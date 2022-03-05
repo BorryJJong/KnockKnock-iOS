@@ -22,8 +22,6 @@ final class MainTabbarController: UITabBarController {
   
   // MARK: - Properties
   
-  static var tabBarSelectedIndex = 0
-  
   lazy var tabBarItems: [Tab: UITabBarItem] = [
     .home: UITabBarItem(
       title: "홈",
@@ -68,7 +66,6 @@ final class MainTabbarController: UITabBarController {
     super.viewDidLoad()
     self.attribute()
   }
-  
   
   private func attribute() {
     UITabBar.appearance().tintColor = UIColor.purple
