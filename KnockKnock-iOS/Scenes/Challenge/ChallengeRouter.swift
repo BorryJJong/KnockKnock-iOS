@@ -12,7 +12,18 @@ protocol ChallengeRouterProtocol: AnyObject {
 }
 
 final class ChallengeRouter: ChallengeRouterProtocol {
+  
   static func createChallenge() -> UIViewController {
-    return UIViewController()
+    let view = ChallengeViewController()
+    let interactor = ChallengeInteractor()
+    let presenter = ChallengePresenter()
+    let worker = ChallengeWorker()
+    
+    view.interactor = interactor
+    interactor.presenter = presenter
+    interactor.worker = worker
+    presenter.view = view
+    
+    return view
   }
 }

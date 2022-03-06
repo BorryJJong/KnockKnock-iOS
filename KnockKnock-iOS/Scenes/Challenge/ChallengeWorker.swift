@@ -7,8 +7,13 @@
 
 import Foundation
 
+protocol ChallengeWorkerProtocol: AnyObject {
+  func fetchChallenge(completionHandler: @escaping () -> Void)
+}
 
-
-final class ChallengeWorker {
+final class ChallengeWorker: ChallengeWorkerProtocol {
   
+  func fetchChallenge(completionHandler: @escaping () -> Void) {
+    completionHandler()
+  }
 }

@@ -9,8 +9,21 @@ import Foundation
 
 protocol ChallengeInteractorProtocol: AnyObject {
   var presenter: ChallengePresenterProtocol? { get set }
+  var worker: ChallengeWorkerProtocol? { get set }
+  
+  func fetchChallenge()
 }
 
-final class ChallengeInteractor {
+final class ChallengeInteractor: ChallengeInteractorProtocol {
   
+  // MARK: - Properties
+  
+  var presenter: ChallengePresenterProtocol?
+  var worker: ChallengeWorkerProtocol?
+  
+  func fetchChallenge() {
+    self.worker?.fetchChallenge {
+      /// do somethings
+    }
+  }
 }

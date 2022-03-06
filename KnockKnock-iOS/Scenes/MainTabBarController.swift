@@ -9,7 +9,7 @@ import UIKit
 
 import Then
 
-final class MainTabbarController: UITabBarController {
+final class MainTabBarController: UITabBarController {
   
   // MARK: - Tab
   
@@ -46,7 +46,7 @@ final class MainTabbarController: UITabBarController {
   ]
   
   let home = HomeViewController()
-  let challenge = ChallengeViewController()
+  let challenge = ChallengeRouter.createChallenge()
   let store = StoreViewController()
   let my = MyViewController()
   
@@ -98,6 +98,6 @@ final class MainTabbarController: UITabBarController {
   }
 }
 
-extension MainTabbarController: UITabBarControllerDelegate {
+extension MainTabBarController: UITabBarControllerDelegate {
   
 }

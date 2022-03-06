@@ -15,7 +15,9 @@ final class ChallengeView: UIView {
   
   let tableView = UITableView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .lightGray
+    $0.backgroundColor = .white
+    $0.rowHeight = UITableView.automaticDimension
+    $0.registCell(type: ChallengeCell.self)
   }
   
   // MARK: - Initialize
