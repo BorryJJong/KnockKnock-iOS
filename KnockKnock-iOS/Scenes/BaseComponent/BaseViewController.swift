@@ -50,6 +50,7 @@ class BaseViewController<View: UIView>: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     self.view.backgroundColor = .white
+    self.setupConfigure()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -62,7 +63,5 @@ class BaseViewController<View: UIView>: UIViewController {
   
   // MARK: Configure
   
-  func setupConstraints() {
-    /// override point
-  }
+  func setupConfigure() { /* override point */ }
 }
