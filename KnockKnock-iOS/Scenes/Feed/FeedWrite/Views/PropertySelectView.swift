@@ -20,7 +20,7 @@ final class PropertySelectView: UIView {
 
   // MARK: - UI
 
-  let tableView = UITableView().then {
+  let propertyTableView = UITableView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .white
     $0.rowHeight = UITableView.automaticDimension
@@ -37,13 +37,13 @@ final class PropertySelectView: UIView {
   }
 
   private func setupConstraints() {
-    [self.tableView].addSubViews(self)
+    [self.propertyTableView].addSubViews(self)
 
     NSLayoutConstraint.activate([
-      self.tableView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-      self.tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-      self.tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-      self.tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+      self.propertyTableView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
+      self.propertyTableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+      self.propertyTableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+      self.propertyTableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
     ])
   }
 }

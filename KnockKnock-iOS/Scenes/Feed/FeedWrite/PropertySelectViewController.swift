@@ -27,8 +27,7 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
   
   override func setupConfigure() {
     self.navigationItem.title = "태그"
-    self.containerView.tableView.do {
-      $0.delegate = self
+    self.containerView.propertyTableView.do {
       $0.dataSource = self
     }
   }
@@ -41,13 +40,9 @@ extension PropertySelectViewController: UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueCell(withType: PropertyCell.self, for: indexPath)
-
     cell.propertyLabel.text = tagList[indexPath.row]
 
     return cell
   }
 }
 
-extension PropertySelectViewController: UITableViewDelegate {
-
-}
