@@ -27,6 +27,11 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     self.containerView.contentTextView.do {
       $0.delegate = self
     }
+    self.containerView.tagSelectButton.addTarget(self, action: #selector(tagSelectButtonDidTap(_:)), for: .touchUpInside)
+  }
+
+  @objc func tagSelectButtonDidTap(_ sender: UIButton) {
+    self.navigationController?.pushViewController(PropertySelectViewController(), animated: true)
   }
 }
 

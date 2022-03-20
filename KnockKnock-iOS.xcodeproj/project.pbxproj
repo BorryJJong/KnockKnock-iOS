@@ -33,6 +33,9 @@
 		611BD4B027E49024007D5C79 /* FeedWriteWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4AF27E49024007D5C79 /* FeedWriteWorker.swift */; };
 		611BD4B227E4903A007D5C79 /* FeedWriteRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4B127E4903A007D5C79 /* FeedWriteRouter.swift */; };
 		611BD4B827E6DD5F007D5C79 /* PropertyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4B727E6DD5F007D5C79 /* PropertyCell.swift */; };
+		611BD4BA27E702F5007D5C79 /* PropertySelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4B927E702F5007D5C79 /* PropertySelectView.swift */; };
+		611BD4BC27E70393007D5C79 /* PropertySelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4BB27E70393007D5C79 /* PropertySelectViewController.swift */; };
+		611BD4BF27E70E64007D5C79 /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4BE27E70E64007D5C79 /* Property.swift */; };
 		61FC60E927B9244D00A51DBC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC60E827B9244D00A51DBC /* AppDelegate.swift */; };
 		61FC60EB27B9244E00A51DBC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC60EA27B9244E00A51DBC /* SceneDelegate.swift */; };
 		61FC60ED27B9244E00A51DBC /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC60EC27B9244E00A51DBC /* MainTabBarController.swift */; };
@@ -67,6 +70,9 @@
 		611BD4AF27E49024007D5C79 /* FeedWriteWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWriteWorker.swift; sourceTree = "<group>"; };
 		611BD4B127E4903A007D5C79 /* FeedWriteRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWriteRouter.swift; sourceTree = "<group>"; };
 		611BD4B727E6DD5F007D5C79 /* PropertyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyCell.swift; sourceTree = "<group>"; };
+		611BD4B927E702F5007D5C79 /* PropertySelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertySelectView.swift; sourceTree = "<group>"; };
+		611BD4BB27E70393007D5C79 /* PropertySelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertySelectViewController.swift; sourceTree = "<group>"; };
+		611BD4BE27E70E64007D5C79 /* Property.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
 		61FC60E527B9244D00A51DBC /* KnockKnock-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KnockKnock-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		61FC60E827B9244D00A51DBC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		61FC60EA27B9244E00A51DBC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -94,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				201077EE27D39FFB00280991 /* Challenge.swift */,
+				611BD4BE27E70E64007D5C79 /* Property.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -232,22 +239,32 @@
 		611BD4A127E2C85C007D5C79 /* Feed */ = {
 			isa = PBXGroup;
 			children = (
-				611BD4A627E30811007D5C79 /* View */,
+				611BD4BD27E703E4007D5C79 /* FeedWrite */,
+			);
+			path = Feed;
+			sourceTree = "<group>";
+		};
+		611BD4A627E30811007D5C79 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				611BD4A427E3080B007D5C79 /* FeedWriteView.swift */,
+				611BD4B927E702F5007D5C79 /* PropertySelectView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		611BD4BD27E703E4007D5C79 /* FeedWrite */ = {
+			isa = PBXGroup;
+			children = (
+				611BD4A627E30811007D5C79 /* Views */,
+				611BD4BB27E70393007D5C79 /* PropertySelectViewController.swift */,
 				611BD4A227E3017E007D5C79 /* FeedWriteViewController.swift */,
 				611BD4A927E48B93007D5C79 /* FeedWriteInteractor.swift */,
 				611BD4AB27E48B9F007D5C79 /* FeedWritePresenter.swift */,
 				611BD4B127E4903A007D5C79 /* FeedWriteRouter.swift */,
 				611BD4AF27E49024007D5C79 /* FeedWriteWorker.swift */,
 			);
-			path = Feed;
-			sourceTree = "<group>";
-		};
-		611BD4A627E30811007D5C79 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				611BD4A427E3080B007D5C79 /* FeedWriteView.swift */,
-			);
-			path = View;
+			path = FeedWrite;
 			sourceTree = "<group>";
 		};
 		61FC60DC27B9244D00A51DBC = {
@@ -418,8 +435,10 @@
 				2090811C27CA4F6B005A1573 /* StoreViewController.swift in Sources */,
 				611BD4AC27E48B9F007D5C79 /* FeedWritePresenter.swift in Sources */,
 				2090811E27CA4F77005A1573 /* MyViewController.swift in Sources */,
+				611BD4BF27E70E64007D5C79 /* Property.swift in Sources */,
 				20D28F8427CFC60900A809DB /* ChallengeRouter.swift in Sources */,
 				61FC60E927B9244D00A51DBC /* AppDelegate.swift in Sources */,
+				611BD4BC27E70393007D5C79 /* PropertySelectViewController.swift in Sources */,
 				611BD4AA27E48B93007D5C79 /* FeedWriteInteractor.swift in Sources */,
 				201077F427D3AA9800280991 /* ChallengeView.swift in Sources */,
 				201077FE27D3D2AC00280991 /* ChallengeCell.swift in Sources */,
@@ -427,6 +446,7 @@
 				611BD4B027E49024007D5C79 /* FeedWriteWorker.swift in Sources */,
 				2010780827D48FDD00280991 /* Int+Ext.swift in Sources */,
 				61FC60EB27B9244E00A51DBC /* SceneDelegate.swift in Sources */,
+				611BD4BA27E702F5007D5C79 /* PropertySelectView.swift in Sources */,
 				611BD4B227E4903A007D5C79 /* FeedWriteRouter.swift in Sources */,
 				611BD4A527E3080B007D5C79 /* FeedWriteView.swift in Sources */,
 				201077F827D3BF4B00280991 /* Array+Ext.swift in Sources */,
