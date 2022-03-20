@@ -38,7 +38,7 @@ final class PropertyCell: BaseTableViewCell {
   @objc func checkButtonDidTap(_ sender: UIButton) {
     if self.propertyLabel.textColor == .black {
       self.checkImageView.image = UIImage(named:"ic_checkbox_on")
-      self.propertyLabel.textColor = .green
+      self.propertyLabel.textColor = .green50
     } else {
       self.checkImageView.image = UIImage(named:"ic_checkbox_off")
       self.propertyLabel.textColor = .black

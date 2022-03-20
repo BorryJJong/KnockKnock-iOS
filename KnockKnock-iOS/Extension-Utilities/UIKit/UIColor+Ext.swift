@@ -35,4 +35,22 @@ extension UIColor {
   class var gray90: UIColor? {
     return UIColor(named: "gray90")
   }
+  class var green10: UIColor? {
+    return UIColor(named: "green10")
+  }
+  class var green20: UIColor? {
+    return UIColor(named: "green20")
+  }
+  class var green30: UIColor? {
+    return UIColor(named: "green30")
+  }
+  class var green40: UIColor? {
+    return UIColor(named: "green40")
+  }
+  class var green50: UIColor? {
+    return UIColor(named: "green50")
+  }
+  class var green60: UIColor? {
+    return UIColor(named: "green60")
+  }
 }
