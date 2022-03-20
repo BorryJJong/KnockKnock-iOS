@@ -52,7 +52,7 @@ class FeedWriteView: UIView {
     $0.contentVerticalAlignment = .center
     $0.contentHorizontalAlignment = .center
     $0.layer.borderWidth = 1
-    $0.layer.borderColor = UIColor.gray80?.cgColor
+    $0.layer.borderColor = UIColor.gray50?.cgColor
     $0.layer.cornerRadius = 5
     $0.alignTextBelow(spacing: 0)
   }

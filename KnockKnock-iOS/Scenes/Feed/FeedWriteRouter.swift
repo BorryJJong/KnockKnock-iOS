@@ -22,7 +22,7 @@ final class FeedWriteRouter: FeedWriteRouterProtocol {
     view.interactor = interactor
     interactor.presenter = presenter
     interactor.worker = worker
-    presenter.view = view
+    presenter.view = view as! FeedWriteViewProtocol
 
     return view
   }
