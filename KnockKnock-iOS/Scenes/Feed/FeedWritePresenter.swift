@@ -6,3 +6,13 @@
 //
 
 import Foundation
+
+protocol FeedWritePresenterProtocol: AnyObject {
+  var view: FeedWriteViewProtocol? { get set }
+}
+
+final class FeedWritePresenter: FeedWritePresenterProtocol {
+  weak var view: FeedWriteViewProtocol?
+
+
+}

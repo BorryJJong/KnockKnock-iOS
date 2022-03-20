@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+protocol FeedWriteWorkerProtocol: AnyObject {
+
+}
+
+final class FeedWriteWorker: FeedWriteWorkerProtocol {
+  
+}

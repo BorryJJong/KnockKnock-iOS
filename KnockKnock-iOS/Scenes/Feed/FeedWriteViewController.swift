@@ -7,13 +7,15 @@
 
 import UIKit
 
-//protocol FeedWriteViewProtocol: AnyObject {
-//  var interactor: FeedWriteInteractorProtocol? { get set }
-//}
+protocol FeedWriteViewProtocol: AnyObject {
+  var interactor: FeedWriteInteractorProtocol? { get set }
+}
 
 final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
   // MARK: - Properties
+
+  var interactor: FeedWriteInteractorProtocol?
 
   // MARK: - Life cycle
   override func viewDidLoad() {
