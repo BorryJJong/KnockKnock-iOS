@@ -50,20 +50,20 @@ final class PropertyCell: BaseTableViewCell {
   
   override func setupConstraints() {
     [self.propertyLabel, self.checkImageView, self.checkButton].addSubViews(self.contentView)
-    
+
     NSLayoutConstraint.activate([
-      self.propertyLabel.centerYAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerYAnchor),
-      self.propertyLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.propertyLabelTopMargin),
-      self.propertyLabel.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.propertyLabelBottomMargin),
-      self.propertyLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.propertyLabelLeadingMargin),
+      self.propertyLabel.centerYAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.centerYAnchor),
+      self.propertyLabel.topAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.topAnchor, constant: Metric.propertyLabelTopMargin),
+      self.propertyLabel.bottomAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.bottomAnchor, constant: Metric.propertyLabelBottomMargin),
+      self.propertyLabel.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor, constant: Metric.propertyLabelLeadingMargin),
       
-      self.checkImageView.centerYAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerYAnchor),
-      self.checkImageView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.checkImageTrailingMargin),
+      self.checkImageView.centerYAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.centerYAnchor),
+      self.checkImageView.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor, constant: Metric.checkImageTrailingMargin),
       
-      self.checkButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-      self.checkButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
-      self.checkButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-      self.checkButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor)
+      self.checkButton.topAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.topAnchor),
+      self.checkButton.bottomAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.bottomAnchor),
+      self.checkButton.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor),
+      self.checkButton.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor)
     ])
   }
 }

@@ -30,6 +30,10 @@ final class shopSearchView: UIView {
     static let seperatorLineViewLeadingMargin = 20.f
     static let seperatorLineViewTrailingMargin = -20.f
     static let seperatorLineViewHeight = 1.f
+
+    static let resultTableViewTopMargin = 20.f
+    static let resultTableViewLeadingMargin = 20.f
+    static let resultTableViewTrailingMargin = -20.f
   }
 
   // MARK: - UI
@@ -72,7 +76,7 @@ final class shopSearchView: UIView {
     $0.rightViewMode = .whileEditing
   }
 
-  let addressSearchButton = UIButton().then {
+  lazy var addressSearchButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setImage(#imageLiteral(resourceName:"ic_search"), for: .normal)
   }
@@ -84,6 +88,9 @@ final class shopSearchView: UIView {
 
   let resultTableView = UITableView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.separatorStyle = .none
+    $0.rowHeight = UITableView.automaticDimension
+    $0.registCell(type: AdressCell.self)
     $0.isHidden = true
   }
 
@@ -117,7 +124,7 @@ final class shopSearchView: UIView {
   }
 
   private func setupConstraints() {
-    [self.cityRegionStackView, self.addressTextField, self.addressSearchButton, self.seperatorLineView, self.statusStackView].addSubViews(self)
+    [self.cityRegionStackView, self.addressTextField, self.addressSearchButton, self.seperatorLineView, self.statusStackView, self.resultTableView].addSubViews(self)
 
     NSLayoutConstraint.activate([
       self.cityRegionStackView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.cityRegionStackViewTopMargin),
@@ -137,6 +144,11 @@ final class shopSearchView: UIView {
       self.seperatorLineView.topAnchor.constraint(equalTo: self.addressTextField.bottomAnchor),
       self.seperatorLineView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.seperatorLineViewLeadingMargin),
       self.seperatorLineView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.seperatorLineViewTrailingMargin),
+
+      self.resultTableView.topAnchor.constraint(equalTo: self.seperatorLineView.bottomAnchor, constant: Metric.resultTableViewTopMargin),
+      self.resultTableView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.resultTableViewLeadingMargin),
+      self.resultTableView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.resultTableViewTrailingMargin),
+      self.resultTableView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
 
       self.statusStackView.centerXAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerXAnchor),
       self.statusStackView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerYAnchor)
