@@ -84,7 +84,7 @@ class FeedWriteView: UIView {
     $0.tintColor = .black
   }
 
-  private let promotionSelectButton = UIButton().then {
+  let promotionSelectButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.tintColor = .clear
   }
@@ -105,7 +105,7 @@ class FeedWriteView: UIView {
     $0.tintColor = .black
   }
 
-  private let shopSearchButton = UIButton().then {
+  let shopSearchButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.tintColor = .clear
   }

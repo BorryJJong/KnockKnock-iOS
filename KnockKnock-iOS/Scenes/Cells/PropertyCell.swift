@@ -12,7 +12,9 @@ final class PropertyCell: BaseTableViewCell {
   // MARK: - Properties
   
   private enum Metric {
-    static let propertyLabelLeftMargin = 20.f
+    static let propertyLabelTopMargin = 15.f
+    static let propertyLabelBottomMargin = -15.f
+    static let propertyLabelLeadingMargin = 20.f
     static let checkImageRightMargin = -20.f
   }
   
@@ -51,9 +53,9 @@ final class PropertyCell: BaseTableViewCell {
     
     NSLayoutConstraint.activate([
       self.propertyLabel.centerYAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerYAnchor),
-      self.propertyLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 15),
-      self.propertyLabel.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -15),
-      self.propertyLabel.leftAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leftAnchor, constant: Metric.propertyLabelLeftMargin),
+      self.propertyLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.propertyLabelTopMargin),
+      self.propertyLabel.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.propertyLabelBottomMargin),
+      self.propertyLabel.leftAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leftAnchor, constant: Metric.propertyLabelLeadingMargin),
       
       self.checkImageView.centerYAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerYAnchor),
       self.checkImageView.rightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.rightAnchor, constant: Metric.checkImageRightMargin),

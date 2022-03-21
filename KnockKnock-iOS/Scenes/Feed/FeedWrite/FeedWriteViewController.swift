@@ -28,10 +28,15 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
       $0.delegate = self
     }
     self.containerView.tagSelectButton.addTarget(self, action: #selector(tagSelectButtonDidTap(_:)), for: .touchUpInside)
+    self.containerView.shopSearchButton.addTarget(self, action: #selector(shopSearchButtonDidTap(_:)), for: .touchUpInside)
   }
 
   @objc func tagSelectButtonDidTap(_ sender: UIButton) {
     self.navigationController?.pushViewController(PropertySelectViewController(), animated: true)
+  }
+
+  @objc func shopSearchButtonDidTap(_ sender: UIButton) {
+    self.navigationController?.pushViewController(shopSearchViewController(), animated: true)
   }
 }
 
