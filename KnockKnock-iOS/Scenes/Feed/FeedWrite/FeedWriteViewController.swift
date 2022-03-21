@@ -35,6 +35,10 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     self.navigationController?.pushViewController(PropertySelectViewController(), animated: true)
   }
 
+  @objc func promotionSelectButtonDidTap(_ sender: UIButton) {
+    self.navigationController?.pushViewController(PropertySelectViewController(), animated: true)
+  }
+
   @objc func shopSearchButtonDidTap(_ sender: UIButton) {
     self.navigationController?.pushViewController(shopSearchViewController(), animated: true)
   }

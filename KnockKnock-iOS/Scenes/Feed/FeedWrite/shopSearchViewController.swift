@@ -18,7 +18,7 @@ class shopSearchViewController: BaseViewController<shopSearchView> {
     self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonDidTap(_:)))
   }
 
-  @objc func doneButtonDidTap(_ sender: UIBarButtonItem){
+  @objc private func doneButtonDidTap(_ sender: UIBarButtonItem){
     self.navigationController?.popViewController(animated: true)
   }
 }
