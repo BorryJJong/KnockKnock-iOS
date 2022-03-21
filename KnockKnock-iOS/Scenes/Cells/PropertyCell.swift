@@ -15,7 +15,7 @@ final class PropertyCell: BaseTableViewCell {
     static let propertyLabelTopMargin = 15.f
     static let propertyLabelBottomMargin = -15.f
     static let propertyLabelLeadingMargin = 20.f
-    static let checkImageRightMargin = -20.f
+    static let checkImageTrailingMargin = -20.f
   }
   
   // MARK: - UI
@@ -55,15 +55,15 @@ final class PropertyCell: BaseTableViewCell {
       self.propertyLabel.centerYAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerYAnchor),
       self.propertyLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.propertyLabelTopMargin),
       self.propertyLabel.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.propertyLabelBottomMargin),
-      self.propertyLabel.leftAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leftAnchor, constant: Metric.propertyLabelLeadingMargin),
+      self.propertyLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.propertyLabelLeadingMargin),
       
       self.checkImageView.centerYAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerYAnchor),
-      self.checkImageView.rightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.rightAnchor, constant: Metric.checkImageRightMargin),
+      self.checkImageView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.checkImageTrailingMargin),
       
       self.checkButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
       self.checkButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
       self.checkButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-      self.checkButton.rightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.rightAnchor)
+      self.checkButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor)
     ])
   }
 }
