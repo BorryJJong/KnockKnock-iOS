@@ -39,6 +39,16 @@ class FeedWriteView: UIView {
 
     static let seperatorHeight = 1.f
     static let seperatorWidthMargin = -40.f
+
+    static let contentTextViewTopMargin = 20.f
+    static let contentTextViewLeadingMargin = 20.f
+    static let contentTextViewTrailingMargin = -20.f
+    static let contentTextViewHeight = 300.f
+
+    static let doneButtonHeight = 45.f
+    static let doneButtonBottomMargin = -10.f
+    static let doneButtonleadingMargin = 20.f
+    static let doneButtonTrailingMargin = -20.f
   }
 
   // MARK: - UI
@@ -211,15 +221,15 @@ class FeedWriteView: UIView {
       shopSearchSeperateLineView.heightAnchor.constraint(equalToConstant: Metric.seperatorHeight),
       shopSearchSeperateLineView.widthAnchor.constraint(equalTo: self.safeAreaLayoutGuide.widthAnchor, constant: Metric.seperatorWidthMargin),
 
-      contentTextView.topAnchor.constraint(equalTo: self.shopSearchSeperateLineView.bottomAnchor, constant: 20),
-      contentTextView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-      contentTextView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-      contentTextView.heightAnchor.constraint(equalToConstant: 300),
+      contentTextView.topAnchor.constraint(equalTo: self.shopSearchSeperateLineView.bottomAnchor, constant: Metric.contentTextViewTopMargin),
+      contentTextView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.contentTextViewLeadingMargin),
+      contentTextView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.contentTextViewTrailingMargin),
+      contentTextView.heightAnchor.constraint(equalToConstant: Metric.contentTextViewHeight),
 
-      doneButton.heightAnchor.constraint(equalToConstant: 45),
-      doneButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-      doneButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-      doneButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+      doneButton.heightAnchor.constraint(equalToConstant: Metric.doneButtonHeight),
+      doneButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.doneButtonBottomMargin),
+      doneButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.doneButtonleadingMargin),
+      doneButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.doneButtonTrailingMargin)
     ])
   }
 }
