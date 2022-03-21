@@ -43,7 +43,13 @@ class FeedWriteView: UIView {
 
   // MARK: - UI
 
-  private let photoAddButton = UIButton().then {
+  let photoCollectionView = UICollectionView().then {
+    let flowLayout = UICollectionViewFlowLayout.init()
+    flowLayout.scrollDirection = .horizontal
+    $0.translatesAutoresizingMaskIntoConstraints = false
+  }
+
+  let photoAddButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setImage(#imageLiteral(resourceName: "ic_feed_photo"), for: .normal)
     $0.setTitle("0/5", for: .normal)
