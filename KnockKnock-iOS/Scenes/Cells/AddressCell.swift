@@ -12,7 +12,9 @@ final class AdressCell: BaseTableViewCell {
   // MARK: - Constants
 
   private enum Metric {
+    static let iconImageViewBottomMargin = -15.f
     static let iconImageViewLeadingMargin = 20.f
+
     static let addressLabelLeadingMargin = 10.f
   }
 
@@ -25,11 +27,7 @@ final class AdressCell: BaseTableViewCell {
 
   let addressLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-  }
-
-  override func layoutSubviews() {
-    super.layoutSubviews()
-    contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 7.5, left: 0, bottom: 7.5, right: 0))
+    $0.font = .systemFont(ofSize: 14)
   }
 
   override func setupConstraints() {
@@ -37,11 +35,12 @@ final class AdressCell: BaseTableViewCell {
 
     NSLayoutConstraint.activate([
       iconImageView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
-      iconImageView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
+      iconImageView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: Metric.iconImageViewBottomMargin),
       iconImageView.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor),
+      iconImageView.heightAnchor.constraint(equalTo: self.iconImageView.widthAnchor, multiplier: 1),
 
       addressLabel.leadingAnchor.constraint(equalTo: self.iconImageView.trailingAnchor, constant: Metric.addressLabelLeadingMargin),
-      addressLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor)
+      addressLabel.centerYAnchor.constraint(equalTo: self.iconImageView.centerYAnchor)
     ])
   }
 
