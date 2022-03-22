@@ -239,9 +239,9 @@ let photoCollectionView = UICollectionView(
 
 extension UIButton {
   func alignTextBelow(spacing: CGFloat) {
-    guard let image = self.imageView?.image else { return }
-    guard let titleLabel = self.titleLabel else { return }
-    guard let titleText = titleLabel.text else { return }
+    guard let image = self.imageView?.image,
+          let titleLabel = self.titleLabel,
+          let titleText = titleLabel.text else { return }
 
     let titleSize = titleText.size(withAttributes: [
       NSAttributedString.Key.font: titleLabel.font as Any
