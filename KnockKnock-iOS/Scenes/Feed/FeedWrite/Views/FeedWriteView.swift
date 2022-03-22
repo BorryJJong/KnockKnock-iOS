@@ -53,9 +53,12 @@ class FeedWriteView: UIView {
 
   // MARK: - UI
 
-  let photoCollectionView = UICollectionView().then {
-    let flowLayout = UICollectionViewFlowLayout.init()
-    flowLayout.scrollDirection = .horizontal
+let photoCollectionView = UICollectionView(
+    frame: .zero,
+    collectionViewLayout: UICollectionViewFlowLayout().then {
+      $0.scrollDirection = .horizontal
+    }
+  ).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
   }
 
