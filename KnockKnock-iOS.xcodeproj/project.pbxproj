@@ -40,6 +40,7 @@
 		618FDAC527E80C6B00C2823F /* shopSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDAC427E80C6B00C2823F /* shopSearchViewController.swift */; };
 		618FDAC727E82A6F00C2823F /* AddressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDAC627E82A6F00C2823F /* AddressCell.swift */; };
 		618FDAC927E836BA00C2823F /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDAC827E836BA00C2823F /* PhotoCell.swift */; };
+		618FDACF27E9642400C2823F /* UIButton+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDACE27E9642400C2823F /* UIButton+Ext.swift */; };
 		61FC60E927B9244D00A51DBC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC60E827B9244D00A51DBC /* AppDelegate.swift */; };
 		61FC60EB27B9244E00A51DBC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC60EA27B9244E00A51DBC /* SceneDelegate.swift */; };
 		61FC60ED27B9244E00A51DBC /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC60EC27B9244E00A51DBC /* MainTabBarController.swift */; };
@@ -81,6 +82,7 @@
 		618FDAC427E80C6B00C2823F /* shopSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shopSearchViewController.swift; sourceTree = "<group>"; };
 		618FDAC627E82A6F00C2823F /* AddressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressCell.swift; sourceTree = "<group>"; };
 		618FDAC827E836BA00C2823F /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
+		618FDACE27E9642400C2823F /* UIButton+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Ext.swift"; sourceTree = "<group>"; };
 		61FC60E527B9244D00A51DBC /* KnockKnock-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KnockKnock-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		61FC60E827B9244D00A51DBC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		61FC60EA27B9244E00A51DBC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				2010780127D3D59F00280991 /* UITableViewCell+Ext.swift */,
 				2010780327D3D62300280991 /* UITableView+Ext.swift */,
 				611BD4AD27E48F37007D5C79 /* UIColor+Ext.swift */,
+				618FDACE27E9642400C2823F /* UIButton+Ext.swift */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -445,6 +448,7 @@
 				611BD4AE27E48F37007D5C79 /* UIColor+Ext.swift in Sources */,
 				20D28F8027CFC5E800A809DB /* ChallengeInteractor.swift in Sources */,
 				20D28F8227CFC5F000A809DB /* ChallengePresenter.swift in Sources */,
+				618FDACF27E9642400C2823F /* UIButton+Ext.swift in Sources */,
 				2090811C27CA4F6B005A1573 /* StoreViewController.swift in Sources */,
 				611BD4AC27E48B9F007D5C79 /* FeedWritePresenter.swift in Sources */,
 				2090811E27CA4F77005A1573 /* MyViewController.swift in Sources */,

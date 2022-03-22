@@ -7,7 +7,7 @@
 
 import UIKit
 
-class shopSearchViewController: BaseViewController<shopSearchView> {
+class shopSearchViewController: BaseViewController<ShopSearchView> {
 
   // MARK: - Properties
 
