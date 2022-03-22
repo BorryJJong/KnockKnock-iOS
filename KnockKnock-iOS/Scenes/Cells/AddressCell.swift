@@ -9,7 +9,7 @@ import UIKit
 
 final class AdressCell: BaseTableViewCell {
 
-  // MARK: - Properties
+  // MARK: - Constants
 
   private enum Metric {
     static let iconImageViewLeadingMargin = 20.f
