@@ -9,7 +9,7 @@ import UIKit
 
 import Then
 
-final class shopSearchView: UIView {
+final class ShopSearchView: UIView {
 
   // MARK: - Properties
 
