@@ -14,4 +14,3 @@ extension Array where Element: UIView {
     }
   }
 }
-
