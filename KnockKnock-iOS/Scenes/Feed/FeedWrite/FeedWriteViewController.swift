@@ -59,3 +59,7 @@ extension FeedWriteViewController: UITextViewDelegate {
     }
   }
 }
+
+extension FeedWriteViewController: FeedWriteViewProtocol {
+  
+}
