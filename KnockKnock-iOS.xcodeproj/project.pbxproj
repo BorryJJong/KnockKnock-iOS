@@ -20,6 +20,7 @@
 		2090811A27CA4F61005A1573 /* ChallengeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090811927CA4F61005A1573 /* ChallengeViewController.swift */; };
 		2090811C27CA4F6B005A1573 /* StoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090811B27CA4F6B005A1573 /* StoreViewController.swift */; };
 		2090811E27CA4F77005A1573 /* MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090811D27CA4F77005A1573 /* MyViewController.swift */; };
+		20A72D1E280BC4EE006689FC /* BaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A72D1D280BC4EE006689FC /* BaseCollectionViewCell.swift */; };
 		20D28F8027CFC5E800A809DB /* ChallengeInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D28F7F27CFC5E800A809DB /* ChallengeInteractor.swift */; };
 		20D28F8227CFC5F000A809DB /* ChallengePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D28F8127CFC5F000A809DB /* ChallengePresenter.swift */; };
 		20D28F8427CFC60900A809DB /* ChallengeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D28F8327CFC60900A809DB /* ChallengeRouter.swift */; };
@@ -46,6 +47,7 @@
 		2090811927CA4F61005A1573 /* ChallengeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeViewController.swift; sourceTree = "<group>"; };
 		2090811B27CA4F6B005A1573 /* StoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreViewController.swift; sourceTree = "<group>"; };
 		2090811D27CA4F77005A1573 /* MyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyViewController.swift; sourceTree = "<group>"; };
+		20A72D1D280BC4EE006689FC /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
 		20D28F7F27CFC5E800A809DB /* ChallengeInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeInteractor.swift; sourceTree = "<group>"; };
 		20D28F8127CFC5F000A809DB /* ChallengePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengePresenter.swift; sourceTree = "<group>"; };
 		20D28F8327CFC60900A809DB /* ChallengeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeRouter.swift; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 			children = (
 				201077F127D3A97A00280991 /* BaseViewController.swift */,
 				201077FB27D3D26E00280991 /* BaseTableViewCell.swift */,
+				20A72D1D280BC4EE006689FC /* BaseCollectionViewCell.swift */,
 			);
 			path = BaseComponent;
 			sourceTree = "<group>";
@@ -373,6 +376,7 @@
 				2090811A27CA4F61005A1573 /* ChallengeViewController.swift in Sources */,
 				2010780427D3D62300280991 /* UITableView+Ext.swift in Sources */,
 				20D28F8027CFC5E800A809DB /* ChallengeInteractor.swift in Sources */,
+				20A72D1E280BC4EE006689FC /* BaseCollectionViewCell.swift in Sources */,
 				20D28F8227CFC5F000A809DB /* ChallengePresenter.swift in Sources */,
 				2090811C27CA4F6B005A1573 /* StoreViewController.swift in Sources */,
 				2090811E27CA4F77005A1573 /* MyViewController.swift in Sources */,
