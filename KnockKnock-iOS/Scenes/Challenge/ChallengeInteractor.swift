@@ -22,8 +22,8 @@ final class ChallengeInteractor: ChallengeInteractorProtocol {
   var worker: ChallengeWorkerProtocol?
   
   func fetchChallenge() {
-    self.worker?.fetchChallenge {
-      /// do somethings
+    self.worker?.fetchChallenge { [weak self] challenges in
+      self?.presenter?.presentFetchChallenge(challenges: challenges)
     }
   }
 }

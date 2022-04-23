@@ -10,7 +10,7 @@ import UIKit
 protocol ChallengeViewProtocol: AnyObject {
   var interactor: ChallengeInteractorProtocol? { get set }
   
-  func fetchChallenges()
+  func fetchChallenges(challenges: [Challenge])
 }
 
 final class ChallengeViewController: BaseViewController<ChallengeView> {
@@ -18,6 +18,7 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
   // MARK: Properties
   
   var interactor: ChallengeInteractorProtocol?
+  var challenges: [Challenge] = []
   
   // MARK: - Life cycle
   
@@ -35,18 +36,21 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
 }
 
 extension ChallengeViewController: ChallengeViewProtocol {
-  func fetchChallenges() {
+  func fetchChallenges(challenges: [Challenge]) {
+    self.challenges = challenges
     self.containerView.tableView.reloadData()
   }
 }
 
 extension ChallengeViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 10
+    return self.challenges.count
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueCell(withType: ChallengeCell.self, for: indexPath)
+    let challenge = self.challenges[indexPath.row]
+    cell.bind(data: challenge)
     return cell
   }
 }

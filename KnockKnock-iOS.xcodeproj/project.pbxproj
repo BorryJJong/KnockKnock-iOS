@@ -25,6 +25,7 @@
 		20D28F8227CFC5F000A809DB /* ChallengePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D28F8127CFC5F000A809DB /* ChallengePresenter.swift */; };
 		20D28F8427CFC60900A809DB /* ChallengeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D28F8327CFC60900A809DB /* ChallengeRouter.swift */; };
 		20D28F8627CFC7B300A809DB /* ChallengeWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D28F8527CFC7B300A809DB /* ChallengeWorker.swift */; };
+		20EAE2972814054F009242A1 /* ChellengeRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EAE2962814054F009242A1 /* ChellengeRepository.swift */; };
 		34F6FB7E518CFAF1AD6C3455 /* Pods_KnockKnock_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EDAE2B5F785D77504C7A50F /* Pods_KnockKnock_iOS.framework */; };
 		61FC60E927B9244D00A51DBC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC60E827B9244D00A51DBC /* AppDelegate.swift */; };
 		61FC60EB27B9244E00A51DBC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC60EA27B9244E00A51DBC /* SceneDelegate.swift */; };
@@ -52,6 +53,7 @@
 		20D28F8127CFC5F000A809DB /* ChallengePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengePresenter.swift; sourceTree = "<group>"; };
 		20D28F8327CFC60900A809DB /* ChallengeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeRouter.swift; sourceTree = "<group>"; };
 		20D28F8527CFC7B300A809DB /* ChallengeWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeWorker.swift; sourceTree = "<group>"; };
+		20EAE2962814054F009242A1 /* ChellengeRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChellengeRepository.swift; sourceTree = "<group>"; };
 		2EDAE2B5F785D77504C7A50F /* Pods_KnockKnock_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KnockKnock_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		61FC60E527B9244D00A51DBC /* KnockKnock-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KnockKnock-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		61FC60E827B9244D00A51DBC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 		201077ED27D39AB400280991 /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				20EAE2962814054F009242A1 /* ChellengeRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -371,6 +374,7 @@
 				201077FC27D3D26E00280991 /* BaseTableViewCell.swift in Sources */,
 				2010780227D3D59F00280991 /* UITableViewCell+Ext.swift in Sources */,
 				201077F227D3A97A00280991 /* BaseViewController.swift in Sources */,
+				20EAE2972814054F009242A1 /* ChellengeRepository.swift in Sources */,
 				61FC60ED27B9244E00A51DBC /* MainTabBarController.swift in Sources */,
 				201077EF27D39FFB00280991 /* Challenge.swift in Sources */,
 				2090811A27CA4F61005A1573 /* ChallengeViewController.swift in Sources */,

@@ -36,8 +36,9 @@ final class ChallengeCell: BaseTableViewCell {
   
   // MARK: - Bind
   
-  func bind() {
-    
+  func bind(data: Challenge) {
+    self.titleLabel.text = data.title
+    self.contentsLabel.text = data.contents
   }
   
   // MARK: - Configure

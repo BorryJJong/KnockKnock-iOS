@@ -8,5 +8,6 @@
 import Foundation
 
 struct Challenge {
-    
+  let title: String
+  let contents: String
 }
