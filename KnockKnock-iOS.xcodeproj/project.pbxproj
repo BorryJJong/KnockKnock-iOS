@@ -20,10 +20,12 @@
 		2090811A27CA4F61005A1573 /* ChallengeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090811927CA4F61005A1573 /* ChallengeViewController.swift */; };
 		2090811C27CA4F6B005A1573 /* StoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090811B27CA4F6B005A1573 /* StoreViewController.swift */; };
 		2090811E27CA4F77005A1573 /* MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090811D27CA4F77005A1573 /* MyViewController.swift */; };
+		20A72D1E280BC4EE006689FC /* BaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A72D1D280BC4EE006689FC /* BaseCollectionViewCell.swift */; };
 		20D28F8027CFC5E800A809DB /* ChallengeInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D28F7F27CFC5E800A809DB /* ChallengeInteractor.swift */; };
 		20D28F8227CFC5F000A809DB /* ChallengePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D28F8127CFC5F000A809DB /* ChallengePresenter.swift */; };
 		20D28F8427CFC60900A809DB /* ChallengeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D28F8327CFC60900A809DB /* ChallengeRouter.swift */; };
 		20D28F8627CFC7B300A809DB /* ChallengeWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D28F8527CFC7B300A809DB /* ChallengeWorker.swift */; };
+		20EAE2972814054F009242A1 /* ChellengeRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EAE2962814054F009242A1 /* ChellengeRepository.swift */; };
 		34F6FB7E518CFAF1AD6C3455 /* Pods_KnockKnock_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EDAE2B5F785D77504C7A50F /* Pods_KnockKnock_iOS.framework */; };
 		611BD4A327E3017E007D5C79 /* FeedWriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4A227E3017E007D5C79 /* FeedWriteViewController.swift */; };
 		611BD4A527E3080B007D5C79 /* FeedWriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4A427E3080B007D5C79 /* FeedWriteView.swift */; };
@@ -62,10 +64,12 @@
 		2090811927CA4F61005A1573 /* ChallengeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeViewController.swift; sourceTree = "<group>"; };
 		2090811B27CA4F6B005A1573 /* StoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreViewController.swift; sourceTree = "<group>"; };
 		2090811D27CA4F77005A1573 /* MyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyViewController.swift; sourceTree = "<group>"; };
+		20A72D1D280BC4EE006689FC /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
 		20D28F7F27CFC5E800A809DB /* ChallengeInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeInteractor.swift; sourceTree = "<group>"; };
 		20D28F8127CFC5F000A809DB /* ChallengePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengePresenter.swift; sourceTree = "<group>"; };
 		20D28F8327CFC60900A809DB /* ChallengeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeRouter.swift; sourceTree = "<group>"; };
 		20D28F8527CFC7B300A809DB /* ChallengeWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeWorker.swift; sourceTree = "<group>"; };
+		20EAE2962814054F009242A1 /* ChellengeRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChellengeRepository.swift; sourceTree = "<group>"; };
 		2EDAE2B5F785D77504C7A50F /* Pods_KnockKnock_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KnockKnock_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		611BD4A227E3017E007D5C79 /* FeedWriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWriteViewController.swift; sourceTree = "<group>"; };
 		611BD4A427E3080B007D5C79 /* FeedWriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWriteView.swift; sourceTree = "<group>"; };
@@ -118,6 +122,7 @@
 		201077ED27D39AB400280991 /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				20EAE2962814054F009242A1 /* ChellengeRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -127,6 +132,7 @@
 			children = (
 				201077F127D3A97A00280991 /* BaseViewController.swift */,
 				201077FB27D3D26E00280991 /* BaseTableViewCell.swift */,
+				20A72D1D280BC4EE006689FC /* BaseCollectionViewCell.swift */,
 			);
 			path = BaseComponent;
 			sourceTree = "<group>";
@@ -440,6 +446,7 @@
 				201077FC27D3D26E00280991 /* BaseTableViewCell.swift in Sources */,
 				2010780227D3D59F00280991 /* UITableViewCell+Ext.swift in Sources */,
 				201077F227D3A97A00280991 /* BaseViewController.swift in Sources */,
+				20EAE2972814054F009242A1 /* ChellengeRepository.swift in Sources */,
 				618FDAC527E80C6B00C2823F /* shopSearchViewController.swift in Sources */,
 				61FC60ED27B9244E00A51DBC /* MainTabBarController.swift in Sources */,
 				201077EF27D39FFB00280991 /* Challenge.swift in Sources */,
@@ -447,6 +454,7 @@
 				2010780427D3D62300280991 /* UITableView+Ext.swift in Sources */,
 				611BD4AE27E48F37007D5C79 /* UIColor+Ext.swift in Sources */,
 				20D28F8027CFC5E800A809DB /* ChallengeInteractor.swift in Sources */,
+				20A72D1E280BC4EE006689FC /* BaseCollectionViewCell.swift in Sources */,
 				20D28F8227CFC5F000A809DB /* ChallengePresenter.swift in Sources */,
 				618FDACF27E9642400C2823F /* UIButton+Ext.swift in Sources */,
 				2090811C27CA4F6B005A1573 /* StoreViewController.swift in Sources */,

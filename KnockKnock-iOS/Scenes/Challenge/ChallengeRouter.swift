@@ -17,7 +17,7 @@ final class ChallengeRouter: ChallengeRouterProtocol {
     let view = ChallengeViewController()
     let interactor = ChallengeInteractor()
     let presenter = ChallengePresenter()
-    let worker = ChallengeWorker()
+    let worker = ChallengeWorker(repository: ChallengeRepository())
     
     view.interactor = interactor
     interactor.presenter = presenter
