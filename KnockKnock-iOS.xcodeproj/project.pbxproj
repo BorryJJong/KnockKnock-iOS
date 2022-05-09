@@ -446,11 +446,8 @@
 				201077FC27D3D26E00280991 /* BaseTableViewCell.swift in Sources */,
 				2010780227D3D59F00280991 /* UITableViewCell+Ext.swift in Sources */,
 				201077F227D3A97A00280991 /* BaseViewController.swift in Sources */,
-<<<<<<< HEAD
 				20EAE2972814054F009242A1 /* ChellengeRepository.swift in Sources */,
-=======
 				618FDAC527E80C6B00C2823F /* shopSearchViewController.swift in Sources */,
->>>>>>> 1dcf08864b45707e3742061a7296ec61ceab607e
 				61FC60ED27B9244E00A51DBC /* MainTabBarController.swift in Sources */,
 				201077EF27D39FFB00280991 /* Challenge.swift in Sources */,
 				2090811A27CA4F61005A1573 /* ChallengeViewController.swift in Sources */,
