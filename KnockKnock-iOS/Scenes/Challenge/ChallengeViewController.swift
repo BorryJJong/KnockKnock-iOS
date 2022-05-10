@@ -50,7 +50,7 @@ extension ChallengeViewController: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ChallengeCell
     let challenge = self.challenges[indexPath.row]
-    cell.backgroundColor = .orange
+    cell.backgroundColor = .white
     cell.bind(data: challenge)
     return cell
   }
@@ -58,7 +58,7 @@ extension ChallengeViewController: UICollectionViewDataSource {
 
 extension ChallengeViewController: UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return CGSize(width: (self.containerView.frame.width - 40), height: 320)
+    return CGSize(width: (self.containerView.frame.width - 40), height: (self.containerView.frame.height - 120) / 2)
   }
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
     return 40
