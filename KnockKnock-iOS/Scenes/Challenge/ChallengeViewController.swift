@@ -69,4 +69,7 @@ extension ChallengeViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension ChallengeViewController: UICollectionViewDelegate {
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    self.navigationController?.pushViewController(ChallengeDetailViewController(), animated: true)
+  }
 }

@@ -14,6 +14,16 @@ final class ChallengeCell: BaseCollectionViewCell {
   private enum Metric {
     static let challengeHeight = 245.f
 
+    static let newChallengeLabelTopMargin = 11.f
+    static let newChallengeLabelLeadingMargin = 10.f
+    static let newChallengeLabelWidth = 40.f
+    static let newChallengeLabelHeight = 20.f
+
+    static let hotChallengeLabelTopMargin = 11.f
+    static let hotChallengeLabelLeadingMargin = 5.f
+    static let hotChallengeLabelWidth = 40.f
+    static let hotChallengeLabelHeight = 20.f
+
     static let participantViewTopMargin = -15.f
     static let participantViewTrailingMargin = -77.f
     static let participantViewHeight = 40.f
@@ -24,6 +34,11 @@ final class ChallengeCell: BaseCollectionViewCell {
     static let participantLabelViewLeadingMargin = 5.f
 
     static let seperatorLineViewHeight = 1.f
+    static let seperatorLineViewTopMargin = 10.f
+
+    static let titleLabelTopMargin = 10.f
+
+    static let contentsLabelTopMargin = 5.f
   }
  
   // MARK: - UI
@@ -114,15 +129,15 @@ final class ChallengeCell: BaseCollectionViewCell {
       self.challengeImageView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
       self.challengeImageView.heightAnchor.constraint(equalToConstant: Metric.challengeHeight),
 
-      self.newChallengeLabel.topAnchor.constraint(equalTo: self.challengeImageView.topAnchor, constant: 11),
-      self.newChallengeLabel.leadingAnchor.constraint(equalTo: self.challengeImageView.leadingAnchor, constant: 10),
-      self.newChallengeLabel.widthAnchor.constraint(equalToConstant: 40),
-      self.newChallengeLabel.heightAnchor.constraint(equalToConstant: 20),
+      self.newChallengeLabel.topAnchor.constraint(equalTo: self.challengeImageView.topAnchor, constant: Metric.newChallengeLabelTopMargin),
+      self.newChallengeLabel.leadingAnchor.constraint(equalTo: self.challengeImageView.leadingAnchor, constant: Metric.newChallengeLabelLeadingMargin),
+      self.newChallengeLabel.widthAnchor.constraint(equalToConstant: Metric.newChallengeLabelWidth),
+      self.newChallengeLabel.heightAnchor.constraint(equalToConstant: Metric.newChallengeLabelHeight),
 
-      self.hotChallengeLabel.topAnchor.constraint(equalTo: self.challengeImageView.topAnchor, constant: 11),
-      self.hotChallengeLabel.leadingAnchor.constraint(equalTo: self.newChallengeLabel.trailingAnchor, constant: 5),
-      self.hotChallengeLabel.widthAnchor.constraint(equalToConstant: 40),
-      self.hotChallengeLabel.heightAnchor.constraint(equalToConstant: 20),
+      self.hotChallengeLabel.topAnchor.constraint(equalTo: self.challengeImageView.topAnchor, constant: Metric.hotChallengeLabelTopMargin),
+      self.hotChallengeLabel.leadingAnchor.constraint(equalTo: self.newChallengeLabel.trailingAnchor, constant: Metric.hotChallengeLabelLeadingMargin),
+      self.hotChallengeLabel.widthAnchor.constraint(equalToConstant: Metric.hotChallengeLabelWidth),
+      self.hotChallengeLabel.heightAnchor.constraint(equalToConstant: Metric.hotChallengeLabelHeight),
 
       self.participantView.topAnchor.constraint(equalTo: self.challengeImageView.bottomAnchor, constant: Metric.participantViewTopMargin),
       self.participantView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
@@ -137,13 +152,13 @@ final class ChallengeCell: BaseCollectionViewCell {
 
       self.seperatorLineView.heightAnchor.constraint(equalToConstant: Metric.seperatorLineViewHeight),
       self.seperatorLineView.widthAnchor.constraint(equalTo: self.contentView.widthAnchor),
-      self.seperatorLineView.topAnchor.constraint(equalTo: self.participantView.bottomAnchor, constant: 10),
+      self.seperatorLineView.topAnchor.constraint(equalTo: self.participantView.bottomAnchor, constant: Metric.seperatorLineViewTopMargin),
 
-      self.titleLabel.topAnchor.constraint(equalTo: self.seperatorLineView.bottomAnchor, constant: 10),
+      self.titleLabel.topAnchor.constraint(equalTo: self.seperatorLineView.bottomAnchor, constant: Metric.titleLabelTopMargin),
       self.titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
       self.titleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
       
-      self.contentsLabel.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: 5),
+      self.contentsLabel.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: Metric.contentsLabelTopMargin),
       self.contentsLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
       self.contentsLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
       self.contentsLabel.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
