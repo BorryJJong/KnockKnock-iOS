@@ -12,12 +12,14 @@ import Then
 final class ChallengeView: UIView {
   
   // MARK: - UI
-  
-  let tableView = UITableView().then {
+
+  let challengeCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
+    let flowLayout = UICollectionViewFlowLayout.init()
+    flowLayout.scrollDirection = .vertical
+    $0.collectionViewLayout = flowLayout
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .white
-    $0.rowHeight = UITableView.automaticDimension
-    $0.registCell(type: ChallengeCell.self)
+    $0.register(ChallengeCell.self, forCellWithReuseIdentifier: "cell")
   }
   
   // MARK: - Initialize
@@ -32,13 +34,13 @@ final class ChallengeView: UIView {
   }
   
   private func setupConstraints() {
-    [self.tableView].addSubViews(self)
+    [self.challengeCollectionView].addSubViews(self)
     
     NSLayoutConstraint.activate([
-      self.tableView.topAnchor.constraint(equalTo: self.topAnchor),
-      self.tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-      self.tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-      self.tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+      self.challengeCollectionView.topAnchor.constraint(equalTo: self.topAnchor),
+      self.challengeCollectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+      self.challengeCollectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+      self.challengeCollectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
     ])
   }
 }

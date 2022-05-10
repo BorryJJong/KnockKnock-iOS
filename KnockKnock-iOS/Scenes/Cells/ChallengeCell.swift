@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ChallengeCell: BaseTableViewCell {
+final class ChallengeCell: BaseCollectionViewCell {
   
   // MARK: - Constants
   
@@ -23,12 +23,14 @@ final class ChallengeCell: BaseTableViewCell {
   }
   let titleLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.tintColor = .black
     $0.text = "#GOGO 챌린지"
     $0.numberOfLines = 1
     $0.textAlignment = .left
   }
   let contentsLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.tintColor = .black
     $0.text = "쓰레기를 줄이자는 의미의 제로웨이스트 운동이 활발해 지고있다. 제로웨이스트에 대해 좀 더 알아보자!"
     $0.numberOfLines = 0
     $0.textAlignment = .left
