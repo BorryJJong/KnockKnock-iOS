@@ -229,12 +229,12 @@
 			isa = PBXGroup;
 			children = (
 				201077F927D3C4A100280991 /* Views */,
+				617F9D66282A5B0300C2BC9A /* ChallengeDetailViewController.swift */,
 				2090811927CA4F61005A1573 /* ChallengeViewController.swift */,
 				20D28F7F27CFC5E800A809DB /* ChallengeInteractor.swift */,
 				20D28F8127CFC5F000A809DB /* ChallengePresenter.swift */,
 				20D28F8327CFC60900A809DB /* ChallengeRouter.swift */,
 				20D28F8527CFC7B300A809DB /* ChallengeWorker.swift */,
-				617F9D66282A5B0300C2BC9A /* ChallengeDetailViewController.swift */,
 			);
 			path = Challenge;
 			sourceTree = "<group>";

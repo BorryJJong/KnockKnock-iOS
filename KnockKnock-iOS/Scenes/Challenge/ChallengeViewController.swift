@@ -24,6 +24,7 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    self.setNavigationItem()
     self.interactor?.fetchChallenge()
   }
 
@@ -36,6 +37,13 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
       $0.delegate = self
       $0.dataSource = self
     }
+  }
+
+  func setNavigationItem() {
+    let searchBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: nil)
+
+    self.navigationItem.title = "챌린지"
+    self.navigationItem.rightBarButtonItem = searchBarButtonItem
   }
 }
 
