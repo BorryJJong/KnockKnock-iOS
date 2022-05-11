@@ -16,12 +16,16 @@ class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
     super.viewDidLoad()
   }
 
+  override func viewWillAppear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = true
+  }
+
   override func setupConfigure() {
     self.setNavigationItem()
-//    self.containerView.challengeCollectionView.do {
-//      $0.delegate = self
-//      $0.dataSource = self
-//    }
+    self.containerView.contentsTableView.do {
+      $0.delegate = self
+      $0.dataSource = self
+    }
   }
 
   func setNavigationItem() {
@@ -37,4 +41,19 @@ class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
     self.navigationItem.leftBarButtonItem = backBarButtonItem
     self.navigationItem.rightBarButtonItems = [shareBarButtonItem, homeBarBUttonItem]
   }
+}
+
+extension ChallengeDetailViewController: UITableViewDataSource {
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let cell = tableView.dequeueCell(withType: ChallengeDetailCell.self, for: indexPath)
+    return cell
+  }
+
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    return 3
+  }
+}
+
+extension ChallengeDetailViewController: UITableViewDelegate {
+
 }
