@@ -5,7 +5,6 @@
 //  Created by Daye on 2022/05/10.
 //
 
-import Foundation
 import UIKit
 
 class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
@@ -29,7 +28,7 @@ class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
   }
 
   func setNavigationItem() {
-    let backBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_back_24_wh"), style: .plain, target: self, action: nil)
+    let backBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_back_24_wh"), style: .plain, target: self, action: #selector(tabBackBarButton(_:)))
     let shareBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_gnb_share_24_wh"), style: .plain, target: self, action: nil)
     let homeBarBUttonItem = UIBarButtonItem(image: UIImage(named: "ic_gnb_home_24_wh"), style: .plain, target: self, action: nil)
 
@@ -40,6 +39,10 @@ class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
 
     self.navigationItem.leftBarButtonItem = backBarButtonItem
     self.navigationItem.rightBarButtonItems = [shareBarButtonItem, homeBarBUttonItem]
+  }
+
+  @objc func tabBackBarButton(_ sender: UIBarButtonItem) {
+    self.navigationController?.popViewController(animated: true)
   }
 }
 

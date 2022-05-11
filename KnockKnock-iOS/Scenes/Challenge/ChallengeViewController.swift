@@ -26,7 +26,11 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
     super.viewDidLoad()
     self.interactor?.fetchChallenge()
   }
-  
+
+  override func viewWillAppear(_ animated: Bool) {
+    self.tabBarController?.tabBar.isHidden = false
+  }
+
   override func setupConfigure() {
     self.containerView.challengeCollectionView.do {
       $0.delegate = self
