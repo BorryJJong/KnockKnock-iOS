@@ -16,7 +16,7 @@ class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
   }
 
   override func viewWillAppear(_ animated: Bool) {
-        self.tabBarController?.tabBar.isHidden = true
+    self.tabBarController?.tabBar.isHidden = true
   }
 
   override func setupConfigure() {
@@ -28,7 +28,7 @@ class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
   }
 
   func setNavigationItem() {
-    let backBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_back_24_wh"), style: .plain, target: self, action: #selector(tabBackBarButton(_:)))
+    let backBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_back_24_wh"), style: .plain, target: self, action: #selector(tapBackBarButton(_:)))
     let shareBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_gnb_share_24_wh"), style: .plain, target: self, action: nil)
     let homeBarBUttonItem = UIBarButtonItem(image: UIImage(named: "ic_gnb_home_24_wh"), style: .plain, target: self, action: nil)
 
@@ -41,7 +41,7 @@ class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
     self.navigationItem.rightBarButtonItems = [shareBarButtonItem, homeBarBUttonItem]
   }
 
-  @objc func tabBackBarButton(_ sender: UIBarButtonItem) {
+  @objc func tapBackBarButton(_ sender: UIBarButtonItem) {
     self.navigationController?.popViewController(animated: true)
   }
 }

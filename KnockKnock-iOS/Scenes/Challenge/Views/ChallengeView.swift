@@ -75,7 +75,6 @@ final class ChallengeView: UIView {
       [self.headerView, self.challengeCollectionView].addSubViews(self)
 
       NSLayoutConstraint.activate([
-
         self.headerView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.headerViewTopMargin),
         self.headerView.heightAnchor.constraint(equalToConstant: Metric.headerViewHeight),
         self.headerView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.headerViewLeadingMargin),

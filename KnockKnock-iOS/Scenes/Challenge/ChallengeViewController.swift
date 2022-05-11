@@ -37,6 +37,7 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
       $0.delegate = self
       $0.dataSource = self
     }
+    self.containerView.sortChallengeButton.addTarget(self, action: #selector(tapSortChallengeButton(_:)), for: .touchUpInside)
   }
 
   func setNavigationItem() {
@@ -44,6 +45,12 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
 
     self.navigationItem.title = "챌린지"
     self.navigationItem.rightBarButtonItem = searchBarButtonItem
+  }
+
+  @objc func tapSortChallengeButton(_ sender: UIButton) {
+    let bottomSheetViewController = BottomSheetViewController()
+    bottomSheetViewController.modalPresentationStyle = .overFullScreen
+    self.present(bottomSheetViewController, animated: false, completion: nil)
   }
 }
 
