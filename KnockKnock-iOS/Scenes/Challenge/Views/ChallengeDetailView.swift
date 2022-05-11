@@ -14,7 +14,7 @@ class ChallengeDetailView: UIView {
   // MARK: - Constants
 
   private enum Metric {
-    static let contentViewHeight = 3000.f
+    static let contentViewHeight = 2500.f
 
     static let participantViewTopMargin = -15.f
     static let participantViewTrailingMargin = -55.f
@@ -45,7 +45,7 @@ class ChallengeDetailView: UIView {
     static let summarySeperatorViewTopMargin = 40.f
 
     static let wayHeaderLabelLeadingMargin = 20.f
-    static let wayHeaderLabelTopMargin = -20.f
+    static let wayHeaderLabelTopMargin = 20.f
 
     static let wayLabelTopMargin = 10.f
     static let wayLabelLeadingMargin = 20.f
