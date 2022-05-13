@@ -24,37 +24,84 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    self.setNavigationItem()
     self.interactor?.fetchChallenge()
   }
-  
+
+  override func viewWillAppear(_ animated: Bool) {
+    self.tabBarController?.tabBar.isHidden = false
+  }
+
   override func setupConfigure() {
-    self.containerView.tableView.do {
+    self.containerView.challengeCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
     }
+    self.containerView.sortChallengeButton.addTarget(self, action: #selector(tapSortChallengeButton(_:)), for: .touchUpInside)
+  }
+
+  func setNavigationItem() {
+    let searchBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: nil)
+
+    self.navigationItem.title = "챌린지"
+    self.navigationItem.rightBarButtonItem = searchBarButtonItem
+  }
+
+  @objc func tapSortChallengeButton(_ sender: UIButton) {
   }
 }
 
 extension ChallengeViewController: ChallengeViewProtocol {
   func fetchChallenges(challenges: [Challenge]) {
     self.challenges = challenges
-    self.containerView.tableView.reloadData()
+    self.containerView.challengeCollectionView.reloadData()
   }
 }
 
-extension ChallengeViewController: UITableViewDataSource {
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+extension ChallengeViewController: UICollectionViewDataSource {
+  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return self.challenges.count
   }
-  
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueCell(withType: ChallengeCell.self, for: indexPath)
+
+  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ChallengeCell
     let challenge = self.challenges[indexPath.row]
+    cell.backgroundColor = .white
     cell.bind(data: challenge)
     return cell
   }
 }
 
-extension ChallengeViewController: UITableViewDelegate {
+extension ChallengeViewController: UICollectionViewDelegateFlowLayout {
+  func collectionView(
+    _ collectionView: UICollectionView, 
+    layout collectionViewLayout: UICollectionViewLayout,
+     sizeForItemAt indexPath: IndexPath
+   ) -> CGSize {
+      return CGSize(width: (self.containerView.frame.width - 40), height: (self.containerView.frame.height - 120) / 2)
+  }
   
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    minimumLineSpacingForSectionAt section: Int
+  ) -> CGFloat {
+      return 40
+  }
+  
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    minimumInteritemSpacingForSectionAt section: Int
+  ) -> CGFloat {
+    return 20
+  }
+}
+
+extension ChallengeViewController: UICollectionViewDelegate {
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    let view = ChallengeDetailViewController()
+    view.hidesBottomBarWhenPushed = true
+    self.navigationController?.pushViewController(view, animated: true)
+  }
 }

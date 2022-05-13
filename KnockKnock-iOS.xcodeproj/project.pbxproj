@@ -39,6 +39,9 @@
 		611BD4BC27E70393007D5C79 /* PropertySelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4BB27E70393007D5C79 /* PropertySelectViewController.swift */; };
 		611BD4BF27E70E64007D5C79 /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4BE27E70E64007D5C79 /* Property.swift */; };
 		611BD4C127E767CE007D5C79 /* shopSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4C027E767CE007D5C79 /* shopSearchView.swift */; };
+		617F9D65282A5AED00C2BC9A /* ChallengeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D64282A5AED00C2BC9A /* ChallengeDetailView.swift */; };
+		617F9D67282A5B0300C2BC9A /* ChallengeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D66282A5B0300C2BC9A /* ChallengeDetailViewController.swift */; };
+		617F9D69282A6EB200C2BC9A /* ChallengeDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D68282A6EB200C2BC9A /* ChallengeDetailCell.swift */; };
 		618FDAC527E80C6B00C2823F /* shopSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDAC427E80C6B00C2823F /* shopSearchViewController.swift */; };
 		618FDAC727E82A6F00C2823F /* AddressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDAC627E82A6F00C2823F /* AddressCell.swift */; };
 		618FDAC927E836BA00C2823F /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDAC827E836BA00C2823F /* PhotoCell.swift */; };
@@ -83,6 +86,9 @@
 		611BD4BB27E70393007D5C79 /* PropertySelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertySelectViewController.swift; sourceTree = "<group>"; };
 		611BD4BE27E70E64007D5C79 /* Property.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
 		611BD4C027E767CE007D5C79 /* shopSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shopSearchView.swift; sourceTree = "<group>"; };
+		617F9D64282A5AED00C2BC9A /* ChallengeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailView.swift; sourceTree = "<group>"; };
+		617F9D66282A5B0300C2BC9A /* ChallengeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailViewController.swift; sourceTree = "<group>"; };
+		617F9D68282A6EB200C2BC9A /* ChallengeDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailCell.swift; sourceTree = "<group>"; };
 		618FDAC427E80C6B00C2823F /* shopSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shopSearchViewController.swift; sourceTree = "<group>"; };
 		618FDAC627E82A6F00C2823F /* AddressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressCell.swift; sourceTree = "<group>"; };
 		618FDAC827E836BA00C2823F /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
@@ -161,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				201077F327D3AA9800280991 /* ChallengeView.swift */,
+				617F9D64282A5AED00C2BC9A /* ChallengeDetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -172,6 +179,7 @@
 				611BD4B727E6DD5F007D5C79 /* PropertyCell.swift */,
 				618FDAC627E82A6F00C2823F /* AddressCell.swift */,
 				618FDAC827E836BA00C2823F /* PhotoCell.swift */,
+				617F9D68282A6EB200C2BC9A /* ChallengeDetailCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -221,6 +229,7 @@
 			isa = PBXGroup;
 			children = (
 				201077F927D3C4A100280991 /* Views */,
+				617F9D66282A5B0300C2BC9A /* ChallengeDetailViewController.swift */,
 				2090811927CA4F61005A1573 /* ChallengeViewController.swift */,
 				20D28F7F27CFC5E800A809DB /* ChallengeInteractor.swift */,
 				20D28F8127CFC5F000A809DB /* ChallengePresenter.swift */,
@@ -445,6 +454,7 @@
 			files = (
 				201077FC27D3D26E00280991 /* BaseTableViewCell.swift in Sources */,
 				2010780227D3D59F00280991 /* UITableViewCell+Ext.swift in Sources */,
+				617F9D69282A6EB200C2BC9A /* ChallengeDetailCell.swift in Sources */,
 				201077F227D3A97A00280991 /* BaseViewController.swift in Sources */,
 				20EAE2972814054F009242A1 /* ChellengeRepository.swift in Sources */,
 				618FDAC527E80C6B00C2823F /* shopSearchViewController.swift in Sources */,
@@ -464,11 +474,13 @@
 				20D28F8427CFC60900A809DB /* ChallengeRouter.swift in Sources */,
 				61FC60E927B9244D00A51DBC /* AppDelegate.swift in Sources */,
 				611BD4BC27E70393007D5C79 /* PropertySelectViewController.swift in Sources */,
+				617F9D65282A5AED00C2BC9A /* ChallengeDetailView.swift in Sources */,
 				611BD4AA27E48B93007D5C79 /* FeedWriteInteractor.swift in Sources */,
 				201077F427D3AA9800280991 /* ChallengeView.swift in Sources */,
 				201077FE27D3D2AC00280991 /* ChallengeCell.swift in Sources */,
 				618FDAC927E836BA00C2823F /* PhotoCell.swift in Sources */,
 				611BD4A327E3017E007D5C79 /* FeedWriteViewController.swift in Sources */,
+				617F9D67282A5B0300C2BC9A /* ChallengeDetailViewController.swift in Sources */,
 				618FDAC727E82A6F00C2823F /* AddressCell.swift in Sources */,
 				611BD4B027E49024007D5C79 /* FeedWriteWorker.swift in Sources */,
 				2010780827D48FDD00280991 /* Int+Ext.swift in Sources */,
