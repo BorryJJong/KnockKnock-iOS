@@ -24,7 +24,7 @@ final class ChallengeDetailCell: BaseTableViewCell {
 
   // MARK: - UIs
 
-  let titleLabel = UILabel().then {
+  private let titleLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.textColor = .green50
     $0.font = .systemFont(ofSize: 17, weight: .bold)
@@ -32,14 +32,14 @@ final class ChallengeDetailCell: BaseTableViewCell {
     $0.text = "제로웨이스트를 실천 해야하는 이유"
   }
 
-  let exampleImageView = UIImageView().then {
+  private let exampleImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.image = UIImage(named: "challenge")
     $0.contentMode = .scaleToFill
     $0.layer.cornerRadius = 10
   }
 
-  let contentsLabel = UILabel().then {
+  private let contentsLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.textColor = .black
     $0.font = .systemFont(ofSize: 14, weight: .regular)
