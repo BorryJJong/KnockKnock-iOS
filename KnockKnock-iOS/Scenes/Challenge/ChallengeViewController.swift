@@ -48,9 +48,6 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
   }
 
   @objc func tapSortChallengeButton(_ sender: UIButton) {
-    let bottomSheetViewController = BottomSheetViewController()
-    bottomSheetViewController.modalPresentationStyle = .overFullScreen
-    self.present(bottomSheetViewController, animated: false, completion: nil)
   }
 }
 
