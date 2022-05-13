@@ -76,13 +76,27 @@ extension ChallengeViewController: UICollectionViewDataSource {
 }
 
 extension ChallengeViewController: UICollectionViewDelegateFlowLayout {
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return CGSize(width: (self.containerView.frame.width - 40), height: (self.containerView.frame.height - 120) / 2)
+  func collectionView(
+    _ collectionView: UICollectionView, 
+    layout collectionViewLayout: UICollectionViewLayout,
+     sizeForItemAt indexPath: IndexPath
+   ) -> CGSize {
+      return CGSize(width: (self.containerView.frame.width - 40), height: (self.containerView.frame.height - 120) / 2)
   }
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-    return 40
+  
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    minimumLineSpacingForSectionAt section: Int
+  ) -> CGFloat {
+      return 40
   }
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+  
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    minimumInteritemSpacingForSectionAt section: Int
+  ) -> CGFloat {
     return 20
   }
 }
