@@ -16,10 +16,9 @@ final class BottomMenuCell: BaseTableViewCell {
 
   // MARK: - UIs
 
-  let menuLabel = UILabel().then {
+  let contentsLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.textColor = .black
-    $0.text = "삭제"
   }
 
   let checkImageView = UIImageView().then {
@@ -28,16 +27,15 @@ final class BottomMenuCell: BaseTableViewCell {
   }
 
   override func setupConstraints() {
-    [self.menuLabel, self.checkImageView].addSubViews(self.contentView)
+    [self.contentsLabel, self.checkImageView].addSubViews(self.contentView)
     
     NSLayoutConstraint.activate([
-      self.menuLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor),
-      self.menuLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
-      self.menuLabel.heightAnchor.constraint(equalToConstant: 50),
+      self.contentsLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
+      self.contentsLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+      self.contentsLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
 
-      self.checkImageView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
+      self.checkImageView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
       self.checkImageView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
-      self.checkImageView.heightAnchor.constraint(equalToConstant: 50)
     ])
   }
 
