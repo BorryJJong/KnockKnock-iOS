@@ -16,14 +16,18 @@ final class BottomMenuCell: BaseTableViewCell {
 
   // MARK: - UIs
 
-  let contentsLabel = UILabel().then {
+  private let contentsLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.textColor = .black
   }
 
-  let checkImageView = UIImageView().then {
+  private let checkImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.image = UIImage(systemName: "check")
+  }
+
+  func setData(labelText: String) {
+    self.contentsLabel.text = labelText
   }
 
   override func setupConstraints() {

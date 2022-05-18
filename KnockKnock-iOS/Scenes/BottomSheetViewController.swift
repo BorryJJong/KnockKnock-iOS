@@ -14,7 +14,7 @@ class BottomSheetViewController: BaseViewController<BottomSheetView> {
   // MARK: - Properties
 
   let bottomHeight: CGFloat = 150
-  private var tableContents: [String] = ["수정", "삭제"]
+  private var tableContents: [String] = []
 
   // MARK: - Life Cycle
 
@@ -38,6 +38,10 @@ class BottomSheetViewController: BaseViewController<BottomSheetView> {
       $0.dataSource = self
     }
     self.containerView.dimmedBackView.alpha = 0.0
+  }
+
+  func setBottomSheetContents(contents: [String]) {
+    self.tableContents = contents
   }
 
   private func setupGestureRecognizer() {
@@ -100,7 +104,7 @@ extension BottomSheetViewController: UITableViewDataSource {
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueCell(withType: BottomMenuCell.self, for: indexPath)
-    cell.contentsLabel.text = tableContents[indexPath.row]
+    cell.setData(labelText: tableContents[indexPath.row])
     return cell
   }
 }
