@@ -107,6 +107,11 @@ extension BottomSheetViewController: UITableViewDataSource {
     cell.setData(labelText: tableContents[indexPath.row])
     return cell
   }
+
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    print("\(indexPath.row) is selected.")
+    self.hideBottomSheet()
+  }
 }
 
 extension BottomSheetViewController: UITableViewDelegate {

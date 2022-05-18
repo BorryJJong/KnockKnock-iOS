@@ -53,6 +53,7 @@ final class BottomSheetView: UIView {
   let tableView = UITableView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.isScrollEnabled = false
+    $0.separatorColor = .clear
     $0.rowHeight = UITableView.automaticDimension
     $0.registCell(type: BottomMenuCell.self)
   }

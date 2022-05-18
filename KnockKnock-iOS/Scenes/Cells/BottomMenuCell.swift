@@ -9,11 +9,6 @@ import UIKit
 
 final class BottomMenuCell: BaseTableViewCell {
 
-  // MARK: - Constants
-
-  private enum Metric {
-  }
-
   // MARK: - UIs
 
   private let contentsLabel = UILabel().then {
@@ -23,7 +18,6 @@ final class BottomMenuCell: BaseTableViewCell {
 
   private let checkImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.image = UIImage(systemName: "check")
   }
 
   func setData(labelText: String) {
