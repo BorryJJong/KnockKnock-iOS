@@ -77,12 +77,10 @@ class BottomSheetViewController: BaseViewController<BottomSheetView> {
     }
   }
 
-  // UITapGestureRecognizer 연결 함수 부분
   @objc private func dimmedViewTapped(_ tapRecognizer: UITapGestureRecognizer) {
     self.hideBottomSheet()
   }
 
-  // UISwipeGestureRecognizer 연결 함수 부분
   @objc func panGesture(_ recognizer: UISwipeGestureRecognizer) {
     if recognizer.state == .ended {
       switch recognizer.direction {

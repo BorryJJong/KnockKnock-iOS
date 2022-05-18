@@ -11,16 +11,31 @@ import Then
 
 final class BottomSheetView: UIView {
 
-  // bottomSheet가 view의 상단에서 떨어진 거리
-  var bottomSheetViewTopConstraint: NSLayoutConstraint!
+  // MARK: - Constants
 
-  // 기존 화면을 흐려지게 만들기 위한 뷰
+  private enum Metric {
+    static let dismissIndicatorViewWidth = 35.f
+    static let dismissIndicatorViewHeight = 5.f
+    static let dismissIndicatorViewTopMargin = 10.f
+
+    static let tableViewTopMargin = 15.f
+    static let tableViewLeadingMargin = 20.f
+    static let tableViewTrailingMargin = -20.f
+    static let tableViewBottomMargin = 20.f
+  }
+
+  // MARK: - Properties
+
+  lazy var topConstant = self.safeAreaInsets.bottom + self.safeAreaLayoutGuide.layoutFrame.height
+  lazy var bottomSheetViewTopConstraint: NSLayoutConstraint = self.bottomSheetView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: topConstant)
+
+  // MARK: - UIs
+
   let dimmedBackView = UIView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
   }
 
-  // 바텀 시트 뷰
   let bottomSheetView = UIView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .white
@@ -29,7 +44,6 @@ final class BottomSheetView: UIView {
     $0.clipsToBounds = true
   }
 
-  // dismiss Indicator View UI 구성 부분
   let dismissIndicatorView = UIView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .systemGray2
@@ -58,9 +72,6 @@ final class BottomSheetView: UIView {
     [self.dimmedBackView, self.bottomSheetView].addSubViews(self)
     [self.dismissIndicatorView, self.tableView].addSubViews(self.bottomSheetView)
 
-    let topConstant = self.safeAreaInsets.bottom + self.safeAreaLayoutGuide.layoutFrame.height
-    self.bottomSheetViewTopConstraint = self.bottomSheetView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: topConstant)
-
     NSLayoutConstraint.activate([
       self.dimmedBackView.topAnchor.constraint(equalTo: self.topAnchor),
       self.dimmedBackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
@@ -72,15 +83,15 @@ final class BottomSheetView: UIView {
       self.bottomSheetView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
       self.bottomSheetViewTopConstraint,
 
-      self.dismissIndicatorView.widthAnchor.constraint(equalToConstant: 35),
-      self.dismissIndicatorView.heightAnchor.constraint(equalToConstant: 5),
-      self.dismissIndicatorView.topAnchor.constraint(equalTo: self.bottomSheetView.topAnchor, constant: 10),
+      self.dismissIndicatorView.widthAnchor.constraint(equalToConstant: Metric.dismissIndicatorViewWidth),
+      self.dismissIndicatorView.heightAnchor.constraint(equalToConstant: Metric.dismissIndicatorViewHeight),
+      self.dismissIndicatorView.topAnchor.constraint(equalTo: self.bottomSheetView.topAnchor, constant: Metric.dismissIndicatorViewTopMargin),
       self.dismissIndicatorView.centerXAnchor.constraint(equalTo: self.bottomSheetView.centerXAnchor),
 
-      self.tableView.topAnchor.constraint(equalTo: self.bottomSheetView.topAnchor, constant: 15),
-      self.tableView.leadingAnchor.constraint(equalTo: self.bottomSheetView.leadingAnchor, constant: 20),
-      self.tableView.trailingAnchor.constraint(equalTo: self.bottomSheetView.trailingAnchor, constant: -20),
-      self.tableView.bottomAnchor.constraint(equalTo: self.bottomSheetView.bottomAnchor, constant: 20)
+      self.tableView.topAnchor.constraint(equalTo: self.bottomSheetView.topAnchor, constant: Metric.tableViewTopMargin),
+      self.tableView.leadingAnchor.constraint(equalTo: self.bottomSheetView.leadingAnchor, constant: Metric.tableViewLeadingMargin),
+      self.tableView.trailingAnchor.constraint(equalTo: self.bottomSheetView.trailingAnchor, constant: Metric.tableViewTrailingMargin),
+      self.tableView.bottomAnchor.constraint(equalTo: self.bottomSheetView.bottomAnchor, constant: Metric.tableViewBottomMargin)
     ])
   }
 }
