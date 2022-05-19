@@ -1,0 +1,12 @@
+included:
+excluded:
+- Pods
+
+disabled_rules:
+- trailing_whitespace           # 후행 간격 제한 해제.
+- identifier_name               # 변수 네이밍 관련 제한 해제.
+- force_cast                    # 강제 캐스팅 제한 해제.
+- line_length                   # 한줄 길이 제한 해제.
+- function_body_length          # 메소드 바디 길이 제한.
+
+

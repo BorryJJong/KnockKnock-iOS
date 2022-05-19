@@ -35,7 +35,10 @@ final class AdressCell: BaseTableViewCell {
 
     NSLayoutConstraint.activate([
       iconImageView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
-      iconImageView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: Metric.iconImageViewBottomMargin),
+      iconImageView.bottomAnchor.constraint(
+        equalTo: self.contentView.bottomAnchor,
+        constant: Metric.iconImageViewBottomMargin
+      ),
       iconImageView.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor),
       iconImageView.heightAnchor.constraint(equalTo: self.iconImageView.widthAnchor, multiplier: 1),
 

@@ -16,6 +16,7 @@
 		2010780227D3D59F00280991 /* UITableViewCell+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2010780127D3D59F00280991 /* UITableViewCell+Ext.swift */; };
 		2010780427D3D62300280991 /* UITableView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2010780327D3D62300280991 /* UITableView+Ext.swift */; };
 		2010780827D48FDD00280991 /* Int+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2010780727D48FDD00280991 /* Int+Ext.swift */; };
+		204320C928367AD300E6FD06 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 204320C828367AD300E6FD06 /* .swiftlint.yml */; };
 		2090811827CA4F56005A1573 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090811727CA4F56005A1573 /* HomeViewController.swift */; };
 		2090811A27CA4F61005A1573 /* ChallengeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090811927CA4F61005A1573 /* ChallengeViewController.swift */; };
 		2090811C27CA4F6B005A1573 /* StoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090811B27CA4F6B005A1573 /* StoreViewController.swift */; };
@@ -39,7 +40,7 @@
 		611BD4BC27E70393007D5C79 /* PropertySelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4BB27E70393007D5C79 /* PropertySelectViewController.swift */; };
 		611BD4BF27E70E64007D5C79 /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4BE27E70E64007D5C79 /* Property.swift */; };
 		611BD4C127E767CE007D5C79 /* shopSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4C027E767CE007D5C79 /* shopSearchView.swift */; };
-		618FDAC527E80C6B00C2823F /* shopSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDAC427E80C6B00C2823F /* shopSearchViewController.swift */; };
+		618FDAC527E80C6B00C2823F /* ShopSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDAC427E80C6B00C2823F /* ShopSearchViewController.swift */; };
 		618FDAC727E82A6F00C2823F /* AddressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDAC627E82A6F00C2823F /* AddressCell.swift */; };
 		618FDAC927E836BA00C2823F /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDAC827E836BA00C2823F /* PhotoCell.swift */; };
 		618FDACF27E9642400C2823F /* UIButton+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDACE27E9642400C2823F /* UIButton+Ext.swift */; };
@@ -60,6 +61,7 @@
 		2010780127D3D59F00280991 /* UITableViewCell+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Ext.swift"; sourceTree = "<group>"; };
 		2010780327D3D62300280991 /* UITableView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Ext.swift"; sourceTree = "<group>"; };
 		2010780727D48FDD00280991 /* Int+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Ext.swift"; sourceTree = "<group>"; };
+		204320C828367AD300E6FD06 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		2090811727CA4F56005A1573 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		2090811927CA4F61005A1573 /* ChallengeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeViewController.swift; sourceTree = "<group>"; };
 		2090811B27CA4F6B005A1573 /* StoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreViewController.swift; sourceTree = "<group>"; };
@@ -83,7 +85,7 @@
 		611BD4BB27E70393007D5C79 /* PropertySelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertySelectViewController.swift; sourceTree = "<group>"; };
 		611BD4BE27E70E64007D5C79 /* Property.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
 		611BD4C027E767CE007D5C79 /* shopSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shopSearchView.swift; sourceTree = "<group>"; };
-		618FDAC427E80C6B00C2823F /* shopSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shopSearchViewController.swift; sourceTree = "<group>"; };
+		618FDAC427E80C6B00C2823F /* ShopSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSearchViewController.swift; sourceTree = "<group>"; };
 		618FDAC627E82A6F00C2823F /* AddressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressCell.swift; sourceTree = "<group>"; };
 		618FDAC827E836BA00C2823F /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		618FDACE27E9642400C2823F /* UIButton+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Ext.swift"; sourceTree = "<group>"; };
@@ -278,7 +280,7 @@
 			children = (
 				611BD4A627E30811007D5C79 /* Views */,
 				611BD4BB27E70393007D5C79 /* PropertySelectViewController.swift */,
-				618FDAC427E80C6B00C2823F /* shopSearchViewController.swift */,
+				618FDAC427E80C6B00C2823F /* ShopSearchViewController.swift */,
 				611BD4A227E3017E007D5C79 /* FeedWriteViewController.swift */,
 				611BD4A927E48B93007D5C79 /* FeedWriteInteractor.swift */,
 				611BD4AB27E48B9F007D5C79 /* FeedWritePresenter.swift */,
@@ -291,6 +293,7 @@
 		61FC60DC27B9244D00A51DBC = {
 			isa = PBXGroup;
 			children = (
+				204320C828367AD300E6FD06 /* .swiftlint.yml */,
 				61FC60E727B9244D00A51DBC /* KnockKnock-iOS */,
 				61FC60E627B9244D00A51DBC /* Products */,
 				321DA5FE23695503A22B86C2 /* Pods */,
@@ -341,6 +344,7 @@
 				61FC60E227B9244D00A51DBC /* Frameworks */,
 				61FC60E327B9244D00A51DBC /* Resources */,
 				E798CD763B526EB54AB74F5A /* [CP] Embed Pods Frameworks */,
+				204320C728367A4F00E6FD06 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -389,6 +393,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				204320C928367AD300E6FD06 /* .swiftlint.yml in Resources */,
 				61FC60F527B9244F00A51DBC /* LaunchScreen.storyboard in Resources */,
 				61FC60F227B9244F00A51DBC /* Assets.xcassets in Resources */,
 			);
@@ -397,6 +402,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		204320C728367A4F00E6FD06 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PODS_ROOT}/SwiftLint/swiftlint\n";
+		};
 		476E8547CB178A7D1C61F974 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -447,7 +469,7 @@
 				2010780227D3D59F00280991 /* UITableViewCell+Ext.swift in Sources */,
 				201077F227D3A97A00280991 /* BaseViewController.swift in Sources */,
 				20EAE2972814054F009242A1 /* ChellengeRepository.swift in Sources */,
-				618FDAC527E80C6B00C2823F /* shopSearchViewController.swift in Sources */,
+				618FDAC527E80C6B00C2823F /* ShopSearchViewController.swift in Sources */,
 				61FC60ED27B9244E00A51DBC /* MainTabBarController.swift in Sources */,
 				201077EF27D39FFB00280991 /* Challenge.swift in Sources */,
 				2090811A27CA4F61005A1573 /* ChallengeViewController.swift in Sources */,

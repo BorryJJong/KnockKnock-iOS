@@ -20,6 +20,6 @@ final class PhotoCell: UICollectionViewCell {
   
   let deleteButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.setImage(#imageLiteral(resourceName:"ic_input_cancel"), for: .normal)
+    $0.setImage(#imageLiteral(resourceName: "ic_input_cancel"), for: .normal)
   }
 }

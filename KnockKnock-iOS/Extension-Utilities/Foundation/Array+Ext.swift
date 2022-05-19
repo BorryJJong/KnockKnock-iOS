@@ -9,7 +9,7 @@ import UIKit
 
 extension Array where Element: UIView {
   func addSubViews(_ parentView: UIView) {
-    self.forEach{
+    self.forEach {
       parentView.addSubview($0)
     }
   }

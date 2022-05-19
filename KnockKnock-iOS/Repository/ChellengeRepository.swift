@@ -20,7 +20,7 @@ final class ChallengeRepository: ChallengeRepositoryProtocol {
     return [
       Challenge(title: "Gogo 챌린지", contents: "쓰레기를 줄이쟈쓰레기를 줄이쟈쓰레기를 줄이쟈쓰레기를 줄이쟈"),
       Challenge(title: "제로웨이스트", contents: "쓰레기를 줄이쟈쓰레기를 줄이쟈쓰레기를 줄이쟈쓰레기를 줄이쟈"),
-      Challenge(title: "오호호호호호호", contents: "쓰레기를 줄이쟈쓰레기를 줄이쟈쓰레기를 줄이쟈쓰레기를 줄이쟈"),
+      Challenge(title: "오호호호호호호", contents: "쓰레기를 줄이쟈쓰레기를 줄이쟈쓰레기를 줄이쟈쓰레기를 줄이쟈")
     ]
   }
 }
