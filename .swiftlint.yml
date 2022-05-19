@@ -8,5 +8,3 @@ disabled_rules:
 - force_cast                    # 강제 캐스팅 제한 해제.
 - line_length                   # 한줄 길이 제한 해제.
 - function_body_length          # 메소드 바디 길이 제한.
-
-
