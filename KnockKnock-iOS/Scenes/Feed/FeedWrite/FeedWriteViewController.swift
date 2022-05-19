@@ -18,6 +18,7 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   var interactor: FeedWriteInteractorProtocol?
 
   // MARK: - Life cycle
+
   override func viewDidLoad() {
     super.viewDidLoad()
   }
@@ -27,8 +28,12 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     self.containerView.contentTextView.do {
       $0.delegate = self
     }
-    self.containerView.tagSelectButton.addTarget(self, action: #selector(tagSelectButtonDidTap(_:)), for: .touchUpInside)
-    self.containerView.shopSearchButton.addTarget(self, action: #selector(shopSearchButtonDidTap(_:)), for: .touchUpInside)
+    self.containerView.tagSelectButton.addTarget(self,
+                                                 action: #selector(tagSelectButtonDidTap(_:)),
+                                                 for: .touchUpInside)
+    self.containerView.shopSearchButton.addTarget(self,
+                                                  action: #selector(shopSearchButtonDidTap(_:)),
+                                                  for: .touchUpInside)
   }
 
   @objc func tagSelectButtonDidTap(_ sender: UIButton) {
@@ -40,7 +45,7 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   }
 
   @objc func shopSearchButtonDidTap(_ sender: UIButton) {
-    self.navigationController?.pushViewController(shopSearchViewController(), animated: true)
+    self.navigationController?.pushViewController(ShopSearchViewController(), animated: true)
   }
 }
 

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class shopSearchViewController: BaseViewController<ShopSearchView> {
+class ShopSearchViewController: BaseViewController<ShopSearchView> {
 
   // MARK: - Properties
 
@@ -39,7 +39,7 @@ class shopSearchViewController: BaseViewController<ShopSearchView> {
   }
 }
 
-extension shopSearchViewController: UITableViewDataSource {
+extension ShopSearchViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return addressDummy.count
   }
