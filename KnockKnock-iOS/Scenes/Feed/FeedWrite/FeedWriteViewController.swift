@@ -40,7 +40,7 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   }
 
   @objc func shopSearchButtonDidTap(_ sender: UIButton) {
-    self.navigationController?.pushViewController(shopSearchViewController(), animated: true)
+    self.navigationController?.pushViewController(ShopSearchViewController(), animated: true)
   }
 }
 

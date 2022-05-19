@@ -16,8 +16,8 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
     case promotion
   }
   
-  let tagList = ["#거꾸로챌린지","#용기내챌린지","#GOGO챌린지","#1일 1환경챌린지"]
-  let promotionList = ["없음","텀블러 할인","사은품 증정","용기 할인"]
+  let tagList = ["#거꾸로챌린지", "#용기내챌린지", "#GOGO챌린지", "#1일 1환경챌린지"]
+  let promotionList = ["없음", "텀블러 할인", "사은품 증정", "용기 할인"]
   
   // MARK: - Life cylce
   
@@ -50,4 +50,3 @@ extension PropertySelectViewController: UITableViewDataSource {
     return cell
   }
 }
-

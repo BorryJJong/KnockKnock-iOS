@@ -78,7 +78,7 @@ final class ShopSearchView: UIView {
 
   lazy var addressSearchButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.setImage(#imageLiteral(resourceName:"ic_search"), for: .normal)
+    $0.setImage(#imageLiteral(resourceName: "ic_search"), for: .normal)
   }
 
   let seperatorLineView = UIView().then {

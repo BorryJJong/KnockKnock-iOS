@@ -20,4 +20,3 @@ extension UIButton {
     imageEdgeInsets = UIEdgeInsets(top: -(titleSize.height + spacing), left: 0, bottom: 0, right: -titleSize.width)
   }
 }
-

@@ -53,7 +53,7 @@ class FeedWriteView: UIView {
 
   // MARK: - UI
 
-let photoCollectionView = UICollectionView(
+  let photoCollectionView = UICollectionView(
     frame: .zero,
     collectionViewLayout: UICollectionViewFlowLayout().then {
       $0.scrollDirection = .horizontal
@@ -163,9 +163,11 @@ let photoCollectionView = UICollectionView(
   }
 
   private func setupConstraints() {
-    [
-      self.photoAddButton, self.tagLabel, self.tagSelectImageView, self.tagSelectButton, self.tagSeperateLineView, self.promotionLabel, self.promotionSelectImageView, self.promotionSelectButton, self.promotionSeperateLineView, self.shopLabel, self.shopSearchImageView, self.shopSearchButton, self.shopSearchSeperateLineView, self.contentTextView, self.doneButton
-    ].addSubViews(self)
+    [self.photoAddButton].addSubViews(self)
+    [self.tagLabel, self.tagSelectImageView, self.tagSelectButton, self.tagSeperateLineView].addSubViews(self)
+    [self.promotionLabel, self.promotionSelectImageView, self.promotionSelectButton, self.promotionSeperateLineView].addSubViews(self)
+    [self.shopLabel, self.shopSearchImageView, self.shopSearchButton, self.shopSearchSeperateLineView].addSubViews(self)
+    [self.contentTextView, self.doneButton].addSubViews(self)
 
     NSLayoutConstraint.activate([
       photoAddButton.heightAnchor.constraint(equalToConstant: Metric.photoAddButtonHeight),

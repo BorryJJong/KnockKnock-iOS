@@ -29,6 +29,4 @@ final class HomeViewController: UIViewController {
   @objc func feedButtonDidTap(_ sender: UIButton) {
     self.navigationController?.pushViewController(FeedWriteViewController(), animated: true)
   }
-
-
 }
