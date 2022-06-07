@@ -82,7 +82,7 @@
 		611BD4A927E48B93007D5C79 /* FeedWriteInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWriteInteractor.swift; sourceTree = "<group>"; };
 		611BD4AB27E48B9F007D5C79 /* FeedWritePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWritePresenter.swift; sourceTree = "<group>"; };
 		611BD4AD27E48F37007D5C79 /* UIColor+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Ext.swift"; sourceTree = "<group>"; };
-		611BD4AF27E49024007D5C79 /* FeedWriteWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWriteWorker.swift; sourceTree = "<group>"; };
+		611BD4AF27E49024007D5C79 /* FeedWriteWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWriteWorker.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		611BD4B127E4903A007D5C79 /* FeedWriteRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWriteRouter.swift; sourceTree = "<group>"; };
 		611BD4B727E6DD5F007D5C79 /* PropertyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyCell.swift; sourceTree = "<group>"; };
 		611BD4B927E702F5007D5C79 /* PropertySelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertySelectView.swift; sourceTree = "<group>"; };

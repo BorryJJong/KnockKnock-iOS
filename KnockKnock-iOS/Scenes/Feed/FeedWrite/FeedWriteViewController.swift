@@ -31,9 +31,15 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     self.containerView.tagSelectButton.addTarget(self,
                                                  action: #selector(tagSelectButtonDidTap(_:)),
                                                  for: .touchUpInside)
+    self.containerView.promotionSelectButton.addTarget(self,
+                                                       action: #selector(promotionSelectButtonDidTap(_:)),
+                                                       for: .touchUpInside)
     self.containerView.shopSearchButton.addTarget(self,
                                                   action: #selector(shopSearchButtonDidTap(_:)),
                                                   for: .touchUpInside)
+    self.containerView.photoAddButton.addTarget(self,
+                                                action: #selector(photoAddButtonDidTap(_:)),
+                                                for: .touchUpInside)
   }
 
   @objc func tagSelectButtonDidTap(_ sender: UIButton) {
@@ -46,6 +52,12 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
   @objc func shopSearchButtonDidTap(_ sender: UIButton) {
     self.navigationController?.pushViewController(ShopSearchViewController(), animated: true)
+  }
+
+  @objc func photoAddButtonDidTap(_ sender: UIButton) {
+    var pickedPhotos = self.interactor?.worker?.callImagePicker(callback: { picker in
+      self.present(picker, animated: true, completion: nil)
+    })
   }
 }
 
@@ -66,5 +78,4 @@ extension FeedWriteViewController: UITextViewDelegate {
 }
 
 extension FeedWriteViewController: FeedWriteViewProtocol {
-  
 }
