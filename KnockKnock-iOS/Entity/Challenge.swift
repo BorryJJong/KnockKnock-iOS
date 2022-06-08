@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct Challenge {
+struct Challenges: Codable {
+  let id: Int
+  let content: String
   let title: String
-  let contents: String
 }

@@ -10,7 +10,7 @@ import UIKit
 protocol ChallengeViewProtocol: AnyObject {
   var interactor: ChallengeInteractorProtocol? { get set }
   
-  func fetchChallenges(challenges: [Challenge])
+  func fetchChallenges(challenges: [Challenges])
 }
 
 final class ChallengeViewController: BaseViewController<ChallengeView> {
@@ -18,7 +18,7 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
   // MARK: Properties
   
   var interactor: ChallengeInteractorProtocol?
-  var challenges: [Challenge] = []
+  var challenges: [Challenges] = []
   
   // MARK: - Life cycle
   
@@ -56,7 +56,7 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
 }
 
 extension ChallengeViewController: ChallengeViewProtocol {
-  func fetchChallenges(challenges: [Challenge]) {
+  func fetchChallenges(challenges: [Challenges]) {
     self.challenges = challenges
     self.containerView.challengeCollectionView.reloadData()
   }
