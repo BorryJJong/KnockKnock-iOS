@@ -112,9 +112,9 @@ final class ChallengeCell: BaseCollectionViewCell {
   
   // MARK: - Bind
   
-  func bind(data: Challenge) {
+  func bind(data: Challenges) {
     self.titleLabel.text = data.title
-    self.contentsLabel.text = data.contents
+    self.contentsLabel.text = data.content
   }
   
   // MARK: - Configure
