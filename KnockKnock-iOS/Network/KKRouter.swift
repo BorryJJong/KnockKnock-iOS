@@ -17,8 +17,8 @@ enum KKRouter: URLRequestConvertible {
     return URL(string: "http://13.209.245.135:3000/")!
   }
 
-  case createFeed(id: Int)
-  case updateFeed(id: Int)
+  case createFeed(Int)
+  case updateFeed(Int)
   case getChallengeResponse
 
   var method: HTTPMethod {
@@ -41,7 +41,7 @@ enum KKRouter: URLRequestConvertible {
     switch self {
     case .getChallengeResponse:
       return nil
-    case .createFeed(let id), .updateFeed(let id):
+    case let .createFeed(id), let .updateFeed(id):
       return [ "id": id ]
     }
   }

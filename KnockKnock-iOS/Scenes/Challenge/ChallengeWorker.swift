@@ -20,7 +20,8 @@ final class ChallengeWorker: ChallengeWorkerProtocol {
   }
   
   func fetchChallenge(completionHandler: @escaping ([Challenges]) -> Void) {
-    let result = repository.fetchChellenge()
-    completionHandler(result)
+    repository.fetchChellenge(completionHandler: { result in
+      completionHandler(result)
+    })
   }
 }
