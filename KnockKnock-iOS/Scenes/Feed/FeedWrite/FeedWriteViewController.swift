@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 import YPImagePicker
 
 protocol FeedWriteViewProtocol: AnyObject {
@@ -65,6 +66,11 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     self.callImagePicker()
   }
 
+  @objc func photoDeleteButtonDidTap(_ sender: UIButton) {
+    self.pickedPhotos.remove(at: sender.tag)
+    self.containerView.photoCollectionView.reloadData()
+  }
+
   func callImagePicker() {
     var config = YPImagePickerConfiguration()
     config.library.maxNumberOfItems = 5
@@ -122,6 +128,8 @@ extension FeedWriteViewController: UICollectionViewDataSource {
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PhotoCell
     let photo = self.pickedPhotos[indexPath.row]
     cell.backgroundColor = .white
+    cell.deleteButton.tag = indexPath.row
+    cell.deleteButton.addTarget(self, action: #selector(photoDeleteButtonDidTap(_:)), for: .touchUpInside)
     cell.bind(data: photo)
     return cell
   }
