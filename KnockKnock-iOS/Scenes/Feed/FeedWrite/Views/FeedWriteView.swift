@@ -19,6 +19,10 @@ class FeedWriteView: UIView {
     static let photoAddButtonTopMargin = 20.f
     static let photoAddButtonLeadingMargin = 20.f
 
+    static let photoCollectionViewHeight = 65.f
+    static let photoCollectionViewTopMargin = 20.f
+    static let photoCollectionViewLeadingMargin = 20.f
+
     static let tagTopMargin = 25.f
     static let tagLeadingMargin = 20.f
     static let tagTrailingMargin = -60.f
@@ -53,12 +57,10 @@ class FeedWriteView: UIView {
 
   // MARK: - UI
 
-let photoCollectionView = UICollectionView(
-    frame: .zero,
-    collectionViewLayout: UICollectionViewFlowLayout().then {
-      $0.scrollDirection = .horizontal
-    }
-  ).then {
+let photoCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
+  let flowLayout = UICollectionViewFlowLayout.init()
+  flowLayout.scrollDirection = .horizontal
+  $0.collectionViewLayout = flowLayout
     $0.translatesAutoresizingMaskIntoConstraints = false
   }
 
@@ -164,7 +166,7 @@ let photoCollectionView = UICollectionView(
 
   private func setupConstraints() {
     [
-      self.photoAddButton, self.tagLabel, self.tagSelectImageView, self.tagSelectButton, self.tagSeperateLineView, self.promotionLabel, self.promotionSelectImageView, self.promotionSelectButton, self.promotionSeperateLineView, self.shopLabel, self.shopSearchImageView, self.shopSearchButton, self.shopSearchSeperateLineView, self.contentTextView, self.doneButton
+      self.photoAddButton, self.photoCollectionView, self.tagLabel, self.tagSelectImageView, self.tagSelectButton, self.tagSeperateLineView, self.promotionLabel, self.promotionSelectImageView, self.promotionSelectButton, self.promotionSeperateLineView, self.shopLabel, self.shopSearchImageView, self.shopSearchButton, self.shopSearchSeperateLineView, self.contentTextView, self.doneButton
     ].addSubViews(self)
 
     NSLayoutConstraint.activate([
@@ -172,6 +174,11 @@ let photoCollectionView = UICollectionView(
       self.photoAddButton.widthAnchor.constraint(equalToConstant: Metric.photoAddButtonWidth),
       self.photoAddButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.photoAddButtonTopMargin),
       self.photoAddButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.photoAddButtonLeadingMargin),
+
+      self.photoCollectionView.topAnchor.constraint(equalTo: self.photoAddButton.topAnchor, constant: -10),
+      self.photoCollectionView.bottomAnchor.constraint(equalTo: self.photoAddButton.bottomAnchor),
+      self.photoCollectionView.leadingAnchor.constraint(equalTo: self.photoAddButton.trailingAnchor, constant: Metric.photoCollectionViewLeadingMargin),
+      self.photoCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
 
       self.tagLabel.topAnchor.constraint(equalTo: self.photoAddButton.bottomAnchor, constant: Metric.tagTopMargin),
       self.tagLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.tagLeadingMargin),

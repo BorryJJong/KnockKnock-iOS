@@ -13,6 +13,4 @@ protocol FeedWritePresenterProtocol: AnyObject {
 
 final class FeedWritePresenter: FeedWritePresenterProtocol {
   weak var view: FeedWriteViewProtocol?
-
-
 }
