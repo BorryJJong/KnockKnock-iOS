@@ -14,7 +14,7 @@ enum KKRouter: URLRequestConvertible {
   typealias Parameters = [String: Any]
 
   var baseURL: URL {
-    return URL(string: "http://13.209.245.135:3000/")!
+    return URL(string: API.BASE_URL)!
   }
 
   case createFeed(Int)
@@ -25,15 +25,14 @@ enum KKRouter: URLRequestConvertible {
     switch self {
     case .getChallengeResponse: return .get
     case .createFeed: return .post
-    case .updateFeed: return .post
+    case .updateFeed: return .patch
     }
   }
 
   var path: String {
     switch self {
     case .getChallengeResponse: return "challenges"
-    case .createFeed: return "feed"
-    case .updateFeed: return "feed"
+    case .createFeed, .updateFeed: return "feed"
     }
   }
 
@@ -51,6 +50,15 @@ enum KKRouter: URLRequestConvertible {
     var request = URLRequest(url: url)
     request.method = method
 
+    switch method {
+    case .get:
+      request = try URLEncoding.default.encode(request, with: parameters)
+    case .post, .patch, .delete:
+      request = try JSONEncoding.default.encode(request, with: parameters)
+      request.setValue("application/json", forHTTPHeaderField: "Accept")
+    default:
+      break
+    }
     return request
   }
 }

@@ -14,11 +14,15 @@ protocol ChallengeRepositoryProtocol {
 }
 
 final class ChallengeRepository: ChallengeRepositoryProtocol {
-  
-  /// 해다 영역에서 네트워크 통신하여 데이터를 Fetch 합니다.
   func fetchChellenge(completionHandler: @escaping ([Challenges]) -> Void) {
-    APIService().getChallenges(callback: { response in
-      completionHandler(response)
-    })
+    KKNetworkManager.shared
+      .request(object: [Challenges].self,
+               router: KKRouter.getChallengeResponse,
+               success: { response in
+        completionHandler(response)
+      },
+               failure: { response in
+        print(response)
+      })
   }
 }
