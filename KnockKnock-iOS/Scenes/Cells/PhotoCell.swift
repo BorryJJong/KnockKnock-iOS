@@ -11,12 +11,24 @@ import Then
 
 final class PhotoCell: BaseCollectionViewCell {
 
+  // MARK: - Constants
+
+  private enum Metric {
+    static let thumbnailImageViewCornerRadius = 5.f
+
+    static let thumbnailImageViewTopMargin = 10.f
+    static let thumbnailImageViewRightMargin = -10.f
+
+    static let deleteButtonWidth = 20.f
+    static let deleteButtonHeight = 20.f
+  }
+
   // MARK: - UI
 
-  let thumnailImageView = UIImageView().then {
+  let thumbnailImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.clipsToBounds = true
-    $0.layer.cornerRadius = 5
+    $0.layer.cornerRadius = Metric.thumbnailImageViewCornerRadius
   }
   
   let deleteButton = UIButton().then {
@@ -27,24 +39,24 @@ final class PhotoCell: BaseCollectionViewCell {
   // MARK: - Bind
 
   func bind(data: UIImage) {
-    self.thumnailImageView.image = data
+    self.thumbnailImageView.image = data
   }
 
   // MARK: - Configure
 
   override func setupConstraints() {
-    [self.thumnailImageView, self.deleteButton].addSubViews(self.contentView)
+    [self.thumbnailImageView, self.deleteButton].addSubViews(self.contentView)
     
     NSLayoutConstraint.activate([
-      self.thumnailImageView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
-      self.thumnailImageView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -10),
-      self.thumnailImageView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
-      self.thumnailImageView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor),
+      self.thumbnailImageView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: Metric.thumbnailImageViewTopMargin),
+      self.thumbnailImageView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: Metric.thumbnailImageViewRightMargin),
+      self.thumbnailImageView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
+      self.thumbnailImageView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor),
 
-      self.deleteButton.centerXAnchor.constraint(equalTo: self.thumnailImageView.trailingAnchor),
-      self.deleteButton.centerYAnchor.constraint(equalTo: self.thumnailImageView.topAnchor),
-      self.deleteButton.widthAnchor.constraint(equalToConstant: 20),
-      self.deleteButton.heightAnchor.constraint(equalToConstant: 20)
+      self.deleteButton.centerXAnchor.constraint(equalTo: self.thumbnailImageView.trailingAnchor),
+      self.deleteButton.centerYAnchor.constraint(equalTo: self.thumbnailImageView.topAnchor),
+      self.deleteButton.widthAnchor.constraint(equalToConstant: Metric.deleteButtonWidth),
+      self.deleteButton.heightAnchor.constraint(equalToConstant: Metric.deleteButtonWidth)
     ])
   }
 

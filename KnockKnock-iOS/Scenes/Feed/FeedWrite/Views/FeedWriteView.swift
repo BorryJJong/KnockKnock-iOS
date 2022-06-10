@@ -14,13 +14,15 @@ class FeedWriteView: UIView {
   // MARK: - Constants
 
   private enum Metric {
+
+    static let buttonCornerRadius = 5.f
+
     static let photoAddButtonWidth = 65.f
     static let photoAddButtonHeight = 65.f
     static let photoAddButtonTopMargin = 20.f
     static let photoAddButtonLeadingMargin = 20.f
 
-    static let photoCollectionViewHeight = 65.f
-    static let photoCollectionViewTopMargin = 20.f
+    static let photoCollectionViewTopMargin = -10.f
     static let photoCollectionViewLeadingMargin = 20.f
 
     static let tagTopMargin = 25.f
@@ -74,7 +76,7 @@ let photoCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .
     $0.contentHorizontalAlignment = .center
     $0.layer.borderWidth = 1
     $0.layer.borderColor = UIColor.gray50?.cgColor
-    $0.layer.cornerRadius = 5
+    $0.layer.cornerRadius = Metric.buttonCornerRadius
     $0.alignTextBelow(spacing: 0)
   }
 
@@ -151,7 +153,7 @@ let photoCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .
   private let doneButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setTitle("등록 완료", for: .normal)
-    $0.layer.cornerRadius = 5
+    $0.layer.cornerRadius = Metric.buttonCornerRadius
     $0.backgroundColor = .gray40
   }
 
@@ -175,7 +177,7 @@ let photoCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .
       self.photoAddButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.photoAddButtonTopMargin),
       self.photoAddButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.photoAddButtonLeadingMargin),
 
-      self.photoCollectionView.topAnchor.constraint(equalTo: self.photoAddButton.topAnchor, constant: -10),
+      self.photoCollectionView.topAnchor.constraint(equalTo: self.photoAddButton.topAnchor, constant: Metric.photoCollectionViewTopMargin),
       self.photoCollectionView.bottomAnchor.constraint(equalTo: self.photoAddButton.bottomAnchor),
       self.photoCollectionView.leadingAnchor.constraint(equalTo: self.photoAddButton.trailingAnchor, constant: Metric.photoCollectionViewLeadingMargin),
       self.photoCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
