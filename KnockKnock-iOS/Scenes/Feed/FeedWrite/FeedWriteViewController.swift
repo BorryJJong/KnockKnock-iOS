@@ -7,6 +7,7 @@
 
 import UIKit
 
+import Then
 import YPImagePicker
 
 protocol FeedWriteViewProtocol: AnyObject {
@@ -76,13 +77,13 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   }
 
   func callImagePicker() {
-    var config = YPImagePickerConfiguration()
-    config.library.maxNumberOfItems = 5
-    config.library.mediaType = .photo
-    config.startOnScreen = .library
-    config.showsPhotoFilters = false
-    config.showsCrop = .rectangle(ratio: 1)
-
+    let config = YPImagePickerConfiguration().with {
+      $0.library.maxNumberOfItems = 5
+      $0.library.mediaType = .photo
+      $0.startOnScreen = .library
+      $0.showsPhotoFilters = false
+      $0.showsCrop = .rectangle(ratio: 1)
+    }
     let picker = YPImagePicker(configuration: config)
 
     self.pickedPhotos = []
@@ -105,7 +106,6 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     }
     self.present(picker, animated: true, completion: nil)
   }
-
 }
 
 extension FeedWriteViewController: UITextViewDelegate {
@@ -136,11 +136,13 @@ extension FeedWriteViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
+
+    let photo = self.pickedPhotos[indexPath.row]
+
     let cell = collectionView.dequeueReusableCell(
       withReuseIdentifier: PhotoCell.reusableIdentifier,
       for: indexPath) as! PhotoCell
 
-    let photo = self.pickedPhotos[indexPath.row]
     cell.backgroundColor = .white
     cell.deleteButton.tag = indexPath.row
     cell.deleteButton.addTarget(
@@ -176,4 +178,7 @@ extension FeedWriteViewController: UICollectionViewDelegate {
 }
 
 extension FeedWriteViewController: FeedWriteViewProtocol {
+}
+
+extension YPImagePickerConfiguration: Then {
 }
