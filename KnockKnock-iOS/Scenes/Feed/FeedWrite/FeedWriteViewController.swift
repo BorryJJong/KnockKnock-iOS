@@ -31,7 +31,7 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     self.containerView.photoCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
-      $0.register(PhotoCell.self, forCellWithReuseIdentifier: "cell")
+      $0.registCell(type: PhotoCell.self)
     }
     self.containerView.contentTextView.do {
       $0.delegate = self
@@ -136,8 +136,10 @@ extension FeedWriteViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell",
-                                                  for: indexPath) as! PhotoCell
+    let cell = collectionView.dequeueReusableCell(
+      withReuseIdentifier: PhotoCell.reusableIdentifier,
+      for: indexPath) as! PhotoCell
+
     let photo = self.pickedPhotos[indexPath.row]
     cell.backgroundColor = .white
     cell.deleteButton.tag = indexPath.row

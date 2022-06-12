@@ -30,7 +30,6 @@ final class ChallengeView: UIView {
     $0.collectionViewLayout = flowLayout
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .white
-    $0.register(ChallengeCell.self, forCellWithReuseIdentifier: "cell")
   }
 
   let totalChallengeLabel = UILabel().then {

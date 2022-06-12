@@ -36,6 +36,7 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
     self.containerView.challengeCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
+      $0.registCell(type:ChallengeCell.self)
     }
     self.containerView.sortChallengeButton.addTarget(self, action: #selector(tapSortChallengeButton(_:)), for: .touchUpInside)
   }
@@ -68,7 +69,7 @@ extension ChallengeViewController: UICollectionViewDataSource {
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ChallengeCell
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChallengeCell.reusableIdentifier, for: indexPath) as! ChallengeCell
     let challenge = self.challenges[indexPath.row]
     cell.backgroundColor = .white
     cell.bind(data: challenge)
