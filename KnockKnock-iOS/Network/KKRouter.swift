@@ -41,7 +41,7 @@ enum KKRouter: URLRequestConvertible {
     case .getChallengeResponse:
       return nil
     case let .createFeed(id), let .updateFeed(id):
-      return [ "id": id ]
+      return ["id": id]
     }
   }
 

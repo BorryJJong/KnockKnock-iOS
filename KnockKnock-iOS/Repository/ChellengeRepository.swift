@@ -16,13 +16,14 @@ protocol ChallengeRepositoryProtocol {
 final class ChallengeRepository: ChallengeRepositoryProtocol {
   func fetchChellenge(completionHandler: @escaping ([Challenges]) -> Void) {
     KKNetworkManager.shared
-      .request(object: [Challenges].self,
-               router: KKRouter.getChallengeResponse,
-               success: { response in
-        completionHandler(response)
-      },
-               failure: { response in
-        print(response)
-      })
+      .request(
+        object: [Challenges].self,
+        router: KKRouter.getChallengeResponse,
+        success: { response in
+          completionHandler(response)
+        },
+        failure: { response in
+          print(response)
+        })
   }
 }
