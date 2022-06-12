@@ -10,13 +10,13 @@ import Foundation
 protocol ChallengePresenterProtocol: AnyObject {
   var view: ChallengeViewProtocol? { get set }
   
-  func presentFetchChallenge(challenges: [Challenge])
+  func presentFetchChallenge(challenges: [Challenges])
 }
 
 final class ChallengePresenter: ChallengePresenterProtocol {
   weak var view: ChallengeViewProtocol?
   
-  func presentFetchChallenge(challenges: [Challenge]) {
+  func presentFetchChallenge(challenges: [Challenges]) {
     self.view?.fetchChallenges(challenges: challenges)
   }
 }

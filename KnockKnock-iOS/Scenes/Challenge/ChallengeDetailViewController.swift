@@ -28,9 +28,21 @@ class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
   }
 
   func setNavigationItem() {
-    let backBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_back_24_wh"), style: .plain, target: self, action: #selector(tapBackBarButton(_:)))
-    let shareBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_gnb_share_24_wh"), style: .plain, target: self, action: nil)
-    let homeBarBUttonItem = UIBarButtonItem(image: UIImage(named: "ic_gnb_home_24_wh"), style: .plain, target: self, action: nil)
+    let backBarButtonItem = UIBarButtonItem(
+      image: UIImage(named: "ic_back_24_wh"),
+      style: .plain,
+      target: self,
+      action: #selector(tapBackBarButton(_:)))
+    let shareBarButtonItem = UIBarButtonItem(
+      image: UIImage(named: "ic_gnb_share_24_wh"),
+      style: .plain,
+      target: self,
+      action: nil)
+    let homeBarBUttonItem = UIBarButtonItem(
+      image: UIImage(named: "ic_gnb_home_24_wh"),
+      style: .plain,
+      target: self,
+      action: nil)
 
     self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
     self.navigationController?.navigationBar.shadowImage = UIImage()
