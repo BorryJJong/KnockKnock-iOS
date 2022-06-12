@@ -27,7 +27,10 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
   
   override func setupConfigure() {
     self.navigationItem.title = "태그"
-    self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonDidTap(_:)))
+    self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+      barButtonSystemItem: .done,
+      target: self,
+      action: #selector(doneButtonDidTap(_:)))
     self.containerView.propertyTableView.do {
       $0.dataSource = self
     }

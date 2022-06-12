@@ -21,7 +21,10 @@ class ShopSearchViewController: BaseViewController<ShopSearchView> {
 
   override func setupConfigure() {
     self.navigationItem.title = "매장검색"
-    self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonDidTap(_:)))
+    self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+      barButtonSystemItem: .done,
+      target: self,
+      action: #selector(doneButtonDidTap(_:)))
     self.containerView.addressSearchButton.do {
       $0.addTarget(self, action: #selector(searchButtonDidTap(_:)), for: .touchUpInside)
     }
@@ -44,7 +47,10 @@ extension ShopSearchViewController: UITableViewDataSource {
     return addressDummy.count
   }
 
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+  func tableView(
+    _ tableView: UITableView,
+    cellForRowAt indexPath: IndexPath
+  ) -> UITableViewCell {
     let cell = tableView.dequeueCell(withType: AdressCell.self, for: indexPath)
     cell.addressLabel.text = addressDummy[indexPath.row]
     return cell

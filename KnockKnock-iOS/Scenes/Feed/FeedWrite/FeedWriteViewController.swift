@@ -36,18 +36,22 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     self.containerView.contentTextView.do {
       $0.delegate = self
     }
-    self.containerView.tagSelectButton.addTarget(self,
-                                                 action: #selector(tagSelectButtonDidTap(_:)),
-                                                 for: .touchUpInside)
-    self.containerView.promotionSelectButton.addTarget(self,
-                                                       action: #selector(promotionSelectButtonDidTap(_:)),
-                                                       for: .touchUpInside)
-    self.containerView.shopSearchButton.addTarget(self,
-                                                  action: #selector(shopSearchButtonDidTap(_:)),
-                                                  for: .touchUpInside)
-    self.containerView.photoAddButton.addTarget(self,
-                                                action: #selector(photoAddButtonDidTap(_:)),
-                                                for: .touchUpInside)
+    self.containerView.tagSelectButton.addTarget(
+      self,
+      action: #selector(tagSelectButtonDidTap(_:)),
+      for: .touchUpInside)
+    self.containerView.promotionSelectButton.addTarget(
+      self,
+      action: #selector(promotionSelectButtonDidTap(_:)),
+      for: .touchUpInside)
+    self.containerView.shopSearchButton.addTarget(
+      self,
+      action: #selector(shopSearchButtonDidTap(_:)),
+      for: .touchUpInside)
+    self.containerView.photoAddButton.addTarget(
+      self,
+      action: #selector(photoAddButtonDidTap(_:)),
+      for: .touchUpInside)
   }
 
   @objc func tagSelectButtonDidTap(_ sender: UIButton) {
@@ -121,25 +125,47 @@ extension FeedWriteViewController: UITextViewDelegate {
 }
 
 extension FeedWriteViewController: UICollectionViewDataSource {
-  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    numberOfItemsInSection section: Int
+  ) -> Int {
     return pickedPhotos.count
   }
-  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PhotoCell
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    cellForItemAt indexPath: IndexPath
+  ) -> UICollectionViewCell {
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell",
+                                                  for: indexPath) as! PhotoCell
     let photo = self.pickedPhotos[indexPath.row]
     cell.backgroundColor = .white
     cell.deleteButton.tag = indexPath.row
-    cell.deleteButton.addTarget(self, action: #selector(photoDeleteButtonDidTap(_:)), for: .touchUpInside)
+    cell.deleteButton.addTarget(
+      self,
+      action: #selector(photoDeleteButtonDidTap(_:)),
+      for: .touchUpInside)
     cell.bind(data: photo)
+
     return cell
   }
 }
 
 extension FeedWriteViewController: UICollectionViewDelegateFlowLayout {
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return CGSize(width: self.containerView.photoAddButton.frame.width + 10, height: self.containerView.photoAddButton.frame.height + 10)
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    sizeForItemAt indexPath: IndexPath
+  ) -> CGSize {
+    return CGSize(width: self.containerView.photoAddButton.frame.width + 10,
+                  height: self.containerView.photoAddButton.frame.height + 10)
   }
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    minimumLineSpacingForSectionAt section: Int
+  ) -> CGFloat {
     return 10
   }
 }
