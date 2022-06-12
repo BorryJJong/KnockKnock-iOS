@@ -11,6 +11,7 @@ target 'KnockKnock-iOS' do
   # Misc.
   pod 'Then'
   pod 'SwiftLint'
+  pod 'YPImagePicker'
 
   # Pods for KnockKnock-iOS
 

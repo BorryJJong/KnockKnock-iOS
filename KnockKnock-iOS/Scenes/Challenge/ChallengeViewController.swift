@@ -36,12 +36,19 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
     self.containerView.challengeCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
+      $0.registCell(type:ChallengeCell.self)
     }
-    self.containerView.sortChallengeButton.addTarget(self, action: #selector(tapSortChallengeButton(_:)), for: .touchUpInside)
+    self.containerView.sortChallengeButton.addTarget(
+      self,
+      action: #selector(tapSortChallengeButton(_:)),
+      for: .touchUpInside)
   }
 
   func setNavigationItem() {
-    let searchBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: nil)
+    let searchBarButtonItem = UIBarButtonItem(
+      barButtonSystemItem: .search,
+      target: self,
+      action: nil)
 
     self.navigationItem.title = "챌린지"
     self.navigationItem.rightBarButtonItem = searchBarButtonItem
@@ -63,12 +70,19 @@ extension ChallengeViewController: ChallengeViewProtocol {
 }
 
 extension ChallengeViewController: UICollectionViewDataSource {
-  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    numberOfItemsInSection section: Int) -> Int {
     return self.challenges.count
   }
 
-  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ChallengeCell
+  func collectionView(
+    _ collectionView: UICollectionView,
+    cellForItemAt indexPath: IndexPath
+  ) -> UICollectionViewCell {
+    let cell = collectionView.dequeueReusableCell(
+      withReuseIdentifier: ChallengeCell.reusableIdentifier,
+      for: indexPath) as! ChallengeCell
     let challenge = self.challenges[indexPath.row]
     cell.backgroundColor = .white
     cell.bind(data: challenge)
@@ -78,11 +92,13 @@ extension ChallengeViewController: UICollectionViewDataSource {
 
 extension ChallengeViewController: UICollectionViewDelegateFlowLayout {
   func collectionView(
-    _ collectionView: UICollectionView, 
+    _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
-     sizeForItemAt indexPath: IndexPath
-   ) -> CGSize {
-      return CGSize(width: (self.containerView.frame.width - 40), height: (self.containerView.frame.height - 120) / 2)
+    sizeForItemAt indexPath: IndexPath
+  ) -> CGSize {
+    return CGSize(
+      width: (self.containerView.frame.width - 40),
+      height: (self.containerView.frame.height - 120) / 2)
   }
   
   func collectionView(
@@ -90,7 +106,7 @@ extension ChallengeViewController: UICollectionViewDelegateFlowLayout {
     layout collectionViewLayout: UICollectionViewLayout,
     minimumLineSpacingForSectionAt section: Int
   ) -> CGFloat {
-      return 40
+    return 40
   }
   
   func collectionView(

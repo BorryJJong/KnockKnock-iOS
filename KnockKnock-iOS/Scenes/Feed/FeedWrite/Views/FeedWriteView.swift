@@ -14,10 +14,16 @@ class FeedWriteView: UIView {
   // MARK: - Constants
 
   private enum Metric {
+
+    static let buttonCornerRadius = 5.f
+
     static let photoAddButtonWidth = 65.f
     static let photoAddButtonHeight = 65.f
     static let photoAddButtonTopMargin = 20.f
     static let photoAddButtonLeadingMargin = 20.f
+
+    static let photoCollectionViewTopMargin = -10.f
+    static let photoCollectionViewLeadingMargin = 20.f
 
     static let tagTopMargin = 25.f
     static let tagLeadingMargin = 20.f
@@ -72,7 +78,7 @@ class FeedWriteView: UIView {
     $0.contentHorizontalAlignment = .center
     $0.layer.borderWidth = 1
     $0.layer.borderColor = UIColor.gray50?.cgColor
-    $0.layer.cornerRadius = 5
+    $0.layer.cornerRadius = Metric.buttonCornerRadius
     $0.alignTextBelow(spacing: 0)
   }
 
@@ -149,7 +155,7 @@ class FeedWriteView: UIView {
   private let doneButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setTitle("등록 완료", for: .normal)
-    $0.layer.cornerRadius = 5
+    $0.layer.cornerRadius = Metric.buttonCornerRadius
     $0.backgroundColor = .gray40
   }
 
@@ -163,78 +169,83 @@ class FeedWriteView: UIView {
   }
 
   private func setupConstraints() {
-    [self.photoAddButton].addSubViews(self)
+    [self.photoAddButton, self.photoCollectionView].addSubViews(self)
     [self.tagLabel, self.tagSelectImageView, self.tagSelectButton, self.tagSeperateLineView].addSubViews(self)
     [self.promotionLabel, self.promotionSelectImageView, self.promotionSelectButton, self.promotionSeperateLineView].addSubViews(self)
     [self.shopLabel, self.shopSearchImageView, self.shopSearchButton, self.shopSearchSeperateLineView].addSubViews(self)
     [self.contentTextView, self.doneButton].addSubViews(self)
 
     NSLayoutConstraint.activate([
-      photoAddButton.heightAnchor.constraint(equalToConstant: Metric.photoAddButtonHeight),
-      photoAddButton.widthAnchor.constraint(equalToConstant: Metric.photoAddButtonWidth),
-      photoAddButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.photoAddButtonTopMargin),
-      photoAddButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.photoAddButtonLeadingMargin),
+      self.photoAddButton.heightAnchor.constraint(equalToConstant: Metric.photoAddButtonHeight),
+      self.photoAddButton.widthAnchor.constraint(equalToConstant: Metric.photoAddButtonWidth),
+      self.photoAddButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.photoAddButtonTopMargin),
+      self.photoAddButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.photoAddButtonLeadingMargin),
 
-      tagLabel.topAnchor.constraint(equalTo: self.photoAddButton.bottomAnchor, constant: Metric.tagTopMargin),
-      tagLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.tagLeadingMargin),
-      tagLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.tagTrailingMargin),
+      self.photoCollectionView.topAnchor.constraint(equalTo: self.photoAddButton.topAnchor, constant: Metric.photoCollectionViewTopMargin),
+      self.photoCollectionView.bottomAnchor.constraint(equalTo: self.photoAddButton.bottomAnchor),
+      self.photoCollectionView.leadingAnchor.constraint(equalTo: self.photoAddButton.trailingAnchor, constant: Metric.photoCollectionViewLeadingMargin),
+      self.photoCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
 
-      tagSelectImageView.topAnchor.constraint(equalTo: self.tagLabel.topAnchor, constant: Metric.selectImageTopMargin),
-      tagSelectImageView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.selectImageTrailingMargin),
+      self.tagLabel.topAnchor.constraint(equalTo: self.photoAddButton.bottomAnchor, constant: Metric.tagTopMargin),
+      self.tagLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.tagLeadingMargin),
+      self.tagLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.tagTrailingMargin),
 
-      tagSelectButton.topAnchor.constraint(equalTo: self.tagLabel.topAnchor),
-      tagSelectButton.leadingAnchor.constraint(equalTo: self.tagLabel.leadingAnchor),
-      tagSelectButton.trailingAnchor.constraint(equalTo: self.tagSelectImageView.trailingAnchor),
-      tagSelectButton.heightAnchor.constraint(equalToConstant: Metric.selectButtonHeight),
+      self.tagSelectImageView.topAnchor.constraint(equalTo: self.tagLabel.topAnchor, constant: Metric.selectImageTopMargin),
+      self.tagSelectImageView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.selectImageTrailingMargin),
 
-      tagSeperateLineView.topAnchor.constraint(equalTo: self.tagSelectButton.bottomAnchor),
-      tagSeperateLineView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-      tagSeperateLineView.heightAnchor.constraint(equalToConstant: Metric.seperatorHeight),
-      tagSeperateLineView.widthAnchor.constraint(equalTo: self.safeAreaLayoutGuide.widthAnchor, constant: Metric.seperatorWidthMargin),
+      self.tagSelectButton.topAnchor.constraint(equalTo: self.tagLabel.topAnchor),
+      self.tagSelectButton.leadingAnchor.constraint(equalTo: self.tagLabel.leadingAnchor),
+      self.tagSelectButton.trailingAnchor.constraint(equalTo: self.tagSelectImageView.trailingAnchor),
+      self.tagSelectButton.heightAnchor.constraint(equalToConstant: Metric.selectButtonHeight),
 
-      promotionLabel.topAnchor.constraint(equalTo: self.tagSeperateLineView.bottomAnchor, constant: Metric.promotionTopMargin),
-      promotionLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.promotionLeadingMargin),
-      promotionLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.promotionTrailingMargin),
+      self.tagSeperateLineView.topAnchor.constraint(equalTo: self.tagSelectButton.bottomAnchor),
+      self.tagSeperateLineView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+      self.tagSeperateLineView.heightAnchor.constraint(equalToConstant: Metric.seperatorHeight),
+      self.tagSeperateLineView.widthAnchor.constraint(equalTo: self.safeAreaLayoutGuide.widthAnchor, constant: Metric.seperatorWidthMargin),
 
-      promotionSelectImageView.topAnchor.constraint(equalTo: self.promotionLabel.topAnchor, constant: Metric.selectImageTopMargin),
-      promotionSelectImageView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.selectImageTrailingMargin),
+      self.promotionLabel.topAnchor.constraint(equalTo: self.tagSeperateLineView.bottomAnchor, constant: Metric.promotionTopMargin),
+      self.promotionLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.promotionLeadingMargin),
+      self.promotionLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.promotionTrailingMargin),
 
-      promotionSelectButton.topAnchor.constraint(equalTo: self.promotionLabel.topAnchor),
-      promotionSelectButton.leadingAnchor.constraint(equalTo: self.promotionLabel.leadingAnchor),
-      promotionSelectButton.trailingAnchor.constraint(equalTo: self.promotionSelectImageView.trailingAnchor),
-      promotionSelectButton.heightAnchor.constraint(equalToConstant: Metric.selectButtonHeight),
+      self.promotionSelectImageView.topAnchor.constraint(equalTo: self.promotionLabel.topAnchor, constant: Metric.selectImageTopMargin),
+      self.promotionSelectImageView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.selectImageTrailingMargin),
 
-      promotionSeperateLineView.topAnchor.constraint(equalTo: self.promotionSelectButton.bottomAnchor),
-      promotionSeperateLineView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-      promotionSeperateLineView.heightAnchor.constraint(equalToConstant: Metric.seperatorHeight),
-      promotionSeperateLineView.widthAnchor.constraint(equalTo: self.safeAreaLayoutGuide.widthAnchor, constant: Metric.seperatorWidthMargin),
+      self.promotionSelectButton.topAnchor.constraint(equalTo: self.promotionLabel.topAnchor),
+      self.promotionSelectButton.leadingAnchor.constraint(equalTo: self.promotionLabel.leadingAnchor),
+      self.promotionSelectButton.trailingAnchor.constraint(equalTo: self.promotionSelectImageView.trailingAnchor),
+      self.promotionSelectButton.heightAnchor.constraint(equalToConstant: Metric.selectButtonHeight),
 
-      shopLabel.topAnchor.constraint(equalTo: self.promotionSeperateLineView.bottomAnchor, constant: Metric.shopTopMargin),
-      shopLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.shopLeadingMargin),
-      shopLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.shopTrailingMargin),
+      self.promotionSeperateLineView.topAnchor.constraint(equalTo: self.promotionSelectButton.bottomAnchor),
+      self.promotionSeperateLineView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+      self.promotionSeperateLineView.heightAnchor.constraint(equalToConstant: Metric.seperatorHeight),
+      self.promotionSeperateLineView.widthAnchor.constraint(equalTo: self.safeAreaLayoutGuide.widthAnchor, constant: Metric.seperatorWidthMargin),
 
-      shopSearchImageView.topAnchor.constraint(equalTo: self.shopLabel.topAnchor, constant: Metric.selectImageTopMargin),
-      shopSearchImageView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.selectImageTrailingMargin),
+      self.shopLabel.topAnchor.constraint(equalTo: self.promotionSeperateLineView.bottomAnchor, constant: Metric.shopTopMargin),
+      self.shopLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.shopLeadingMargin),
+      self.shopLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.shopTrailingMargin),
+
+      self.shopSearchImageView.topAnchor.constraint(equalTo: self.shopLabel.topAnchor, constant: Metric.selectImageTopMargin),
+      self.shopSearchImageView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.selectImageTrailingMargin),
       
-      shopSearchButton.topAnchor.constraint(equalTo: self.shopLabel.topAnchor),
-      shopSearchButton.leadingAnchor.constraint(equalTo: self.shopLabel.leadingAnchor),
-      shopSearchButton.trailingAnchor.constraint(equalTo: self.shopSearchImageView.trailingAnchor),
-      shopSearchButton.heightAnchor.constraint(equalToConstant: Metric.selectButtonHeight),
+      self.shopSearchButton.topAnchor.constraint(equalTo: self.shopLabel.topAnchor),
+      self.shopSearchButton.leadingAnchor.constraint(equalTo: self.shopLabel.leadingAnchor),
+      self.shopSearchButton.trailingAnchor.constraint(equalTo: self.shopSearchImageView.trailingAnchor),
+      self.shopSearchButton.heightAnchor.constraint(equalToConstant: Metric.selectButtonHeight),
 
-      shopSearchSeperateLineView.topAnchor.constraint(equalTo: self.shopSearchButton.bottomAnchor),
-      shopSearchSeperateLineView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-      shopSearchSeperateLineView.heightAnchor.constraint(equalToConstant: Metric.seperatorHeight),
-      shopSearchSeperateLineView.widthAnchor.constraint(equalTo: self.safeAreaLayoutGuide.widthAnchor, constant: Metric.seperatorWidthMargin),
+      self.shopSearchSeperateLineView.topAnchor.constraint(equalTo: self.shopSearchButton.bottomAnchor),
+      self.shopSearchSeperateLineView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+      self.shopSearchSeperateLineView.heightAnchor.constraint(equalToConstant: Metric.seperatorHeight),
+      self.shopSearchSeperateLineView.widthAnchor.constraint(equalTo: self.safeAreaLayoutGuide.widthAnchor, constant: Metric.seperatorWidthMargin),
 
-      contentTextView.topAnchor.constraint(equalTo: self.shopSearchSeperateLineView.bottomAnchor, constant: Metric.contentTextViewTopMargin),
-      contentTextView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.contentTextViewLeadingMargin),
-      contentTextView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.contentTextViewTrailingMargin),
-      contentTextView.heightAnchor.constraint(equalToConstant: Metric.contentTextViewHeight),
+      self.contentTextView.topAnchor.constraint(equalTo: self.shopSearchSeperateLineView.bottomAnchor, constant: Metric.contentTextViewTopMargin),
+      self.contentTextView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.contentTextViewLeadingMargin),
+      self.contentTextView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.contentTextViewTrailingMargin),
+      self.contentTextView.heightAnchor.constraint(equalToConstant: Metric.contentTextViewHeight),
 
-      doneButton.heightAnchor.constraint(equalToConstant: Metric.doneButtonHeight),
-      doneButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.doneButtonBottomMargin),
-      doneButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.doneButtonleadingMargin),
-      doneButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.doneButtonTrailingMargin)
+      self.doneButton.heightAnchor.constraint(equalToConstant: Metric.doneButtonHeight),
+      self.doneButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.doneButtonBottomMargin),
+      self.doneButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.doneButtonleadingMargin),
+      self.doneButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.doneButtonTrailingMargin)
     ])
   }
 }
