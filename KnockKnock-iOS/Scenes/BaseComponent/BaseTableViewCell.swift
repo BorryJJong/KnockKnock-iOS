@@ -23,4 +23,3 @@ class BaseTableViewCell: UITableViewCell {
   
   func setupConstraints() { /* override point */ }
 }
-

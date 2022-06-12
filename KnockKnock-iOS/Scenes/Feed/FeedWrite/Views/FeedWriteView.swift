@@ -59,10 +59,12 @@ class FeedWriteView: UIView {
 
   // MARK: - UI
 
-let photoCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
-  let flowLayout = UICollectionViewFlowLayout.init()
-  flowLayout.scrollDirection = .horizontal
-  $0.collectionViewLayout = flowLayout
+  let photoCollectionView = UICollectionView(
+    frame: .zero,
+    collectionViewLayout: UICollectionViewFlowLayout().then {
+      $0.scrollDirection = .horizontal
+    }
+  ).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
   }
 
@@ -167,9 +169,11 @@ let photoCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .
   }
 
   private func setupConstraints() {
-    [
-      self.photoAddButton, self.photoCollectionView, self.tagLabel, self.tagSelectImageView, self.tagSelectButton, self.tagSeperateLineView, self.promotionLabel, self.promotionSelectImageView, self.promotionSelectButton, self.promotionSeperateLineView, self.shopLabel, self.shopSearchImageView, self.shopSearchButton, self.shopSearchSeperateLineView, self.contentTextView, self.doneButton
-    ].addSubViews(self)
+    [self.photoAddButton, self.photoCollectionView].addSubViews(self)
+    [self.tagLabel, self.tagSelectImageView, self.tagSelectButton, self.tagSeperateLineView].addSubViews(self)
+    [self.promotionLabel, self.promotionSelectImageView, self.promotionSelectButton, self.promotionSeperateLineView].addSubViews(self)
+    [self.shopLabel, self.shopSearchImageView, self.shopSearchButton, self.shopSearchSeperateLineView].addSubViews(self)
+    [self.contentTextView, self.doneButton].addSubViews(self)
 
     NSLayoutConstraint.activate([
       self.photoAddButton.heightAnchor.constraint(equalToConstant: Metric.photoAddButtonHeight),

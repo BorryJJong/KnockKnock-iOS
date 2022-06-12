@@ -29,4 +29,3 @@ extension UIButton {
       right: -titleSize.width)
   }
 }
-

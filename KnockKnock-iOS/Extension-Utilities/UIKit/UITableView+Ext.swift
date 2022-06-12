@@ -13,7 +13,7 @@ extension UITableView {
     let cellID = identifier ?? type.identifier
     register(type, forCellReuseIdentifier: cellID)
   }
-  
+
   func registCells(_ types: [UITableViewCell.Type]) {
     types.forEach { self.registCell(type: $0) }
   }
