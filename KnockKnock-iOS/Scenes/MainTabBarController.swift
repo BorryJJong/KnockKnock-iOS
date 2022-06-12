@@ -34,7 +34,7 @@ final class MainTabBarController: UITabBarController {
       selectedImage: UIImage(named: "ic_challenge")
     ),
     .store: UITabBarItem(
-      title: "스토어",
+      title: "피드",
       image: UIImage(named: "ic_store"),
       selectedImage: UIImage(named: "ic_store")
     ),
@@ -47,7 +47,7 @@ final class MainTabBarController: UITabBarController {
   
   let home = HomeViewController()
   let challenge = ChallengeRouter.createChallenge()
-  let store = StoreViewController()
+  let feed = FeedWriteRouter.createFeedWrite()
   let my = MyViewController()
   
   // MARK: - Initialize
@@ -81,18 +81,18 @@ final class MainTabBarController: UITabBarController {
     
     self.home.tabBarItem = self.tabBarItems[.home]
     self.challenge.tabBarItem = self.tabBarItems[.challenge]
-    self.store.tabBarItem = self.tabBarItems[.store]
+    self.feed.tabBarItem = self.tabBarItems[.store]
     self.my.tabBarItem = self.tabBarItems[.my]
     
     let homeNVC = UINavigationController(rootViewController: self.home)
     let challengeNVC = UINavigationController(rootViewController: self.challenge)
-    let storeNVC = UINavigationController(rootViewController: self.store)
+    let feedNVC = UINavigationController(rootViewController: self.feed)
     let myNVC = UINavigationController(rootViewController: self.my)
     
     self.viewControllers = [
       homeNVC,
       challengeNVC,
-      storeNVC,
+      feedNVC,
       myNVC
     ]
   }
