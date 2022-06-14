@@ -87,8 +87,9 @@ extension FeedViewController: UICollectionViewDataSource {
         withReuseIdentifier: TagCell.reusableIdentifier,
         for: indexPath
       ) as! TagCell
-      cell.tagButton.setTitle(self.tagList[indexPath.item], for: .normal)
       cell.backgroundColor = .white
+      cell.tagLabel.text = self.tagList[indexPath.item]
+
       return cell
 
     } else {
@@ -104,4 +105,19 @@ extension FeedViewController: UICollectionViewDataSource {
 }
 
 extension FeedViewController: UICollectionViewDelegate {
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    if let cell = collectionView.cellForItem(at: indexPath) as? TagCell {
+      cell.tagLabel.backgroundColor = .green50
+      cell.tagLabel.textColor = .white
+      cell.tagLabel.font = .systemFont(ofSize: 16, weight: .bold)
+    }
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+    if let cell = collectionView.cellForItem(at: indexPath) as? TagCell {
+      cell.tagLabel.backgroundColor = .white
+      cell.tagLabel.textColor = .green50
+      cell.tagLabel.font = .systemFont(ofSize: 16, weight: .medium)
+    }
+  }
 }

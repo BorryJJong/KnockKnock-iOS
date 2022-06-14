@@ -11,13 +11,12 @@ class TagCell: BaseCollectionViewCell {
 
   // MARK: - UIs
 
-  let tagButton = UIButton().then {
+  let tagLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.textAlignment = .center
     $0.clipsToBounds = true
     $0.layer.cornerRadius = 20
-    $0.backgroundColor = .white
-    $0.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-    $0.setTitleColor(.green50, for: .normal)
+    $0.textColor = .green50
     $0.layer.borderWidth = 1
     $0.layer.borderColor = UIColor.green40?.cgColor
   }
@@ -25,13 +24,13 @@ class TagCell: BaseCollectionViewCell {
   // MARK: - Configure
 
   override func setupConstraints() {
-    [self.tagButton].addSubViews(self.contentView)
+    [self.tagLabel].addSubViews(self.contentView)
 
     NSLayoutConstraint.activate([
-      self.tagButton.topAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.topAnchor),
-      self.tagButton.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor),
-      self.tagButton.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor),
-      self.tagButton.bottomAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.bottomAnchor)
+      self.tagLabel.topAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.topAnchor),
+      self.tagLabel.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor),
+      self.tagLabel.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor),
+      self.tagLabel.bottomAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.bottomAnchor)
     ])
   }
 }
