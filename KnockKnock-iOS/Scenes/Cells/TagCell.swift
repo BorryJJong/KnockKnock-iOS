@@ -26,6 +26,7 @@ class TagCell: BaseCollectionViewCell {
 
   override func setupConstraints() {
     [self.tagButton].addSubViews(self.contentView)
+
     NSLayoutConstraint.activate([
       self.tagButton.topAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.topAnchor),
       self.tagButton.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor),

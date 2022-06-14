@@ -19,7 +19,6 @@ class FeedView: UIView {
     frame: .zero,
     collectionViewLayout: UICollectionViewFlowLayout().then {
       $0.scrollDirection = .horizontal
-//      $0.minimumLineSpacing = 5
       $0.minimumInteritemSpacing = 5
     }
   ).then {
@@ -112,38 +111,34 @@ class FeedView: UIView {
   func feedCollectionViewLayout() -> UICollectionViewCompositionalLayout {
     let compositionalLayout: UICollectionViewCompositionalLayout = {
 
-      let inset: CGFloat = 2.5
+    let inset: CGFloat = 2.5
 
-      // Items
-      let largeItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.666), heightDimension: .fractionalHeight(1))
-      let largeItem = NSCollectionLayoutItem(layoutSize: largeItemSize)
-      largeItem.contentInsets = NSDirectionalEdgeInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
+    let largeItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.666), heightDimension: .fractionalHeight(1))
+    let largeItem = NSCollectionLayoutItem(layoutSize: largeItemSize)
+    largeItem.contentInsets = NSDirectionalEdgeInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
 
-      let smallItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.5))
-      let smallItem = NSCollectionLayoutItem(layoutSize: smallItemSize)
-      smallItem.contentInsets = NSDirectionalEdgeInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
+    let smallItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.5))
+    let smallItem = NSCollectionLayoutItem(layoutSize: smallItemSize)
+    smallItem.contentInsets = NSDirectionalEdgeInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
 
-      // Nested Group
-      let verticalGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.333), heightDimension: .fractionalHeight(1))
-      let verticalGroup = NSCollectionLayoutGroup.vertical(layoutSize: verticalGroupSize, subitems: [smallItem])
+    let verticalGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.333), heightDimension: .fractionalHeight(1))
+    let verticalGroup = NSCollectionLayoutGroup.vertical(layoutSize: verticalGroupSize, subitems: [smallItem])
 
-      // Outer Group
-      let largeFirstMixedGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(0.666))
-      let largeFirstMixedGroup = NSCollectionLayoutGroup.horizontal(layoutSize: largeFirstMixedGroupSize, subitems: [largeItem, verticalGroup])
+    let largeFirstMixedGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(0.666))
+    let largeFirstMixedGroup = NSCollectionLayoutGroup.horizontal(layoutSize: largeFirstMixedGroupSize, subitems: [largeItem, verticalGroup])
 
-      let verticalFirstMixedGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(0.666))
-      let verticalFirstMixedGroup = NSCollectionLayoutGroup.horizontal(layoutSize: verticalFirstMixedGroupSize, subitems: [verticalGroup, largeItem])
+    let verticalFirstMixedGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(0.666))
+    let verticalFirstMixedGroup = NSCollectionLayoutGroup.horizontal(layoutSize: verticalFirstMixedGroupSize, subitems: [verticalGroup, largeItem])
 
-      let threeVerticalGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(0.666))
-      let threeVerticalGroup = NSCollectionLayoutGroup.horizontal(layoutSize: threeVerticalGroupSize, subitems: [verticalGroup, verticalGroup, verticalGroup])
+    let threeVerticalGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(0.666))
+    let threeVerticalGroup = NSCollectionLayoutGroup.horizontal(layoutSize: threeVerticalGroupSize, subitems: [verticalGroup, verticalGroup, verticalGroup])
 
-      let OuterGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(4))
-      let OuterGroup = NSCollectionLayoutGroup.vertical(layoutSize: OuterGroupSize, subitems: [largeFirstMixedGroup, threeVerticalGroup, verticalFirstMixedGroup, threeVerticalGroup])
+    let outerGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(4))
+    let outerGroup = NSCollectionLayoutGroup.vertical(layoutSize: outerGroupSize, subitems: [largeFirstMixedGroup, threeVerticalGroup, verticalFirstMixedGroup, threeVerticalGroup])
 
-      // Section
-      let section = NSCollectionLayoutSection(group: OuterGroup)
+    let section = NSCollectionLayoutSection(group: outerGroup)
 
-      return UICollectionViewCompositionalLayout(section: section)
+    return UICollectionViewCompositionalLayout(section: section)
     }()
     return compositionalLayout
   }
