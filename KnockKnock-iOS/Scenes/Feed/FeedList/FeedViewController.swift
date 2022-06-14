@@ -43,38 +43,32 @@ extension FeedViewController: UICollectionViewDelegateFlowLayout {
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
     var cellSize = CGSize()
+
     switch collectionView {
     case self.containerView.tagCollectionView:
-      cellSize = CGSize(
-        width: 100,
-        height: 35)
+      let attributes = [NSAttributedString.Key.font: UIFont.systemFont(
+        ofSize: 12,
+        weight: .medium)]
+      let tagLength = (self.tagList[indexPath.row] as NSString)
+        .size(withAttributes: attributes as [NSAttributedString.Key: Any])
+
+      cellSize = CGSize(width: tagLength.width + 60, height: 35)
+
     case self.containerView.feedCollectionView:
-      cellSize = CGSize(
-        width: (self.containerView.frame.width - 20) / 3,
-        height: (self.containerView.frame.height - 120) / 5)
+      let feedWidth = collectionView.bounds.width
+      let numberOfItemsPerRow: CGFloat = 3
+      let spacing: CGFloat = 5
+      let availableWidth = feedWidth - spacing * (numberOfItemsPerRow + 1)
+      let itemDimension = floor(availableWidth / numberOfItemsPerRow)
+
+      cellSize = CGSize(width: itemDimension, height: itemDimension)
     default:
       break
     }
     return cellSize
   }
-
-  func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    minimumLineSpacingForSectionAt section: Int
-  ) -> CGFloat {
-    return 5
-  }
-
-  func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    minimumInteritemSpacingForSectionAt section: Int
-  ) -> CGFloat {
-    return 5
-  }
-
 }
+
 extension FeedViewController: UICollectionViewDataSource {
   func collectionView(
     _ collectionView: UICollectionView,
@@ -100,7 +94,7 @@ extension FeedViewController: UICollectionViewDataSource {
         withReuseIdentifier: TagCell.reusableIdentifier,
         for: indexPath
       ) as! TagCell
-
+      cell.tagButton.setTitle(self.tagList[indexPath.item], for: .normal)
       return cell
 
     } else {

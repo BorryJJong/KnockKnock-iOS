@@ -19,10 +19,13 @@ class FeedView: UIView {
     frame: .zero,
     collectionViewLayout: UICollectionViewFlowLayout().then {
       $0.scrollDirection = .horizontal
+      $0.minimumLineSpacing = 10
+      $0.minimumInteritemSpacing = 10
     }
   ).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .yellow
+    $0.showsHorizontalScrollIndicator = false
   }
 
   let gradientImageView = UIImageView().then {
@@ -33,6 +36,8 @@ class FeedView: UIView {
     frame: .zero,
     collectionViewLayout: UICollectionViewFlowLayout().then {
       $0.scrollDirection = .vertical
+      $0.minimumLineSpacing = 10
+      $0.minimumInteritemSpacing = 10
     }
   ).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
@@ -57,13 +62,13 @@ class FeedView: UIView {
 
     NSLayoutConstraint.activate([
       self.tagCollectionView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-      self.tagCollectionView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-      self.tagCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
+      self.tagCollectionView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+      self.tagCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -20),
       self.tagCollectionView.heightAnchor.constraint(equalToConstant: 60),
 
       self.feedCollectionView.topAnchor.constraint(equalTo: self.tagCollectionView.bottomAnchor),
-      self.feedCollectionView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-      self.feedCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
+      self.feedCollectionView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+      self.feedCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -20),
       self.feedCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor)
     ])
   }
