@@ -19,17 +19,17 @@ class FeedView: UIView {
     frame: .zero,
     collectionViewLayout: UICollectionViewFlowLayout().then {
       $0.scrollDirection = .horizontal
-      $0.minimumLineSpacing = 10
-      $0.minimumInteritemSpacing = 10
+//      $0.minimumLineSpacing = 5
+      $0.minimumInteritemSpacing = 5
     }
   ).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .yellow
     $0.showsHorizontalScrollIndicator = false
   }
 
   let gradientImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.image = UIImage(named: "tagButton_gradient")
   }
 
   let feedCollectionView = UICollectionView(
@@ -41,14 +41,27 @@ class FeedView: UIView {
     }
   ).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .purple
   }
 
   let viewMoreButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setTitle("+ 더보기", for: .normal)
-    $0.titleLabel?.textColor = .gray50
+    $0.setTitleColor(.gray80, for: .normal)
     $0.layer.borderWidth = 1
+    $0.layer.borderColor = UIColor.gray30?.cgColor
+  }
+
+  let scrollView = UIScrollView().then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
+  }
+
+  lazy var stackView = UIStackView(arrangedSubviews: [self.feedCollectionView, self.viewMoreButton]).then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.axis = .vertical
+    $0.distribution = .fill
+    $0.alignment = .fill
+
+    $0.spacing = 20
   }
 
   // MARK: - Initailize
@@ -65,7 +78,9 @@ class FeedView: UIView {
   // MARK: - Constraints
 
   func setupConstraints() {
-    [self.tagCollectionView, self.feedCollectionView].addSubViews(self)
+    [self.tagCollectionView, self.gradientImageView].addSubViews(self)
+    [self.scrollView].addSubViews(self)
+    [self.stackView].addSubViews(self.scrollView)
 
     NSLayoutConstraint.activate([
       self.tagCollectionView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
@@ -73,15 +88,24 @@ class FeedView: UIView {
       self.tagCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -20),
       self.tagCollectionView.heightAnchor.constraint(equalToConstant: 60),
 
-//      self.viewMoreButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -40),
-//      self.viewMoreButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-//      self.viewMoreButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-//      self.viewMoreButton.heightAnchor.constraint(equalToConstant: 40),
+      self.gradientImageView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
+      self.gradientImageView.trailingAnchor.constraint(equalTo: self.tagCollectionView.trailingAnchor),
+      self.gradientImageView.bottomAnchor.constraint(equalTo: self.tagCollectionView.bottomAnchor),
+      self.gradientImageView.widthAnchor.constraint(equalToConstant: 30),
 
-      self.feedCollectionView.topAnchor.constraint(equalTo: self.tagCollectionView.bottomAnchor),
-      self.feedCollectionView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 15),
-      self.feedCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -15),
-      self.feedCollectionView.bottomAnchor.constraint(equalTo: self.viewMoreButton.topAnchor, constant: -15)
+      self.scrollView.topAnchor.constraint(equalTo: self.tagCollectionView.bottomAnchor),
+      self.scrollView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 15),
+      self.scrollView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -15),
+      self.scrollView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
+
+      self.stackView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
+      self.stackView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor),
+      self.stackView.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor),
+      self.stackView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor),
+      self.stackView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor),
+
+      self.viewMoreButton.heightAnchor.constraint(equalToConstant: 40),
+      self.feedCollectionView.heightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.heightAnchor)
     ])
   }
 

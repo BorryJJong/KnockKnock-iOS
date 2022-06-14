@@ -15,7 +15,11 @@ class TagCell: BaseCollectionViewCell {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.clipsToBounds = true
     $0.layer.cornerRadius = 20
-    $0.backgroundColor = .green50
+    $0.backgroundColor = .white
+    $0.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
+    $0.setTitleColor(.green50, for: .normal)
+    $0.layer.borderWidth = 1
+    $0.layer.borderColor = UIColor.green40?.cgColor
   }
 
   // MARK: - Configure

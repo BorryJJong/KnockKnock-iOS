@@ -88,6 +88,7 @@ extension FeedViewController: UICollectionViewDataSource {
         for: indexPath
       ) as! TagCell
       cell.tagButton.setTitle(self.tagList[indexPath.item], for: .normal)
+      cell.backgroundColor = .white
       return cell
 
     } else {
@@ -96,7 +97,7 @@ extension FeedViewController: UICollectionViewDataSource {
         withReuseIdentifier: FeedCell.reusableIdentifier,
         for: indexPath
       ) as! FeedCell
-
+      cell.backgroundColor = .white
       return cell
     }
   }
