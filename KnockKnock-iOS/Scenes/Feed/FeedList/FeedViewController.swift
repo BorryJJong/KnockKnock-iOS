@@ -32,6 +32,7 @@ class FeedViewController: BaseViewController<FeedView> {
       $0.delegate = self
       $0.dataSource = self
       $0.registCell(type: FeedCell.self)
+      $0.collectionViewLayout = self.containerView.feedCollectionViewLayout()
     }
   }
 }
@@ -54,14 +55,6 @@ extension FeedViewController: UICollectionViewDelegateFlowLayout {
 
       cellSize = CGSize(width: tagLength.width + 60, height: 35)
 
-    case self.containerView.feedCollectionView:
-      let feedWidth = collectionView.bounds.width
-      let numberOfItemsPerRow: CGFloat = 3
-      let spacing: CGFloat = 5
-      let availableWidth = feedWidth - spacing * (numberOfItemsPerRow + 1)
-      let itemDimension = floor(availableWidth / numberOfItemsPerRow)
-
-      cellSize = CGSize(width: itemDimension, height: itemDimension)
     default:
       break
     }
@@ -76,9 +69,9 @@ extension FeedViewController: UICollectionViewDataSource {
   ) -> Int {
     switch collectionView {
     case self.containerView.tagCollectionView:
-      return 5
+      return self.tagList.count
     case self.containerView.feedCollectionView:
-      return 30
+      return 36
     default:
       return 0
     }
