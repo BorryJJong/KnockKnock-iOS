@@ -11,6 +11,27 @@ import Then
 
 class FeedView: UIView {
 
+  // MARK: - Constants
+
+  private enum Metric {
+    static let tagCollectionViewItemSpacing = 5.f
+    static let tagCollectionViewLeadingMargin = 20.f
+    static let tagCollectionViewTrailingMargin = -20.f
+    static let tagCollectionViewHeight = 60.f
+
+    static let gradientImageViewWidth = 30.f
+
+    static let scrollViewLeadingMargin = 15.f
+    static let scrollViewTrailingMargin = -15.f
+
+    static let feedCollectionViewLineSpacing = 10.f
+    static let feedCollectionViewItemSpacing = 10.f
+
+    static let viewMoreButtonHeight = 40.f
+
+    static let stackViewSpacing = 20.f
+  }
+
   // MARK: - UIs
 
   let searchBar = UISearchController()
@@ -19,7 +40,7 @@ class FeedView: UIView {
     frame: .zero,
     collectionViewLayout: UICollectionViewFlowLayout().then {
       $0.scrollDirection = .horizontal
-      $0.minimumInteritemSpacing = 5
+      $0.minimumInteritemSpacing = Metric.tagCollectionViewItemSpacing
     }
   ).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
@@ -35,8 +56,8 @@ class FeedView: UIView {
     frame: .zero,
     collectionViewLayout: UICollectionViewFlowLayout().then {
       $0.scrollDirection = .vertical
-      $0.minimumLineSpacing = 10
-      $0.minimumInteritemSpacing = 10
+      $0.minimumLineSpacing = Metric.feedCollectionViewLineSpacing
+      $0.minimumInteritemSpacing = Metric.feedCollectionViewItemSpacing
     }
   ).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
@@ -50,7 +71,7 @@ class FeedView: UIView {
     $0.layer.borderColor = UIColor.gray30?.cgColor
   }
 
-  let scrollView = UIScrollView().then {
+  private let scrollView = UIScrollView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
   }
 
@@ -59,8 +80,7 @@ class FeedView: UIView {
     $0.axis = .vertical
     $0.distribution = .fill
     $0.alignment = .fill
-
-    $0.spacing = 20
+    $0.spacing = Metric.stackViewSpacing
   }
 
   // MARK: - Initailize
@@ -83,18 +103,18 @@ class FeedView: UIView {
 
     NSLayoutConstraint.activate([
       self.tagCollectionView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-      self.tagCollectionView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-      self.tagCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-      self.tagCollectionView.heightAnchor.constraint(equalToConstant: 60),
+      self.tagCollectionView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.tagCollectionViewLeadingMargin),
+      self.tagCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.tagCollectionViewTrailingMargin),
+      self.tagCollectionView.heightAnchor.constraint(equalToConstant: Metric.tagCollectionViewHeight),
 
       self.gradientImageView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
       self.gradientImageView.trailingAnchor.constraint(equalTo: self.tagCollectionView.trailingAnchor),
       self.gradientImageView.bottomAnchor.constraint(equalTo: self.tagCollectionView.bottomAnchor),
-      self.gradientImageView.widthAnchor.constraint(equalToConstant: 30),
+      self.gradientImageView.widthAnchor.constraint(equalToConstant: Metric.gradientImageViewWidth),
 
       self.scrollView.topAnchor.constraint(equalTo: self.tagCollectionView.bottomAnchor),
-      self.scrollView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 15),
-      self.scrollView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -15),
+      self.scrollView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.scrollViewLeadingMargin),
+      self.scrollView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.scrollViewTrailingMargin),
       self.scrollView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
 
       self.stackView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
@@ -103,7 +123,7 @@ class FeedView: UIView {
       self.stackView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor),
       self.stackView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor),
 
-      self.viewMoreButton.heightAnchor.constraint(equalToConstant: 40),
+      self.viewMoreButton.heightAnchor.constraint(equalToConstant: Metric.viewMoreButtonHeight),
       self.feedCollectionView.heightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.heightAnchor)
     ])
   }

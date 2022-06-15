@@ -9,6 +9,13 @@ import UIKit
 
 class FeedCell: BaseCollectionViewCell {
 
+  // MARK: - Constants
+
+  private enum Metric {
+    static let severalSymbolImageViewBottomMargin = -12.f
+    static let severalSymbolImageViewTrailingMargin = -12.f
+  }
+
   // MARK: - UIs
 
   let thumbnailImageView = UIImageView().then {
@@ -26,12 +33,15 @@ class FeedCell: BaseCollectionViewCell {
   // MARK: - Configure
 
   override func setupConstraints() {
-    [self.thumbnailImageView].addSubViews(self.contentView)
+    [self.thumbnailImageView, self.severalSymbolImageView].addSubViews(self.contentView)
     NSLayoutConstraint.activate([
       self.thumbnailImageView.topAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.topAnchor),
       self.thumbnailImageView.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor),
       self.thumbnailImageView.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor),
-      self.thumbnailImageView.bottomAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.bottomAnchor)
+      self.thumbnailImageView.bottomAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.bottomAnchor),
+
+      self.severalSymbolImageView.bottomAnchor.constraint(equalTo: self.thumbnailImageView.bottomAnchor, constant: Metric.severalSymbolImageViewBottomMargin),
+      self.severalSymbolImageView.trailingAnchor.constraint(equalTo: self.thumbnailImageView.trailingAnchor, constant: Metric.severalSymbolImageViewTrailingMargin)
     ])
   }
 }
