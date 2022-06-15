@@ -13,7 +13,7 @@ class FeedViewController: BaseViewController<FeedView> {
 
   // MARK: - Properties
 
-  let tagList = ["전체", "#친환경", "#제로웨이스트", "#용기내챌린지", "업사이클링" ]
+  let tagList = ["전체", "#친환경", "#제로웨이스트", "#용기내챌린지", "#업사이클링" ]
 
   // MARK: - Lify Cycles
 
@@ -71,7 +71,7 @@ extension FeedViewController: UICollectionViewDataSource {
     case self.containerView.tagCollectionView:
       return self.tagList.count
     case self.containerView.feedCollectionView:
-      return 36
+      return 33
     default:
       return 0
     }
