@@ -68,11 +68,14 @@ extension FeedViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
+
     switch collectionView {
     case self.containerView.tagCollectionView:
       return self.tagList.count
+      
     case self.containerView.feedCollectionView:
       return 33
+      
     default:
       return 0
     }
