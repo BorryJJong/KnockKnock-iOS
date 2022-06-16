@@ -84,10 +84,8 @@ extension FeedViewController: UICollectionViewDataSource {
   ) -> UICollectionViewCell {
     if collectionView == self.containerView.tagCollectionView {
 
-      let cell = collectionView.dequeueReusableCell(
-        withReuseIdentifier: TagCell.reusableIdentifier,
-        for: indexPath
-      ) as! TagCell
+      let cell = collectionView.dequeueCell(withType: TagCell.self, for: indexPath)
+
       cell.backgroundColor = .white
       cell.tagLabel.text = self.tagList[indexPath.item]
 
@@ -95,11 +93,9 @@ extension FeedViewController: UICollectionViewDataSource {
 
     } else {
 
-      let cell = collectionView.dequeueReusableCell(
-        withReuseIdentifier: FeedCell.reusableIdentifier,
-        for: indexPath
-      ) as! FeedCell
+      let cell = collectionView.dequeueCell(withType: FeedCell.self, for: indexPath)
       cell.backgroundColor = .white
+      
       return cell
     }
   }
