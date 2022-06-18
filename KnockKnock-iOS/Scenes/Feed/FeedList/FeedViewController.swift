@@ -23,43 +23,14 @@ class FeedViewController: BaseViewController<FeedView> {
 
   override func setupConfigure() {
     self.navigationItem.searchController = containerView.searchBar
-    self.containerView.tagCollectionView.do {
-      $0.delegate = self
-      $0.dataSource = self
-      $0.registCell(type: TagCell.self)
-    }
 
     self.containerView.feedCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
+      $0.registCell(type: TagCell.self)
       $0.registCell(type: FeedCell.self)
       $0.collectionViewLayout = self.containerView.feedCollectionViewLayout()
     }
-  }
-}
-
-extension FeedViewController: UICollectionViewDelegateFlowLayout {
-  func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    sizeForItemAt indexPath: IndexPath
-  ) -> CGSize {
-    var cellSize = CGSize()
-
-    switch collectionView {
-    case self.containerView.tagCollectionView:
-      let attributes = [NSAttributedString.Key.font: UIFont.systemFont(
-        ofSize: 12,
-        weight: .medium)]
-      let tagLength = (self.tagList[indexPath.row] as NSString)
-        .size(withAttributes: attributes as [NSAttributedString.Key: Any])
-
-      cellSize = CGSize(width: tagLength.width + 60, height: 35)
-
-    default:
-      break
-    }
-    return cellSize
   }
 }
 
@@ -68,35 +39,36 @@ extension FeedViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    switch collectionView {
-    case self.containerView.tagCollectionView:
+    switch section {
+    case 0:
       return self.tagList.count
-    case self.containerView.feedCollectionView:
+    case 1:
       return 33
     default:
       return 0
     }
   }
 
+  func numberOfSections(in collectionView: UICollectionView) -> Int {
+    return 2
+  }
+
   func collectionView(
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
-    if collectionView == self.containerView.tagCollectionView {
-
+    switch indexPath.section {
+    case 0:
       let cell = collectionView.dequeueCell(withType: TagCell.self, for: indexPath)
-
       cell.backgroundColor = .white
       cell.tagLabel.text = self.tagList[indexPath.item]
-
       return cell
-
-    } else {
-
+    case 1:
       let cell = collectionView.dequeueCell(withType: FeedCell.self, for: indexPath)
       cell.backgroundColor = .white
-      
       return cell
+    default:
+      return UICollectionViewCell()
     }
   }
 }

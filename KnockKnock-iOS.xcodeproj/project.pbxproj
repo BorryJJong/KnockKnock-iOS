@@ -50,6 +50,7 @@
 		61215AE428577933003FDCAA /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AE328577933003FDCAA /* FeedCell.swift */; };
 		61215AE628577A9C003FDCAA /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AE528577A9C003FDCAA /* TagCell.swift */; };
 		61215AE82858B2D3003FDCAA /* UIScrollView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AE72858B2D3003FDCAA /* UIScrollView+Ext.swift */; };
+		61215AEC285ADFF8003FDCAA /* UICollectionLayoutSize+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AEB285ADFF8003FDCAA /* UICollectionLayoutSize+Ext.swift */; };
 		617F9D65282A5AED00C2BC9A /* ChallengeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D64282A5AED00C2BC9A /* ChallengeDetailView.swift */; };
 		617F9D67282A5B0300C2BC9A /* ChallengeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D66282A5B0300C2BC9A /* ChallengeDetailViewController.swift */; };
 		617F9D69282A6EB200C2BC9A /* ChallengeDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D68282A6EB200C2BC9A /* ChallengeDetailCell.swift */; };
@@ -111,6 +112,7 @@
 		61215AE328577933003FDCAA /* FeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
 		61215AE528577A9C003FDCAA /* TagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
 		61215AE72858B2D3003FDCAA /* UIScrollView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+Ext.swift"; sourceTree = "<group>"; };
+		61215AEB285ADFF8003FDCAA /* UICollectionLayoutSize+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionLayoutSize+Ext.swift"; sourceTree = "<group>"; };
 		617F9D64282A5AED00C2BC9A /* ChallengeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailView.swift; sourceTree = "<group>"; };
 		617F9D66282A5B0300C2BC9A /* ChallengeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailViewController.swift; sourceTree = "<group>"; };
 		617F9D68282A6EB200C2BC9A /* ChallengeDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailCell.swift; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 				61215ACF28559B6E003FDCAA /* UICollectionViewCell+Ext.swift */,
 				61215AD228559BD0003FDCAA /* UICollectionView+Ext.swift */,
 				61215AE72858B2D3003FDCAA /* UIScrollView+Ext.swift */,
+				61215AEB285ADFF8003FDCAA /* UICollectionLayoutSize+Ext.swift */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -544,6 +547,7 @@
 				2010780227D3D59F00280991 /* UITableViewCell+Ext.swift in Sources */,
 				617F9D69282A6EB200C2BC9A /* ChallengeDetailCell.swift in Sources */,
 				201077F227D3A97A00280991 /* BaseViewController.swift in Sources */,
+				61215AEC285ADFF8003FDCAA /* UICollectionLayoutSize+Ext.swift in Sources */,
 				20EAE2972814054F009242A1 /* ChellengeRepository.swift in Sources */,
 				618FDAC527E80C6B00C2823F /* ShopSearchViewController.swift in Sources */,
 				61FC60ED27B9244E00A51DBC /* MainTabBarController.swift in Sources */,
