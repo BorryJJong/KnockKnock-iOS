@@ -34,6 +34,8 @@ class FeedViewController: BaseViewController<FeedView> {
   }
 }
 
+  // MARK: - Extensions
+
 extension FeedViewController: UICollectionViewDataSource {
   func collectionView(
     _ collectionView: UICollectionView,
@@ -42,8 +44,10 @@ extension FeedViewController: UICollectionViewDataSource {
     switch section {
     case 0:
       return self.tagList.count
+
     case 1:
       return 33
+      
     default:
       return 0
     }
@@ -63,13 +67,20 @@ extension FeedViewController: UICollectionViewDataSource {
       cell.backgroundColor = .white
       cell.tagLabel.text = self.tagList[indexPath.item]
       return cell
+
     case 1:
       let cell = collectionView.dequeueCell(withType: FeedCell.self, for: indexPath)
       cell.backgroundColor = .white
       return cell
+
     default:
       return UICollectionViewCell()
     }
+  }
+
+  func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    let footer = collectionView.dequeueReusableSupplementaryFooterView(for: indexPath)
+    return footer
   }
 }
 

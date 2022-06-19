@@ -35,7 +35,7 @@ class FeedView: UIView {
   // MARK: - UIs
   
   let searchBar = UISearchController()
-  
+ 
   let gradientImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.image = UIImage(named: "tagButton_gradient")
@@ -50,26 +50,7 @@ class FeedView: UIView {
     }
   ).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-  }
-  
-  let viewMoreButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.setTitle("+ 더보기", for: .normal)
-    $0.setTitleColor(.gray80, for: .normal)
-    $0.layer.borderWidth = 1
-    $0.layer.borderColor = UIColor.gray30?.cgColor
-  }
-  
-  private let scrollView = UIScrollView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-  }
-  
-  lazy var stackView = UIStackView(arrangedSubviews: [self.feedCollectionView, self.viewMoreButton]).then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.axis = .vertical
-    $0.distribution = .fill
-    $0.alignment = .fill
-    $0.spacing = Metric.stackViewSpacing
+    $0.registFooterView(type: FooterCollectionReusableView.self)
   }
   
   // MARK: - Initailize
@@ -86,9 +67,7 @@ class FeedView: UIView {
   // MARK: - Constraints
   
   func setupConstraints() {
-
-    [self.scrollView].addSubViews(self)
-    [self.stackView].addSubViews(self.scrollView)
+    [self.feedCollectionView].addSubViews(self)
     [self.gradientImageView].addSubViews(self)
     
     NSLayoutConstraint.activate([
@@ -97,19 +76,10 @@ class FeedView: UIView {
       self.gradientImageView.heightAnchor.constraint(equalToConstant: Metric.gradientImageViewWidth),
       self.gradientImageView.widthAnchor.constraint(equalToConstant: Metric.gradientImageViewWidth),
       
-      self.scrollView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-      self.scrollView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.scrollViewLeadingMargin),
-      self.scrollView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.scrollViewTrailingMargin),
-      self.scrollView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
-      
-      self.stackView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
-      self.stackView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor),
-      self.stackView.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor),
-      self.stackView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor),
-      self.stackView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor),
-      
-      self.viewMoreButton.heightAnchor.constraint(equalToConstant: Metric.viewMoreButtonHeight),
-      self.feedCollectionView.heightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.heightAnchor)
+      self.feedCollectionView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
+      self.feedCollectionView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.scrollViewLeadingMargin),
+      self.feedCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.scrollViewTrailingMargin),
+      self.feedCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor)
     ])
   }
   
@@ -166,10 +136,18 @@ class FeedView: UIView {
     let outerGroup = NSCollectionLayoutGroup.vertical(layoutSize: outerGroupSize, subitems: [largeFirstMixedGroup, twoHorizontalGroup, verticalFirstMixedGroup, twoHorizontalGroup])
     
     let sectionTwo = NSCollectionLayoutSection(group: outerGroup)
-    
-    let layout = UICollectionViewCompositionalLayout { (section: Int, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+
+    // footer
+    let footerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(50.0))
+    let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
+    footer.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0)
+
+    sectionTwo.boundarySupplementaryItems = [footer]
+
+    let layout = UICollectionViewCompositionalLayout { (section: Int, _) -> NSCollectionLayoutSection? in
       if section == 0 {
         return sectionOne
+
       } else {
         return sectionTwo
       }
