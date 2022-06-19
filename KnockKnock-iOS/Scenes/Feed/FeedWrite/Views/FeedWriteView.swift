@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import KKDSKit
 
 import Then
 
@@ -70,7 +71,7 @@ class FeedWriteView: UIView {
 
   let photoAddButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.setImage(#imageLiteral(resourceName: "ic_feed_photo"), for: .normal)
+    $0.setImage(KKDS.Image.ic_post_camera_24_gr, for: .normal)
     $0.setTitle("0/5", for: .normal)
     $0.setTitleColor(.gray60, for: .normal)
     $0.titleLabel?.font = .systemFont(ofSize: 14)

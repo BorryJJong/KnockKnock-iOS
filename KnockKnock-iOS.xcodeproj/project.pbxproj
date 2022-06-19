@@ -22,6 +22,7 @@
 		2090811C27CA4F6B005A1573 /* StoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090811B27CA4F6B005A1573 /* StoreViewController.swift */; };
 		2090811E27CA4F77005A1573 /* MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090811D27CA4F77005A1573 /* MyViewController.swift */; };
 		20A72D1E280BC4EE006689FC /* BaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A72D1D280BC4EE006689FC /* BaseCollectionViewCell.swift */; };
+		20AF1007285F2C74005C73EC /* KKDSKit in Frameworks */ = {isa = PBXBuildFile; productRef = 20AF1006285F2C74005C73EC /* KKDSKit */; };
 		20D28F8027CFC5E800A809DB /* ChallengeInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D28F7F27CFC5E800A809DB /* ChallengeInteractor.swift */; };
 		20D28F8227CFC5F000A809DB /* ChallengePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D28F8127CFC5F000A809DB /* ChallengePresenter.swift */; };
 		20D28F8427CFC60900A809DB /* ChallengeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D28F8327CFC60900A809DB /* ChallengeRouter.swift */; };
@@ -40,13 +41,11 @@
 		611BD4BC27E70393007D5C79 /* PropertySelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4BB27E70393007D5C79 /* PropertySelectViewController.swift */; };
 		611BD4BF27E70E64007D5C79 /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4BE27E70E64007D5C79 /* Property.swift */; };
 		611BD4C127E767CE007D5C79 /* shopSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4C027E767CE007D5C79 /* shopSearchView.swift */; };
-
 		61215AC5284F856D003FDCAA /* KKNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AC4284F856D003FDCAA /* KKNetworkManager.swift */; };
 		61215AC928507D51003FDCAA /* KKRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AC828507D51003FDCAA /* KKRouter.swift */; };
 		61215ACB2852D5B5003FDCAA /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215ACA2852D5B5003FDCAA /* APIConstants.swift */; };
 		61215AD028559B6E003FDCAA /* UICollectionViewCell+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215ACF28559B6E003FDCAA /* UICollectionViewCell+Ext.swift */; };
 		61215AD328559BD0003FDCAA /* UICollectionView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AD228559BD0003FDCAA /* UICollectionView+Ext.swift */; };
-
 		617F9D65282A5AED00C2BC9A /* ChallengeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D64282A5AED00C2BC9A /* ChallengeDetailView.swift */; };
 		617F9D67282A5B0300C2BC9A /* ChallengeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D66282A5B0300C2BC9A /* ChallengeDetailViewController.swift */; };
 		617F9D69282A6EB200C2BC9A /* ChallengeDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D68282A6EB200C2BC9A /* ChallengeDetailCell.swift */; };
@@ -80,6 +79,7 @@
 		2090811B27CA4F6B005A1573 /* StoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreViewController.swift; sourceTree = "<group>"; };
 		2090811D27CA4F77005A1573 /* MyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyViewController.swift; sourceTree = "<group>"; };
 		20A72D1D280BC4EE006689FC /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
+		20AF1005285F2BFF005C73EC /* KKDSKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = KKDSKit; sourceTree = "<group>"; };
 		20D28F7F27CFC5E800A809DB /* ChallengeInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeInteractor.swift; sourceTree = "<group>"; };
 		20D28F8127CFC5F000A809DB /* ChallengePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengePresenter.swift; sourceTree = "<group>"; };
 		20D28F8327CFC60900A809DB /* ChallengeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeRouter.swift; sourceTree = "<group>"; };
@@ -98,14 +98,11 @@
 		611BD4BB27E70393007D5C79 /* PropertySelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertySelectViewController.swift; sourceTree = "<group>"; };
 		611BD4BE27E70E64007D5C79 /* Property.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
 		611BD4C027E767CE007D5C79 /* shopSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shopSearchView.swift; sourceTree = "<group>"; };
-
 		61215AC4284F856D003FDCAA /* KKNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KKNetworkManager.swift; sourceTree = "<group>"; };
 		61215AC828507D51003FDCAA /* KKRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KKRouter.swift; sourceTree = "<group>"; };
 		61215ACA2852D5B5003FDCAA /* APIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
-
 		61215ACF28559B6E003FDCAA /* UICollectionViewCell+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell+Ext.swift"; sourceTree = "<group>"; };
 		61215AD228559BD0003FDCAA /* UICollectionView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Ext.swift"; sourceTree = "<group>"; };
-
 		617F9D64282A5AED00C2BC9A /* ChallengeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailView.swift; sourceTree = "<group>"; };
 		617F9D66282A5B0300C2BC9A /* ChallengeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailViewController.swift; sourceTree = "<group>"; };
 		617F9D68282A6EB200C2BC9A /* ChallengeDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailCell.swift; sourceTree = "<group>"; };
@@ -132,6 +129,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				20AF1007285F2C74005C73EC /* KKDSKit in Frameworks */,
 				34F6FB7E518CFAF1AD6C3455 /* Pods_KnockKnock_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -338,6 +336,7 @@
 		61FC60DC27B9244D00A51DBC = {
 			isa = PBXGroup;
 			children = (
+				20AF1005285F2BFF005C73EC /* KKDSKit */,
 				204320C828367AD300E6FD06 /* .swiftlint.yml */,
 				61FC60E727B9244D00A51DBC /* KnockKnock-iOS */,
 				61FC60E627B9244D00A51DBC /* Products */,
@@ -397,6 +396,9 @@
 			dependencies = (
 			);
 			name = "KnockKnock-iOS";
+			packageProductDependencies = (
+				20AF1006285F2C74005C73EC /* KKDSKit */,
+			);
 			productName = "KnockKnock-iOS";
 			productReference = 61FC60E527B9244D00A51DBC /* KnockKnock-iOS.app */;
 			productType = "com.apple.product-type.application";
@@ -771,6 +773,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		20AF1006285F2C74005C73EC /* KKDSKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KKDSKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 61FC60DD27B9244D00A51DBC /* Project object */;
 }
