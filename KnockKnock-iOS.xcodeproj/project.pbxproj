@@ -52,6 +52,7 @@
 		61215AE82858B2D3003FDCAA /* UIScrollView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AE72858B2D3003FDCAA /* UIScrollView+Ext.swift */; };
 		61215AEC285ADFF8003FDCAA /* UICollectionLayoutSize+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AEB285ADFF8003FDCAA /* UICollectionLayoutSize+Ext.swift */; };
 		6143294D285DD2A0008BDCC9 /* FooterCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6143294C285DD2A0008BDCC9 /* FooterCollectionReusableView.swift */; };
+		6143294F285F2BCF008BDCC9 /* BasePaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6143294E285F2BCF008BDCC9 /* BasePaddingLabel.swift */; };
 		617F9D65282A5AED00C2BC9A /* ChallengeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D64282A5AED00C2BC9A /* ChallengeDetailView.swift */; };
 		617F9D67282A5B0300C2BC9A /* ChallengeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D66282A5B0300C2BC9A /* ChallengeDetailViewController.swift */; };
 		617F9D69282A6EB200C2BC9A /* ChallengeDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D68282A6EB200C2BC9A /* ChallengeDetailCell.swift */; };
@@ -115,6 +116,7 @@
 		61215AE72858B2D3003FDCAA /* UIScrollView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+Ext.swift"; sourceTree = "<group>"; };
 		61215AEB285ADFF8003FDCAA /* UICollectionLayoutSize+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionLayoutSize+Ext.swift"; sourceTree = "<group>"; };
 		6143294C285DD2A0008BDCC9 /* FooterCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterCollectionReusableView.swift; sourceTree = "<group>"; };
+		6143294E285F2BCF008BDCC9 /* BasePaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePaddingLabel.swift; sourceTree = "<group>"; };
 		617F9D64282A5AED00C2BC9A /* ChallengeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailView.swift; sourceTree = "<group>"; };
 		617F9D66282A5B0300C2BC9A /* ChallengeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailViewController.swift; sourceTree = "<group>"; };
 		617F9D68282A6EB200C2BC9A /* ChallengeDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailCell.swift; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 		201077F027D3A94800280991 /* BaseComponent */ = {
 			isa = PBXGroup;
 			children = (
+				6143294E285F2BCF008BDCC9 /* BasePaddingLabel.swift */,
 				201077F127D3A97A00280991 /* BaseViewController.swift */,
 				201077FB27D3D26E00280991 /* BaseTableViewCell.swift */,
 				20A72D1D280BC4EE006689FC /* BaseCollectionViewCell.swift */,
@@ -565,6 +568,7 @@
 				61215ACB2852D5B5003FDCAA /* APIConstants.swift in Sources */,
 				61215AC928507D51003FDCAA /* KKRouter.swift in Sources */,
 				618FDACF27E9642400C2823F /* UIButton+Ext.swift in Sources */,
+				6143294F285F2BCF008BDCC9 /* BasePaddingLabel.swift in Sources */,
 				61215AD028559B6E003FDCAA /* UICollectionViewCell+Ext.swift in Sources */,
 				617F9D75282BEB2A00C2BC9A /* BottomMenuCell.swift in Sources */,
 				2090811C27CA4F6B005A1573 /* StoreViewController.swift in Sources */,

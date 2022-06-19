@@ -14,12 +14,8 @@ class FeedView: UIView {
   // MARK: - Constants
   
   private enum Metric {
-    static let tagCollectionViewItemSpacing = 5.f
-    static let tagCollectionViewLeadingMargin = 20.f
-    static let tagCollectionViewTrailingMargin = -20.f
-    static let tagCollectionViewHeight = 60.f
-    
     static let gradientImageViewWidth = 30.f
+    static let gradientImageViewHeight = 60.f
     
     static let scrollViewLeadingMargin = 15.f
     static let scrollViewTrailingMargin = -15.f
@@ -73,7 +69,7 @@ class FeedView: UIView {
     NSLayoutConstraint.activate([
       self.gradientImageView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
       self.gradientImageView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
-      self.gradientImageView.heightAnchor.constraint(equalToConstant: Metric.gradientImageViewWidth),
+      self.gradientImageView.heightAnchor.constraint(equalToConstant: Metric.gradientImageViewHeight),
       self.gradientImageView.widthAnchor.constraint(equalToConstant: Metric.gradientImageViewWidth),
       
       self.feedCollectionView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
@@ -93,11 +89,9 @@ class FeedView: UIView {
     let tagItemSize = NSCollectionLayoutSize(widthDimension: .estimated(estimatedWidth),
                                             heightDimension: .estimated(estimatedHeigth))
     let tagItem = NSCollectionLayoutItem(layoutSize: tagItemSize)
-    tagItem.contentInsets = NSDirectionalEdgeInsets(top: 0.0, leading: 10, bottom: 0.0, trailing: 10)
 
     let tagGroupSize = NSCollectionLayoutSize(widthDimension: .estimated(estimatedWidth), heightDimension: .estimated(estimatedHeigth))
     let tagGroup = NSCollectionLayoutGroup.vertical(layoutSize: tagGroupSize, subitems: [tagItem])
-    tagGroup.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 30)
 
     let sectionOne = NSCollectionLayoutSection(group: tagGroup)
     sectionOne.interGroupSpacing = 10

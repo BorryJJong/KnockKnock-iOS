@@ -11,15 +11,14 @@ class TagCell: BaseCollectionViewCell {
 
   // MARK: - UIs
 
-  let tagLabel = UILabel().then {
+  let tagLabel = BasePaddingLabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.textAlignment = .center
     $0.clipsToBounds = true
-    $0.layer.cornerRadius = 10
+    $0.layer.cornerRadius = 20
     $0.textColor = .green50
     $0.layer.borderWidth = 1
     $0.layer.borderColor = UIColor.green40?.cgColor
-
   }
 
   // MARK: - Configure
