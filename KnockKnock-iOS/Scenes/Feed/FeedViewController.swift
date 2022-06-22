@@ -7,11 +7,16 @@
 
 import UIKit
 
-import Then
+protocol FeedViewProtocol: AnyObject {
+  var interactor: FeedInteracotrProtocol? { get set }
+}
 
-class FeedViewController: BaseViewController<FeedView> {
+final class FeedViewController: BaseViewController<FeedView> {
 
   // MARK: - Properties
+
+  var interactor: FeedInteracotrProtocol?
+  var router = FeedRouter()
 
   private let tagList = ["전체", "#친환경", "#제로웨이스트", "#용기내챌린지", "#업사이클링" ]
 
@@ -34,7 +39,10 @@ class FeedViewController: BaseViewController<FeedView> {
   }
 }
 
-  // MARK: - Extensions
+// MARK: - Extensions
+
+extension FeedViewController: FeedViewProtocol {
+}
 
 extension FeedViewController: UICollectionViewDataSource {
   func collectionView(
@@ -98,10 +106,22 @@ extension FeedViewController: UICollectionViewDelegate {
   }
   
   func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-    if let cell = collectionView.cellForItem(at: indexPath) as? TagCell {
-      cell.tagLabel.backgroundColor = .white
-      cell.tagLabel.textColor = .green50
-      cell.tagLabel.font = .systemFont(ofSize: 16, weight: .medium)
+
+    switch indexPath.section{
+    case 0:
+      if let cell = collectionView.cellForItem(at: indexPath) as? TagCell {
+        cell.tagLabel.backgroundColor = .white
+        cell.tagLabel.textColor = .green50
+        cell.tagLabel.font = .systemFont(ofSize: 16, weight: .medium)
+      }
+
+    case 1:
+      self.router.navigateToFeedList(source: self, destination: FeedListViewController())
+      
+    default:
+      return
     }
   }
 }
+
+
