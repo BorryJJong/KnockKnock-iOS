@@ -53,6 +53,9 @@
 		61215AEC285ADFF8003FDCAA /* UICollectionLayoutSize+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AEB285ADFF8003FDCAA /* UICollectionLayoutSize+Ext.swift */; };
 		6143294D285DD2A0008BDCC9 /* FooterCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6143294C285DD2A0008BDCC9 /* FooterCollectionReusableView.swift */; };
 		6143294F285F2BCF008BDCC9 /* BasePaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6143294E285F2BCF008BDCC9 /* BasePaddingLabel.swift */; };
+		614329552862EFE0008BDCC9 /* FeedListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614329542862EFE0008BDCC9 /* FeedListView.swift */; };
+		614329572862EFF1008BDCC9 /* FeedListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614329562862EFF1008BDCC9 /* FeedListViewController.swift */; };
+		614329592862F273008BDCC9 /* FeedListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614329582862F273008BDCC9 /* FeedListCell.swift */; };
 		617F9D65282A5AED00C2BC9A /* ChallengeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D64282A5AED00C2BC9A /* ChallengeDetailView.swift */; };
 		617F9D67282A5B0300C2BC9A /* ChallengeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D66282A5B0300C2BC9A /* ChallengeDetailViewController.swift */; };
 		617F9D69282A6EB200C2BC9A /* ChallengeDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D68282A6EB200C2BC9A /* ChallengeDetailCell.swift */; };
@@ -117,6 +120,9 @@
 		61215AEB285ADFF8003FDCAA /* UICollectionLayoutSize+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionLayoutSize+Ext.swift"; sourceTree = "<group>"; };
 		6143294C285DD2A0008BDCC9 /* FooterCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterCollectionReusableView.swift; sourceTree = "<group>"; };
 		6143294E285F2BCF008BDCC9 /* BasePaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePaddingLabel.swift; sourceTree = "<group>"; };
+		614329542862EFE0008BDCC9 /* FeedListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedListView.swift; sourceTree = "<group>"; };
+		614329562862EFF1008BDCC9 /* FeedListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedListViewController.swift; sourceTree = "<group>"; };
+		614329582862F273008BDCC9 /* FeedListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedListCell.swift; sourceTree = "<group>"; };
 		617F9D64282A5AED00C2BC9A /* ChallengeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailView.swift; sourceTree = "<group>"; };
 		617F9D66282A5B0300C2BC9A /* ChallengeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailViewController.swift; sourceTree = "<group>"; };
 		617F9D68282A6EB200C2BC9A /* ChallengeDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailCell.swift; sourceTree = "<group>"; };
@@ -222,6 +228,7 @@
 				617F9D74282BEB2A00C2BC9A /* BottomMenuCell.swift */,
 				61215AE328577933003FDCAA /* FeedCell.swift */,
 				61215AE528577A9C003FDCAA /* TagCell.swift */,
+				614329582862F273008BDCC9 /* FeedListCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -311,6 +318,8 @@
 		611BD4A127E2C85C007D5C79 /* Feed */ = {
 			isa = PBXGroup;
 			children = (
+				61215AE128572055003FDCAA /* FeedViewController.swift */,
+				6143295A2862F60C008BDCC9 /* Views */,
 				61215AD928571D4E003FDCAA /* FeedList */,
 				611BD4BD27E703E4007D5C79 /* FeedWrite */,
 			);
@@ -355,8 +364,8 @@
 		61215AD928571D4E003FDCAA /* FeedList */ = {
 			isa = PBXGroup;
 			children = (
+				614329562862EFF1008BDCC9 /* FeedListViewController.swift */,
 				61215ADC28571E12003FDCAA /* Views */,
-				61215AE128572055003FDCAA /* FeedViewController.swift */,
 			);
 			path = FeedList;
 			sourceTree = "<group>";
@@ -364,8 +373,16 @@
 		61215ADC28571E12003FDCAA /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				61215ADD28571E20003FDCAA /* FeedView.swift */,
+				614329542862EFE0008BDCC9 /* FeedListView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		6143295A2862F60C008BDCC9 /* Views */ = {
+			isa = PBXGroup;
+			children = (
 				6143294C285DD2A0008BDCC9 /* FooterCollectionReusableView.swift */,
+				61215ADD28571E20003FDCAA /* FeedView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -576,6 +593,7 @@
 				2090811E27CA4F77005A1573 /* MyViewController.swift in Sources */,
 				611BD4BF27E70E64007D5C79 /* Property.swift in Sources */,
 				61215AE628577A9C003FDCAA /* TagCell.swift in Sources */,
+				614329552862EFE0008BDCC9 /* FeedListView.swift in Sources */,
 				20D28F8427CFC60900A809DB /* ChallengeRouter.swift in Sources */,
 				61FC60E927B9244D00A51DBC /* AppDelegate.swift in Sources */,
 				611BD4BC27E70393007D5C79 /* PropertySelectViewController.swift in Sources */,
@@ -602,6 +620,8 @@
 				20D28F8627CFC7B300A809DB /* ChallengeWorker.swift in Sources */,
 				611BD4B827E6DD5F007D5C79 /* PropertyCell.swift in Sources */,
 				2090811827CA4F56005A1573 /* HomeViewController.swift in Sources */,
+				614329592862F273008BDCC9 /* FeedListCell.swift in Sources */,
+				614329572862EFF1008BDCC9 /* FeedListViewController.swift in Sources */,
 				61215AE82858B2D3003FDCAA /* UIScrollView+Ext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
