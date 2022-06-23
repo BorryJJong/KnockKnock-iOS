@@ -88,12 +88,12 @@ class FeedListCell: BaseCollectionViewCell {
     $0.translatesAutoresizingMaskIntoConstraints = false
   }
 
-  private let contentLabel = UILabel().then {
+  let contentLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.numberOfLines = 2
-    $0.backgroundColor = .systemPink
-    $0.textAlignment = .natural
-    $0.text = "패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다다 다다다다ㅏ따다다다ㅏ다다다다다다다다ㅏ다다다다ㅏ다ㅏ"
+    $0.backgroundColor = .white
+
+    $0.text = "패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. 패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. "
   }
 
   let likeButton = UIButton().then {
