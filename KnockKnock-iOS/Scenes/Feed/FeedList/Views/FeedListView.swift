@@ -21,7 +21,7 @@ class FeedListView: UIView {
 
   let feedListCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
     $0.scrollDirection = .vertical
-    $0.minimumLineSpacing = 30
+    $0.minimumLineSpacing = 50
   }).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
   }

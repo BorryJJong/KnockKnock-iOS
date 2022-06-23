@@ -107,7 +107,7 @@ extension FeedViewController: UICollectionViewDelegate {
   
   func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
 
-    switch indexPath.section{
+    switch indexPath.section {
     case 0:
       if let cell = collectionView.cellForItem(at: indexPath) as? TagCell {
         cell.tagLabel.backgroundColor = .white
@@ -123,5 +123,3 @@ extension FeedViewController: UICollectionViewDelegate {
     }
   }
 }
-
-

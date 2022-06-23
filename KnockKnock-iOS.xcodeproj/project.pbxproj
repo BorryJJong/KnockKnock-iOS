@@ -326,12 +326,12 @@
 		611BD4A127E2C85C007D5C79 /* Feed */ = {
 			isa = PBXGroup;
 			children = (
+				6143295A2862F60C008BDCC9 /* Views */,
 				61215AE128572055003FDCAA /* FeedViewController.swift */,
 				6143295B2862F6BB008BDCC9 /* FeedRouter.swift */,
 				6143295D2862F6CC008BDCC9 /* FeedPresenter.swift */,
 				6143295F2862F6DB008BDCC9 /* FeedInteractor.swift */,
 				614329612862F6E3008BDCC9 /* FeedWorker.swift */,
-				6143295A2862F60C008BDCC9 /* Views */,
 				61215AD928571D4E003FDCAA /* FeedList */,
 				611BD4BD27E703E4007D5C79 /* FeedWrite */,
 			);

@@ -47,5 +47,13 @@ extension FeedListViewController: UICollectionViewDataSource {
 }
 
 extension FeedListViewController: UICollectionViewDelegateFlowLayout {
-
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    sizeForItemAt indexPath: IndexPath
+  ) -> CGSize {
+    return CGSize(
+      width: (self.containerView.frame.width - 40),
+      height: ((self.containerView.frame.width - 40) + 200))
+  }
 }
