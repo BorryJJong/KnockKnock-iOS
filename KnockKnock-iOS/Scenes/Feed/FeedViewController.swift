@@ -9,6 +9,8 @@ import UIKit
 
 protocol FeedViewProtocol: AnyObject {
   var interactor: FeedInteracotrProtocol? { get set }
+
+  func fetchFeed(feed: [Feed])
 }
 
 final class FeedViewController: BaseViewController<FeedView> {
@@ -17,6 +19,7 @@ final class FeedViewController: BaseViewController<FeedView> {
 
   var interactor: FeedInteracotrProtocol?
   var router = FeedRouter()
+  var feed: [Feed] = []
 
   private let tagList = ["전체", "#친환경", "#제로웨이스트", "#용기내챌린지", "#업사이클링" ]
 
@@ -24,6 +27,7 @@ final class FeedViewController: BaseViewController<FeedView> {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    self.interactor?.fetchFeed()
   }
 
   override func setupConfigure() {
@@ -42,6 +46,10 @@ final class FeedViewController: BaseViewController<FeedView> {
 // MARK: - Extensions
 
 extension FeedViewController: FeedViewProtocol {
+  func fetchFeed(feed: [Feed]) {
+    self.feed = feed
+    self.containerView.feedCollectionView.reloadData()
+  }
 }
 
 extension FeedViewController: UICollectionViewDataSource {
@@ -54,7 +62,7 @@ extension FeedViewController: UICollectionViewDataSource {
       return self.tagList.count
 
     case 1:
-      return 33
+      return self.feed.count
       
     default:
       return 0
@@ -78,7 +86,8 @@ extension FeedViewController: UICollectionViewDataSource {
 
     case 1:
       let cell = collectionView.dequeueCell(withType: FeedCell.self, for: indexPath)
-      cell.backgroundColor = .white
+      let feed = self.feed[indexPath.item]
+      cell.bind(feed: feed)
       return cell
 
     default:

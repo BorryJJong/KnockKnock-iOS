@@ -7,6 +7,21 @@
 
 import Foundation
 
-final class FeedWorker {
-  
+protocol FeedWorkerProtocol: AnyObject {
+  func fetchFeed(completionHandler: @escaping ([Feed]) -> Void)
+}
+
+final class FeedWorker: FeedWorkerProtocol {
+
+  private let repository: FeedRepositoryProtocol
+
+  init(repository: FeedRepositoryProtocol) {
+    self.repository = repository
+  }
+
+  func fetchFeed(completionHandler: @escaping ([Feed]) -> Void) {
+    repository.fetchFeed(completionHandler: { result in
+      completionHandler(result)
+    })
+  }
 }

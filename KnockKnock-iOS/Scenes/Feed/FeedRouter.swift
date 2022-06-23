@@ -18,7 +18,7 @@ final class FeedRouter {
     let view = FeedViewController()
     let interactor = FeedInteractor()
     let presenter = FeedPresenter()
-    let worker = FeedWorker()
+    let worker = FeedWorker(repository: FeedRepository())
 
     view.interactor = interactor
     interactor.presenter = presenter

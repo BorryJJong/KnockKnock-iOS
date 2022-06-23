@@ -8,13 +8,22 @@
 import Foundation
 
 protocol FeedInteracotrProtocol {
-  
+  var presenter: FeedPresenterProtocol? { get set }
+  var worker: FeedWorkerProtocol? { get set }
+
+  func fetchFeed()
 }
 
 final class FeedInteractor: FeedInteracotrProtocol {
 
   // MARK: - Properties
-  var presenter: FeedPresenter?
-  var worker: FeedWorker?
+  
+  var presenter: FeedPresenterProtocol?
+  var worker: FeedWorkerProtocol?
 
+  func fetchFeed() {
+    self.worker?.fetchFeed { [weak self] feed in
+      self?.presenter?.presentFetchFeed(feed: feed)
+    }
+  }
 }

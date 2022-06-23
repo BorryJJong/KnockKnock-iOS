@@ -28,6 +28,17 @@ class FeedCell: BaseCollectionViewCell {
   let severalSymbolImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .white
+    $0.image = UIImage(named: "ic_checkbox_on")
+    $0.isHidden = true
+  }
+
+  // MARK: - Bind
+
+  func bind(feed: Feed) {
+    if feed.images.count > 1 {
+      self.severalSymbolImageView.isHidden = false
+    }
+    self.thumbnailImageView.image = UIImage(named: feed.images.first ?? "")
   }
 
   // MARK: - Configure

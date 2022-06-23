@@ -8,7 +8,8 @@
 import Foundation
 
 protocol FeedPresenterProtocol {
-
+  var view: FeedViewProtocol? { get set }
+  func presentFetchFeed(feed: [Feed])
 }
 
 final class FeedPresenter: FeedPresenterProtocol {
@@ -16,4 +17,8 @@ final class FeedPresenter: FeedPresenterProtocol {
   // MARK: - Properties
 
   weak var view: FeedViewProtocol?
+
+  func presentFetchFeed(feed: [Feed]) {
+    self.view?.fetchFeed(feed: feed)
+  }
 }
