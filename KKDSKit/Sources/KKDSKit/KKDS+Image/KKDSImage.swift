@@ -29,7 +29,6 @@ public extension KKDS.Image {
   static var ic_more_img_20_off: UIImage          { .load(name: "ic_more_img_20_off") }
   static var ic_more_img_20_on: UIImage           { .load(name: "ic_more_img_20_on") }
   static var ic_more_img_20_wh: UIImage           { .load(name: "ic_more_img_20_wh") }
-  static var ic_post_camera_24_gr: UIImage        { .load(name: "ic_post_camera_24_gr") }
 }
 
 // MARK: - Icon Size 24
