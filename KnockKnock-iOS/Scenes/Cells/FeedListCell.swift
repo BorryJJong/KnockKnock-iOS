@@ -24,6 +24,9 @@ class FeedListCell: BaseCollectionViewCell {
 
     static let imageScrollViewTopMargin = 10.f
 
+    static let imageNumberLabelTopMargin = 15.f
+    static let imageNumberLabelTrailingMargin = -18.f
+
     static let imagePageControlBottomMargin = -20.f
 
     static let postContentViewTopMargin = 15.f
@@ -97,10 +100,21 @@ class FeedListCell: BaseCollectionViewCell {
     $0.hidesForSinglePage = true
   }
 
-  private let imageNumberLabel = UILabel().then {
+  private let imageNumberLabel = BasePaddingLabel(
+    padding: UIEdgeInsets(
+      top: 7,
+      left: 15,
+      bottom: 7,
+      right: 15
+    )
+  ).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .black
+    $0.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 0.5)
+    $0.layer.cornerRadius = 14
+    $0.clipsToBounds = true
     $0.text = "0/1"
+    $0.font = .systemFont(ofSize: 12, weight: .medium)
+    $0.textColor = .white
   }
 
   private let postContentView = UIView().then {
@@ -137,6 +151,7 @@ class FeedListCell: BaseCollectionViewCell {
 
     self.setImageSlider(images: images)
     self.imagePageControl.numberOfPages = images.count
+    self.imageNumberLabel.text = "0/\(images.count)"
   }
 
   func setImageSlider(images: [String]) {
@@ -163,7 +178,7 @@ class FeedListCell: BaseCollectionViewCell {
   override func setupConstraints() {
     [self.headerView].addSubViews(self.contentView)
     [self.profileImageView, self.stackView, self.configureButton].addSubViews(headerView)
-    [self.imageScrollView, imagePageControl].addSubViews(self.contentView)
+    [self.imageScrollView, self.imageNumberLabel, self.imagePageControl].addSubViews(self.contentView)
     [self.postContentView].addSubViews(self.contentView)
     [self.contentLabel, self.likeButton, self.commentsButton].addSubViews(self.postContentView)
 
@@ -191,6 +206,10 @@ class FeedListCell: BaseCollectionViewCell {
       self.imageScrollView.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor),
       self.imageScrollView.heightAnchor.constraint(equalTo: self.contentView.widthAnchor),
 
+      self.imageNumberLabel.widthAnchor.constraint(equalToConstant: 50),
+      self.imageNumberLabel.topAnchor.constraint(equalTo: self.imageScrollView.topAnchor, constant: Metric.imageNumberLabelTopMargin),
+      self.imageNumberLabel.trailingAnchor.constraint(equalTo: self.imageScrollView.trailingAnchor, constant: Metric.imageNumberLabelTrailingMargin),
+
       self.imagePageControl.bottomAnchor.constraint(equalTo: self.imageScrollView.bottomAnchor, constant: Metric.imagePageControlBottomMargin),
       self.imagePageControl.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
 
@@ -216,6 +235,7 @@ class FeedListCell: BaseCollectionViewCell {
 
 extension FeedListCell: UIScrollViewDelegate {
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    imagePageControl.currentPage = Int(round(imageScrollView.contentOffset.x / UIScreen.main.bounds.width))
+    self.imagePageControl.currentPage = Int(round(imageScrollView.contentOffset.x / UIScreen.main.bounds.width))
+    self.imageNumberLabel.text = "\(imagePageControl.currentPage)/\(imagePageControl.numberOfPages)"
   }
 }
