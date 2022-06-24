@@ -41,7 +41,7 @@ extension FeedListViewController: UICollectionViewDataSource {
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
     let cell = collectionView.dequeueCell(withType: FeedListCell.self, for: indexPath)
-//    cell.backgroundColor = .white
+    cell.bind()
     DispatchQueue.main.async {
       cell.contentLabel.addTrailing(with: "...", moreText: "더보기", moreTextFont: UIFont.systemFont(ofSize: 13, weight: .medium), moreTextColor: UIColor.gray)
     }

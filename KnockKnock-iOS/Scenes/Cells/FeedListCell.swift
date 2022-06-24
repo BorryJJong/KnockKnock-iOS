@@ -24,6 +24,8 @@ class FeedListCell: BaseCollectionViewCell {
 
     static let imageScrollViewTopMargin = 10.f
 
+    static let imagePageControlBottomMargin = -20.f
+
     static let postContentViewTopMargin = 15.f
     static let postContentViewLeadingMargin = 15.f
     static let postContentViewTrailingMargin = -15.f
@@ -78,10 +80,27 @@ class FeedListCell: BaseCollectionViewCell {
     $0.setTitle("•••", for: .normal)
     $0.contentHorizontalAlignment = .right
   }
-  private let imageScrollView = UIScrollView().then {
+
+  lazy var imageScrollView = UIScrollView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.isPagingEnabled = true
+    $0.showsHorizontalScrollIndicator = false
     $0.backgroundColor = .orange
+    $0.delegate = self
+  }
+
+  private let imagePageControl = UIPageControl().then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.currentPage = 0
+    $0.pageIndicatorTintColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.5)
+    $0.currentPageIndicatorTintColor = .white
+    $0.hidesForSinglePage = true
+  }
+
+  private let imageNumberLabel = UILabel().then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.backgroundColor = .black
+    $0.text = "0/1"
   }
 
   private let postContentView = UIView().then {
@@ -92,7 +111,6 @@ class FeedListCell: BaseCollectionViewCell {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.numberOfLines = 2
     $0.backgroundColor = .white
-
     $0.text = "패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. 패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. "
   }
 
@@ -106,12 +124,46 @@ class FeedListCell: BaseCollectionViewCell {
     $0.backgroundColor = .gray
   }
 
+  // MARK: - Bind
+
+  func bind() {
+    // func bind(feed: Feed)
+    //    self.userIdLabel.text = "\(feed.userId)"
+    //    self.contentLabel.text = feed.content
+    //    self.setImageSlider(images: feed.images)
+    //    self.imagePageControl.numberOfPages = feed.images.count
+
+    let images = ["challenge", "challenge", "challenge", "ic_feed_photo"]
+
+    self.setImageSlider(images: images)
+    self.imagePageControl.numberOfPages = images.count
+  }
+
+  func setImageSlider(images: [String]) {
+    for index in 0..<images.count {
+
+      let imageView = UIImageView()
+      imageView.image = UIImage(named: images[index])
+      imageView.contentMode = .scaleAspectFit
+
+      let xPosition = self.contentView.frame.width * CGFloat(index)
+
+      imageView.frame = CGRect(x: xPosition,
+                               y: 0,
+                               width: self.contentView.frame.width,
+                               height: self.contentView.frame.width)
+
+      imageScrollView.contentSize.width = self.contentView.frame.width * CGFloat(index+1)
+      imageScrollView.addSubview(imageView)
+    }
+  }
+
   // MARK: - Configure
 
   override func setupConstraints() {
     [self.headerView].addSubViews(self.contentView)
     [self.profileImageView, self.stackView, self.configureButton].addSubViews(headerView)
-    [self.imageScrollView].addSubViews(self.contentView)
+    [self.imageScrollView, imagePageControl].addSubViews(self.contentView)
     [self.postContentView].addSubViews(self.contentView)
     [self.contentLabel, self.likeButton, self.commentsButton].addSubViews(self.postContentView)
 
@@ -139,6 +191,9 @@ class FeedListCell: BaseCollectionViewCell {
       self.imageScrollView.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor),
       self.imageScrollView.heightAnchor.constraint(equalTo: self.contentView.widthAnchor),
 
+      self.imagePageControl.bottomAnchor.constraint(equalTo: self.imageScrollView.bottomAnchor, constant: Metric.imagePageControlBottomMargin),
+      self.imagePageControl.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
+
       self.postContentView.topAnchor.constraint(equalTo: self.imageScrollView.bottomAnchor, constant: Metric.postContentViewTopMargin),
       self.postContentView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: Metric.postContentViewLeadingMargin),
       self.postContentView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: Metric.postContentViewTrailingMargin),
@@ -156,5 +211,11 @@ class FeedListCell: BaseCollectionViewCell {
       self.commentsButton.bottomAnchor.constraint(equalTo: self.postContentView.bottomAnchor),
       self.commentsButton.leadingAnchor.constraint(equalTo: self.likeButton.trailingAnchor, constant: Metric.commentsButtonLeadingMargin)
     ])
+  }
+}
+
+extension FeedListCell: UIScrollViewDelegate {
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    imagePageControl.currentPage = Int(round(imageScrollView.contentOffset.x / UIScreen.main.bounds.width))
   }
 }
