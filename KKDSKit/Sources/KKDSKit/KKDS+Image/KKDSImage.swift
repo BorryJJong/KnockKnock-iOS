@@ -11,7 +11,6 @@ public extension KKDS {
     enum Image { }
 }
 
-
 // MARK: - Icon size 20
 
 public extension KKDS.Image {
