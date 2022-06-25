@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import KKDSKit
 
 class FeedCell: BaseCollectionViewCell {
 
@@ -27,8 +28,7 @@ class FeedCell: BaseCollectionViewCell {
 
   let severalSymbolImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .white
-    $0.image = UIImage(named: "ic_checkbox_on")
+    $0.image = KKDS.Image.ic_more_img_20_wh
     $0.isHidden = true
   }
 

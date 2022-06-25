@@ -7,6 +7,8 @@
 
 import UIKit
 
+import KKDSKit
+
 class FeedListCell: BaseCollectionViewCell {
 
   // MARK: - Constants
@@ -26,19 +28,22 @@ class FeedListCell: BaseCollectionViewCell {
 
     static let imageNumberLabelTopMargin = 15.f
     static let imageNumberLabelTrailingMargin = -18.f
+    static let imageNumberLabelWidth = 50.f
 
-    static let imagePageControlBottomMargin = -20.f
+    static let imagePageControlBottomMargin = -10.f
 
     static let postContentViewTopMargin = 15.f
-    static let postContentViewLeadingMargin = 15.f
-    static let postContentViewTrailingMargin = -15.f
-    static let postContentViewBottomMargin = -15.f
 
-    static let contentlabelBottomMargin = -15.f
+    static let contentLabelLeadingMargin = 15.f
+    static let contentLabelTrailingMargin = -15.f
+    static let contentLabelTopMargin = 15.f
+    static let contentLabelHeight = 40.f
 
+    static let likeButtonBottomMargin = -15.f
     static let likeButtonLeadingMargin = 10.f
     
     static let commentsButtonLeadingMargin = 10.f
+    static let commentsButtonBottomMargin = -15.f
 
   }
 
@@ -46,7 +51,6 @@ class FeedListCell: BaseCollectionViewCell {
 
   private let headerView = UIView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .purple
   }
 
   private lazy var stackView = UIStackView(arrangedSubviews: [
@@ -61,26 +65,28 @@ class FeedListCell: BaseCollectionViewCell {
 
   private lazy var profileImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .red
     $0.layer.cornerRadius = 16
     $0.clipsToBounds = true
+    $0.image = KKDS.Image.ic_person_24
   }
 
   private let userIdLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.font = .systemFont(ofSize: 13, weight: .bold)
     $0.text = "sungmin_kim94"
   }
 
   private let postDateLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.textColor = .gray70
+    $0.font = .systemFont(ofSize: 12, weight: .light)
     $0.text = "1시간전"
   }
 
   private let configureButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .yellow
     $0.setTitleColor(.black, for: .normal)
-    $0.setTitle("•••", for: .normal)
+    $0.setImage(KKDS.Image.ic_more_20_gr, for: .normal)
     $0.contentHorizontalAlignment = .right
   }
 
@@ -88,7 +94,6 @@ class FeedListCell: BaseCollectionViewCell {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.isPagingEnabled = true
     $0.showsHorizontalScrollIndicator = false
-    $0.backgroundColor = .orange
     $0.delegate = self
   }
 
@@ -113,29 +118,44 @@ class FeedListCell: BaseCollectionViewCell {
     $0.layer.cornerRadius = 14
     $0.clipsToBounds = true
     $0.text = "0/1"
-    $0.font = .systemFont(ofSize: 12, weight: .medium)
+    $0.font = .systemFont(ofSize: 12, weight: .semibold)
     $0.textColor = .white
   }
 
-  private let postContentView = UIView().then {
+  let postContentView = UIView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.backgroundColor = .white
+    $0.clipsToBounds = true
+    $0.layer.cornerRadius = 5
+    $0.layer.masksToBounds = false
+    $0.layer.shadowColor = UIColor.black.cgColor
+    $0.layer.shadowOpacity = 0.1
+    $0.layer.shadowOffset = CGSize(width: 0, height: 10)
+    $0.layer.shadowRadius = 5
   }
 
   let contentLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.numberOfLines = 2
+    $0.numberOfLines = 0
     $0.backgroundColor = .white
+    $0.font = UIFont(name: "Apple SD Gothic Neo", size: 13)
     $0.text = "패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. 패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. "
   }
 
   let likeButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .blue
+    $0.setImage(KKDS.Image.ic_like_24_off, for: .normal)
+    $0.setTitle(" 0", for: .normal)
+    $0.contentHorizontalAlignment = .center
+    $0.semanticContentAttribute = .forceLeftToRight
   }
 
   let commentsButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .gray
+    $0.setImage(KKDS.Image.ic_balloon_24_gr, for: .normal)
+    $0.setTitle(" 0", for: .normal)
+    $0.contentHorizontalAlignment = .center
+    $0.semanticContentAttribute = .forceLeftToRight
   }
 
   // MARK: - Bind
@@ -152,6 +172,14 @@ class FeedListCell: BaseCollectionViewCell {
     self.setImageSlider(images: images)
     self.imagePageControl.numberOfPages = images.count
     self.imageNumberLabel.text = "0/\(images.count)"
+
+    guard let contentTextLength = self.contentLabel.text?.count else { return }
+
+    if contentTextLength > 1 {
+      DispatchQueue.main.async {
+        self.contentLabel.addTrailing(with: "... ", moreText: "더보기", moreTextFont: .systemFont(ofSize: 13), moreTextColor: UIColor.gray)
+      }
+    }
   }
 
   func setImageSlider(images: [String]) {
@@ -160,6 +188,8 @@ class FeedListCell: BaseCollectionViewCell {
       let imageView = UIImageView()
       imageView.image = UIImage(named: images[index])
       imageView.contentMode = .scaleAspectFit
+      imageView.layer.cornerRadius = 5
+      imageView.clipsToBounds = true
 
       let xPosition = self.contentView.frame.width * CGFloat(index)
 
@@ -178,8 +208,8 @@ class FeedListCell: BaseCollectionViewCell {
   override func setupConstraints() {
     [self.headerView].addSubViews(self.contentView)
     [self.profileImageView, self.stackView, self.configureButton].addSubViews(headerView)
-    [self.imageScrollView, self.imageNumberLabel, self.imagePageControl].addSubViews(self.contentView)
     [self.postContentView].addSubViews(self.contentView)
+    [self.imageScrollView, self.imageNumberLabel, self.imagePageControl].addSubViews(self.postContentView)
     [self.contentLabel, self.likeButton, self.commentsButton].addSubViews(self.postContentView)
 
     NSLayoutConstraint.activate([
@@ -201,33 +231,33 @@ class FeedListCell: BaseCollectionViewCell {
       self.stackView.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: Metric.stackViewLeadingMargin),
       self.stackView.trailingAnchor.constraint(equalTo: self.configureButton.leadingAnchor, constant: Metric.stackViewTrailingMargin),
 
-      self.imageScrollView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor, constant: Metric.imageScrollViewTopMargin),
-      self.imageScrollView.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor),
-      self.imageScrollView.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor),
-      self.imageScrollView.heightAnchor.constraint(equalTo: self.contentView.widthAnchor),
+      self.postContentView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor, constant: Metric.postContentViewTopMargin),
+      self.postContentView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+      self.postContentView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+      self.postContentView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
 
-      self.imageNumberLabel.widthAnchor.constraint(equalToConstant: 50),
+      self.imageScrollView.topAnchor.constraint(equalTo: self.postContentView.topAnchor),
+      self.imageScrollView.leadingAnchor.constraint(equalTo: self.postContentView.leadingAnchor),
+      self.imageScrollView.trailingAnchor.constraint(equalTo: self.postContentView.trailingAnchor),
+      self.imageScrollView.heightAnchor.constraint(equalTo: self.postContentView.widthAnchor),
+
+      self.imageNumberLabel.widthAnchor.constraint(equalToConstant: Metric.imageNumberLabelWidth),
       self.imageNumberLabel.topAnchor.constraint(equalTo: self.imageScrollView.topAnchor, constant: Metric.imageNumberLabelTopMargin),
       self.imageNumberLabel.trailingAnchor.constraint(equalTo: self.imageScrollView.trailingAnchor, constant: Metric.imageNumberLabelTrailingMargin),
 
       self.imagePageControl.bottomAnchor.constraint(equalTo: self.imageScrollView.bottomAnchor, constant: Metric.imagePageControlBottomMargin),
-      self.imagePageControl.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
+      self.imagePageControl.centerXAnchor.constraint(equalTo: self.postContentView.centerXAnchor),
 
-      self.postContentView.topAnchor.constraint(equalTo: self.imageScrollView.bottomAnchor, constant: Metric.postContentViewTopMargin),
-      self.postContentView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: Metric.postContentViewLeadingMargin),
-      self.postContentView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: Metric.postContentViewTrailingMargin),
-      self.postContentView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: Metric.postContentViewBottomMargin),
+      self.contentLabel.topAnchor.constraint(equalTo: self.imageScrollView.bottomAnchor, constant: Metric.contentLabelTopMargin),
+      self.contentLabel.leadingAnchor.constraint(equalTo: self.postContentView.leadingAnchor, constant: Metric.contentLabelLeadingMargin),
+      self.contentLabel.trailingAnchor.constraint(equalTo: self.postContentView.trailingAnchor, constant: Metric.contentLabelTrailingMargin),
 
-      self.contentLabel.topAnchor.constraint(equalTo: self.postContentView.topAnchor),
-      self.contentLabel.leadingAnchor.constraint(equalTo: self.postContentView.leadingAnchor),
-      self.contentLabel.trailingAnchor.constraint(equalTo: self.postContentView.trailingAnchor),
-      self.contentLabel.bottomAnchor.constraint(equalTo: self.likeButton.topAnchor, constant: Metric.contentlabelBottomMargin),
+      self.contentLabel.heightAnchor.constraint(equalToConstant: Metric.contentLabelHeight),
 
-      self.likeButton.bottomAnchor.constraint(equalTo: self.postContentView.bottomAnchor),
-      self.likeButton.leadingAnchor.constraint(equalTo: self.postContentView.leadingAnchor),
+      self.likeButton.bottomAnchor.constraint(equalTo: self.postContentView.bottomAnchor, constant: Metric.likeButtonBottomMargin),
+      self.likeButton.leadingAnchor.constraint(equalTo: self.postContentView.leadingAnchor, constant: Metric.likeButtonLeadingMargin),
 
-      self.commentsButton.topAnchor.constraint(equalTo: self.likeButton.topAnchor),
-      self.commentsButton.bottomAnchor.constraint(equalTo: self.postContentView.bottomAnchor),
+      self.commentsButton.bottomAnchor.constraint(equalTo: self.postContentView.bottomAnchor, constant: Metric.commentsButtonBottomMargin),
       self.commentsButton.leadingAnchor.constraint(equalTo: self.likeButton.trailingAnchor, constant: Metric.commentsButtonLeadingMargin)
     ])
   }

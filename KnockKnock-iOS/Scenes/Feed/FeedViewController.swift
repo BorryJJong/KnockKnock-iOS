@@ -87,6 +87,7 @@ extension FeedViewController: UICollectionViewDataSource {
     case 1:
       let cell = collectionView.dequeueCell(withType: FeedCell.self, for: indexPath)
       let feed = self.feed[indexPath.item]
+      cell.backgroundColor = .white
       cell.bind(feed: feed)
       return cell
 

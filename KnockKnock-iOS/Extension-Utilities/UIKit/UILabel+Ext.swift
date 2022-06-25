@@ -87,9 +87,6 @@ extension UILabel {
 
       if safeTrimmedString.count <= readMoreLength { return }
 
-      print("this number \(safeTrimmedString.count) should never be less\n")
-      print("then this number \(readMoreLength)")
-
       let trimmedForReadMore: String = (safeTrimmedString as NSString).replacingCharacters(in: NSRange(location: safeTrimmedString.count - readMoreLength, length: readMoreLength), with: "") + trailingText
 
       let answerAttributed = NSMutableAttributedString(string: trimmedForReadMore, attributes: [NSAttributedString.Key.font: self.font as Any])

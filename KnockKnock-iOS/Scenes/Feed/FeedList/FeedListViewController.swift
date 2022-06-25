@@ -41,10 +41,8 @@ extension FeedListViewController: UICollectionViewDataSource {
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
     let cell = collectionView.dequeueCell(withType: FeedListCell.self, for: indexPath)
+    cell.backgroundColor = .white
     cell.bind()
-    DispatchQueue.main.async {
-      cell.contentLabel.addTrailing(with: "...", moreText: "더보기", moreTextFont: UIFont.systemFont(ofSize: 13, weight: .medium), moreTextColor: UIColor.gray)
-    }
     return cell
   }
 }
@@ -57,6 +55,6 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
   ) -> CGSize {
     return CGSize(
       width: (self.containerView.frame.width - 40),
-      height: ((self.containerView.frame.width - 40) + 200))
+      height: ((self.containerView.frame.width - 40) + 170))
   }
 }
