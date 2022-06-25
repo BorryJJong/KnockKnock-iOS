@@ -10,16 +10,12 @@ import UIKit
 import Then
 
 class FeedListView: UIView {
-
-  // MARK: - Constants
-
-  private enum Metric {
-
-  }
   
   // MARK: - UIs
 
-  let feedListCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
+  let feedListCollectionView = UICollectionView(
+    frame: .zero,
+    collectionViewLayout: UICollectionViewFlowLayout().then {
     $0.scrollDirection = .vertical
     $0.minimumLineSpacing = 50
   }).then {

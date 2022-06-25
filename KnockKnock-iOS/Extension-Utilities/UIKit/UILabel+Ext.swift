@@ -20,8 +20,14 @@ extension UILabel {
     if let myText = self.text {
 
       let attributes: [AnyHashable: Any] = [NSAttributedString.Key.font: font]
-      let attributedText = NSAttributedString(string: myText, attributes: attributes as? [NSAttributedString.Key : Any])
-      let boundingRect: CGRect = attributedText.boundingRect(with: sizeConstraint, options: .usesLineFragmentOrigin, context: nil)
+      let attributedText = NSAttributedString(
+        string: myText,
+        attributes: attributes as? [NSAttributedString.Key: Any])
+
+      let boundingRect: CGRect = attributedText.boundingRect(
+        with: sizeConstraint,
+        options: .usesLineFragmentOrigin,
+        context: nil)
 
       if boundingRect.size.height > labelHeight {
         var index: Int = 0
@@ -44,7 +50,7 @@ extension UILabel {
           .boundingRect(
             with: sizeConstraint,
             options: .usesLineFragmentOrigin,
-            attributes: attributes as? [NSAttributedString.Key : Any], context: nil)
+            attributes: attributes as? [NSAttributedString.Key: Any], context: nil)
           .size
           .height <= labelHeight
 
@@ -87,10 +93,24 @@ extension UILabel {
 
       if safeTrimmedString.count <= readMoreLength { return }
 
-      let trimmedForReadMore: String = (safeTrimmedString as NSString).replacingCharacters(in: NSRange(location: safeTrimmedString.count - readMoreLength, length: readMoreLength), with: "") + trailingText
+      let trimmedForReadMore: String = (safeTrimmedString as NSString)
+        .replacingCharacters(
+          in: NSRange(
+            location: safeTrimmedString.count - readMoreLength,
+            length: readMoreLength)
+          ,with: ""
+        ) + trailingText
 
-      let answerAttributed = NSMutableAttributedString(string: trimmedForReadMore, attributes: [NSAttributedString.Key.font: self.font as Any])
-      let readMoreAttributed = NSMutableAttributedString(string: moreText, attributes: [NSAttributedString.Key.font: moreTextFont, NSAttributedString.Key.foregroundColor: moreTextColor])
+      let answerAttributed = NSMutableAttributedString(
+        string: trimmedForReadMore,
+        attributes: [NSAttributedString.Key.font: self.font as Any]
+      )
+
+      let readMoreAttributed = NSMutableAttributedString(
+        string: moreText,
+        attributes: [NSAttributedString.Key.font: moreTextFont,
+                     NSAttributedString.Key.foregroundColor: moreTextColor]
+      )
       answerAttributed.append(readMoreAttributed)
       self.attributedText = answerAttributed
     }

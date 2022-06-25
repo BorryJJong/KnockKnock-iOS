@@ -9,7 +9,7 @@ import UIKit
 
 import Then
 
-class FeedListViewController: BaseViewController<FeedListView> {
+final class FeedListViewController: BaseViewController<FeedListView> {
 
   // MARK: - Life Cycles
 
