@@ -22,6 +22,7 @@
 		2090811C27CA4F6B005A1573 /* StoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090811B27CA4F6B005A1573 /* StoreViewController.swift */; };
 		2090811E27CA4F77005A1573 /* MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090811D27CA4F77005A1573 /* MyViewController.swift */; };
 		20A72D1E280BC4EE006689FC /* BaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A72D1D280BC4EE006689FC /* BaseCollectionViewCell.swift */; };
+		20AF1007285F2C74005C73EC /* KKDSKit in Frameworks */ = {isa = PBXBuildFile; productRef = 20AF1006285F2C74005C73EC /* KKDSKit */; };
 		20D28F8027CFC5E800A809DB /* ChallengeInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D28F7F27CFC5E800A809DB /* ChallengeInteractor.swift */; };
 		20D28F8227CFC5F000A809DB /* ChallengePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D28F8127CFC5F000A809DB /* ChallengePresenter.swift */; };
 		20D28F8427CFC60900A809DB /* ChallengeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D28F8327CFC60900A809DB /* ChallengeRouter.swift */; };
@@ -86,6 +87,7 @@
 		2090811B27CA4F6B005A1573 /* StoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreViewController.swift; sourceTree = "<group>"; };
 		2090811D27CA4F77005A1573 /* MyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyViewController.swift; sourceTree = "<group>"; };
 		20A72D1D280BC4EE006689FC /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
+		20AF1005285F2BFF005C73EC /* KKDSKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = KKDSKit; sourceTree = "<group>"; };
 		20D28F7F27CFC5E800A809DB /* ChallengeInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeInteractor.swift; sourceTree = "<group>"; };
 		20D28F8127CFC5F000A809DB /* ChallengePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengePresenter.swift; sourceTree = "<group>"; };
 		20D28F8327CFC60900A809DB /* ChallengeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeRouter.swift; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				20AF1007285F2C74005C73EC /* KKDSKit in Frameworks */,
 				34F6FB7E518CFAF1AD6C3455 /* Pods_KnockKnock_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -373,6 +376,7 @@
 		61FC60DC27B9244D00A51DBC = {
 			isa = PBXGroup;
 			children = (
+				20AF1005285F2BFF005C73EC /* KKDSKit */,
 				204320C828367AD300E6FD06 /* .swiftlint.yml */,
 				61FC60E727B9244D00A51DBC /* KnockKnock-iOS */,
 				61FC60E627B9244D00A51DBC /* Products */,
@@ -432,6 +436,9 @@
 			dependencies = (
 			);
 			name = "KnockKnock-iOS";
+			packageProductDependencies = (
+				20AF1006285F2C74005C73EC /* KKDSKit */,
+			);
 			productName = "KnockKnock-iOS";
 			productReference = 61FC60E527B9244D00A51DBC /* KnockKnock-iOS.app */;
 			productType = "com.apple.product-type.application";
@@ -814,6 +821,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		20AF1006285F2C74005C73EC /* KKDSKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KKDSKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 61FC60DD27B9244D00A51DBC /* Project object */;
 }

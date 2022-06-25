@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import KKDSKit
 
 import Then
 
@@ -25,23 +26,23 @@ final class MainTabBarController: UITabBarController {
   lazy var tabBarItems: [Tab: UITabBarItem] = [
     .home: UITabBarItem(
       title: "홈",
-      image: UIImage(named: "ic_home"),
-      selectedImage: UIImage(named: "ic_home")
+      image: KKDS.Image.ic_bottom_challenge_27_off,
+      selectedImage: KKDS.Image.ic_bottom_home_27_on
     ),
     .challenge: UITabBarItem(
       title: "챌린지",
-      image: UIImage(named: "ic_challenge"),
-      selectedImage: UIImage(named: "ic_challenge")
+      image: KKDS.Image.ic_bottom_challenge_27_off,
+      selectedImage: KKDS.Image.ic_bottom_challenge_27_on
     ),
     .store: UITabBarItem(
       title: "피드",
-      image: UIImage(named: "ic_store"),
-      selectedImage: UIImage(named: "ic_store")
+      image: KKDS.Image.ic_bottom_store_27_off,
+      selectedImage: KKDS.Image.ic_bottom_store_27_on
     ),
     .my: UITabBarItem(
       title: "마이",
-      image: UIImage(named: "ic_my"),
-      selectedImage: UIImage(named: "ic_my")
+      image: KKDS.Image.ic_bottom_my_27_off,
+      selectedImage: KKDS.Image.ic_bottom_my_27_on
     )
   ]
   

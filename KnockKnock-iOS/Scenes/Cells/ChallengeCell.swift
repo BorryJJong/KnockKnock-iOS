@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import KKDSKit
 
 final class ChallengeCell: BaseCollectionViewCell {
   
@@ -73,7 +74,7 @@ final class ChallengeCell: BaseCollectionViewCell {
   private let participantImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
-    $0.image = UIImage(named: "ic_person_24")
+    $0.image = KKDS.Image.ic_person_24
   }
 
   private let participantLabel = UILabel().then {
