@@ -9,12 +9,24 @@ import UIKit
 
 import Then
 
+protocol FeedListViewProtocol: AnyObject {
+  var interactor: FeedListInteractorProtocol? { get set }
+
+  func fetchFeedList(feed: [Feed])
+}
+
 final class FeedListViewController: BaseViewController<FeedListView> {
+
+  // MARK: - Properties
+
+  var interactor: FeedListInteractorProtocol?
+  var feed: [Feed] = []
 
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    self.interactor?.fetchFeed()
   }
 
   override func setupConfigure() {
@@ -33,7 +45,7 @@ extension FeedListViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    return 10
+    return self.feed.count
   }
 
   func collectionView(
@@ -42,7 +54,7 @@ extension FeedListViewController: UICollectionViewDataSource {
   ) -> UICollectionViewCell {
     let cell = collectionView.dequeueCell(withType: FeedListCell.self, for: indexPath)
     cell.backgroundColor = .white
-    cell.bind()
+    cell.bind(feed: self.feed[indexPath.item])
     return cell
   }
 }
@@ -56,5 +68,12 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
     return CGSize(
       width: (self.containerView.frame.width - 40),
       height: ((self.containerView.frame.width - 40) + 170))
+  }
+}
+
+extension FeedListViewController: FeedListViewProtocol {
+  func fetchFeedList(feed: [Feed]) {
+    self.feed = feed
+    self.containerView.feedListCollectionView.reloadData()
   }
 }

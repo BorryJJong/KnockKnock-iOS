@@ -8,7 +8,7 @@
 import UIKit
 
 protocol FeedViewProtocol: AnyObject {
-  var interactor: FeedInteracotrProtocol? { get set }
+  var interactor: FeedInteractorProtocol? { get set }
 
   func fetchFeed(feed: [Feed])
 }
@@ -17,7 +17,7 @@ final class FeedViewController: BaseViewController<FeedView> {
 
   // MARK: - Properties
 
-  var interactor: FeedInteracotrProtocol?
+  var interactor: FeedInteractorProtocol?
   var router = FeedRouter()
   var feed: [Feed] = []
 
@@ -126,7 +126,7 @@ extension FeedViewController: UICollectionViewDelegate {
       }
 
     case 1:
-      self.router.navigateToFeedList(source: self, destination: FeedListViewController())
+      self.router.navigateToFeedList(source: self, destination: FeedListRouter.createFeedList() as! FeedListViewController)
       
     default:
       return

@@ -7,14 +7,14 @@
 
 import Foundation
 
-protocol FeedInteracotrProtocol {
+protocol FeedInteractorProtocol {
   var presenter: FeedPresenterProtocol? { get set }
   var worker: FeedWorkerProtocol? { get set }
 
   func fetchFeed()
 }
 
-final class FeedInteractor: FeedInteracotrProtocol {
+final class FeedInteractor: FeedInteractorProtocol {
 
   // MARK: - Properties
   

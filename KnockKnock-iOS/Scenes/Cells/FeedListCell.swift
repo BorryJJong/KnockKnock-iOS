@@ -120,6 +120,7 @@ class FeedListCell: BaseCollectionViewCell {
     $0.text = "0/1"
     $0.font = .systemFont(ofSize: 12, weight: .semibold)
     $0.textColor = .white
+    $0.isHidden = true
   }
 
   let postContentView = UIView().then {
@@ -160,19 +161,18 @@ class FeedListCell: BaseCollectionViewCell {
 
   // MARK: - Bind
 
-  func bind() {
-    // func bind(feed: Feed)
-    //    self.userIdLabel.text = "\(feed.userId)"
-    //    self.contentLabel.text = feed.content
-    //    self.setImageSlider(images: feed.images)
-    //    self.imagePageControl.numberOfPages = feed.images.count
+  //  func bind() {
+  func bind(feed: Feed) {
+    self.userIdLabel.text = "\(feed.userId)"
+    self.contentLabel.text = feed.content
+    self.setImageSlider(images: feed.images)
 
-    let images = ["challenge", "challenge", "challenge", "ic_feed_photo"]
-
-    self.setImageSlider(images: images)
-    self.imagePageControl.numberOfPages = images.count
-    self.imageNumberLabel.text = "0/\(images.count)"
-
+    if feed.images.count > 1 {
+      self.imageNumberLabel.isHidden = false
+      self.imagePageControl.numberOfPages = feed.images.count
+      self.imageNumberLabel.text = "0/\(feed.images.count)"
+    }
+    
     guard let contentTextLength = self.contentLabel.text?.count else { return }
 
     if contentTextLength > 1 {
