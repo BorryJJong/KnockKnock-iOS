@@ -47,6 +47,10 @@ class FeedListCell: BaseCollectionViewCell {
 
   }
 
+  // MARK: - Properties
+
+  private var images: [UIImageView] = []
+
   // MARK: - UIs
 
   private let headerView = UIView().then {
@@ -159,21 +163,38 @@ class FeedListCell: BaseCollectionViewCell {
     $0.semanticContentAttribute = .forceLeftToRight
   }
 
+  override func prepareForReuse() {
+    super.prepareForReuse()
+    self.images.forEach {
+      $0.removeFromSuperview()
+    }
+    self.imageNumberLabel.isHidden = true
+    self.imagePageControl.isHidden = true
+  }
+
   // MARK: - Bind
 
-  //  func bind() {
   func bind(feed: Feed) {
     self.userIdLabel.text = "\(feed.userId)"
     self.contentLabel.text = feed.content
-    self.setImageSlider(images: feed.images)
+    self.images = self.setImageView(images: feed.images)
+
+    for index in 0..<images.count {
+      imageScrollView.contentSize.width = self.contentView.frame.width * CGFloat(index+1)
+      imageScrollView.addSubview(images[index])
+    }
 
     if feed.images.count > 1 {
       self.imageNumberLabel.isHidden = false
+      self.imagePageControl.isHidden = false
       self.imagePageControl.numberOfPages = feed.images.count
       self.imageNumberLabel.text = "0/\(feed.images.count)"
     }
     
-    guard let contentTextLength = self.contentLabel.text?.count else { return }
+    guard let contentTextLength = self.contentLabel.text?.count
+    else {
+      return
+    }
 
     if contentTextLength > 1 {
       DispatchQueue.main.async {
@@ -182,7 +203,8 @@ class FeedListCell: BaseCollectionViewCell {
     }
   }
 
-  func setImageSlider(images: [String]) {
+  func setImageView(images: [String]) -> [UIImageView] {
+    var imageViewArray: [UIImageView] = []
     for index in 0..<images.count {
 
       let imageView = UIImageView()
@@ -197,10 +219,9 @@ class FeedListCell: BaseCollectionViewCell {
                                y: 0,
                                width: self.contentView.frame.width,
                                height: self.contentView.frame.width)
-
-      imageScrollView.contentSize.width = self.contentView.frame.width * CGFloat(index+1)
-      imageScrollView.addSubview(imageView)
+      imageViewArray.append(imageView)
     }
+    return imageViewArray
   }
 
   // MARK: - Configure

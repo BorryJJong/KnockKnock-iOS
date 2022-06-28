@@ -52,6 +52,7 @@ extension FeedListViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
+    
     let cell = collectionView.dequeueCell(withType: FeedListCell.self, for: indexPath)
     cell.backgroundColor = .white
     cell.bind(feed: self.feed[indexPath.item])
@@ -74,6 +75,5 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
 extension FeedListViewController: FeedListViewProtocol {
   func fetchFeedList(feed: [Feed]) {
     self.feed = feed
-    self.containerView.feedListCollectionView.reloadData()
   }
 }
