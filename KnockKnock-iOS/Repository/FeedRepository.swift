@@ -30,13 +30,13 @@ final class FeedRepository: FeedRepositoryProtocol {
 
   // api 미완성으로 우선 dummydata 사용
   func fetchFeed(completionHandler: @escaping ([Feed]) -> Void) {
-    let feed = [Feed(userId: 1, content: "패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. 패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. ", images: ["challenge", "challenge", "challenge"], scale: "1:1"),
-                Feed(userId: 2, content: "b패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. 패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. 패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. 패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. b", images: ["challenge"], scale: "1:1"),
-                Feed(userId: 3, content: "aa", images: ["challenge", "challenge", "challenge"], scale: "3:4"),
-                Feed(userId: 4, content: "bb", images: ["challenge"], scale: "1:1"),
-                Feed(userId: 5, content: "aa", images: ["challenge", "challenge", "challenge"], scale: "4:3"),
-                Feed(userId: 6, content: "bb", images: ["challenge"], scale: "1:1"),
-                Feed(userId: 7, content: "aa", images: ["challenge", "challenge", "challenge"], scale: "1:1"),
+    let feed = [Feed(userId: 1, content: "패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. 패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. ", images: ["feed_sample_1"], scale: "1:1"),
+                Feed(userId: 2, content: "b패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. 패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. 패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. 패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. b", images: ["feed_sample_4"], scale: "1:1"),
+                Feed(userId: 3, content: "aa", images: ["feed_sample_2"], scale: "3:4"),
+                Feed(userId: 4, content: "bb", images: ["feed_sample_3"], scale: "1:1"),
+                Feed(userId: 5, content: "aa", images: ["feed_sample_4", "feed_sample_2", "feed_sample_2"], scale: "4:3"),
+                Feed(userId: 6, content: "bb", images: ["feed_sample_2"], scale: "1:1"),
+                Feed(userId: 7, content: "aa", images: ["feed_sample_2", "feed_sample_2", "feed_sample_2"], scale: "1:1"),
                 Feed(userId: 8, content: "bb", images: ["challenge"], scale: "1:1"),
                 Feed(userId: 9, content: "aa", images: ["challenge", "challenge", "challenge"], scale: "1:1"),
                 Feed(userId: 10, content: "bb", images: ["challenge"], scale: "1:1"),

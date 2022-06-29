@@ -14,6 +14,9 @@ class FeedListCell: BaseCollectionViewCell {
   // MARK: - Constants
 
   private enum Metric {
+
+    static let cellMargin = 0.f
+
     static let headerViewHeight = 50.f
 
     static let profileImageViewWidth = 32.f
@@ -177,7 +180,7 @@ class FeedListCell: BaseCollectionViewCell {
   func bind(feed: Feed) {
     self.userIdLabel.text = "\(feed.userId)"
     self.contentLabel.text = feed.content
-    self.images = self.setImageView(images: feed.images)
+    self.images = self.setImageView(images: feed.images, scale: feed.scale)
 
     for index in 0..<images.count {
       imageScrollView.contentSize.width = self.contentView.frame.width * CGFloat(index+1)
@@ -188,7 +191,7 @@ class FeedListCell: BaseCollectionViewCell {
       self.imageNumberLabel.isHidden = false
       self.imagePageControl.isHidden = false
       self.imagePageControl.numberOfPages = feed.images.count
-      self.imageNumberLabel.text = "0/\(feed.images.count)"
+      self.imageNumberLabel.text = "1/\(feed.images.count)"
     }
     
     guard let contentTextLength = self.contentLabel.text?.count
@@ -203,22 +206,38 @@ class FeedListCell: BaseCollectionViewCell {
     }
   }
 
-  func setImageView(images: [String]) -> [UIImageView] {
+  func setImageView(images: [String], scale: String) -> [UIImageView] {
     var imageViewArray: [UIImageView] = []
     for index in 0..<images.count {
 
       let imageView = UIImageView()
       imageView.image = UIImage(named: images[index])
-      imageView.contentMode = .scaleAspectFit
+      imageView.contentMode = .scaleAspectFill
       imageView.layer.cornerRadius = 5
       imageView.clipsToBounds = true
 
       let xPosition = self.contentView.frame.width * CGFloat(index)
-
-      imageView.frame = CGRect(x: xPosition,
-                               y: 0,
-                               width: self.contentView.frame.width,
-                               height: self.contentView.frame.width)
+      let width = self.contentView.frame.width - Metric.cellMargin
+      switch scale {
+      case "3:4":
+        imageView.frame = CGRect(x: xPosition,
+                                 y: 0,
+                                 width: width,
+                                 height: width * 1.333)
+        self.imageScrollView.heightAnchor.constraint(equalToConstant: width * 1.333).isActive = true
+      case "4:3":
+        imageView.frame = CGRect(x: xPosition,
+                                 y: 0,
+                                 width: width,
+                                 height: width * 0.75)
+        self.imageScrollView.heightAnchor.constraint(equalToConstant: width * 0.75).isActive = true
+      default:
+        imageView.frame = CGRect(x: xPosition,
+                                 y: 0,
+                                 width: width,
+                                 height: width)
+        self.imageScrollView.heightAnchor.constraint(equalToConstant: width).isActive = true
+      }
       imageViewArray.append(imageView)
     }
     return imageViewArray
@@ -260,7 +279,6 @@ class FeedListCell: BaseCollectionViewCell {
       self.imageScrollView.topAnchor.constraint(equalTo: self.postContentView.topAnchor),
       self.imageScrollView.leadingAnchor.constraint(equalTo: self.postContentView.leadingAnchor),
       self.imageScrollView.trailingAnchor.constraint(equalTo: self.postContentView.trailingAnchor),
-      self.imageScrollView.heightAnchor.constraint(equalTo: self.postContentView.widthAnchor),
 
       self.imageNumberLabel.widthAnchor.constraint(equalToConstant: Metric.imageNumberLabelWidth),
       self.imageNumberLabel.topAnchor.constraint(equalTo: self.imageScrollView.topAnchor, constant: Metric.imageNumberLabelTopMargin),
@@ -272,7 +290,6 @@ class FeedListCell: BaseCollectionViewCell {
       self.contentLabel.topAnchor.constraint(equalTo: self.imageScrollView.bottomAnchor, constant: Metric.contentLabelTopMargin),
       self.contentLabel.leadingAnchor.constraint(equalTo: self.postContentView.leadingAnchor, constant: Metric.contentLabelLeadingMargin),
       self.contentLabel.trailingAnchor.constraint(equalTo: self.postContentView.trailingAnchor, constant: Metric.contentLabelTrailingMargin),
-
       self.contentLabel.heightAnchor.constraint(equalToConstant: Metric.contentLabelHeight),
 
       self.likeButton.bottomAnchor.constraint(equalTo: self.postContentView.bottomAnchor, constant: Metric.likeButtonBottomMargin),
@@ -287,6 +304,6 @@ class FeedListCell: BaseCollectionViewCell {
 extension FeedListCell: UIScrollViewDelegate {
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     self.imagePageControl.currentPage = Int(round(imageScrollView.contentOffset.x / UIScreen.main.bounds.width))
-    self.imageNumberLabel.text = "\(imagePageControl.currentPage)/\(imagePageControl.numberOfPages)"
+    self.imageNumberLabel.text = "\(imagePageControl.currentPage + 1)/\(imagePageControl.numberOfPages)"
   }
 }

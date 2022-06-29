@@ -66,9 +66,23 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
     layout collectionViewLayout: UICollectionViewLayout,
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
-    return CGSize(
-      width: (self.containerView.frame.width - 40),
-      height: ((self.containerView.frame.width - 40) + 170))
+
+    switch feed[indexPath.item].scale {
+    case "3:4":
+      return CGSize(
+        width: (self.containerView.frame.width - 40),
+        height: ((self.containerView.frame.width - 40) * 1.333 + 170))
+
+    case "4:3":
+      return CGSize(
+        width: (self.containerView.frame.width - 40),
+        height: ((self.containerView.frame.width - 40) * 0.75 + 170))
+
+    default:
+      return CGSize(
+        width: (self.containerView.frame.width - 40),
+        height: ((self.containerView.frame.width - 40) + 170))
+    }
   }
 }
 
