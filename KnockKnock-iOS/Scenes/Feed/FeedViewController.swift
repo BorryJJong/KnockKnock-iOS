@@ -108,28 +108,29 @@ extension FeedViewController: UICollectionViewDataSource {
 
 extension FeedViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    if let cell = collectionView.cellForItem(at: indexPath) as? TagCell {
-      cell.tagLabel.backgroundColor = .green50
-      cell.tagLabel.textColor = .white
-      cell.tagLabel.font = .systemFont(ofSize: 16, weight: .bold)
+    switch indexPath.section {
+    case 0:
+      if let cell = collectionView.cellForItem(at: indexPath) as? TagCell {
+        cell.tagLabel.backgroundColor = .green50
+        cell.tagLabel.textColor = .white
+        cell.tagLabel.font = .systemFont(ofSize: 16, weight: .bold)
+      }
+
+    case 1:
+      self.router.navigateToFeedList(source: self, destination: FeedListRouter.createFeedList() as! FeedListViewController)
+
+    default:
+      return
     }
   }
   
   func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-
-    switch indexPath.section {
-    case 0:
+    if indexPath.section == 0 {
       if let cell = collectionView.cellForItem(at: indexPath) as? TagCell {
         cell.tagLabel.backgroundColor = .white
         cell.tagLabel.textColor = .green50
         cell.tagLabel.font = .systemFont(ofSize: 16, weight: .medium)
       }
-
-    case 1:
-      self.router.navigateToFeedList(source: self, destination: FeedListRouter.createFeedList() as! FeedListViewController)
-      
-    default:
-      return
     }
   }
 }
