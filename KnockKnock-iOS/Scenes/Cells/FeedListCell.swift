@@ -15,8 +15,6 @@ class FeedListCell: BaseCollectionViewCell {
 
   private enum Metric {
 
-    static let cellMargin = 0.f
-
     static let headerViewHeight = 50.f
 
     static let profileImageViewWidth = 32.f
@@ -28,6 +26,7 @@ class FeedListCell: BaseCollectionViewCell {
     static let stackViewTrailingMargin = -25.f
 
     static let imageScrollViewTopMargin = 10.f
+    static let imageScrollViewBottomMargin = -15.f
 
     static let imageNumberLabelTopMargin = 15.f
     static let imageNumberLabelTrailingMargin = -18.f
@@ -39,7 +38,7 @@ class FeedListCell: BaseCollectionViewCell {
 
     static let contentLabelLeadingMargin = 15.f
     static let contentLabelTrailingMargin = -15.f
-    static let contentLabelTopMargin = 15.f
+    static let contentLabelBottomMargin = -10.f
     static let contentLabelHeight = 40.f
 
     static let likeButtonBottomMargin = -15.f
@@ -52,8 +51,8 @@ class FeedListCell: BaseCollectionViewCell {
 
   // MARK: - Properties
 
-  private var images: [UIImageView] = []
-
+//  private var images: [UIImageView] = []
+  
   // MARK: - UIs
 
   private let headerView = UIView().then {
@@ -168,7 +167,7 @@ class FeedListCell: BaseCollectionViewCell {
 
   override func prepareForReuse() {
     super.prepareForReuse()
-    self.images.forEach {
+    self.imageScrollView.subviews.forEach{
       $0.removeFromSuperview()
     }
     self.imageNumberLabel.isHidden = true
@@ -180,12 +179,7 @@ class FeedListCell: BaseCollectionViewCell {
   func bind(feed: Feed) {
     self.userIdLabel.text = "\(feed.userId)"
     self.contentLabel.text = feed.content
-    self.images = self.setImageView(images: feed.images, scale: feed.scale)
-
-    for index in 0..<images.count {
-      imageScrollView.contentSize.width = self.contentView.frame.width * CGFloat(index+1)
-      imageScrollView.addSubview(images[index])
-    }
+    self.setImageView(images: feed.images, scale: feed.scale)
 
     if feed.images.count > 1 {
       self.imageNumberLabel.isHidden = false
@@ -206,8 +200,7 @@ class FeedListCell: BaseCollectionViewCell {
     }
   }
 
-  func setImageView(images: [String], scale: String) -> [UIImageView] {
-    var imageViewArray: [UIImageView] = []
+  func setImageView(images: [String], scale: String) {
     for index in 0..<images.count {
 
       let imageView = UIImageView()
@@ -217,35 +210,34 @@ class FeedListCell: BaseCollectionViewCell {
       imageView.clipsToBounds = true
 
       let xPosition = self.contentView.frame.width * CGFloat(index)
-      let width = self.contentView.frame.width - Metric.cellMargin
+      let width = self.contentView.frame.width
+
       switch scale {
       case "3:4":
         imageView.frame = CGRect(x: xPosition,
                                  y: 0,
                                  width: width,
                                  height: width * 1.333)
-        self.imageScrollView.heightAnchor.constraint(equalToConstant: width * 1.333).isActive = true
       case "4:3":
         imageView.frame = CGRect(x: xPosition,
                                  y: 0,
                                  width: width,
                                  height: width * 0.75)
-        self.imageScrollView.heightAnchor.constraint(equalToConstant: width * 0.75).isActive = true
       default:
         imageView.frame = CGRect(x: xPosition,
                                  y: 0,
                                  width: width,
                                  height: width)
-        self.imageScrollView.heightAnchor.constraint(equalToConstant: width).isActive = true
       }
-      imageViewArray.append(imageView)
+      self.imageScrollView.contentSize.width = self.contentView.frame.width * CGFloat(index+1)
+      self.imageScrollView.addSubview(imageView)
     }
-    return imageViewArray
   }
 
   // MARK: - Configure
 
   override func setupConstraints() {
+
     [self.headerView].addSubViews(self.contentView)
     [self.profileImageView, self.stackView, self.configureButton].addSubViews(headerView)
     [self.postContentView].addSubViews(self.contentView)
@@ -279,6 +271,7 @@ class FeedListCell: BaseCollectionViewCell {
       self.imageScrollView.topAnchor.constraint(equalTo: self.postContentView.topAnchor),
       self.imageScrollView.leadingAnchor.constraint(equalTo: self.postContentView.leadingAnchor),
       self.imageScrollView.trailingAnchor.constraint(equalTo: self.postContentView.trailingAnchor),
+      self.imageScrollView.bottomAnchor.constraint(equalTo: self.contentLabel.topAnchor, constant: Metric.imageScrollViewBottomMargin),
 
       self.imageNumberLabel.widthAnchor.constraint(equalToConstant: Metric.imageNumberLabelWidth),
       self.imageNumberLabel.topAnchor.constraint(equalTo: self.imageScrollView.topAnchor, constant: Metric.imageNumberLabelTopMargin),
@@ -287,9 +280,9 @@ class FeedListCell: BaseCollectionViewCell {
       self.imagePageControl.bottomAnchor.constraint(equalTo: self.imageScrollView.bottomAnchor, constant: Metric.imagePageControlBottomMargin),
       self.imagePageControl.centerXAnchor.constraint(equalTo: self.postContentView.centerXAnchor),
 
-      self.contentLabel.topAnchor.constraint(equalTo: self.imageScrollView.bottomAnchor, constant: Metric.contentLabelTopMargin),
       self.contentLabel.leadingAnchor.constraint(equalTo: self.postContentView.leadingAnchor, constant: Metric.contentLabelLeadingMargin),
       self.contentLabel.trailingAnchor.constraint(equalTo: self.postContentView.trailingAnchor, constant: Metric.contentLabelTrailingMargin),
+      self.contentLabel.bottomAnchor.constraint(equalTo: self.likeButton.topAnchor, constant: Metric.contentLabelBottomMargin),
       self.contentLabel.heightAnchor.constraint(equalToConstant: Metric.contentLabelHeight),
 
       self.likeButton.bottomAnchor.constraint(equalTo: self.postContentView.bottomAnchor, constant: Metric.likeButtonBottomMargin),

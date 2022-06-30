@@ -38,7 +38,7 @@ final class FeedRepository: FeedRepositoryProtocol {
                 Feed(userId: 6, content: "bb", images: ["feed_sample_2"], scale: "1:1"),
                 Feed(userId: 7, content: "aa", images: ["feed_sample_2", "feed_sample_2", "feed_sample_2"], scale: "1:1"),
                 Feed(userId: 8, content: "bb", images: ["challenge"], scale: "1:1"),
-                Feed(userId: 9, content: "aa", images: ["challenge", "challenge", "challenge"], scale: "1:1"),
+                Feed(userId: 9, content: "aa", images: ["challenge", "challenge", "challenge"], scale: "4:3"),
                 Feed(userId: 10, content: "bb", images: ["challenge"], scale: "1:1"),
                 Feed(userId: 11, content: "aa", images: ["challenge", "challenge", "challenge"], scale: "1:1"),
                 Feed(userId: 12, content: "bb", images: ["challenge"], scale: "1:1"),
