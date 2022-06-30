@@ -12,6 +12,7 @@ protocol FeedInteractorProtocol {
   var worker: FeedWorkerProtocol? { get set }
 
   func fetchFeed()
+  func getChallengeTitles()
 }
 
 final class FeedInteractor: FeedInteractorProtocol {
@@ -24,6 +25,12 @@ final class FeedInteractor: FeedInteractorProtocol {
   func fetchFeed() {
     self.worker?.fetchFeed { [weak self] feed in
       self?.presenter?.presentFetchFeed(feed: feed)
+    }
+  }
+
+  func getChallengeTitles() {
+    self.worker?.getChallengeTitles { [weak self] challengeTitle in
+      self?.presenter?.presentGetChallengeTitles(challengeTitle: challengeTitle)
     }
   }
 }

@@ -11,10 +11,22 @@ import Alamofire
 
 protocol FeedRepositoryProtocol {
   func fetchFeed(completionHandler: @escaping ([Feed]) -> Void)
+  func getChallengeTitles(completionHandler: @escaping (([ChallengeTitle])) -> Void)
 }
 
 final class FeedRepository: FeedRepositoryProtocol {
-  //
+  func getChallengeTitles(completionHandler: @escaping (([ChallengeTitle])) -> Void) {
+    KKNetworkManager.shared
+      .request(
+        object: [ChallengeTitle].self,
+        router: KKRouter.getChallengeTitles,
+        success: { response in
+          completionHandler(response)
+        }, failure: { error in
+          print(error)
+        })
+  }
+
   //  func fetchFeed(completionHandler: @escaping ([Feed]) -> Void) {
   //    KKNetworkManager.shared
   //      .request(

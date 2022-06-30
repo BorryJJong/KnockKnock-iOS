@@ -9,6 +9,7 @@ import Foundation
 
 protocol FeedWorkerProtocol: AnyObject {
   func fetchFeed(completionHandler: @escaping ([Feed]) -> Void)
+  func getChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void)
 }
 
 final class FeedWorker: FeedWorkerProtocol {
@@ -21,6 +22,12 @@ final class FeedWorker: FeedWorkerProtocol {
 
   func fetchFeed(completionHandler: @escaping ([Feed]) -> Void) {
     repository.fetchFeed(completionHandler: { result in
+      completionHandler(result)
+    })
+  }
+
+  func getChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void) {
+    repository.getChallengeTitles(completionHandler: { result in
       completionHandler(result)
     })
   }

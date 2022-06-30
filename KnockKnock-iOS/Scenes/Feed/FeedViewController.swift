@@ -11,6 +11,7 @@ protocol FeedViewProtocol: AnyObject {
   var interactor: FeedInteractorProtocol? { get set }
 
   func fetchFeed(feed: [Feed])
+  func getChallengeTitles(challengeTitle: [ChallengeTitle])
 }
 
 final class FeedViewController: BaseViewController<FeedView> {
@@ -19,15 +20,17 @@ final class FeedViewController: BaseViewController<FeedView> {
 
   var interactor: FeedInteractorProtocol?
   var router = FeedRouter()
-  var feed: [Feed] = []
 
-  private let tagList = ["전체", "#친환경", "#제로웨이스트", "#용기내챌린지", "#업사이클링" ]
+  var feed: [Feed] = []
+  var challengeTitles: [ChallengeTitle] = []
+
 
   // MARK: - Lify Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
     self.interactor?.fetchFeed()
+    self.interactor?.getChallengeTitles()
   }
 
   override func setupConfigure() {
@@ -50,6 +53,11 @@ extension FeedViewController: FeedViewProtocol {
     self.feed = feed
     self.containerView.feedCollectionView.reloadData()
   }
+
+  func getChallengeTitles(challengeTitle: [ChallengeTitle]) {
+    self.challengeTitles = challengeTitle
+    self.containerView.feedCollectionView.reloadData()
+  }
 }
 
 extension FeedViewController: UICollectionViewDataSource {
@@ -59,7 +67,7 @@ extension FeedViewController: UICollectionViewDataSource {
   ) -> Int {
     switch section {
     case 0:
-      return self.tagList.count
+      return self.challengeTitles.count
 
     case 1:
       return self.feed.count
@@ -81,7 +89,13 @@ extension FeedViewController: UICollectionViewDataSource {
     case 0:
       let cell = collectionView.dequeueCell(withType: TagCell.self, for: indexPath)
       cell.backgroundColor = .white
-      cell.tagLabel.text = self.tagList[indexPath.item]
+      cell.bind(tag: self.challengeTitles[indexPath.item].title)
+
+      if indexPath.item == 0 {
+        cell.isSelected = true
+        collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .init())
+      }
+
       return cell
 
     case 1:

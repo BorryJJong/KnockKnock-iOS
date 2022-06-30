@@ -9,7 +9,9 @@ import Foundation
 
 protocol FeedPresenterProtocol {
   var view: FeedViewProtocol? { get set }
+  
   func presentFetchFeed(feed: [Feed])
+  func presentGetChallengeTitles(challengeTitle: [ChallengeTitle])
 }
 
 final class FeedPresenter: FeedPresenterProtocol {
@@ -20,5 +22,9 @@ final class FeedPresenter: FeedPresenterProtocol {
 
   func presentFetchFeed(feed: [Feed]) {
     self.view?.fetchFeed(feed: feed)
+  }
+
+  func presentGetChallengeTitles(challengeTitle: [ChallengeTitle]) {
+    self.view?.getChallengeTitles(challengeTitle: challengeTitle)
   }
 }

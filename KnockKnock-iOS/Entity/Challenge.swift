@@ -12,3 +12,8 @@ struct Challenges: Codable {
   let content: String
   let title: String
 }
+
+struct ChallengeTitle: Codable {
+  let id: Int
+  let title: String
+}
