@@ -51,7 +51,7 @@ class FeedListCell: BaseCollectionViewCell {
 
   // MARK: - Properties
 
-//  private var images: [UIImageView] = []
+  //  private var images: [UIImageView] = []
   
   // MARK: - UIs
 
@@ -61,8 +61,8 @@ class FeedListCell: BaseCollectionViewCell {
 
   private lazy var stackView = UIStackView(arrangedSubviews: [
     self.userIdLabel,
-    self.postDateLabel]
-  ).then {
+    self.postDateLabel
+  ]).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.axis = .vertical
     $0.alignment = .fill
@@ -106,7 +106,12 @@ class FeedListCell: BaseCollectionViewCell {
   private let imagePageControl = UIPageControl().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.currentPage = 0
-    $0.pageIndicatorTintColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.5)
+    $0.pageIndicatorTintColor = UIColor(
+      red: 255/255,
+      green: 255/255,
+      blue: 255/255,
+      alpha: 0.5
+    )
     $0.currentPageIndicatorTintColor = .white
     $0.hidesForSinglePage = true
   }
@@ -117,17 +122,21 @@ class FeedListCell: BaseCollectionViewCell {
       left: 15,
       bottom: 7,
       right: 15
-    )
-  ).then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 0.5)
-    $0.layer.cornerRadius = 14
-    $0.clipsToBounds = true
-    $0.text = "0/1"
-    $0.font = .systemFont(ofSize: 12, weight: .semibold)
-    $0.textColor = .white
-    $0.isHidden = true
-  }
+    )).then {
+      $0.translatesAutoresizingMaskIntoConstraints = false
+      $0.backgroundColor = UIColor(
+        red: 34/255,
+        green: 34/255,
+        blue: 34/255,
+        alpha: 0.5
+      )
+      $0.layer.cornerRadius = 14
+      $0.clipsToBounds = true
+      $0.text = "0/1"
+      $0.font = .systemFont(ofSize: 12, weight: .semibold)
+      $0.textColor = .white
+      $0.isHidden = true
+    }
 
   let postContentView = UIView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
@@ -195,7 +204,12 @@ class FeedListCell: BaseCollectionViewCell {
 
     if contentTextLength > 1 {
       DispatchQueue.main.async {
-        self.contentLabel.addTrailing(with: "... ", moreText: "더보기", moreTextFont: .systemFont(ofSize: 13), moreTextColor: UIColor.gray)
+        self.contentLabel.addTrailing(
+          with: "... ",
+          moreText: "더보기",
+          moreTextFont: .systemFont(ofSize: 13),
+          moreTextColor: UIColor.gray
+        )
       }
     }
   }
@@ -214,20 +228,26 @@ class FeedListCell: BaseCollectionViewCell {
 
       switch scale {
       case "3:4":
-        imageView.frame = CGRect(x: xPosition,
-                                 y: 0,
-                                 width: width,
-                                 height: width * 1.333)
+        imageView.frame = CGRect(
+          x: xPosition,
+          y: 0,
+          width: width,
+          height: width * 1.333
+        )
       case "4:3":
-        imageView.frame = CGRect(x: xPosition,
-                                 y: 0,
-                                 width: width,
-                                 height: width * 0.75)
+        imageView.frame = CGRect(
+          x: xPosition,
+          y: 0,
+          width: width,
+          height: width * 0.75
+        )
       default:
-        imageView.frame = CGRect(x: xPosition,
-                                 y: 0,
-                                 width: width,
-                                 height: width)
+        imageView.frame = CGRect(
+          x: xPosition,
+          y: 0,
+          width: width,
+          height: width
+        )
       }
       self.imageScrollView.contentSize.width = self.contentView.frame.width * CGFloat(index+1)
       self.imageScrollView.addSubview(imageView)

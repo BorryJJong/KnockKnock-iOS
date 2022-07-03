@@ -9,6 +9,8 @@ import UIKit
 
 extension UILabel {
 
+  /// label의 폰트, 사이즈를 계산해서 최종적으로 화면에 보여질 글자의 길이를 저장할 변수
+
   var visibleTextLength: Int {
 
     let font: UIFont = self.font
@@ -64,6 +66,8 @@ extension UILabel {
       return self.text!.count
     }
   }
+
+  /// 덧 붙일 텍스트의 길이만큼 trailing 값을 추가하는 함수
 
   func addTrailing(
     with trailingText: String,
