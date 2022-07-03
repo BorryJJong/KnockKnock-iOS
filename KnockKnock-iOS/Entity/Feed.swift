@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Feed: Codable {
+struct Feed: Decodable {
   let userId: Int
   let content: String
   let images: [String]
