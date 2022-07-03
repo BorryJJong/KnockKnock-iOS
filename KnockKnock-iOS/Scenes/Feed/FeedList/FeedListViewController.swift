@@ -17,6 +17,14 @@ protocol FeedListViewProtocol: AnyObject {
 
 final class FeedListViewController: BaseViewController<FeedListView> {
 
+  // MARK: - Constants
+
+  private enum Scale {
+    static let square = "1:1"
+    static let threeToFour = "3:4"
+    static let fourToThree = "4:3"
+  }
+
   // MARK: - Properties
 
   var interactor: FeedListInteractorProtocol?
@@ -66,21 +74,26 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
 
-    switch feed[indexPath.item].scale {
-    case "3:4":
+    let scale = feed[indexPath.item].scale
+
+    switch scale {
+    case Scale.threeToFour:
       return CGSize(
         width: (self.containerView.frame.width - 40),
         height: ((self.containerView.frame.width - 40) * 1.333 + 170))
 
-    case "4:3":
+    case Scale.fourToThree:
       return CGSize(
         width: (self.containerView.frame.width - 40),
         height: ((self.containerView.frame.width - 40) * 0.75 + 170))
 
-    default:
+    case Scale.square:
       return CGSize(
         width: (self.containerView.frame.width - 40),
         height: ((self.containerView.frame.width - 40) + 170))
+
+    default:
+      return CGSize()
     }
   }
 }

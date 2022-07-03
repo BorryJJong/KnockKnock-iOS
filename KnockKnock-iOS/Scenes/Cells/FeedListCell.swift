@@ -49,9 +49,11 @@ class FeedListCell: BaseCollectionViewCell {
 
   }
 
-  // MARK: - Properties
-
-  //  private var images: [UIImageView] = []
+  private enum Scale {
+    static let square = "1:1"
+    static let threeToFour = "3:4"
+    static let fourToThree = "4:3"
+  }
   
   // MARK: - UIs
 
@@ -227,27 +229,29 @@ class FeedListCell: BaseCollectionViewCell {
       let width = self.contentView.frame.width
 
       switch scale {
-      case "3:4":
+      case Scale.threeToFour:
         imageView.frame = CGRect(
           x: xPosition,
           y: 0,
           width: width,
           height: width * 1.333
         )
-      case "4:3":
+      case Scale.fourToThree:
         imageView.frame = CGRect(
           x: xPosition,
           y: 0,
           width: width,
           height: width * 0.75
         )
-      default:
+      case Scale.square:
         imageView.frame = CGRect(
           x: xPosition,
           y: 0,
           width: width,
           height: width
         )
+      default:
+        imageView.frame = CGRect()
       }
       self.imageScrollView.contentSize.width = self.contentView.frame.width * CGFloat(index+1)
       self.imageScrollView.addSubview(imageView)
