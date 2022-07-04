@@ -35,9 +35,7 @@ class FeedCell: BaseCollectionViewCell {
   // MARK: - Bind
 
   func bind(feed: Feed) {
-    if feed.images.count > 1 {
-      self.severalSymbolImageView.isHidden = false
-    }
+    self.severalSymbolImageView.isHidden = feed.images.count <= 1
     self.thumbnailImageView.image = UIImage(named: feed.images.first ?? "")
   }
 

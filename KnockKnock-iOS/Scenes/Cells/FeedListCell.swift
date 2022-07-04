@@ -176,18 +176,13 @@ class FeedListCell: BaseCollectionViewCell {
     $0.semanticContentAttribute = .forceLeftToRight
   }
 
-  override func prepareForReuse() {
-    super.prepareForReuse()
-    self.imageScrollView.subviews.forEach{
-      $0.removeFromSuperview()
-    }
-    self.imageNumberLabel.isHidden = true
-    self.imagePageControl.isHidden = true
-  }
-
   // MARK: - Bind
 
   func bind(feed: Feed) {
+    self.imageScrollView.subviews.forEach{
+      $0.removeFromSuperview()
+    }
+
     self.userIdLabel.text = "\(feed.userId)"
     self.contentLabel.text = feed.content
     self.setImageView(images: feed.images, scale: feed.scale)
@@ -197,6 +192,9 @@ class FeedListCell: BaseCollectionViewCell {
       self.imagePageControl.isHidden = false
       self.imagePageControl.numberOfPages = feed.images.count
       self.imageNumberLabel.text = "1/\(feed.images.count)"
+    } else {
+      self.imageNumberLabel.isHidden = true
+      self.imagePageControl.isHidden = true
     }
     
     guard let contentTextLength = self.contentLabel.text?.count
