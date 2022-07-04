@@ -74,26 +74,9 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
   ) -> CGSize {
 
     let scale = feed[indexPath.item].scale
-
-    switch scale {
-    case Scale.threeToFour:
-      return CGSize(
-        width: (self.containerView.frame.width - 40),
-        height: ((self.containerView.frame.width - 40) * 1.333 + 170))
-
-    case Scale.fourToThree:
-      return CGSize(
-        width: (self.containerView.frame.width - 40),
-        height: ((self.containerView.frame.width - 40) * 0.75 + 170))
-
-    case Scale.square:
-      return CGSize(
-        width: (self.containerView.frame.width - 40),
-        height: ((self.containerView.frame.width - 40) + 170))
-
-    default:
-      return CGSize()
-    }
+    let scaleType = ImageScaleType(rawValue: scale)
+    
+    return scaleType?.cellSize(width: self.containerView.frame.width) ?? CGSize.init()
   }
 }
 

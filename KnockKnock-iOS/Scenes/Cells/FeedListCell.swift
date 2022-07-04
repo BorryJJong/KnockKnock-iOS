@@ -48,12 +48,6 @@ class FeedListCell: BaseCollectionViewCell {
     static let commentsButtonBottomMargin = -15.f
 
   }
-
-  private enum Scale {
-    static let square = "1:1"
-    static let threeToFour = "3:4"
-    static let fourToThree = "4:3"
-  }
   
   // MARK: - UIs
 
@@ -223,35 +217,13 @@ class FeedListCell: BaseCollectionViewCell {
       imageView.layer.cornerRadius = 5
       imageView.clipsToBounds = true
 
-      let xPosition = self.contentView.frame.width * CGFloat(index)
+      let imageSizeType = ImageScaleType(rawValue: scale)
       let width = self.contentView.frame.width
+      let xPosition = width * CGFloat(index)
 
-      switch scale {
-      case Scale.threeToFour:
-        imageView.frame = CGRect(
-          x: xPosition,
-          y: 0,
-          width: width,
-          height: width * 1.333
-        )
-      case Scale.fourToThree:
-        imageView.frame = CGRect(
-          x: xPosition,
-          y: 0,
-          width: width,
-          height: width * 0.75
-        )
-      case Scale.square:
-        imageView.frame = CGRect(
-          x: xPosition,
-          y: 0,
-          width: width,
-          height: width
-        )
-      default:
-        imageView.frame = CGRect()
-      }
-      self.imageScrollView.contentSize.width = self.contentView.frame.width * CGFloat(index+1)
+      imageView.frame = imageSizeType?.imageSize(xPosition: xPosition, width: width) ?? CGRect.init()
+
+      self.imageScrollView.contentSize.width = width * CGFloat(index+1)
       self.imageScrollView.addSubview(imageView)
     }
   }
