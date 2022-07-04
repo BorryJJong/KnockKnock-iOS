@@ -24,7 +24,6 @@ final class FeedViewController: BaseViewController<FeedView> {
   var feed: [Feed] = []
   var challengeTitles: [ChallengeTitle] = []
 
-
   // MARK: - Lify Cycles
 
   override func viewDidLoad() {
@@ -88,7 +87,6 @@ extension FeedViewController: UICollectionViewDataSource {
     switch indexPath.section {
     case 0:
       let cell = collectionView.dequeueCell(withType: TagCell.self, for: indexPath)
-      cell.backgroundColor = .white
       cell.bind(tag: self.challengeTitles[indexPath.item].title)
 
       if indexPath.item == 0 {
@@ -101,7 +99,6 @@ extension FeedViewController: UICollectionViewDataSource {
     case 1:
       let cell = collectionView.dequeueCell(withType: FeedCell.self, for: indexPath)
       let feed = self.feed[indexPath.item]
-      cell.backgroundColor = .white
       cell.bind(feed: feed)
       return cell
 
