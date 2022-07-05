@@ -10,7 +10,7 @@ import Foundation
 struct Challenges: Decodable {
   let id: Int
   let title: String
-  let subtitle: String
+  let subTitle: String
   let content: String
   let regDate: String
   let newYn: String // 새로운 게시물
