@@ -31,7 +31,7 @@ final class ChallengeCell: BaseCollectionViewCell {
     static let participantViewTrailingMargin = -77.f
     static let participantViewHeight = 40.f
 
-    static let participantImageViewTopMargin = 15.f
+    static let participantImageStackViewTopMargin = 15.f
 
     static let participantLabelViewTopMargin = 15.f
     static let participantLabelViewLeadingMargin = 5.f
@@ -206,7 +206,7 @@ final class ChallengeCell: BaseCollectionViewCell {
       self.participantView.trailingAnchor.constraint(equalTo: self.challengeImageView.trailingAnchor, constant: Metric.participantViewTrailingMargin),
       self.participantView.heightAnchor.constraint(equalToConstant: Metric.participantViewHeight),
 
-      self.participantImageStackView.topAnchor.constraint(equalTo: self.participantView.topAnchor, constant: Metric.participantImageViewTopMargin),
+      self.participantImageStackView.topAnchor.constraint(equalTo: self.participantView.topAnchor, constant: Metric.participantImageStackViewTopMargin),
       self.participantImageStackView.leadingAnchor.constraint(equalTo: self.participantView.leadingAnchor),
 
       self.participantLabel.centerYAnchor.constraint(equalTo: self.participantImageStackView.centerYAnchor),
