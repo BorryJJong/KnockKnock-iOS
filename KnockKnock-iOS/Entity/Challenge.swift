@@ -7,8 +7,13 @@
 
 import Foundation
 
-struct Challenges: Codable {
+struct Challenges: Decodable {
   let id: Int
   let content: String
+  let title: String
+}
+
+struct ChallengeTitle: Decodable {
+  let id: Int
   let title: String
 }
