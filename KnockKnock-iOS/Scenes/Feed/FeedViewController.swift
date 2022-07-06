@@ -87,7 +87,7 @@ extension FeedViewController: UICollectionViewDataSource {
     switch indexPath.section {
     case 0:
       let cell = collectionView.dequeueCell(withType: TagCell.self, for: indexPath)
-      cell.bind(tag: self.challengeTitles[indexPath.item].title)
+      cell.bind(tag: self.challengeTitles[indexPath.item])
 
       if indexPath.item == 0 {
         cell.isSelected = true
@@ -122,9 +122,14 @@ extension FeedViewController: UICollectionViewDelegate {
     switch indexPath.section {
     case 0:
       if let cell = collectionView.cellForItem(at: indexPath) as? TagCell {
-        cell.tagLabel.backgroundColor = .green50
-        cell.tagLabel.textColor = .white
-        cell.tagLabel.font = .systemFont(ofSize: 16, weight: .bold)
+        for index in 0..<self.challengeTitles.count {
+          if index == indexPath.item {
+            self.challengeTitles[index].isSelected = true
+          } else {
+            self.challengeTitles[index].isSelected = false
+          }
+          cell.setLabel(isSelected: challengeTitles[indexPath.item].isSelected)
+        }
       }
 
     case 1:
@@ -136,11 +141,14 @@ extension FeedViewController: UICollectionViewDelegate {
   }
   
   func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-    if indexPath.section == 0 {
-      if let cell = collectionView.cellForItem(at: indexPath) as? TagCell {
-        cell.tagLabel.backgroundColor = .white
-        cell.tagLabel.textColor = .green50
-        cell.tagLabel.font = .systemFont(ofSize: 16, weight: .medium)
+    if let cell = collectionView.cellForItem(at: indexPath) as? TagCell {
+      for index in 0..<self.challengeTitles.count {
+        if index == indexPath.item {
+          self.challengeTitles[index].isSelected = false
+        } else {
+          self.challengeTitles[index].isSelected = true
+        }
+        cell.setLabel(isSelected: challengeTitles[indexPath.item].isSelected)
       }
     }
   }

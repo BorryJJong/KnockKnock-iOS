@@ -30,6 +30,9 @@ final class FeedInteractor: FeedInteractorProtocol {
 
   func getChallengeTitles() {
     self.worker?.getChallengeTitles { [weak self] challengeTitle in
+      var challengeTitle = challengeTitle
+      challengeTitle[0].isSelected = true
+
       self?.presenter?.presentGetChallengeTitles(challengeTitle: challengeTitle)
     }
   }

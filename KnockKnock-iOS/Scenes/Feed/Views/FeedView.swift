@@ -17,8 +17,8 @@ class FeedView: UIView {
     static let gradientImageViewWidth = 30.f
     static let gradientImageViewHeight = 60.f
     
-    static let scrollViewLeadingMargin = 15.f
-    static let scrollViewTrailingMargin = -15.f
+    static let feedCollectionViewLeadingMargin = 15.f
+    static let feedCollectionViewTrailingMargin = -15.f
     
     static let feedCollectionViewLineSpacing = 10.f
     static let feedCollectionViewItemSpacing = 10.f
@@ -73,8 +73,8 @@ class FeedView: UIView {
       self.gradientImageView.widthAnchor.constraint(equalToConstant: Metric.gradientImageViewWidth),
       
       self.feedCollectionView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-      self.feedCollectionView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.scrollViewLeadingMargin),
-      self.feedCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.scrollViewTrailingMargin),
+      self.feedCollectionView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.feedCollectionViewLeadingMargin),
+      self.feedCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.feedCollectionViewTrailingMargin),
       self.feedCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor)
     ])
   }
