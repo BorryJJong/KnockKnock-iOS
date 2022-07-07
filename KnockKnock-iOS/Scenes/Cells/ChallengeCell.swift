@@ -124,7 +124,7 @@ final class ChallengeCell: BaseCollectionViewCell {
     self.setParticipantLabel(count: data.participants.count)
   }
 
-  func setParticipantsImageStackView(participants: [Participant]) {
+  private func setParticipantsImageStackView(participants: [Participant]) {
     self.participantImageStackView.subviews.forEach {
       $0.removeFromSuperview()
     }
@@ -152,12 +152,10 @@ final class ChallengeCell: BaseCollectionViewCell {
           $0.layer.borderColor = UIColor.white.cgColor
           $0.backgroundColor = .white
 
-          if let image = participants[index].image {
-            if let url = URL(string: image) {
-              if let data = try? Data(contentsOf: url) {
-                $0.image = UIImage(data: data)
-              }
-            }
+          if let image = participants[index].image,
+             let url = URL(string: image),
+             let data = try? Data(contentsOf: url) {
+            $0.image = UIImage(data: data)
           } else {
             $0.image = KKDS.Image.ic_person_24
           }
@@ -171,7 +169,7 @@ final class ChallengeCell: BaseCollectionViewCell {
     }
   }
 
-  func setParticipantLabel(count: Int) {
+  private func setParticipantLabel(count: Int) {
     if count == 0 {
       self.participantLabel.text = "첫 번째 참여자가 되어보세요!"
     } else {
