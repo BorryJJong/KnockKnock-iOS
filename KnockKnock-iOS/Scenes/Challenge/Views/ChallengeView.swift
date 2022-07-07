@@ -8,6 +8,7 @@
 import UIKit
 
 import Then
+import KKDSKit
 
 final class ChallengeView: UIView {
 
@@ -50,7 +51,9 @@ final class ChallengeView: UIView {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.contentVerticalAlignment = .top
     $0.setTitleColor(.gray80, for: .normal)
-    $0.setTitle("최신순 ∨", for: .normal)
+    $0.setTitle("최신순", for: .normal)
+    $0.setImage(KKDS.Image.ic_down_20_gr, for: .normal)
+    $0.semanticContentAttribute = .forceRightToLeft
     $0.titleLabel?.font = .systemFont(ofSize: 13)
   }
 

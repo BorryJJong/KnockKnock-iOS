@@ -6,7 +6,9 @@
 //
 
 import UIKit
+
 import KKDSKit
+import Then
 
 final class ChallengeCell: BaseCollectionViewCell {
   
@@ -29,7 +31,7 @@ final class ChallengeCell: BaseCollectionViewCell {
     static let participantViewTrailingMargin = -77.f
     static let participantViewHeight = 40.f
 
-    static let participantImageViewTopMargin = 15.f
+    static let participantImageStackViewTopMargin = 15.f
 
     static let participantLabelViewTopMargin = 15.f
     static let participantLabelViewLeadingMargin = 5.f
@@ -41,7 +43,7 @@ final class ChallengeCell: BaseCollectionViewCell {
 
     static let contentsLabelTopMargin = 5.f
   }
- 
+
   // MARK: - UI
   
   private let challengeImageView = UIImageView().then {
@@ -62,7 +64,7 @@ final class ChallengeCell: BaseCollectionViewCell {
     $0.tintColor = .gray80
     $0.font = .systemFont(ofSize: 13)
     $0.text = "쓰레기를 줄이자는 의미의 제로웨이스트 운동이 활발해 지고있다. 제로웨이스트에 대해 좀 더 알아보자!"
-    $0.numberOfLines = 0
+    $0.numberOfLines = 2
     $0.textAlignment = .left
   }
 
@@ -71,10 +73,12 @@ final class ChallengeCell: BaseCollectionViewCell {
     $0.backgroundColor = .white
   }
 
-  private let participantImageView = UIImageView().then {
+  private let participantImageStackView = UIStackView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
-    $0.image = KKDS.Image.ic_person_24
+    $0.axis = .horizontal
+    $0.distribution = .equalCentering
+    $0.alignment = .center
+    $0.spacing = -7
   }
 
   private let participantLabel = UILabel().then {
@@ -115,13 +119,33 @@ final class ChallengeCell: BaseCollectionViewCell {
   
   func bind(data: Challenges) {
     self.titleLabel.text = data.title
-    self.contentsLabel.text = data.content
+    self.contentsLabel.text = data.subTitle
+    self.setParticipantsImageStackView(participants: data.participants)
+    self.setParticipantLabel(count: data.participants.count)
   }
-  
+
+  private func setParticipantsImageStackView(participants: [Participant]) {
+    var images: [String?] = []
+
+    participants.forEach {
+      images.append($0.image)
+    }
+    self.participantImageStackView.removeAllSubViews()
+    self.participantImageStackView.addParticipantImageViews(images: images)
+  }
+
+  private func setParticipantLabel(count: Int) {
+    if count == 0 {
+      self.participantLabel.text = "첫 번째 참여자가 되어보세요!"
+    } else {
+      self.participantLabel.text = "\(count)명 참여중"
+    }
+  }
+
   // MARK: - Configure
   
   override func setupConstraints() {
-    [self.participantLabel, self.participantImageView].addSubViews(self.participantView)
+    [self.participantLabel, self.participantImageStackView].addSubViews(self.participantView)
     [self.challengeImageView, self.participantView, self.seperatorLineView, self.titleLabel, self.contentsLabel, self.newChallengeLabel, self.hotChallengeLabel].addSubViews(self.contentView)
     
     NSLayoutConstraint.activate([
@@ -145,11 +169,11 @@ final class ChallengeCell: BaseCollectionViewCell {
       self.participantView.trailingAnchor.constraint(equalTo: self.challengeImageView.trailingAnchor, constant: Metric.participantViewTrailingMargin),
       self.participantView.heightAnchor.constraint(equalToConstant: Metric.participantViewHeight),
 
-      self.participantImageView.topAnchor.constraint(equalTo: self.participantView.topAnchor, constant: Metric.participantImageViewTopMargin),
-      self.participantImageView.leadingAnchor.constraint(equalTo: self.participantView.leadingAnchor),
+      self.participantImageStackView.topAnchor.constraint(equalTo: self.participantView.topAnchor, constant: Metric.participantImageStackViewTopMargin),
+      self.participantImageStackView.leadingAnchor.constraint(equalTo: self.participantView.leadingAnchor),
 
-      self.participantLabel.centerYAnchor.constraint(equalTo: self.participantImageView.centerYAnchor),
-      self.participantLabel.leadingAnchor.constraint(equalTo: self.participantImageView.trailingAnchor, constant: Metric.participantLabelViewLeadingMargin),
+      self.participantLabel.centerYAnchor.constraint(equalTo: self.participantImageStackView.centerYAnchor),
+      self.participantLabel.leadingAnchor.constraint(equalTo: self.participantImageStackView.trailingAnchor, constant: Metric.participantLabelViewLeadingMargin),
 
       self.seperatorLineView.heightAnchor.constraint(equalToConstant: Metric.seperatorLineViewHeight),
       self.seperatorLineView.widthAnchor.constraint(equalTo: self.contentView.widthAnchor),
