@@ -125,48 +125,13 @@ final class ChallengeCell: BaseCollectionViewCell {
   }
 
   private func setParticipantsImageStackView(participants: [Participant]) {
-    self.participantImageStackView.subviews.forEach {
-      $0.removeFromSuperview()
+    var images: [String?] = []
+
+    participants.forEach {
+      images.append($0.image)
     }
-
-    if participants.count == 0 {
-      let imageView = UIImageView().then {
-        $0.image = KKDS.Image.ic_person_24
-        $0.contentMode = .scaleAspectFill
-        $0.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
-        $0.layer.cornerRadius = $0.frame.width / 2
-        $0.layer.borderWidth = 1
-        $0.layer.borderColor = UIColor.white.cgColor
-        $0.backgroundColor = .white
-      }
-      self.participantImageStackView.addArrangedSubview(imageView)
-
-    } else {
-      for index in 0..<participants.count {
-
-        let imageView = UIImageView().then {
-          $0.contentMode = .scaleAspectFill
-          $0.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
-          $0.layer.cornerRadius = $0.frame.width / 2
-          $0.layer.borderWidth = 1
-          $0.layer.borderColor = UIColor.white.cgColor
-          $0.backgroundColor = .white
-
-          if let image = participants[index].image,
-             let url = URL(string: image),
-             let data = try? Data(contentsOf: url) {
-            $0.image = UIImage(data: data)
-          } else {
-            $0.image = KKDS.Image.ic_person_24
-          }
-        }
-        self.participantImageStackView.addArrangedSubview(imageView)
-
-        if index == 2 {
-          break
-        }
-      }
-    }
+    self.participantImageStackView.removeAllSubViews()
+    self.participantImageStackView.addParticipantImageViews(images: images)
   }
 
   private func setParticipantLabel(count: Int) {
