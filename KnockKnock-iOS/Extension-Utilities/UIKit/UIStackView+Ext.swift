@@ -34,13 +34,11 @@ extension UIStackView {
         $0.layer.borderColor = UIColor.white.cgColor
         $0.backgroundColor = .white
 
-        if let image = images[index],
-           let url = URL(string: image),
-           let data = try? Data(contentsOf: url) {
-          $0.image = UIImage(data: data)
-        } else {
-          $0.image = KKDS.Image.ic_person_24
-        }
+        $0.image = images[index]
+          .flatMap { URL(string: $0) }
+          .flatMap { try? Data(contentsOf: $0) }
+          .flatMap { UIImage(data: $0) }
+        ?? KKDS.Image.ic_person_24
       }
       addArrangedSubview(imageView)
 
