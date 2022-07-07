@@ -24,3 +24,8 @@ struct Participant: Decodable {
   let nickname: String
   let image: String?
 }
+
+struct ChallengeTitle: Decodable {
+  let id: Int
+  let title: String
+}

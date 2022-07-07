@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import KKDSKit
 
 class FeedCell: BaseCollectionViewCell {
 
@@ -27,7 +28,15 @@ class FeedCell: BaseCollectionViewCell {
 
   let severalSymbolImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .white
+    $0.image = KKDS.Image.ic_more_img_20_wh
+    $0.isHidden = true
+  }
+
+  // MARK: - Bind
+
+  func bind(feed: Feed) {
+    self.severalSymbolImageView.isHidden = feed.images.count <= 1
+    self.thumbnailImageView.image = UIImage(named: feed.images.first ?? "")
   }
 
   // MARK: - Configure

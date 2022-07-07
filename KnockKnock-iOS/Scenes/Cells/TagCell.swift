@@ -21,6 +21,12 @@ class TagCell: BaseCollectionViewCell {
     $0.layer.borderColor = UIColor.green40?.cgColor
   }
 
+  // MARK: - Bind
+
+  func bind(tag: String) {
+    self.tagLabel.text = tag
+  }
+
   // MARK: - Configure
 
   override func setupConstraints() {
