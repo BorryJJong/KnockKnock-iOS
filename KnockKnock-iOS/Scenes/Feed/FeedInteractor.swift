@@ -13,6 +13,7 @@ protocol FeedInteractorProtocol {
 
   func fetchFeed()
   func getChallengeTitles()
+  func setSelectedStatus(challengeTitles: [ChallengeTitle], selectedIndex: IndexPath)
 }
 
 final class FeedInteractor: FeedInteractorProtocol {
@@ -35,5 +36,18 @@ final class FeedInteractor: FeedInteractorProtocol {
 
       self?.presenter?.presentGetChallengeTitles(challengeTitle: challengeTitle)
     }
+  }
+
+  func setSelectedStatus(challengeTitles: [ChallengeTitle], selectedIndex: IndexPath) {
+    var challengeTitles = challengeTitles
+
+    for index in 0..<challengeTitles.count {
+      if index == selectedIndex.item {
+        challengeTitles[index].isSelected = true
+      } else {
+        challengeTitles[index].isSelected = false
+      }
+    }
+    presenter?.presentGetChallengeTitles(challengeTitle: challengeTitles)
   }
 }

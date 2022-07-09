@@ -121,16 +121,7 @@ extension FeedViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     switch indexPath.section {
     case 0:
-      if let cell = collectionView.cellForItem(at: indexPath) as? TagCell {
-        for index in 0..<self.challengeTitles.count {
-          if index == indexPath.item {
-            self.challengeTitles[index].isSelected = true
-          } else {
-            self.challengeTitles[index].isSelected = false
-          }
-          cell.setLabel(isSelected: challengeTitles[indexPath.item].isSelected)
-        }
-      }
+      interactor?.setSelectedStatus(challengeTitles: challengeTitles, selectedIndex: indexPath)
 
     case 1:
       self.router.navigateToFeedList(source: self, destination: FeedListRouter.createFeedList() as! FeedListViewController)
@@ -141,15 +132,6 @@ extension FeedViewController: UICollectionViewDelegate {
   }
   
   func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-    if let cell = collectionView.cellForItem(at: indexPath) as? TagCell {
-      for index in 0..<self.challengeTitles.count {
-        if index == indexPath.item {
-          self.challengeTitles[index].isSelected = false
-        } else {
-          self.challengeTitles[index].isSelected = true
-        }
-        cell.setLabel(isSelected: challengeTitles[indexPath.item].isSelected)
-      }
-    }
+    interactor?.setSelectedStatus(challengeTitles: challengeTitles, selectedIndex: indexPath)
   }
 }

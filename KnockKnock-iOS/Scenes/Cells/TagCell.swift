@@ -11,11 +11,11 @@ class TagCell: BaseCollectionViewCell {
 
   // MARK: - UIs
 
-  let tagLabel = BasePaddingLabel().then {
+  private let tagLabel = BasePaddingLabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.textAlignment = .center
     $0.clipsToBounds = true
-    $0.layer.cornerRadius = 18
+    $0.layer.cornerRadius = 20
     $0.textColor = .green50
     $0.layer.borderWidth = 1
     $0.layer.borderColor = UIColor.green40?.cgColor
@@ -28,18 +28,18 @@ class TagCell: BaseCollectionViewCell {
     self.setLabel(isSelected: tag.isSelected)
   }
 
-  func setLabel(isSelected: Bool) {
+  private func setLabel(isSelected: Bool) {
     switch isSelected {
     case true:
       self.tagLabel.backgroundColor = .green50
       self.tagLabel.textColor = .white
-      self.tagLabel.font = .systemFont(ofSize: 13, weight: .bold)
+      self.tagLabel.font = .systemFont(ofSize: 14, weight: .bold)
       self.tagLabel.sizeToFit()
 
     case false:
       self.tagLabel.backgroundColor = .white
       self.tagLabel.textColor = .green50
-      self.tagLabel.font = .systemFont(ofSize: 13, weight: .medium)
+      self.tagLabel.font = .systemFont(ofSize: 14, weight: .medium)
       self.tagLabel.sizeToFit()
     }
   }
