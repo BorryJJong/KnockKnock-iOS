@@ -11,7 +11,7 @@ protocol FeedViewProtocol: AnyObject {
   var interactor: FeedInteractorProtocol? { get set }
 
   func fetchFeed(feed: [Feed])
-  func getChallengeTitles(challengeTitle: [ChallengeTitle])
+  func getChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?)
 }
 
 final class FeedViewController: BaseViewController<FeedView> {
@@ -23,6 +23,7 @@ final class FeedViewController: BaseViewController<FeedView> {
 
   var feed: [Feed] = []
   var challengeTitles: [ChallengeTitle] = []
+  var cellWidths: NSMutableDictionary = [:]
 
   // MARK: - Lify Cycles
 
@@ -53,9 +54,20 @@ extension FeedViewController: FeedViewProtocol {
     self.containerView.feedCollectionView.reloadData()
   }
 
-  func getChallengeTitles(challengeTitle: [ChallengeTitle]) {
+  func getChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?) {
     self.challengeTitles = challengeTitle
-    self.containerView.feedCollectionView.reloadData()
+
+    if let index = index {
+      UIView.performWithoutAnimation {
+        self.containerView.feedCollectionView.reloadSections([0])
+        self.containerView.feedCollectionView.scrollToItem(
+          at: index,
+          at: .centeredHorizontally,
+          animated: false)
+      }
+    } else {
+      self.containerView.feedCollectionView.reloadData()
+    }
   }
 }
 
@@ -118,20 +130,35 @@ extension FeedViewController: UICollectionViewDataSource {
 }
 
 extension FeedViewController: UICollectionViewDelegate {
-  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    didSelectItemAt indexPath: IndexPath
+  ) {
     switch indexPath.section {
     case 0:
-      interactor?.setSelectedStatus(challengeTitles: challengeTitles, selectedIndex: indexPath)
+      self.interactor?.setSelectedStatus(
+        challengeTitles: challengeTitles,
+        selectedIndex: indexPath
+      )
 
     case 1:
-      self.router.navigateToFeedList(source: self, destination: FeedListRouter.createFeedList() as! FeedListViewController)
+      self.router.navigateToFeedList(
+        source: self,
+        destination: FeedListRouter.createFeedList() as! FeedListViewController
+      )
 
     default:
       return
     }
   }
   
-  func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-    interactor?.setSelectedStatus(challengeTitles: challengeTitles, selectedIndex: indexPath)
+  func collectionView(
+    _ collectionView: UICollectionView,
+    didDeselectItemAt indexPath: IndexPath
+  ) {
+    self.interactor?.setSelectedStatus(
+      challengeTitles: challengeTitles,
+      selectedIndex: indexPath
+    )
   }
 }

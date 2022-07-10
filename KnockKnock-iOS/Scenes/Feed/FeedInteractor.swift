@@ -34,7 +34,7 @@ final class FeedInteractor: FeedInteractorProtocol {
       var challengeTitle = challengeTitle
       challengeTitle[0].isSelected = true
 
-      self?.presenter?.presentGetChallengeTitles(challengeTitle: challengeTitle)
+      self?.presenter?.presentGetChallengeTitles(challengeTitle: challengeTitle, index: nil)
     }
   }
 
@@ -48,6 +48,6 @@ final class FeedInteractor: FeedInteractorProtocol {
         challengeTitles[index].isSelected = false
       }
     }
-    presenter?.presentGetChallengeTitles(challengeTitle: challengeTitles)
+    presenter?.presentGetChallengeTitles(challengeTitle: challengeTitles, index: selectedIndex)
   }
 }
