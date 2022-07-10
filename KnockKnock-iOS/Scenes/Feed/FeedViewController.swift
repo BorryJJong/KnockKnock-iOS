@@ -16,6 +16,15 @@ protocol FeedViewProtocol: AnyObject {
 
 final class FeedViewController: BaseViewController<FeedView> {
 
+  // MARK: - Enums
+
+  private enum FeedSection: Int {
+    case tag = 0
+    case feed = 1
+
+    static let allCases: [FeedSection] = [.tag, .feed]
+  }
+
   // MARK: - Properties
 
   var interactor: FeedInteractorProtocol?
@@ -23,7 +32,6 @@ final class FeedViewController: BaseViewController<FeedView> {
 
   var feed: [Feed] = []
   var challengeTitles: [ChallengeTitle] = []
-  var cellWidths: NSMutableDictionary = [:]
 
   // MARK: - Lify Cycles
 
@@ -59,7 +67,7 @@ extension FeedViewController: FeedViewProtocol {
 
     if let index = index {
       UIView.performWithoutAnimation {
-        self.containerView.feedCollectionView.reloadSections([0])
+        self.containerView.feedCollectionView.reloadSections([FeedSection.tag.rawValue])
         self.containerView.feedCollectionView.scrollToItem(
           at: index,
           at: .centeredHorizontally,
@@ -77,10 +85,10 @@ extension FeedViewController: UICollectionViewDataSource {
     numberOfItemsInSection section: Int
   ) -> Int {
     switch section {
-    case 0:
+    case FeedSection.tag.rawValue:
       return self.challengeTitles.count
 
-    case 1:
+    case FeedSection.feed.rawValue:
       return self.feed.count
       
     default:
@@ -89,7 +97,7 @@ extension FeedViewController: UICollectionViewDataSource {
   }
 
   func numberOfSections(in collectionView: UICollectionView) -> Int {
-    return 2
+    return FeedSection.allCases.count
   }
 
   func collectionView(
@@ -97,7 +105,7 @@ extension FeedViewController: UICollectionViewDataSource {
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
     switch indexPath.section {
-    case 0:
+    case FeedSection.tag.rawValue:
       let cell = collectionView.dequeueCell(withType: TagCell.self, for: indexPath)
       cell.bind(tag: self.challengeTitles[indexPath.item])
 
@@ -108,7 +116,7 @@ extension FeedViewController: UICollectionViewDataSource {
 
       return cell
 
-    case 1:
+    case FeedSection.feed.rawValue:
       let cell = collectionView.dequeueCell(withType: FeedCell.self, for: indexPath)
       let feed = self.feed[indexPath.item]
       cell.bind(feed: feed)
@@ -135,13 +143,13 @@ extension FeedViewController: UICollectionViewDelegate {
     didSelectItemAt indexPath: IndexPath
   ) {
     switch indexPath.section {
-    case 0:
+    case FeedSection.tag.rawValue:
       self.interactor?.setSelectedStatus(
         challengeTitles: challengeTitles,
         selectedIndex: indexPath
       )
 
-    case 1:
+    case FeedSection.feed.rawValue:
       self.router.navigateToFeedList(
         source: self,
         destination: FeedListRouter.createFeedList() as! FeedListViewController
