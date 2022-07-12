@@ -28,7 +28,7 @@ final class FeedViewController: BaseViewController<FeedView> {
   // MARK: - Properties
 
   var interactor: FeedInteractorProtocol?
-  var router = FeedRouter()
+  var router: FeedRouterProtocol?
 
   var feed: [Feed] = []
   var challengeTitles: [ChallengeTitle] = []
@@ -159,10 +159,7 @@ extension FeedViewController: UICollectionViewDelegate {
       )
 
     case CollectionViewTag.feed.rawValue:
-      self.router.navigateToFeedList(
-        source: self,
-        destination: FeedListRouter.createFeedList() as! FeedListViewController
-      )
+      self.router?.navigateToFeedList(source: self)
 
     default:
       return
