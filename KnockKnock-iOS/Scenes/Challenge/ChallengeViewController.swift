@@ -36,7 +36,7 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
     self.containerView.challengeCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
-      $0.registCell(type:ChallengeCell.self)
+      $0.registCell(type: ChallengeCell.self)
     }
     self.containerView.sortChallengeButton.addTarget(
       self,
@@ -98,7 +98,7 @@ extension ChallengeViewController: UICollectionViewDelegateFlowLayout {
   ) -> CGSize {
     return CGSize(
       width: (self.containerView.frame.width - 40),
-      height: (self.containerView.frame.height - 120) / 2)
+      height: (self.containerView.frame.height - 100) / 2)
   }
   
   func collectionView(
