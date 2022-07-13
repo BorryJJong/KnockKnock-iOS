@@ -16,8 +16,9 @@ final class MainTabBarController: UITabBarController {
   
   enum Tab: Int {
     case home
+    case feed
+    case post
     case challenge
-    case store
     case my
   }
   
@@ -29,15 +30,20 @@ final class MainTabBarController: UITabBarController {
       image: KKDS.Image.ic_bottom_challenge_27_off,
       selectedImage: KKDS.Image.ic_bottom_home_27_on
     ),
+    .feed: UITabBarItem(
+      title: "검색",
+      image: KKDS.Image.ic_bottom_store_27_off,
+      selectedImage: KKDS.Image.ic_bottom_store_27_on
+    ),
+    .post: UITabBarItem(
+      title: nil,
+      image: KKDS.Image.ic_bottom_more_40.withRenderingMode(.alwaysOriginal),
+      selectedImage: KKDS.Image.ic_bottom_more_40.withRenderingMode(.alwaysOriginal)
+    ),
     .challenge: UITabBarItem(
       title: "챌린지",
       image: KKDS.Image.ic_bottom_challenge_27_off,
       selectedImage: KKDS.Image.ic_bottom_challenge_27_on
-    ),
-    .store: UITabBarItem(
-      title: "피드",
-      image: KKDS.Image.ic_bottom_store_27_off,
-      selectedImage: KKDS.Image.ic_bottom_store_27_on
     ),
     .my: UITabBarItem(
       title: "마이",
@@ -47,8 +53,9 @@ final class MainTabBarController: UITabBarController {
   ]
   
   let home = HomeViewController()
+  let feed = FeedViewController()
+  let post = FeedWriteViewController()
   let challenge = ChallengeRouter.createChallenge()
-  let feed = FeedRouter.createFeed()
   let my = MyViewController()
   
   // MARK: - Initialize
@@ -69,31 +76,34 @@ final class MainTabBarController: UITabBarController {
   }
   
   private func attribute() {
-    UITabBar.appearance().tintColor = UIColor.purple
     self.delegate = self
     self.tabBar.do {
       $0.backgroundColor = .white
-      $0.tintColor = .black
+      $0.tintColor = .green50
       $0.barTintColor = .white
       $0.isTranslucent = false
-      $0.unselectedItemTintColor = .systemGray2
+      $0.unselectedItemTintColor = .gray60
       $0.standardAppearance.backgroundColor = .white
     }
     
     self.home.tabBarItem = self.tabBarItems[.home]
+    self.feed.tabBarItem = self.tabBarItems[.feed]
+    self.post.tabBarItem = self.tabBarItems[.post]
+    self.post.tabBarItem.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -8, right: 0)
     self.challenge.tabBarItem = self.tabBarItems[.challenge]
-    self.feed.tabBarItem = self.tabBarItems[.store]
     self.my.tabBarItem = self.tabBarItems[.my]
     
     let homeNVC = UINavigationController(rootViewController: self.home)
-    let challengeNVC = UINavigationController(rootViewController: self.challenge)
     let feedNVC = UINavigationController(rootViewController: self.feed)
+    let postNVC = UINavigationController(rootViewController: self.post)
+    let challengeNVC = UINavigationController(rootViewController: self.challenge)
     let myNVC = UINavigationController(rootViewController: self.my)
     
     self.viewControllers = [
       homeNVC,
-      challengeNVC,
       feedNVC,
+      postNVC,
+      challengeNVC,
       myNVC
     ]
   }

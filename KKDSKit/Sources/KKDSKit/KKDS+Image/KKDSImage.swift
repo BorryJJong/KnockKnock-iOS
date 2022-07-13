@@ -68,6 +68,7 @@ public extension KKDS.Image {
   static var ic_bottom_search_27_on: UIImage      { .load(name: "ic_bottom_search_27_on") }
   static var ic_bottom_store_27_off: UIImage      { .load(name: "ic_bottom_store_27_off") }
   static var ic_bottom_store_27_on: UIImage       { .load(name: "ic_bottom_store_27_on") }
+  static var ic_bottom_more_40: UIImage           { .load(name: "ic_bottom_more_40") }
 }
 
 extension UIImage {
