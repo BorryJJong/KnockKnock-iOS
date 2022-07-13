@@ -25,9 +25,14 @@ final class BottomSheetView: UIView {
   }
 
   // MARK: - Properties
+  let screenHeight = UIDevice.current.heightOfSafeArea()
+  lazy var topConstant = self.safeAreaInsets.bottom + self.screenHeight
+  lazy var bottomSheetViewTopConstraint: NSLayoutConstraint = self.bottomSheetView.topAnchor.constraint(
+    equalTo: self.safeAreaLayoutGuide.topAnchor,
+    constant: topConstant
+  )
 
-  lazy var topConstant = self.safeAreaInsets.bottom + self.safeAreaLayoutGuide.layoutFrame.height
-  lazy var bottomSheetViewTopConstraint: NSLayoutConstraint = self.bottomSheetView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: topConstant)
+  let bottomHeight: CGFloat = 150
 
   // MARK: - UIs
 
@@ -69,6 +74,37 @@ final class BottomSheetView: UIView {
     super.init(coder: aDecoder)
   }
 
+  // MARK: - Bottom Sheet Animation
+
+  func showBottomSheet() {
+    let safeAreaHeight: CGFloat = self.safeAreaLayoutGuide.layoutFrame.height
+    let bottomPadding: CGFloat = self.safeAreaInsets.bottom
+
+    self.bottomSheetViewTopConstraint.constant = (safeAreaHeight + bottomPadding) - self.bottomHeight
+
+    UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseIn, animations: {
+      self.dimmedBackView.alpha = 0.5
+      self.layoutIfNeeded()
+    }, completion: nil)
+  }
+
+  func hideBottomSheet(view: BottomSheetViewController) {
+    let safeAreaHeight = self.safeAreaLayoutGuide.layoutFrame.height
+    let bottomPadding = self.safeAreaInsets.bottom
+
+    self.bottomSheetViewTopConstraint.constant = safeAreaHeight + bottomPadding
+    UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseIn, animations: {
+      self.dimmedBackView.alpha = 0.0
+      self.layoutIfNeeded()
+    }) { _ in
+      if view.presentingViewController != nil {
+        view.dismiss(animated: false, completion: nil)
+      }
+    }
+  }
+
+  // MARK: - Constraints
+
   private func setupConstraints() {
     [self.dimmedBackView, self.bottomSheetView].addSubViews(self)
     [self.dismissIndicatorView, self.tableView].addSubViews(self.bottomSheetView)
@@ -82,7 +118,7 @@ final class BottomSheetView: UIView {
       self.bottomSheetView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
       self.bottomSheetView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
       self.bottomSheetView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-      self.bottomSheetViewTopConstraint,
+      bottomSheetViewTopConstraint,
 
       self.dismissIndicatorView.widthAnchor.constraint(equalToConstant: Metric.dismissIndicatorViewWidth),
       self.dismissIndicatorView.heightAnchor.constraint(equalToConstant: Metric.dismissIndicatorViewHeight),
