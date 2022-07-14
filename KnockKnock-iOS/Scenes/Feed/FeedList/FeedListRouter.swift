@@ -32,7 +32,7 @@ final class FeedListRouter: FeedListRouterProtocol {
   func navigateToCommentView(source: FeedListViewProtocol) {
     let commentViewController = CommentRouter.createCommentView()
     if let sourceView = source as? UIViewController {
-      sourceView.modalPresentationStyle = .fullScreen
+      commentViewController.modalPresentationStyle = .fullScreen
       sourceView.present(commentViewController, animated: true, completion: nil)
     }
   }
