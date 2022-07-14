@@ -12,6 +12,26 @@ import Then
 
 class CommentView: UIView {
 
+  // MARK: - Constants
+
+  private enum Metric {
+    static let commentInputViewTopMargin = -20.f
+
+    static let commentTextViewHeight = 34.f
+    static let commentTextViewBottomMargin = -19.f
+    static let commentTextViewTrailingMargin = -70.f
+    static let commentTextViewLeadingMargin = 20.f
+
+    static let registButtonTrailingMargin = -20.f
+    static let registButtonBottomMargin = -15.f
+    static let registButtonWidth = 50.f
+    static let registButtonHeight = 30.f
+  }
+
+  // MARK: - Properties
+
+  let commentTextViewPlaceholder = "댓글을 입력하세요..."
+
   // MARK: - UIs
 
   let commentCollectionView = UICollectionView(
@@ -34,9 +54,11 @@ class CommentView: UIView {
     $0.layer.shadowOffset = CGSize(width: 0, height: -3)
   }
 
-  private let commentTextField = UITextField().then {
+  lazy var commentTextView = UITextView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.placeholder = "댓글을 달아주세요..."
+    $0.text = self.commentTextViewPlaceholder
+    $0.textColor = .gray50
+    $0.font = .systemFont(ofSize: 15, weight: .regular)
   }
 
   let registButton = UIButton().then {
@@ -60,11 +82,23 @@ class CommentView: UIView {
     super.init(coder: aDecoder)
   }
 
+  // MARK: - Configure
+
+  func setPlaceholder() {
+    if self.commentTextView.text == self.commentTextViewPlaceholder {
+      self.commentTextView.text = nil
+      self.commentTextView.textColor = .black
+    } else if self.commentTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+      self.commentTextView.text = self.commentTextViewPlaceholder
+      self.commentTextView.textColor = .gray50
+    }
+  }
+
   // MARK: - Constraints
 
   func setupConstraints() {
     [self.commentCollectionView, self.commentInputView].addSubViews(self)
-    [self.commentTextField, self.registButton].addSubViews(commentInputView)
+    [self.commentTextView, self.registButton].addSubViews(self)
 
     NSLayoutConstraint.activate([
       self.commentCollectionView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
@@ -75,17 +109,17 @@ class CommentView: UIView {
       self.commentInputView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
       self.commentInputView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
       self.commentInputView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-      self.commentInputView.heightAnchor.constraint(equalToConstant: 60),
+      self.commentInputView.topAnchor.constraint(equalTo: self.commentTextView.topAnchor, constant: Metric.commentInputViewTopMargin),
 
-      self.commentTextField.topAnchor.constraint(equalTo: self.commentInputView.topAnchor, constant: 20),
-      self.commentTextField.bottomAnchor.constraint(equalTo: self.commentInputView.bottomAnchor, constant: -19),
-      self.commentTextField.trailingAnchor.constraint(equalTo: self.commentInputView.trailingAnchor, constant: -70),
-      self.commentTextField.leadingAnchor.constraint(equalTo: self.commentInputView.leadingAnchor, constant: 20),
+      self.commentTextView.heightAnchor.constraint(equalToConstant: Metric.commentTextViewHeight),
+      self.commentTextView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.commentTextViewBottomMargin),
+      self.commentTextView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.commentTextViewTrailingMargin),
+      self.commentTextView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.commentTextViewLeadingMargin),
 
-      self.registButton.trailingAnchor.constraint(equalTo: self.commentInputView.trailingAnchor, constant: -20),
-      self.registButton.bottomAnchor.constraint(equalTo: self.commentInputView.bottomAnchor, constant: -15),
-      self.registButton.widthAnchor.constraint(equalToConstant: 50),
-      self.registButton.heightAnchor.constraint(equalToConstant: 30)
+      self.registButton.trailingAnchor.constraint(equalTo: self.commentInputView.trailingAnchor, constant: Metric.registButtonTrailingMargin),
+      self.registButton.bottomAnchor.constraint(equalTo: self.commentInputView.bottomAnchor, constant: Metric.registButtonBottomMargin),
+      self.registButton.widthAnchor.constraint(equalToConstant: Metric.registButtonWidth),
+      self.registButton.heightAnchor.constraint(equalToConstant: Metric.registButtonHeight)
     ])
   }
 }
