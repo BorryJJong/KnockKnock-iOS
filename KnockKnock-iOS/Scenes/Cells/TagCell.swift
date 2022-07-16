@@ -11,7 +11,7 @@ class TagCell: BaseCollectionViewCell {
 
   // MARK: - UIs
 
-  let tagLabel = BasePaddingLabel().then {
+  private let tagLabel = BasePaddingLabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.textAlignment = .center
     $0.clipsToBounds = true
@@ -23,8 +23,25 @@ class TagCell: BaseCollectionViewCell {
 
   // MARK: - Bind
 
-  func bind(tag: String) {
-    self.tagLabel.text = tag
+  func bind(tag: ChallengeTitle) {
+    self.tagLabel.text = tag.title
+    self.setLabel(isSelected: tag.isSelected)
+  }
+
+  private func setLabel(isSelected: Bool) {
+    switch isSelected {
+    case true:
+      self.tagLabel.backgroundColor = .green50
+      self.tagLabel.textColor = .white
+      self.tagLabel.font = .systemFont(ofSize: 14, weight: .bold)
+      self.tagLabel.sizeToFit()
+
+    case false:
+      self.tagLabel.backgroundColor = .white
+      self.tagLabel.textColor = .green50
+      self.tagLabel.font = .systemFont(ofSize: 14, weight: .medium)
+      self.tagLabel.sizeToFit()
+    }
   }
 
   // MARK: - Configure
