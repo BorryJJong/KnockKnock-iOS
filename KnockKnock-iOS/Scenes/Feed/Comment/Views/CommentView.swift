@@ -116,8 +116,8 @@ class CommentView: UIView {
       self.commentTextView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.commentTextViewTrailingMargin),
       self.commentTextView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.commentTextViewLeadingMargin),
 
-      self.registButton.trailingAnchor.constraint(equalTo: self.commentInputView.trailingAnchor, constant: Metric.registButtonTrailingMargin),
-      self.registButton.bottomAnchor.constraint(equalTo: self.commentInputView.bottomAnchor, constant: Metric.registButtonBottomMargin),
+      self.registButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.registButtonTrailingMargin),
+      self.registButton.bottomAnchor.constraint(equalTo: self.commentTextView.bottomAnchor),
       self.registButton.widthAnchor.constraint(equalToConstant: Metric.registButtonWidth),
       self.registButton.heightAnchor.constraint(equalToConstant: Metric.registButtonHeight)
     ])
