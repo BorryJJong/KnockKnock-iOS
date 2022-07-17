@@ -36,6 +36,7 @@ final class CommentViewController: BaseViewController<CommentView>, CommentViewP
       $0.delegate = self
       $0.dataSource = self
       $0.registCell(type: CommentCell.self)
+      $0.collectionViewLayout = self.containerView.commentCollectionViewLayout()
     }
     
     self.containerView.commentTextView.do {

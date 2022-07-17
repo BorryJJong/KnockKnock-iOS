@@ -70,6 +70,13 @@ public extension KKDS.Image {
   static var ic_bottom_store_27_on: UIImage       { .load(name: "ic_bottom_store_27_on") }
 }
 
+
+// MARK: - Etc.
+
+public extension KKDS.Image {
+  static var etc_reply_8_gr: UIImage  { .load(name: "etc_reply_8_gr") }
+}
+
 extension UIImage {
   public static func load(name: String) -> UIImage {
     guard let image = UIImage(named: name, in: KKDS.bundle, compatibleWith: nil) else {

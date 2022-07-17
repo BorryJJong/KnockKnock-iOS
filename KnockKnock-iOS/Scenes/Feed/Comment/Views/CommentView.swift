@@ -122,4 +122,27 @@ class CommentView: UIView {
       self.registButton.heightAnchor.constraint(equalToConstant: Metric.registButtonHeight)
     ])
   }
+  
+  func commentCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+
+    // section 1
+//    let estimatedWidth: CGFloat = 50
+    let estimatedHeigth: CGFloat = 400
+
+    let tagItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                            heightDimension: .estimated(estimatedHeigth))
+    let tagItem = NSCollectionLayoutItem(layoutSize: tagItemSize)
+
+    let tagGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(estimatedHeigth))
+    let tagGroup = NSCollectionLayoutGroup.vertical(layoutSize: tagGroupSize, subitems: [tagItem])
+
+    let sectionOne = NSCollectionLayoutSection(group: tagGroup)
+    sectionOne.interGroupSpacing = 10
+    sectionOne.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0.0, bottom: 15, trailing: 0.0)
+//    sectionOne.orthogonalScrollingBehavior = .continuous
+
+    let layout = UICollectionViewCompositionalLayout(section: sectionOne)
+
+    return layout
+  }
 }
