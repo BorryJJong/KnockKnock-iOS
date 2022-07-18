@@ -93,6 +93,10 @@ final class CommentViewController: BaseViewController<CommentView>, CommentViewP
       }
     }
   }
+
+  @objc private func exitButtonDidTap(_ sender: UIButton) {
+    self.router?.dismissCommentView(view: self)
+  }
 }
 
 // MARK: - CollectionView Delegate, DataSource
@@ -110,6 +114,20 @@ extension CommentViewController: UICollectionViewDataSource {
   ) -> UICollectionViewCell {
     let cell = collectionView.dequeueCell(withType: CommentCell.self, for: indexPath)
     return cell
+  }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    viewForSupplementaryElementOfKind kind: String,
+    at indexPath: IndexPath
+  ) -> UICollectionReusableView {
+    let header = collectionView.dequeueReusableSupplementaryHeaderView(
+      withType: HeaderCollectionReusableView.self,
+      for: indexPath
+    )
+    
+    header.exitButton.addTarget(self, action: #selector(exitButtonDidTap(_:)), for: .touchUpInside)
+    return header
   }
 }
 

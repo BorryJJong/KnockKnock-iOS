@@ -9,6 +9,7 @@ import UIKit
 
 protocol CommentRouterProtocol {
   static func createCommentView() -> UIViewController
+  func dismissCommentView(view: CommentViewProtocol)
 }
 
 final class CommentRouter: CommentRouterProtocol {
@@ -27,5 +28,11 @@ final class CommentRouter: CommentRouterProtocol {
 //    presenter.view = view
 
     return view
+  }
+
+  func dismissCommentView(view: CommentViewProtocol) {
+    if let view = view as? UIViewController {
+      view.dismiss(animated: true)
+    }
   }
 }

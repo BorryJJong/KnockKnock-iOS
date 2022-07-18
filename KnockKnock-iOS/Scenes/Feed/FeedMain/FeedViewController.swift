@@ -112,7 +112,10 @@ extension FeedViewController: UICollectionViewDataSource {
     viewForSupplementaryElementOfKind kind: String,
     at indexPath: IndexPath
   ) -> UICollectionReusableView {
-    let footer = collectionView.dequeueReusableSupplementaryFooterView(for: indexPath)
+    let footer = collectionView.dequeueReusableSupplementaryFooterView(
+      withType: FooterCollectionReusableView.self,
+      for: indexPath
+    )
     return footer
   }
 }

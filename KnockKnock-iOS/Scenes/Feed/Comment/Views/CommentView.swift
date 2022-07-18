@@ -15,6 +15,10 @@ class CommentView: UIView {
   // MARK: - Constants
 
   private enum Metric {
+    static let commentCollectionViewLeadingMargin = 20.f
+    static let commentCollectionViewTrailingMargin = -20.f
+    static let commentCollectionViewBottomMargin = -70.f
+
     static let commentInputViewTopMargin = -20.f
 
     static let commentTextViewHeight = 34.f
@@ -40,7 +44,8 @@ class CommentView: UIView {
       $0.scrollDirection = .vertical
     }).then {
       $0.translatesAutoresizingMaskIntoConstraints = false
-      $0.backgroundColor = .yellow
+//      $0.backgroundColor = .yellow
+      $0.registHeaderView(type: HeaderCollectionReusableView.self)
     }
 
   let commentInputView = UIView().then {
@@ -102,9 +107,9 @@ class CommentView: UIView {
 
     NSLayoutConstraint.activate([
       self.commentCollectionView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-      self.commentCollectionView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-      self.commentCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
-      self.commentCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
+      self.commentCollectionView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.commentCollectionViewLeadingMargin),
+      self.commentCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.commentCollectionViewTrailingMargin),
+      self.commentCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.commentCollectionViewBottomMargin),
 
       self.commentInputView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
       self.commentInputView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
@@ -125,8 +130,9 @@ class CommentView: UIView {
   
   func commentCollectionViewLayout() -> UICollectionViewCompositionalLayout {
 
-    // section 1
-//    let estimatedWidth: CGFloat = 50
+    let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(50.0))
+    let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+
     let estimatedHeigth: CGFloat = 400
 
     let tagItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
@@ -136,12 +142,12 @@ class CommentView: UIView {
     let tagGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(estimatedHeigth))
     let tagGroup = NSCollectionLayoutGroup.vertical(layoutSize: tagGroupSize, subitems: [tagItem])
 
-    let sectionOne = NSCollectionLayoutSection(group: tagGroup)
-    sectionOne.interGroupSpacing = 10
-    sectionOne.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0.0, bottom: 15, trailing: 0.0)
-//    sectionOne.orthogonalScrollingBehavior = .continuous
+    let section = NSCollectionLayoutSection(group: tagGroup)
+    section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0.0, bottom: 15, trailing: 0.0)
+    section.interGroupSpacing = 15
+    section.boundarySupplementaryItems = [header]
 
-    let layout = UICollectionViewCompositionalLayout(section: sectionOne)
+    let layout = UICollectionViewCompositionalLayout(section: section)
 
     return layout
   }
