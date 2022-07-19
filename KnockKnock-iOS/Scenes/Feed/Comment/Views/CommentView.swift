@@ -15,6 +15,8 @@ class CommentView: UIView {
   // MARK: - Constants
 
   private enum Metric {
+    static let exitButtonTrailingMargin = -10.f
+
     static let commentCollectionViewLeadingMargin = 20.f
     static let commentCollectionViewTrailingMargin = -20.f
     static let commentCollectionViewBottomMargin = -70.f
@@ -38,14 +40,28 @@ class CommentView: UIView {
 
   // MARK: - UIs
 
+  let headerView = UIView().then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
+  }
+
+  let titleLabel = UILabel().then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.text = "댓글"
+    $0.font = .systemFont(ofSize: 17, weight: .bold)
+  }
+
+  let exitButton = UIButton().then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.setImage(KKDS.Image.ic_close_24_bk, for: .normal)
+  }
+
   let commentCollectionView = UICollectionView(
     frame: .zero,
     collectionViewLayout: UICollectionViewFlowLayout().then{
       $0.scrollDirection = .vertical
     }).then {
       $0.translatesAutoresizingMaskIntoConstraints = false
-//      $0.backgroundColor = .yellow
-      $0.registHeaderView(type: HeaderCollectionReusableView.self)
+//      $0.registHeaderView(type: HeaderCollectionReusableView.self)
     }
 
   let commentInputView = UIView().then {
@@ -102,11 +118,26 @@ class CommentView: UIView {
   // MARK: - Constraints
 
   func setupConstraints() {
-    [self.commentCollectionView, self.commentInputView].addSubViews(self)
-    [self.commentTextView, self.registButton].addSubViews(self)
+    [self.headerView].addSubViews(self)
+    [self.titleLabel, self.exitButton].addSubViews(self.headerView)
+    [self.commentCollectionView].addSubViews(self)
+    [self.commentInputView, self.commentTextView, self.registButton].addSubViews(self)
 
     NSLayoutConstraint.activate([
-      self.commentCollectionView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
+      self.headerView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
+      self.headerView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
+      self.headerView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+      self.headerView.heightAnchor.constraint(equalToConstant: 50),
+
+      self.exitButton.trailingAnchor.constraint(equalTo: self.headerView.trailingAnchor, constant: Metric.exitButtonTrailingMargin),
+      self.exitButton.centerYAnchor.constraint(equalTo: self.headerView.centerYAnchor),
+
+      self.titleLabel.centerYAnchor.constraint(equalTo: self.headerView.centerYAnchor),
+      self.titleLabel.centerXAnchor.constraint(equalTo: self.headerView.centerXAnchor)
+    ])
+
+    NSLayoutConstraint.activate([
+      self.commentCollectionView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor),
       self.commentCollectionView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.commentCollectionViewLeadingMargin),
       self.commentCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.commentCollectionViewTrailingMargin),
       self.commentCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.commentCollectionViewBottomMargin),
