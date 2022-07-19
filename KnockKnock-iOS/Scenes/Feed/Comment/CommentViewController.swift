@@ -35,10 +35,13 @@ final class CommentViewController: BaseViewController<CommentView>, CommentViewP
     self.containerView.commentCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
-      $0.registCell(type: CommentCell.self)
+//      $0.registCell(type: CommentCell.self)
+      $0.registCell(type: ReplyCell.self)
       $0.collectionViewLayout = self.containerView.commentCollectionViewLayout()
     }
-    
+    self.containerView.exitButton.do {
+      $0.addTarget(self, action: #selector(exitButtonDidTap(_:)), for: .touchUpInside)
+    }
     self.containerView.commentTextView.do {
       $0.delegate = self
     }
@@ -49,20 +52,20 @@ final class CommentViewController: BaseViewController<CommentView>, CommentViewP
   // MARK: - Keyboard Show & Hide
 
   private func addKeyboardNotification() {
-      NotificationCenter.default.addObserver(
-        self,
-        selector: #selector(keyboardWillShow(_:)),
-        name: UIResponder.keyboardWillShowNotification,
-        object: nil
-      )
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(keyboardWillShow(_:)),
+      name: UIResponder.keyboardWillShowNotification,
+      object: nil
+    )
 
-      NotificationCenter.default.addObserver(
-        self,
-        selector: #selector(keyboardWillHide(_:)),
-        name: UIResponder.keyboardWillHideNotification,
-        object: nil
-      )
-    }
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(keyboardWillHide(_:)),
+      name: UIResponder.keyboardWillHideNotification,
+      object: nil
+    )
+  }
 
   @objc private func keyboardWillShow(_ notification: Notification) {
     self.setCommentsTextViewConstant(notification: notification, isAppearing: true)
@@ -81,7 +84,7 @@ final class CommentViewController: BaseViewController<CommentView>, CommentViewP
 
       guard let animationDurationValue = userInfo?[
         UIResponder
-        .keyboardAnimationDurationUserInfoKey
+          .keyboardAnimationDurationUserInfoKey
       ] as? NSNumber else { return }
 
       let heightConstant = isAppearing ? (-keyboardHeight + 15) : -19
@@ -104,7 +107,12 @@ final class CommentViewController: BaseViewController<CommentView>, CommentViewP
 extension CommentViewController: UICollectionViewDataSource {
   func collectionView(
     _ collectionView: UICollectionView,
-    numberOfItemsInSection section: Int) -> Int {
+    numberOfItemsInSection section: Int
+  ) -> Int {
+    return 3
+  }
+
+  func numberOfSections(in collectionView: UICollectionView) -> Int {
     return 10
   }
 
@@ -112,7 +120,7 @@ extension CommentViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
-    let cell = collectionView.dequeueCell(withType: CommentCell.self, for: indexPath)
+    let cell = collectionView.dequeueCell(withType: ReplyCell.self, for: indexPath)
     return cell
   }
 
@@ -125,8 +133,8 @@ extension CommentViewController: UICollectionViewDataSource {
       withType: HeaderCollectionReusableView.self,
       for: indexPath
     )
-    
-    header.exitButton.addTarget(self, action: #selector(exitButtonDidTap(_:)), for: .touchUpInside)
+    header.backgroundColor = .blue
+
     return header
   }
 }

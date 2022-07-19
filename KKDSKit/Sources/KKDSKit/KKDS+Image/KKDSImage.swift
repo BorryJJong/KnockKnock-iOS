@@ -70,11 +70,11 @@ public extension KKDS.Image {
   static var ic_bottom_store_27_on: UIImage       { .load(name: "ic_bottom_store_27_on") }
 }
 
-
 // MARK: - Etc.
 
 public extension KKDS.Image {
-  static var etc_reply_8_gr: UIImage  { .load(name: "etc_reply_8_gr") }
+  static var etc_bar_8_gr: UIImage  { .load(name: "etc_bar_8_gr") }
+  static var etc_bar_30_gr: UIImage  { .load(name: "etc_bar_30_gr") }
 }
 
 extension UIImage {

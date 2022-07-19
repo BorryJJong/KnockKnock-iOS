@@ -61,7 +61,7 @@ class CommentView: UIView {
       $0.scrollDirection = .vertical
     }).then {
       $0.translatesAutoresizingMaskIntoConstraints = false
-//      $0.registHeaderView(type: HeaderCollectionReusableView.self)
+      $0.registHeaderView(type: HeaderCollectionReusableView.self)
     }
 
   let commentInputView = UIView().then {
@@ -126,7 +126,7 @@ class CommentView: UIView {
     NSLayoutConstraint.activate([
       self.headerView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
       self.headerView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-      self.headerView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+      self.headerView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -10),
       self.headerView.heightAnchor.constraint(equalToConstant: 50),
 
       self.exitButton.trailingAnchor.constraint(equalTo: self.headerView.trailingAnchor, constant: Metric.exitButtonTrailingMargin),
@@ -161,10 +161,10 @@ class CommentView: UIView {
   
   func commentCollectionViewLayout() -> UICollectionViewCompositionalLayout {
 
-    let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(50.0))
-    let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-
     let estimatedHeigth: CGFloat = 400
+
+    let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(estimatedHeigth))
+    let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
 
     let tagItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                             heightDimension: .estimated(estimatedHeigth))

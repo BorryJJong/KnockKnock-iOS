@@ -1,15 +1,15 @@
 //
-//  CommentCell.swift
+//  ReplyCell.swift
 //  KnockKnock-iOS
 //
-//  Created by Daye on 2022/07/13.
+//  Created by Daye on 2022/07/19.
 //
 
 import UIKit
 
 import KKDSKit
 
-class CommentCell: BaseCollectionViewCell {
+class ReplyCell: BaseCollectionViewCell {
 
   // MARK: - Properties
 
@@ -42,36 +42,14 @@ class CommentCell: BaseCollectionViewCell {
     $0.textColor = .gray70
   }
 
-  private let replyWriteButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.setTitleColor(.gray70, for: .normal)
-    $0.setImage(KKDS.Image.etc_bar_8_gr, for: .normal)
-    $0.setTitle("   댓글달기", for: .normal)
-    $0.semanticContentAttribute = .forceLeftToRight
-    $0.titleLabel?.font = .systemFont(ofSize: 12, weight: .semibold)
-  }
-
-  lazy var replyMoreButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.setImage(KKDS.Image.etc_bar_30_gr, for: .normal)
-    $0.setTitle("   답글 \(self.countReplies)개 보기", for: .normal)
-    $0.setTitle("답글 숨기기", for: .selected)
-    $0.setTitleColor(.gray70, for: .normal)
-    $0.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
-    $0.isHidden = self.countReplies == 0
-  }
-
-  @objc private func replyMoreButtonDidTap(_ sender: UIButton) {
-  }
-
   override func setupConstraints() {
-    [self.profileImageView, self.userIdLabel, self.commentLabel, self.writtenDateLabel, self.replyWriteButton, self.replyMoreButton].addSubViews(self.contentView)
+    [self.profileImageView, self.userIdLabel, self.commentLabel, self.writtenDateLabel].addSubViews(self.contentView)
 
     NSLayoutConstraint.activate([
       self.profileImageView.topAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.topAnchor),
-      self.profileImageView.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor),
-      self.profileImageView.widthAnchor.constraint(equalToConstant: 32),
-      self.profileImageView.heightAnchor.constraint(equalToConstant: 32),
+      self.profileImageView.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor, constant: 42),
+      self.profileImageView.widthAnchor.constraint(equalToConstant: 24),
+      self.profileImageView.heightAnchor.constraint(equalToConstant: 24),
 
       self.userIdLabel.topAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.topAnchor),
       self.userIdLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: 10),
@@ -81,16 +59,9 @@ class CommentCell: BaseCollectionViewCell {
       self.commentLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: 10),
       self.commentLabel.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor),
 
-      self.replyMoreButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
-      self.replyMoreButton.leadingAnchor.constraint(equalTo: self.commentLabel.leadingAnchor),
-      self.replyMoreButton.topAnchor.constraint(equalTo: self.writtenDateLabel.bottomAnchor, constant: 15),
-
-      self.writtenDateLabel.topAnchor.constraint(equalTo: self.commentLabel.bottomAnchor, constant: 3),
+      self.writtenDateLabel.bottomAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.bottomAnchor),
       self.writtenDateLabel.leadingAnchor.constraint(equalTo: self.commentLabel.leadingAnchor),
-
-      self.replyWriteButton.leadingAnchor.constraint(equalTo: self.writtenDateLabel.trailingAnchor, constant: 10),
-      self.replyWriteButton.topAnchor.constraint(equalTo: self.writtenDateLabel.topAnchor),
-      self.replyWriteButton.bottomAnchor.constraint(equalTo: self.writtenDateLabel.bottomAnchor)
+      self.writtenDateLabel.topAnchor.constraint(equalTo: self.commentLabel.bottomAnchor, constant: 15)
     ])
   }
 }
