@@ -110,13 +110,11 @@ final class CommentViewController: BaseViewController<CommentView> {
     self.comments[sender.tag].isOpen.toggle()
 
     if self.comments[sender.tag].isOpen {
-      sender.setTitle("   답글 숨기기", for: .normal)
       self.reply[sender.tag] = self.comments[sender.tag].replies
-
     } else {
-      sender.setTitle("   답글 \(self.comments[sender.tag].replies.count)개 보기", for: .normal)
       self.reply[sender.tag] = []
     }
+    
     UIView.performWithoutAnimation {
       self.containerView.commentCollectionView.reloadSections([sender.tag])
     }
@@ -172,9 +170,13 @@ extension CommentViewController: UICollectionViewDataSource {
       for: indexPath
     )
     header.bind(comment: self.comments[indexPath.section])
-    header.backgroundColor = .red
+    
     header.replyMoreButton.tag = indexPath.section
-    header.replyMoreButton.addTarget(self, action: #selector(replyMoreButtonDidTap(_:)), for: .touchUpInside)
+    header.replyMoreButton.addTarget(
+      self,
+      action: #selector(replyMoreButtonDidTap(_:)),
+      for: .touchUpInside
+    )
 
     return header
   }

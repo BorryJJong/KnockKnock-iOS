@@ -11,9 +11,23 @@ import KKDSKit
 
 class HeaderCollectionReusableView: UICollectionReusableView {
 
-  // MARK: - Properties
+  // MARK: Constants
 
-  let countReplies: Int = 3
+  private enum Metric {
+    static let profileImageViewWidth = 32.f
+    static let profileImageViewHeight = 32.f
+
+    static let userIdLabelLeadingMargin = 10.f
+
+    static let commentLabelTopMargin = 3.f
+    static let commentLabelLeadingMargin = 10.f
+
+    static let replyMoreButtonTopMargin = 15.f
+
+    static let writtenDateLabelTopMargin = 3.f
+
+    static let replyWriteButtonLeadingMargin = 10.f
+  }
 
   // MARK: - UIs
 
@@ -30,7 +44,7 @@ class HeaderCollectionReusableView: UICollectionReusableView {
 
   private let commentLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.text = "댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다"
+    $0.text = "댓글 내용입니다."
     $0.numberOfLines = 0
     $0.font = .systemFont(ofSize: 13, weight: .medium)
   }
@@ -54,11 +68,8 @@ class HeaderCollectionReusableView: UICollectionReusableView {
   lazy var replyMoreButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setImage(KKDS.Image.etc_bar_30_gr, for: .normal)
-    $0.setTitle("   답글 \(self.countReplies)개 보기", for: .normal)
-    $0.setTitle("답글 숨기기", for: .selected)
     $0.setTitleColor(.gray70, for: .normal)
     $0.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
-    $0.isHidden = self.countReplies == 0
   }
   
   // MARK: - Initailize
@@ -75,16 +86,29 @@ class HeaderCollectionReusableView: UICollectionReusableView {
   // MARK: - Bind
 
   func bind(comment: Comment) {
-    if comment.replies.count == 0 {
-      self.replyMoreButton.isHidden = true
-      self.writtenDateLabel.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor).isActive = true
-    } else {
+    self.setReplyMoreButton(count: comment.replies.count, isOpen: comment.isOpen)
     self.userIdLabel.text = comment.userID
     self.commentLabel.text = comment.contents
-    }
   }
 
   // MARK: - Configure
+
+  func setReplyMoreButton(count: Int, isOpen: Bool) {
+    if count == 0 {
+      self.replyMoreButton.isHidden = true
+      self.writtenDateLabel.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor).isActive = true
+    } else {
+      if !isOpen {
+        self.replyMoreButton.isHidden = false
+        self.replyMoreButton.setTitle("   답글 \(count)개 보기", for: .normal)
+        self.replyMoreButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor).isActive = true
+      } else {
+        self.replyMoreButton.isHidden = false
+        self.replyMoreButton.setTitle("   답글 숨기기", for: .normal)
+        self.replyMoreButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor).isActive = true
+      }
+    }
+  }
 
   func setupConstraints() {
     [self.profileImageView, self.userIdLabel, self.commentLabel, self.writtenDateLabel, self.replyWriteButton, self.replyMoreButton].addSubViews(self)
@@ -92,25 +116,24 @@ class HeaderCollectionReusableView: UICollectionReusableView {
     NSLayoutConstraint.activate([
       self.profileImageView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
       self.profileImageView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-      self.profileImageView.widthAnchor.constraint(equalToConstant: 32),
-      self.profileImageView.heightAnchor.constraint(equalToConstant: 32),
+      self.profileImageView.widthAnchor.constraint(equalToConstant: Metric.profileImageViewWidth),
+      self.profileImageView.heightAnchor.constraint(equalToConstant: Metric.profileImageViewHeight),
 
       self.userIdLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-      self.userIdLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: 10),
+      self.userIdLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: Metric.userIdLabelLeadingMargin),
       self.userIdLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
 
-      self.commentLabel.topAnchor.constraint(equalTo: self.userIdLabel.bottomAnchor, constant: 3),
-      self.commentLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: 10),
+      self.commentLabel.topAnchor.constraint(equalTo: self.userIdLabel.bottomAnchor, constant: Metric.commentLabelTopMargin),
+      self.commentLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: Metric.commentLabelLeadingMargin),
       self.commentLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
 
-      self.replyMoreButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
       self.replyMoreButton.leadingAnchor.constraint(equalTo: self.commentLabel.leadingAnchor),
-      self.replyMoreButton.topAnchor.constraint(equalTo: self.writtenDateLabel.bottomAnchor, constant: 15),
+      self.replyMoreButton.topAnchor.constraint(equalTo: self.writtenDateLabel.bottomAnchor, constant: Metric.replyMoreButtonTopMargin),
 
-      self.writtenDateLabel.topAnchor.constraint(equalTo: self.commentLabel.bottomAnchor, constant: 3),
+      self.writtenDateLabel.topAnchor.constraint(equalTo: self.commentLabel.bottomAnchor, constant: Metric.writtenDateLabelTopMargin),
       self.writtenDateLabel.leadingAnchor.constraint(equalTo: self.commentLabel.leadingAnchor),
 
-      self.replyWriteButton.leadingAnchor.constraint(equalTo: self.writtenDateLabel.trailingAnchor, constant: 10),
+      self.replyWriteButton.leadingAnchor.constraint(equalTo: self.writtenDateLabel.trailingAnchor, constant: Metric.replyWriteButtonLeadingMargin),
       self.replyWriteButton.topAnchor.constraint(equalTo: self.writtenDateLabel.topAnchor),
       self.replyWriteButton.bottomAnchor.constraint(equalTo: self.writtenDateLabel.bottomAnchor)
     ])
