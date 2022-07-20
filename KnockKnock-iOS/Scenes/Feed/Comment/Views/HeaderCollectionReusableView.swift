@@ -11,7 +11,7 @@ import KKDSKit
 
 class HeaderCollectionReusableView: UICollectionReusableView {
 
-  // MARK: Constants
+  // MARK: - Constants
 
   private enum Metric {
     static let profileImageViewWidth = 32.f

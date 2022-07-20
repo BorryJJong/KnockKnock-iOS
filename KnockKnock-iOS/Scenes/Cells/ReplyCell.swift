@@ -11,9 +11,20 @@ import KKDSKit
 
 class ReplyCell: BaseCollectionViewCell {
 
-  // MARK: - Properties
+  // MARK: Constants
 
-  let countReplies: Int = 3
+  private enum Metric {
+    static let profileImageViewLeadingMargin = 42.f
+    static let profileImageViewWidth = 24.f
+    static let profileImageViewHeight = 24.f
+
+    static let userIdLabelLeadingMargin = 10.f
+
+    static let commentLabelTopMargin = 3.f
+    static let commentLabelLeadingMargin = 10.f
+
+    static let writtenDateLabelTopMargin = 3.f
+  }
 
   // MARK: - UIs
 
@@ -30,7 +41,7 @@ class ReplyCell: BaseCollectionViewCell {
 
   private let commentLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.text = "댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다.댓글 내용입니다"
+    $0.text = "댓글 내용입니다."
     $0.numberOfLines = 0
     $0.font = .systemFont(ofSize: 13, weight: .medium)
   }
@@ -56,21 +67,21 @@ class ReplyCell: BaseCollectionViewCell {
 
     NSLayoutConstraint.activate([
       self.profileImageView.topAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.topAnchor),
-      self.profileImageView.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor, constant: 42),
-      self.profileImageView.widthAnchor.constraint(equalToConstant: 24),
-      self.profileImageView.heightAnchor.constraint(equalToConstant: 24),
+      self.profileImageView.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor, constant: Metric.profileImageViewLeadingMargin),
+      self.profileImageView.widthAnchor.constraint(equalToConstant: Metric.profileImageViewWidth),
+      self.profileImageView.heightAnchor.constraint(equalToConstant: Metric.profileImageViewHeight),
 
       self.userIdLabel.topAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.topAnchor),
-      self.userIdLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: 10),
+      self.userIdLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: Metric.userIdLabelLeadingMargin),
       self.userIdLabel.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor),
 
-      self.commentLabel.topAnchor.constraint(equalTo: self.userIdLabel.bottomAnchor, constant: 3),
-      self.commentLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: 10),
+      self.commentLabel.topAnchor.constraint(equalTo: self.userIdLabel.bottomAnchor, constant: Metric.commentLabelTopMargin),
+      self.commentLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: Metric.commentLabelLeadingMargin),
       self.commentLabel.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor),
 
       self.writtenDateLabel.bottomAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.bottomAnchor),
       self.writtenDateLabel.leadingAnchor.constraint(equalTo: self.commentLabel.leadingAnchor),
-      self.writtenDateLabel.topAnchor.constraint(equalTo: self.commentLabel.bottomAnchor, constant: 15)
+      self.writtenDateLabel.topAnchor.constraint(equalTo: self.commentLabel.bottomAnchor, constant: Metric.writtenDateLabelTopMargin)
     ])
   }
 }

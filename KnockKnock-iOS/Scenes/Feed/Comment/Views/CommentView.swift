@@ -15,6 +15,9 @@ class CommentView: UIView {
   // MARK: - Constants
 
   private enum Metric {
+    static let headerViewHeight = 50.f
+    static let headerViewTrailingMargin = -10.f
+
     static let exitButtonTrailingMargin = -10.f
 
     static let commentCollectionViewLeadingMargin = 20.f
@@ -36,15 +39,15 @@ class CommentView: UIView {
 
   // MARK: - Properties
 
-  let commentTextViewPlaceholder = "댓글을 입력하세요..."
+  private let commentTextViewPlaceholder = "댓글을 입력하세요..."
 
   // MARK: - UIs
 
-  let headerView = UIView().then {
+  private let headerView = UIView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
   }
 
-  let titleLabel = UILabel().then {
+  private let titleLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.text = "댓글"
     $0.font = .systemFont(ofSize: 17, weight: .bold)
@@ -126,17 +129,15 @@ class CommentView: UIView {
     NSLayoutConstraint.activate([
       self.headerView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
       self.headerView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-      self.headerView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-      self.headerView.heightAnchor.constraint(equalToConstant: 50),
+      self.headerView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.headerViewTrailingMargin),
+      self.headerView.heightAnchor.constraint(equalToConstant: Metric.headerViewHeight),
 
       self.exitButton.trailingAnchor.constraint(equalTo: self.headerView.trailingAnchor, constant: Metric.exitButtonTrailingMargin),
       self.exitButton.centerYAnchor.constraint(equalTo: self.headerView.centerYAnchor),
 
       self.titleLabel.centerYAnchor.constraint(equalTo: self.headerView.centerYAnchor),
-      self.titleLabel.centerXAnchor.constraint(equalTo: self.headerView.centerXAnchor)
-    ])
+      self.titleLabel.centerXAnchor.constraint(equalTo: self.headerView.centerXAnchor),
 
-    NSLayoutConstraint.activate([
       self.commentCollectionView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor),
       self.commentCollectionView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.commentCollectionViewLeadingMargin),
       self.commentCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.commentCollectionViewTrailingMargin),
@@ -160,7 +161,6 @@ class CommentView: UIView {
   }
   
   func commentCollectionViewLayout() -> UICollectionViewCompositionalLayout {
-
     let estimatedHeigth: CGFloat = 400
 
     let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(estimatedHeigth))
@@ -182,29 +182,4 @@ class CommentView: UIView {
 
     return layout
   }
-
-  func collapseCollectionViewLayout() -> UICollectionViewCompositionalLayout {
-
-    let estimatedHeigth: CGFloat = 400
-
-    let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(estimatedHeigth))
-    let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-
-    let tagItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                            heightDimension: .absolute(1))
-    let tagItem = NSCollectionLayoutItem(layoutSize: tagItemSize)
-
-    let tagGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(1))
-    let tagGroup = NSCollectionLayoutGroup.vertical(layoutSize: tagGroupSize, subitems: [tagItem])
-
-    let section = NSCollectionLayoutSection(group: tagGroup)
-    section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0.0, bottom: 15, trailing: 0.0)
-    section.interGroupSpacing = 15
-    section.boundarySupplementaryItems = [header]
-
-    let layout = UICollectionViewCompositionalLayout(section: section)
-
-    return layout
-  }
-
 }
