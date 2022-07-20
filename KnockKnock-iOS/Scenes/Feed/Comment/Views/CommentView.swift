@@ -166,11 +166,35 @@ class CommentView: UIView {
     let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(estimatedHeigth))
     let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
 
-    let tagItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+    let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                             heightDimension: .estimated(estimatedHeigth))
+    let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+    let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(estimatedHeigth))
+    let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+
+    let section = NSCollectionLayoutSection(group: group)
+    section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0.0, bottom: 15, trailing: 0.0)
+    section.interGroupSpacing = 15
+    section.boundarySupplementaryItems = [header]
+
+    let layout = UICollectionViewCompositionalLayout(section: section)
+
+    return layout
+  }
+
+  func collapseCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+
+    let estimatedHeigth: CGFloat = 400
+
+    let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(estimatedHeigth))
+    let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+
+    let tagItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                            heightDimension: .absolute(1))
     let tagItem = NSCollectionLayoutItem(layoutSize: tagItemSize)
 
-    let tagGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(estimatedHeigth))
+    let tagGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(1))
     let tagGroup = NSCollectionLayoutGroup.vertical(layoutSize: tagGroupSize, subitems: [tagItem])
 
     let section = NSCollectionLayoutSection(group: tagGroup)
@@ -182,4 +206,5 @@ class CommentView: UIView {
 
     return layout
   }
+
 }

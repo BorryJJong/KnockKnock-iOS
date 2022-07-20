@@ -42,6 +42,15 @@ class ReplyCell: BaseCollectionViewCell {
     $0.textColor = .gray70
   }
 
+  // MARK: - Bind
+
+  func bind(reply: Reply) {
+    self.userIdLabel.text = reply.userID
+    self.commentLabel.text = reply.contents
+  }
+
+  // MARK: - Configure
+
   override func setupConstraints() {
     [self.profileImageView, self.userIdLabel, self.commentLabel, self.writtenDateLabel].addSubViews(self.contentView)
 

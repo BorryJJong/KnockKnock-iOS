@@ -77,6 +77,7 @@
 		618FDAC927E836BA00C2823F /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDAC827E836BA00C2823F /* PhotoCell.swift */; };
 		618FDACF27E9642400C2823F /* UIButton+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDACE27E9642400C2823F /* UIButton+Ext.swift */; };
 		619DEE9C28868E7E00C80095 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619DEE9B28868E7E00C80095 /* Comment.swift */; };
+		619DEE9E2887B41B00C80095 /* CommentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619DEE9D2887B41B00C80095 /* CommentRepository.swift */; };
 		61A8DC47287E905B000512EC /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC46287E905B000512EC /* CommentView.swift */; };
 		61A8DC4A287E90BC000512EC /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC49287E90BC000512EC /* CommentViewController.swift */; };
 		61A8DC4C287E90E9000512EC /* CommentInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC4B287E90E9000512EC /* CommentInteractor.swift */; };
@@ -166,6 +167,7 @@
 		618FDAC827E836BA00C2823F /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		618FDACE27E9642400C2823F /* UIButton+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Ext.swift"; sourceTree = "<group>"; };
 		619DEE9B28868E7E00C80095 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
+		619DEE9D2887B41B00C80095 /* CommentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRepository.swift; sourceTree = "<group>"; };
 		61A8DC46287E905B000512EC /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		61A8DC49287E90BC000512EC /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
 		61A8DC4B287E90E9000512EC /* CommentInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInteractor.swift; sourceTree = "<group>"; };
@@ -217,6 +219,7 @@
 			children = (
 				20EAE2962814054F009242A1 /* ChellengeRepository.swift */,
 				6143296928644458008BDCC9 /* FeedRepository.swift */,
+				619DEE9D2887B41B00C80095 /* CommentRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -674,6 +677,7 @@
 				61E3088428768D71001394B6 /* UIStackView+Ext.swift in Sources */,
 				617F9D69282A6EB200C2BC9A /* ChallengeDetailCell.swift in Sources */,
 				201077F227D3A97A00280991 /* BaseViewController.swift in Sources */,
+				619DEE9E2887B41B00C80095 /* CommentRepository.swift in Sources */,
 				20EAE2972814054F009242A1 /* ChellengeRepository.swift in Sources */,
 				618FDAC527E80C6B00C2823F /* ShopSearchViewController.swift in Sources */,
 				61A8DC572881B173000512EC /* UIViewController+Ext.swift in Sources */,

@@ -60,9 +60,6 @@ class HeaderCollectionReusableView: UICollectionReusableView {
     $0.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
     $0.isHidden = self.countReplies == 0
   }
-
-  @objc private func replyMoreButtonDidTap(_ sender: UIButton) {
-  }
   
   // MARK: - Initailize
 
@@ -75,6 +72,20 @@ class HeaderCollectionReusableView: UICollectionReusableView {
     super.init(coder: aDecoder)
   }
 
+  // MARK: - Bind
+
+  func bind(comment: Comment) {
+    if comment.replies.count == 0 {
+      self.replyMoreButton.isHidden = true
+      self.writtenDateLabel.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor).isActive = true
+    } else {
+    self.userIdLabel.text = comment.userID
+    self.commentLabel.text = comment.contents
+    }
+  }
+
+  // MARK: - Configure
+
   func setupConstraints() {
     [self.profileImageView, self.userIdLabel, self.commentLabel, self.writtenDateLabel, self.replyWriteButton, self.replyMoreButton].addSubViews(self)
 
@@ -85,7 +96,7 @@ class HeaderCollectionReusableView: UICollectionReusableView {
       self.profileImageView.heightAnchor.constraint(equalToConstant: 32),
 
       self.userIdLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-      self.userIdLabel.leadingAnchor.constraint(equalTo: self.trailingAnchor, constant: 10),
+      self.userIdLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: 10),
       self.userIdLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
 
       self.commentLabel.topAnchor.constraint(equalTo: self.userIdLabel.bottomAnchor, constant: 3),

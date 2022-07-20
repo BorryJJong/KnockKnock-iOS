@@ -13,20 +13,26 @@ import KKDSKit
 protocol CommentViewProtocol {
   var router: CommentRouterProtocol? { get set }
   var interactor: CommentInteractorProtocol? { get set }
+
+  func getComments(comments: [Comment])
 }
 
-final class CommentViewController: BaseViewController<CommentView>, CommentViewProtocol {
+final class CommentViewController: BaseViewController<CommentView> {
 
   // MARK: - Properties
 
   var router: CommentRouterProtocol?
   var interactor: CommentInteractorProtocol?
 
+  var comments: [Comment] = []
+  var reply: [Int: [Reply]] = [ : ]
+
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setupConfigure()
+    self.interactor?.getComments()
   }
 
   // MARK: - Configure
@@ -35,7 +41,6 @@ final class CommentViewController: BaseViewController<CommentView>, CommentViewP
     self.containerView.commentCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
-//      $0.registCell(type: CommentCell.self)
       $0.registCell(type: ReplyCell.self)
       $0.collectionViewLayout = self.containerView.commentCollectionViewLayout()
     }
@@ -100,6 +105,34 @@ final class CommentViewController: BaseViewController<CommentView>, CommentViewP
   @objc private func exitButtonDidTap(_ sender: UIButton) {
     self.router?.dismissCommentView(view: self)
   }
+
+  @objc private func replyMoreButtonDidTap(_ sender: UIButton) {
+    self.comments[sender.tag].isOpen.toggle()
+
+    if self.comments[sender.tag].isOpen {
+      sender.setTitle("   답글 숨기기", for: .normal)
+      self.reply[sender.tag] = self.comments[sender.tag].replies
+
+    } else {
+      sender.setTitle("   답글 \(self.comments[sender.tag].replies.count)개 보기", for: .normal)
+      self.reply[sender.tag] = []
+    }
+    UIView.performWithoutAnimation {
+      self.containerView.commentCollectionView.reloadSections([sender.tag])
+    }
+  }
+}
+
+// MARK: - CommentViewProtocol
+
+extension CommentViewController: CommentViewProtocol {
+  func getComments(comments: [Comment]) {
+    self.comments = comments
+    for index in 0 ..< comments.count {
+      self.reply[index] = []
+    }
+    self.containerView.commentCollectionView.reloadData()
+  }
 }
 
 // MARK: - CollectionView Delegate, DataSource
@@ -109,11 +142,13 @@ extension CommentViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    return 3
+    guard let reply = self.reply[section] else { return 0 }
+
+    return reply.count
   }
 
   func numberOfSections(in collectionView: UICollectionView) -> Int {
-    return 10
+    return self.comments.count
   }
 
   func collectionView(
@@ -121,6 +156,9 @@ extension CommentViewController: UICollectionViewDataSource {
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
     let cell = collectionView.dequeueCell(withType: ReplyCell.self, for: indexPath)
+    if let reply = self.reply[indexPath.section] {
+      cell.bind(reply: reply[indexPath.item])
+    }
     return cell
   }
 
@@ -133,7 +171,10 @@ extension CommentViewController: UICollectionViewDataSource {
       withType: HeaderCollectionReusableView.self,
       for: indexPath
     )
-    header.backgroundColor = .blue
+    header.bind(comment: self.comments[indexPath.section])
+    header.backgroundColor = .red
+    header.replyMoreButton.tag = indexPath.section
+    header.replyMoreButton.addTarget(self, action: #selector(replyMoreButtonDidTap(_:)), for: .touchUpInside)
 
     return header
   }
