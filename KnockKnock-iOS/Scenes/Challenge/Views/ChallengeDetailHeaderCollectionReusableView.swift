@@ -143,7 +143,7 @@ class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableView {
 
   func bind() {
     let content = "제로웨이스트 운동 (Zero-waste) 는 말 그대로 쓰레기(Waste) 배출량이 0(zero)인, 다시 말하자면 '쓰레기 없는 생활'을 추구하는 운동입니다. 기존의 환경보호 운동과 차이점이라 하면 제로웨이스트는 일상생활 속에서 발생하는 쓰레기(플라스틱, 일회용 용기 등)를 최소화하는 데 초점을 맞춘 라이프스타일의 관점에서 자주 쓰는 용어입니다."
-    self.setSummeryLabel(content: content)
+    self.summaryLabel.setLineHeight(fontSize: 14, content: content)
     self.setParticipantsImageStackView(participants: [Participant(id: 2, nickname: "", image: nil), Participant(id: 2, nickname: "", image: nil), Participant(id: 2, nickname: "", image: nil)])
   }
 
@@ -167,21 +167,7 @@ class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableView {
       self.participantLabel.text = "\(count)명 참여중"
     }
   }
-
-  private func setSummeryLabel(content: String) {
-    let style = NSMutableParagraphStyle()
-    let fontSize: CGFloat = 14
-    let lineHeight = fontSize * 1.6
-    style.minimumLineHeight = lineHeight
-    style.maximumLineHeight = lineHeight
-
-    self.summaryLabel.attributedText = NSAttributedString(string: content,
-    attributes: [
-      .paragraphStyle: style,
-      .font: UIFont.systemFont(ofSize: 14, weight: .regular)
-    ])
-  }
-
+  
   private func setWayStackView(ways: [String]) {
     let wayLabelFont = UIFont.systemFont(ofSize: 12, weight: .regular)
     let bulletImage = KKDS.Image.ic_bullet_3_gr
