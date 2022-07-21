@@ -8,6 +8,7 @@
 import UIKit
 
 import Then
+import KKDSKit
 
 class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableView {
 
@@ -112,15 +113,17 @@ class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableView {
     $0.textColor = .green50
   }
 
-  let waysLabel = UILabel().then {
+  let waysStackView = UIStackView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.axis = .vertical
+    $0.distribution = .fill
+    $0.alignment = .leading
+    $0.spacing = 10
+    $0.layoutMargins = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
+    $0.isLayoutMarginsRelativeArrangement = true
     $0.backgroundColor = .gray20
     $0.clipsToBounds = true
     $0.layer.cornerRadius = 10
-    $0.font = .systemFont(ofSize: 12, weight: .regular)
-    $0.text = " - 카페에서 음료 주문시 빨대 사용하지 않기\n - 테이크아웃, 음료\n - 재사용 가능한 물병 가지고 다니기\n - 쇼핑할때 장바구니 챙기기\n - 유리 제품 사용하기"
-    $0.numberOfLines = 0
-    $0.textAlignment = .left
   }
 
   // MARK: - Initailize
@@ -128,17 +131,51 @@ class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableView {
   override init(frame: CGRect) {
     super.init(frame: frame)
     self.setupConstraints()
+    let ways = ["카페에서 음료 주문시 빨대 사용하지 않기",
+                "쇼핑할때 장바구니 챙기기",
+                "유리 제품 사용하기"]
+    self.setWayStackView(ways: ways)
   }
 
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
   }
 
-  // MARK: - Constraints
+  // MARK: - Configure
+
+  private func setWayStackView(ways: [String]) {
+    let wayLabelFontHeight = UIFont.systemFont(ofSize: 12).capHeight
+    let bulletImage = KKDS.Image.ic_bullet_3_gr
+
+    for way in ways {
+      let attributedString = NSMutableAttributedString(string: "")
+
+      let imageAttachment = NSTextAttachment()
+      imageAttachment.image = bulletImage
+      imageAttachment.bounds = CGRect(
+        x: 0,
+        y: (wayLabelFontHeight - bulletImage.size.height).rounded() / 2,
+        width: bulletImage.size.width,
+        height: bulletImage.size.height
+      )
+
+      attributedString.append(NSAttributedString(attachment: imageAttachment))
+      attributedString.append(NSAttributedString(string: "  \(way)"))
+
+      let waysLabel = UILabel().then {
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.font = .systemFont(ofSize: 12, weight: .regular)
+        $0.attributedText = attributedString
+        $0.numberOfLines = 0
+        $0.textAlignment = .left
+      }
+      self.waysStackView.addArrangedSubview(waysLabel)
+    }
+  }
 
   func setupConstraints() {
     [self.participantImageView, self.participantLabel].addSubViews(self.participantView)
-    [self.mainImageView, self.participantView, self.participantSeperatorView, self.titleLabel, self.summaryLabel, self.summarySeperatorView, self.wayHeaderLabel, self.waysLabel].addSubViews(self)
+    [self.mainImageView, self.participantView, self.participantSeperatorView, self.titleLabel, self.summaryLabel, self.summarySeperatorView, self.wayHeaderLabel, self.waysStackView].addSubViews(self)
 
     NSLayoutConstraint.activate([
       self.mainImageView.topAnchor.constraint(equalTo: self.topAnchor),
@@ -178,10 +215,10 @@ class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableView {
       self.wayHeaderLabel.topAnchor.constraint(equalTo: self.summarySeperatorView.bottomAnchor, constant: Metric.wayHeaderLabelTopMargin),
       self.wayHeaderLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.wayHeaderLabelLeadingMargin),
 
-      self.waysLabel.topAnchor.constraint(equalTo: self.wayHeaderLabel.bottomAnchor, constant: Metric.wayLabelTopMargin),
-      self.waysLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.wayLabelLeadingMargin),
-      self.waysLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.wayLabelTrailingMargin),
-      self.waysLabel.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor)
+      self.waysStackView.topAnchor.constraint(equalTo: self.wayHeaderLabel.bottomAnchor, constant: Metric.wayLabelTopMargin),
+      self.waysStackView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.wayLabelLeadingMargin),
+      self.waysStackView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.wayLabelTrailingMargin),
+      self.waysStackView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor)
     ])
   }
 }

@@ -11,6 +11,12 @@ public extension KKDS {
     enum Image { }
 }
 
+// MARK: - Icon size 3
+
+public extension KKDS.Image {
+  static var ic_bullet_3_gr: UIImage              { .load(name: "ic_bullet_3_gr")}
+}
+
 // MARK: - Icon size 20
 
 public extension KKDS.Image {
@@ -58,7 +64,7 @@ public extension KKDS.Image {
 // MARK: - Icon Size 90
 
 public extension KKDS.Image {
-  static var ic_background_gradient_90_wh : UIImage {.load(name: "ic_background_gradient_90_wh")}
+  static var ic_background_gradient_90_wh: UIImage {.load(name: "ic_background_gradient_90_wh")}
 }
 
 // MARK: - Tab
