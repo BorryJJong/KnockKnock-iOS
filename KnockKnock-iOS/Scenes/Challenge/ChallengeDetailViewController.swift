@@ -78,7 +78,7 @@ extension ChallengeDetailViewController: UICollectionViewDelegateFlowLayout, UIC
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
     let cell = collectionView.dequeueCell(withType: ChallengeDetailCell.self, for: indexPath)
-
+    cell.bind()
     return cell
   }
 
@@ -88,7 +88,7 @@ extension ChallengeDetailViewController: UICollectionViewDelegateFlowLayout, UIC
     at indexPath: IndexPath
   ) -> UICollectionReusableView {
     let header = collectionView.dequeueReusableSupplementaryHeaderView(withType: ChallengeDetailHeaderCollectionReusableView.self, for: indexPath)
-
+    header.bind()
     return header
   }
 }
