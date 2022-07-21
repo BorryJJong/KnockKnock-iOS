@@ -36,7 +36,7 @@ class ChallengeDetailView: UIView {
       $0.translatesAutoresizingMaskIntoConstraints = false
     }
 
-  let backgroundGradientImageView = UIImageView().then {
+  private let backgroundGradientImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.image = KKDS.Image.ic_background_gradient_90_wh
   }
