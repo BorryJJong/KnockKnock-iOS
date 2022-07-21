@@ -55,6 +55,12 @@ public extension KKDS.Image {
   static var ic_set_24_bk: UIImage                { .load(name: "ic_set_24_bk") }
 }
 
+// MARK: - Icon Size 90
+
+public extension KKDS.Image {
+  static var ic_background_gradient_90_wh : UIImage {.load(name: "ic_background_gradient_90_wh")}
+}
+
 // MARK: - Tab
 
 public extension KKDS.Image {

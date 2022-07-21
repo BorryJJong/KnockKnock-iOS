@@ -7,12 +7,12 @@
 
 import UIKit
 
-final class ChallengeDetailCell: BaseTableViewCell {
+final class ChallengeDetailCell: BaseCollectionViewCell {
 
   // MARK: - Constants
 
   private enum Metric {
-    static let titleLabelTopMargin = 20.f
+    static let titleLabelTopMargin = 40.f
     static let titleLabelHeight = 20.f
 
     static let exampleImageViewHeight = 200.f
@@ -55,18 +55,19 @@ final class ChallengeDetailCell: BaseTableViewCell {
 
     NSLayoutConstraint.activate([
       self.titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: Metric.titleLabelTopMargin),
-      self.titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+      self.titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
+      self.titleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
       self.titleLabel.heightAnchor.constraint(equalToConstant: Metric.titleLabelHeight),
 
       self.exampleImageView.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: Metric.exampleImageViewTopMargin),
-      self.exampleImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
-      self.exampleImageView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+      self.exampleImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
+      self.exampleImageView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
       self.exampleImageView.heightAnchor.constraint(equalToConstant: Metric.exampleImageViewHeight),
 
       self.contentsLabel.topAnchor.constraint(equalTo: self.exampleImageView.bottomAnchor, constant: Metric.contentsLabelTopMargin),
-      self.contentsLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
-      self.contentsLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
-      self.contentsLabel.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: Metric.contentsLabelBottomMargin),
+      self.contentsLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
+      self.contentsLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
+      self.contentsLabel.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: Metric.contentsLabelBottomMargin)
     ])
   }
 }

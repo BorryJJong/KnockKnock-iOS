@@ -26,4 +26,16 @@ extension UICollectionView {
   func dequeueReusableSupplementaryFooterView(for indexPath: IndexPath) -> UICollectionReusableView {
     return dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FooterCollectionReusableView.reusableIdentifier, for: indexPath) as! FooterCollectionReusableView
   }
+
+
+  // don't commit
+
+  func registHeaderView(type: UICollectionReusableView.Type, identifier: String? = nil) {
+      let cellID = identifier ?? type.reusableIdentifier
+      register(type, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: cellID)
+    }
+
+    func dequeueReusableSupplementaryHeaderView<Header: UICollectionReusableView>(withType type: Header.Type, for indexPath: IndexPath) -> Header {
+      return dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: type.reusableIdentifier, for: indexPath) as! Header
+    }
 }

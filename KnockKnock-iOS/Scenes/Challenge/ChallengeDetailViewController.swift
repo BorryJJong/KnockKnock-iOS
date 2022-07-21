@@ -19,11 +19,16 @@ class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
     self.tabBarController?.tabBar.isHidden = true
   }
 
+  // MARK: - Configure
+
   override func setupConfigure() {
     self.setNavigationItem()
-    self.containerView.contentsTableView.do {
+    self.containerView.challengeDetailCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
+      $0.registCell(type: ChallengeDetailCell.self)
+      $0.registHeaderView(type: ChallengeDetailHeaderCollectionReusableView.self)
+      $0.collectionViewLayout = self.containerView.challengeCollectionViewLayout()
     }
   }
 
@@ -58,17 +63,32 @@ class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
   }
 }
 
-extension ChallengeDetailViewController: UITableViewDataSource {
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueCell(withType: ChallengeDetailCell.self, for: indexPath)
+// MARK: - CollectionView delegate, datasource
+
+extension ChallengeDetailViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    numberOfItemsInSection section: Int
+  ) -> Int {
+    return 3
+  }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    cellForItemAt indexPath: IndexPath
+  ) -> UICollectionViewCell {
+    let cell = collectionView.dequeueCell(withType: ChallengeDetailCell.self, for: indexPath)
+
     return cell
   }
 
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 3
+  func collectionView(
+    _ collectionView: UICollectionView,
+    viewForSupplementaryElementOfKind kind: String,
+    at indexPath: IndexPath
+  ) -> UICollectionReusableView {
+    let header = collectionView.dequeueReusableSupplementaryHeaderView(withType: ChallengeDetailHeaderCollectionReusableView.self, for: indexPath)
+
+    return header
   }
-}
-
-extension ChallengeDetailViewController: UITableViewDelegate {
-
 }
