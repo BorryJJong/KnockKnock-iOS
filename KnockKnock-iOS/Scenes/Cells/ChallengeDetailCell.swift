@@ -51,7 +51,13 @@ final class ChallengeDetailCell: BaseCollectionViewCell {
 
   func bind(challengeContent: ChallengeContent) {
     self.titleLabel.text = challengeContent.title
-//    self.exampleImageView.image = challengeContent.image
+
+    self.exampleImageView.image = challengeContent.image
+      .flatMap { URL(string: $0) }
+      .flatMap { try? Data(contentsOf: $0) }
+      .flatMap { UIImage(data: $0) }
+    ?? UIImage(named: "challenge")
+
     self.contentsLabel.setLineHeight(fontSize: 14, content: challengeContent.content)
   }
 

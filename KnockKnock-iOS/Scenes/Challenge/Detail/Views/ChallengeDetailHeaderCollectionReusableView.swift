@@ -134,10 +134,6 @@ class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableView {
   override init(frame: CGRect) {
     super.init(frame: frame)
     self.setupConstraints()
-//    let ways = ["카페에서 음료 주문시 빨대 사용하지 않기",
-//                "쇼핑할때 장바구니 챙기기",
-//                "유리 제품 사용하기"]
-//    self.setWayStackView(ways: ways)
   }
 
   required init?(coder aDecoder: NSCoder) {
@@ -147,8 +143,17 @@ class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableView {
   // MARK: - Bind
 
   func bind(challengeDetail: ChallengeDetail) {
+    self.waysStackView.subviews.forEach {
+      $0.removeFromSuperview()
+    }
+    self.mainImageView.image = challengeDetail.image
+      .flatMap { URL(string: $0) }
+      .flatMap { try? Data(contentsOf: $0) }
+      .flatMap { UIImage(data: $0) }
+    ?? UIImage(named: "challenge")
+
     self.summaryLabel.setLineHeight(fontSize: 14, content: challengeDetail.summary)
-    self.setParticipantsImageStackView(participants: [Participant(id: 2, nickname: "", image: nil), Participant(id: 2, nickname: "", image: nil), Participant(id: 2, nickname: "", image: nil)])
+    self.setParticipantsImageStackView(participants: challengeDetail.participants)
     self.titleLabel.text = challengeDetail.title
     self.setWayStackView(ways: challengeDetail.practice)
   }
@@ -206,7 +211,7 @@ class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableView {
 
   func setupConstraints() {
     [self.participantImageStackView, self.participantLabel].addSubViews(self.participantView)
-    [self.mainImageView,  self.topGradientImageView, self.participantView, self.participantSeperatorView, self.titleLabel, self.summaryLabel, self.summarySeperatorView, self.wayHeaderLabel, self.waysStackView].addSubViews(self)
+    [self.mainImageView, self.topGradientImageView, self.participantView, self.participantSeperatorView, self.titleLabel, self.summaryLabel, self.summarySeperatorView, self.wayHeaderLabel, self.waysStackView].addSubViews(self)
 
     NSLayoutConstraint.activate([
       self.topGradientImageView.topAnchor.constraint(equalTo: self.topAnchor),

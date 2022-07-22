@@ -122,7 +122,10 @@ extension ChallengeDetailViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
-    let cell = collectionView.dequeueCell(withType: ChallengeDetailCell.self, for: indexPath)
+    let cell = collectionView.dequeueCell(
+      withType: ChallengeDetailCell.self,
+      for: indexPath
+    )
 
     if let challengeDetail = self.challengeDetail {
       cell.bind(challengeContent: challengeDetail.contents[indexPath.item])
@@ -136,7 +139,10 @@ extension ChallengeDetailViewController: UICollectionViewDataSource {
     viewForSupplementaryElementOfKind kind: String,
     at indexPath: IndexPath
   ) -> UICollectionReusableView {
-    let header = collectionView.dequeueReusableSupplementaryHeaderView(withType: ChallengeDetailHeaderCollectionReusableView.self, for: indexPath)
+    let header = collectionView.dequeueReusableSupplementaryHeaderView(
+      withType: ChallengeDetailHeaderCollectionReusableView.self,
+      for: indexPath
+    )
 
     if let challengeDetail = self.challengeDetail {
       header.bind(challengeDetail: challengeDetail)
