@@ -19,14 +19,10 @@ extension UIDevice {
 
     guard let rootView = rootView else { return 0 }
 
-    if #available(iOS 11.0, *) {
-      let topInset = rootView.safeAreaInsets.top
-      let bottomInset = rootView.safeAreaInsets.bottom
+    let topInset = rootView.safeAreaInsets.top
+    let bottomInset = rootView.safeAreaInsets.bottom
 
-      return rootView.bounds.height - topInset - bottomInset
+    return rootView.bounds.height - topInset - bottomInset
 
-    } else {
-      return rootView.bounds.height
-    }
   }
 }
