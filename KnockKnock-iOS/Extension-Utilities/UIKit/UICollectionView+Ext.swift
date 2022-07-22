@@ -27,7 +27,6 @@ extension UICollectionView {
     return dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FooterCollectionReusableView.reusableIdentifier, for: indexPath) as! FooterCollectionReusableView
   }
 
-
   // don't commit
 
   func registHeaderView(type: UICollectionReusableView.Type, identifier: String? = nil) {

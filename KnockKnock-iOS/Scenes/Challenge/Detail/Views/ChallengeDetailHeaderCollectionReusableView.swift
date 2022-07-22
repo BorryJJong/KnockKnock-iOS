@@ -134,10 +134,10 @@ class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableView {
   override init(frame: CGRect) {
     super.init(frame: frame)
     self.setupConstraints()
-    let ways = ["카페에서 음료 주문시 빨대 사용하지 않기",
-                "쇼핑할때 장바구니 챙기기",
-                "유리 제품 사용하기"]
-    self.setWayStackView(ways: ways)
+//    let ways = ["카페에서 음료 주문시 빨대 사용하지 않기",
+//                "쇼핑할때 장바구니 챙기기",
+//                "유리 제품 사용하기"]
+//    self.setWayStackView(ways: ways)
   }
 
   required init?(coder aDecoder: NSCoder) {
@@ -146,10 +146,11 @@ class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableView {
 
   // MARK: - Bind
 
-  func bind() {
-    let content = "제로웨이스트 운동 (Zero-waste) 는 말 그대로 쓰레기(Waste) 배출량이 0(zero)인, 다시 말하자면 '쓰레기 없는 생활'을 추구하는 운동입니다. 기존의 환경보호 운동과 차이점이라 하면 제로웨이스트는 일상생활 속에서 발생하는 쓰레기(플라스틱, 일회용 용기 등)를 최소화하는 데 초점을 맞춘 라이프스타일의 관점에서 자주 쓰는 용어입니다."
-    self.summaryLabel.setLineHeight(fontSize: 14, content: content)
+  func bind(challengeDetail: ChallengeDetail) {
+    self.summaryLabel.setLineHeight(fontSize: 14, content: challengeDetail.summary)
     self.setParticipantsImageStackView(participants: [Participant(id: 2, nickname: "", image: nil), Participant(id: 2, nickname: "", image: nil), Participant(id: 2, nickname: "", image: nil)])
+    self.titleLabel.text = challengeDetail.title
+    self.setWayStackView(ways: challengeDetail.practice)
   }
 
   // MARK: - Configure

@@ -9,9 +9,21 @@ import UIKit
 
 import KKDSKit
 
+protocol ChallengeDetailViewProtocol {
+  var interactor: ChallengeDetailInteractorProtocol? { get set }
+  var router: ChallengeDetailRouterProtocol? { get set }
+
+  func getChallengeDetail(challengeDetail: ChallengeDetail)
+}
+
 class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
 
   // MARK: - Properties
+
+  var interactor: ChallengeDetailInteractorProtocol?
+  var router: ChallengeDetailRouterProtocol?
+
+  var challengeDetail: ChallengeDetail?
 
   lazy var backBarButtonItem = UIBarButtonItem(
     image: KKDS.Image.ic_back_24_wh,
@@ -38,6 +50,7 @@ class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    self.interactor?.getChallengeDetail()
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -87,9 +100,17 @@ class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
   }
 }
 
+// MARK: - Bind
+
+extension ChallengeDetailViewController: ChallengeDetailViewProtocol {
+  func getChallengeDetail(challengeDetail: ChallengeDetail) {
+    self.challengeDetail = challengeDetail
+  }
+}
+
 // MARK: - CollectionView delegate, datasource
 
-extension ChallengeDetailViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+extension ChallengeDetailViewController: UICollectionViewDataSource {
   func collectionView(
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
@@ -102,7 +123,11 @@ extension ChallengeDetailViewController: UICollectionViewDelegateFlowLayout, UIC
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
     let cell = collectionView.dequeueCell(withType: ChallengeDetailCell.self, for: indexPath)
-    cell.bind()
+
+    if let challengeDetail = self.challengeDetail {
+      cell.bind(challengeContent: challengeDetail.contents[indexPath.item])
+    }
+
     return cell
   }
 
@@ -112,10 +137,16 @@ extension ChallengeDetailViewController: UICollectionViewDelegateFlowLayout, UIC
     at indexPath: IndexPath
   ) -> UICollectionReusableView {
     let header = collectionView.dequeueReusableSupplementaryHeaderView(withType: ChallengeDetailHeaderCollectionReusableView.self, for: indexPath)
-    header.bind()
+
+    if let challengeDetail = self.challengeDetail {
+      header.bind(challengeDetail: challengeDetail)
+    }
+
     return header
   }
+}
 
+extension ChallengeDetailViewController: UICollectionViewDelegateFlowLayout {
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     if scrollView.contentOffset.y < 0 {
       self.navigationController?.navigationBar.tintColor = .white
