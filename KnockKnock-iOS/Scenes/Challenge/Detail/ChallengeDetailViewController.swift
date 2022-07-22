@@ -90,6 +90,7 @@ class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
     self.navigationController?.navigationBar.standardAppearance = scrollAppearance
     self.navigationController?.navigationBar.scrollEdgeAppearance = topAppearance
     self.navigationController?.navigationBar.isTranslucent = true
+    self.navigationController?.navigationBar.tintColor = .white
 
     self.navigationItem.leftBarButtonItem = self.backBarButtonItem
     self.navigationItem.rightBarButtonItems = [self.shareBarButtonItem, self.homeBarButtonItem]
@@ -154,7 +155,7 @@ extension ChallengeDetailViewController: UICollectionViewDataSource {
 
 extension ChallengeDetailViewController: UICollectionViewDelegateFlowLayout {
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    if scrollView.contentOffset.y < 0 {
+    if scrollView.contentOffset.y <= 0 {
       self.navigationController?.navigationBar.tintColor = .white
     } else {
       self.navigationController?.navigationBar.tintColor = .black

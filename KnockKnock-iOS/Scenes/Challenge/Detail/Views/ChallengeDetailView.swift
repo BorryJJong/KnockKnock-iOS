@@ -34,6 +34,7 @@ class ChallengeDetailView: UIView {
       $0.scrollDirection = .vertical
     }).then {
       $0.translatesAutoresizingMaskIntoConstraints = false
+      $0.contentInsetAdjustmentBehavior = .never
     }
 
   private let bottomGradientImageView = UIImageView().then {
@@ -65,8 +66,7 @@ class ChallengeDetailView: UIView {
     [self.challengeDetailCollectionView, self.bottomGradientImageView, self.participateButton].addSubViews(self)
 
     NSLayoutConstraint.activate([
-      // 27 branch merge 이후에 top constant 값 변경 필요(UIDevice extension)
-      self.challengeDetailCollectionView.topAnchor.constraint(equalTo: self.topAnchor, constant: -100),
+      self.challengeDetailCollectionView.topAnchor.constraint(equalTo: self.topAnchor),
       self.challengeDetailCollectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
       self.challengeDetailCollectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
       self.challengeDetailCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.challengDetailCollectionViewBottomMargin),

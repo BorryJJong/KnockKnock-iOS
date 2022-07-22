@@ -13,12 +13,18 @@ final class ChallengeDetailCell: BaseCollectionViewCell {
 
   private enum Metric {
     static let titleLabelTopMargin = 40.f
+    static let titleLabelLeadingMargin = 20.f
+    static let titleLabelTrailingMargin = -20.f
     static let titleLabelHeight = 20.f
 
     static let exampleImageViewHeight = 200.f
+    static let exampleImageViewLeadingMargin = 20.f
+    static let exampleImageViewTrailingMargin = -20.f
     static let exampleImageViewTopMargin = 15.f
 
     static let contentsLabelTopMargin = 15.f
+    static let contentsLabelLeadingMargin = 20.f
+    static let contentsLabelTrailingMargin = -20.f
     static let contentsLabelBottomMargin = -20.f
   }
 
@@ -68,18 +74,18 @@ final class ChallengeDetailCell: BaseCollectionViewCell {
 
     NSLayoutConstraint.activate([
       self.titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: Metric.titleLabelTopMargin),
-      self.titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
-      self.titleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
+      self.titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: Metric.titleLabelLeadingMargin),
+      self.titleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: Metric.titleLabelTrailingMargin),
       self.titleLabel.heightAnchor.constraint(equalToConstant: Metric.titleLabelHeight),
 
       self.exampleImageView.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: Metric.exampleImageViewTopMargin),
-      self.exampleImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
-      self.exampleImageView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
+      self.exampleImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: Metric.exampleImageViewLeadingMargin),
+      self.exampleImageView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: Metric.exampleImageViewTrailingMargin),
       self.exampleImageView.heightAnchor.constraint(equalToConstant: Metric.exampleImageViewHeight),
 
       self.contentsLabel.topAnchor.constraint(equalTo: self.exampleImageView.bottomAnchor, constant: Metric.contentsLabelTopMargin),
-      self.contentsLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
-      self.contentsLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
+      self.contentsLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: Metric.contentsLabelLeadingMargin),
+      self.contentsLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: Metric.contentsLabelTrailingMargin),
       self.contentsLabel.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: Metric.contentsLabelBottomMargin)
     ])
   }
