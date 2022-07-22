@@ -96,16 +96,15 @@ class HeaderCollectionReusableView: UICollectionReusableView {
   func setReplyMoreButton(count: Int, isOpen: Bool) {
     if count == 0 {
       self.replyMoreButton.isHidden = true
-      self.writtenDateLabel.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor).isActive = true
+      self.replyMoreButton.bottomConstraint?.constant = 20
     } else {
+      self.replyMoreButton.bottomConstraint?.constant = 0
       if !isOpen {
         self.replyMoreButton.isHidden = false
         self.replyMoreButton.setTitle("   답글 \(count)개 보기", for: .normal)
-        self.replyMoreButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor).isActive = true
       } else {
         self.replyMoreButton.isHidden = false
         self.replyMoreButton.setTitle("   답글 숨기기", for: .normal)
-        self.replyMoreButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor).isActive = true
       }
     }
   }
@@ -129,6 +128,7 @@ class HeaderCollectionReusableView: UICollectionReusableView {
 
       self.replyMoreButton.leadingAnchor.constraint(equalTo: self.commentLabel.leadingAnchor),
       self.replyMoreButton.topAnchor.constraint(equalTo: self.writtenDateLabel.bottomAnchor, constant: Metric.replyMoreButtonTopMargin),
+      self.replyMoreButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
 
       self.writtenDateLabel.topAnchor.constraint(equalTo: self.commentLabel.bottomAnchor, constant: Metric.writtenDateLabelTopMargin),
       self.writtenDateLabel.leadingAnchor.constraint(equalTo: self.commentLabel.leadingAnchor),

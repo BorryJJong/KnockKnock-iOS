@@ -23,8 +23,3 @@ struct Reply: Decodable {
   let contents: String
   let date: String
 }
-
-enum ListItem: Decodable {
-  case comment(Comment)
-  case reply(Reply)
-}
