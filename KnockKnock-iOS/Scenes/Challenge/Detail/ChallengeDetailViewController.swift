@@ -16,7 +16,7 @@ protocol ChallengeDetailViewProtocol {
   func getChallengeDetail(challengeDetail: ChallengeDetail)
 }
 
-class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
+final class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
 
   // MARK: - Properties
 
@@ -70,7 +70,7 @@ class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
     }
   }
 
-  func setNavigationItem() {
+  private func setNavigationItem() {
     let topAppearance = UINavigationBarAppearance().then {
       $0.configureWithOpaqueBackground()
       $0.backgroundColor = .clear

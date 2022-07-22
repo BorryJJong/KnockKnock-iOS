@@ -10,7 +10,7 @@ import UIKit
 import Then
 import KKDSKit
 
-class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableView {
+final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableView {
 
   // MARK: - Constants
 
