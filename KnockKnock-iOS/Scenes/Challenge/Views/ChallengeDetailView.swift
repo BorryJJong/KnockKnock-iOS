@@ -36,9 +36,9 @@ class ChallengeDetailView: UIView {
       $0.translatesAutoresizingMaskIntoConstraints = false
     }
 
-  private let backgroundGradientImageView = UIImageView().then {
+  private let bottomGradientImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.image = KKDS.Image.ic_background_gradient_90_wh
+    $0.image = KKDS.Image.ic_bg_gradient_wh
   }
 
   let participateButton = UIButton().then {
@@ -62,7 +62,7 @@ class ChallengeDetailView: UIView {
   }
 
   private func setupConstraints() {
-    [self.challengeDetailCollectionView, self.backgroundGradientImageView, self.participateButton].addSubViews(self)
+    [self.challengeDetailCollectionView, self.bottomGradientImageView, self.participateButton].addSubViews(self)
 
     NSLayoutConstraint.activate([
       // 27 branch merge 이후에 top constant 값 변경 필요(UIDevice extension)
@@ -71,10 +71,10 @@ class ChallengeDetailView: UIView {
       self.challengeDetailCollectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
       self.challengeDetailCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.challengDetailCollectionViewBottomMargin),
 
-      self.backgroundGradientImageView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
-      self.backgroundGradientImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-      self.backgroundGradientImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-      self.backgroundGradientImageView.topAnchor.constraint(equalTo: self.participateButton.topAnchor, constant: Metric.backgroundGradientImageViewTopMargin),
+      self.bottomGradientImageView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
+      self.bottomGradientImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+      self.bottomGradientImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+      self.bottomGradientImageView.topAnchor.constraint(equalTo: self.participateButton.topAnchor, constant: Metric.backgroundGradientImageViewTopMargin),
 
       self.participateButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.participateButtonBottomMargin),
       self.participateButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.participateButtonLeadingMargin),

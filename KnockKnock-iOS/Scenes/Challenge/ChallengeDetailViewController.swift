@@ -7,7 +7,32 @@
 
 import UIKit
 
+import KKDSKit
+
 class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
+
+  // MARK: - Properties
+
+  lazy var backBarButtonItem = UIBarButtonItem(
+    image: KKDS.Image.ic_back_24_wh,
+    style: .plain,
+    target: self,
+    action: #selector(tapBackBarButton(_:))
+  )
+
+  lazy var shareBarButtonItem = UIBarButtonItem(
+    image: KKDS.Image.ic_gnb_share_24_wh,
+    style: .plain,
+    target: self,
+    action: nil
+  )
+
+  lazy var homeBarButtonItem = UIBarButtonItem(
+    image: KKDS.Image.ic_gnb_home_24_wh,
+    style: .plain,
+    target: self,
+    action: nil
+  )
 
   // MARK: - Life cycle
 
@@ -33,29 +58,28 @@ class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
   }
 
   func setNavigationItem() {
-    let backBarButtonItem = UIBarButtonItem(
-      image: UIImage(named: "ic_back_24_wh"),
-      style: .plain,
-      target: self,
-      action: #selector(tapBackBarButton(_:)))
-    let shareBarButtonItem = UIBarButtonItem(
-      image: UIImage(named: "ic_gnb_share_24_wh"),
-      style: .plain,
-      target: self,
-      action: nil)
-    let homeBarBUttonItem = UIBarButtonItem(
-      image: UIImage(named: "ic_gnb_home_24_wh"),
-      style: .plain,
-      target: self,
-      action: nil)
+    let topAppearance = UINavigationBarAppearance().then {
+      $0.configureWithOpaqueBackground()
+      $0.backgroundColor = .clear
+      $0.shadowImage = UIImage()
+      $0.shadowColor = .clear
+    }
 
-    self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-    self.navigationController?.navigationBar.shadowImage = UIImage()
+    let scrollAppearance = UINavigationBarAppearance().then {
+      $0.configureWithOpaqueBackground()
+      $0.backgroundColor = .white
+      $0.shadowImage = UIImage()
+      $0.shadowColor = .clear
+    }
+
+    self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+
+    self.navigationController?.navigationBar.standardAppearance = scrollAppearance
+    self.navigationController?.navigationBar.scrollEdgeAppearance = topAppearance
     self.navigationController?.navigationBar.isTranslucent = true
-    self.navigationController?.view.backgroundColor = UIColor.clear
 
-    self.navigationItem.leftBarButtonItem = backBarButtonItem
-    self.navigationItem.rightBarButtonItems = [shareBarButtonItem, homeBarBUttonItem]
+    self.navigationItem.leftBarButtonItem = self.backBarButtonItem
+    self.navigationItem.rightBarButtonItems = [self.shareBarButtonItem, self.homeBarButtonItem]
   }
 
   @objc func tapBackBarButton(_ sender: UIBarButtonItem) {
@@ -91,4 +115,15 @@ extension ChallengeDetailViewController: UICollectionViewDelegateFlowLayout, UIC
     header.bind()
     return header
   }
+
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    if scrollView.contentOffset.y < 0 {
+      self.navigationController?.navigationBar.tintColor = .white
+    } else {
+      self.navigationController?.navigationBar.tintColor = .black
+    }
+  }
+}
+
+extension ChallengeDetailViewController: UIGestureRecognizerDelegate {
 }

@@ -51,6 +51,8 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
       action: nil)
 
     self.navigationItem.title = "챌린지"
+//    self.navigationController?.navigationBar.isTranslucent = false
+    self.navigationController?.navigationBar.barTintColor = .white
     self.navigationItem.rightBarButtonItem = searchBarButtonItem
   }
 

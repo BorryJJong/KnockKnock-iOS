@@ -61,10 +61,11 @@ public extension KKDS.Image {
   static var ic_set_24_bk: UIImage                { .load(name: "ic_set_24_bk") }
 }
 
-// MARK: - Icon Size 90
+// MARK: - background
 
 public extension KKDS.Image {
-  static var ic_background_gradient_90_wh: UIImage {.load(name: "ic_background_gradient_90_wh")}
+  static var ic_bg_gradient_wh: UIImage           {.load(name: "ic_bg_gradient_wh")}
+  static var ic_bg_gradient_bk: UIImage           {.load(name: "ic_bg_gradient_bk")}
 }
 
 // MARK: - Tab

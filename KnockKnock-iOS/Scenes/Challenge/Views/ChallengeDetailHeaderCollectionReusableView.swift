@@ -54,6 +54,11 @@ class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableView {
 
   // MARK: - UIs
 
+  private let topGradientImageView = UIImageView().then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.image = KKDS.Image.ic_bg_gradient_bk
+  }
+
   private let mainImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.image = UIImage(named: "challenge")
@@ -200,9 +205,13 @@ class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableView {
 
   func setupConstraints() {
     [self.participantImageStackView, self.participantLabel].addSubViews(self.participantView)
-    [self.mainImageView, self.participantView, self.participantSeperatorView, self.titleLabel, self.summaryLabel, self.summarySeperatorView, self.wayHeaderLabel, self.waysStackView].addSubViews(self)
+    [self.mainImageView,  self.topGradientImageView, self.participantView, self.participantSeperatorView, self.titleLabel, self.summaryLabel, self.summarySeperatorView, self.wayHeaderLabel, self.waysStackView].addSubViews(self)
 
     NSLayoutConstraint.activate([
+      self.topGradientImageView.topAnchor.constraint(equalTo: self.topAnchor),
+      self.topGradientImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+      self.topGradientImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+      
       self.mainImageView.topAnchor.constraint(equalTo: self.topAnchor),
       self.mainImageView.widthAnchor.constraint(equalTo: self.widthAnchor),
       self.mainImageView.heightAnchor.constraint(equalTo: self.widthAnchor),
