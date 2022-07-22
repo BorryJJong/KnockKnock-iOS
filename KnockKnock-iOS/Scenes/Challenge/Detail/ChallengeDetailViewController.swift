@@ -116,7 +116,9 @@ extension ChallengeDetailViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    return 3
+    guard let contents = self.challengeDetail?.contents else { return 0 }
+    
+    return contents.count
   }
 
   func collectionView(

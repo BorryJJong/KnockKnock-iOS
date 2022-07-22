@@ -130,8 +130,6 @@ extension ChallengeViewController: UICollectionViewDelegateFlowLayout {
 
 extension ChallengeViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//    let view = ChallengeDetailViewController()
-//    view.hidesBottomBarWhenPushed = true
     self.router?.navigateToChallengeDetail(source: self)
   }
 }
