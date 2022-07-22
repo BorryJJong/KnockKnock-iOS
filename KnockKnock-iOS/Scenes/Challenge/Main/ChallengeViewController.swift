@@ -7,6 +7,8 @@
 
 import UIKit
 
+import KKDSKit
+
 protocol ChallengeViewProtocol: AnyObject {
   var interactor: ChallengeInteractorProtocol? { get set }
   var router: ChallengeRouterProtocol? { get set }
@@ -33,6 +35,7 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
 
   override func viewWillAppear(_ animated: Bool) {
     self.tabBarController?.tabBar.isHidden = false
+    self.setNavigationItem()
   }
 
   override func setupConfigure() {
@@ -49,12 +52,15 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
 
   func setNavigationItem() {
     let searchBarButtonItem = UIBarButtonItem(
-      barButtonSystemItem: .search,
+      image: KKDS.Image.ic_search_24_bk,
+      style: .plain,
       target: self,
-      action: nil)
+      action: nil
+    )
 
     self.navigationItem.title = "챌린지"
     self.navigationController?.navigationBar.barTintColor = .white
+    self.navigationController?.navigationBar.tintColor = .black
     self.navigationItem.rightBarButtonItem = searchBarButtonItem
   }
 
