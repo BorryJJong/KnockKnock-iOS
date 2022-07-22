@@ -9,7 +9,8 @@ import UIKit
 
 protocol ChallengeViewProtocol: AnyObject {
   var interactor: ChallengeInteractorProtocol? { get set }
-  
+  var router: ChallengeRouterProtocol? { get set }
+
   func fetchChallenges(challenges: [Challenges])
 }
 
@@ -18,6 +19,8 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
   // MARK: Properties
   
   var interactor: ChallengeInteractorProtocol?
+  var router: ChallengeRouterProtocol?
+
   var challenges: [Challenges] = []
   
   // MARK: - Life cycle
@@ -121,8 +124,8 @@ extension ChallengeViewController: UICollectionViewDelegateFlowLayout {
 
 extension ChallengeViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    let view = ChallengeDetailViewController()
-    view.hidesBottomBarWhenPushed = true
-    self.navigationController?.pushViewController(view, animated: true)
+//    let view = ChallengeDetailViewController()
+//    view.hidesBottomBarWhenPushed = true
+    self.router?.navigateToChallengeDetail(source: self)
   }
 }
