@@ -11,6 +11,7 @@ import Then
 
 protocol FeedListViewProtocol: AnyObject {
   var interactor: FeedListInteractorProtocol? { get set }
+  var router: FeedListRouterProtocol? { get set }
 
   func fetchFeedList(feed: [Feed])
 }
@@ -28,13 +29,18 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   // MARK: - Properties
 
   var interactor: FeedListInteractorProtocol?
+  var router: FeedListRouterProtocol?
+  
   var feed: [Feed] = []
+
+  lazy var tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapScrollViewSection(_:)))
 
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
     self.interactor?.fetchFeed()
+    self.containerView.addGestureRecognizer(tapGesture)
   }
 
   override func setupConfigure() {
@@ -42,6 +48,24 @@ final class FeedListViewController: BaseViewController<FeedListView> {
       $0.delegate = self
       $0.dataSource = self
       $0.registCell(type: FeedListCell.self)
+    }
+  }
+
+  // MARK: - didSelectItem
+
+  /// ScrollView 영역을 포함하여 didSelectItem 호출하기 위한 메소드
+  @objc func tapScrollViewSection(_ sender: UITapGestureRecognizer) {
+    let collectionView = self.containerView.feedListCollectionView
+
+    let touchLocation: CGPoint = sender.location(ofTouch: 0, in: collectionView)
+    let indexPath = collectionView.indexPathForItem(at: touchLocation)
+
+    if let indexPath = indexPath {
+      if let cell = collectionView.cellForItem(at: indexPath) {
+        if !cell.isSelected {
+          self.router?.navigateToFeedDetail(source: self)
+        }
+      }
     }
   }
 }
