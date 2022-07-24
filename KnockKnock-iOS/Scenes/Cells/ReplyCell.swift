@@ -9,7 +9,7 @@ import UIKit
 
 import KKDSKit
 
-class ReplyCell: BaseCollectionViewCell {
+final class ReplyCell: BaseCollectionViewCell {
 
   // MARK: Constants
 
