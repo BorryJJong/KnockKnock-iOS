@@ -11,7 +11,7 @@ protocol FeedPresenterProtocol {
   var view: FeedViewProtocol? { get set }
   
   func presentFetchFeed(feed: [Feed])
-  func presentGetChallengeTitles(challengeTitle: [ChallengeTitle])
+  func presentGetChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?)
 }
 
 final class FeedPresenter: FeedPresenterProtocol {
@@ -24,7 +24,7 @@ final class FeedPresenter: FeedPresenterProtocol {
     self.view?.fetchFeed(feed: feed)
   }
 
-  func presentGetChallengeTitles(challengeTitle: [ChallengeTitle]) {
-    self.view?.getChallengeTitles(challengeTitle: challengeTitle)
+  func presentGetChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?) {
+    self.view?.getChallengeTitles(challengeTitle: challengeTitle, index: index)
   }
 }
