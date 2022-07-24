@@ -83,6 +83,7 @@ class CommentView: UIView {
     $0.text = self.commentTextViewPlaceholder
     $0.textColor = .gray50
     $0.font = .systemFont(ofSize: 15, weight: .regular)
+    $0.autocorrectionType = .no
   }
 
   let registButton = UIButton().then {
