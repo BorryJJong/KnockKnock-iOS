@@ -84,6 +84,7 @@ class CommentView: UIView {
     $0.textColor = .gray50
     $0.font = .systemFont(ofSize: 15, weight: .regular)
     $0.autocorrectionType = .no
+    $0.spellCheckingType = .no
   }
 
   let registButton = UIButton().then {
