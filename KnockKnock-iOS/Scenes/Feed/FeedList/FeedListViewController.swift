@@ -11,6 +11,7 @@ import Then
 
 protocol FeedListViewProtocol: AnyObject {
   var interactor: FeedListInteractorProtocol? { get set }
+  var router: FeedListRouter? { get set }
 
   func fetchFeedList(feed: [Feed])
 }
@@ -28,6 +29,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   // MARK: - Properties
 
   var interactor: FeedListInteractorProtocol?
+  var router: FeedListRouter?
   var feed: [Feed] = []
 
   // MARK: - Life Cycles
@@ -43,6 +45,10 @@ final class FeedListViewController: BaseViewController<FeedListView> {
       $0.dataSource = self
       $0.registCell(type: FeedListCell.self)
     }
+  }
+
+  @objc func commentButtonDidTap(_ sender: UIButton) {
+    self.router?.navigateToCommentView(source: self)
   }
 }
 
@@ -62,6 +68,7 @@ extension FeedListViewController: UICollectionViewDataSource {
   ) -> UICollectionViewCell {
     let cell = collectionView.dequeueCell(withType: FeedListCell.self, for: indexPath)
     cell.bind(feed: self.feed[indexPath.item])
+    cell.commentsButton.addTarget(self, action: #selector(commentButtonDidTap(_:)), for: .touchUpInside)
     return cell
   }
 }
