@@ -17,17 +17,17 @@ enum ImageScaleType: String {
     case .threeToFour:
       return CGSize(
         width: (width - 40),
-        height: ((width - 40) * 1.333 + 120))
+        height: ((width - 40) * 1.333 + 100))
 
     case .fourToThree:
       return CGSize(
         width: (width - 40),
-        height: ((width - 40) * 0.75 + 120))
+        height: ((width - 40) * 0.75 + 100))
 
     case .square:
       return CGSize(
         width: (width - 40),
-        height: ((width - 40) + 120))
+        height: ((width - 40) + 100))
     }
   }
 

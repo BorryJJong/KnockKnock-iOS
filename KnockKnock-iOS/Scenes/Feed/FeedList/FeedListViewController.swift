@@ -78,6 +78,7 @@ extension FeedListViewController: UICollectionViewDataSource {
     )
 
     cell.bind(feed: self.feed[indexPath.item])
+    cell.setCellShadow(cell: cell)
     cell.commentsButton.addTarget(
       self,
       action: #selector(commentButtonDidTap(_:)),
@@ -113,6 +114,7 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
     layout collectionViewLayout: UICollectionViewLayout,
     referenceSizeForHeaderInSection section: Int
   ) -> CGSize {
+
     return CGSize(
       width: self.containerView.frame.width,
       height: 50
@@ -124,8 +126,9 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
     layout collectionViewLayout: UICollectionViewLayout,
     insetForSectionAt section: Int
   ) -> UIEdgeInsets {
+
     return UIEdgeInsets(
-      top: 0,
+      top: 10,
       left: 0,
       bottom: 40,
       right: 0

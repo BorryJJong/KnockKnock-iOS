@@ -24,15 +24,13 @@ class FeedListCell: BaseCollectionViewCell {
 
     static let imagePageControlBottomMargin = -10.f
 
-    static let postContentViewTopMargin = 15.f
-
     static let contentLabelLeadingMargin = 15.f
     static let contentLabelTrailingMargin = -15.f
     static let contentLabelBottomMargin = -10.f
     static let contentLabelHeight = 40.f
 
     static let likeButtonBottomMargin = -15.f
-    static let likeButtonLeadingMargin = 10.f
+    static let likeButtonLeadingMargin = 15.f
     
     static let commentsButtonLeadingMargin = 10.f
     static let commentsButtonBottomMargin = -15.f
@@ -177,20 +175,26 @@ class FeedListCell: BaseCollectionViewCell {
 
   // MARK: - Configure
 
+  func setCellShadow(cell: UICollectionViewCell) {
+    cell.do {
+      $0.clipsToBounds = true
+      $0.layer.cornerRadius = 5
+      $0.layer.masksToBounds = false
+      $0.layer.shadowColor = UIColor.black.cgColor
+      $0.layer.shadowOpacity = 0.1
+      $0.layer.shadowOffset = CGSize(width: 0, height: 10)
+      $0.layer.shadowRadius = 5
+    }
+  }
+
   override func setupConstraints() {
-    [self.postContentView].addSubViews(self.contentView)
-    [self.imageScrollView, self.imageNumberLabel, self.imagePageControl].addSubViews(self.postContentView)
-    [self.contentLabel, self.likeButton, self.commentsButton].addSubViews(self.postContentView)
+    [self.imageScrollView, self.imageNumberLabel, self.imagePageControl].addSubViews(self.contentView)
+    [self.contentLabel, self.likeButton, self.commentsButton].addSubViews(self.contentView)
 
     NSLayoutConstraint.activate([
-      self.postContentView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: Metric.postContentViewTopMargin),
-      self.postContentView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
-      self.postContentView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
-      self.postContentView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
-
-      self.imageScrollView.topAnchor.constraint(equalTo: self.postContentView.topAnchor),
-      self.imageScrollView.leadingAnchor.constraint(equalTo: self.postContentView.leadingAnchor),
-      self.imageScrollView.trailingAnchor.constraint(equalTo: self.postContentView.trailingAnchor),
+      self.imageScrollView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
+      self.imageScrollView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+      self.imageScrollView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
       self.imageScrollView.bottomAnchor.constraint(equalTo: self.contentLabel.topAnchor, constant: Metric.imageScrollViewBottomMargin),
 
       self.imageNumberLabel.widthAnchor.constraint(equalToConstant: Metric.imageNumberLabelWidth),
@@ -198,21 +202,23 @@ class FeedListCell: BaseCollectionViewCell {
       self.imageNumberLabel.trailingAnchor.constraint(equalTo: self.imageScrollView.trailingAnchor, constant: Metric.imageNumberLabelTrailingMargin),
 
       self.imagePageControl.bottomAnchor.constraint(equalTo: self.imageScrollView.bottomAnchor, constant: Metric.imagePageControlBottomMargin),
-      self.imagePageControl.centerXAnchor.constraint(equalTo: self.postContentView.centerXAnchor),
+      self.imagePageControl.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
 
-      self.contentLabel.leadingAnchor.constraint(equalTo: self.postContentView.leadingAnchor, constant: Metric.contentLabelLeadingMargin),
-      self.contentLabel.trailingAnchor.constraint(equalTo: self.postContentView.trailingAnchor, constant: Metric.contentLabelTrailingMargin),
+      self.contentLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: Metric.contentLabelLeadingMargin),
+      self.contentLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: Metric.contentLabelTrailingMargin),
       self.contentLabel.bottomAnchor.constraint(equalTo: self.likeButton.topAnchor, constant: Metric.contentLabelBottomMargin),
       self.contentLabel.heightAnchor.constraint(equalToConstant: Metric.contentLabelHeight),
 
-      self.likeButton.bottomAnchor.constraint(equalTo: self.postContentView.bottomAnchor, constant: Metric.likeButtonBottomMargin),
-      self.likeButton.leadingAnchor.constraint(equalTo: self.postContentView.leadingAnchor, constant: Metric.likeButtonLeadingMargin),
+      self.likeButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: Metric.likeButtonBottomMargin),
+      self.likeButton.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: Metric.likeButtonLeadingMargin),
 
-      self.commentsButton.bottomAnchor.constraint(equalTo: self.postContentView.bottomAnchor, constant: Metric.commentsButtonBottomMargin),
+      self.commentsButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: Metric.commentsButtonBottomMargin),
       self.commentsButton.leadingAnchor.constraint(equalTo: self.likeButton.trailingAnchor, constant: Metric.commentsButtonLeadingMargin)
     ])
   }
 }
+
+// MARK: - ScrollView delegate
 
 extension FeedListCell: UIScrollViewDelegate {
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
