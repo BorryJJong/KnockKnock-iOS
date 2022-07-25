@@ -14,6 +14,11 @@ extension UICollectionView {
     register(type, forCellWithReuseIdentifier: cellID)
   }
 
+  func registHeaderView(type: UICollectionReusableView.Type, identifier: String? = nil) {
+    let cellID = identifier ?? type.reusableIdentifier
+    register(type, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: cellID)
+  }
+
   func registFooterView(type: UICollectionReusableView.Type, identifier: String? = nil) {
     let cellID = identifier ?? type.reusableIdentifier
     register(type, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: cellID)
@@ -23,7 +28,11 @@ extension UICollectionView {
     return dequeueReusableCell(withReuseIdentifier: type.reusableIdentifier, for: indexPath) as! Cell
   }
 
-  func dequeueReusableSupplementaryFooterView(for indexPath: IndexPath) -> UICollectionReusableView {
-    return dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FooterCollectionReusableView.reusableIdentifier, for: indexPath) as! FooterCollectionReusableView
+  func dequeueReusableSupplementaryFooterView<Footer: UICollectionReusableView>(withType type: Footer.Type, for indexPath: IndexPath) -> Footer {
+    return dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: type.reusableIdentifier, for: indexPath) as! Footer
+  }
+
+  func dequeueReusableSupplementaryHeaderView<Header: UICollectionReusableView>(withType type: Header.Type, for indexPath: IndexPath) -> Header {
+    return dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: type.reusableIdentifier, for: indexPath) as! Header
   }
 }
