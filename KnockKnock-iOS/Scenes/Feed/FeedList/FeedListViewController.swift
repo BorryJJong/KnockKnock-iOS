@@ -12,37 +12,29 @@ import Then
 protocol FeedListViewProtocol: AnyObject {
   var interactor: FeedListInteractorProtocol? { get set }
   var router: FeedListRouterProtocol? { get set }
-
+  
   func fetchFeedList(feed: [Feed])
 }
 
 final class FeedListViewController: BaseViewController<FeedListView> {
-
-  // MARK: - Constants
-
-  private enum Scale {
-    static let square = "1:1"
-    static let threeToFour = "3:4"
-    static let fourToThree = "4:3"
-  }
-
+  
   // MARK: - Properties
-
+  
   var interactor: FeedListInteractorProtocol?
   var router: FeedListRouterProtocol?
   
   var feed: [Feed] = []
-
+  
   lazy var tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapScrollViewSection(_:)))
-
+  
   // MARK: - Life Cycles
-
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     self.interactor?.fetchFeed()
     self.containerView.addGestureRecognizer(tapGesture)
   }
-
+  
   override func setupConfigure() {
     self.containerView.feedListCollectionView.do {
       $0.delegate = self
@@ -50,16 +42,16 @@ final class FeedListViewController: BaseViewController<FeedListView> {
       $0.registCell(type: FeedListCell.self)
     }
   }
-
+  
   // MARK: - didSelectItem
-
+  
   /// ScrollView 영역을 포함하여 didSelectItem 호출하기 위한 메소드
   @objc func tapScrollViewSection(_ sender: UITapGestureRecognizer) {
     let collectionView = self.containerView.feedListCollectionView
-
+    
     let touchLocation: CGPoint = sender.location(ofTouch: 0, in: collectionView)
     let indexPath = collectionView.indexPathForItem(at: touchLocation)
-
+    
     if let indexPath = indexPath {
       if let cell = collectionView.cellForItem(at: indexPath) {
         if !cell.isSelected {
@@ -67,6 +59,10 @@ final class FeedListViewController: BaseViewController<FeedListView> {
         }
       }
     }
+  }
+  
+  @objc func commentButtonDidTap(_ sender: UIButton) {
+    self.router?.navigateToCommentView(source: self)
   }
 }
 
@@ -79,13 +75,14 @@ extension FeedListViewController: UICollectionViewDataSource {
   ) -> Int {
     return self.feed.count
   }
-
+  
   func collectionView(
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
     let cell = collectionView.dequeueCell(withType: FeedListCell.self, for: indexPath)
     cell.bind(feed: self.feed[indexPath.item])
+    cell.commentsButton.addTarget(self, action: #selector(commentButtonDidTap(_:)), for: .touchUpInside)
     return cell
   }
 }
@@ -96,7 +93,7 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
     layout collectionViewLayout: UICollectionViewLayout,
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
-
+    
     let scale = feed[indexPath.item].scale
     let scaleType = ImageScaleType(rawValue: scale)
     
