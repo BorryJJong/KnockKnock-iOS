@@ -11,17 +11,28 @@ import Then
 
 class FeedDetailViewController: BaseViewController<FeedDetailView> {
 
+  // MARK: - Properties
+
+  let feed =  Feed(userId: 5, content: "aa", images: ["feed_sample_3", "feed_sample_2", "feed_sample_2"], scale: "3:4")
+  let tags = ["#용기내챌린지", "#프로모션", "#제로웨이스트", "#지구지키기프로젝트", "#용기내챌린지", "#용기내챌린지"]
+
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setupConfigure()
-//    self.navigationController?.navigationBar.isHidden = true
   }
 
   // MARK: - Configure
 
   override func setupConfigure() {
+    self.containerView.postCollectionView.do {
+      $0.dataSource = self
+      $0.delegate = self
+      $0.collectionViewLayout = self.containerView.setPostCollectionViewLayout()
+      $0.registCell(type: PostImageCell.self)
+      $0.registHeaderView(type: PostHeaderReusableView.self)
+    }
     self.containerView.commentTextView.do {
       $0.delegate = self
     }
@@ -78,6 +89,47 @@ class FeedDetailViewController: BaseViewController<FeedDetailView> {
   }
 }
 
+// MARK: - CollectionView datasource, layout
+
+extension FeedDetailViewController: UICollectionViewDataSource {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    numberOfItemsInSection section: Int
+  ) -> Int {
+    
+    return self.tags.count
+  }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    cellForItemAt indexPath: IndexPath
+  ) -> UICollectionViewCell {
+    let cell = collectionView.dequeueCell(
+      withType: PostImageCell.self,
+      for: indexPath)
+    cell.bind(text: self.tags[indexPath.item])
+    return cell
+  }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    viewForSupplementaryElementOfKind kind: String,
+    at indexPath: IndexPath
+  ) -> UICollectionReusableView {
+    let header = collectionView.dequeueReusableSupplementaryHeaderView(
+      withType: PostHeaderReusableView.self,
+      for: indexPath
+    )
+    header.bind(feed: self.feed)
+    
+    return header
+  }
+}
+
+extension FeedDetailViewController: UICollectionViewDelegateFlowLayout {
+
+}
+
 // MARK: - TextField delegate
 
 extension FeedDetailViewController: UITextViewDelegate {
@@ -90,7 +142,10 @@ extension FeedDetailViewController: UITextViewDelegate {
   }
 
   func textViewDidChange(_ textView: UITextView) {
-    let size = CGSize(width: view.frame.width, height: .infinity)
+    let size = CGSize(
+      width: view.frame.width,
+      height: .infinity
+    )
     let estimatedSize = textView.sizeThatFits(size)
 
     textView.constraints.forEach { (constraint) in

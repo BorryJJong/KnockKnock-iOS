@@ -22,6 +22,12 @@ class FeedDetailView: UIView {
     static let headerViewHeight = 50.f
     static let headerViewTrailingMargin = -10.f
 
+    static let imageNumberLabelTopMargin = 15.f
+    static let imageNumberLabelTrailingMargin = -18.f
+    static let imageNumberLabelWidth = 50.f
+
+    static let imagePageControlBottomMargin = -10.f
+
     static let commentInputViewTopMargin = -20.f
 
     static let likeButtonLeadingMargin = 20.f
@@ -39,8 +45,50 @@ class FeedDetailView: UIView {
 
   // MARK: - UIs
 
+  let postCollectionView = UICollectionView(
+    frame: .zero,
+    collectionViewLayout: UICollectionViewFlowLayout().then {
+      $0.scrollDirection = .horizontal
+    }).then {
+      $0.translatesAutoresizingMaskIntoConstraints = false
+    }
 
-  let commentInputView = UIView().then {
+  private let imagePageControl = UIPageControl().then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.currentPage = 0
+    $0.pageIndicatorTintColor = UIColor(
+      red: 255/255,
+      green: 255/255,
+      blue: 255/255,
+      alpha: 0.5
+    )
+    $0.currentPageIndicatorTintColor = .white
+    $0.hidesForSinglePage = true
+  }
+
+  private let imageNumberLabel = BasePaddingLabel(
+    padding: UIEdgeInsets(
+      top: 7,
+      left: 15,
+      bottom: 7,
+      right: 15
+    )).then {
+      $0.translatesAutoresizingMaskIntoConstraints = false
+      $0.backgroundColor = UIColor(
+        red: 34/255,
+        green: 34/255,
+        blue: 34/255,
+        alpha: 0.5
+      )
+      $0.layer.cornerRadius = 14
+      $0.clipsToBounds = true
+      $0.text = "0/1"
+      $0.font = .systemFont(ofSize: 12, weight: .semibold)
+      $0.textColor = .white
+      $0.isHidden = true
+    }
+
+  private let commentInputView = UIView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .white
     $0.layer.borderWidth = 1
@@ -102,6 +150,15 @@ class FeedDetailView: UIView {
   // MARK: - Constraints
 
   func setupConstraints() {
+    [self.postCollectionView].addSubViews(self)
+
+    NSLayoutConstraint.activate([
+      self.postCollectionView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
+      self.postCollectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+      self.postCollectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+      self.postCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -70)
+    ])
+
     [self.commentInputView, self.likeButton, self.commentTextView, self.registButton].addSubViews(self)
 
     NSLayoutConstraint.activate([
@@ -123,5 +180,56 @@ class FeedDetailView: UIView {
       self.registButton.widthAnchor.constraint(equalToConstant: Metric.registButtonWidth),
       self.registButton.heightAnchor.constraint(equalToConstant: Metric.registButtonHeight)
     ])
+  }
+
+  func setPostCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+    // section 1: Contents(images, context, tag, shopAddress)
+
+    let estimatedWidth: CGFloat = 50
+    let estimatedHeigth: CGFloat = 700
+
+    let tagHeaderSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .estimated(estimatedHeigth)
+    )
+
+    let tagHeader = NSCollectionLayoutBoundarySupplementaryItem(
+      layoutSize: tagHeaderSize,
+      elementKind: UICollectionView.elementKindSectionHeader,
+      alignment: .top
+    )
+
+    let tagItemSize = NSCollectionLayoutSize(
+      widthDimension: .estimated(estimatedWidth),
+      heightDimension: .absolute(25)
+    )
+    let tagItem = NSCollectionLayoutItem(layoutSize: tagItemSize)
+    tagItem.contentInsets = NSDirectionalEdgeInsets(top: 2.5, leading: 0, bottom: 2.5, trailing: 0)
+
+    let tagGroupSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .estimated(estimatedHeigth)
+    )
+    let tagGroup = NSCollectionLayoutGroup.horizontal(
+      layoutSize: tagGroupSize,
+      subitems: [tagItem]
+    )
+    tagGroup.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+    tagGroup.interItemSpacing = .fixed(5)
+    
+    let postContentsSection = NSCollectionLayoutSection(group: tagGroup)
+    postContentsSection.contentInsets = NSDirectionalEdgeInsets(
+      top: 0,
+      leading: 0,
+      bottom: 0,
+      trailing: 0
+    )
+
+    postContentsSection.boundarySupplementaryItems = [tagHeader]
+
+    let layout = UICollectionViewCompositionalLayout(section: postContentsSection)
+
+    return layout
+
   }
 }
