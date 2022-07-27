@@ -9,11 +9,14 @@ import UIKit
 
 protocol FeedListRouterProtocol {
   static func createFeedList() -> UIViewController
+
+  func navigateToFeedDetail(source: FeedListViewProtocol)
   func navigateToCommentView(source: FeedListViewProtocol)
 }
 
 final class FeedListRouter: FeedListRouterProtocol {
   static func createFeedList() -> UIViewController {
+
     let view = FeedListViewController()
     let interactor = FeedListInteractor()
     let presenter = FeedListPresenter()
@@ -27,6 +30,14 @@ final class FeedListRouter: FeedListRouterProtocol {
     presenter.view = view
 
     return view
+  }
+
+  func navigateToFeedDetail(source: FeedListViewProtocol) {
+    let feedDetailViewController = FeedDetailViewController()
+    if let sourceView = source as? UIViewController {
+      feedDetailViewController.hidesBottomBarWhenPushed = true
+      sourceView.navigationController?.pushViewController(feedDetailViewController, animated: true)
+    }
   }
 
   func navigateToCommentView(source: FeedListViewProtocol) {
