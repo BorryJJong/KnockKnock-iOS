@@ -9,7 +9,7 @@ import UIKit
 
 import Then
 
-final class PostImageCell: BaseCollectionViewCell {
+final class PostCell: BaseCollectionViewCell {
 
   // MARK: - UIs
 

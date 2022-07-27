@@ -35,7 +35,7 @@ class FeedDetailViewController: BaseViewController<FeedDetailView> {
       $0.dataSource = self
       $0.delegate = self
       $0.collectionViewLayout = self.containerView.setPostCollectionViewLayout()
-      $0.registCell(type: PostImageCell.self)
+      $0.registCell(type: PostCell.self)
       $0.registHeaderView(type: PostHeaderReusableView.self)
       $0.registFooterView(type: PostFooterReusableView.self)
     }
@@ -111,7 +111,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
     let cell = collectionView.dequeueCell(
-      withType: PostImageCell.self,
+      withType: PostCell.self,
       for: indexPath)
     cell.bind(text: self.tags[indexPath.item])
     return cell

@@ -66,7 +66,7 @@
 		6143297828687B69008BDCC9 /* FeedListInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6143297728687B69008BDCC9 /* FeedListInteractor.swift */; };
 		6143297A28687B74008BDCC9 /* FeedListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6143297928687B74008BDCC9 /* FeedListPresenter.swift */; };
 		6143297C28687B7F008BDCC9 /* FeedListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6143297B28687B7F008BDCC9 /* FeedListRouter.swift */; };
-		616EB0882890E42F001BD18C /* PostImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616EB0872890E42F001BD18C /* PostImageCell.swift */; };
+		616EB0882890E42F001BD18C /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616EB0872890E42F001BD18C /* PostCell.swift */; };
 		616EB08B28910485001BD18C /* PostHeaderReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616EB08A28910485001BD18C /* PostHeaderReusableView.swift */; };
 		616EB08D289120C7001BD18C /* PostFooterReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616EB08C289120C7001BD18C /* PostFooterReusableView.swift */; };
 		617F9D65282A5AED00C2BC9A /* ChallengeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D64282A5AED00C2BC9A /* ChallengeDetailView.swift */; };
@@ -167,7 +167,7 @@
 		6143297728687B69008BDCC9 /* FeedListInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedListInteractor.swift; sourceTree = "<group>"; };
 		6143297928687B74008BDCC9 /* FeedListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedListPresenter.swift; sourceTree = "<group>"; };
 		6143297B28687B7F008BDCC9 /* FeedListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedListRouter.swift; sourceTree = "<group>"; };
-		616EB0872890E42F001BD18C /* PostImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostImageCell.swift; sourceTree = "<group>"; };
+		616EB0872890E42F001BD18C /* PostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
 		616EB08A28910485001BD18C /* PostHeaderReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHeaderReusableView.swift; sourceTree = "<group>"; };
 		616EB08C289120C7001BD18C /* PostFooterReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFooterReusableView.swift; sourceTree = "<group>"; };
 		617F9D64282A5AED00C2BC9A /* ChallengeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailView.swift; sourceTree = "<group>"; };
@@ -304,7 +304,7 @@
 				61215AE528577A9C003FDCAA /* TagCell.swift */,
 				614329582862F273008BDCC9 /* FeedListCell.swift */,
 				61A8DC5C288685BE000512EC /* ReplyCell.swift */,
-				616EB0872890E42F001BD18C /* PostImageCell.swift */,
+				616EB0872890E42F001BD18C /* PostCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -794,7 +794,7 @@
 				6143296628642745008BDCC9 /* UILabel+Ext.swift in Sources */,
 				20D28F8427CFC60900A809DB /* ChallengeRouter.swift in Sources */,
 				61A8DC4A287E90BC000512EC /* CommentViewController.swift in Sources */,
-				616EB0882890E42F001BD18C /* PostImageCell.swift in Sources */,
+				616EB0882890E42F001BD18C /* PostCell.swift in Sources */,
 				61FC60E927B9244D00A51DBC /* AppDelegate.swift in Sources */,
 				611BD4BC27E70393007D5C79 /* PropertySelectViewController.swift in Sources */,
 				617F9D65282A5AED00C2BC9A /* ChallengeDetailView.swift in Sources */,
