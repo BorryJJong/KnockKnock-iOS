@@ -13,7 +13,7 @@ class FeedDetailViewController: BaseViewController<FeedDetailView> {
 
   // MARK: - Properties
 
-  let feed =  Feed(userId: 5, content: "aa", images: ["feed_sample_3", "feed_sample_2", "feed_sample_2"], scale: "3:4")
+  let feed =  Feed(userId: 5, content: "aa", images: ["feed_sample_3", "feed_sample_2", "feed_sample_2"], scale: "1:1")
   let tags = ["#용기내챌린지", "#프로모션", "#제로웨이스트", "#지구지키기프로젝트", "#용기내챌린지", "#용기내챌린지"]
 
   // MARK: - Life Cycles
@@ -32,6 +32,7 @@ class FeedDetailViewController: BaseViewController<FeedDetailView> {
       $0.collectionViewLayout = self.containerView.setPostCollectionViewLayout()
       $0.registCell(type: PostImageCell.self)
       $0.registHeaderView(type: PostHeaderReusableView.self)
+      $0.registFooterView(type: PostFooterReusableView.self)
     }
     self.containerView.commentTextView.do {
       $0.delegate = self
@@ -116,13 +117,28 @@ extension FeedDetailViewController: UICollectionViewDataSource {
     viewForSupplementaryElementOfKind kind: String,
     at indexPath: IndexPath
   ) -> UICollectionReusableView {
-    let header = collectionView.dequeueReusableSupplementaryHeaderView(
-      withType: PostHeaderReusableView.self,
-      for: indexPath
-    )
-    header.bind(feed: self.feed)
-    
-    return header
+    switch kind {
+    case UICollectionView.elementKindSectionHeader:
+      let header = collectionView.dequeueReusableSupplementaryHeaderView(
+        withType: PostHeaderReusableView.self,
+        for: indexPath
+      )
+      header.bind(feed: self.feed)
+
+      return header
+
+    case UICollectionView.elementKindSectionFooter:
+      let footer = collectionView.dequeueReusableSupplementaryFooterView(
+        withType: PostFooterReusableView.self,
+        for: indexPath
+      )
+
+      return footer
+
+    default:
+          assert(false, "Unexpected element kind")
+    }
+
   }
 }
 

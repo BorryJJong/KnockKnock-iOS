@@ -42,7 +42,6 @@ class PostHeaderReusableView: UICollectionReusableView {
     $0.isPagingEnabled = true
     $0.showsHorizontalScrollIndicator = false
     $0.delegate = self
-    $0.backgroundColor = .brown
   }
 
   private let imagePageControl = UIPageControl().then {
@@ -102,6 +101,7 @@ class PostHeaderReusableView: UICollectionReusableView {
   // MARK: - Bind
 
   func bind(feed: Feed) {
+    self.contentLabel.setLineHeight(fontSize: 14, content: "패키지 상품을 받았을때의 기쁨 후엔 \n늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다.\n그래서 GMM은 자원도 아끼고 시간도 아끼고 번거로움도\n줄여주는 종이패키징으로 포장하기로 하였습니다.\n스티커나 비닐을 일체 사용하지 않아서 포장 매무새가 조금\n부족합니다. 너그러이 양해부탁드립니다. 🎀\n제품은 부족함없이 아낌없이 넘치도록 꽉차게 자연성분으로만\n만들었습니다 💚 ")
     self.imageScrollView.subviews.forEach{
       $0.removeFromSuperview()
     }

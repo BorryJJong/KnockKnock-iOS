@@ -186,17 +186,28 @@ class FeedDetailView: UIView {
     // section 1: Contents(images, context, tag, shopAddress)
 
     let estimatedWidth: CGFloat = 50
-    let estimatedHeigth: CGFloat = 700
+    let estimatedHeigth: CGFloat = 300
 
-    let tagHeaderSize = NSCollectionLayoutSize(
+    let contentsHeaderSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1),
       heightDimension: .estimated(estimatedHeigth)
     )
 
-    let tagHeader = NSCollectionLayoutBoundarySupplementaryItem(
-      layoutSize: tagHeaderSize,
+    let contentsHeader = NSCollectionLayoutBoundarySupplementaryItem(
+      layoutSize: contentsHeaderSize,
       elementKind: UICollectionView.elementKindSectionHeader,
       alignment: .top
+    )
+
+    let contentsFooterSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .estimated(estimatedHeigth)
+    )
+
+    let contentsFooter = NSCollectionLayoutBoundarySupplementaryItem(
+      layoutSize: contentsFooterSize,
+      elementKind: UICollectionView.elementKindSectionFooter,
+      alignment: .bottom
     )
 
     let tagItemSize = NSCollectionLayoutSize(
@@ -225,7 +236,7 @@ class FeedDetailView: UIView {
       trailing: 0
     )
 
-    postContentsSection.boundarySupplementaryItems = [tagHeader]
+    postContentsSection.boundarySupplementaryItems = [contentsHeader, contentsFooter]
 
     let layout = UICollectionViewCompositionalLayout(section: postContentsSection)
 
