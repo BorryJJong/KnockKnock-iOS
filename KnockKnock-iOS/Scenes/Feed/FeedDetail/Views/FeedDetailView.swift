@@ -19,8 +19,8 @@ class FeedDetailView: UIView {
   // MARK: - Constants
 
   private enum Metric {
-    static let headerViewHeight = 50.f
-    static let headerViewTrailingMargin = -10.f
+
+    static let postCollectionViewBottomMargin = -80.f
 
     static let imageNumberLabelTopMargin = 15.f
     static let imageNumberLabelTrailingMargin = -18.f
@@ -156,7 +156,7 @@ class FeedDetailView: UIView {
       self.postCollectionView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
       self.postCollectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
       self.postCollectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-      self.postCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -70)
+      self.postCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.postCollectionViewBottomMargin)
     ])
 
     [self.commentInputView, self.likeButton, self.commentTextView, self.registButton].addSubViews(self)
@@ -215,7 +215,12 @@ class FeedDetailView: UIView {
       heightDimension: .absolute(25)
     )
     let tagItem = NSCollectionLayoutItem(layoutSize: tagItemSize)
-    tagItem.contentInsets = NSDirectionalEdgeInsets(top: 2.5, leading: 0, bottom: 2.5, trailing: 0)
+    tagItem.contentInsets = NSDirectionalEdgeInsets(
+      top: 2.5,
+      leading: 0,
+      bottom: 2.5,
+      trailing: 0
+    )
 
     let tagGroupSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1),
@@ -225,16 +230,15 @@ class FeedDetailView: UIView {
       layoutSize: tagGroupSize,
       subitems: [tagItem]
     )
-    tagGroup.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+    tagGroup.contentInsets = NSDirectionalEdgeInsets(
+      top: 0,
+      leading: 20,
+      bottom: 0,
+      trailing: 20
+    )
     tagGroup.interItemSpacing = .fixed(5)
     
     let postContentsSection = NSCollectionLayoutSection(group: tagGroup)
-    postContentsSection.contentInsets = NSDirectionalEdgeInsets(
-      top: 0,
-      leading: 0,
-      bottom: 0,
-      trailing: 0
-    )
 
     postContentsSection.boundarySupplementaryItems = [contentsHeader, contentsFooter]
 

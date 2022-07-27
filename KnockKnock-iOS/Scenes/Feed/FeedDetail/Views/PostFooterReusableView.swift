@@ -11,6 +11,27 @@ import KKDSKit
 
 class PostFooterReusableView: UICollectionReusableView {
 
+  // MARK: - Constants
+
+  private enum Metric {
+    static let shopInfoViewTopMargin = 20.f
+    static let shopInfoViewLeadingMargin = 20.f
+    static let shopInfoViewTrailingMargin = -20.f
+    static let shopInfoVIewBottomMargin = -30.f
+
+    static let markImageViewTopMargin = 15.f
+    static let markImageViewLeadingMaring = 20.f
+
+    static let shopNameLabelLeadingMargin = 10.f
+
+    static let shopAddressLabelTopMargin = 5.f
+    static let shopAddressLabelLeadingMargin = 20.f
+    static let shopAddressLabelBottomMargin = -15.f
+
+    static let seperateLineViewHeight = 10.f
+  }
+
+
   // MARK: - UIs
 
   private let shopInfoView = UIView().then {
@@ -61,25 +82,25 @@ class PostFooterReusableView: UICollectionReusableView {
     [self.markImageView, self.shopNameLabel, self.shopAddressLabel, self.seperateLineView].addSubViews(self)
 
     NSLayoutConstraint.activate([
-    self.shopInfoView.topAnchor.constraint(equalTo: self.topAnchor, constant: 20),
-    self.shopInfoView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
-    self.shopInfoView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
-    self.shopInfoView.bottomAnchor.constraint(equalTo: self.seperateLineView.topAnchor, constant: -30),
+      self.shopInfoView.topAnchor.constraint(equalTo: self.topAnchor, constant: Metric.shopInfoViewTopMargin),
+      self.shopInfoView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Metric.shopInfoViewLeadingMargin),
+      self.shopInfoView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: Metric.shopInfoViewTrailingMargin),
+      self.shopInfoView.bottomAnchor.constraint(equalTo: self.seperateLineView.topAnchor, constant: Metric.shopInfoVIewBottomMargin),
 
-    self.markImageView.topAnchor.constraint(equalTo: self.shopInfoView.topAnchor, constant: 15),
-    self.markImageView.leadingAnchor.constraint(equalTo: self.shopInfoView.leadingAnchor, constant: 20),
+      self.markImageView.topAnchor.constraint(equalTo: self.shopInfoView.topAnchor, constant: Metric.markImageViewTopMargin),
+      self.markImageView.leadingAnchor.constraint(equalTo: self.shopInfoView.leadingAnchor, constant: Metric.markImageViewLeadingMaring),
 
-    self.shopNameLabel.leadingAnchor.constraint(equalTo: self.markImageView.trailingAnchor, constant: 10),
-    self.shopNameLabel.centerYAnchor.constraint(equalTo: self.markImageView.centerYAnchor),
+      self.shopNameLabel.leadingAnchor.constraint(equalTo: self.markImageView.trailingAnchor, constant: Metric.shopNameLabelLeadingMargin),
+      self.shopNameLabel.centerYAnchor.constraint(equalTo: self.markImageView.centerYAnchor),
 
-    self.shopAddressLabel.leadingAnchor.constraint(equalTo: self.shopInfoView.leadingAnchor, constant: 20),
-    self.shopAddressLabel.topAnchor.constraint(equalTo: self.markImageView.bottomAnchor, constant: 5),
-    self.shopAddressLabel.bottomAnchor.constraint(equalTo: self.shopInfoView.bottomAnchor, constant: -15),
+      self.shopAddressLabel.leadingAnchor.constraint(equalTo: self.shopInfoView.leadingAnchor, constant: Metric.shopAddressLabelLeadingMargin),
+      self.shopAddressLabel.topAnchor.constraint(equalTo: self.markImageView.bottomAnchor, constant: Metric.shopAddressLabelTopMargin),
+      self.shopAddressLabel.bottomAnchor.constraint(equalTo: self.shopInfoView.bottomAnchor, constant: Metric.shopAddressLabelBottomMargin),
 
-    self.seperateLineView.heightAnchor.constraint(equalToConstant: 10),
-    self.seperateLineView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-    self.seperateLineView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-    self.seperateLineView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+      self.seperateLineView.heightAnchor.constraint(equalToConstant: Metric.seperateLineViewHeight),
+      self.seperateLineView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+      self.seperateLineView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+      self.seperateLineView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
     ])
   }
 

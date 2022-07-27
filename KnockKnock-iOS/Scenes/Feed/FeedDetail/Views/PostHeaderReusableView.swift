@@ -8,11 +8,11 @@
 import UIKit
 
 class PostHeaderReusableView: UICollectionReusableView {
+
   // MARK: - Constants
 
   private enum Metric {
-    static let headerViewHeight = 50.f
-    static let headerViewTrailingMargin = -10.f
+    static let imageScrollViewBottomMargin = 0.f
 
     static let imageNumberLabelTopMargin = 15.f
     static let imageNumberLabelTrailingMargin = -18.f
@@ -33,7 +33,16 @@ class PostHeaderReusableView: UICollectionReusableView {
     static let registButtonBottomMargin = -15.f
     static let registButtonWidth = 50.f
     static let registButtonHeight = 30.f
+
+    static let contentLabelTopMargin = 20.f
+    static let contentLabelLeadingMargin = 20.f
+    static let contentLabelTrailingMargin = -20.f
+    static let contentLabelBottomMargin = -20.f
   }
+
+  // MARK: - Properties
+
+  let dummyContent = "패키지 상품을 받았을때의 기쁨 후엔 \n늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다.\n그래서 GMM은 자원도 아끼고 시간도 아끼고 번거로움도\n줄여주는 종이패키징으로 포장하기로 하였습니다.\n스티커나 비닐을 일체 사용하지 않아서 포장 매무새가 조금\n부족합니다. 너그러이 양해부탁드립니다. 🎀\n제품은 부족함없이 아낌없이 넘치도록 꽉차게 자연성분으로만\n만들었습니다 💚 "
 
   // MARK: - UIs
 
@@ -79,12 +88,11 @@ class PostHeaderReusableView: UICollectionReusableView {
       $0.isHidden = true
     }
 
-  let contentLabel = UILabel().then {
+  private let contentLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.numberOfLines = 0
     $0.backgroundColor = .white
     $0.font = UIFont(name: "Apple SD Gothic Neo", size: 14)
-    $0.text = "패키지 상품을 받았을때의 기쁨 후엔 \n늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다.\n그래서 GMM은 자원도 아끼고 시간도 아끼고 번거로움도\n줄여주는 종이패키징으로 포장하기로 하였습니다.\n스티커나 비닐을 일체 사용하지 않아서 포장 매무새가 조금\n부족합니다. 너그러이 양해부탁드립니다. 🎀\n제품은 부족함없이 아낌없이 넘치도록 꽉차게 자연성분으로만\n만들었습니다 💚 "
   }
 
   // MARK: - Initailize
@@ -101,7 +109,8 @@ class PostHeaderReusableView: UICollectionReusableView {
   // MARK: - Bind
 
   func bind(feed: Feed) {
-    self.contentLabel.setLineHeight(fontSize: 14, content: "패키지 상품을 받았을때의 기쁨 후엔 \n늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다.\n그래서 GMM은 자원도 아끼고 시간도 아끼고 번거로움도\n줄여주는 종이패키징으로 포장하기로 하였습니다.\n스티커나 비닐을 일체 사용하지 않아서 포장 매무새가 조금\n부족합니다. 너그러이 양해부탁드립니다. 🎀\n제품은 부족함없이 아낌없이 넘치도록 꽉차게 자연성분으로만\n만들었습니다 💚 ")
+    self.contentLabel.setLineHeight(fontSize: 14, content: self.dummyContent)
+
     self.imageScrollView.subviews.forEach{
       $0.removeFromSuperview()
     }
@@ -118,7 +127,7 @@ class PostHeaderReusableView: UICollectionReusableView {
     }
   }
 
-  func setImageView(images: [String], scale: String) {
+  private func setImageView(images: [String], scale: String) {
     for index in 0..<images.count {
 
       let imageView = UIImageView()
@@ -141,14 +150,13 @@ class PostHeaderReusableView: UICollectionReusableView {
   }
 
   private func setupConstraints() {
-
     [self.imageScrollView, self.imageNumberLabel, self.imagePageControl, self.contentLabel].addSubViews(self)
 
     NSLayoutConstraint.activate([
       self.imageScrollView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
       self.imageScrollView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
       self.imageScrollView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-      self.imageScrollView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 0),
+      self.imageScrollView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.imageScrollViewBottomMargin),
 
       self.imageNumberLabel.widthAnchor.constraint(equalToConstant: Metric.imageNumberLabelWidth),
       self.imageNumberLabel.topAnchor.constraint(equalTo: self.imageScrollView.topAnchor, constant: Metric.imageNumberLabelTopMargin),
@@ -157,10 +165,10 @@ class PostHeaderReusableView: UICollectionReusableView {
       self.imagePageControl.bottomAnchor.constraint(equalTo: self.imageScrollView.bottomAnchor, constant: Metric.imagePageControlBottomMargin),
       self.imagePageControl.centerXAnchor.constraint(equalTo: self.centerXAnchor),
 
-      self.contentLabel.topAnchor.constraint(equalTo: self.imageScrollView.bottomAnchor, constant: 20),
-      self.contentLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
-      self.contentLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
-      self.contentLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -20)
+      self.contentLabel.topAnchor.constraint(equalTo: self.imageScrollView.bottomAnchor, constant: Metric.contentLabelTopMargin),
+      self.contentLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Metric.contentLabelLeadingMargin),
+      self.contentLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: Metric.contentLabelTrailingMargin),
+      self.contentLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: Metric.contentLabelBottomMargin)
     ])
 
   }

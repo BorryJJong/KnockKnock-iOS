@@ -13,7 +13,12 @@ class FeedDetailViewController: BaseViewController<FeedDetailView> {
 
   // MARK: - Properties
 
-  let feed =  Feed(userId: 5, content: "aa", images: ["feed_sample_3", "feed_sample_2", "feed_sample_2"], scale: "1:1")
+  let feed =  Feed(
+    userId: 5,
+    content: "aa",
+    images: ["feed_sample_3", "feed_sample_2", "feed_sample_2"],
+    scale: "1:1"
+  )
   let tags = ["#용기내챌린지", "#프로모션", "#제로웨이스트", "#지구지키기프로젝트", "#용기내챌린지", "#용기내챌린지"]
 
   // MARK: - Life Cycles
