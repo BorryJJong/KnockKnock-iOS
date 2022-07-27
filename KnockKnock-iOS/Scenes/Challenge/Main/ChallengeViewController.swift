@@ -7,9 +7,12 @@
 
 import UIKit
 
+import KKDSKit
+
 protocol ChallengeViewProtocol: AnyObject {
   var interactor: ChallengeInteractorProtocol? { get set }
-  
+  var router: ChallengeRouterProtocol? { get set }
+
   func fetchChallenges(challenges: [Challenges])
 }
 
@@ -18,6 +21,8 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
   // MARK: Properties
   
   var interactor: ChallengeInteractorProtocol?
+  var router: ChallengeRouterProtocol?
+
   var challenges: [Challenges] = []
   
   // MARK: - Life cycle
@@ -30,6 +35,7 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
 
   override func viewWillAppear(_ animated: Bool) {
     self.tabBarController?.tabBar.isHidden = false
+    self.setNavigationItem()
   }
 
   override func setupConfigure() {
@@ -46,11 +52,15 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
 
   func setNavigationItem() {
     let searchBarButtonItem = UIBarButtonItem(
-      barButtonSystemItem: .search,
+      image: KKDS.Image.ic_search_24_bk,
+      style: .plain,
       target: self,
-      action: nil)
+      action: nil
+    )
 
     self.navigationItem.title = "챌린지"
+    self.navigationController?.navigationBar.barTintColor = .white
+    self.navigationController?.navigationBar.tintColor = .black
     self.navigationItem.rightBarButtonItem = searchBarButtonItem
   }
 
@@ -120,8 +130,6 @@ extension ChallengeViewController: UICollectionViewDelegateFlowLayout {
 
 extension ChallengeViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    let view = ChallengeDetailViewController()
-    view.hidesBottomBarWhenPushed = true
-    self.navigationController?.pushViewController(view, animated: true)
+    self.router?.navigateToChallengeDetail(source: self)
   }
 }
