@@ -26,8 +26,8 @@ class FeedDetailView: UIView {
 
     static let commentTextViewHeight = 34.f
     static let commentTextViewBottomMargin = -19.f
-    static let commentTextViewTrailingMargin = -70.f
-    static let commentTextViewLeadingMargin = 20.f
+    static let commentTextViewTrailingMargin = -10.f
+    static let commentTextViewLeadingMargin = 10.f
 
     static let registButtonTrailingMargin = -20.f
     static let registButtonBottomMargin = -15.f
@@ -117,12 +117,12 @@ class FeedDetailView: UIView {
       self.commentInputView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
       self.commentInputView.topAnchor.constraint(equalTo: self.commentTextView.topAnchor, constant: Metric.commentInputViewTopMargin),
 
-      self.likeButton.leadingAnchor.constraint(equalTo: self.commentInputView.leadingAnchor, constant: 20),
-      self.likeButton.bottomAnchor.constraint(equalTo: self.commentTextView.bottomAnchor),
+      self.likeButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+      self.likeButton.centerYAnchor.constraint(equalTo: self.commentTextView.centerYAnchor),
 
       self.commentTextView.heightAnchor.constraint(equalToConstant: Metric.commentTextViewHeight),
       self.commentTextView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.commentTextViewBottomMargin),
-      self.commentTextView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.commentTextViewTrailingMargin),
+      self.commentTextView.trailingAnchor.constraint(equalTo: self.registButton.leadingAnchor, constant: Metric.commentTextViewTrailingMargin),
       self.commentTextView.leadingAnchor.constraint(equalTo: self.likeButton.trailingAnchor, constant: Metric.commentTextViewLeadingMargin),
 
       self.registButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.registButtonTrailingMargin),
