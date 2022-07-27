@@ -39,3 +39,18 @@ struct ChallengeTitle: Decodable {
     self.isSelected = false
   }
 }
+
+struct ChallengeDetail: Decodable {
+  let image: String?
+  let title: String
+  let summary: String
+  let practice: [String]
+  let contents: [ChallengeContent]
+  let participants: [Participant]
+}
+
+struct ChallengeContent: Decodable {
+  let title: String
+  let image: String?
+  let content: String
+}

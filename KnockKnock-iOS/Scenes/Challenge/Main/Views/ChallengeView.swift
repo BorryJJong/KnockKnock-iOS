@@ -100,5 +100,4 @@ final class ChallengeView: UIView {
         self.challengeCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor)
       ])
     }
-
 }
