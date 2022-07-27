@@ -141,7 +141,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       return footer
 
     default:
-          assert(false, "Unexpected element kind")
+      assert(false, "Unexpected element kind")
     }
 
   }

@@ -31,13 +31,14 @@ class PostFooterReusableView: UICollectionReusableView {
     static let seperateLineViewHeight = 10.f
   }
 
-
   // MARK: - UIs
 
   private let shopInfoView = UIView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.layer.borderWidth = 1
-    $0.layer.borderColor = UIColor.gray10?.cgColor
+    $0.layer.borderColor = UIColor.gray20?.cgColor
+    $0.clipsToBounds = true
+    $0.layer.cornerRadius = 3
   }
 
   private let markImageView = UIImageView().then {

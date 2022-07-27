@@ -170,7 +170,6 @@ class PostHeaderReusableView: UICollectionReusableView {
       self.contentLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: Metric.contentLabelTrailingMargin),
       self.contentLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: Metric.contentLabelBottomMargin)
     ])
-
   }
 }
 
