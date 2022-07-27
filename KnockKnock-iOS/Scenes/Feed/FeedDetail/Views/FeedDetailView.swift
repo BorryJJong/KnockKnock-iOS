@@ -24,6 +24,8 @@ class FeedDetailView: UIView {
 
     static let commentInputViewTopMargin = -20.f
 
+    static let likeButtonLeadingMargin = 20.f
+
     static let commentTextViewHeight = 34.f
     static let commentTextViewBottomMargin = -19.f
     static let commentTextViewTrailingMargin = -10.f
@@ -37,9 +39,6 @@ class FeedDetailView: UIView {
 
   // MARK: - UIs
 
-  private let headerView = UIView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-  }
 
   let commentInputView = UIView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
@@ -103,21 +102,15 @@ class FeedDetailView: UIView {
   // MARK: - Constraints
 
   func setupConstraints() {
-    [self.headerView].addSubViews(self)
     [self.commentInputView, self.likeButton, self.commentTextView, self.registButton].addSubViews(self)
 
     NSLayoutConstraint.activate([
-      self.headerView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-      self.headerView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-      self.headerView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.headerViewTrailingMargin),
-      self.headerView.heightAnchor.constraint(equalToConstant: Metric.headerViewHeight),
-
       self.commentInputView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
       self.commentInputView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
       self.commentInputView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
       self.commentInputView.topAnchor.constraint(equalTo: self.commentTextView.topAnchor, constant: Metric.commentInputViewTopMargin),
 
-      self.likeButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+      self.likeButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.likeButtonLeadingMargin),
       self.likeButton.centerYAnchor.constraint(equalTo: self.commentTextView.centerYAnchor),
 
       self.commentTextView.heightAnchor.constraint(equalToConstant: Metric.commentTextViewHeight),
