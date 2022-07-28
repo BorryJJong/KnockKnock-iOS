@@ -184,9 +184,8 @@ class FeedDetailView: UIView {
 
   func setPostCollectionViewLayout() -> UICollectionViewCompositionalLayout {
     // section 1: Contents(images, context, tag, shopAddress)
-
-    let estimatedWidth: CGFloat = 50
-    let estimatedHeigth: CGFloat = 300
+    let estimatedWidth: CGFloat = 100
+    let estimatedHeigth: CGFloat = 100
 
     let contentsHeaderSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1),
@@ -242,9 +241,73 @@ class FeedDetailView: UIView {
 
     postContentsSection.boundarySupplementaryItems = [contentsHeader, contentsFooter]
 
-    let layout = UICollectionViewCompositionalLayout(section: postContentsSection)
+    // Section 2: Like
+    let reactHeaderSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .estimated(estimatedHeigth)
+    )
 
+    let reactHeader = NSCollectionLayoutBoundarySupplementaryItem(
+      layoutSize: reactHeaderSize,
+      elementKind: UICollectionView.elementKindSectionHeader,
+      alignment: .top
+    )
+
+    let reactFooterSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .estimated(estimatedHeigth)
+    )
+
+    let reactFooter = NSCollectionLayoutBoundarySupplementaryItem(
+      layoutSize: reactFooterSize,
+      elementKind: UICollectionView.elementKindSectionFooter,
+      alignment: .bottom
+    )
+
+    let likeItemSize = NSCollectionLayoutSize(
+      widthDimension: .absolute(45),
+      heightDimension: .absolute(45)
+    )
+    let likeItem = NSCollectionLayoutItem(layoutSize: likeItemSize)
+
+    let likeGroupSize = NSCollectionLayoutSize(
+      widthDimension: .estimated(estimatedWidth),
+      heightDimension: .estimated(estimatedHeigth
+                                 )
+    )
+    let likeGroup = NSCollectionLayoutGroup.horizontal(
+      layoutSize: likeGroupSize,
+      subitems: [likeItem]
+    )
+
+    let likeSection = NSCollectionLayoutSection(group: likeGroup)
+    likeSection.boundarySupplementaryItems = [reactHeader, reactFooter]
+    likeSection.orthogonalScrollingBehavior = .continuous
+    likeSection.interGroupSpacing = 12
+    likeSection.contentInsets = NSDirectionalEdgeInsets(
+      top: 15,
+      leading: 20,
+      bottom: 15,
+      trailing: 0
+)
+    let layout = UICollectionViewCompositionalLayout {(section: Int, _: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+
+      let section = FeedDetailSection(rawValue: section)
+
+      switch section {
+      case .content:
+        return postContentsSection
+
+      case .like:
+        return likeSection
+        //
+        //      case .comment:
+        //        return likeSection
+
+      default:
+        assert(false)
+      }
+    }
     return layout
-
   }
 }

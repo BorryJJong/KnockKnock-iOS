@@ -17,6 +17,12 @@ public extension KKDS.Image {
   static var ic_bullet_3_gr: UIImage              { .load(name: "ic_bullet_3_gr")}
 }
 
+// MARK: - Icon size 16
+
+public extension KKDS.Image {
+  static var ic_like_circle_16: UIImage              { .load(name: "ic_like_circle_16")}
+}
+
 // MARK: - Icon size 20
 
 public extension KKDS.Image {

@@ -35,9 +35,14 @@ class FeedDetailViewController: BaseViewController<FeedDetailView> {
       $0.dataSource = self
       $0.delegate = self
       $0.collectionViewLayout = self.containerView.setPostCollectionViewLayout()
-      $0.registCell(type: PostCell.self)
+
       $0.registHeaderView(type: PostHeaderReusableView.self)
       $0.registFooterView(type: PostFooterReusableView.self)
+      $0.registCell(type: PostCell.self)
+
+      $0.registHeaderView(type: ReactHeaderReusableView.self)
+      $0.registFooterView(type: ReactFooterReusableView.self)
+      $0.registCell(type: LikeCell.self)
     }
     self.containerView.commentTextView.do {
       $0.delegate = self
@@ -102,19 +107,59 @@ extension FeedDetailViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    
-    return self.tags.count
+    switch FeedDetailSection(rawValue: section) {
+    case .content:
+      return self.tags.count
+
+    case .like:
+      return 10
+
+    case .comment:
+      return 10
+
+    default:
+      assert(false)
+    }
+
+  }
+
+  func numberOfSections(in collectionView: UICollectionView) -> Int {
+    return 2
   }
 
   func collectionView(
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
-    let cell = collectionView.dequeueCell(
-      withType: PostCell.self,
-      for: indexPath)
-    cell.bind(text: self.tags[indexPath.item])
-    return cell
+    let section = FeedDetailSection(rawValue: indexPath.section)
+
+    switch section {
+    case .content:
+      let cell = collectionView.dequeueCell(
+        withType: PostCell.self,
+        for: indexPath)
+      cell.bind(text: self.tags[indexPath.item])
+
+      return cell
+
+    case .like:
+      let cell = collectionView.dequeueCell(
+        withType: LikeCell.self,
+        for: indexPath)
+
+      return cell
+
+    case .comment:
+      let cell = collectionView.dequeueCell(
+        withType: LikeCell.self,
+        for: indexPath)
+
+      return cell
+
+    default:
+      assert(false)
+    }
+
   }
 
   func collectionView(
@@ -122,28 +167,65 @@ extension FeedDetailViewController: UICollectionViewDataSource {
     viewForSupplementaryElementOfKind kind: String,
     at indexPath: IndexPath
   ) -> UICollectionReusableView {
-    switch kind {
-    case UICollectionView.elementKindSectionHeader:
+    let section = FeedDetailSection(rawValue: indexPath.section)
+    switch section {
+    case .content:
+
+      switch kind {
+      case UICollectionView.elementKindSectionHeader:
+        let header = collectionView.dequeueReusableSupplementaryHeaderView(
+          withType: PostHeaderReusableView.self,
+          for: indexPath
+        )
+        header.bind(feed: self.feed)
+
+        return header
+
+      case UICollectionView.elementKindSectionFooter:
+        let footer = collectionView.dequeueReusableSupplementaryFooterView(
+          withType: PostFooterReusableView.self,
+          for: indexPath
+        )
+
+        return footer
+
+      default:
+        assert(false, "Unexpected element kind")
+      }
+
+    case .like:
+      switch kind {
+      case UICollectionView.elementKindSectionHeader:
+        let header = collectionView.dequeueReusableSupplementaryHeaderView(
+          withType: ReactHeaderReusableView.self,
+          for: indexPath
+        )
+        header.bind(count: 10, section: .like)
+
+        return header
+
+      case UICollectionView.elementKindSectionFooter:
+        let footer = collectionView.dequeueReusableSupplementaryFooterView(
+          withType: ReactFooterReusableView.self,
+          for: indexPath
+        )
+
+        return footer
+
+      default:
+        assert(false, "Unexpected element kind")
+      }
+
+    case .comment:
       let header = collectionView.dequeueReusableSupplementaryHeaderView(
-        withType: PostHeaderReusableView.self,
+        withType: ReactHeaderReusableView.self,
         for: indexPath
       )
-      header.bind(feed: self.feed)
 
       return header
-
-    case UICollectionView.elementKindSectionFooter:
-      let footer = collectionView.dequeueReusableSupplementaryFooterView(
-        withType: PostFooterReusableView.self,
-        for: indexPath
-      )
-
-      return footer
-
     default:
       assert(false, "Unexpected element kind")
     }
-
   }
 }
 
