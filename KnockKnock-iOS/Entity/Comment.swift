@@ -15,6 +15,7 @@ struct Comment: Decodable {
   let date: String
 
   var isOpen: Bool = false
+  var isReply: Bool = false
 }
 
 struct Reply: Decodable {
@@ -22,4 +23,14 @@ struct Reply: Decodable {
   let image: String
   let contents: String
   let date: String
+}
+
+struct CommentData: Decodable {
+  let userID: String
+  let image: String
+  let contents: String
+  let date: String
+
+  var isOpen: Bool = false
+  var isReply: Bool = false
 }

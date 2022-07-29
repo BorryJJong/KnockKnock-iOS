@@ -36,11 +36,76 @@ class FeedDetailViewController: BaseViewController<FeedDetailView> {
     Participant(id: 2, nickname: "", image: nil)
   ]
 
+  var dummyComments: [Comment] = [
+    Comment(userID: "user1", image: "", contents: "댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다",
+            replies: [
+              Reply(userID: "user2", image: "", contents: "retewar", date: "0201223"),
+              Reply(userID: "user3", image: "", contents: "asdfwegqegweqgwerwerwsdaf", date: "0201223"),
+              Reply(userID: "user2", image: "", contents: "retwegwelkwje;lkfjw;elfkjw;lkewar", date: "0201223")
+            ], date: "123kj12"),
+
+    Comment(userID: "user1", image: "", contents: "갖;ㅁㄷ기ㅓㅈ딥;ㅏ겆ㅂ디;ㅏ거;ㅣ나얾;ㅣㄴ아ㅓ히;ㅏ엏ㅈ;ㅣ다ㅜ;ㅣㅏ",
+            replies: [
+              Reply(userID: "user2", image: "", contents: "retewar", date: "0201223"),
+              Reply(userID: "user2", image: "", contents: "retwegwelkwje;lkfjw;elfkjw;lkewar", date: "0201223")
+            ], date: "123kj12"),
+
+    Comment(userID: "user1", image: "", contents: "댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다",
+            replies: [
+            ], date: "123kj12"),
+
+    Comment(userID: "user1", image: "", contents: "댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다",
+            replies: [
+              Reply(userID: "user2", image: "", contents: "retewar", date: "0201223"),
+              Reply(userID: "user3", image: "", contents: "asdfwegqegweqgwerwerwsdaf", date: "0201223"),
+              Reply(userID: "user2", image: "", contents: "retwegwelkwje;lkfjw;elfkjw;lkewar", date: "0201223")
+            ], date: "123kj12"),
+    Comment(userID: "user1", image: "", contents: "댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다",
+            replies: [
+              Reply(userID: "user2", image: "", contents: "retewar", date: "0201223"),
+              Reply(userID: "user3", image: "", contents: "asdfwegqegweqgwerwerwsdaf", date: "0201223"),
+              Reply(userID: "user2", image: "", contents: "retwegwelkwje;lkfjw;elfkjw;lkewar", date: "0201223")
+            ], date: "123kj12"),
+    Comment(userID: "user1", image: "", contents: "갖;ㅁㄷ기ㅓㅈ딥;ㅏ겆ㅂ디;ㅏ거;ㅣ나얾;ㅣㄴ아ㅓ히;ㅏ엏ㅈ;ㅣ다ㅜ;ㅣㅏ",
+            replies: [
+              Reply(userID: "user2", image: "", contents: "retewar", date: "0201223"),
+              Reply(userID: "user2", image: "", contents: "retwegwelkwje;lkfjw;elfkjw;lkewar", date: "0201223")
+            ], date: "123kj12")
+  ]
+
+  var testComments: [Comment] = []
+
+  func setComment(comments: [Comment]) {
+    self.testComments = []
+    for comment in comments {
+      if comment.replies.count != 0 && comment.isOpen {
+        self.testComments.append(comment)
+        for reply in comment.replies {
+          self.testComments.append(
+            Comment(
+              userID: reply.userID,
+              image: reply.image,
+              contents: reply.contents,
+              replies: [],
+              date: reply.date,
+              isReply: true
+            )
+          )
+        }
+      } else {
+        if !comment.isReply {
+          self.testComments.append(comment)
+        }
+      }
+    }
+  }
+
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setupConfigure()
+    self.setComment(comments: self.dummyComments)
   }
 
   // MARK: - Configure
@@ -58,12 +123,24 @@ class FeedDetailViewController: BaseViewController<FeedDetailView> {
       $0.registHeaderView(type: ReactHeaderReusableView.self)
       $0.registFooterView(type: ReactFooterReusableView.self)
       $0.registCell(type: LikeCell.self)
+
+      $0.registCell(type: PostCommentCell.self)
     }
     self.containerView.commentTextView.do {
       $0.delegate = self
     }
     self.addKeyboardNotification()
     self.hideKeyboardWhenTappedAround()
+  }
+
+  @objc private func replyMoreButtonDidTap(_ sender: UIButton) {
+    self.testComments[sender.tag].isOpen.toggle()
+
+    self.setComment(comments: self.testComments)
+
+    UIView.performWithoutAnimation {
+      self.containerView.postCollectionView.reloadSections([FeedDetailSection.comment.rawValue])
+    }
   }
 
   // MARK: - Keyboard Show & Hide
@@ -130,8 +207,8 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       return self.people.count + 1
 
     case .comment:
-      return 10
-
+      return self.testComments.count
+      
     default:
       assert(false)
     }
@@ -173,9 +250,17 @@ extension FeedDetailViewController: UICollectionViewDataSource {
 
     case .comment:
       let cell = collectionView.dequeueCell(
-        withType: LikeCell.self,
+        withType: PostCommentCell.self,
         for: indexPath
       )
+      cell.replyMoreButton.tag = indexPath.item
+      cell.replyMoreButton.addTarget(
+        self,
+        action: #selector(replyMoreButtonDidTap(_:)),
+        for: .touchUpInside
+      )
+      print("\(indexPath.item), \(self.testComments[indexPath.item].isReply)")
+      cell.bind(comment: self.testComments[indexPath.item])
 
       return cell
 
@@ -191,6 +276,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
     at indexPath: IndexPath
   ) -> UICollectionReusableView {
     let section = FeedDetailSection(rawValue: indexPath.section)
+
     switch section {
     case .content:
 
@@ -217,6 +303,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       }
 
     case .like:
+
       switch kind {
       case UICollectionView.elementKindSectionHeader:
         let header = collectionView.dequeueReusableSupplementaryHeaderView(
@@ -232,7 +319,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
           withType: ReactFooterReusableView.self,
           for: indexPath
         )
-
+        footer.backgroundColor = .cyan
         return footer
 
       default:
@@ -244,6 +331,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
         withType: ReactHeaderReusableView.self,
         for: indexPath
       )
+      header.bind(count: 10, section: .comment)
 
       return header
       
