@@ -272,8 +272,7 @@ class FeedDetailView: UIView {
 
     let likeGroupSize = NSCollectionLayoutSize(
       widthDimension: .estimated(estimatedWidth),
-      heightDimension: .estimated(estimatedHeigth
-                                 )
+      heightDimension: .estimated(estimatedHeigth)
     )
     let likeGroup = NSCollectionLayoutGroup.horizontal(
       layoutSize: likeGroupSize,

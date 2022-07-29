@@ -20,6 +20,21 @@ class FeedDetailViewController: BaseViewController<FeedDetailView> {
     scale: "1:1"
   )
   let tags = ["#용기내챌린지", "#프로모션", "#제로웨이스트", "#지구지키기프로젝트", "#용기내챌린지", "#용기내챌린지"]
+  let people = [
+    Participant(id: 2, nickname: "", image: nil),
+    Participant(id: 2, nickname: "", image: nil),
+    Participant(id: 2, nickname: "", image: nil),
+    Participant(id: 2, nickname: "", image: nil),
+    Participant(id: 2, nickname: "", image: nil),
+    Participant(id: 2, nickname: "", image: nil),
+    Participant(id: 2, nickname: "", image: nil),
+    Participant(id: 2, nickname: "", image: nil),
+    Participant(id: 2, nickname: "", image: nil),
+    Participant(id: 2, nickname: "", image: nil),
+    Participant(id: 2, nickname: "", image: nil),
+    Participant(id: 2, nickname: "", image: nil),
+    Participant(id: 2, nickname: "", image: nil)
+  ]
 
   // MARK: - Life Cycles
 
@@ -112,7 +127,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       return self.tags.count
 
     case .like:
-      return 10
+      return self.people.count + 1
 
     case .comment:
       return 10
@@ -137,22 +152,30 @@ extension FeedDetailViewController: UICollectionViewDataSource {
     case .content:
       let cell = collectionView.dequeueCell(
         withType: PostCell.self,
-        for: indexPath)
+        for: indexPath
+      )
       cell.bind(text: self.tags[indexPath.item])
 
       return cell
 
     case .like:
+
       let cell = collectionView.dequeueCell(
         withType: LikeCell.self,
-        for: indexPath)
-
+        for: indexPath
+      )
+      if indexPath.item == self.people.count {
+        cell.bind(isLast: true)
+      } else {
+        cell.bind(isLast: false)
+      }
       return cell
 
     case .comment:
       let cell = collectionView.dequeueCell(
         withType: LikeCell.self,
-        for: indexPath)
+        for: indexPath
+      )
 
       return cell
 
@@ -200,7 +223,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
           withType: ReactHeaderReusableView.self,
           for: indexPath
         )
-        header.bind(count: 10, section: .like)
+        header.bind(count: self.people.count, section: .like)
 
         return header
 

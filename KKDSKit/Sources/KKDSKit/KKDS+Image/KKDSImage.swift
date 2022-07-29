@@ -65,6 +65,7 @@ public extension KKDS.Image {
   static var ic_search_24_gr: UIImage             { .load(name: "ic_search_24_gr") }
   static var ic_search_24_wh: UIImage             { .load(name: "ic_search_24_wh") }
   static var ic_set_24_bk: UIImage                { .load(name: "ic_set_24_bk") }
+  static var ic_next_24_bk: UIImage                { .load(name: "ic_next_24_bk") }
 }
 
 // MARK: - background
