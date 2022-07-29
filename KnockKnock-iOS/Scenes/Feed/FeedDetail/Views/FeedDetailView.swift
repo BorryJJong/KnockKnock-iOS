@@ -288,7 +288,8 @@ class FeedDetailView: UIView {
       leading: 20,
       bottom: 15,
       trailing: 0
-)
+    )
+    
     let layout = UICollectionViewCompositionalLayout {(section: Int, _: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
 
       let section = FeedDetailSection(rawValue: section)

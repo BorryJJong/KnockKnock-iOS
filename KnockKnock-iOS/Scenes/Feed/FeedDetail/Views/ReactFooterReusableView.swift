@@ -40,7 +40,7 @@ class ReactFooterReusableView: UICollectionReusableView {
 
   private func setupConstraints() {
     [self.seperateLineView].addSubViews(self)
-
+    
     NSLayoutConstraint.activate([
       self.seperateLineView.topAnchor.constraint(equalTo: self.topAnchor),
       self.seperateLineView.leadingAnchor.constraint(equalTo: self.leadingAnchor),

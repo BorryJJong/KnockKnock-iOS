@@ -139,7 +139,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
   }
 
   func numberOfSections(in collectionView: UICollectionView) -> Int {
-    return 2
+    return FeedDetailSection.allCases.count
   }
 
   func collectionView(
@@ -246,6 +246,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       )
 
       return header
+      
     default:
       assert(false, "Unexpected element kind")
     }
