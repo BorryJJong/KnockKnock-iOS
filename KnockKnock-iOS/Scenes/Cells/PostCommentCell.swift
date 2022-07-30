@@ -15,8 +15,8 @@ class PostCommentCell: BaseCollectionViewCell {
   // MARK: - Constants
 
   private enum Metric {
-    static let profileImageViewWidth = 32.f
-    static let profileImageViewHeight = 32.f
+    static let profileImageViewTrailingMargin = 32.f
+    static let profileImageViewBottomMargin = 32.f
 
     static let userIdLabelLeadingMargin = 10.f
 
@@ -84,12 +84,10 @@ class PostCommentCell: BaseCollectionViewCell {
       self.profileImageView.trailingConstraint?.constant = 44
       self.profileImageView.bottomConstraint?.constant = 24
       self.profileImageView.leadingConstraint?.constant = 20
-      print("24")
     } else {
       self.profileImageView.trailingConstraint?.constant = 32
       self.profileImageView.bottomConstraint?.constant = 32
       self.profileImageView.leadingConstraint?.constant = 0
-      print("32")
     }
   }
 
@@ -117,10 +115,8 @@ class PostCommentCell: BaseCollectionViewCell {
     NSLayoutConstraint.activate([
       self.profileImageView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
       self.profileImageView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-//      self.profileImageView.widthAnchor.constraint(equalToConstant: Metric.profileImageViewWidth),
-//      self.profileImageView.heightAnchor.constraint(equalToConstant: Metric.profileImageViewHeight),
-      self.profileImageView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 32),
-      self.profileImageView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 32),
+      self.profileImageView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.profileImageViewTrailingMargin),
+      self.profileImageView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.profileImageViewBottomMargin),
 
       self.userIdLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
       self.userIdLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: Metric.userIdLabelLeadingMargin),

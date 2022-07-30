@@ -274,7 +274,6 @@ extension FeedDetailViewController: UICollectionViewDataSource {
         action: #selector(replyMoreButtonDidTap(_:)),
         for: .touchUpInside
       )
-      print("\(indexPath.item), \(self.testComments[indexPath.item].isReply)")
       cell.bind(comment: self.testComments[indexPath.item])
 
       return cell
