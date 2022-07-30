@@ -9,17 +9,22 @@ import UIKit
 
 import Then
 
-class FeedDetailViewController: BaseViewController<FeedDetailView> {
+protocol FeedDetailViewProtocol {
+  var interactor: FeedDetailInteractorProtocol? { get set }
+  var router: FeedDetailRouterProtocol? { get set }
+
+  func getFeedDetail(feedDetail: FeedDetail)
+}
+
+final class FeedDetailViewController: BaseViewController<FeedDetailView> {
 
   // MARK: - Properties
 
-  let feed =  Feed(
-    userId: 5,
-    content: "aa",
-    images: ["feed_sample_3", "feed_sample_2", "feed_sample_2"],
-    scale: "1:1"
-  )
-  let tags = ["#용기내챌린지", "#프로모션", "#제로웨이스트", "#지구지키기프로젝트", "#용기내챌린지", "#용기내챌린지"]
+  var interactor: FeedDetailInteractorProtocol?
+  var router: FeedDetailRouterProtocol?
+
+  var feedDetail: FeedDetail?
+
   let people = [
     Participant(id: 2, nickname: "", image: nil),
     Participant(id: 2, nickname: "", image: nil),
@@ -105,6 +110,7 @@ class FeedDetailViewController: BaseViewController<FeedDetailView> {
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setupConfigure()
+    self.interactor?.getFeedDeatil()
     self.setComment(comments: self.dummyComments)
   }
 
@@ -192,6 +198,14 @@ class FeedDetailViewController: BaseViewController<FeedDetailView> {
   }
 }
 
+// MARK: - FeedDetailViewProtocol
+
+extension FeedDetailViewController: FeedDetailViewProtocol {
+  func getFeedDetail(feedDetail: FeedDetail) {
+    self.feedDetail = feedDetail
+  }
+}
+
 // MARK: - CollectionView datasource, layout
 
 extension FeedDetailViewController: UICollectionViewDataSource {
@@ -201,7 +215,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
   ) -> Int {
     switch FeedDetailSection(rawValue: section) {
     case .content:
-      return self.tags.count
+      return self.feedDetail?.challenge.count ?? 0
 
     case .like:
       return self.people.count + 1
@@ -231,8 +245,9 @@ extension FeedDetailViewController: UICollectionViewDataSource {
         withType: PostCell.self,
         for: indexPath
       )
-      cell.bind(text: self.tags[indexPath.item])
-
+      if let feedDetail = self.feedDetail {
+        cell.bind(text: feedDetail.challenge[indexPath.item].title)
+      }
       return cell
 
     case .like:
@@ -286,7 +301,9 @@ extension FeedDetailViewController: UICollectionViewDataSource {
           withType: PostHeaderReusableView.self,
           for: indexPath
         )
-        header.bind(feed: self.feed)
+        if let feedDetail = self.feedDetail {
+          header.bind(feed: feedDetail)
+        }
 
         return header
 

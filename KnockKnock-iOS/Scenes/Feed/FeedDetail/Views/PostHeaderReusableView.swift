@@ -108,7 +108,7 @@ class PostHeaderReusableView: UICollectionReusableView {
 
   // MARK: - Bind
 
-  func bind(feed: Feed) {
+  func bind(feed: FeedDetail) {
     self.contentLabel.setLineHeight(fontSize: 14, content: self.dummyContent)
 
     self.imageScrollView.subviews.forEach{

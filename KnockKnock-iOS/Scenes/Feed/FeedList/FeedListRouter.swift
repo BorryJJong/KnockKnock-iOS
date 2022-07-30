@@ -33,7 +33,7 @@ final class FeedListRouter: FeedListRouterProtocol {
   }
 
   func navigateToFeedDetail(source: FeedListViewProtocol) {
-    let feedDetailViewController = FeedDetailViewController()
+    let feedDetailViewController = FeedDetailRouter.createFeedDetail()
     if let sourceView = source as? UIViewController {
       feedDetailViewController.hidesBottomBarWhenPushed = true
       sourceView.navigationController?.pushViewController(feedDetailViewController, animated: true)
