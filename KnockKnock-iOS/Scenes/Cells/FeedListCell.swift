@@ -176,6 +176,10 @@ class FeedListCell: BaseCollectionViewCell {
   // MARK: - Configure
 
   override func setupConfigure() {
+    self.setCellShadow()
+  }
+
+  private func setCellShadow() {
     self.do {
       $0.clipsToBounds = true
       $0.layer.cornerRadius = 5
@@ -186,6 +190,7 @@ class FeedListCell: BaseCollectionViewCell {
       $0.layer.shadowRadius = 5
     }
   }
+
 
   override func setupConstraints() {
     [self.imageScrollView, self.imageNumberLabel, self.imagePageControl].addSubViews(self.contentView)
