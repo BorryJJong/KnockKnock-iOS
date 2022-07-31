@@ -78,7 +78,6 @@ extension FeedListViewController: UICollectionViewDataSource {
     )
 
     cell.bind(feed: self.feed[indexPath.item])
-    cell.setCellShadow(cell: cell)
     cell.commentsButton.addTarget(
       self,
       action: #selector(commentButtonDidTap(_:)),

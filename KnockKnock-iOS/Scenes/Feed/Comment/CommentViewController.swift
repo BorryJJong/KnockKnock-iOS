@@ -31,7 +31,6 @@ final class CommentViewController: BaseViewController<CommentView> {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.setupConfigure()
     self.interactor?.getComments()
   }
 

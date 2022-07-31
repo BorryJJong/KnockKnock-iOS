@@ -123,6 +123,7 @@ class FeedListCell: BaseCollectionViewCell {
       $0.removeFromSuperview()
     }
 
+    self.setCellShadow()
     self.contentLabel.text = feed.content
     self.setImageView(images: feed.images, scale: feed.scale)
 
@@ -175,8 +176,8 @@ class FeedListCell: BaseCollectionViewCell {
 
   // MARK: - Configure
 
-  func setCellShadow(cell: UICollectionViewCell) {
-    cell.do {
+  func setCellShadow() {
+    self.do {
       $0.clipsToBounds = true
       $0.layer.cornerRadius = 5
       $0.layer.masksToBounds = false
