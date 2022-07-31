@@ -165,7 +165,7 @@ extension CommentViewController: UICollectionViewDataSource {
     at indexPath: IndexPath
   ) -> UICollectionReusableView {
     let header = collectionView.dequeueReusableSupplementaryHeaderView(
-      withType: HeaderCollectionReusableView.self,
+      withType: CommentHeaderCollectionReusableView.self,
       for: indexPath
     )
     header.bind(comment: self.comments[indexPath.section])
