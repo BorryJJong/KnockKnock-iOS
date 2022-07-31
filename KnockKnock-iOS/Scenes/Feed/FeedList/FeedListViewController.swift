@@ -11,34 +11,30 @@ import Then
 
 protocol FeedListViewProtocol: AnyObject {
   var interactor: FeedListInteractorProtocol? { get set }
-  var router: FeedListRouter? { get set }
-
+  var router: FeedListRouterProtocol? { get set }
+  
   func fetchFeedList(feed: [Feed])
 }
 
 final class FeedListViewController: BaseViewController<FeedListView> {
-
-  // MARK: - Constants
-
-  private enum Scale {
-    static let square = "1:1"
-    static let threeToFour = "3:4"
-    static let fourToThree = "4:3"
-  }
-
+  
   // MARK: - Properties
-
+  
   var interactor: FeedListInteractorProtocol?
-  var router: FeedListRouter?
+  var router: FeedListRouterProtocol?
+  
   var feed: [Feed] = []
-
+  
+  lazy var tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapScrollViewSection(_:)))
+  
   // MARK: - Life Cycles
-
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     self.interactor?.fetchFeed()
+    self.containerView.addGestureRecognizer(tapGesture)
   }
-
+  
   override func setupConfigure() {
     self.containerView.feedListCollectionView.do {
       $0.delegate = self
@@ -47,7 +43,25 @@ final class FeedListViewController: BaseViewController<FeedListView> {
       $0.registHeaderView(type: FeedListHeaderReusableView.self)
     }
   }
-
+  
+  // MARK: - didSelectItem
+  
+  /// ScrollView 영역을 포함하여 didSelectItem 호출하기 위한 메소드
+  @objc func tapScrollViewSection(_ sender: UITapGestureRecognizer) {
+    let collectionView = self.containerView.feedListCollectionView
+    
+    let touchLocation: CGPoint = sender.location(ofTouch: 0, in: collectionView)
+    let indexPath = collectionView.indexPathForItem(at: touchLocation)
+    
+    if let indexPath = indexPath {
+      if let cell = collectionView.cellForItem(at: indexPath) {
+        if !cell.isSelected {
+          self.router?.navigateToFeedDetail(source: self)
+        }
+      }
+    }
+  }
+  
   @objc func commentButtonDidTap(_ sender: UIButton) {
     self.router?.navigateToCommentView(source: self)
   }
@@ -66,7 +80,7 @@ extension FeedListViewController: UICollectionViewDataSource {
   ) -> Int {
     return 1
   }
-
+  
   func collectionView(
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
@@ -102,6 +116,7 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
     layout collectionViewLayout: UICollectionViewLayout,
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
+
     let scale = feed[indexPath.item].scale
     let scaleType = ImageScaleType(rawValue: scale)
     

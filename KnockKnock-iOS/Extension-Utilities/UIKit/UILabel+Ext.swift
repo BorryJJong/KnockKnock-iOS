@@ -9,8 +9,24 @@ import UIKit
 
 extension UILabel {
 
-  /// label의 폰트, 사이즈를 계산해서 최종적으로 화면에 보여질 글자의 길이를 저장할 변수
+  // MARK: Line height 설정
 
+  func setLineHeight(fontSize: CGFloat, content: String) {
+    let style = NSMutableParagraphStyle()
+    let lineHeight = fontSize * 1.6
+    style.minimumLineHeight = lineHeight
+    style.maximumLineHeight = lineHeight
+
+    self.attributedText = NSAttributedString(string: content,
+    attributes: [
+      .paragraphStyle: style,
+      .font: UIFont.systemFont(ofSize: fontSize, weight: .regular)
+    ])
+  }
+
+  // MARK: - "...더보기"
+
+/// label의 폰트, 사이즈를 계산해서 최종적으로 화면에 보여질 글자의 길이를 저장할 변수
   var visibleTextLength: Int {
 
     let font: UIFont = self.font
@@ -68,7 +84,6 @@ extension UILabel {
   }
 
   /// 덧 붙일 텍스트의 길이만큼 trailing 값을 추가하는 함수
-
   func addTrailing(
     with trailingText: String,
     moreText: String,
@@ -102,7 +117,7 @@ extension UILabel {
           in: NSRange(
             location: safeTrimmedString.count - readMoreLength,
             length: readMoreLength)
-          ,with: ""
+          , with: ""
         ) + trailingText
 
       let answerAttributed = NSMutableAttributedString(
