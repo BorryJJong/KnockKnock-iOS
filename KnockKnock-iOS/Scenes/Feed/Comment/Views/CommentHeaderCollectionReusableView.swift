@@ -9,7 +9,7 @@ import UIKit
 
 import KKDSKit
 
-final class HeaderCollectionReusableView: UICollectionReusableView {
+final class CommentHeaderCollectionReusableView: UICollectionReusableView {
 
   // MARK: - Constants
 
