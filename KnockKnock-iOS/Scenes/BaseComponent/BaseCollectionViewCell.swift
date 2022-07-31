@@ -15,6 +15,7 @@ class BaseCollectionViewCell: UICollectionViewCell {
     super.init(frame: frame)
     self.backgroundColor = .white
     self.setupConstraints()
+    self.setupConfigure()
   }
   
   required init?(coder: NSCoder) {
@@ -22,4 +23,5 @@ class BaseCollectionViewCell: UICollectionViewCell {
   }
   
   func setupConstraints() { /* override point */ }
+  func setupConfigure() {/* override point */}
 }

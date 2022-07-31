@@ -15,16 +15,6 @@ class FeedListCell: BaseCollectionViewCell {
 
   private enum Metric {
 
-    static let headerViewHeight = 50.f
-
-    static let profileImageViewWidth = 32.f
-    static let profileImageViewHeight = 32.f
-
-    static let configureButtonWidth = 40.f
-
-    static let stackViewLeadingMargin = 15.f
-    static let stackViewTrailingMargin = -25.f
-
     static let imageScrollViewTopMargin = 10.f
     static let imageScrollViewBottomMargin = -15.f
 
@@ -34,63 +24,19 @@ class FeedListCell: BaseCollectionViewCell {
 
     static let imagePageControlBottomMargin = -10.f
 
-    static let postContentViewTopMargin = 15.f
-
     static let contentLabelLeadingMargin = 15.f
     static let contentLabelTrailingMargin = -15.f
     static let contentLabelBottomMargin = -10.f
     static let contentLabelHeight = 40.f
 
     static let likeButtonBottomMargin = -15.f
-    static let likeButtonLeadingMargin = 10.f
+    static let likeButtonLeadingMargin = 15.f
     
     static let commentsButtonLeadingMargin = 10.f
     static let commentsButtonBottomMargin = -15.f
-
   }
   
   // MARK: - UIs
-
-  private let headerView = UIView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-  }
-
-  private lazy var stackView = UIStackView(arrangedSubviews: [
-    self.userIdLabel,
-    self.postDateLabel
-  ]).then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.axis = .vertical
-    $0.alignment = .fill
-    $0.distribution = .fill
-  }
-
-  private lazy var profileImageView = UIImageView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.layer.cornerRadius = 16
-    $0.clipsToBounds = true
-    $0.image = KKDS.Image.ic_person_24
-  }
-
-  private let userIdLabel = UILabel().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.font = .systemFont(ofSize: 13, weight: .bold)
-    $0.text = "sungmin_kim94"
-  }
-
-  private let postDateLabel = UILabel().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.textColor = .gray70
-    $0.font = .systemFont(ofSize: 12, weight: .light)
-    $0.text = "1시간전"
-  }
-
-  private let configureButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.setTitleColor(.black, for: .normal)
-    $0.setImage(KKDS.Image.ic_more_20_gr, for: .normal)
-    $0.contentHorizontalAlignment = .right
-  }
 
   lazy var imageScrollView = UIScrollView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
@@ -177,7 +123,6 @@ class FeedListCell: BaseCollectionViewCell {
       $0.removeFromSuperview()
     }
 
-    self.userIdLabel.text = "\(feed.userId)"
     self.contentLabel.text = feed.content
     self.setImageView(images: feed.images, scale: feed.scale)
 
@@ -230,41 +175,31 @@ class FeedListCell: BaseCollectionViewCell {
 
   // MARK: - Configure
 
-  override func setupConstraints() {
+  override func setupConfigure() {
+    self.setCellShadow()
+  }
 
-    [self.headerView].addSubViews(self.contentView)
-    [self.profileImageView, self.stackView, self.configureButton].addSubViews(headerView)
-    [self.postContentView].addSubViews(self.contentView)
-    [self.imageScrollView, self.imageNumberLabel, self.imagePageControl].addSubViews(self.postContentView)
-    [self.contentLabel, self.likeButton, self.commentsButton].addSubViews(self.postContentView)
+  private func setCellShadow() {
+    self.do {
+      $0.clipsToBounds = true
+      $0.layer.cornerRadius = 5
+      $0.layer.masksToBounds = false
+      $0.layer.shadowColor = UIColor.black.cgColor
+      $0.layer.shadowOpacity = 0.1
+      $0.layer.shadowOffset = CGSize(width: 0, height: 10)
+      $0.layer.shadowRadius = 5
+    }
+  }
+
+
+  override func setupConstraints() {
+    [self.imageScrollView, self.imageNumberLabel, self.imagePageControl].addSubViews(self.contentView)
+    [self.contentLabel, self.likeButton, self.commentsButton].addSubViews(self.contentView)
 
     NSLayoutConstraint.activate([
-      self.headerView.topAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.topAnchor),
-      self.headerView.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor),
-      self.headerView.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor),
-      self.headerView.heightAnchor.constraint(equalToConstant: Metric.headerViewHeight),
-
-      self.profileImageView.centerYAnchor.constraint(equalTo: self.headerView.centerYAnchor),
-      self.profileImageView.leadingAnchor.constraint(equalTo: self.headerView.leadingAnchor),
-      self.profileImageView.widthAnchor.constraint(equalToConstant: Metric.profileImageViewWidth),
-      self.profileImageView.heightAnchor.constraint(equalToConstant: Metric.profileImageViewHeight),
-
-      self.configureButton.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor),
-      self.configureButton.widthAnchor.constraint(equalToConstant: Metric.configureButtonWidth),
-      self.configureButton.centerYAnchor.constraint(equalTo: self.headerView.centerYAnchor),
-
-      self.stackView.centerYAnchor.constraint(equalTo: self.headerView.centerYAnchor),
-      self.stackView.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: Metric.stackViewLeadingMargin),
-      self.stackView.trailingAnchor.constraint(equalTo: self.configureButton.leadingAnchor, constant: Metric.stackViewTrailingMargin),
-
-      self.postContentView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor, constant: Metric.postContentViewTopMargin),
-      self.postContentView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
-      self.postContentView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
-      self.postContentView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
-
-      self.imageScrollView.topAnchor.constraint(equalTo: self.postContentView.topAnchor),
-      self.imageScrollView.leadingAnchor.constraint(equalTo: self.postContentView.leadingAnchor),
-      self.imageScrollView.trailingAnchor.constraint(equalTo: self.postContentView.trailingAnchor),
+      self.imageScrollView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
+      self.imageScrollView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+      self.imageScrollView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
       self.imageScrollView.bottomAnchor.constraint(equalTo: self.contentLabel.topAnchor, constant: Metric.imageScrollViewBottomMargin),
 
       self.imageNumberLabel.widthAnchor.constraint(equalToConstant: Metric.imageNumberLabelWidth),
@@ -272,21 +207,23 @@ class FeedListCell: BaseCollectionViewCell {
       self.imageNumberLabel.trailingAnchor.constraint(equalTo: self.imageScrollView.trailingAnchor, constant: Metric.imageNumberLabelTrailingMargin),
 
       self.imagePageControl.bottomAnchor.constraint(equalTo: self.imageScrollView.bottomAnchor, constant: Metric.imagePageControlBottomMargin),
-      self.imagePageControl.centerXAnchor.constraint(equalTo: self.postContentView.centerXAnchor),
+      self.imagePageControl.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
 
-      self.contentLabel.leadingAnchor.constraint(equalTo: self.postContentView.leadingAnchor, constant: Metric.contentLabelLeadingMargin),
-      self.contentLabel.trailingAnchor.constraint(equalTo: self.postContentView.trailingAnchor, constant: Metric.contentLabelTrailingMargin),
+      self.contentLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: Metric.contentLabelLeadingMargin),
+      self.contentLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: Metric.contentLabelTrailingMargin),
       self.contentLabel.bottomAnchor.constraint(equalTo: self.likeButton.topAnchor, constant: Metric.contentLabelBottomMargin),
       self.contentLabel.heightAnchor.constraint(equalToConstant: Metric.contentLabelHeight),
 
-      self.likeButton.bottomAnchor.constraint(equalTo: self.postContentView.bottomAnchor, constant: Metric.likeButtonBottomMargin),
-      self.likeButton.leadingAnchor.constraint(equalTo: self.postContentView.leadingAnchor, constant: Metric.likeButtonLeadingMargin),
+      self.likeButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: Metric.likeButtonBottomMargin),
+      self.likeButton.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: Metric.likeButtonLeadingMargin),
 
-      self.commentsButton.bottomAnchor.constraint(equalTo: self.postContentView.bottomAnchor, constant: Metric.commentsButtonBottomMargin),
+      self.commentsButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: Metric.commentsButtonBottomMargin),
       self.commentsButton.leadingAnchor.constraint(equalTo: self.likeButton.trailingAnchor, constant: Metric.commentsButtonLeadingMargin)
     ])
   }
 }
+
+// MARK: - ScrollView delegate
 
 extension FeedListCell: UIScrollViewDelegate {
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
