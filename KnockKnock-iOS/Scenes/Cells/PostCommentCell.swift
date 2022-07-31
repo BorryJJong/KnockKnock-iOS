@@ -81,9 +81,9 @@ class PostCommentCell: BaseCollectionViewCell {
     self.commentLabel.text = comment.contents
 
     if comment.isReply {
-      self.profileImageView.trailingConstraint?.constant = 44
+      self.profileImageView.trailingConstraint?.constant = 66
       self.profileImageView.bottomConstraint?.constant = 24
-      self.profileImageView.leadingConstraint?.constant = 20
+      self.profileImageView.leadingConstraint?.constant = 42
     } else {
       self.profileImageView.trailingConstraint?.constant = 32
       self.profileImageView.bottomConstraint?.constant = 32

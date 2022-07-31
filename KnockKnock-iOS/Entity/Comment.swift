@@ -11,7 +11,7 @@ struct Comment: Decodable {
   let userID: String
   let image: String
   let contents: String
-  var replies: [Reply]
+  let replies: [Reply]
   let date: String
 
   var isOpen: Bool = false
