@@ -14,6 +14,8 @@ protocol FeedDetailViewProtocol {
   var router: FeedDetailRouterProtocol? { get set }
 
   func getFeedDetail(feedDetail: FeedDetail)
+  func getAllComments(allComments: [Comment])
+  func setVisibleComments(comments: [Comment])
 }
 
 final class FeedDetailViewController: BaseViewController<FeedDetailView> {
@@ -41,69 +43,8 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     Participant(id: 2, nickname: "", image: nil)
   ]
 
-  var dummyComments: [Comment] = [
-    Comment(userID: "user1", image: "", contents: "댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다",
-            replies: [
-              Reply(userID: "user2", image: "", contents: "retewar", date: "0201223"),
-              Reply(userID: "user3", image: "", contents: "asdfwegqegweqgwerwerwsdaf", date: "0201223"),
-              Reply(userID: "user2", image: "", contents: "retwegwelkwje;lkfjw;elfkjw;lkewar", date: "0201223")
-            ], date: "123kj12"),
-
-    Comment(userID: "user1", image: "", contents: "갖;ㅁㄷ기ㅓㅈ딥;ㅏ겆ㅂ디;ㅏ거;ㅣ나얾;ㅣㄴ아ㅓ히;ㅏ엏ㅈ;ㅣ다ㅜ;ㅣㅏ",
-            replies: [
-              Reply(userID: "user2", image: "", contents: "retewar", date: "0201223"),
-              Reply(userID: "user2", image: "", contents: "retwegwelkwje;lkfjw;elfkjw;lkewar", date: "0201223")
-            ], date: "123kj12"),
-
-    Comment(userID: "user1", image: "", contents: "댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다",
-            replies: [
-            ], date: "123kj12"),
-
-    Comment(userID: "user1", image: "", contents: "댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다",
-            replies: [
-              Reply(userID: "user2", image: "", contents: "retewar", date: "0201223"),
-              Reply(userID: "user3", image: "", contents: "asdfwegqegweqgwerwerwsdaf", date: "0201223"),
-              Reply(userID: "user2", image: "", contents: "retwegwelkwje;lkfjw;elfkjw;lkewar", date: "0201223")
-            ], date: "123kj12"),
-    Comment(userID: "user1", image: "", contents: "댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다",
-            replies: [
-              Reply(userID: "user2", image: "", contents: "retewar", date: "0201223"),
-              Reply(userID: "user3", image: "", contents: "asdfwegqegweqgwerwerwsdaf", date: "0201223"),
-              Reply(userID: "user2", image: "", contents: "retwegwelkwje;lkfjw;elfkjw;lkewar", date: "0201223")
-            ], date: "123kj12"),
-    Comment(userID: "user1", image: "", contents: "갖;ㅁㄷ기ㅓㅈ딥;ㅏ겆ㅂ디;ㅏ거;ㅣ나얾;ㅣㄴ아ㅓ히;ㅏ엏ㅈ;ㅣ다ㅜ;ㅣㅏ",
-            replies: [
-              Reply(userID: "user2", image: "", contents: "retewar", date: "0201223"),
-              Reply(userID: "user2", image: "", contents: "retwegwelkwje;lkfjw;elfkjw;lkewar", date: "0201223")
-            ], date: "123kj12")
-  ]
-
-  var testComments: [Comment] = []
-
-  func setComment(comments: [Comment]) {
-    self.testComments = []
-    for comment in comments {
-      if comment.replies.count != 0 && comment.isOpen {
-        self.testComments.append(comment)
-        for reply in comment.replies {
-          self.testComments.append(
-            Comment(
-              userID: reply.userID,
-              image: reply.image,
-              contents: reply.contents,
-              replies: [],
-              date: reply.date,
-              isReply: true
-            )
-          )
-        }
-      } else {
-        if !comment.isReply {
-          self.testComments.append(comment)
-        }
-      }
-    }
-  }
+  var allComments: [Comment] = []
+  var visibleComments: [Comment] = []
 
   // MARK: - Life Cycles
 
@@ -111,7 +52,8 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     super.viewDidLoad()
     self.setupConfigure()
     self.interactor?.getFeedDeatil()
-    self.setComment(comments: self.dummyComments)
+    self.interactor?.getAllComments()
+    self.interactor?.setVisibleComments(comments: self.allComments)
   }
 
   // MARK: - Configure
@@ -140,10 +82,10 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   }
 
   @objc private func replyMoreButtonDidTap(_ sender: UIButton) {
-    self.testComments[sender.tag].isOpen.toggle()
+    self.visibleComments[sender.tag].isOpen.toggle()
 
-    self.setComment(comments: self.testComments)
-
+    self.interactor?.setVisibleComments(comments: self.visibleComments)
+    
     UIView.performWithoutAnimation {
       self.containerView.postCollectionView.reloadSections([FeedDetailSection.comment.rawValue])
     }
@@ -204,6 +146,14 @@ extension FeedDetailViewController: FeedDetailViewProtocol {
   func getFeedDetail(feedDetail: FeedDetail) {
     self.feedDetail = feedDetail
   }
+
+  func getAllComments(allComments: [Comment]) {
+    self.allComments = allComments
+  }
+
+  func setVisibleComments(comments: [Comment]) {
+    self.visibleComments = comments
+  }
 }
 
 // MARK: - CollectionView datasource, layout
@@ -221,7 +171,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       return self.people.count + 1
 
     case .comment:
-      return self.testComments.count
+      return self.visibleComments.count
       
     default:
       assert(false)
@@ -274,7 +224,8 @@ extension FeedDetailViewController: UICollectionViewDataSource {
         action: #selector(replyMoreButtonDidTap(_:)),
         for: .touchUpInside
       )
-      cell.bind(comment: self.testComments[indexPath.item])
+
+      cell.bind(comment: self.visibleComments[indexPath.item])
 
       return cell
 

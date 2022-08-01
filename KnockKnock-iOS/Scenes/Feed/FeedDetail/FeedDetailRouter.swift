@@ -16,7 +16,10 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
     let view = FeedDetailViewController()
     let interactor = FeedDetailInteractor()
     let presenter = FeedDetailPresenter()
-    let worker = FeedDetailWorker(repository: FeedRepository())
+    let worker = FeedDetailWorker(
+      feedRepository: FeedRepository(),
+      commentRepository: CommentRepository()
+    )
     let router = FeedDetailRouter()
 
     view.interactor = interactor
