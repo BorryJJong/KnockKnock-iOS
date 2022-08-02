@@ -11,7 +11,17 @@ import Then
 import KKDSKit
 
 class LikeCell: BaseCollectionViewCell {
-  
+
+  // MARK: - Constants
+
+  private enum Metric {
+    static let profileImageViewWidth = 45.f
+    static let profileImageViewHeight = 45.f
+
+    static let likeImageViewWidth = 16.f
+    static let likeImageViewHeight = 16.f
+  }
+
   // MARK: - UIs
   
   private let profileImageView = UIImageView().then {
@@ -54,16 +64,16 @@ class LikeCell: BaseCollectionViewCell {
     NSLayoutConstraint.activate([
       self.profileImageView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
       self.profileImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
-      self.profileImageView.heightAnchor.constraint(equalToConstant: 45),
-      self.profileImageView.widthAnchor.constraint(equalToConstant: 45),
+      self.profileImageView.heightAnchor.constraint(equalToConstant: Metric.profileImageViewHeight),
+      self.profileImageView.widthAnchor.constraint(equalToConstant: Metric.profileImageViewWidth),
       
       self.nextImageView.leadingAnchor.constraint(equalTo: self.profileImageView.leadingAnchor),
       self.nextImageView.centerYAnchor.constraint(equalTo: self.profileImageView.centerYAnchor),
       
       self.likeImageView.trailingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor),
       self.likeImageView.bottomAnchor.constraint(equalTo: self.profileImageView.bottomAnchor),
-      self.likeImageView.heightAnchor.constraint(equalToConstant: 16),
-      self.likeImageView.widthAnchor.constraint(equalToConstant: 16)
+      self.likeImageView.heightAnchor.constraint(equalToConstant: Metric.likeImageViewHeight),
+      self.likeImageView.widthAnchor.constraint(equalToConstant: Metric.likeImageViewWidth)
     ])
   }
 }
