@@ -8,6 +8,7 @@
 import UIKit
 
 import Then
+import KKDSKit
 
 protocol FeedDetailViewProtocol {
   var interactor: FeedDetailInteractorProtocol? { get set }
@@ -35,6 +36,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    self.setNavigationBar()
     self.setupConfigure()
 
     self.interactor?.getFeedDeatil()
@@ -67,6 +69,39 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     }
     self.addKeyboardNotification()
     self.hideKeyboardWhenTappedAround()
+  }
+
+  func setNavigationBar() {
+    let navigationView = FeedDetailNavigationBarView()
+    
+    let backButton = UIBarButtonItem(
+      image: KKDS.Image.ic_back_24_bk,
+      style: .done,
+      target: self,
+      action: #selector(backButtonDidTap(_:))
+    )
+    let moreButton = UIBarButtonItem(
+      image: KKDS.Image.ic_more_20_gr,
+      style: .plain,
+      target: self,
+      action: #selector(moreButtonDidTap(_:))
+    )
+
+    self.navigationItem.leftBarButtonItems = [
+      backButton,
+      UIBarButtonItem.init(customView: navigationView)
+    ]
+    self.navigationItem.rightBarButtonItem = moreButton
+    self.navigationController?.navigationBar.tintColor = .black
+  }
+
+  // MARK: - Button Actions
+
+  @objc private func backButtonDidTap(_ sender: UIButton) {
+    self.navigationController?.popViewController(animated: true)
+  }
+
+  @objc private func moreButtonDidTap(_ sender: UIButton) {
   }
 
   @objc private func replyMoreButtonDidTap(_ sender: UIButton) {
@@ -168,7 +203,6 @@ extension FeedDetailViewController: UICollectionViewDataSource {
     default:
       assert(false)
     }
-
   }
 
   func numberOfSections(in collectionView: UICollectionView) -> Int {
