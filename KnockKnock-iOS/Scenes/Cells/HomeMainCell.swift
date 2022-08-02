@@ -20,14 +20,28 @@ class HomeMainCell: BaseCollectionViewCell {
     $0.contentMode = .scaleToFill
   }
 
-//  let gradientImageView = UIImageView().then {
-//  }
+  let topGradientImageView = UIImageView().then {
+    $0.image = KKDS.Image.ic_bg_gradient_top_bk
+  }
+
+  let bottomGradientImageView = UIImageView().then {
+    $0.image = KKDS.Image.ic_bg_gradient_bottom_bk
+  }
 
   override func setupConstraints() {
-    [self.mainImageView].addSubViews(self.contentView)
+    [self.mainImageView, self.topGradientImageView, self.bottomGradientImageView].addSubViews(self.contentView)
 
     self.mainImageView.snp.makeConstraints {
       $0.edges.equalToSuperview()
+    }
+
+    self.topGradientImageView.snp.makeConstraints {
+      $0.edges.top.trailing.leading.equalToSuperview()
+      $0.height.equalTo(300)
+    }
+
+    self.bottomGradientImageView.snp.makeConstraints {
+      $0.edges.bottom.trailing.leading.equalToSuperview()
     }
   }
 }

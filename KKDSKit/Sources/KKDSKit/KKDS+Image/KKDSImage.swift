@@ -65,7 +65,8 @@ public extension KKDS.Image {
 
 public extension KKDS.Image {
   static var ic_bg_gradient_wh: UIImage           {.load(name: "ic_bg_gradient_wh")}
-  static var ic_bg_gradient_bk: UIImage           {.load(name: "ic_bg_gradient_bk")}
+  static var ic_bg_gradient_top_bk: UIImage           {.load(name: "ic_bg_gradient_top_bk")}
+  static var ic_bg_gradient_bottom_bk: UIImage           {.load(name: "ic_bg_gradient_bottom_bk")}
 }
 
 // MARK: - Tab
