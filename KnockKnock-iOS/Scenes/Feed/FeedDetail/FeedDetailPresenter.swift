@@ -13,6 +13,7 @@ protocol FeedDetailPresenterProtocol {
   func presentFeedDetail(feedDetail: FeedDetail)
   func presentAllComments(allComments: [Comment])
   func setVisibleComments(visibleComments: [Comment])
+  func presentLike(like: [Like])
 }
 
 final class FeedDetailPresenter: FeedDetailPresenterProtocol {
@@ -20,6 +21,10 @@ final class FeedDetailPresenter: FeedDetailPresenterProtocol {
 
   func presentFeedDetail(feedDetail: FeedDetail) {
     self.view?.getFeedDetail(feedDetail: feedDetail)
+  }
+
+  func presentLike(like: [Like]) {
+    self.view?.getLike(like: like)
   }
 
   func presentAllComments(allComments: [Comment]) {

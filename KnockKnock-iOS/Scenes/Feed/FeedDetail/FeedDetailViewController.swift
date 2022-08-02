@@ -16,6 +16,7 @@ protocol FeedDetailViewProtocol {
   func getFeedDetail(feedDetail: FeedDetail)
   func getAllComments(allComments: [Comment])
   func setVisibleComments(comments: [Comment])
+  func getLike(like: [Like])
 }
 
 final class FeedDetailViewController: BaseViewController<FeedDetailView> {
@@ -26,23 +27,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   var router: FeedDetailRouterProtocol?
 
   var feedDetail: FeedDetail?
-
-  let people = [
-    Participant(id: 2, nickname: "", image: nil),
-    Participant(id: 2, nickname: "", image: nil),
-    Participant(id: 2, nickname: "", image: nil),
-    Participant(id: 2, nickname: "", image: nil),
-    Participant(id: 2, nickname: "", image: nil),
-    Participant(id: 2, nickname: "", image: nil),
-    Participant(id: 2, nickname: "", image: nil),
-    Participant(id: 2, nickname: "", image: nil),
-    Participant(id: 2, nickname: "", image: nil),
-    Participant(id: 2, nickname: "", image: nil),
-    Participant(id: 2, nickname: "", image: nil),
-    Participant(id: 2, nickname: "", image: nil),
-    Participant(id: 2, nickname: "", image: nil)
-  ]
-
+  var like: [Like] = []
   var allComments: [Comment] = []
   var visibleComments: [Comment] = []
 
@@ -51,7 +36,9 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setupConfigure()
+
     self.interactor?.getFeedDeatil()
+    self.interactor?.getLike()
     self.interactor?.getAllComments()
     self.interactor?.setVisibleComments(comments: self.allComments)
   }
@@ -62,7 +49,6 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     self.containerView.postCollectionView.do {
       $0.dataSource = self
       $0.delegate = self
-      $0.collectionViewLayout = self.containerView.setPostCollectionViewLayout()
 
       $0.registHeaderView(type: PostHeaderReusableView.self)
       $0.registFooterView(type: PostFooterReusableView.self)
@@ -73,6 +59,8 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       $0.registCell(type: LikeCell.self)
 
       $0.registCell(type: PostCommentCell.self)
+
+      $0.collectionViewLayout = self.containerView.setPostCollectionViewLayout()
     }
     self.containerView.commentTextView.do {
       $0.delegate = self
@@ -154,6 +142,10 @@ extension FeedDetailViewController: FeedDetailViewProtocol {
   func setVisibleComments(comments: [Comment]) {
     self.visibleComments = comments
   }
+
+  func getLike(like: [Like]) {
+    self.like = like
+  }
 }
 
 // MARK: - CollectionView datasource, layout
@@ -168,7 +160,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       return self.feedDetail?.challenge.count ?? 0
 
     case .like:
-      return self.people.count + 1
+      return self.like.count + 1
 
     case .comment:
       return self.visibleComments.count
@@ -206,7 +198,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
         withType: LikeCell.self,
         for: indexPath
       )
-      if indexPath.item == self.people.count {
+      if indexPath.item == self.like.count {
         cell.bind(isLast: true)
       } else {
         cell.bind(isLast: false)
@@ -232,7 +224,6 @@ extension FeedDetailViewController: UICollectionViewDataSource {
     default:
       assert(false)
     }
-
   }
 
   func collectionView(
@@ -277,7 +268,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
           withType: ReactHeaderReusableView.self,
           for: indexPath
         )
-        header.bind(count: self.people.count, section: .like)
+        header.bind(count: self.like.count, section: .like)
 
         return header
 
@@ -286,7 +277,6 @@ extension FeedDetailViewController: UICollectionViewDataSource {
           withType: ReactFooterReusableView.self,
           for: indexPath
         )
-        footer.backgroundColor = .cyan
         return footer
 
       default:
@@ -298,7 +288,13 @@ extension FeedDetailViewController: UICollectionViewDataSource {
         withType: ReactHeaderReusableView.self,
         for: indexPath
       )
-      header.bind(count: 10, section: .comment)
+      var count = self.allComments.count
+
+      self.allComments.forEach {
+        count += $0.replies.count
+      }
+
+      header.bind(count: count, section: .comment)
 
       return header
       

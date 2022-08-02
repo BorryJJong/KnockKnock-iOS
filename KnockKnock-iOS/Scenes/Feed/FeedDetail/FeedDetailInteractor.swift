@@ -14,6 +14,7 @@ protocol FeedDetailInteractorProtocol {
   func getFeedDeatil()
   func getAllComments()
   func setVisibleComments(comments: [Comment])
+  func getLike()
 }
 
 final class FeedDetailInteractor: FeedDetailInteractorProtocol {
@@ -23,6 +24,12 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   func getFeedDeatil() {
     self.worker?.getFeedDetail { [weak self] feedDetail in
       self?.presenter?.presentFeedDetail(feedDetail: feedDetail)
+    }
+  }
+
+  func getLike() {
+    self.worker?.getLike {[weak self] like in
+      self?.presenter?.presentLike(like: like)
     }
   }
 
