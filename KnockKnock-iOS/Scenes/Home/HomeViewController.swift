@@ -23,7 +23,7 @@ final class HomeViewController: BaseViewController<HomeView> {
     self.containerView.homeCollectionView.do {
       $0.dataSource = self
       $0.delegate = self
-      $0.registCell(type: TagCell.self)
+      $0.registCell(type: HomeMainCell.self)
       $0.collectionViewLayout = self.containerView.mainCollectionViewLayout()
     }
   }
@@ -31,7 +31,7 @@ final class HomeViewController: BaseViewController<HomeView> {
 
 extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return 10
+    return 5
   }
 
   func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -40,7 +40,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueCell(withType: TagCell.self, for: indexPath)
+    let cell = collectionView.dequeueCell(withType: HomeMainCell.self, for: indexPath)
     return cell
   }
 }

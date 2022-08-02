@@ -20,7 +20,6 @@ class HomeView: UIView {
       $0.scrollDirection = .vertical
     }).then {
       $0.translatesAutoresizingMaskIntoConstraints = false
-      $0.backgroundColor = .orange
       $0.contentInsetAdjustmentBehavior = .never
     }
 
