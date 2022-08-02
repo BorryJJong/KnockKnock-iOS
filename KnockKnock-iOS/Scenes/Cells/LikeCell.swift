@@ -10,7 +10,7 @@ import UIKit
 import Then
 import KKDSKit
 
-class LikeCell: BaseCollectionViewCell {
+final class LikeCell: BaseCollectionViewCell {
 
   // MARK: - Constants
 

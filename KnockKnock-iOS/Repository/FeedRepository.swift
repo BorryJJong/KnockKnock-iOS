@@ -17,21 +17,15 @@ protocol FeedRepositoryProtocol {
 
 final class FeedRepository: FeedRepositoryProtocol {
   func getChallengeTitles(completionHandler: @escaping (([ChallengeTitle])) -> Void) {
-
-    completionHandler([ChallengeTitle(id: 1, title:"용기내챌린지", isSelected: false),
-                       ChallengeTitle(id: 1, title:"용기내챌린지", isSelected: false),
-                       ChallengeTitle(id: 1, title:"용기내챌린지", isSelected: false),
-                       ChallengeTitle(id: 1, title:"용기내챌린지", isSelected: false),
-                       ChallengeTitle(id: 1, title:"용기내챌린지", isSelected: false)])
-//    KKNetworkManager.shared
-//      .request(
-//        object: [ChallengeTitle].self,
-//        router: KKRouter.getChallengeTitles,
-//        success: { response in
-//          completionHandler(response)
-//        }, failure: { error in
-//          print(error)
-//        })
+    KKNetworkManager.shared
+      .request(
+        object: [ChallengeTitle].self,
+        router: KKRouter.getChallengeTitles,
+        success: { response in
+          completionHandler(response)
+        }, failure: { error in
+          print(error)
+        })
   }
 
   //  func fetchFeed(completionHandler: @escaping ([Feed]) -> Void) {

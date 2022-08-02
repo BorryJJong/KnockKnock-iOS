@@ -11,7 +11,7 @@ protocol LikeRepositoryProtocol {
   func getlike(completionHandler: @escaping ([Like]) -> Void)
 }
 
-class LikeRepository: LikeRepositoryProtocol {
+final class LikeRepository: LikeRepositoryProtocol {
   func getlike(completionHandler: @escaping ([Like]) -> Void) {
     let like = [
       Like(userId: 2, nickname: "", image: nil),

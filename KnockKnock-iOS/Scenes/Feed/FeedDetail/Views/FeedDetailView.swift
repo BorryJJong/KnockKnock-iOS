@@ -10,7 +10,7 @@ import UIKit
 import KKDSKit
 import Then
 
-class FeedDetailView: UIView {
+final class FeedDetailView: UIView {
 
   // MARK: - Properties
 

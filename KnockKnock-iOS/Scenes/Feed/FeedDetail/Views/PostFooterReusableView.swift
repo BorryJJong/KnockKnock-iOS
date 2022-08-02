@@ -9,7 +9,7 @@ import UIKit
 
 import KKDSKit
 
-class PostFooterReusableView: UICollectionReusableView {
+final class PostFooterReusableView: UICollectionReusableView {
 
   // MARK: - Constants
 

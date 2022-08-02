@@ -10,7 +10,7 @@ import UIKit
 import KKDSKit
 import Then
 
-class PostCommentCell: BaseCollectionViewCell {
+final class PostCommentCell: BaseCollectionViewCell {
 
   // MARK: - Constants
 
@@ -93,7 +93,7 @@ class PostCommentCell: BaseCollectionViewCell {
 
   // MARK: - Configure
 
-  func setReplyMoreButton(count: Int, isOpen: Bool) {
+  private func setReplyMoreButton(count: Int, isOpen: Bool) {
     if count == 0 {
       self.replyMoreButton.isHidden = true
       self.replyMoreButton.bottomConstraint?.constant = 20

@@ -10,7 +10,7 @@ import UIKit
 import Then
 import KKDSKit
 
-class FeedDetailNavigationBarView: UIView {
+final class FeedDetailNavigationBarView: UIView {
 
   // MARK: - Constants
 
@@ -41,10 +41,9 @@ class FeedDetailNavigationBarView: UIView {
 
   private lazy var profileImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-//    $0.layer.cornerRadius = 16
+    $0.layer.cornerRadius = 16
     $0.clipsToBounds = true
     $0.image = KKDS.Image.ic_person_24
-//    $0.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
   }
 
   private let userIdLabel = UILabel().then {

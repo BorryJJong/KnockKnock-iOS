@@ -9,7 +9,7 @@ import UIKit
 
 import Then
 
-class ReactFooterReusableView: UICollectionReusableView {
+final class ReactFooterReusableView: UICollectionReusableView {
 
   // MARK: - Constants
 

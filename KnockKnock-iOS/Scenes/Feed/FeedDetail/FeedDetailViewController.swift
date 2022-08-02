@@ -71,9 +71,9 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     self.hideKeyboardWhenTappedAround()
   }
 
-  func setNavigationBar() {
+  private func setNavigationBar() {
     let navigationView = FeedDetailNavigationBarView()
-    
+
     let backButton = UIBarButtonItem(
       image: KKDS.Image.ic_back_24_bk,
       style: .done,
