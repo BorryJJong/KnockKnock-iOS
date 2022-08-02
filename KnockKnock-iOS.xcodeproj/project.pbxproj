@@ -78,9 +78,31 @@
 		618FDAC727E82A6F00C2823F /* AddressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDAC627E82A6F00C2823F /* AddressCell.swift */; };
 		618FDAC927E836BA00C2823F /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDAC827E836BA00C2823F /* PhotoCell.swift */; };
 		618FDACF27E9642400C2823F /* UIButton+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDACE27E9642400C2823F /* UIButton+Ext.swift */; };
+
+		61B6D97F2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D97E2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift */; };
+		61B6D984288A967A00E60F08 /* ChallengeDetailWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D983288A967A00E60F08 /* ChallengeDetailWorker.swift */; };
+		61B6D986288A968600E60F08 /* ChallengeDetailInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D985288A968600E60F08 /* ChallengeDetailInteractor.swift */; };
+		61B6D988288A969100E60F08 /* ChallengeDetailRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D987288A969100E60F08 /* ChallengeDetailRouter.swift */; };
+		61B6D98A288A96A300E60F08 /* ChallengeDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D989288A96A300E60F08 /* ChallengeDetailPresenter.swift */; };
+
+
+		619DEE9C28868E7E00C80095 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619DEE9B28868E7E00C80095 /* Comment.swift */; };
+		619DEE9E2887B41B00C80095 /* CommentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619DEE9D2887B41B00C80095 /* CommentRepository.swift */; };
+		61A8DC47287E905B000512EC /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC46287E905B000512EC /* CommentView.swift */; };
+		61A8DC4A287E90BC000512EC /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC49287E90BC000512EC /* CommentViewController.swift */; };
+		61A8DC4C287E90E9000512EC /* CommentInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC4B287E90E9000512EC /* CommentInteractor.swift */; };
+		61A8DC4E287E90F6000512EC /* CommentPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC4D287E90F6000512EC /* CommentPresenter.swift */; };
+		61A8DC50287E9120000512EC /* CommentRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC4F287E9120000512EC /* CommentRouter.swift */; };
+		61A8DC52287E9131000512EC /* CommentWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC51287E9131000512EC /* CommentWorker.swift */; };
+		61A8DC572881B173000512EC /* UIViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC562881B173000512EC /* UIViewController+Ext.swift */; };
+		61A8DC59288506A6000512EC /* HeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC58288506A6000512EC /* HeaderCollectionReusableView.swift */; };
+		61A8DC5D288685BE000512EC /* ReplyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC5C288685BE000512EC /* ReplyCell.swift */; };
+
 		61A8DC44287E8783000512EC /* UIDevice+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC43287E8783000512EC /* UIDevice+Ext.swift */; };
+
 		61B6D993288C2C2700E60F08 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D992288C2C2700E60F08 /* HomeView.swift */; };
 		61B6D998288C40BF00E60F08 /* HomeSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D997288C40BF00E60F08 /* HomeSection.swift */; };
+
 		61E3087C287334C1001394B6 /* ImageScaleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E3087B287334C1001394B6 /* ImageScaleType.swift */; };
 		61E3088428768D71001394B6 /* UIStackView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E3088328768D71001394B6 /* UIStackView+Ext.swift */; };
 		61FC60E927B9244D00A51DBC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC60E827B9244D00A51DBC /* AppDelegate.swift */; };
@@ -161,9 +183,29 @@
 		618FDAC627E82A6F00C2823F /* AddressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressCell.swift; sourceTree = "<group>"; };
 		618FDAC827E836BA00C2823F /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		618FDACE27E9642400C2823F /* UIButton+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Ext.swift"; sourceTree = "<group>"; };
+
+		61B6D97E2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
+		61B6D983288A967A00E60F08 /* ChallengeDetailWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailWorker.swift; sourceTree = "<group>"; };
+		61B6D985288A968600E60F08 /* ChallengeDetailInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailInteractor.swift; sourceTree = "<group>"; };
+		61B6D987288A969100E60F08 /* ChallengeDetailRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailRouter.swift; sourceTree = "<group>"; };
+		61B6D989288A96A300E60F08 /* ChallengeDetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailPresenter.swift; sourceTree = "<group>"; };
+
+		619DEE9B28868E7E00C80095 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
+		619DEE9D2887B41B00C80095 /* CommentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRepository.swift; sourceTree = "<group>"; };
+		61A8DC46287E905B000512EC /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
+		61A8DC49287E90BC000512EC /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
+		61A8DC4B287E90E9000512EC /* CommentInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInteractor.swift; sourceTree = "<group>"; };
+		61A8DC4D287E90F6000512EC /* CommentPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentPresenter.swift; sourceTree = "<group>"; };
+		61A8DC4F287E9120000512EC /* CommentRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRouter.swift; sourceTree = "<group>"; };
+		61A8DC51287E9131000512EC /* CommentWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentWorker.swift; sourceTree = "<group>"; };
+		61A8DC562881B173000512EC /* UIViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Ext.swift"; sourceTree = "<group>"; };
+		61A8DC58288506A6000512EC /* HeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCollectionReusableView.swift; sourceTree = "<group>"; };
+		61A8DC5C288685BE000512EC /* ReplyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyCell.swift; sourceTree = "<group>"; };
+
 		61A8DC43287E8783000512EC /* UIDevice+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Ext.swift"; sourceTree = "<group>"; };
 		61B6D992288C2C2700E60F08 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		61B6D997288C40BF00E60F08 /* HomeSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSection.swift; sourceTree = "<group>"; };
+
 		61E3087B287334C1001394B6 /* ImageScaleType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageScaleType.swift; sourceTree = "<group>"; };
 		61E3088328768D71001394B6 /* UIStackView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Ext.swift"; sourceTree = "<group>"; };
 		61FC60E527B9244D00A51DBC /* KnockKnock-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KnockKnock-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -197,6 +239,7 @@
 				201077EE27D39FFB00280991 /* Challenge.swift */,
 				611BD4BE27E70E64007D5C79 /* Property.swift */,
 				6143296728644187008BDCC9 /* Feed.swift */,
+				619DEE9B28868E7E00C80095 /* Comment.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -206,6 +249,7 @@
 			children = (
 				20EAE2962814054F009242A1 /* ChellengeRepository.swift */,
 				6143296928644458008BDCC9 /* FeedRepository.swift */,
+				619DEE9D2887B41B00C80095 /* CommentRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -232,6 +276,7 @@
 				61215AD228559BD0003FDCAA /* UICollectionView+Ext.swift */,
 				61E3088328768D71001394B6 /* UIStackView+Ext.swift */,
 				6143296528642745008BDCC9 /* UILabel+Ext.swift */,
+				61A8DC562881B173000512EC /* UIViewController+Ext.swift */,
 				61A8DC43287E8783000512EC /* UIDevice+Ext.swift */,
 			);
 			path = UIKit;
@@ -250,7 +295,6 @@
 			isa = PBXGroup;
 			children = (
 				201077F327D3AA9800280991 /* ChallengeView.swift */,
-				617F9D64282A5AED00C2BC9A /* ChallengeDetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -268,6 +312,8 @@
 				61215AE528577A9C003FDCAA /* TagCell.swift */,
 				614329582862F273008BDCC9 /* FeedListCell.swift */,
 				613856D72899015000BE347E /* HomeMainCell.swift */,
+				61A8DC5C288685BE000512EC /* ReplyCell.swift */,
+
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -319,13 +365,8 @@
 		2090811427CA4F28005A1573 /* Challenge */ = {
 			isa = PBXGroup;
 			children = (
-				201077F927D3C4A100280991 /* Views */,
-				617F9D66282A5B0300C2BC9A /* ChallengeDetailViewController.swift */,
-				2090811927CA4F61005A1573 /* ChallengeViewController.swift */,
-				20D28F7F27CFC5E800A809DB /* ChallengeInteractor.swift */,
-				20D28F8127CFC5F000A809DB /* ChallengePresenter.swift */,
-				20D28F8327CFC60900A809DB /* ChallengeRouter.swift */,
-				20D28F8527CFC7B300A809DB /* ChallengeWorker.swift */,
+				61B6D981288A962F00E60F08 /* Main */,
+				61B6D980288A962100E60F08 /* Detail */,
 			);
 			path = Challenge;
 			sourceTree = "<group>";
@@ -358,12 +399,8 @@
 		611BD4A127E2C85C007D5C79 /* Feed */ = {
 			isa = PBXGroup;
 			children = (
-				6143295A2862F60C008BDCC9 /* Views */,
-				61215AE128572055003FDCAA /* FeedViewController.swift */,
-				6143295B2862F6BB008BDCC9 /* FeedRouter.swift */,
-				6143295D2862F6CC008BDCC9 /* FeedPresenter.swift */,
-				6143295F2862F6DB008BDCC9 /* FeedInteractor.swift */,
-				614329612862F6E3008BDCC9 /* FeedWorker.swift */,
+				61A8DC53287E9CDD000512EC /* FeedMain */,
+				61A8DC45287E9020000512EC /* Comment */,
 				61215AD928571D4E003FDCAA /* FeedList */,
 				611BD4BD27E703E4007D5C79 /* FeedWrite */,
 			);
@@ -435,14 +472,88 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+
 		61B6D991288C2C1500E60F08 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				61B6D992288C2C2700E60F08 /* HomeView.swift */,
+      );
+      path = Views;
+      sourceTree = "<group>";
+    };
+
+		61B6D980288A962100E60F08 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				61B6D982288A964B00E60F08 /* Views */,
+				617F9D66282A5B0300C2BC9A /* ChallengeDetailViewController.swift */,
+				61B6D985288A968600E60F08 /* ChallengeDetailInteractor.swift */,
+				61B6D989288A96A300E60F08 /* ChallengeDetailPresenter.swift */,
+				61B6D983288A967A00E60F08 /* ChallengeDetailWorker.swift */,
+				61B6D987288A969100E60F08 /* ChallengeDetailRouter.swift */,
+			);
+			path = Detail;
+			sourceTree = "<group>";
+		};
+		61B6D981288A962F00E60F08 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				201077F927D3C4A100280991 /* Views */,
+				2090811927CA4F61005A1573 /* ChallengeViewController.swift */,
+				20D28F7F27CFC5E800A809DB /* ChallengeInteractor.swift */,
+				20D28F8127CFC5F000A809DB /* ChallengePresenter.swift */,
+				20D28F8327CFC60900A809DB /* ChallengeRouter.swift */,
+				20D28F8527CFC7B300A809DB /* ChallengeWorker.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		61B6D982288A964B00E60F08 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				617F9D64282A5AED00C2BC9A /* ChallengeDetailView.swift */,
+				61B6D97E2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift */,
+			);
+			path = Views;
+         sourceTree = "<group>";
+    };
+
+		61A8DC45287E9020000512EC /* Comment */ = {
+			isa = PBXGroup;
+			children = (
+				61A8DC48287E90AB000512EC /* Views */,
+				61A8DC49287E90BC000512EC /* CommentViewController.swift */,
+				61A8DC4B287E90E9000512EC /* CommentInteractor.swift */,
+				61A8DC4D287E90F6000512EC /* CommentPresenter.swift */,
+				61A8DC4F287E9120000512EC /* CommentRouter.swift */,
+				61A8DC51287E9131000512EC /* CommentWorker.swift */,
+			);
+			path = Comment;
+			sourceTree = "<group>";
+		};
+		61A8DC48287E90AB000512EC /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				61A8DC46287E905B000512EC /* CommentView.swift */,
+				61A8DC58288506A6000512EC /* HeaderCollectionReusableView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
 		};
+		61A8DC53287E9CDD000512EC /* FeedMain */ = {
+			isa = PBXGroup;
+			children = (
+				6143295A2862F60C008BDCC9 /* Views */,
+				61215AE128572055003FDCAA /* FeedViewController.swift */,
+				6143295B2862F6BB008BDCC9 /* FeedRouter.swift */,
+				6143295D2862F6CC008BDCC9 /* FeedPresenter.swift */,
+				6143295F2862F6DB008BDCC9 /* FeedInteractor.swift */,
+				614329612862F6E3008BDCC9 /* FeedWorker.swift */,
+			);
+			path = FeedMain;
+			sourceTree = "<group>";
+		};
+
 		61E3087A2873349B001394B6 /* Enum */ = {
 			isa = PBXGroup;
 			children = (
@@ -646,10 +757,13 @@
 				61E3088428768D71001394B6 /* UIStackView+Ext.swift in Sources */,
 				617F9D69282A6EB200C2BC9A /* ChallengeDetailCell.swift in Sources */,
 				201077F227D3A97A00280991 /* BaseViewController.swift in Sources */,
+				619DEE9E2887B41B00C80095 /* CommentRepository.swift in Sources */,
 				20EAE2972814054F009242A1 /* ChellengeRepository.swift in Sources */,
 				618FDAC527E80C6B00C2823F /* ShopSearchViewController.swift in Sources */,
+				61A8DC572881B173000512EC /* UIViewController+Ext.swift in Sources */,
 				61FC60ED27B9244E00A51DBC /* MainTabBarController.swift in Sources */,
 				201077EF27D39FFB00280991 /* Challenge.swift in Sources */,
+				61B6D986288A968600E60F08 /* ChallengeDetailInteractor.swift in Sources */,
 				6143295E2862F6CC008BDCC9 /* FeedPresenter.swift in Sources */,
 				6143297628687B56008BDCC9 /* FeedListWorker.swift in Sources */,
 				61215ADE28571E20003FDCAA /* FeedView.swift in Sources */,
@@ -660,13 +774,17 @@
 				614329602862F6DB008BDCC9 /* FeedInteractor.swift in Sources */,
 				20D28F8027CFC5E800A809DB /* ChallengeInteractor.swift in Sources */,
 				20A72D1E280BC4EE006689FC /* BaseCollectionViewCell.swift in Sources */,
+				61A8DC52287E9131000512EC /* CommentWorker.swift in Sources */,
 				6143297828687B69008BDCC9 /* FeedListInteractor.swift in Sources */,
 				61A8DC44287E8783000512EC /* UIDevice+Ext.swift in Sources */,
 				20D28F8227CFC5F000A809DB /* ChallengePresenter.swift in Sources */,
 				61215ACB2852D5B5003FDCAA /* APIConstants.swift in Sources */,
 				61215AC928507D51003FDCAA /* KKRouter.swift in Sources */,
+				61B6D98A288A96A300E60F08 /* ChallengeDetailPresenter.swift in Sources */,
 				618FDACF27E9642400C2823F /* UIButton+Ext.swift in Sources */,
+				61B6D984288A967A00E60F08 /* ChallengeDetailWorker.swift in Sources */,
 				6143294F285F2BCF008BDCC9 /* BasePaddingLabel.swift in Sources */,
+				61A8DC4C287E90E9000512EC /* CommentInteractor.swift in Sources */,
 				614329622862F6E3008BDCC9 /* FeedWorker.swift in Sources */,
 				61215AD028559B6E003FDCAA /* UICollectionViewCell+Ext.swift in Sources */,
 				617F9D75282BEB2A00C2BC9A /* BottomMenuCell.swift in Sources */,
@@ -676,15 +794,24 @@
 				611BD4BF27E70E64007D5C79 /* Property.swift in Sources */,
 				61215AE628577A9C003FDCAA /* TagCell.swift in Sources */,
 				6143296A28644458008BDCC9 /* FeedRepository.swift in Sources */,
+				61B6D97F2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift in Sources */,
 				614329552862EFE0008BDCC9 /* FeedListView.swift in Sources */,
+				61A8DC47287E905B000512EC /* CommentView.swift in Sources */,
 				6143296628642745008BDCC9 /* UILabel+Ext.swift in Sources */,
 				20D28F8427CFC60900A809DB /* ChallengeRouter.swift in Sources */,
+				61A8DC4A287E90BC000512EC /* CommentViewController.swift in Sources */,
 				61FC60E927B9244D00A51DBC /* AppDelegate.swift in Sources */,
 				611BD4BC27E70393007D5C79 /* PropertySelectViewController.swift in Sources */,
 				617F9D65282A5AED00C2BC9A /* ChallengeDetailView.swift in Sources */,
+				61A8DC59288506A6000512EC /* HeaderCollectionReusableView.swift in Sources */,
+				619DEE9C28868E7E00C80095 /* Comment.swift in Sources */,
 				611BD4AA27E48B93007D5C79 /* FeedWriteInteractor.swift in Sources */,
 				61215AC5284F856D003FDCAA /* KKNetworkManager.swift in Sources */,
+
 				61B6D993288C2C2700E60F08 /* HomeView.swift in Sources */,
+
+				61A8DC4E287E90F6000512EC /* CommentPresenter.swift in Sources */,
+
 				201077F427D3AA9800280991 /* ChallengeView.swift in Sources */,
 				201077FE27D3D2AC00280991 /* ChallengeCell.swift in Sources */,
 				6143297A28687B74008BDCC9 /* FeedListPresenter.swift in Sources */,
@@ -694,8 +821,10 @@
 				611BD4A327E3017E007D5C79 /* FeedWriteViewController.swift in Sources */,
 				61215AD328559BD0003FDCAA /* UICollectionView+Ext.swift in Sources */,
 				617F9D67282A5B0300C2BC9A /* ChallengeDetailViewController.swift in Sources */,
+				61B6D988288A969100E60F08 /* ChallengeDetailRouter.swift in Sources */,
 				6143295C2862F6BB008BDCC9 /* FeedRouter.swift in Sources */,
 				61215AE228572055003FDCAA /* FeedViewController.swift in Sources */,
+				61A8DC5D288685BE000512EC /* ReplyCell.swift in Sources */,
 				618FDAC727E82A6F00C2823F /* AddressCell.swift in Sources */,
 				6143297C28687B7F008BDCC9 /* FeedListRouter.swift in Sources */,
 				611BD4B027E49024007D5C79 /* FeedWriteWorker.swift in Sources */,
@@ -711,6 +840,7 @@
 				611BD4B827E6DD5F007D5C79 /* PropertyCell.swift in Sources */,
 				2090811827CA4F56005A1573 /* HomeViewController.swift in Sources */,
 				614329592862F273008BDCC9 /* FeedListCell.swift in Sources */,
+				61A8DC50287E9120000512EC /* CommentRouter.swift in Sources */,
 				614329572862EFF1008BDCC9 /* FeedListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
