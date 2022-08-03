@@ -24,6 +24,7 @@ final class HomeViewController: BaseViewController<HomeView> {
       $0.dataSource = self
       $0.delegate = self
       $0.registCell(type: HomeMainCell.self)
+      $0.registCell(type: StoreCell.self)
       $0.collectionViewLayout = self.containerView.mainCollectionViewLayout()
     }
   }
@@ -36,11 +37,34 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
 
   func numberOfSections(in collectionView: UICollectionView) -> Int {
 //    return HomeSection.allCases.countgit
-    return 1
+    return 2
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueCell(withType: HomeMainCell.self, for: indexPath)
-    return cell
+    let section = HomeSection(rawValue: indexPath.section)
+
+    switch section {
+    case .main:
+      let cell = collectionView.dequeueCell(withType: HomeMainCell.self, for: indexPath)
+      return cell
+    case .store:
+      let cell = collectionView.dequeueCell(withType: StoreCell.self, for: indexPath)
+      return cell
+//    case .banner:
+//      let cell = collectionView.dequeueCell(withType: HomeMainCell.self, for: indexPath)
+//      return cell
+//    case .tag:
+//      let cell = collectionView.dequeueCell(withType: HomeMainCell.self, for: indexPath)
+//      return cell
+//    case .popularPost:
+//      let cell = collectionView.dequeueCell(withType: HomeMainCell.self, for: indexPath)
+//      return cell
+//    case .event:
+//      let cell = collectionView.dequeueCell(withType: HomeMainCell.self, for: indexPath)
+//      return cell
+
+    default:
+      assert(false)
+    }
   }
 }

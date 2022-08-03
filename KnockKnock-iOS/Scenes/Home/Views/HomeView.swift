@@ -74,7 +74,62 @@ class HomeView: UIView {
     )
     mainSection.orthogonalScrollingBehavior = .paging
 
-    let layout = UICollectionViewCompositionalLayout(section: mainSection)
+    // Section 2: Store
+
+    let estimatedHeight: CGFloat = 400
+
+     let storeItemSize = NSCollectionLayoutSize(
+       widthDimension: .absolute(150),
+       heightDimension: .estimated(estimatedHeight)
+     )
+     let storeItem = NSCollectionLayoutItem(layoutSize: storeItemSize)
+
+     let storeGroupSize = NSCollectionLayoutSize(
+       widthDimension: .estimated(estimatedHeight),
+       heightDimension: .estimated(estimatedHeight)
+     )
+     let storeGroup = NSCollectionLayoutGroup.horizontal(
+       layoutSize: storeGroupSize,
+       subitems: [storeItem]
+     )
+
+     let storeSection = NSCollectionLayoutSection(group: storeGroup)
+     storeSection.interGroupSpacing = 10
+     storeSection.contentInsets = NSDirectionalEdgeInsets(
+       top: 45,
+       leading: 10,
+       bottom: 0,
+       trailing: 0
+     )
+     storeSection.orthogonalScrollingBehavior = .continuous
+
+    let layout = UICollectionViewCompositionalLayout {(section: Int, _: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+
+         let homeSection = HomeSection(rawValue: section)
+
+         switch homeSection {
+         case .main:
+           return mainSection
+
+         case .store:
+           return storeSection
+//
+//         case .banner:
+//           return bannerSection
+//
+//         case .tag:
+//           return tagSection
+//
+//         case .popularPost:
+//           return popularSection
+//
+//         case .event:
+//           return eventSection
+
+         default:
+           assert(false)
+         }
+       }
 
     return layout
   }

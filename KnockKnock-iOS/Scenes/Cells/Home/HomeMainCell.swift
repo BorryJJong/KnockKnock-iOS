@@ -32,16 +32,15 @@ class HomeMainCell: BaseCollectionViewCell {
     [self.mainImageView, self.topGradientImageView, self.bottomGradientImageView].addSubViews(self.contentView)
 
     self.mainImageView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
+      $0.edges.equalTo(self.contentView)
     }
 
     self.topGradientImageView.snp.makeConstraints {
-      $0.edges.top.trailing.leading.equalToSuperview()
-      $0.height.equalTo(300)
+      $0.top.trailing.leading.equalTo(self.contentView)
     }
 
     self.bottomGradientImageView.snp.makeConstraints {
-      $0.edges.bottom.trailing.leading.equalToSuperview()
+      $0.bottom.trailing.leading.equalTo(self.contentView)
     }
   }
 }
