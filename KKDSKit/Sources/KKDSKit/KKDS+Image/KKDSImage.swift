@@ -8,13 +8,19 @@
 import UIKit
 
 public extension KKDS {
-    enum Image { }
+  enum Image { }
 }
 
 // MARK: - Icon size 3
 
 public extension KKDS.Image {
   static var ic_bullet_3_gr: UIImage              { .load(name: "ic_bullet_3_gr")}
+}
+
+// MARK: - Icon size 10
+
+public extension KKDS.Image {
+  static var ic_left_10_gr: UIImage                      { .load(name: "ic_left_10_gr")}
 }
 
 // MARK: - Icon size 20
@@ -65,8 +71,8 @@ public extension KKDS.Image {
 
 public extension KKDS.Image {
   static var ic_bg_gradient_wh: UIImage           {.load(name: "ic_bg_gradient_wh")}
-  static var ic_bg_gradient_top_bk: UIImage           {.load(name: "ic_bg_gradient_top_bk")}
-  static var ic_bg_gradient_bottom_bk: UIImage           {.load(name: "ic_bg_gradient_bottom_bk")}
+  static var ic_bg_gradient_top_bk: UIImage       {.load(name: "ic_bg_gradient_top_bk")}
+  static var ic_bg_gradient_bottom_bk: UIImage    {.load(name: "ic_bg_gradient_bottom_bk")}
 }
 
 // MARK: - Tab

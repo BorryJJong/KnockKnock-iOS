@@ -48,6 +48,12 @@ class HomeView: UIView {
   }
 
   func mainCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+    // Section Header
+    let headerEstimatedHeight: CGFloat = 400
+
+    let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(headerEstimatedHeight))
+    let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+
     // Section 1: Main
 
     let mainItemSize = NSCollectionLayoutSize(
@@ -66,70 +72,65 @@ class HomeView: UIView {
     )
 
     let mainSection = NSCollectionLayoutSection(group: mainGroup)
-    mainSection.contentInsets = NSDirectionalEdgeInsets(
-      top: 0,
-      leading: 0,
-      bottom: 0,
-      trailing: 0
-    )
     mainSection.orthogonalScrollingBehavior = .paging
 
     // Section 2: Store
 
-    let estimatedHeight: CGFloat = 400
+    let storeEstimatedHeight: CGFloat = 400
 
-     let storeItemSize = NSCollectionLayoutSize(
-       widthDimension: .absolute(150),
-       heightDimension: .estimated(estimatedHeight)
-     )
-     let storeItem = NSCollectionLayoutItem(layoutSize: storeItemSize)
+    let storeItemSize = NSCollectionLayoutSize(
+      widthDimension: .absolute(150),
+      heightDimension: .estimated(storeEstimatedHeight)
+    )
+    let storeItem = NSCollectionLayoutItem(layoutSize: storeItemSize)
 
-     let storeGroupSize = NSCollectionLayoutSize(
-       widthDimension: .estimated(estimatedHeight),
-       heightDimension: .estimated(estimatedHeight)
-     )
-     let storeGroup = NSCollectionLayoutGroup.horizontal(
-       layoutSize: storeGroupSize,
-       subitems: [storeItem]
-     )
+    let storeGroupSize = NSCollectionLayoutSize(
+      widthDimension: .estimated(storeEstimatedHeight),
+      heightDimension: .estimated(storeEstimatedHeight)
+    )
+    let storeGroup = NSCollectionLayoutGroup.horizontal(
+      layoutSize: storeGroupSize,
+      subitems: [storeItem]
+    )
 
-     let storeSection = NSCollectionLayoutSection(group: storeGroup)
-     storeSection.interGroupSpacing = 10
-     storeSection.contentInsets = NSDirectionalEdgeInsets(
-       top: 45,
-       leading: 10,
-       bottom: 0,
-       trailing: 0
-     )
-     storeSection.orthogonalScrollingBehavior = .continuous
+    let storeSection = NSCollectionLayoutSection(group: storeGroup)
+    storeSection.interGroupSpacing = 10
+    storeSection.contentInsets = NSDirectionalEdgeInsets(
+      top: 0,
+      leading: 20,
+      bottom: 0,
+      trailing: 0
+    )
+    storeSection.orthogonalScrollingBehavior = .continuous
+    storeSection.boundarySupplementaryItems = [header]
 
     let layout = UICollectionViewCompositionalLayout {(section: Int, _: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
 
-         let homeSection = HomeSection(rawValue: section)
+      let homeSection = HomeSection(rawValue: section)
 
-         switch homeSection {
-         case .main:
-           return mainSection
+      switch homeSection {
+      case .main:
+        return mainSection
 
-         case .store:
-           return storeSection
-//
-//         case .banner:
-//           return bannerSection
-//
-//         case .tag:
-//           return tagSection
-//
-//         case .popularPost:
-//           return popularSection
-//
-//         case .event:
-//           return eventSection
+      case .store:
+        return storeSection
+        //
+        //         case .banner:
+        //           return bannerSection
+        //
+        //         case .tag:
+        //           return tagSection
+        //
+        //         case .popularPost:
+        //           return popularSection
+        //
+        //         case .event:
+        //           return eventSection
 
-         default:
-           assert(false)
-         }
-       }
+      default:
+        assert(false)
+      }
+    }
 
     return layout
   }

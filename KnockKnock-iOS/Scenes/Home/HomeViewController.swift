@@ -23,6 +23,7 @@ final class HomeViewController: BaseViewController<HomeView> {
     self.containerView.homeCollectionView.do {
       $0.dataSource = self
       $0.delegate = self
+      $0.registHeaderView(type: HomeHeaderCollectionReusableView.self)
       $0.registCell(type: HomeMainCell.self)
       $0.registCell(type: StoreCell.self)
       $0.collectionViewLayout = self.containerView.mainCollectionViewLayout()
@@ -38,6 +39,12 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
   func numberOfSections(in collectionView: UICollectionView) -> Int {
 //    return HomeSection.allCases.countgit
     return 2
+  }
+
+  func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    let header = collectionView.dequeueReusableSupplementaryHeaderView(withType: HomeHeaderCollectionReusableView.self, for: indexPath)
+
+    return header
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
