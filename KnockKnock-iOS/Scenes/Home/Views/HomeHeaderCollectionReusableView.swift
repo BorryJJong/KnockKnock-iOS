@@ -16,10 +16,10 @@ class HomeHeaderCollectionReusableView: UICollectionReusableView {
   // MARK: - Constants
 
   private enum Metric {
-    static let headerLabelTopMargin = 45
-    static let headerLabelBottomMargin = -20
+    static let headerLabelTopMargin = 45.f
+    static let headerLabelBottomMargin = -20.f
 
-    static let moreButtonTrailingMargin = -20
+    static let moreButtonTrailingMargin = -20.f
   }
 
   // MARK: - UIs

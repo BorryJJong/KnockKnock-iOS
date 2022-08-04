@@ -11,6 +11,18 @@ import SnapKit
 
 class StoreCell: BaseCollectionViewCell {
 
+  // MARK: - Constants
+
+  private enum Metric {
+    static let storeImageViewWidth = 150.f
+
+    static let storeNameLabelTopMargin = 20.f
+
+    static let storeInfoLabelTopMargin = 5.f
+
+    static let promotionStackViewTopMargin = 10.f
+  }
+
   // MARK: - Properties
 
   let promotions = ["텀블러 할인", "사은품 증정", "포인트 적립"]
@@ -66,22 +78,22 @@ class StoreCell: BaseCollectionViewCell {
 
     self.storeImageView.snp.makeConstraints {
       $0.top.leading.equalTo(self.contentView)
-      $0.width.height.equalTo(150)
+      $0.width.height.equalTo(Metric.storeImageViewWidth)
     }
 
     self.storeNameLabel.snp.makeConstraints {
       $0.leading.trailing.equalTo(self.contentView)
-      $0.top.equalTo(self.storeImageView.snp.bottom).offset(20)
+      $0.top.equalTo(self.storeImageView.snp.bottom).offset(Metric.storeNameLabelTopMargin)
     }
 
     self.storeInfoLabel.snp.makeConstraints {
       $0.leading.trailing.equalTo(self.contentView)
-      $0.top.equalTo(self.storeNameLabel.snp.bottom).offset(5)
+      $0.top.equalTo(self.storeNameLabel.snp.bottom).offset(Metric.storeInfoLabelTopMargin)
     }
 
     self.promotionStackView.snp.makeConstraints {
       $0.leading.trailing.equalTo(self.contentView)
-      $0.top.equalTo(self.storeInfoLabel.snp.bottom).offset(10)
+      $0.top.equalTo(self.storeInfoLabel.snp.bottom).offset(Metric.promotionStackViewTopMargin)
     }
 
   }
