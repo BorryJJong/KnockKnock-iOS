@@ -30,6 +30,7 @@ final class HomeViewController: BaseViewController<HomeView> {
       $0.registCell(type: TagCell.self)
       $0.registCell(type: PopularPostCell.self)
       $0.registFooterView(type: PopularFooterCollectionReusableView.self)
+      $0.registCell(type: EventCell.self)
       $0.collectionViewLayout = self.containerView.mainCollectionViewLayout()
     }
   }
@@ -41,8 +42,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
   }
 
   func numberOfSections(in collectionView: UICollectionView) -> Int {
-    //    return HomeSection.allCases.countgit
-    return 5
+        return HomeSection.allCases.count
   }
 
   func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -117,9 +117,13 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
 
       return cell
 
-      //    case .event:
-      //      let cell = collectionView.dequeueCell(withType: HomeMainCell.self, for: indexPath)
-      //      return cell
+    case .event:
+      let cell = collectionView.dequeueCell(
+        withType: EventCell.self,
+        for: indexPath
+      )
+      
+      return cell
 
     default:
       assert(false)

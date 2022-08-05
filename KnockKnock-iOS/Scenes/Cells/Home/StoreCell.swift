@@ -106,6 +106,5 @@ class StoreCell: BaseCollectionViewCell {
       $0.leading.bottom.trailing.equalTo(self.contentView)
       $0.top.equalTo(self.storeInfoLabel.snp.bottom).offset(Metric.promotionStackViewTopMargin)
     }
-
   }
 }

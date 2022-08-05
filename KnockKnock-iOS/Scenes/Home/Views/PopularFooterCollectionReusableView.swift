@@ -54,7 +54,7 @@ class PopularFooterCollectionReusableView: UICollectionReusableView {
       $0.top.equalTo(self.morePostButton.snp.bottom).offset(40)
       $0.leading.trailing.equalTo(self)
       $0.height.equalTo(8)
-      $0.bottom.equalTo(self.snp.bottom)
+      $0.bottom.equalTo(self.snp.bottom).offset(-20)
     }
   }
 }

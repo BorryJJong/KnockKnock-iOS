@@ -77,9 +77,10 @@ class HomeHeaderCollectionReusableView: UICollectionReusableView {
 
     self.headerLabel.snp.makeConstraints {
       $0.leading.equalToSuperview()
-      $0.top.equalToSuperview().offset(Metric.headerLabelTopMargin)
+//      $0.top.equalToSuperview()
+//      $0.centerY.equalTo(self.snp.centerY)
       $0.trailing.equalTo(self.moreButton)
-      $0.bottom.equalToSuperview().offset(Metric.headerLabelBottomMargin)
+//      $0.bottom.equalToSuperview()
     }
 
     self.moreButton.snp.makeConstraints {
