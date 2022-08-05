@@ -40,34 +40,45 @@ class StoreCell: BaseCollectionViewCell {
   let storeNameLabel = UILabel().then {
     $0.text = "청담동 스타벅스"
     $0.font = .systemFont(ofSize: 15, weight: .semibold)
+    $0.numberOfLines = 1
   }
 
   let storeInfoLabel = UILabel().then {
     $0.text = "환경을위한 다양한 프로모션 전문 상점"
     $0.font = .systemFont(ofSize: 12, weight: .medium)
     $0.textColor = .gray70
+    $0.numberOfLines = 1
   }
 
   let promotionStackView = UIStackView().then {
     $0.axis = .horizontal
     $0.spacing = 5
-    $0.distribution = .equalSpacing
+    $0.distribution = .fill
+    $0.alignment = .bottom
   }
 
   func setPromotionStackView(promotions: [String]) {
     for index in 0..<promotions.count {
-      let label = BasePaddingLabel(padding: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)).then {
-        $0.text = promotions[index]
-        $0.font = .systemFont(ofSize: 10)
-        $0.textColor = .gray70
-        $0.clipsToBounds = true
-        $0.layer.cornerRadius = 5
-        $0.backgroundColor = .gray20
-      }
+      let label = BasePaddingLabel(
+        padding: UIEdgeInsets(
+          top: 5,
+          left: 5,
+          bottom: 5,
+          right: 5
+        )).then {
+          $0.text = promotions[index]
+          $0.font = .systemFont(ofSize: 10)
+          $0.textColor = .gray70
+          $0.clipsToBounds = true
+          $0.layer.cornerRadius = 5
+          $0.backgroundColor = .gray20
+        }
       if index == promotions.count - 1 {
-        label.setContentCompressionResistancePriority(UILayoutPriority.defaultLow, for: .horizontal)
+        label.setContentCompressionResistancePriority(
+          UILayoutPriority.defaultLow,
+          for: .horizontal
+        )
       }
-
       self.promotionStackView.addArrangedSubview(label)
     }
   }
@@ -92,7 +103,7 @@ class StoreCell: BaseCollectionViewCell {
     }
 
     self.promotionStackView.snp.makeConstraints {
-      $0.leading.trailing.equalTo(self.contentView)
+      $0.leading.bottom.trailing.equalTo(self.contentView)
       $0.top.equalTo(self.storeInfoLabel.snp.bottom).offset(Metric.promotionStackViewTopMargin)
     }
 

@@ -19,6 +19,7 @@ class TagCell: BaseCollectionViewCell {
     $0.textColor = .green50
     $0.layer.borderWidth = 1
     $0.layer.borderColor = UIColor.green40?.cgColor
+    $0.text = "용기내챌린지"
   }
 
   // MARK: - Bind

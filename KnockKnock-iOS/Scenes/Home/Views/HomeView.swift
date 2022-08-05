@@ -49,10 +49,17 @@ class HomeView: UIView {
 
   func mainCollectionViewLayout() -> UICollectionViewCompositionalLayout {
     // Section Header
-    let headerEstimatedHeight: CGFloat = 400
+    let headerEstimatedHeight: CGFloat = 60
 
-    let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(headerEstimatedHeight))
-    let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+    let headerSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1.0),
+      heightDimension: .estimated(headerEstimatedHeight)
+    )
+    let header = NSCollectionLayoutBoundarySupplementaryItem(
+      layoutSize: headerSize,
+      elementKind: UICollectionView.elementKindSectionHeader,
+      alignment: .top
+    )
 
     // Section 1: Main
 
@@ -76,14 +83,14 @@ class HomeView: UIView {
 
     // Section 2: Store
 
-    let storeEstimatedHeight: CGFloat = 400
+    let storeEstimatedHeight: CGFloat = 100
 
     let storeItemSize = NSCollectionLayoutSize(
       widthDimension: .absolute(150),
       heightDimension: .estimated(storeEstimatedHeight)
     )
     let storeItem = NSCollectionLayoutItem(layoutSize: storeItemSize)
-
+    
     let storeGroupSize = NSCollectionLayoutSize(
       widthDimension: .estimated(storeEstimatedHeight),
       heightDimension: .estimated(storeEstimatedHeight)
@@ -98,11 +105,73 @@ class HomeView: UIView {
     storeSection.contentInsets = NSDirectionalEdgeInsets(
       top: 0,
       leading: 20,
-      bottom: 0,
+      bottom: 40,
       trailing: 0
     )
     storeSection.orthogonalScrollingBehavior = .continuous
     storeSection.boundarySupplementaryItems = [header]
+
+    // Section 3: Banner
+
+    let bannerItemSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .estimated(80)
+    )
+    let bannerItem = NSCollectionLayoutItem(layoutSize: bannerItemSize)
+    bannerItem.contentInsets = NSDirectionalEdgeInsets(
+      top: 0,
+      leading: 3,
+      bottom: 0,
+      trailing: 3
+    )
+
+    let bannerGroupSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(0.9),
+      heightDimension: .estimated(80)
+    )
+    let bannerGroup = NSCollectionLayoutGroup.horizontal(
+      layoutSize: bannerGroupSize,
+      subitems: [bannerItem]
+    )
+
+    let bannerSection = NSCollectionLayoutSection(group: bannerGroup)
+    bannerSection.contentInsets = NSDirectionalEdgeInsets(
+      top: 0,
+      leading: 17,
+      bottom: 0,
+      trailing: 0
+    )
+
+    bannerSection.orthogonalScrollingBehavior = .groupPaging
+
+    // Section 4: Tag
+    let tagEstimatedWidth: CGFloat = 50
+    let tagEstimatedHeigth: CGFloat = 30
+    let tagItemSize = NSCollectionLayoutSize(
+      widthDimension: .estimated(tagEstimatedWidth),
+      heightDimension: .estimated(tagEstimatedHeigth)
+    )
+    let tagItem = NSCollectionLayoutItem(layoutSize: tagItemSize)
+
+    let tagGroupSize = NSCollectionLayoutSize(
+      widthDimension: .estimated(tagEstimatedWidth),
+      heightDimension: .estimated(tagEstimatedHeigth)
+    )
+    let tagGroup = NSCollectionLayoutGroup.vertical(
+      layoutSize: tagGroupSize,
+      subitems: [tagItem]
+    )
+
+    let tagSection = NSCollectionLayoutSection(group: tagGroup)
+    tagSection.interGroupSpacing = 10
+    tagSection.contentInsets = NSDirectionalEdgeInsets(
+      top: 0,
+      leading: 20,
+      bottom: 0,
+      trailing: 20
+    )
+    tagSection.orthogonalScrollingBehavior = .continuous
+    tagSection.boundarySupplementaryItems = [header]
 
     let layout = UICollectionViewCompositionalLayout {(section: Int, _: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
 
@@ -114,12 +183,12 @@ class HomeView: UIView {
 
       case .store:
         return storeSection
-        //
-        //         case .banner:
-        //           return bannerSection
-        //
-        //         case .tag:
-        //           return tagSection
+
+      case .banner:
+        return bannerSection
+
+      case .tag:
+        return tagSection
         //
         //         case .popularPost:
         //           return popularSection
