@@ -9,6 +9,7 @@ import UIKit
 
 import Then
 import KKDSKit
+import SnapKit
 
 class HomeView: UIView {
 
@@ -39,12 +40,10 @@ class HomeView: UIView {
   private func setupConstraints() {
     [self.homeCollectionView].addSubViews(self)
 
-    NSLayoutConstraint.activate([
-      self.homeCollectionView.topAnchor.constraint(equalTo: self.topAnchor),
-      self.homeCollectionView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-      self.homeCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
-      self.homeCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor)
-    ])
+    self.homeCollectionView.snp.makeConstraints {
+      $0.top.equalTo(self)
+      $0.leading.trailing.bottom.equalTo(self.safeAreaLayoutGuide)
+    }
   }
 
   func mainCollectionViewLayout() -> UICollectionViewCompositionalLayout {
