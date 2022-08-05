@@ -48,6 +48,28 @@ class HomeHeaderCollectionReusableView: UICollectionReusableView {
     super.init(coder: aDecoder)
   }
 
+  // MARK: - Bind
+
+  func bind(section: HomeSection?) {
+
+    switch section {
+    case .store:
+      self.headerLabel.text = "녹녹이 인증한 스토어"
+      self.moreButton.isHidden = false
+
+    case .tag:
+      self.headerLabel.text = "오늘의 인기 게시글 🔥"
+      self.moreButton.isHidden = true
+
+    case .event:
+      self.headerLabel.text = "더 특별한 이벤트 🎉"
+      self.moreButton.isHidden = false
+
+    default:
+      self.headerLabel.text = ""
+    }
+  }
+
   // MARK: - Constraints
 
   func setupConstraints() {

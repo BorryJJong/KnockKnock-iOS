@@ -48,6 +48,7 @@ class HomeView: UIView {
   }
 
   func mainCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+
     // Section Header
     let headerEstimatedHeight: CGFloat = 60
 
@@ -145,6 +146,7 @@ class HomeView: UIView {
     bannerSection.orthogonalScrollingBehavior = .groupPaging
 
     // Section 4: Tag
+
     let tagEstimatedWidth: CGFloat = 50
     let tagEstimatedHeigth: CGFloat = 30
     let tagItemSize = NSCollectionLayoutSize(
@@ -173,6 +175,112 @@ class HomeView: UIView {
     tagSection.orthogonalScrollingBehavior = .continuous
     tagSection.boundarySupplementaryItems = [header]
 
+    // Section 5: Popular Post
+
+    let sectionInset: CGFloat = 2.5
+
+    let largeItemSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(0.666),
+      heightDimension: .fractionalHeight(1)
+    )
+    let largeItem = NSCollectionLayoutItem(layoutSize: largeItemSize)
+    largeItem.contentInsets = NSDirectionalEdgeInsets(
+      top: sectionInset,
+      leading: sectionInset,
+      bottom: sectionInset,
+      trailing: sectionInset
+    )
+
+    let verticalSmallItemSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .fractionalHeight(0.5)
+    )
+    let verticalSmallItem = NSCollectionLayoutItem(layoutSize: verticalSmallItemSize)
+    verticalSmallItem.contentInsets = NSDirectionalEdgeInsets(
+      top: sectionInset,
+      leading: sectionInset,
+      bottom: sectionInset,
+      trailing: sectionInset
+    )
+
+    let horizontalSmallItemSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(0.333),
+      heightDimension: .fractionalHeight(1)
+    )
+    let horizontalSmallItem = NSCollectionLayoutItem(layoutSize: horizontalSmallItemSize)
+    horizontalSmallItem.contentInsets = NSDirectionalEdgeInsets(
+      top: sectionInset,
+      leading: sectionInset,
+      bottom: sectionInset,
+      trailing: sectionInset
+    )
+
+    let verticalGroupSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(0.333),
+      heightDimension: .fractionalHeight(1)
+    )
+    let verticalGroup = NSCollectionLayoutGroup.vertical(
+      layoutSize: verticalGroupSize,
+      subitems: [verticalSmallItem]
+    )
+
+    let horizontalGroupSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .fractionalHeight(0.333)
+    )
+    let horizontalGroup = NSCollectionLayoutGroup.horizontal(
+      layoutSize: horizontalGroupSize,
+      subitem: horizontalSmallItem, count: 3
+    )
+
+    let largeFirstMixedGroupSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .fractionalWidth(0.666)
+    )
+    let largeFirstMixedGroup = NSCollectionLayoutGroup.horizontal(
+      layoutSize: largeFirstMixedGroupSize,
+      subitems: [largeItem, verticalGroup]
+    )
+
+    let outerGroupSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .fractionalWidth(1)
+    )
+    let outerGroup = NSCollectionLayoutGroup.vertical(
+      layoutSize: outerGroupSize,
+      subitems: [largeFirstMixedGroup, horizontalGroup]
+    )
+    outerGroup.contentInsets = NSDirectionalEdgeInsets(
+      top: 0,
+      leading: 20,
+      bottom: 0,
+      trailing: 20
+    )
+
+    let popularSection = NSCollectionLayoutSection(group: outerGroup)
+    popularSection.contentInsets = NSDirectionalEdgeInsets(
+      top: 15,
+      leading: 0,
+      bottom: 0,
+      trailing: 0
+    )
+
+    // Popular footer
+    
+    let footerEstimatedHeight: CGFloat = 60
+
+    let popularFooterSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1.0),
+      heightDimension: .estimated(footerEstimatedHeight)
+    )
+    let popularFooter = NSCollectionLayoutBoundarySupplementaryItem(
+      layoutSize: popularFooterSize,
+      elementKind: UICollectionView.elementKindSectionFooter,
+      alignment: .bottom
+    )
+
+    popularSection.boundarySupplementaryItems = [popularFooter]
+
     let layout = UICollectionViewCompositionalLayout {(section: Int, _: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
 
       let homeSection = HomeSection(rawValue: section)
@@ -189,9 +297,9 @@ class HomeView: UIView {
 
       case .tag:
         return tagSection
-        //
-        //         case .popularPost:
-        //           return popularSection
+        
+      case .popularPost:
+        return popularSection
         //
         //         case .event:
         //           return eventSection

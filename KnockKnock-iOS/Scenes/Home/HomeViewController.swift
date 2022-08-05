@@ -28,6 +28,8 @@ final class HomeViewController: BaseViewController<HomeView> {
       $0.registCell(type: StoreCell.self)
       $0.registCell(type: BannerCell.self)
       $0.registCell(type: TagCell.self)
+      $0.registCell(type: PopularPostCell.self)
+      $0.registFooterView(type: PopularFooterCollectionReusableView.self)
       $0.collectionViewLayout = self.containerView.mainCollectionViewLayout()
     }
   }
@@ -40,7 +42,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
 
   func numberOfSections(in collectionView: UICollectionView) -> Int {
     //    return HomeSection.allCases.countgit
-    return 4
+    return 5
   }
 
   func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -48,27 +50,27 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     switch section {
     case .main, .banner:
       return UICollectionReusableView()
+
     case .store, .event, .tag:
       let header = collectionView.dequeueReusableSupplementaryHeaderView(
         withType: HomeHeaderCollectionReusableView.self,
         for: indexPath
       )
+      header.bind(section: section)
 
       return header
 
     case .popularPost:
-      let header = collectionView.dequeueReusableSupplementaryHeaderView(
-        withType: HomeHeaderCollectionReusableView.self,
+      let footer = collectionView.dequeueReusableSupplementaryFooterView(
+        withType: PopularFooterCollectionReusableView.self,
         for: indexPath
       )
 
-      return header
+      return footer
 
     default:
       assert(false)
-
     }
-
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -80,6 +82,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         withType: HomeMainCell.self,
         for: indexPath
       )
+      
       return cell
 
     case .store:
@@ -87,6 +90,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         withType: StoreCell.self,
         for: indexPath
       )
+
       return cell
 
     case .banner:
@@ -94,6 +98,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         withType: BannerCell.self,
         for: indexPath
       )
+
       return cell
 
     case .tag:
@@ -101,11 +106,17 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         withType: TagCell.self,
         for: indexPath
       )
+
       return cell
 
-      //    case .popularPost:
-      //      let cell = collectionView.dequeueCell(withType: HomeMainCell.self, for: indexPath)
-      //      return cell
+    case .popularPost:
+      let cell = collectionView.dequeueCell(
+        withType: PopularPostCell.self,
+        for: indexPath
+      )
+
+      return cell
+
       //    case .event:
       //      let cell = collectionView.dequeueCell(withType: HomeMainCell.self, for: indexPath)
       //      return cell
