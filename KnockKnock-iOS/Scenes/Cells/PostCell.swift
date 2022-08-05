@@ -13,7 +13,7 @@ final class PostCell: BaseCollectionViewCell {
 
   // MARK: - UIs
 
-  let contentLabel = BasePaddingLabel().then {
+  private let contentLabel = BasePaddingLabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.numberOfLines = 0
     $0.backgroundColor = .gray20
@@ -25,7 +25,7 @@ final class PostCell: BaseCollectionViewCell {
   }
 
   func bind(text: String) {
-    contentLabel.text = text
+    self.contentLabel.text = text
   }
 
   override func setupConstraints() {
