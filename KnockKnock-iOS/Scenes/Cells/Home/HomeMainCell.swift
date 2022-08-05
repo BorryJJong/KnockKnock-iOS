@@ -15,16 +15,16 @@ class HomeMainCell: BaseCollectionViewCell {
 
   // MARK: - UIs
 
-  let mainImageView = UIImageView().then {
+  private let mainImageView = UIImageView().then {
     $0.image = UIImage(named: "feed_sample_1")
     $0.contentMode = .scaleToFill
   }
 
-  let topGradientImageView = UIImageView().then {
+  private let topGradientImageView = UIImageView().then {
     $0.image = KKDS.Image.ic_bg_gradient_top_bk
   }
 
-  let bottomGradientImageView = UIImageView().then {
+  private let bottomGradientImageView = UIImageView().then {
     $0.image = KKDS.Image.ic_bg_gradient_bottom_bk
   }
 

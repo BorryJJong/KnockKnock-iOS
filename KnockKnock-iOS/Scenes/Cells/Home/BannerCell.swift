@@ -12,7 +12,7 @@ class BannerCell: BaseCollectionViewCell {
 
   // MARK: - UIs
 
-  let bannerImageView = UIImageView().then {
+  private let bannerImageView = UIImageView().then {
     $0.backgroundColor = .green
     $0.clipsToBounds = true
     $0.layer.cornerRadius = 5

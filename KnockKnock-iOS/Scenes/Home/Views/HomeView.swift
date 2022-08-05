@@ -61,7 +61,11 @@ class HomeView: UIView {
       alignment: .top
     )
     header.contentInsets = NSDirectionalEdgeInsets(
-      top: 20, leading: 0, bottom: 20, trailing: 0)
+      top: 20,
+      leading: 0,
+      bottom: 20,
+      trailing: 0
+    )
 
     // Section 1: Main
 
@@ -82,7 +86,12 @@ class HomeView: UIView {
 
     let mainSection = NSCollectionLayoutSection(group: mainGroup)
     mainSection.orthogonalScrollingBehavior = .paging
-    mainSection.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 45, trailing: 0)
+    mainSection.contentInsets = NSDirectionalEdgeInsets(
+      top: 0,
+      leading: 0,
+      bottom: 45,
+      trailing: 0
+    )
 
     // Section 2: Store
 

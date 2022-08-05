@@ -25,11 +25,11 @@ class StoreCell: BaseCollectionViewCell {
 
   // MARK: - Properties
 
-  let promotions = ["텀블러 할인", "사은품 증정", "포인트 적립"]
+  private let promotions = ["텀블러 할인", "사은품 증정", "포인트 적립"]
 
   // MARK: - UIs
 
-  let storeImageView = UIImageView().then {
+  private let storeImageView = UIImageView().then {
     $0.image = UIImage(named: "feed_sample_1")
     $0.layer.cornerRadius = 5
     $0.backgroundColor = .darkGray
@@ -37,27 +37,27 @@ class StoreCell: BaseCollectionViewCell {
     $0.clipsToBounds = true
   }
 
-  let storeNameLabel = UILabel().then {
+  private let storeNameLabel = UILabel().then {
     $0.text = "청담동 스타벅스"
     $0.font = .systemFont(ofSize: 15, weight: .semibold)
     $0.numberOfLines = 1
   }
 
-  let storeInfoLabel = UILabel().then {
+  private let storeInfoLabel = UILabel().then {
     $0.text = "환경을위한 다양한 프로모션 전문 상점"
     $0.font = .systemFont(ofSize: 12, weight: .medium)
     $0.textColor = .gray70
     $0.numberOfLines = 1
   }
 
-  let promotionStackView = UIStackView().then {
+  private let promotionStackView = UIStackView().then {
     $0.axis = .horizontal
     $0.spacing = 5
     $0.distribution = .fill
     $0.alignment = .bottom
   }
 
-  func setPromotionStackView(promotions: [String]) {
+  private func setPromotionStackView(promotions: [String]) {
     for index in 0..<promotions.count {
       let label = BasePaddingLabel(
         padding: UIEdgeInsets(

@@ -41,7 +41,7 @@ class PopularFooterCollectionReusableView: UICollectionReusableView {
 
   // MARK: - Constraints
 
-  func setupConstraints() {
+  private func setupConstraints() {
     [self.morePostButton, self.seperaterView].addSubViews(self)
 
     self.morePostButton.snp.makeConstraints {

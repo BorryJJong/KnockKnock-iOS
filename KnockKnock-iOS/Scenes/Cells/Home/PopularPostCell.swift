@@ -15,19 +15,19 @@ class PopularPostCell: BaseCollectionViewCell {
 
   // MARK: - UIs
 
-  let thumbnailImageView = UIImageView().then {
+  private let thumbnailImageView = UIImageView().then {
     $0.backgroundColor = .gray40
     $0.layer.cornerRadius = 5
     $0.clipsToBounds = true
   }
 
-  let gradientImageView = UIImageView().then {
+  private let gradientImageView = UIImageView().then {
     $0.image = KKDS.Image.ic_bg_gradient_bottom_bk
     $0.layer.cornerRadius = 5
     $0.clipsToBounds = true
   }
 
-  let nickNameLabel = UILabel().then {
+  private let nickNameLabel = UILabel().then {
     $0.font = .systemFont(ofSize: 12, weight: .medium)
     $0.textColor = .white
     $0.text = "@ksungmin94"

@@ -23,6 +23,7 @@ final class HomeViewController: BaseViewController<HomeView> {
     self.containerView.homeCollectionView.do {
       $0.dataSource = self
       $0.delegate = self
+
       $0.registHeaderView(type: HomeHeaderCollectionReusableView.self)
       $0.registCell(type: HomeMainCell.self)
       $0.registCell(type: StoreCell.self)
@@ -31,22 +32,35 @@ final class HomeViewController: BaseViewController<HomeView> {
       $0.registCell(type: PopularPostCell.self)
       $0.registFooterView(type: PopularFooterCollectionReusableView.self)
       $0.registCell(type: EventCell.self)
+
       $0.collectionViewLayout = self.containerView.mainCollectionViewLayout()
     }
   }
 }
 
+  // MARK: - CollectionView DataSource, Delegate
+
 extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    numberOfItemsInSection section: Int
+  ) -> Int {
     return 5
   }
 
-  func numberOfSections(in collectionView: UICollectionView) -> Int {
+  func numberOfSections(
+    in collectionView: UICollectionView
+  ) -> Int {
         return HomeSection.allCases.count
   }
 
-  func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    viewForSupplementaryElementOfKind kind: String,
+    at indexPath: IndexPath
+  ) -> UICollectionReusableView {
     let section = HomeSection(rawValue: indexPath.section)
+
     switch section {
     case .main, .banner:
       return UICollectionReusableView()
@@ -73,7 +87,10 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     }
   }
 
-  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    cellForItemAt indexPath: IndexPath
+  ) -> UICollectionViewCell {
     let section = HomeSection(rawValue: indexPath.section)
 
     switch section {

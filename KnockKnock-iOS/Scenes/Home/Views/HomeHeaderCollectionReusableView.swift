@@ -24,7 +24,7 @@ class HomeHeaderCollectionReusableView: UICollectionReusableView {
 
   // MARK: - UIs
 
-  let headerLabel = UILabel().then {
+  private let headerLabel = UILabel().then {
     $0.font = .systemFont(ofSize: 20, weight: .bold)
     $0.text = "녹녹이 인증한 스토어"
   }
@@ -77,10 +77,7 @@ class HomeHeaderCollectionReusableView: UICollectionReusableView {
 
     self.headerLabel.snp.makeConstraints {
       $0.leading.equalToSuperview()
-//      $0.top.equalToSuperview()
-//      $0.centerY.equalTo(self.snp.centerY)
       $0.trailing.equalTo(self.moreButton)
-//      $0.bottom.equalToSuperview()
     }
 
     self.moreButton.snp.makeConstraints {
