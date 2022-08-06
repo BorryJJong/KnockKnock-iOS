@@ -64,7 +64,7 @@ class CommentView: UIView {
       $0.scrollDirection = .vertical
     }).then {
       $0.translatesAutoresizingMaskIntoConstraints = false
-      $0.registHeaderView(type: HeaderCollectionReusableView.self)
+      $0.registHeaderView(type: CommentHeaderCollectionReusableView.self)
     }
 
   let commentInputView = UIView().then {
