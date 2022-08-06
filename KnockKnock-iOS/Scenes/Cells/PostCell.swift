@@ -13,7 +13,12 @@ final class PostCell: BaseCollectionViewCell {
 
   // MARK: - UIs
 
-  private let contentLabel = BasePaddingLabel().then {
+  private let contentLabel = BasePaddingLabel(padding: UIEdgeInsets(
+    top: 5,
+    left: 5,
+    bottom: 5,
+    right: 5
+  )).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.numberOfLines = 0
     $0.backgroundColor = .gray20
@@ -21,7 +26,6 @@ final class PostCell: BaseCollectionViewCell {
     $0.font = .systemFont(ofSize: 12, weight: .semibold)
     $0.layer.cornerRadius = 3
     $0.clipsToBounds = true
-    $0.padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
   }
 
   func bind(text: String) {
