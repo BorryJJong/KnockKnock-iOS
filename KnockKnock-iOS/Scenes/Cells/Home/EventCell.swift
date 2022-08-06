@@ -11,7 +11,22 @@ import Then
 import SnapKit
 import KKDSKit
 
-class EventCell: BaseCollectionViewCell {
+final class EventCell: BaseCollectionViewCell {
+
+  // MARK: - Constants
+
+  private enum Metric {
+    static let gradientImageViewHeight = 100.f
+
+    static let titleLabelBottomMargin = -15.f
+    static let titleLabelLeadingMargin = 15.f
+
+    static let periodLabelBottomMargin = -5.f
+
+    static let newEventLabelTopMargin = 10.f
+    static let newEventLabelWidth = 40.f
+    static let newEventLabelHeight = 20.f
+  }
 
   // MARK: - UIs
 
@@ -59,23 +74,23 @@ class EventCell: BaseCollectionViewCell {
 
     self.gradientImageView.snp.makeConstraints {
       $0.leading.trailing.bottom.equalTo(self.thumbnailImageView)
-      $0.height.equalTo(100)
+      $0.height.equalTo(Metric.gradientImageViewHeight)
     }
 
     self.titleLabel.snp.makeConstraints {
-      $0.bottom.equalTo(self.contentView).offset(-15)
-      $0.leading.equalTo(self.contentView).offset(15)
+      $0.bottom.equalTo(self.contentView).offset(Metric.titleLabelBottomMargin)
+      $0.leading.equalTo(self.contentView).offset(Metric.titleLabelLeadingMargin)
     }
 
     self.periodLabel.snp.makeConstraints {
-      $0.bottom.equalTo(self.titleLabel.snp.top).offset(-5)
+      $0.bottom.equalTo(self.titleLabel.snp.top).offset(Metric.periodLabelBottomMargin)
       $0.leading.equalTo(self.titleLabel.snp.leading)
     }
 
     self.newEventLabel.snp.makeConstraints {
-      $0.top.leading.equalTo(self.contentView).offset(10)
-      $0.width.equalTo(40)
-      $0.height.equalTo(20)
+      $0.top.leading.equalTo(self.contentView).offset(Metric.newEventLabelTopMargin)
+      $0.width.equalTo(Metric.newEventLabelWidth)
+      $0.height.equalTo(Metric.newEventLabelHeight)
     }
   }
 }

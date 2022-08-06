@@ -9,7 +9,7 @@ import UIKit
 
 import SnapKit
 
-class StoreCell: BaseCollectionViewCell {
+final class StoreCell: BaseCollectionViewCell {
 
   // MARK: - Constants
 

@@ -45,7 +45,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    return 5
+    return 6
   }
 
   func numberOfSections(

@@ -11,7 +11,7 @@ import SnapKit
 import Then
 import KKDSKit
 
-class HomeMainCell: BaseCollectionViewCell {
+final class HomeMainCell: BaseCollectionViewCell {
 
   // MARK: - UIs
 

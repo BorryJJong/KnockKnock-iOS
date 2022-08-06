@@ -11,7 +11,15 @@ import SnapKit
 import Then
 import KKDSKit
 
-class PopularPostCell: BaseCollectionViewCell {
+final class PopularPostCell: BaseCollectionViewCell {
+
+  // MARK: - Constants
+
+  private enum Metric {
+    static let gradientImageViewHeight = 100.f
+    static let nickNameLabelLeadingMargin = 10.f
+    static let nickNameLabelBottomMargin = -10.f
+  }
 
   // MARK: - UIs
 
@@ -44,12 +52,12 @@ class PopularPostCell: BaseCollectionViewCell {
 
     self.gradientImageView.snp.makeConstraints {
       $0.leading.trailing.bottom.equalTo(self.thumbnailImageView)
-      $0.height.equalTo(100)
+      $0.height.equalTo(Metric.gradientImageViewHeight)
     }
 
     self.nickNameLabel.snp.makeConstraints {
-      $0.leading.equalTo(self.thumbnailImageView.snp.leading).offset(10)
-      $0.bottom.equalTo(self.thumbnailImageView.snp.bottom).offset(-10)
+      $0.leading.equalTo(self.thumbnailImageView.snp.leading).offset(Metric.nickNameLabelLeadingMargin)
+      $0.bottom.equalTo(self.thumbnailImageView.snp.bottom).offset(Metric.nickNameLabelBottomMargin)
     }
   }
 }

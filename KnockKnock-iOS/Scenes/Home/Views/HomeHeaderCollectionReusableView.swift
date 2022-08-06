@@ -11,7 +11,7 @@ import Then
 import SnapKit
 import KKDSKit
 
-class HomeHeaderCollectionReusableView: UICollectionReusableView {
+final class HomeHeaderCollectionReusableView: UICollectionReusableView {
 
   // MARK: - Constants
 

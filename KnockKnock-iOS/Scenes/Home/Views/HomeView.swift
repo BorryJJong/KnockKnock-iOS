@@ -11,7 +11,7 @@ import Then
 import KKDSKit
 import SnapKit
 
-class HomeView: UIView {
+final class HomeView: UIView {
 
   // MARK: - UIs
 
@@ -50,9 +50,11 @@ class HomeView: UIView {
 
     // Section Header
 
+    let headerHeight: CGFloat = 60
+
     let headerSize = NSCollectionLayoutSize(
-      widthDimension: .fractionalWidth(1.0),
-      heightDimension: .absolute(60)
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .absolute(headerHeight)
     )
     let header = NSCollectionLayoutBoundarySupplementaryItem(
       layoutSize: headerSize,
@@ -94,10 +96,11 @@ class HomeView: UIView {
 
     // Section 2: Store
 
-    let storeEstimatedHeight: CGFloat = 100
+    let storeWidth: CGFloat = 150
+    let storeEstimatedHeight: CGFloat = 200
 
     let storeItemSize = NSCollectionLayoutSize(
-      widthDimension: .absolute(150),
+      widthDimension: .absolute(storeWidth),
       heightDimension: .estimated(storeEstimatedHeight)
     )
     let storeItem = NSCollectionLayoutItem(layoutSize: storeItemSize)
@@ -124,9 +127,11 @@ class HomeView: UIView {
 
     // Section 3: Banner
 
+    let bannerEstimatedHeight: CGFloat = 80
+
     let bannerItemSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1),
-      heightDimension: .estimated(80)
+      heightDimension: .estimated(bannerEstimatedHeight)
     )
     let bannerItem = NSCollectionLayoutItem(layoutSize: bannerItemSize)
     bannerItem.contentInsets = NSDirectionalEdgeInsets(
@@ -138,7 +143,7 @@ class HomeView: UIView {
 
     let bannerGroupSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(0.9),
-      heightDimension: .estimated(80)
+      heightDimension: .estimated(bannerEstimatedHeight)
     )
     let bannerGroup = NSCollectionLayoutGroup.horizontal(
       layoutSize: bannerGroupSize,
@@ -159,6 +164,7 @@ class HomeView: UIView {
 
     let tagEstimatedWidth: CGFloat = 50
     let tagEstimatedHeigth: CGFloat = 30
+
     let tagItemSize = NSCollectionLayoutSize(
       widthDimension: .estimated(tagEstimatedWidth),
       heightDimension: .estimated(tagEstimatedHeigth)
@@ -269,7 +275,7 @@ class HomeView: UIView {
 
     let popularSection = NSCollectionLayoutSection(group: outerGroup)
     popularSection.contentInsets = NSDirectionalEdgeInsets(
-      top: 30,
+      top: 20,
       leading: 0,
       bottom: 0,
       trailing: 0
@@ -280,7 +286,7 @@ class HomeView: UIView {
     let footerEstimatedHeight: CGFloat = 60
 
     let popularFooterSize = NSCollectionLayoutSize(
-      widthDimension: .fractionalWidth(1.0),
+      widthDimension: .fractionalWidth(1),
       heightDimension: .estimated(footerEstimatedHeight)
     )
     let popularFooter = NSCollectionLayoutBoundarySupplementaryItem(
@@ -307,6 +313,12 @@ class HomeView: UIView {
       layoutSize: eventGroupSize,
       subitems: [eventItem]
     )
+    eventGroup.contentInsets = NSDirectionalEdgeInsets(
+      top: 0,
+      leading: 0,
+      bottom: 0,
+      trailing: 20
+    )
 
     let eventSection = NSCollectionLayoutSection(group: eventGroup)
     eventSection.interGroupSpacing = 20
@@ -314,7 +326,7 @@ class HomeView: UIView {
       top: 0,
       leading: 20,
       bottom: 40,
-      trailing: 20
+      trailing: 0
     )
     eventSection.boundarySupplementaryItems = [header]
 

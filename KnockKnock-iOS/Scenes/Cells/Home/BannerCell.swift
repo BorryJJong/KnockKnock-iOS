@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class BannerCell: BaseCollectionViewCell {
+final class BannerCell: BaseCollectionViewCell {
 
   // MARK: - UIs
 
