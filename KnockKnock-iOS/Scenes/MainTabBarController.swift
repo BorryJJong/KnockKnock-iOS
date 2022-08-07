@@ -27,7 +27,7 @@ final class MainTabBarController: UITabBarController {
   lazy var tabBarItems: [Tab: UITabBarItem] = [
     .home: UITabBarItem(
       title: "홈",
-      image: KKDS.Image.ic_bottom_challenge_27_off,
+      image: KKDS.Image.ic_bottom_home_27_off,
       selectedImage: KKDS.Image.ic_bottom_home_27_on
     ),
     .feed: UITabBarItem(
@@ -46,7 +46,7 @@ final class MainTabBarController: UITabBarController {
       selectedImage: KKDS.Image.ic_bottom_challenge_27_on
     ),
     .my: UITabBarItem(
-      title: "마이",
+      title: "MY",
       image: KKDS.Image.ic_bottom_my_27_off,
       selectedImage: KKDS.Image.ic_bottom_my_27_on
     )
