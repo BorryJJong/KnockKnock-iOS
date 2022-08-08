@@ -52,8 +52,9 @@ class TagCell: BaseCollectionViewCell {
     [self.tagLabel].addSubViews(self.contentView)
 
     NSLayoutConstraint.activate([
-      self.tagLabel.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor),
-      self.tagLabel.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor)
+      self.tagLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor),
+      self.tagLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+      self.tagLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor)
     ])
   }
 }

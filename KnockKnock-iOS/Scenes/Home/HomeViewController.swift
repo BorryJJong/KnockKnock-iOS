@@ -25,10 +25,10 @@ final class HomeViewController: BaseViewController<HomeView> {
       $0.delegate = self
 
       $0.registHeaderView(type: HomeHeaderCollectionReusableView.self)
-      $0.registCell(type: HomeMainCell.self)
+      $0.registCell(type: HomeMainPagerCell.self)
       $0.registCell(type: StoreCell.self)
       $0.registCell(type: BannerCell.self)
-      $0.registCell(type: TagCell.self)
+      $0.registCell(type: HomeTagCell.self)
       $0.registCell(type: PopularPostCell.self)
       $0.registFooterView(type: PopularFooterCollectionReusableView.self)
       $0.registCell(type: EventCell.self)
@@ -45,7 +45,14 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    return 6
+    let section = HomeSection(rawValue: section)
+
+    switch section {
+    case .main, .tag:
+      return 1
+    default:
+      return 6
+    }
   }
 
   func numberOfSections(
@@ -96,7 +103,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     switch section {
     case .main:
       let cell = collectionView.dequeueCell(
-        withType: HomeMainCell.self,
+        withType: HomeMainPagerCell.self,
         for: indexPath
       )
       
@@ -120,7 +127,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
 
     case .tag:
       let cell = collectionView.dequeueCell(
-        withType: TagCell.self,
+        withType: HomeTagCell.self,
         for: indexPath
       )
 

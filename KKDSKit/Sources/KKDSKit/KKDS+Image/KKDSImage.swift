@@ -20,7 +20,9 @@ public extension KKDS.Image {
 // MARK: - Icon size 10
 
 public extension KKDS.Image {
-  static var ic_left_10_gr: UIImage                      { .load(name: "ic_left_10_gr")}
+  static var ic_left_10_gr: UIImage               { .load(name: "ic_left_10_gr")}
+  static var ic_page_10_wh_on: UIImage            {.load(name: "ic_page_10_wh_on")}
+  static var ic_page_10_wh_off: UIImage           {.load(name: "ic_page_10_wh_off")}
 }
 
 // MARK: - Icon size 20
@@ -67,6 +69,12 @@ public extension KKDS.Image {
   static var ic_set_24_bk: UIImage                { .load(name: "ic_set_24_bk") }
 }
 
+// MARK: - Icon Size 40
+
+public extension KKDS.Image {
+  static var ic_tag_gradient_40_wh: UIImage       {.load(name: "ic_tag_gradient_40_wh")}
+}
+
 // MARK: - background
 
 public extension KKDS.Image {
@@ -94,8 +102,8 @@ public extension KKDS.Image {
 // MARK: - Etc.
 
 public extension KKDS.Image {
-  static var etc_bar_8_gr: UIImage  { .load(name: "etc_bar_8_gr") }
-  static var etc_bar_30_gr: UIImage  { .load(name: "etc_bar_30_gr") }
+  static var etc_bar_8_gr: UIImage                { .load(name: "etc_bar_8_gr") }
+  static var etc_bar_30_gr: UIImage               { .load(name: "etc_bar_30_gr") }
 }
 
 extension UIImage {

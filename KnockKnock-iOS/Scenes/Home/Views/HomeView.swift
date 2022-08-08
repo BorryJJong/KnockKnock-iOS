@@ -20,7 +20,6 @@ final class HomeView: UIView {
     collectionViewLayout: UICollectionViewFlowLayout().then {
       $0.scrollDirection = .vertical
     }).then {
-      $0.translatesAutoresizingMaskIntoConstraints = false
       $0.contentInsetAdjustmentBehavior = .never
     }
 
@@ -162,17 +161,16 @@ final class HomeView: UIView {
 
     // Section 4: Tag
 
-    let tagEstimatedWidth: CGFloat = 50
     let tagEstimatedHeigth: CGFloat = 30
 
     let tagItemSize = NSCollectionLayoutSize(
-      widthDimension: .estimated(tagEstimatedWidth),
+      widthDimension: .fractionalWidth(1),
       heightDimension: .estimated(tagEstimatedHeigth)
     )
     let tagItem = NSCollectionLayoutItem(layoutSize: tagItemSize)
 
     let tagGroupSize = NSCollectionLayoutSize(
-      widthDimension: .estimated(tagEstimatedWidth),
+      widthDimension: .fractionalWidth(1),
       heightDimension: .estimated(tagEstimatedHeigth)
     )
     let tagGroup = NSCollectionLayoutGroup.vertical(
@@ -181,14 +179,12 @@ final class HomeView: UIView {
     )
 
     let tagSection = NSCollectionLayoutSection(group: tagGroup)
-    tagSection.interGroupSpacing = 10
     tagSection.contentInsets = NSDirectionalEdgeInsets(
       top: 0,
       leading: 20,
       bottom: 0,
-      trailing: 20
+      trailing: 10
     )
-    tagSection.orthogonalScrollingBehavior = .continuous
     tagSection.boundarySupplementaryItems = [header]
 
     // Section 5: Popular Post
