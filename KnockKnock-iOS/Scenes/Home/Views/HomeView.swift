@@ -40,7 +40,7 @@ final class HomeView: UIView {
     [self.homeCollectionView].addSubViews(self)
 
     self.homeCollectionView.snp.makeConstraints {
-      $0.top.equalTo(self)
+      $0.top.equalTo(self.snp.top)
       $0.leading.trailing.bottom.equalTo(self.safeAreaLayoutGuide)
     }
   }
@@ -126,11 +126,11 @@ final class HomeView: UIView {
 
     // Section 3: Banner
 
-    let bannerEstimatedHeight: CGFloat = 80
+    let bannerHeight: CGFloat = 80
 
     let bannerItemSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1),
-      heightDimension: .estimated(bannerEstimatedHeight)
+      heightDimension: .absolute(bannerHeight)
     )
     let bannerItem = NSCollectionLayoutItem(layoutSize: bannerItemSize)
     bannerItem.contentInsets = NSDirectionalEdgeInsets(
@@ -142,7 +142,7 @@ final class HomeView: UIView {
 
     let bannerGroupSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(0.9),
-      heightDimension: .estimated(bannerEstimatedHeight)
+      heightDimension: .absolute(bannerHeight)
     )
     let bannerGroup = NSCollectionLayoutGroup.horizontal(
       layoutSize: bannerGroupSize,
@@ -161,19 +161,19 @@ final class HomeView: UIView {
 
     // Section 4: Tag
 
-    let tagEstimatedHeigth: CGFloat = 30
+    let tagHeight: CGFloat = 40
 
     let tagItemSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1),
-      heightDimension: .estimated(tagEstimatedHeigth)
+      heightDimension: .absolute(tagHeight)
     )
     let tagItem = NSCollectionLayoutItem(layoutSize: tagItemSize)
 
     let tagGroupSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1),
-      heightDimension: .estimated(tagEstimatedHeigth)
+      heightDimension: .absolute(tagHeight)
     )
-    let tagGroup = NSCollectionLayoutGroup.vertical(
+    let tagGroup = NSCollectionLayoutGroup.horizontal(
       layoutSize: tagGroupSize,
       subitems: [tagItem]
     )

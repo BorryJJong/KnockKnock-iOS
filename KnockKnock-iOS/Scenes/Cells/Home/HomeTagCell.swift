@@ -21,6 +21,7 @@ class HomeTagCell: BaseCollectionViewCell {
       $0.scrollDirection = .horizontal
     }).then {
       $0.alwaysBounceVertical = false
+      $0.contentInsetAdjustmentBehavior = .never
     }
   
   let gradientImageView = UIImageView().then {
@@ -53,19 +54,20 @@ class HomeTagCell: BaseCollectionViewCell {
   func HomeTagCollectionViewLayout() -> UICollectionViewCompositionalLayout {
     
     let tagEstimatedWidth: CGFloat = 50
+    let tagEstimatedHeight: CGFloat = 30
     
     let tagItemSize = NSCollectionLayoutSize(
       widthDimension: .estimated(tagEstimatedWidth),
-      heightDimension: .absolute(50)
+      heightDimension: .estimated(tagEstimatedHeight)
     )
     let tagItem = NSCollectionLayoutItem(layoutSize: tagItemSize)
     
     let tagGroupSize = NSCollectionLayoutSize(
       widthDimension: .estimated(tagEstimatedWidth),
-      heightDimension: .absolute(50)
+      heightDimension: .estimated(tagEstimatedHeight)
     )
     
-    let tagGroup = NSCollectionLayoutGroup.vertical(
+    let tagGroup = NSCollectionLayoutGroup.horizontal(
       layoutSize: tagGroupSize,
       subitems: [tagItem]
     )
