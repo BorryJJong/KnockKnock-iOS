@@ -11,7 +11,12 @@ class TagCell: BaseCollectionViewCell {
 
   // MARK: - UIs
 
-  private let tagLabel = BasePaddingLabel().then {
+  private let tagLabel = BasePaddingLabel(padding: UIEdgeInsets(
+    top: 10,
+    left: 20,
+    bottom: 10,
+    right: 20
+  )).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.textAlignment = .center
     $0.clipsToBounds = true

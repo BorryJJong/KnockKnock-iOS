@@ -13,3 +13,31 @@ struct Feed: Decodable {
   let images: [String]
   let scale: String
 }
+
+struct FeedDetail: Decodable {
+  let id: Int
+  let userId: Int
+  let content: String
+  let storeAddress: String
+  let locationX: String
+  let locationY: String
+  let regDate: String
+  let nickname: String
+  let image: String?
+  let promotions: [Promotion]
+  let challenge: [Challenge]
+  let images: [String]
+  let scale: String
+}
+
+struct Promotion: Decodable {
+  let id: Int
+  let promotionId: Int
+  let title: String
+}
+
+struct Challenge: Decodable {
+  let id: Int
+  let challengeId: Int
+  let title: String
+}

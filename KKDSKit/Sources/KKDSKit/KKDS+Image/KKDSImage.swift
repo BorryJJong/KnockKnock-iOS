@@ -25,6 +25,12 @@ public extension KKDS.Image {
   static var ic_page_10_wh_off: UIImage           {.load(name: "ic_page_10_wh_off")}
 }
 
+// MARK: - Icon size 16
+
+public extension KKDS.Image {
+  static var ic_like_circle_16: UIImage              { .load(name: "ic_like_circle_16")}
+}
+
 // MARK: - Icon size 20
 
 public extension KKDS.Image {
@@ -67,6 +73,7 @@ public extension KKDS.Image {
   static var ic_search_24_gr: UIImage             { .load(name: "ic_search_24_gr") }
   static var ic_search_24_wh: UIImage             { .load(name: "ic_search_24_wh") }
   static var ic_set_24_bk: UIImage                { .load(name: "ic_set_24_bk") }
+  static var ic_next_24_bk: UIImage                { .load(name: "ic_next_24_bk") }
 }
 
 // MARK: - Icon Size 40

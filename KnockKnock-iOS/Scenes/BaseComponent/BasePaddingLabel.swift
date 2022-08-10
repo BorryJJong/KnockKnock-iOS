@@ -8,11 +8,15 @@
 import UIKit
 
 class BasePaddingLabel: UILabel {
-  private var padding = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
+  private let padding: UIEdgeInsets
 
-  convenience init(padding: UIEdgeInsets) {
-    self.init()
+  init(padding: UIEdgeInsets) {
     self.padding = padding
+    super.init(frame: .zero)
+  }
+   
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
   }
 
   override func drawText(in rect: CGRect) {
