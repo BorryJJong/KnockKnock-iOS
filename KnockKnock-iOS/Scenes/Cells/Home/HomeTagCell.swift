@@ -11,7 +11,7 @@ import SnapKit
 import KKDSKit
 import Then
 
-class HomeTagCell: BaseCollectionViewCell {
+final class HomeTagCell: BaseCollectionViewCell {
   
   // MARK: - UIs
   

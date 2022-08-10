@@ -11,7 +11,7 @@ import SnapKit
 import KKDSKit
 import Then
 
-class HomeMainPagerCell: BaseCollectionViewCell {
+final class HomeMainPagerCell: BaseCollectionViewCell {
 
   // MARK: - Constants
 
