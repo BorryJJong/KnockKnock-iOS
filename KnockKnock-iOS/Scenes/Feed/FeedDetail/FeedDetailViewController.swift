@@ -343,6 +343,13 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       assert(false, "Unexpected element kind")
     }
   }
+
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    if indexPath.section == FeedDetailSection.like.rawValue {
+      self.navigationController?.pushViewController(<#T##viewController: UIViewController##UIViewController#>, animated: <#T##Bool#>)
+    }
+  }
+
 }
 
 extension FeedDetailViewController: UICollectionViewDelegateFlowLayout {
