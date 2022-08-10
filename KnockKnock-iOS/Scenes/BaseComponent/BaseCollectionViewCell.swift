@@ -15,15 +15,12 @@ class BaseCollectionViewCell: UICollectionViewCell {
     super.init(frame: frame)
     self.backgroundColor = .white
     self.setupConstraints()
-    self.setupCollectionView()
     self.setupConfigure()
   }
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-
-  func setupCollectionView() { }
 
   func setupConstraints() { /* override point */ }
   func setupConfigure() {/* override point */}

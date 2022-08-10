@@ -51,7 +51,7 @@ class HomeMainPagerCell: BaseCollectionViewCell {
     )
   }
 
-  override func setupCollectionView() {
+  override func setupConfigure() {
     self.homeMainCollectionView.do {
       $0.delegate = self
       $0.dataSource = self

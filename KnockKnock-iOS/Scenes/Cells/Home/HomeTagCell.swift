@@ -28,7 +28,7 @@ class HomeTagCell: BaseCollectionViewCell {
     $0.image = KKDS.Image.ic_tag_gradient_40_wh
   }
   
-  override func setupCollectionView() {
+  override func setupConfigure() {
     self.homeTagCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
