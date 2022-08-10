@@ -13,6 +13,20 @@ import KKDSKit
 
 class LikeDetailCell: BaseCollectionViewCell {
 
+  // MARK: - Constants
+
+  private enum Metric {
+    static let profileImageViewWidth = 45.f
+
+    static let likeImageViewWidth = 16.f
+
+    static let userNameLabelBottomMargin = -2.5.f
+    static let userNameLabelLeadingMargin = 15.f
+
+    static let likeLabelTopMargin = 5.f
+    static let likeLabelLeadingMargin = 15.f
+  }
+
   // MARK: - UIs
 
   private let profileImageView = UIImageView().then {
@@ -42,22 +56,22 @@ class LikeDetailCell: BaseCollectionViewCell {
 
     self.profileImageView.snp.makeConstraints {
       $0.top.bottom.leading.equalTo(self.contentView)
-      $0.width.height.equalTo(45)
+      $0.width.height.equalTo(Metric.profileImageViewWidth)
     }
 
     self.likeImageView.snp.makeConstraints {
       $0.bottom.trailing.equalTo(self.profileImageView)
-      $0.width.height.equalTo(16)
+      $0.width.height.equalTo(Metric.likeImageViewWidth)
     }
 
     self.userNameLabel.snp.makeConstraints {
-      $0.bottom.equalTo(self.profileImageView.snp.centerY)
-      $0.leading.equalTo(self.profileImageView.snp.trailing).offset(15)
+      $0.bottom.equalTo(self.profileImageView.snp.centerY).offset(Metric.userNameLabelBottomMargin)
+      $0.leading.equalTo(self.profileImageView.snp.trailing).offset(Metric.userNameLabelLeadingMargin)
     }
 
     self.likeLabel.snp.makeConstraints {
-      $0.top.equalTo(self.userNameLabel.snp.bottom)
-      $0.leading.equalTo(self.profileImageView.snp.trailing).offset(15)
+      $0.top.equalTo(self.userNameLabel.snp.bottom).offset(Metric.likeLabelTopMargin)
+      $0.leading.equalTo(self.profileImageView.snp.trailing).offset(Metric.likeLabelLeadingMargin)
     }
   }
 }

@@ -21,14 +21,15 @@ class LikeDetailViewContoller: BaseViewController<LikeDetailView> {
       $0.delegate = self
       $0.dataSource = self
       $0.registCell(type: LikeDetailCell.self)
+      $0.collectionViewLayout = self.containerView.likeDetailCollectionViewLayout()
     }
   }
 }
 
 extension LikeDetailViewContoller: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
   func collectionView(
-    _ collectionView: UICollectionView
-    , numberOfItemsInSection section: Int
+    _ collectionView: UICollectionView,
+    numberOfItemsInSection section: Int
   ) -> Int {
     return 10
   }

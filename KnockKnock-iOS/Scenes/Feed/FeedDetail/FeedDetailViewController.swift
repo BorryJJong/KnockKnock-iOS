@@ -346,10 +346,11 @@ extension FeedDetailViewController: UICollectionViewDataSource {
 
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     if indexPath.section == FeedDetailSection.like.rawValue {
-      self.navigationController?.pushViewController(<#T##viewController: UIViewController##UIViewController#>, animated: <#T##Bool#>)
+      if indexPath.item == self.like.count {
+      self.navigationController?.pushViewController(LikeDetailViewContoller(), animated: true)
+      }
     }
   }
-
 }
 
 extension FeedDetailViewController: UICollectionViewDelegateFlowLayout {

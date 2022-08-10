@@ -39,7 +39,6 @@
 		611BD4B827E6DD5F007D5C79 /* PropertyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4B727E6DD5F007D5C79 /* PropertyCell.swift */; };
 		611BD4BA27E702F5007D5C79 /* PropertySelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4B927E702F5007D5C79 /* PropertySelectView.swift */; };
 		611BD4BC27E70393007D5C79 /* PropertySelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4BB27E70393007D5C79 /* PropertySelectViewController.swift */; };
-		611BD4BF27E70E64007D5C79 /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4BE27E70E64007D5C79 /* Property.swift */; };
 		611BD4C127E767CE007D5C79 /* shopSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4C027E767CE007D5C79 /* shopSearchView.swift */; };
 		61215AC5284F856D003FDCAA /* KKNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AC4284F856D003FDCAA /* KKNetworkManager.swift */; };
 		61215AC928507D51003FDCAA /* KKRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AC828507D51003FDCAA /* KKRouter.swift */; };
@@ -106,6 +105,8 @@
 		61A8DC5D288685BE000512EC /* ReplyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC5C288685BE000512EC /* ReplyCell.swift */; };
 		61AB2E4C28A36E0400A1AE30 /* LikeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AB2E4B28A36E0400A1AE30 /* LikeDetailView.swift */; };
 		61AB2E4E28A36E3E00A1AE30 /* LikeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AB2E4D28A36E3E00A1AE30 /* LikeDetailViewController.swift */; };
+		61AB2E5128A372FD00A1AE30 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 61AB2E5028A372FD00A1AE30 /* SnapKit */; };
+		61AB2E5428A3775300A1AE30 /* Double+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AB2E5328A3775300A1AE30 /* Double+Ext.swift */; };
 		61B6D97F2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D97E2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift */; };
 		61B6D984288A967A00E60F08 /* ChallengeDetailWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D983288A967A00E60F08 /* ChallengeDetailWorker.swift */; };
 		61B6D986288A968600E60F08 /* ChallengeDetailInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D985288A968600E60F08 /* ChallengeDetailInteractor.swift */; };
@@ -156,7 +157,6 @@
 		611BD4B727E6DD5F007D5C79 /* PropertyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyCell.swift; sourceTree = "<group>"; };
 		611BD4B927E702F5007D5C79 /* PropertySelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertySelectView.swift; sourceTree = "<group>"; };
 		611BD4BB27E70393007D5C79 /* PropertySelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertySelectViewController.swift; sourceTree = "<group>"; };
-		611BD4BE27E70E64007D5C79 /* Property.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
 		611BD4C027E767CE007D5C79 /* shopSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shopSearchView.swift; sourceTree = "<group>"; };
 		61215AC4284F856D003FDCAA /* KKNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KKNetworkManager.swift; sourceTree = "<group>"; };
 		61215AC828507D51003FDCAA /* KKRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KKRouter.swift; sourceTree = "<group>"; };
@@ -223,6 +223,7 @@
 		61A8DC5C288685BE000512EC /* ReplyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyCell.swift; sourceTree = "<group>"; };
 		61AB2E4B28A36E0400A1AE30 /* LikeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeDetailView.swift; sourceTree = "<group>"; };
 		61AB2E4D28A36E3E00A1AE30 /* LikeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeDetailViewController.swift; sourceTree = "<group>"; };
+		61AB2E5328A3775300A1AE30 /* Double+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Ext.swift"; sourceTree = "<group>"; };
 		61B6D97E2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		61B6D983288A967A00E60F08 /* ChallengeDetailWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailWorker.swift; sourceTree = "<group>"; };
 		61B6D985288A968600E60F08 /* ChallengeDetailInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailInteractor.swift; sourceTree = "<group>"; };
@@ -249,6 +250,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61AB2E5128A372FD00A1AE30 /* SnapKit in Frameworks */,
 				20AF1007285F2C74005C73EC /* KKDSKit in Frameworks */,
 				34F6FB7E518CFAF1AD6C3455 /* Pods_KnockKnock_iOS.framework in Frameworks */,
 			);
@@ -261,7 +263,6 @@
 			isa = PBXGroup;
 			children = (
 				201077EE27D39FFB00280991 /* Challenge.swift */,
-				611BD4BE27E70E64007D5C79 /* Property.swift */,
 				6143296728644187008BDCC9 /* Feed.swift */,
 				619DEE9B28868E7E00C80095 /* Comment.swift */,
 				613856CC2898B64000BE347E /* Like.swift */,
@@ -313,6 +314,7 @@
 			children = (
 				201077F727D3BF4B00280991 /* Array+Ext.swift */,
 				2010780727D48FDD00280991 /* Int+Ext.swift */,
+				61AB2E5328A3775300A1AE30 /* Double+Ext.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -674,6 +676,7 @@
 			name = "KnockKnock-iOS";
 			packageProductDependencies = (
 				20AF1006285F2C74005C73EC /* KKDSKit */,
+				61AB2E5028A372FD00A1AE30 /* SnapKit */,
 			);
 			productName = "KnockKnock-iOS";
 			productReference = 61FC60E527B9244D00A51DBC /* KnockKnock-iOS.app */;
@@ -703,6 +706,9 @@
 				Base,
 			);
 			mainGroup = 61FC60DC27B9244D00A51DBC;
+			packageReferences = (
+				61AB2E4F28A3727B00A1AE30 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = 61FC60E627B9244D00A51DBC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -837,7 +843,6 @@
 				2090811C27CA4F6B005A1573 /* StoreViewController.swift in Sources */,
 				611BD4AC27E48B9F007D5C79 /* FeedWritePresenter.swift in Sources */,
 				2090811E27CA4F77005A1573 /* MyViewController.swift in Sources */,
-				611BD4BF27E70E64007D5C79 /* Property.swift in Sources */,
 				61B6D990288BCE6E00E60F08 /* FeedDetailView.swift in Sources */,
 				61215AE628577A9C003FDCAA /* TagCell.swift in Sources */,
 				6143296A28644458008BDCC9 /* FeedRepository.swift in Sources */,
@@ -864,6 +869,7 @@
 				616EB08B28910485001BD18C /* PostHeaderReusableView.swift in Sources */,
 				6143297A28687B74008BDCC9 /* FeedListPresenter.swift in Sources */,
 				618FDAC927E836BA00C2823F /* PhotoCell.swift in Sources */,
+				61AB2E5428A3775300A1AE30 /* Double+Ext.swift in Sources */,
 				616EB0972892341F001BD18C /* ReactFooterReusableView.swift in Sources */,
 				61E3087C287334C1001394B6 /* ImageScaleType.swift in Sources */,
 				611BD4A327E3017E007D5C79 /* FeedWriteViewController.swift in Sources */,
@@ -1110,10 +1116,26 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		61AB2E4F28A3727B00A1AE30 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Snapkit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		20AF1006285F2C74005C73EC /* KKDSKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = KKDSKit;
+		};
+		61AB2E5028A372FD00A1AE30 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61AB2E4F28A3727B00A1AE30 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
