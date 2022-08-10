@@ -12,6 +12,10 @@ import Then
 
 class LikeDetailViewContoller: BaseViewController<LikeDetailView> {
 
+  // MARK: - Properties
+
+  var like: [Like] = []
+
   override func viewDidLoad() {
     super.viewDidLoad()
   }
@@ -31,7 +35,7 @@ extension LikeDetailViewContoller: UICollectionViewDataSource, UICollectionViewD
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    return 10
+    return self.like.count
   }
 
   func collectionView(
@@ -42,6 +46,8 @@ extension LikeDetailViewContoller: UICollectionViewDataSource, UICollectionViewD
       withType: LikeDetailCell.self,
       for: indexPath
     )
+
+    cell.bind(like: like[indexPath.item])
 
     return cell
   }
