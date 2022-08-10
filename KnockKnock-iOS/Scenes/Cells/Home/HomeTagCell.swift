@@ -24,7 +24,7 @@ class HomeTagCell: BaseCollectionViewCell {
       $0.contentInsetAdjustmentBehavior = .never
     }
   
-  let gradientImageView = UIImageView().then {
+  private let gradientImageView = UIImageView().then {
     $0.image = KKDS.Image.ic_tag_gradient_40_wh
   }
   
@@ -51,7 +51,7 @@ class HomeTagCell: BaseCollectionViewCell {
     }
   }
   
-  func HomeTagCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+  private func HomeTagCollectionViewLayout() -> UICollectionViewCompositionalLayout {
     
     let tagEstimatedWidth: CGFloat = 50
     let tagEstimatedHeight: CGFloat = 30
@@ -85,12 +85,19 @@ class HomeTagCell: BaseCollectionViewCell {
 }
 
 extension HomeTagCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    numberOfItemsInSection section: Int
+  ) -> Int {
     return 6
   }
   
-  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    cellForItemAt indexPath: IndexPath
+  ) -> UICollectionViewCell {
     let cell = collectionView.dequeueCell(withType: TagCell.self, for: indexPath)
+    
     return cell
   }
 }

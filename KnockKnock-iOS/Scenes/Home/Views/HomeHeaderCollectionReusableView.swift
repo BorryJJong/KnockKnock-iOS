@@ -72,7 +72,7 @@ final class HomeHeaderCollectionReusableView: UICollectionReusableView {
 
   // MARK: - Constraints
 
-  func setupConstraints() {
+  private func setupConstraints() {
     [self.headerLabel, self.moreButton].addSubViews(self)
 
     self.headerLabel.snp.makeConstraints {

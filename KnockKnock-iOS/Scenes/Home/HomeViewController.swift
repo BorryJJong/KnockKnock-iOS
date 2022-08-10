@@ -50,6 +50,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     switch section {
     case .main, .tag:
       return 1
+      
     default:
       return 6
     }

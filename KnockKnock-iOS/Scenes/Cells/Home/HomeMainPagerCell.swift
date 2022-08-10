@@ -18,15 +18,14 @@ class HomeMainPagerCell: BaseCollectionViewCell {
   private enum Metric {
     static let lineBackgroundViewWidth = 245.f
     static let lineBackgroundViewHeight = 2.f
-
     static let lineBackgroundViewLeadingMargin = 20.f
     static let lineBackgroundViewBottomMargin = -30.f
   }
 
   // MARK: - Properties
 
-  var mainImages: [String] = ["", "", "", "", "", ""]
-  var currentIndex: CGFloat = 0
+  private var mainImages: [String] = ["", "", "", "", "", ""]
+  private var currentIndex: CGFloat = 0
 
   // MARK: - UIs
 
@@ -39,18 +38,11 @@ class HomeMainPagerCell: BaseCollectionViewCell {
       $0.alwaysBounceVertical = false
     }
 
-  let pageControl = UIPageControl().then {
-    $0.currentPage = 0
-    $0.hidesForSinglePage = true
-    $0.preferredIndicatorImage = KKDS.Image.ic_page_10_wh_off
-    $0.backgroundStyle = .minimal
-  }
-
-  let lineView = UIView().then {
+  private let lineView = UIView().then {
     $0.backgroundColor = .white
   }
 
-  let lineBackgroundView = UIView().then {
+  private let lineBackgroundView = UIView().then {
     $0.backgroundColor = UIColor(
       red: 255/255,
       green: 255/255,
@@ -89,7 +81,7 @@ class HomeMainPagerCell: BaseCollectionViewCell {
     }
   }
 
-  func setHomeMainPagerCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+  private func setHomeMainPagerCollectionViewLayout() -> UICollectionViewCompositionalLayout {
     let mainItemSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1),
       heightDimension: .fractionalHeight(1)
@@ -118,11 +110,14 @@ class HomeMainPagerCell: BaseCollectionViewCell {
     return layout
   }
 
-  func movePager(currentPage: CGFloat, itemCount: Int) {
+  // MARK: - Pager 위치 이동 애니메이션 메소드
+
+  private func movePager(currentPage: CGFloat, itemCount: Int) {
+    let itemCount = CGFloat(itemCount)
+
     UIView.animate(withDuration: 0.5, animations: {
-      let itemCount = CGFloat(itemCount)
       self.lineView.transform = CGAffineTransform(
-        translationX: CGFloat(Metric.lineBackgroundViewWidth/itemCount) * currentPage,
+        translationX: CGFloat(Metric.lineBackgroundViewWidth / itemCount) * currentPage,
         y: 0
       )
     })
