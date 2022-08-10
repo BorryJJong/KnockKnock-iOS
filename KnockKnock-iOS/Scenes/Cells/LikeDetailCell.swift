@@ -11,7 +11,7 @@ import SnapKit
 import Then
 import KKDSKit
 
-class LikeDetailCell: BaseCollectionViewCell {
+final class LikeDetailCell: BaseCollectionViewCell {
 
   // MARK: - Constants
 

@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-class LikeDetailView: UIView {
+final class LikeDetailView: UIView {
 
   // MARK: - Constants
 
@@ -39,7 +39,7 @@ class LikeDetailView: UIView {
     super.init(coder: aDecoder)
   }
 
-  // MARK: - Constraints
+  // MARK: - Configure
 
   private func setupConstraints() {
     [self.likeCollectionView].addSubViews(self)
@@ -52,15 +52,17 @@ class LikeDetailView: UIView {
   }
 
   func likeDetailCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+    let estimatedHeight = 40.f
+
     let likeItemSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1),
-      heightDimension: .estimated(40)
+      heightDimension: .estimated(estimatedHeight)
     )
     let likeItem = NSCollectionLayoutItem(layoutSize: likeItemSize)
 
     let likeGroupSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1),
-      heightDimension: .estimated(40)
+      heightDimension: .estimated(estimatedHeight)
     )
     let likeGroup = NSCollectionLayoutGroup.horizontal(
       layoutSize: likeGroupSize,

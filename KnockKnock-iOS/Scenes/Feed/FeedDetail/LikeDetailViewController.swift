@@ -10,15 +10,19 @@ import UIKit
 import SnapKit
 import Then
 
-class LikeDetailViewContoller: BaseViewController<LikeDetailView> {
+final class LikeDetailViewContoller: BaseViewController<LikeDetailView> {
 
   // MARK: - Properties
 
   var like: [Like] = []
 
+  // MARK: - Life cycle
+
   override func viewDidLoad() {
     super.viewDidLoad()
   }
+
+  // MARK: - Configure
 
   override func setupConfigure() {
     self.containerView.likeCollectionView.do {
@@ -29,6 +33,8 @@ class LikeDetailViewContoller: BaseViewController<LikeDetailView> {
     }
   }
 }
+
+// MARK: - CollectionView DataSource, Delegate
 
 extension LikeDetailViewContoller: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
   func collectionView(
