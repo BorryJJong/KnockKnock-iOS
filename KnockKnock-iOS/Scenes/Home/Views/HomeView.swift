@@ -45,6 +45,8 @@ final class HomeView: UIView {
     }
   }
 
+  // MARK: - CollectionView Layout
+
   func mainCollectionViewLayout() -> UICollectionViewCompositionalLayout {
 
     // Section Header
@@ -67,8 +69,58 @@ final class HomeView: UIView {
       trailing: 0
     )
 
-    // Section 1: Main
+    let layout = UICollectionViewCompositionalLayout {(section: Int, _: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
 
+      let homeSection = HomeSection(rawValue: section)
+
+      switch homeSection {
+      case .main:
+
+        let mainSection = self.mainSectionLayout()
+        return mainSection
+
+      case .store:
+
+        let storeSection = self.storeSectionLayout()
+        storeSection.boundarySupplementaryItems = [header]
+
+        return storeSection
+
+      case .banner:
+
+        let bannerSection = self.bannerSectionLayout()
+        return bannerSection
+
+      case .tag:
+
+        let tagSection = self.tagSectionLayout()
+        tagSection.boundarySupplementaryItems = [header]
+
+        return tagSection
+        
+      case .popularPost:
+
+        let popularSection = self.popularSectionLayout()
+        return popularSection
+
+      case .event:
+
+        let eventSection = self.eventSectionLayout()
+        eventSection.boundarySupplementaryItems = [header]
+
+        return eventSection
+
+      default:
+        assert(false)
+      }
+    }
+
+    return layout
+  }
+
+  // MARK: - Main Section Layout
+
+  private func mainSectionLayout() -> NSCollectionLayoutSection {
     let mainItemSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1),
       heightDimension: .fractionalWidth(1.333)
@@ -93,8 +145,12 @@ final class HomeView: UIView {
       trailing: 0
     )
 
-    // Section 2: Store
+    return mainSection
+  }
 
+  // MARK: - Store Section Layout
+
+  private func storeSectionLayout() -> NSCollectionLayoutSection {
     let storeWidth: CGFloat = 150
     let storeEstimatedHeight: CGFloat = 200
 
@@ -103,7 +159,7 @@ final class HomeView: UIView {
       heightDimension: .estimated(storeEstimatedHeight)
     )
     let storeItem = NSCollectionLayoutItem(layoutSize: storeItemSize)
-    
+
     let storeGroupSize = NSCollectionLayoutSize(
       widthDimension: .estimated(storeEstimatedHeight),
       heightDimension: .estimated(storeEstimatedHeight)
@@ -122,9 +178,13 @@ final class HomeView: UIView {
       trailing: 0
     )
     storeSection.orthogonalScrollingBehavior = .continuous
-    storeSection.boundarySupplementaryItems = [header]
 
-    // Section 3: Banner
+    return storeSection
+  }
+
+  // MARK: - Banner Section Layout
+
+  private func bannerSectionLayout() -> NSCollectionLayoutSection {
 
     let bannerHeight: CGFloat = 80
 
@@ -156,11 +216,14 @@ final class HomeView: UIView {
       bottom: 45,
       trailing: 0
     )
-
     bannerSection.orthogonalScrollingBehavior = .groupPaging
 
-    // Section 4: Tag
+    return bannerSection
+  }
 
+  // MARK: - Tag Section Layout
+
+  private func tagSectionLayout() -> NSCollectionLayoutSection {
     let tagHeight: CGFloat = 40
 
     let tagItemSize = NSCollectionLayoutSize(
@@ -185,9 +248,28 @@ final class HomeView: UIView {
       bottom: 0,
       trailing: 10
     )
-    tagSection.boundarySupplementaryItems = [header]
+    return tagSection
+  }
 
-    // Section 5: Popular Post
+  // MARK: - Popular Section Layout
+
+  private func popularSectionLayout() -> NSCollectionLayoutSection {
+
+    // footer
+
+    let footerEstimatedHeight: CGFloat = 60
+
+    let popularFooterSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .estimated(footerEstimatedHeight)
+    )
+    let popularFooter = NSCollectionLayoutBoundarySupplementaryItem(
+      layoutSize: popularFooterSize,
+      elementKind: UICollectionView.elementKindSectionFooter,
+      alignment: .bottom
+    )
+
+    // Item
 
     let sectionInset: CGFloat = 2.5
 
@@ -276,24 +358,14 @@ final class HomeView: UIView {
       bottom: 0,
       trailing: 0
     )
-
-    // Popular footer
-    
-    let footerEstimatedHeight: CGFloat = 60
-
-    let popularFooterSize = NSCollectionLayoutSize(
-      widthDimension: .fractionalWidth(1),
-      heightDimension: .estimated(footerEstimatedHeight)
-    )
-    let popularFooter = NSCollectionLayoutBoundarySupplementaryItem(
-      layoutSize: popularFooterSize,
-      elementKind: UICollectionView.elementKindSectionFooter,
-      alignment: .bottom
-    )
-
     popularSection.boundarySupplementaryItems = [popularFooter]
 
-    // Section 6: Event
+    return popularSection
+  }
+
+  // MARK: - Event Section Layout
+
+  private func eventSectionLayout() -> NSCollectionLayoutSection {
 
     let eventItemSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1),
@@ -324,36 +396,7 @@ final class HomeView: UIView {
       bottom: 40,
       trailing: 0
     )
-    eventSection.boundarySupplementaryItems = [header]
-
-    let layout = UICollectionViewCompositionalLayout {(section: Int, _: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
-
-      let homeSection = HomeSection(rawValue: section)
-
-      switch homeSection {
-      case .main:
-        return mainSection
-
-      case .store:
-        return storeSection
-
-      case .banner:
-        return bannerSection
-
-      case .tag:
-        return tagSection
-        
-      case .popularPost:
-        return popularSection
-
-      case .event:
-        return eventSection
-
-      default:
-        assert(false)
-      }
-    }
-
-    return layout
+    return eventSection
   }
 }
+
