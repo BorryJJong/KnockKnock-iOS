@@ -21,7 +21,7 @@ class BaseCollectionViewCell: UICollectionViewCell {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
+
   func setupConstraints() { /* override point */ }
   func setupConfigure() {/* override point */}
 }

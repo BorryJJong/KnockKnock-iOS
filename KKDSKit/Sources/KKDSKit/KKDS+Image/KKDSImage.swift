@@ -8,13 +8,21 @@
 import UIKit
 
 public extension KKDS {
-    enum Image { }
+  enum Image { }
 }
 
 // MARK: - Icon size 3
 
 public extension KKDS.Image {
   static var ic_bullet_3_gr: UIImage              { .load(name: "ic_bullet_3_gr")}
+}
+
+// MARK: - Icon size 10
+
+public extension KKDS.Image {
+  static var ic_left_10_gr: UIImage               { .load(name: "ic_left_10_gr")}
+  static var ic_page_10_wh_on: UIImage            {.load(name: "ic_page_10_wh_on")}
+  static var ic_page_10_wh_off: UIImage           {.load(name: "ic_page_10_wh_off")}
 }
 
 // MARK: - Icon size 16
@@ -68,11 +76,18 @@ public extension KKDS.Image {
   static var ic_next_24_bk: UIImage                { .load(name: "ic_next_24_bk") }
 }
 
+// MARK: - Icon Size 40
+
+public extension KKDS.Image {
+  static var ic_tag_gradient_40_wh: UIImage       {.load(name: "ic_tag_gradient_40_wh")}
+}
+
 // MARK: - background
 
 public extension KKDS.Image {
   static var ic_bg_gradient_wh: UIImage           {.load(name: "ic_bg_gradient_wh")}
-  static var ic_bg_gradient_bk: UIImage           {.load(name: "ic_bg_gradient_bk")}
+  static var ic_bg_gradient_top_bk: UIImage       {.load(name: "ic_bg_gradient_top_bk")}
+  static var ic_bg_gradient_bottom_bk: UIImage    {.load(name: "ic_bg_gradient_bottom_bk")}
 }
 
 // MARK: - Tab
@@ -94,8 +109,8 @@ public extension KKDS.Image {
 // MARK: - Etc.
 
 public extension KKDS.Image {
-  static var etc_bar_8_gr: UIImage  { .load(name: "etc_bar_8_gr") }
-  static var etc_bar_30_gr: UIImage  { .load(name: "etc_bar_30_gr") }
+  static var etc_bar_8_gr: UIImage                { .load(name: "etc_bar_8_gr") }
+  static var etc_bar_30_gr: UIImage               { .load(name: "etc_bar_30_gr") }
 }
 
 extension UIImage {
