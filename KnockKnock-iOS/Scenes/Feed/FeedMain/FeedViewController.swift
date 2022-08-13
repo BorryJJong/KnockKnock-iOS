@@ -10,7 +10,7 @@ import UIKit
 protocol FeedViewProtocol: AnyObject {
   var interactor: FeedInteractorProtocol? { get set }
 
-  func fetchFeed(feed: [Feed])
+  func getFeedMain(feed: FeedMain)
   func getChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?)
 }
 
@@ -30,7 +30,7 @@ final class FeedViewController: BaseViewController<FeedView> {
   var interactor: FeedInteractorProtocol?
   var router: FeedRouterProtocol?
 
-  var feed: [Feed] = []
+  var feedMain: FeedMain?
   var challengeTitles: [ChallengeTitle] = []
 
   // MARK: - Lify Cycles
@@ -38,7 +38,7 @@ final class FeedViewController: BaseViewController<FeedView> {
   override func viewDidLoad() {
     super.viewDidLoad()
     self.extendedLayoutIncludesOpaqueBars = true
-    self.interactor?.fetchFeed()
+    self.interactor?.getFeedMain(currentPage: 0, totalCount: 21, challengeId: 0)
     self.interactor?.getChallengeTitles()
   }
 
@@ -70,8 +70,8 @@ final class FeedViewController: BaseViewController<FeedView> {
 // MARK: - Extensions
 
 extension FeedViewController: FeedViewProtocol {
-  func fetchFeed(feed: [Feed]) {
-    self.feed = feed
+  func getFeedMain(feed: FeedMain) {
+    self.feedMain = feed
     self.containerView.feedCollectionView.reloadData()
   }
 
@@ -102,7 +102,7 @@ extension FeedViewController: UICollectionViewDataSource {
       return self.challengeTitles.count
 
     case CollectionViewTag.feed.rawValue:
-      return self.feed.count
+      return self.feedMain?.feeds.count ?? 0
       
     default:
       return 0
@@ -127,8 +127,9 @@ extension FeedViewController: UICollectionViewDataSource {
 
     case CollectionViewTag.feed.rawValue:
       let cell = collectionView.dequeueCell(withType: FeedCell.self, for: indexPath)
-      let feed = self.feed[indexPath.item]
-      cell.bind(feed: feed)
+      if let feed = self.feedMain {
+        cell.bind(post: feed.feeds[indexPath.item])
+      }
       return cell
 
     default:

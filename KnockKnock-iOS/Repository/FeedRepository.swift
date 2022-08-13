@@ -10,9 +10,10 @@ import Foundation
 import Alamofire
 
 protocol FeedRepositoryProtocol {
-  func fetchFeed(completionHandler: @escaping ([Feed]) -> Void)
+  func getFeedMain(currentPage: Int, totalCount: Int, challengeId: Int, completionHandler: @escaping (FeedMain) -> Void)
   func getChallengeTitles(completionHandler: @escaping (([ChallengeTitle])) -> Void)
   func getFeedDetail(completionHandler: @escaping (FeedDetail) -> Void)
+  func fetchFeed(completionHandler: @escaping ([Feed]) -> Void)
 }
 
 final class FeedRepository: FeedRepositoryProtocol {
@@ -28,18 +29,27 @@ final class FeedRepository: FeedRepositoryProtocol {
         })
   }
 
-  //  func fetchFeed(completionHandler: @escaping ([Feed]) -> Void) {
-  //    KKNetworkManager.shared
-  //      .request(
-  //        object: [Feed].self,
-  //        router: KKRouter.fetchFeed,
-  //        success: { response in
-  //          completionHandler(response)
-  //        },
-  //        failure: { response in
-  //          print(response)
-  //        })
-  //  }
+    func getFeedMain(
+      currentPage: Int,
+      totalCount: Int,
+      challengeId: Int,
+      completionHandler: @escaping (FeedMain) -> Void) {
+        
+      KKNetworkManager.shared
+        .request(
+          object: FeedMain.self,
+          router: KKRouter.getFeedMain(
+            skip: currentPage,
+            take: totalCount,
+            challengeId: challengeId
+          ),
+          success: { response in
+            completionHandler(response)
+          },
+          failure: { response in
+            print(response)
+          })
+    }
 
   // api 미완성으로 우선 dummydata 사용
   func fetchFeed(completionHandler: @escaping ([Feed]) -> Void) {

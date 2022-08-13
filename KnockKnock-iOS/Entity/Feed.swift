@@ -41,3 +41,15 @@ struct Challenge: Decodable {
   let challengeId: Int
   let title: String
 }
+
+struct FeedMain: Decodable {
+  let isNext: Bool
+  let total: Int
+  let feeds: [FeedMainPost]
+}
+
+struct FeedMainPost: Decodable {
+  let id: Int
+  let thumbnailUrl: String
+  let isImageMore: Bool
+}
