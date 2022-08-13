@@ -11,7 +11,7 @@ protocol FeedInteractorProtocol {
   var presenter: FeedPresenterProtocol? { get set }
   var worker: FeedWorkerProtocol? { get set }
 
-  func getFeedMain(currentPage: Int, totalCount: Int, challengeId: Int)
+  func getFeedMain(currentPage: Int, pageSize: Int, challengeId: Int)
   func getChallengeTitles()
   func setSelectedStatus(challengeTitles: [ChallengeTitle], selectedIndex: IndexPath)
 }
@@ -28,12 +28,12 @@ final class FeedInteractor: FeedInteractorProtocol {
 //      self?.presenter?.presentFetchFeed(feed: feed)
 //    }
 //  }
-  func getFeedMain(currentPage: Int, totalCount: Int, challengeId: Int) {
+  func getFeedMain(currentPage: Int, pageSize: Int, challengeId: Int) {
     self.worker?.getFeedMain(
       currentPage: currentPage,
-      totalCount: totalCount,
+      pageSize: pageSize,
       challengeId: challengeId,
-      completionHandler:  { [weak self] feed in
+      completionHandler: { [weak self] feed in
       self?.presenter?.presentFeedMain(feed: feed)
     })
   }

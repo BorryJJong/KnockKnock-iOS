@@ -30,21 +30,35 @@ final class FeedViewController: BaseViewController<FeedView> {
   var interactor: FeedInteractorProtocol?
   var router: FeedRouterProtocol?
 
-  var feedMain: FeedMain?
+  var feedMain: FeedMain? {
+    didSet {
+      self.containerView.feedCollectionView.reloadData()
+    }
+  }
   var challengeTitles: [ChallengeTitle] = []
+
+  var currentPage = 0
+  let pageSize = 21
+  var challengeId = 0
 
   // MARK: - Lify Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
     self.extendedLayoutIncludesOpaqueBars = true
-    self.interactor?.getFeedMain(currentPage: 0, totalCount: 21, challengeId: 0)
+    self.interactor?.getFeedMain(
+      currentPage: self.currentPage,
+      pageSize: self.pageSize,
+      challengeId: self.challengeId
+    )
     self.interactor?.getChallengeTitles()
   }
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
   }
+
+  // MARK: - Configure
 
   override func setupConfigure() {
     self.navigationItem.searchController = containerView.searchBar
@@ -64,6 +78,17 @@ final class FeedViewController: BaseViewController<FeedView> {
       $0.collectionViewLayout = self.containerView.feedCollectionViewLayout()
       $0.tag = CollectionViewTag.feed.rawValue
     }
+  }
+
+  // MARK: - Button Actions
+
+  @objc func didTapViewMoreButton(_ sender: UIButton) {
+    self.currentPage += 1
+    self.interactor?.getFeedMain(
+      currentPage: self.currentPage,
+      pageSize: self.pageSize,
+      challengeId: self.challengeId
+    )
   }
 }
 
@@ -102,7 +127,7 @@ extension FeedViewController: UICollectionViewDataSource {
       return self.challengeTitles.count
 
     case CollectionViewTag.feed.rawValue:
-      return self.feedMain?.feeds.count ?? 0
+      return self.feedMain?.total ?? 0
       
     default:
       return 0
@@ -146,6 +171,19 @@ extension FeedViewController: UICollectionViewDataSource {
       withType: FooterCollectionReusableView.self,
       for: indexPath
     )
+    if let feedMain = self.feedMain {
+      if !feedMain.isNext {
+        footer.viewMoreButton.isHidden = true
+      } else {
+        footer.viewMoreButton.isHidden = false
+      }
+    }
+
+    footer.viewMoreButton.addTarget(
+      self,
+      action: #selector(self.didTapViewMoreButton(_:)),
+      for: .touchUpInside
+    )
     return footer
   }
 }
@@ -177,6 +215,14 @@ extension FeedViewController: UICollectionViewDelegate {
     self.interactor?.setSelectedStatus(
       challengeTitles: challengeTitles,
       selectedIndex: indexPath
+    )
+    self.challengeId = indexPath.item
+    self.currentPage = 0
+
+    self.interactor?.getFeedMain(
+      currentPage: self.currentPage,
+      pageSize: self.pageSize,
+      challengeId: self.challengeId
     )
   }
 }
