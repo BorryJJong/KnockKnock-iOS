@@ -13,6 +13,8 @@ final class TapCell: BaseCollectionViewCell {
 
   private let tapLabel = UILabel().then {
     $0.text = "진행 이벤트"
+    $0.font = .systemFont(ofSize: 15)
+    $0.textColor = .black
   }
 
   // MARK: - Configure
@@ -21,7 +23,8 @@ final class TapCell: BaseCollectionViewCell {
     [self.tapLabel].addSubViews(self.contentView)
 
     self.tapLabel.snp.makeConstraints {
-      $0.edges.equalTo(self.contentView)
+      $0.centerX.equalTo(self.contentView.snp.centerX)
+      $0.bottom.equalTo(self.contentView.snp.bottom)
     }
   }
 }
