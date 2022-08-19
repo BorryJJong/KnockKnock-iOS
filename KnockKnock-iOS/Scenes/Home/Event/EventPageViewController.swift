@@ -18,13 +18,23 @@ final class EventPageViewController: BaseViewController<EventPageView> {
     self.setupConfigure()
   }
 
+  // MARK: - Configure
+
   override func setupConfigure() {
     self.containerView.tapCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
       $0.registCell(type: TapCell.self)
     }
+    self.containerView.eventPageViewController.do {
+      $0.setViewControllers([OngoingEventListViewController()], direction: .forward, animated: true, completion: nil)
+      $0.delegate = self
+      $0.dataSource = self
+    }
   }
+
+  // MARK: - Pager 이동 애니메이션 메소드
+
   private func movePager(currentPage: Int) {
 
     UIView.animate(withDuration: 0.5, animations: {
@@ -55,5 +65,15 @@ extension EventPageViewController: UICollectionViewDelegateFlowLayout, UICollect
 
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     self.movePager(currentPage: indexPath.item)
+  }
+}
+
+extension EventPageViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+  func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+    return OngoingEventListViewController()
+  }
+
+  func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+    return ClosedEventListViewController()
   }
 }
