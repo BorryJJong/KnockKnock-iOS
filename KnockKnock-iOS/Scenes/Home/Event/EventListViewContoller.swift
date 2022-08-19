@@ -25,6 +25,15 @@ final class EventPageViewController: BaseViewController<EventPageView> {
       $0.registCell(type: TapCell.self)
     }
   }
+  private func movePager(currentPage: Int) {
+
+    UIView.animate(withDuration: 0.5, animations: {
+      self.containerView.underLineView.transform = CGAffineTransform(
+        translationX: CGFloat(100 * currentPage),
+        y: 0
+      )
+    })
+  }
 }
 
 // MARK: - CollectionView Delegate, DataSource
@@ -45,6 +54,6 @@ extension EventPageViewController: UICollectionViewDelegateFlowLayout, UICollect
   }
 
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    
+    self.movePager(currentPage: indexPath.item)
   }
 }
