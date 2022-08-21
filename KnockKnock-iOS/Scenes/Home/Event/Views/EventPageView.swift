@@ -50,7 +50,7 @@ final class EventPageView: UIView {
   // MARK: - Configure
 
   private func setupConstraints() {
-    [self.tapCollectionView, self.underLineView, self.seperatorView].addSubViews(self)
+    [self.tapCollectionView, self.underLineView, self.seperatorView, self.eventPageViewController.view].addSubViews(self)
 
     self.tapCollectionView.snp.makeConstraints {
       $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(20)
@@ -69,6 +69,11 @@ final class EventPageView: UIView {
       $0.top.equalTo(self.underLineView.snp.bottom)
       $0.leading.trailing.equalToSuperview()
       $0.height.equalTo(1)
+    }
+
+    self.eventPageViewController.view.snp.makeConstraints {
+      $0.top.equalTo(self.seperatorView.snp.bottom)
+      $0.leading.bottom.trailing.equalTo(self.safeAreaLayoutGuide)
     }
   }
 }

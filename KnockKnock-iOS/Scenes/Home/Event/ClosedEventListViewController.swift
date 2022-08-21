@@ -23,6 +23,7 @@ class ClosedEventListViewController: BaseViewController<EventListView> {
       $0.delegate = self
       $0.dataSource = self
       $0.registCell(type: EventCell.self)
+      $0.backgroundColor = .blue
     }
   }
 }
@@ -35,5 +36,12 @@ extension ClosedEventListViewController: UICollectionViewDataSource, UICollectio
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueCell(withType: EventCell.self, for: indexPath)
     return cell
+  }
+
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+    let width = self.containerView.frame.width - 40
+
+    return CGSize(width: width, height: width/2)
   }
 }

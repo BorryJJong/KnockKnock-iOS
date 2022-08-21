@@ -11,6 +11,10 @@ import Then
 
 final class EventPageViewController: BaseViewController<EventPageView> {
 
+  // MARK: - Properties
+
+  let eventViewControllers = [OngoingEventListViewController(), ClosedEventListViewController()]
+
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
@@ -36,13 +40,29 @@ final class EventPageViewController: BaseViewController<EventPageView> {
   // MARK: - Pager 이동 애니메이션 메소드
 
   private func movePager(currentPage: Int) {
-
+    print(currentPage)
     UIView.animate(withDuration: 0.5, animations: {
       self.containerView.underLineView.transform = CGAffineTransform(
         translationX: CGFloat(100 * currentPage),
         y: 0
       )
     })
+  }
+
+  var currentPage: Int = 0 {
+    didSet {
+      bind(oldValue: oldValue, newValue: currentPage)
+    }
+  }
+
+  private func bind(oldValue: Int, newValue: Int) {
+
+    // collectionView 에서 선택한 경우
+    let direction: UIPageViewController.NavigationDirection = oldValue < newValue ? .forward : .reverse
+    self.containerView.eventPageViewController.setViewControllers([eventViewControllers[currentPage]], direction: direction, animated: true, completion: nil)
+    // pageViewController에서 paging한 경우
+    self.containerView.tapCollectionView.selectItem(at: IndexPath(item: currentPage, section: 0), animated: true, scrollPosition: .left)
+//    self.movePager(currentPage: currentPage)
   }
 }
 
@@ -65,6 +85,7 @@ extension EventPageViewController: UICollectionViewDelegateFlowLayout, UICollect
 
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     self.movePager(currentPage: indexPath.item)
+    self.currentPage = indexPath.item
   }
 }
 
