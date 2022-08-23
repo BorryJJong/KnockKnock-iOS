@@ -31,7 +31,7 @@ final class StoreListCell: BaseCollectionViewCell {
 
   // MARK: - Properties
 
-  private let promotions = ["텀블러 할인", "사은품 증정", "포인트 적립"]
+  private let promotions = ["텀블러 할인", "사은품 증정", "포인트 적립", "텀블러 할인"]
 
   // MARK: - UIs
 
@@ -56,7 +56,6 @@ final class StoreListCell: BaseCollectionViewCell {
   private let promotionStackView = UIStackView().then {
     $0.axis = .horizontal
     $0.spacing = 5
-    $0.distribution = .fill
     $0.alignment = .bottom
   }
 
@@ -125,6 +124,7 @@ final class StoreListCell: BaseCollectionViewCell {
 
     self.promotionStackView.snp.makeConstraints {
       $0.leading.equalTo(self.thumbnailImageView.snp.trailing).offset(Metric.promotionStackViewLeadingMargin)
+      $0.trailing.equalTo(self.contentView.snp.trailing)
       $0.top.equalTo(self.storeInfoLabel.snp.bottom).offset(Metric.promotionStackViewTopMargin)
     }
 

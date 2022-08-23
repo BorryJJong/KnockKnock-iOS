@@ -21,6 +21,8 @@ final class StoreListViewController: BaseViewController<StoreListView> {
   }
 
   override func setupConfigure() {
+    self.navigationItem.title = "인증된 스토어"
+    self.navigationItem.titleView?.tintColor = .black
     self.containerView.storeCollectionView.do {
       $0.delegate = self
       $0.dataSource = self

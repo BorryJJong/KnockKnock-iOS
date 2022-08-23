@@ -15,6 +15,7 @@ final class StoreListView: UIView {
   // MARK: - Constants
 
   private enum Metric {
+    static let bannerImageViewTopMargin = 10.f
     static let bannerImageViewLeadingMargin = 20.f
     static let bannerImageViewHeight = 4.f
 
@@ -54,7 +55,7 @@ final class StoreListView: UIView {
     [self.bannerImageView, self.storeCollectionView].addSubViews(self)
 
     self.bannerImageView.snp.makeConstraints {
-      $0.top.equalTo(self.safeAreaLayoutGuide)
+      $0.top.equalTo(self.safeAreaLayoutGuide).offset(Metric.bannerImageViewTopMargin)
       $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.bannerImageViewLeadingMargin)
       $0.height.equalTo(self.bannerImageView.snp.width).dividedBy(Metric.bannerImageViewHeight)
     }
