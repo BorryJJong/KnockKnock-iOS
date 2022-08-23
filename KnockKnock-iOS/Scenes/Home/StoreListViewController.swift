@@ -11,7 +11,7 @@ final class StoreListViewController: BaseViewController<StoreListView> {
 
   // MARK: - Properties
 
-  let store = ["", "", "", ""]
+  private let store = ["", "", "", ""]
 
   // MARK: - Life Cycles
 

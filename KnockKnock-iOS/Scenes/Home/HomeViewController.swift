@@ -9,14 +9,23 @@ import UIKit
 
 import Then
 
+protocol HomeViewProtocol: AnyObject {
+  var interactor: HomeInteractorProtocol? { get set }
+  var router: HomeRouter? { get set }
+}
+
 final class HomeViewController: BaseViewController<HomeView> {
+
+  // MARK: - Properties
+
+  var interactor: HomeInteractorProtocol?
+  var router: HomeRouter?
 
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setupConfigure()
-    self.view.backgroundColor = .lightGray
   }
 
   override func setupConfigure() {
@@ -38,8 +47,13 @@ final class HomeViewController: BaseViewController<HomeView> {
   }
 
   @objc func didTapMoreButton(_ sender: UIButton) {
-    self.navigationController?.pushViewController(StoreListViewController(), animated: true)
+    self.router?.navigateToStoreListView(source: self)
   }
+}
+
+  // MARK: - HomeViewProtocol
+
+extension HomeViewController: HomeViewProtocol {
 }
 
   // MARK: - CollectionView DataSource, Delegate

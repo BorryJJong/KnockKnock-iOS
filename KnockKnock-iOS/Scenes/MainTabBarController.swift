@@ -52,7 +52,7 @@ final class MainTabBarController: UITabBarController {
     )
   ]
   
-  let home = HomeViewController()
+  let home = HomeRouter.createHome()
   let feed = FeedRouter.createFeed()
   let post = FeedWriteViewController()
   let challenge = ChallengeRouter.createChallenge()
