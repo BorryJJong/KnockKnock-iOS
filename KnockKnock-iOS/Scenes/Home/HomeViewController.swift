@@ -36,6 +36,10 @@ final class HomeViewController: BaseViewController<HomeView> {
       $0.collectionViewLayout = self.containerView.mainCollectionViewLayout()
     }
   }
+
+  @objc func didTapMoreButton(_ sender: UIButton) {
+    self.navigationController?.pushViewController(StoreListViewController(), animated: true)
+  }
 }
 
   // MARK: - CollectionView DataSource, Delegate
@@ -79,6 +83,12 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         for: indexPath
       )
       header.bind(section: section)
+      
+      header.moreButton.addTarget(
+        self,
+        action: #selector(self.didTapMoreButton(_:)),
+        for: .touchUpInside
+      )
 
       return header
 

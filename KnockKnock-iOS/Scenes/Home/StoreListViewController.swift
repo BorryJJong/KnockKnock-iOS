@@ -7,7 +7,11 @@
 
 import UIKit
 
-class StoreListViewController: BaseViewController<StoreListView> {
+final class StoreListViewController: BaseViewController<StoreListView> {
+
+  // MARK: - Properties
+
+  let store = ["", "", "", ""]
 
   // MARK: - Life Cycles
 
@@ -26,13 +30,35 @@ class StoreListViewController: BaseViewController<StoreListView> {
 }
 
 extension StoreListViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
-  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return 5
+  func collectionView(
+    _ collectionView: UICollectionView,
+    numberOfItemsInSection section: Int
+  ) -> Int {
+    return self.store.count
   }
 
-  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueCell(withType: StoreListCell.self, for: indexPath)
+  func collectionView(
+    _ collectionView: UICollectionView,
+    cellForItemAt indexPath: IndexPath
+  ) -> UICollectionViewCell {
+    let cell = collectionView.dequeueCell(
+      withType: StoreListCell.self,
+      for: indexPath
+    )
+    let isLast = indexPath.item == (self.store.count - 1)
+    cell.setSeparatorLineView(isLast: isLast)
 
     return cell
+  }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    sizeForItemAt indexPath: IndexPath
+  ) -> CGSize {
+    return CGSize(
+      width: self.containerView.frame.width - 40,
+      height: 95
+    )
   }
 }

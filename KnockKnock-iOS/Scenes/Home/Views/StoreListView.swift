@@ -8,22 +8,23 @@
 import UIKit
 
 import SnapKit
-import KKDSKit
 import Then
 
-
-class StoreListView: UIView {
+final class StoreListView: UIView {
 
   // MARK: - UIs
 
-  let bannerImageView = UIImageView().then {
+  private let bannerImageView = UIImageView().then {
     $0.backgroundColor = .orange
+    $0.layer.cornerRadius = 5
+    $0.clipsToBounds = true
   }
 
   let storeCollectionView = UICollectionView(
     frame: .zero,
     collectionViewLayout: UICollectionViewFlowLayout().then {
       $0.scrollDirection = .vertical
+      $0.minimumLineSpacing = 15
     }
   )
 
@@ -46,13 +47,12 @@ class StoreListView: UIView {
     self.bannerImageView.snp.makeConstraints {
       $0.top.equalTo(self.safeAreaLayoutGuide)
       $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(20)
-      $0.height.equalTo((self.frame.width - 40)/4)
+      $0.height.equalTo(self.bannerImageView.snp.width).dividedBy(4)
     }
 
     self.storeCollectionView.snp.makeConstraints {
-      $0.top.equalTo(self.snp.top)
+      $0.top.equalTo(self.bannerImageView.snp.bottom).offset(15)
       $0.leading.trailing.bottom.equalTo(self.safeAreaLayoutGuide)
     }
   }
-
 }
