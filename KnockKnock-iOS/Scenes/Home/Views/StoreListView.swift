@@ -12,6 +12,15 @@ import Then
 
 final class StoreListView: UIView {
 
+  // MARK: - Constants
+
+  private enum Metric {
+    static let bannerImageViewLeadingMargin = 20.f
+    static let bannerImageViewHeight = 4.f
+
+    static let storeCollectionViewTopMargin = 15.f
+  }
+
   // MARK: - UIs
 
   private let bannerImageView = UIImageView().then {
@@ -46,12 +55,12 @@ final class StoreListView: UIView {
 
     self.bannerImageView.snp.makeConstraints {
       $0.top.equalTo(self.safeAreaLayoutGuide)
-      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(20)
-      $0.height.equalTo(self.bannerImageView.snp.width).dividedBy(4)
+      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.bannerImageViewLeadingMargin)
+      $0.height.equalTo(self.bannerImageView.snp.width).dividedBy(Metric.bannerImageViewHeight)
     }
 
     self.storeCollectionView.snp.makeConstraints {
-      $0.top.equalTo(self.bannerImageView.snp.bottom).offset(15)
+      $0.top.equalTo(self.bannerImageView.snp.bottom).offset(Metric.storeCollectionViewTopMargin)
       $0.leading.trailing.bottom.equalTo(self.safeAreaLayoutGuide)
     }
   }
