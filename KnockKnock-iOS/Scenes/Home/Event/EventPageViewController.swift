@@ -31,7 +31,9 @@ final class EventPageViewController: BaseViewController<EventPageView> {
       $0.registCell(type: TapCell.self)
     }
     self.containerView.eventPageViewController.do {
-      $0.setViewControllers([OngoingEventListViewController()], direction: .forward, animated: true, completion: nil)
+      if let firstViewController = eventViewControllers.first {
+        $0.setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
+      }
       $0.delegate = self
       $0.dataSource = self
     }
@@ -41,7 +43,7 @@ final class EventPageViewController: BaseViewController<EventPageView> {
 
   private func movePager(currentPage: Int) {
     print(currentPage)
-    UIView.animate(withDuration: 0.5, animations: {
+    UIView.animate(withDuration: 0.3, animations: {
       self.containerView.underLineView.transform = CGAffineTransform(
         translationX: CGFloat(100 * currentPage),
         y: 0
@@ -56,13 +58,10 @@ final class EventPageViewController: BaseViewController<EventPageView> {
   }
 
   private func bind(oldValue: Int, newValue: Int) {
-
-    // collectionView 에서 선택한 경우
     let direction: UIPageViewController.NavigationDirection = oldValue < newValue ? .forward : .reverse
+
     self.containerView.eventPageViewController.setViewControllers([eventViewControllers[currentPage]], direction: direction, animated: true, completion: nil)
-    // pageViewController에서 paging한 경우
-    self.containerView.tapCollectionView.selectItem(at: IndexPath(item: currentPage, section: 0), animated: true, scrollPosition: .left)
-//    self.movePager(currentPage: currentPage)
+    self.movePager(currentPage: currentPage)
   }
 }
 
@@ -84,17 +83,40 @@ extension EventPageViewController: UICollectionViewDelegateFlowLayout, UICollect
   }
 
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    self.movePager(currentPage: indexPath.item)
     self.currentPage = indexPath.item
   }
 }
 
+// MARK: - PageViewController DataSource, Delegate
+
 extension EventPageViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
   func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-    return OngoingEventListViewController()
+    guard let index = eventViewControllers.firstIndex(of: viewController as! BaseViewController<EventListView>) else { return nil }
+    let previousIndex = index - 1
+
+    if previousIndex < 0 {
+      return nil
+    }
+    return eventViewControllers[previousIndex]
   }
 
   func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-    return ClosedEventListViewController()
+    guard let index = eventViewControllers.firstIndex(of: viewController as! BaseViewController<EventListView>) else { return nil }
+    let nextIndex = index + 1
+
+    if nextIndex == eventViewControllers.count {
+      return nil
+    }
+    return eventViewControllers[nextIndex]
+  }
+
+  func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+    if completed {
+      if previousViewControllers.first == eventViewControllers[0] {
+        self.currentPage = 1
+      } else {
+        self.currentPage = 0
+      }
+    }
   }
 }
