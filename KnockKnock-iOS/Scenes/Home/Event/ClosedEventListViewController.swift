@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ClosedEventListViewController: BaseViewController<EventListView> {
+final class ClosedEventListViewController: BaseViewController<EventListView> {
 
   // MARK: - Life Cycles
 
@@ -27,22 +27,40 @@ class ClosedEventListViewController: BaseViewController<EventListView> {
   }
 }
 
+// MARK: - CollectionView DataSource, Delegate
+
 extension ClosedEventListViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    numberOfItemsInSection section: Int
+  ) -> Int {
     return 5
   }
 
-  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueCell(withType: EventCell.self, for: indexPath)
+  func collectionView(
+    _ collectionView: UICollectionView,
+    cellForItemAt indexPath: IndexPath
+  ) -> UICollectionViewCell {
+    let cell = collectionView.dequeueCell(
+      withType: EventCell.self,
+      for: indexPath
+    )
     cell.isClosedEvent(isClosed: true)
     
     return cell
   }
 
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    sizeForItemAt indexPath: IndexPath
+  ) -> CGSize {
 
     let width = self.containerView.frame.width - 40
 
-    return CGSize(width: width, height: width/2)
+    return CGSize(
+      width: width,
+      height: width/2
+    )
   }
 }

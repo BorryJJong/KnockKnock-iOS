@@ -13,7 +13,14 @@ final class EventPageViewController: BaseViewController<EventPageView> {
 
   // MARK: - Properties
 
-  let eventViewControllers = [OngoingEventListViewController(), ClosedEventListViewController()]
+  private let eventViewControllers = [OngoingEventListViewController(), ClosedEventListViewController()]
+
+  private var currentPage: Int = 0 {
+    didSet {
+      self.bind(oldValue: oldValue, newValue: currentPage)
+      self.containerView.tapCollectionView.reloadData()
+    }
+  }
 
   // MARK: - Life Cycles
 
@@ -30,13 +37,34 @@ final class EventPageViewController: BaseViewController<EventPageView> {
       $0.dataSource = self
       $0.registCell(type: TapCell.self)
     }
+    
     self.containerView.eventPageViewController.do {
-      if let firstViewController = eventViewControllers.first {
-        $0.setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
-      }
       $0.delegate = self
       $0.dataSource = self
+
+      if let firstViewController = eventViewControllers.first {
+        $0.setViewControllers(
+          [firstViewController],
+          direction: .forward,
+          animated: true,
+          completion: nil
+        )
+      }
     }
+  }
+
+  // MARK: - Bind
+
+  private func bind(oldValue: Int, newValue: Int) {
+    let direction: UIPageViewController.NavigationDirection = oldValue < newValue ? .forward : .reverse
+
+    self.containerView.eventPageViewController.setViewControllers(
+      [eventViewControllers[currentPage]],
+      direction: direction,
+      animated: true,
+      completion: nil
+    )
+    self.movePager(currentPage: currentPage)
   }
 
   // MARK: - Pager 이동 애니메이션 메소드
@@ -49,31 +77,26 @@ final class EventPageViewController: BaseViewController<EventPageView> {
       )
     })
   }
-
-  var currentPage: Int = 0 {
-    didSet {
-      bind(oldValue: oldValue, newValue: currentPage)
-      self.containerView.tapCollectionView.reloadData()
-    }
-  }
-
-  private func bind(oldValue: Int, newValue: Int) {
-    let direction: UIPageViewController.NavigationDirection = oldValue < newValue ? .forward : .reverse
-
-    self.containerView.eventPageViewController.setViewControllers([eventViewControllers[currentPage]], direction: direction, animated: true, completion: nil)
-    self.movePager(currentPage: currentPage)
-  }
 }
 
 // MARK: - CollectionView Delegate, DataSource
 
 extension EventPageViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
-  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    numberOfItemsInSection section: Int
+  ) -> Int {
     return 2
   }
 
-  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueCell(withType: TapCell.self, for: indexPath)
+  func collectionView(
+    _ collectionView: UICollectionView,
+    cellForItemAt indexPath: IndexPath
+  ) -> UICollectionViewCell {
+    let cell = collectionView.dequeueCell(
+      withType: TapCell.self,
+      for: indexPath
+    )
 
     if indexPath.item == currentPage {
       cell.tapLabel.textColor = .green40
@@ -85,11 +108,21 @@ extension EventPageViewController: UICollectionViewDelegateFlowLayout, UICollect
     return cell
   }
 
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return CGSize(width: 70, height: 40)
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    sizeForItemAt indexPath: IndexPath
+  ) -> CGSize {
+    return CGSize(
+      width: 70,
+      height: 40
+    )
   }
 
-  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    didSelectItemAt indexPath: IndexPath
+  ) {
     self.currentPage = indexPath.item
   }
 }
@@ -97,29 +130,51 @@ extension EventPageViewController: UICollectionViewDelegateFlowLayout, UICollect
 // MARK: - PageViewController DataSource, Delegate
 
 extension EventPageViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
-  func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-    guard let index = eventViewControllers.firstIndex(of: viewController as! BaseViewController<EventListView>) else { return nil }
+  func pageViewController(
+    _ pageViewController: UIPageViewController,
+    viewControllerBefore viewController: UIViewController
+  ) -> UIViewController? {
+
+    guard let index = self.eventViewControllers.firstIndex(
+      of: viewController as! BaseViewController<EventListView>
+    ) else {
+      return nil
+    }
+
     let previousIndex = index - 1
 
     if previousIndex < 0 {
       return nil
     }
-    return eventViewControllers[previousIndex]
+    return self.eventViewControllers[previousIndex]
   }
 
-  func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-    guard let index = eventViewControllers.firstIndex(of: viewController as! BaseViewController<EventListView>) else { return nil }
-    let nextIndex = index + 1
-
-    if nextIndex == eventViewControllers.count {
+  func pageViewController(
+    _ pageViewController: UIPageViewController,
+    viewControllerAfter viewController: UIViewController
+  ) -> UIViewController? {
+    guard let index = self.eventViewControllers.firstIndex(
+      of: viewController as! BaseViewController<EventListView>
+    ) else {
       return nil
     }
-    return eventViewControllers[nextIndex]
+
+    let nextIndex = index + 1
+
+    if nextIndex == self.eventViewControllers.count {
+      return nil
+    }
+    return self.eventViewControllers[nextIndex]
   }
 
-  func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+  func pageViewController(
+    _ pageViewController: UIPageViewController,
+    didFinishAnimating finished: Bool,
+    previousViewControllers: [UIViewController],
+    transitionCompleted completed: Bool
+  ) {
     if completed {
-      if previousViewControllers.first == eventViewControllers[0] {
+      if previousViewControllers.first == self.eventViewControllers[0] {
         self.currentPage = 1
       } else {
         self.currentPage = 0
