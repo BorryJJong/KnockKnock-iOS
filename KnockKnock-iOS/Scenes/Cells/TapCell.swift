@@ -11,7 +11,7 @@ final class TapCell: BaseCollectionViewCell {
 
   // MARK: - UIs
 
-  private let tapLabel = UILabel().then {
+  let tapLabel = UILabel().then {
     $0.text = "진행 이벤트"
     $0.font = .systemFont(ofSize: 15)
     $0.textColor = .black

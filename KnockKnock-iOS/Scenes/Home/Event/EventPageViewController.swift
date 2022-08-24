@@ -42,7 +42,6 @@ final class EventPageViewController: BaseViewController<EventPageView> {
   // MARK: - Pager 이동 애니메이션 메소드
 
   private func movePager(currentPage: Int) {
-    print(currentPage)
     UIView.animate(withDuration: 0.3, animations: {
       self.containerView.underLineView.transform = CGAffineTransform(
         translationX: CGFloat(100 * currentPage),
@@ -54,6 +53,7 @@ final class EventPageViewController: BaseViewController<EventPageView> {
   var currentPage: Int = 0 {
     didSet {
       bind(oldValue: oldValue, newValue: currentPage)
+      self.containerView.tapCollectionView.reloadData()
     }
   }
 
@@ -75,6 +75,13 @@ extension EventPageViewController: UICollectionViewDelegateFlowLayout, UICollect
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueCell(withType: TapCell.self, for: indexPath)
 
+    if indexPath.item == currentPage {
+      cell.tapLabel.textColor = .green40
+      cell.tapLabel.font = .systemFont(ofSize: 15, weight: .bold)
+    } else {
+      cell.tapLabel.textColor = .gray70
+      cell.tapLabel.font = .systemFont(ofSize: 15, weight: .light)
+    }
     return cell
   }
 
