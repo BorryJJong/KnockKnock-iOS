@@ -23,7 +23,6 @@ class OngoingEventListViewController: BaseViewController<EventListView> {
       $0.delegate = self
       $0.dataSource = self
       $0.registCell(type: EventCell.self)
-      $0.backgroundColor = .orange
     }
   }
 }

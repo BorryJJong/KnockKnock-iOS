@@ -38,7 +38,8 @@ class EventListView: UIView {
     [self.eventCollectionView].addSubViews(self)
 
     self.eventCollectionView.snp.makeConstraints {
-      $0.edges.equalTo(self)
+      $0.top.equalTo(self.safeAreaLayoutGuide.snp.top).offset(20)
+      $0.leading.trailing.bottom.equalTo(self)
     }
   }
 }

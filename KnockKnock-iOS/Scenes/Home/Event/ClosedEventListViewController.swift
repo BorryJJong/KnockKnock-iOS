@@ -23,7 +23,6 @@ class ClosedEventListViewController: BaseViewController<EventListView> {
       $0.delegate = self
       $0.dataSource = self
       $0.registCell(type: EventCell.self)
-      $0.backgroundColor = .blue
     }
   }
 }
@@ -35,6 +34,8 @@ extension ClosedEventListViewController: UICollectionViewDataSource, UICollectio
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueCell(withType: EventCell.self, for: indexPath)
+    cell.isClosedEvent(isClosed: true)
+    
     return cell
   }
 
