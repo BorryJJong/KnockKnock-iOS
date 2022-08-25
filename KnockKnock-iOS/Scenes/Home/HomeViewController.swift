@@ -47,14 +47,7 @@ final class HomeViewController: BaseViewController<HomeView> {
   }
 
   @objc func didTapMoreButton(_ sender: UIButton) {
-<<<<<<< HEAD
-    let section = HomeSection(rawValue: sender.tag)
 
-    if section == .event {
-      self.navigationController?.pushViewController(EventPageViewController(), animated: true)
-    }
-  }
-=======
     self.router?.navigateToStoreListView(source: self)
   }
 }
@@ -62,7 +55,7 @@ final class HomeViewController: BaseViewController<HomeView> {
   // MARK: - HomeViewProtocol
 
 extension HomeViewController: HomeViewProtocol {
->>>>>>> 28a411bb6cc6982e24bdadf3321809c9117b6a66
+
 }
 
   // MARK: - CollectionView DataSource, Delegate
@@ -106,17 +99,10 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         for: indexPath
       )
       header.bind(section: section)
-<<<<<<< HEAD
+
       header.moreButton.tag = indexPath.section
       header.moreButton.addTarget(self, action: #selector(didTapMoreButton(_:)), for: .touchUpInside)
-=======
-      
-      header.moreButton.addTarget(
-        self,
-        action: #selector(self.didTapMoreButton(_:)),
-        for: .touchUpInside
-      )
->>>>>>> 28a411bb6cc6982e24bdadf3321809c9117b6a66
+
 
       return header
 
