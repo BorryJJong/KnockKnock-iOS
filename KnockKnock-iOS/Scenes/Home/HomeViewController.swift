@@ -8,6 +8,7 @@
 import UIKit
 
 import Then
+import KKDSKit
 
 protocol HomeViewProtocol: AnyObject {
   var interactor: HomeInteractorProtocol? { get set }
@@ -28,7 +29,10 @@ final class HomeViewController: BaseViewController<HomeView> {
     self.setupConfigure()
   }
 
+  // MARK: - Configure
+
   override func setupConfigure() {
+    self.setNavigationItem()
     self.containerView.homeCollectionView.do {
       $0.dataSource = self
       $0.delegate = self
@@ -46,19 +50,32 @@ final class HomeViewController: BaseViewController<HomeView> {
     }
   }
 
-  @objc func didTapMoreButton(_ sender: UIButton) {
+  // MARK: - Navigation Bar 설정
 
-    self.router?.navigateToStoreListView(source: self)
+  func setNavigationItem() {
+    self.navigationItem.backButtonTitle = ""
+    self.navigationController?.navigationBar.tintColor = .black
+  }
+
+  // MARK: - button action
+
+  @objc func didTapMoreButton(_ sender: UIButton) {
+    let section = HomeSection(rawValue: sender.tag)
+    if section == .store {
+      self.router?.navigateToStoreListView(source: self)
+    } else if section == .event {
+      self.router?.navigateToEventPageView(source: self)
+    }
   }
 }
 
-  // MARK: - HomeViewProtocol
+// MARK: - HomeViewProtocol
 
 extension HomeViewController: HomeViewProtocol {
 
 }
 
-  // MARK: - CollectionView DataSource, Delegate
+// MARK: - CollectionView DataSource, Delegate
 
 extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
   func collectionView(
@@ -79,7 +96,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
   func numberOfSections(
     in collectionView: UICollectionView
   ) -> Int {
-        return HomeSection.allCases.count
+    return HomeSection.allCases.count
   }
 
   func collectionView(
@@ -101,9 +118,12 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
       header.bind(section: section)
 
       header.moreButton.tag = indexPath.section
-      header.moreButton.addTarget(self, action: #selector(didTapMoreButton(_:)), for: .touchUpInside)
-
-
+      header.moreButton.addTarget(
+        self,
+        action: #selector(didTapMoreButton(_:)),
+        for: .touchUpInside
+      )
+      
       return header
 
     case .popularPost:

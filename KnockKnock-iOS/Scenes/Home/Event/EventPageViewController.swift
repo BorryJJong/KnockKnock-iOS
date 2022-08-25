@@ -8,6 +8,7 @@
 import UIKit
 
 import Then
+import KKDSKit
 
 final class EventPageViewController: BaseViewController<EventPageView> {
 
@@ -32,6 +33,8 @@ final class EventPageViewController: BaseViewController<EventPageView> {
   // MARK: - Configure
 
   override func setupConfigure() {
+    self.navigationItem.title = "이벤트"
+
     self.containerView.tapCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
