@@ -32,6 +32,11 @@
 		6105D2F428AFD51A001413DF /* OngoingEventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6105D2F328AFD51A001413DF /* OngoingEventListViewController.swift */; };
 		6105D2F628AFD544001413DF /* EventListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6105D2F528AFD544001413DF /* EventListView.swift */; };
 		6105D2F828AFD573001413DF /* ClosedEventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6105D2F728AFD573001413DF /* ClosedEventListViewController.swift */; };
+		6105079428B4EE7E00C1B5CF /* HomeWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6105079328B4EE7E00C1B5CF /* HomeWorker.swift */; };
+		6105079628B4EE9F00C1B5CF /* HomeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6105079528B4EE9F00C1B5CF /* HomeRouter.swift */; };
+		6105079828B4EEA800C1B5CF /* HomeInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6105079728B4EEA800C1B5CF /* HomeInteractor.swift */; };
+		6105079A28B4EEDF00C1B5CF /* HomePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6105079928B4EEDF00C1B5CF /* HomePresenter.swift */; };
+
 		611BD4A327E3017E007D5C79 /* FeedWriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4A227E3017E007D5C79 /* FeedWriteViewController.swift */; };
 		611BD4A527E3080B007D5C79 /* FeedWriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4A427E3080B007D5C79 /* FeedWriteView.swift */; };
 		611BD4AA27E48B93007D5C79 /* FeedWriteInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4A927E48B93007D5C79 /* FeedWriteInteractor.swift */; };
@@ -105,6 +110,9 @@
 		618FDACF27E9642400C2823F /* UIButton+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDACE27E9642400C2823F /* UIButton+Ext.swift */; };
 		619DEE9C28868E7E00C80095 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619DEE9B28868E7E00C80095 /* Comment.swift */; };
 		619DEE9E2887B41B00C80095 /* CommentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619DEE9D2887B41B00C80095 /* CommentRepository.swift */; };
+		61A5EA2328B3B71300A0214D /* StoreListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A5EA2228B3B71300A0214D /* StoreListView.swift */; };
+		61A5EA2528B3B72100A0214D /* StoreListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A5EA2428B3B72100A0214D /* StoreListViewController.swift */; };
+		61A5EA2728B3BEDC00A0214D /* StoreListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A5EA2628B3BEDC00A0214D /* StoreListCell.swift */; };
 		61A8DC44287E8783000512EC /* UIDevice+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC43287E8783000512EC /* UIDevice+Ext.swift */; };
 		61A8DC47287E905B000512EC /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC46287E905B000512EC /* CommentView.swift */; };
 		61A8DC4A287E90BC000512EC /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC49287E90BC000512EC /* CommentViewController.swift */; };
@@ -119,9 +127,11 @@
 		61AB2E4C28A36E0400A1AE30 /* LikeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AB2E4B28A36E0400A1AE30 /* LikeDetailView.swift */; };
 		61AB2E4E28A36E3E00A1AE30 /* LikeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AB2E4D28A36E3E00A1AE30 /* LikeDetailViewController.swift */; };
 		61AB2E5428A3775300A1AE30 /* Double+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AB2E5328A3775300A1AE30 /* Double+Ext.swift */; };
+
 		61AB2E5928A620B700A1AE30 /* EventPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AB2E5828A620B700A1AE30 /* EventPageView.swift */; };
 		61AB2E5B28A620C700A1AE30 /* EventPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AB2E5A28A620C700A1AE30 /* EventPageViewController.swift */; };
 		61AB2E5D28A6257E00A1AE30 /* TapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AB2E5C28A6257E00A1AE30 /* TapCell.swift */; };
+
 		61B6D97F2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D97E2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift */; };
 		61B6D984288A967A00E60F08 /* ChallengeDetailWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D983288A967A00E60F08 /* ChallengeDetailWorker.swift */; };
 		61B6D986288A968600E60F08 /* ChallengeDetailInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D985288A968600E60F08 /* ChallengeDetailInteractor.swift */; };
@@ -164,9 +174,16 @@
 		20D28F8527CFC7B300A809DB /* ChallengeWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeWorker.swift; sourceTree = "<group>"; };
 		20EAE2962814054F009242A1 /* ChellengeRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChellengeRepository.swift; sourceTree = "<group>"; };
 		2EDAE2B5F785D77504C7A50F /* Pods_KnockKnock_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KnockKnock_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+
 		6105D2F328AFD51A001413DF /* OngoingEventListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OngoingEventListViewController.swift; sourceTree = "<group>"; };
 		6105D2F528AFD544001413DF /* EventListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListView.swift; sourceTree = "<group>"; };
 		6105D2F728AFD573001413DF /* ClosedEventListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosedEventListViewController.swift; sourceTree = "<group>"; };
+
+		6105079328B4EE7E00C1B5CF /* HomeWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWorker.swift; sourceTree = "<group>"; };
+		6105079528B4EE9F00C1B5CF /* HomeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HomeRouter.swift; path = "KnockKnock-iOS/Scenes/Home/HomeRouter.swift"; sourceTree = SOURCE_ROOT; };
+		6105079728B4EEA800C1B5CF /* HomeInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeInteractor.swift; sourceTree = "<group>"; };
+		6105079928B4EEDF00C1B5CF /* HomePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePresenter.swift; sourceTree = "<group>"; };
+
 		611BD4A227E3017E007D5C79 /* FeedWriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWriteViewController.swift; sourceTree = "<group>"; };
 		611BD4A427E3080B007D5C79 /* FeedWriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWriteView.swift; sourceTree = "<group>"; };
 		611BD4A927E48B93007D5C79 /* FeedWriteInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWriteInteractor.swift; sourceTree = "<group>"; };
@@ -239,6 +256,9 @@
 		618FDACE27E9642400C2823F /* UIButton+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Ext.swift"; sourceTree = "<group>"; };
 		619DEE9B28868E7E00C80095 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		619DEE9D2887B41B00C80095 /* CommentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRepository.swift; sourceTree = "<group>"; };
+		61A5EA2228B3B71300A0214D /* StoreListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListView.swift; sourceTree = "<group>"; };
+		61A5EA2428B3B72100A0214D /* StoreListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListViewController.swift; sourceTree = "<group>"; };
+		61A5EA2628B3BEDC00A0214D /* StoreListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListCell.swift; sourceTree = "<group>"; };
 		61A8DC43287E8783000512EC /* UIDevice+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Ext.swift"; sourceTree = "<group>"; };
 		61A8DC46287E905B000512EC /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		61A8DC49287E90BC000512EC /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
@@ -256,6 +276,7 @@
 		61AB2E5828A620B700A1AE30 /* EventPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPageView.swift; sourceTree = "<group>"; };
 		61AB2E5A28A620C700A1AE30 /* EventPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPageViewController.swift; sourceTree = "<group>"; };
 		61AB2E5C28A6257E00A1AE30 /* TapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapCell.swift; sourceTree = "<group>"; };
+
 		61B6D97E2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		61B6D983288A967A00E60F08 /* ChallengeDetailWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailWorker.swift; sourceTree = "<group>"; };
 		61B6D985288A968600E60F08 /* ChallengeDetailInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailInteractor.swift; sourceTree = "<group>"; };
@@ -425,6 +446,11 @@
 				61B6D991288C2C1500E60F08 /* Views */,
 				61A45CF128A7710400070B22 /* Event */,
 				2090811727CA4F56005A1573 /* HomeViewController.swift */,
+				6105079728B4EEA800C1B5CF /* HomeInteractor.swift */,
+				6105079928B4EEDF00C1B5CF /* HomePresenter.swift */,
+				6105079328B4EE7E00C1B5CF /* HomeWorker.swift */,
+				6105079528B4EE9F00C1B5CF /* HomeRouter.swift */,
+				61A5EA2428B3B72100A0214D /* StoreListViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -542,6 +568,7 @@
 				613856E7289CD43F00BE347E /* EventCell.swift */,
 				613856EB289F738D00BE347E /* HomeMainPagerCell.swift */,
 				61AB2E4728A0A7E900A1AE30 /* HomeTagCell.swift */,
+				61A5EA2628B3BEDC00A0214D /* StoreListCell.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -679,6 +706,8 @@
 				61B6D992288C2C2700E60F08 /* HomeView.swift */,
 				613856DD289A795200BE347E /* HomeHeaderCollectionReusableView.swift */,
 				613856E5289CCE4800BE347E /* PopularFooterCollectionReusableView.swift */,
+				61A5EA2228B3B71300A0214D /* StoreListView.swift */,
+
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -888,10 +917,13 @@
 				2010780227D3D59F00280991 /* UITableViewCell+Ext.swift in Sources */,
 				61E3088428768D71001394B6 /* UIStackView+Ext.swift in Sources */,
 				6105D2F428AFD51A001413DF /* OngoingEventListViewController.swift in Sources */,
+				61A5EA2328B3B71300A0214D /* StoreListView.swift in Sources */,
 				617F9D69282A6EB200C2BC9A /* ChallengeDetailCell.swift in Sources */,
 				613856EC289F738D00BE347E /* HomeMainPagerCell.swift in Sources */,
+				61A5EA2728B3BEDC00A0214D /* StoreListCell.swift in Sources */,
 				201077F227D3A97A00280991 /* BaseViewController.swift in Sources */,
 				619DEE9E2887B41B00C80095 /* CommentRepository.swift in Sources */,
+				6105079628B4EE9F00C1B5CF /* HomeRouter.swift in Sources */,
 				20EAE2972814054F009242A1 /* ChellengeRepository.swift in Sources */,
 				618FDAC527E80C6B00C2823F /* ShopSearchViewController.swift in Sources */,
 				61A8DC572881B173000512EC /* UIViewController+Ext.swift in Sources */,
@@ -913,6 +945,7 @@
 				20A72D1E280BC4EE006689FC /* BaseCollectionViewCell.swift in Sources */,
 				61A8DC52287E9131000512EC /* CommentWorker.swift in Sources */,
 				6143297828687B69008BDCC9 /* FeedListInteractor.swift in Sources */,
+				6105079428B4EE7E00C1B5CF /* HomeWorker.swift in Sources */,
 				61A8DC44287E8783000512EC /* UIDevice+Ext.swift in Sources */,
 				61AB2E4C28A36E0400A1AE30 /* LikeDetailView.swift in Sources */,
 				20D28F8227CFC5F000A809DB /* ChallengePresenter.swift in Sources */,
@@ -924,6 +957,7 @@
 				6143294F285F2BCF008BDCC9 /* BasePaddingLabel.swift in Sources */,
 				61A8DC4C287E90E9000512EC /* CommentInteractor.swift in Sources */,
 				614329622862F6E3008BDCC9 /* FeedWorker.swift in Sources */,
+				6105079A28B4EEDF00C1B5CF /* HomePresenter.swift in Sources */,
 				613856D12898CB1300BE347E /* FeedDetailNavigtaionBarView.swift in Sources */,
 				61AB2E4E28A36E3E00A1AE30 /* LikeDetailViewController.swift in Sources */,
 				61215AD028559B6E003FDCAA /* UICollectionViewCell+Ext.swift in Sources */,
@@ -938,6 +972,7 @@
 				6143296A28644458008BDCC9 /* FeedRepository.swift in Sources */,
 				61B6D97F2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift in Sources */,
 				613856DB289948F500BE347E /* StoreCell.swift in Sources */,
+				61A5EA2528B3B72100A0214D /* StoreListViewController.swift in Sources */,
 				614329552862EFE0008BDCC9 /* FeedListView.swift in Sources */,
 				613856DE289A795200BE347E /* HomeHeaderCollectionReusableView.swift in Sources */,
 				61A8DC47287E905B000512EC /* CommentView.swift in Sources */,
@@ -945,6 +980,7 @@
 				6143296628642745008BDCC9 /* UILabel+Ext.swift in Sources */,
 				20D28F8427CFC60900A809DB /* ChallengeRouter.swift in Sources */,
 				61A8DC4A287E90BC000512EC /* CommentViewController.swift in Sources */,
+				6105079828B4EEA800C1B5CF /* HomeInteractor.swift in Sources */,
 				616EB0882890E42F001BD18C /* PostCell.swift in Sources */,
 				61FC60E927B9244D00A51DBC /* AppDelegate.swift in Sources */,
 				611BD4BC27E70393007D5C79 /* PropertySelectViewController.swift in Sources */,
@@ -1148,10 +1184,13 @@
 				DEVELOPMENT_TEAM = R4HW69RLJ5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "KnockKnock-iOS/Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "사진 촬영을 위해 카메라 접근 권한이 필요합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진을 불러오기 위하여 갤러리 접근 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1176,10 +1215,13 @@
 				DEVELOPMENT_TEAM = R4HW69RLJ5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "KnockKnock-iOS/Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "사진 촬영을 위해 카메라 접근 권한이 필요합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진을 불러오기 위하여 갤러리 접근 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
