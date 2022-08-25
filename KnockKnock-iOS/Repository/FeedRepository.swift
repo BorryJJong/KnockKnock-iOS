@@ -39,7 +39,7 @@ final class FeedRepository: FeedRepositoryProtocol {
         .request(
           object: FeedMain.self,
           router: KKRouter.getFeedMain(
-            skip: currentPage,
+            page: currentPage,
             take: totalCount,
             challengeId: challengeId
           ),

@@ -37,7 +37,7 @@ final class FeedViewController: BaseViewController<FeedView> {
   }
   var challengeTitles: [ChallengeTitle] = []
 
-  var currentPage = 0
+  var currentPage = 1
   let pageSize = 21
   var challengeId = 0
 
@@ -100,7 +100,10 @@ extension FeedViewController: FeedViewProtocol {
     self.containerView.feedCollectionView.reloadData()
   }
 
-  func getChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?) {
+  func getChallengeTitles(
+    challengeTitle: [ChallengeTitle],
+    index: IndexPath?
+  ) {
     self.challengeTitles = challengeTitle
 
     if let index = index {
@@ -140,18 +143,28 @@ extension FeedViewController: UICollectionViewDataSource {
   ) -> UICollectionViewCell {
     switch collectionView.tag {
     case CollectionViewTag.tag.rawValue:
-      let cell = collectionView.dequeueCell(withType: TagCell.self, for: indexPath)
+      let cell = collectionView.dequeueCell(
+        withType: TagCell.self,
+        for: indexPath
+      )
       cell.bind(tag: self.challengeTitles[indexPath.item])
 
       if indexPath.item == 0 {
         cell.isSelected = true
-        collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .init())
+        collectionView.selectItem(
+          at: indexPath,
+          animated: false,
+          scrollPosition: .init()
+        )
       }
 
       return cell
 
     case CollectionViewTag.feed.rawValue:
-      let cell = collectionView.dequeueCell(withType: FeedCell.self, for: indexPath)
+      let cell = collectionView.dequeueCell(
+        withType: FeedCell.self,
+        for: indexPath
+      )
       if let feed = self.feedMain {
         cell.bind(post: feed.feeds[indexPath.item])
       }
@@ -200,29 +213,20 @@ extension FeedViewController: UICollectionViewDelegate {
         selectedIndex: indexPath
       )
 
+      self.challengeId = indexPath.item
+      self.currentPage = 1
+
+      self.interactor?.getFeedMain(
+        currentPage: self.currentPage,
+        pageSize: self.pageSize,
+        challengeId: self.challengeId
+      )
+
     case CollectionViewTag.feed.rawValue:
       self.router?.navigateToFeedList(source: self)
 
     default:
       return
     }
-  }
-  
-  func collectionView(
-    _ collectionView: UICollectionView,
-    didDeselectItemAt indexPath: IndexPath
-  ) {
-    self.interactor?.setSelectedStatus(
-      challengeTitles: challengeTitles,
-      selectedIndex: indexPath
-    )
-    self.challengeId = indexPath.item
-    self.currentPage = 0
-
-    self.interactor?.getFeedMain(
-      currentPage: self.currentPage,
-      pageSize: self.pageSize,
-      challengeId: self.challengeId
-    )
   }
 }

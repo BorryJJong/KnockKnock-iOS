@@ -23,11 +23,6 @@ final class FeedInteractor: FeedInteractorProtocol {
   var presenter: FeedPresenterProtocol?
   var worker: FeedWorkerProtocol?
 
-//  func fetchFeed() {
-//    self.worker?.fetchFeed { [weak self] feed in
-//      self?.presenter?.presentFetchFeed(feed: feed)
-//    }
-//  }
   func getFeedMain(currentPage: Int, pageSize: Int, challengeId: Int) {
     self.worker?.getFeedMain(
       currentPage: currentPage,
