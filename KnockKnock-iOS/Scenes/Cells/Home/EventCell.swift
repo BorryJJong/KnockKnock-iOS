@@ -90,6 +90,7 @@ final class EventCell: BaseCollectionViewCell {
     self.thumbnailImageView.snp.makeConstraints {
       $0.edges.equalTo(self.contentView)
     }
+
     self.coverView.snp.makeConstraints {
       $0.edges.equalTo(self.contentView)
     }

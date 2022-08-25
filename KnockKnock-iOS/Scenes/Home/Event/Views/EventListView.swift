@@ -12,13 +12,6 @@ import Then
 
 class EventListView: UIView {
 
-  // MARK: - Constants
-
-  private enum Metric {
-    static let eventCollectionViewTopMargin = 20.f
-  }
-
-
   // MARK: - UIs
 
   let eventCollectionView = UICollectionView(
@@ -26,6 +19,7 @@ class EventListView: UIView {
     collectionViewLayout: UICollectionViewFlowLayout().then {
       $0.scrollDirection = .vertical
       $0.minimumLineSpacing = 20
+      $0.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 20)
     }
   )
 
@@ -46,7 +40,7 @@ class EventListView: UIView {
     [self.eventCollectionView].addSubViews(self)
 
     self.eventCollectionView.snp.makeConstraints {
-      $0.top.equalTo(self.safeAreaLayoutGuide.snp.top).offset(Metric.eventCollectionViewTopMargin)
+      $0.top.equalTo(self.safeAreaLayoutGuide.snp.top)
       $0.leading.trailing.bottom.equalTo(self)
     }
   }

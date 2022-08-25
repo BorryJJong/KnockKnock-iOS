@@ -21,16 +21,16 @@ final class HomeRouter: HomeRouterProtocol {
     let presenter = HomePresenter()
     let worker = HomeWorker()
     let router = HomeRouter()
-    
+
     view.interactor = interactor
     view.router = router
     interactor.worker = worker
     interactor.presenter = presenter
     presenter.view = view
-    
+
     return view
   }
-  
+
   func navigateToStoreListView(source: HomeViewProtocol) {
     let storeListViewController = StoreListViewController()
     if let sourceView = source as? UIViewController {
@@ -38,7 +38,7 @@ final class HomeRouter: HomeRouterProtocol {
         storeListViewController, animated: true)
     }
   }
-  
+
   func navigateToEventPageView(source: HomeViewProtocol) {
     let eventPageViewController = EventPageViewController()
     if let sourceView = source as? UIViewController {
