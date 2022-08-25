@@ -45,7 +45,10 @@ final class FeedViewController: BaseViewController<FeedView> {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+
     self.extendedLayoutIncludesOpaqueBars = true
+    self.navigationItem.hidesSearchBarWhenScrolling = false
+
     self.interactor?.getFeedMain(
       currentPage: self.currentPage,
       pageSize: self.pageSize,
