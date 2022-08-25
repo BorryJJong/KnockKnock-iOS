@@ -56,7 +56,7 @@ final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableVie
 
   private let topGradientImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.image = KKDS.Image.ic_bg_gradient_bk
+    $0.image = KKDS.Image.ic_bg_gradient_top_bk
   }
 
   private let mainImageView = UIImageView().then {
