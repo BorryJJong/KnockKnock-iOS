@@ -21,7 +21,7 @@ final class FeedRepository: FeedRepositoryProtocol {
     KKNetworkManager.shared
       .request(
         object: [ChallengeTitle].self,
-        router: KKRouter.getChallengeTitles,
+        router: KKRouter.requestChallengeTitle,
         success: { response in
           completionHandler(response)
         }, failure: { error in
@@ -38,7 +38,7 @@ final class FeedRepository: FeedRepositoryProtocol {
       KKNetworkManager.shared
         .request(
           object: FeedMain.self,
-          router: KKRouter.getFeedMain(
+          router: KKRouter.requestFeedMain(
             page: currentPage,
             take: totalCount,
             challengeId: challengeId

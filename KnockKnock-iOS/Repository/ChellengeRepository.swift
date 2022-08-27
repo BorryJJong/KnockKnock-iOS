@@ -19,7 +19,7 @@ final class ChallengeRepository: ChallengeRepositoryProtocol {
     KKNetworkManager.shared
       .request(
         object: [Challenges].self,
-        router: KKRouter.getChallengeResponse,
+        router: KKRouter.requestChallengeResponse,
         success: { response in
           completionHandler(response)
         },
