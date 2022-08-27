@@ -11,8 +11,8 @@ protocol FeedInteractorProtocol {
   var presenter: FeedPresenterProtocol? { get set }
   var worker: FeedWorkerProtocol? { get set }
 
-  func getFeedMain(currentPage: Int, pageSize: Int, challengeId: Int)
-  func getChallengeTitles()
+  func requestFeedMain(currentPage: Int, pageSize: Int, challengeId: Int)
+  func requestChallengeTitles()
   func setSelectedStatus(challengeTitles: [ChallengeTitle], selectedIndex: IndexPath)
 }
 
@@ -23,7 +23,7 @@ final class FeedInteractor: FeedInteractorProtocol {
   var presenter: FeedPresenterProtocol?
   var worker: FeedWorkerProtocol?
 
-  func getFeedMain(currentPage: Int, pageSize: Int, challengeId: Int) {
+  func requestFeedMain(currentPage: Int, pageSize: Int, challengeId: Int) {
     self.worker?.getFeedMain(
       currentPage: currentPage,
       pageSize: pageSize,
@@ -33,7 +33,7 @@ final class FeedInteractor: FeedInteractorProtocol {
     })
   }
 
-  func getChallengeTitles() {
+  func requestChallengeTitles() {
     self.worker?.getChallengeTitles { [weak self] challengeTitle in
       var challengeTitle = challengeTitle
       challengeTitle[0].isSelected = true

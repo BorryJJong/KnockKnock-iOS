@@ -10,8 +10,8 @@ import UIKit
 protocol FeedViewProtocol: AnyObject {
   var interactor: FeedInteractorProtocol? { get set }
   
-  func getFeedMain(feed: FeedMain)
-  func getChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?)
+  func requestFeedMain(feed: FeedMain)
+  func requestChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?)
 }
 
 final class FeedViewController: BaseViewController<FeedView> {
@@ -49,12 +49,12 @@ final class FeedViewController: BaseViewController<FeedView> {
     self.extendedLayoutIncludesOpaqueBars = true
     self.navigationItem.hidesSearchBarWhenScrolling = false
     
-    self.interactor?.getFeedMain(
+    self.interactor?.requestFeedMain(
       currentPage: self.currentPage,
       pageSize: self.pageSize,
       challengeId: self.challengeId
     )
-    self.interactor?.getChallengeTitles()
+    self.interactor?.requestChallengeTitles()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -87,7 +87,7 @@ final class FeedViewController: BaseViewController<FeedView> {
   
   @objc func didTapViewMoreButton(_ sender: UIButton) {
     self.currentPage += 1
-    self.interactor?.getFeedMain(
+    self.interactor?.requestFeedMain(
       currentPage: self.currentPage,
       pageSize: self.pageSize,
       challengeId: self.challengeId
@@ -98,14 +98,14 @@ final class FeedViewController: BaseViewController<FeedView> {
 // MARK: - Extensions
 
 extension FeedViewController: FeedViewProtocol {
-  func getFeedMain(feed: FeedMain) {
+  func requestFeedMain(feed: FeedMain) {
     self.feedMain = feed
     self.feedMain?.feeds.forEach {
       self.feedMainPost.append($0)
     }
   }
   
-  func getChallengeTitles(
+  func requestChallengeTitles(
     challengeTitle: [ChallengeTitle],
     index: IndexPath?
   ) {
@@ -224,7 +224,7 @@ extension FeedViewController: UICollectionViewDelegate {
       self.challengeId = indexPath.item
       self.currentPage = 1
       
-      self.interactor?.getFeedMain(
+      self.interactor?.requestFeedMain(
         currentPage: self.currentPage,
         pageSize: self.pageSize,
         challengeId: self.challengeId

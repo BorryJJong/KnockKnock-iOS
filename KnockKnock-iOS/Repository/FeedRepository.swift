@@ -10,18 +10,18 @@ import Foundation
 import Alamofire
 
 protocol FeedRepositoryProtocol {
-  func getFeedMain(currentPage: Int, totalCount: Int, challengeId: Int, completionHandler: @escaping (FeedMain) -> Void)
-  func getChallengeTitles(completionHandler: @escaping (([ChallengeTitle])) -> Void)
+  func requestFeedMain(currentPage: Int, totalCount: Int, challengeId: Int, completionHandler: @escaping (FeedMain) -> Void)
+  func requestChallengeTitles(completionHandler: @escaping (([ChallengeTitle])) -> Void)
   func getFeedDetail(completionHandler: @escaping (FeedDetail) -> Void)
   func fetchFeed(completionHandler: @escaping ([Feed]) -> Void)
 }
 
 final class FeedRepository: FeedRepositoryProtocol {
-  func getChallengeTitles(completionHandler: @escaping (([ChallengeTitle])) -> Void) {
+  func requestChallengeTitles(completionHandler: @escaping (([ChallengeTitle])) -> Void) {
     KKNetworkManager.shared
       .request(
         object: [ChallengeTitle].self,
-        router: KKRouter.requestChallengeTitle,
+        router: KKRouter.getChallengeTitles,
         success: { response in
           completionHandler(response)
         }, failure: { error in
@@ -29,7 +29,7 @@ final class FeedRepository: FeedRepositoryProtocol {
         })
   }
 
-    func getFeedMain(
+    func requestFeedMain(
       currentPage: Int,
       totalCount: Int,
       challengeId: Int,
@@ -38,7 +38,7 @@ final class FeedRepository: FeedRepositoryProtocol {
       KKNetworkManager.shared
         .request(
           object: FeedMain.self,
-          router: KKRouter.requestFeedMain(
+          router: KKRouter.getFeedMain(
             page: currentPage,
             take: totalCount,
             challengeId: challengeId

@@ -21,10 +21,10 @@ final class FeedPresenter: FeedPresenterProtocol {
   weak var view: FeedViewProtocol?
 
   func presentFeedMain(feed: FeedMain) {
-    self.view?.getFeedMain(feed: feed)
+    self.view?.requestFeedMain(feed: feed)
   }
 
   func presentGetChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?) {
-    self.view?.getChallengeTitles(challengeTitle: challengeTitle, index: index)
+    self.view?.requestChallengeTitles(challengeTitle: challengeTitle, index: index)
   }
 }
