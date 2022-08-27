@@ -18,11 +18,9 @@ final class FeedViewController: BaseViewController<FeedView> {
   
   // MARK: - Enums
   
-  private enum CollectionViewTag: Int {
+  private enum CollectionViewTag: Int, CaseIterable {
     case tag = 0
     case feed = 1
-    
-    static let allCases: [CollectionViewTag] = [.tag, .feed]
   }
   
   // MARK: - Properties
