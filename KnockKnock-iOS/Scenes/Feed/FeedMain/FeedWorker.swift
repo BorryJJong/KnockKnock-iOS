@@ -26,7 +26,7 @@ final class FeedWorker: FeedWorkerProtocol {
     challengeId: Int,
     completionHandler: @escaping (FeedMain) -> Void) {
 
-    repository.getFeedMain(
+    repository.requestFeedMain(
       currentPage: currentPage,
       totalCount: pageSize,
       challengeId: challengeId,
@@ -36,7 +36,7 @@ final class FeedWorker: FeedWorkerProtocol {
   }
 
   func getChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void) {
-    repository.getChallengeTitles(completionHandler: { result in
+    repository.requestChallengeTitles(completionHandler: { result in
       completionHandler(result)
     })
   }
