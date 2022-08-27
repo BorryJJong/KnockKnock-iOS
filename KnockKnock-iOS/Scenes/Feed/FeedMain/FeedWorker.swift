@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FeedWorkerProtocol: AnyObject {
-  func fetchFeed(completionHandler: @escaping ([Feed]) -> Void)
+  func getFeedMain(currentPage: Int, pageSize: Int, challengeId: Int, completionHandler: @escaping (FeedMain) -> Void)
   func getChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void)
 }
 
@@ -20,8 +20,17 @@ final class FeedWorker: FeedWorkerProtocol {
     self.repository = repository
   }
 
-  func fetchFeed(completionHandler: @escaping ([Feed]) -> Void) {
-    repository.fetchFeed(completionHandler: { result in
+  func getFeedMain(
+    currentPage: Int,
+    pageSize: Int,
+    challengeId: Int,
+    completionHandler: @escaping (FeedMain) -> Void) {
+
+    repository.getFeedMain(
+      currentPage: currentPage,
+      totalCount: pageSize,
+      challengeId: challengeId,
+      completionHandler: { result in
       completionHandler(result)
     })
   }

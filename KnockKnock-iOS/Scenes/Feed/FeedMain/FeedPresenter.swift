@@ -10,7 +10,7 @@ import Foundation
 protocol FeedPresenterProtocol {
   var view: FeedViewProtocol? { get set }
   
-  func presentFetchFeed(feed: [Feed])
+  func presentFeedMain(feed: FeedMain)
   func presentGetChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?)
 }
 
@@ -20,8 +20,8 @@ final class FeedPresenter: FeedPresenterProtocol {
 
   weak var view: FeedViewProtocol?
 
-  func presentFetchFeed(feed: [Feed]) {
-    self.view?.fetchFeed(feed: feed)
+  func presentFeedMain(feed: FeedMain) {
+    self.view?.getFeedMain(feed: feed)
   }
 
   func presentGetChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?) {
