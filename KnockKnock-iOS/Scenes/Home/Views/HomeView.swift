@@ -399,4 +399,3 @@ final class HomeView: UIView {
     return eventSection
   }
 }
-

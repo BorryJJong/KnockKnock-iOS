@@ -9,7 +9,9 @@ import UIKit
 
 protocol HomeRouterProtocol {
   static func createHome() -> UIViewController
+  
   func navigateToStoreListView(source: HomeViewProtocol)
+  func navigateToEventPageView(source: HomeViewProtocol)
 }
 
 final class HomeRouter: HomeRouterProtocol {
@@ -34,6 +36,16 @@ final class HomeRouter: HomeRouterProtocol {
     if let sourceView = source as? UIViewController {
       sourceView.navigationController?.pushViewController(
         storeListViewController, animated: true)
+    }
+  }
+
+  func navigateToEventPageView(source: HomeViewProtocol) {
+    let eventPageViewController = EventPageViewController()
+    if let sourceView = source as? UIViewController {
+      sourceView.navigationController?.pushViewController(
+        eventPageViewController,
+        animated: true
+      )
     }
   }
 }

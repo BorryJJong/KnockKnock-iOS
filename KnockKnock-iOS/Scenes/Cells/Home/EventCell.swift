@@ -36,6 +36,13 @@ final class EventCell: BaseCollectionViewCell {
     $0.clipsToBounds = true
   }
 
+  private let coverView = UIView().then {
+    $0.backgroundColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.5)
+    $0.layer.cornerRadius = 5
+    $0.clipsToBounds = true
+    $0.isHidden = true
+  }
+
   private let gradientImageView = UIImageView().then {
     $0.image = KKDS.Image.ic_bg_gradient_bottom_bk
     $0.layer.cornerRadius = 5
@@ -65,10 +72,26 @@ final class EventCell: BaseCollectionViewCell {
     $0.text = "NEW"
   }
 
+  // MARK: - Bind
+
+  func isClosedEvent(isClosed: Bool) {
+    if isClosed {
+      self.coverView.isHidden = false
+    } else {
+      self.coverView.isHidden = true
+    }
+  }
+
+  // MARK: - Configure
+
   override func setupConstraints() {
-    [self.thumbnailImageView, self.gradientImageView, self.periodLabel, self.titleLabel, self.newEventLabel].addSubViews(self.contentView)
+    [self.thumbnailImageView, self.gradientImageView, self.coverView, self.periodLabel, self.titleLabel, self.newEventLabel].addSubViews(self.contentView)
 
     self.thumbnailImageView.snp.makeConstraints {
+      $0.edges.equalTo(self.contentView)
+    }
+
+    self.coverView.snp.makeConstraints {
       $0.edges.equalTo(self.contentView)
     }
 
