@@ -126,6 +126,10 @@ class CommentView: UIView {
     }
   }
 
+  func setHiddenStatusAlertView(isHidden: Bool) {
+    self.alertView.isHidden = isHidden
+  }
+
   // MARK: - Constraints
 
   func setupConstraints() {

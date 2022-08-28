@@ -142,12 +142,12 @@ final class CommentViewController: BaseViewController<CommentView> {
 
   @objc private func alertButtonDidTap(_ sender: UIButton) {
     if sender.tag == 0 {
-      self.containerView.alertView.isHidden = true
+      self.containerView.setHiddenStatusAlertView(isHidden: false)
     }
   }
 
   @objc private func longPressGestureDidDetect(_ sender: UILongPressGestureRecognizer) {
-    self.containerView.alertView.isHidden = false
+    self.containerView.setHiddenStatusAlertView(isHidden: true)
   }
 }
 
