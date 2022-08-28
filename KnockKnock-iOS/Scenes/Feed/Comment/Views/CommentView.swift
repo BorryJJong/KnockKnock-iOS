@@ -98,6 +98,7 @@ class CommentView: UIView {
     $0.setTitleColor(.white, for: .normal)
   }
 
+
   let alertView = AlertView().then {
     $0.isHidden = true
     $0.bind(content: "댓글을 삭제하시겠습니까?", isCancelActive: true)

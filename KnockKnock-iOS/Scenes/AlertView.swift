@@ -12,6 +12,20 @@ import Then
 
 final class AlertView: UIView {
 
+  // MARK: - Constants
+
+  private enum Metric {
+    static let alertViewLeadingMargin = 20.f
+    static let alertViewHeight = 130.f
+
+    static let contentLabelTopMargin = 30.f
+    static let contentLabelTrailingMargin = 20.f
+
+    static let confirmButtonTrailingMargin = -20.f
+
+    static let cancelButtonTrailingMargin = -30.f
+  }
+
   // MARK: - UIs
 
   private let dimmedView = UIView().then {
@@ -73,21 +87,21 @@ final class AlertView: UIView {
 
     self.alertView.snp.makeConstraints {
       $0.centerY.equalToSuperview()
-      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(20)
-      $0.height.equalTo(130)
+      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.alertViewLeadingMargin)
+      $0.height.equalTo(Metric.alertViewHeight)
     }
 
     self.contentLabel.snp.makeConstraints {
-      $0.top.equalTo(self.alertView.snp.top).offset(30)
-      $0.trailing.leading.equalToSuperview().inset(20)
+      $0.top.equalTo(self.alertView.snp.top).offset(Metric.contentLabelTopMargin)
+      $0.trailing.leading.equalToSuperview().inset(Metric.contentLabelTrailingMargin)
     }
 
     self.confirmButton.snp.makeConstraints {
-      $0.trailing.bottom.equalToSuperview().offset(-20)
+      $0.trailing.bottom.equalToSuperview().offset(Metric.confirmButtonTrailingMargin)
     }
 
     self.cancelButton.snp.makeConstraints {
-      $0.trailing.equalTo(self.confirmButton.snp.leading).offset(-30)
+      $0.trailing.equalTo(self.confirmButton.snp.leading).offset(Metric.cancelButtonTrailingMargin)
       $0.bottom.equalTo(self.confirmButton)
     }
   }
