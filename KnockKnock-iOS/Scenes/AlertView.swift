@@ -29,16 +29,18 @@ final class AlertView: UIView {
     $0.font = .systemFont(ofSize: 14, weight: .medium)
   }
 
-  private let cancelButton = UIButton().then {
+  let cancelButton = UIButton().then {
     $0.setTitle("취소", for: .normal)
     $0.setTitleColor(.gray60, for: .normal)
     $0.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
+    $0.tag = 0
   }
 
-  private let confirmButton = UIButton().then {
+  let confirmButton = UIButton().then {
     $0.setTitle("확인", for: .normal)
     $0.setTitleColor(.green40, for: .normal)
     $0.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
+    $0.tag = 1
   }
 
   // MARK: - Initialize
@@ -52,9 +54,19 @@ final class AlertView: UIView {
     super.init(coder: aDecoder)
   }
 
+  // MARK: - Bind
+
+  func bind(content: String, isCancelActive: Bool) {
+    self.cancelButton.isHidden = !isCancelActive
+    self.contentLabel.text = content
+  }
+
   // MARK: - Configure
 
   private func setupConstraints() {
+    [self.dimmedView, self.alertView].addSubViews(self)
+    [self.contentLabel, self.cancelButton, self.confirmButton].addSubViews(self.alertView)
+
     self.dimmedView.snp.makeConstraints {
       $0.edges.equalToSuperview()
     }
@@ -63,6 +75,20 @@ final class AlertView: UIView {
       $0.centerY.equalToSuperview()
       $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(20)
       $0.height.equalTo(130)
+    }
+
+    self.contentLabel.snp.makeConstraints {
+      $0.top.equalTo(self.alertView.snp.top).offset(30)
+      $0.trailing.leading.equalToSuperview().inset(20)
+    }
+
+    self.confirmButton.snp.makeConstraints {
+      $0.trailing.bottom.equalToSuperview().offset(-20)
+    }
+
+    self.cancelButton.snp.makeConstraints {
+      $0.trailing.equalTo(self.confirmButton.snp.leading).offset(-30)
+      $0.bottom.equalTo(self.confirmButton)
     }
   }
 }
