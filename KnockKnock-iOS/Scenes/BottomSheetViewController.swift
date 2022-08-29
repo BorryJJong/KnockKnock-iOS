@@ -96,8 +96,11 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
   // MARK: - Alert View Button Actions
 
   @objc private func alertCancelButtonDidTap(_ sender: UIButton) {
-    self.containerView.bottomSheetView.isHidden = false
-    self.containerView.setHiddenStatusAlertView(isHidden: true)
+    self.containerView.do {
+      $0.bottomSheetView.isHidden = false
+      $0.setHiddenStatusAlertView(isHidden: true)
+      $0.tableView.reloadData()
+    }
   }
 
   @objc private func alertConfirmButtonDidTap(_ sender: UIButton) {
@@ -124,6 +127,7 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
       for: indexPath
     )
     cell.setData(labelText: options[indexPath.row])
+    cell.setSelected(true, animated: false)
 
     return cell
   }
@@ -133,7 +137,7 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
     didSelectRowAt indexPath: IndexPath
   ) {
     let option = BottomSheetOption(rawValue: options[indexPath.row])
-
+    
     switch option {
     case .delete:
       self.containerView.do {
