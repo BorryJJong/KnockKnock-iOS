@@ -148,6 +148,9 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
         )
       }
 
+    case .edit:
+      self.containerView.hideBottomSheet(view: self)
+      
       // 추후 케이스 별 코드 작성 필요
     default:
       self.dismiss(animated: false)
