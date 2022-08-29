@@ -56,7 +56,11 @@ final class CommentViewController: BaseViewController<CommentView> {
     }
 
     self.containerView.exitButton.do {
-      $0.addTarget(self, action: #selector(exitButtonDidTap(_:)), for: .touchUpInside)
+      $0.addTarget(
+        self,
+        action: #selector(exitButtonDidTap(_:)),
+        for: .touchUpInside
+      )
     }
 
     self.containerView.commentTextView.do {
@@ -93,7 +97,10 @@ final class CommentViewController: BaseViewController<CommentView> {
     self.setCommentsTextViewConstant(notification: notification, isAppearing: false)
   }
 
-  private func setCommentsTextViewConstant(notification: Notification, isAppearing: Bool) {
+  private func setCommentsTextViewConstant(
+    notification: Notification,
+    isAppearing: Bool
+  ) {
     let userInfo = notification.userInfo
 
     if let keyboardFrame = userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
@@ -172,7 +179,10 @@ extension CommentViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
-    let cell = collectionView.dequeueCell(withType: ReplyCell.self, for: indexPath)
+    let cell = collectionView.dequeueCell(
+      withType: ReplyCell.self,
+      for: indexPath
+    )
     if let reply = self.reply[indexPath.section] {
       cell.bind(reply: reply[indexPath.item])
     }
@@ -184,6 +194,7 @@ extension CommentViewController: UICollectionViewDataSource {
     viewForSupplementaryElementOfKind kind: String,
     at indexPath: IndexPath
   ) -> UICollectionReusableView {
+
     let header = collectionView.dequeueReusableSupplementaryHeaderView(
       withType: CommentHeaderCollectionReusableView.self,
       for: indexPath

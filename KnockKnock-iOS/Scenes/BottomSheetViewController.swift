@@ -9,7 +9,7 @@ import UIKit
 
 import Then
 
-class BottomSheetViewController: BaseViewController<BottomSheetView> {
+final class BottomSheetViewController: BaseViewController<BottomSheetView> {
 
   // MARK: - Properties
 
@@ -39,8 +39,16 @@ class BottomSheetViewController: BaseViewController<BottomSheetView> {
     self.containerView.dimmedBackView.alpha = 0.0
     
     self.containerView.alertView.do {
-      $0.confirmButton.addTarget(self, action: #selector(self.alertConfirmButtonDidTap(_:)), for: .touchUpInside)
-      $0.cancelButton.addTarget(self, action: #selector(self.alertCancelButtonDidTap(_:)), for: .touchUpInside)
+      $0.confirmButton.addTarget(
+        self,
+        action: #selector(self.alertConfirmButtonDidTap(_:)),
+        for: .touchUpInside
+      )
+      $0.cancelButton.addTarget(
+        self,
+        action: #selector(self.alertCancelButtonDidTap(_:)),
+        for: .touchUpInside
+      )
     }
   }
 
@@ -53,11 +61,17 @@ class BottomSheetViewController: BaseViewController<BottomSheetView> {
   // MARK: - Gesture
 
   private func setupGestureRecognizer() {
-    let dimmedTap = UITapGestureRecognizer(target: self, action: #selector(dimmedViewTapped(_:)))
+    let dimmedTap = UITapGestureRecognizer(
+      target: self,
+      action: #selector(dimmedViewTapped(_:))
+    )
     self.containerView.dimmedBackView.addGestureRecognizer(dimmedTap)
     self.containerView.dimmedBackView.isUserInteractionEnabled = true
 
-    let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(panGesture))
+    let swipeGesture = UISwipeGestureRecognizer(
+      target: self,
+      action: #selector(panGesture)
+    )
     swipeGesture.direction = .down
     self.view.addGestureRecognizer(swipeGesture)
   }
@@ -68,16 +82,18 @@ class BottomSheetViewController: BaseViewController<BottomSheetView> {
 
   @objc func panGesture(_ recognizer: UISwipeGestureRecognizer) {
     if recognizer.state == .ended {
+
       switch recognizer.direction {
       case .down:
         self.containerView.hideBottomSheet(view: self)
+
       default:
         break
       }
     }
   }
 
-  // MARK: - Button Actions
+  // MARK: - Alert View Button Actions
 
   @objc private func alertCancelButtonDidTap(_ sender: UIButton) {
     self.containerView.bottomSheetView.isHidden = false
@@ -92,24 +108,36 @@ class BottomSheetViewController: BaseViewController<BottomSheetView> {
 // MARK: - TableView DataSource
 
 extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate {
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  func tableView(
+    _ tableView: UITableView,
+    numberOfRowsInSection section: Int
+  ) -> Int {
     return self.options.count
   }
 
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+  func tableView(
+    _ tableView: UITableView,
+    cellForRowAt indexPath: IndexPath
+  ) -> UITableViewCell {
     let cell = tableView.dequeueCell(withType: BottomMenuCell.self, for: indexPath)
     cell.setData(labelText: options[indexPath.row])
 
     return cell
   }
 
-  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+  func tableView(
+    _ tableView: UITableView,
+    didSelectRowAt indexPath: IndexPath
+  ) {
     let option = BottomSheetOption(rawValue: options[indexPath.row])
 
     switch option {
     case .delete:
       self.containerView.setHiddenStatusAlertView(isHidden: false)
-      self.containerView.alertView.bind(content: "댓글을 삭제하시겠습니까?", isCancelActive: true)
+      self.containerView.alertView.bind(
+        content: "댓글을 삭제하시겠습니까?",
+        isCancelActive: true
+      )
 
     // 추후 케이스 별 코드 작성 필요
     default:

@@ -8,7 +8,6 @@
 import UIKit
 
 import Then
-import SnapKit
 
 final class BottomSheetView: UIView {
 
@@ -26,6 +25,7 @@ final class BottomSheetView: UIView {
   }
 
   // MARK: - Properties
+
   let screenHeight = UIDevice.current.heightOfSafeArea()
   lazy var topConstant = self.safeAreaInsets.bottom + self.screenHeight
   lazy var bottomSheetViewTopConstraint: NSLayoutConstraint = self.bottomSheetView.topAnchor.constraint(
@@ -122,11 +122,12 @@ final class BottomSheetView: UIView {
     [self.dismissIndicatorView, self.tableView].addSubViews(self.bottomSheetView)
     [self.alertView].addSubViews(self)
 
-    self.alertView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
-    }
-
     NSLayoutConstraint.activate([
+      self.alertView.topAnchor.constraint(equalTo: self.topAnchor),
+      self.alertView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+      self.alertView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+      self.alertView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+
       self.dimmedBackView.topAnchor.constraint(equalTo: self.topAnchor),
       self.dimmedBackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
       self.dimmedBackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
