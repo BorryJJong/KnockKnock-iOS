@@ -9,7 +9,7 @@ import UIKit
 
 import Then
 
-class FeedView: UIView {
+class FeedMainView: UIView {
   
   // MARK: - Constants
   
@@ -63,7 +63,7 @@ class FeedView: UIView {
     }
   ).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.registFooterView(type: FooterCollectionReusableView.self)
+    $0.registFooterView(type: FeedMainFooterCollectionReusableView.self)
   }
   
   // MARK: - Initailize

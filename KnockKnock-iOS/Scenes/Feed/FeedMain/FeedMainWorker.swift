@@ -7,12 +7,12 @@
 
 import Foundation
 
-protocol FeedWorkerProtocol: AnyObject {
-  func getFeedMain(currentPage: Int, pageSize: Int, challengeId: Int, completionHandler: @escaping (FeedMain) -> Void)
-  func getChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void)
+protocol FeedMainWorkerProtocol: AnyObject {
+  func fetchFeedMain(currentPage: Int, pageSize: Int, challengeId: Int, completionHandler: @escaping (FeedMain) -> Void)
+  func fetchChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void)
 }
 
-final class FeedWorker: FeedWorkerProtocol {
+final class FeedMainWorker: FeedMainWorkerProtocol {
 
   private let repository: FeedRepositoryProtocol
 
@@ -20,7 +20,7 @@ final class FeedWorker: FeedWorkerProtocol {
     self.repository = repository
   }
 
-  func getFeedMain(
+  func fetchFeedMain(
     currentPage: Int,
     pageSize: Int,
     challengeId: Int,
@@ -35,7 +35,7 @@ final class FeedWorker: FeedWorkerProtocol {
     })
   }
 
-  func getChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void) {
+  func fetchChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void) {
     repository.requestChallengeTitles(completionHandler: { result in
       completionHandler(result)
     })
