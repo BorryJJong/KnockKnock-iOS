@@ -8,6 +8,7 @@
 import UIKit
 
 import Then
+import SnapKit
 
 final class BottomSheetView: UIView {
 
@@ -122,12 +123,11 @@ final class BottomSheetView: UIView {
     [self.dismissIndicatorView, self.tableView].addSubViews(self.bottomSheetView)
     [self.alertView].addSubViews(self)
 
-    NSLayoutConstraint.activate([
-      self.alertView.topAnchor.constraint(equalTo: self.topAnchor),
-      self.alertView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-      self.alertView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-      self.alertView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+    self.alertView.snp.makeConstraints {
+      $0.edges.equalToSuperview()
+    }
 
+    NSLayoutConstraint.activate([
       self.dimmedBackView.topAnchor.constraint(equalTo: self.topAnchor),
       self.dimmedBackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
       self.dimmedBackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),

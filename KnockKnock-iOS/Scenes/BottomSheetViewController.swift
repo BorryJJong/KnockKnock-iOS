@@ -119,7 +119,10 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
     _ tableView: UITableView,
     cellForRowAt indexPath: IndexPath
   ) -> UITableViewCell {
-    let cell = tableView.dequeueCell(withType: BottomMenuCell.self, for: indexPath)
+    let cell = tableView.dequeueCell(
+      withType: BottomMenuCell.self,
+      for: indexPath
+    )
     cell.setData(labelText: options[indexPath.row])
 
     return cell
@@ -133,13 +136,15 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
 
     switch option {
     case .delete:
-      self.containerView.setHiddenStatusAlertView(isHidden: false)
-      self.containerView.alertView.bind(
-        content: "댓글을 삭제하시겠습니까?",
-        isCancelActive: true
-      )
+      self.containerView.do {
+        $0.setHiddenStatusAlertView(isHidden: false)
+        $0.alertView.bind(
+          content: "댓글을 삭제하시겠습니까?",
+          isCancelActive: true
+        )
+      }
 
-    // 추후 케이스 별 코드 작성 필요
+      // 추후 케이스 별 코드 작성 필요
     default:
       self.dismiss(animated: false)
     }
