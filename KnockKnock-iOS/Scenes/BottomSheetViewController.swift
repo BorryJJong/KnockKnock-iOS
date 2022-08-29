@@ -13,7 +13,7 @@ class BottomSheetViewController: BaseViewController<BottomSheetView> {
 
   // MARK: - Properties
 
-  private var tableContents: [String] = []
+  private var options: [String] = []
 
   // MARK: - Life Cycle
 
@@ -34,14 +34,20 @@ class BottomSheetViewController: BaseViewController<BottomSheetView> {
     self.view.backgroundColor = .clear
     self.containerView.tableView.do {
       $0.dataSource = self
+      $0.delegate = self
     }
     self.containerView.dimmedBackView.alpha = 0.0
+    
+    self.containerView.alertView.do {
+      $0.confirmButton.addTarget(self, action: #selector(self.alertConfirmButtonDidTap(_:)), for: .touchUpInside)
+      $0.cancelButton.addTarget(self, action: #selector(self.alertCancelButtonDidTap(_:)), for: .touchUpInside)
+    }
   }
 
   // MARK: - Bind
 
   func setBottomSheetContents(contents: [String]) {
-    self.tableContents = contents
+    self.options = contents
   }
 
   // MARK: - Gesture
@@ -70,23 +76,44 @@ class BottomSheetViewController: BaseViewController<BottomSheetView> {
       }
     }
   }
+
+  // MARK: - Button Actions
+
+  @objc private func alertCancelButtonDidTap(_ sender: UIButton) {
+    self.containerView.bottomSheetView.isHidden = false
+    self.containerView.setHiddenStatusAlertView(isHidden: true)
+  }
+
+  @objc private func alertConfirmButtonDidTap(_ sender: UIButton) {
+    self.containerView.hideBottomSheet(view: self)
+  }
 }
 
 // MARK: - TableView DataSource
 
-extension BottomSheetViewController: UITableViewDataSource {
+extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return self.tableContents.count
+    return self.options.count
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueCell(withType: BottomMenuCell.self, for: indexPath)
-    cell.setData(labelText: tableContents[indexPath.row])
+    cell.setData(labelText: options[indexPath.row])
+
     return cell
   }
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    print("\(indexPath.row) is selected.")
-    self.containerView.hideBottomSheet(view: self)
+    let option = BottomSheetOption(rawValue: options[indexPath.row])
+
+    switch option {
+    case .delete:
+      self.containerView.setHiddenStatusAlertView(isHidden: false)
+      self.containerView.alertView.bind(content: "댓글을 삭제하시겠습니까?", isCancelActive: true)
+
+    // 추후 케이스 별 코드 작성 필요
+    default:
+      self.dismiss(animated: false)
+    }
   }
 }

@@ -63,11 +63,6 @@ final class CommentViewController: BaseViewController<CommentView> {
       $0.delegate = self
     }
 
-    self.containerView.alertView.do {
-      $0.confirmButton.addTarget(self, action: #selector(self.alertButtonDidTap(_:)), for: .touchUpInside)
-      $0.cancelButton.addTarget(self, action: #selector(self.alertButtonDidTap(_:)), for: .touchUpInside)
-    }
-
     self.addKeyboardNotification()
     self.hideKeyboardWhenTappedAround()
   }
@@ -140,14 +135,8 @@ final class CommentViewController: BaseViewController<CommentView> {
     }
   }
 
-  @objc private func alertButtonDidTap(_ sender: UIButton) {
-    if sender.tag == 0 {
-      self.containerView.setHiddenStatusAlertView(isHidden: false)
-    }
-  }
-
   @objc private func longPressGestureDidDetect(_ sender: UILongPressGestureRecognizer) {
-    self.containerView.setHiddenStatusAlertView(isHidden: true)
+    self.router?.presentBottomSheetView(source: self)
   }
 }
 

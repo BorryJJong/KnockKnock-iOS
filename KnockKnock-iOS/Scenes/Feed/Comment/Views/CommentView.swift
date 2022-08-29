@@ -98,11 +98,6 @@ class CommentView: UIView {
     $0.setTitleColor(.white, for: .normal)
   }
 
-  let alertView = AlertView().then {
-    $0.isHidden = true
-    $0.bind(content: "댓글을 삭제하시겠습니까?", isCancelActive: true)
-  }
-
   // MARK: - Initailize
 
   init() {
@@ -126,10 +121,6 @@ class CommentView: UIView {
     }
   }
 
-  func setHiddenStatusAlertView(isHidden: Bool) {
-    self.alertView.isHidden = isHidden
-  }
-
   // MARK: - Constraints
 
   func setupConstraints() {
@@ -137,11 +128,6 @@ class CommentView: UIView {
     [self.titleLabel, self.exitButton].addSubViews(self.headerView)
     [self.commentCollectionView].addSubViews(self)
     [self.commentInputView, self.commentTextView, self.registButton].addSubViews(self)
-    [self.alertView].addSubViews(self)
-
-    self.alertView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
-    }
 
     self.headerView.snp.makeConstraints {
       $0.top.leading.equalTo(self.safeAreaLayoutGuide)
