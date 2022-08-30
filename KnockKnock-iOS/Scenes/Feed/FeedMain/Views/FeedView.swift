@@ -39,9 +39,11 @@ class FeedView: UIView {
     $0.hidesNavigationBarDuringPresentation = false
     $0.showsSearchResultsController = true
     $0.searchBar.placeholder = "검색어를 입력하세요."
+    $0.searchBar.tintColor = .black
+    $0.searchBar.setValue("취소", forKey: "cancelButtonText")
   }
 
-  let gradientImageView = UIImageView().then {
+  private let gradientImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.image = UIImage(named: "tagButton_gradient")
   }

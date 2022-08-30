@@ -49,7 +49,6 @@ final class FeedViewController: BaseViewController<FeedView> {
     self.extendedLayoutIncludesOpaqueBars = true
     self.navigationItem.hidesSearchBarWhenScrolling = false
 
-    
 //    self.interactor?.requestFeedMain(
 //      currentPage: self.currentPage,
 //      pageSize: self.pageSize,
