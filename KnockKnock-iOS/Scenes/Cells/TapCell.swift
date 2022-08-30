@@ -17,6 +17,12 @@ final class TapCell: BaseCollectionViewCell {
     $0.textColor = .black
   }
 
+  // MARK: - Bind
+
+  func bind(tapName: String) {
+    self.tapLabel.text = tapName
+  }
+
   // MARK: - Configure
 
   override func setupConfigure() {

@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+enum TapViewTag: Int {
+  case event = 0
+  case search = 1
+}

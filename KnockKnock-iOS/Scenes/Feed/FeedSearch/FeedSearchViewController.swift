@@ -18,6 +18,10 @@ class FeedSearchViewController: BaseViewController<FeedSearchView> {
     case result = 1
   }
 
+  // MARK: - Properties
+
+  private let taps: [String] = ["인기", "계정", "태그", "장소"]
+
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
@@ -59,6 +63,7 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
     switch collectionViewTag {
     case .tap:
       let cell = collectionView.dequeueCell(withType: TapCell.self, for: indexPath)
+      cell.bind(tapName: self.taps[indexPath.item])
 
       return cell
 
@@ -79,7 +84,7 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
     return CGSize(
-      width: 70,
+      width: 25,
       height: 40
     )
   }
