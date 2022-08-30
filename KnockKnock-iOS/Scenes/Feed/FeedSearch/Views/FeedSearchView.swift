@@ -31,10 +31,11 @@ class FeedSearchView: UIView {
     $0.backgroundColor = .gray20
   }
 
-  let searchResultCollectionView =  UICollectionView(
+  let searchResultPageCollectionView =  UICollectionView(
     frame: .zero,
     collectionViewLayout: UICollectionViewFlowLayout().then {
       $0.scrollDirection = .horizontal
+      $0.minimumLineSpacing = 0
     }
   )
   
@@ -52,7 +53,7 @@ class FeedSearchView: UIView {
   // MARK: - Configure
 
   private func setupConstraints() {
-    [self.searchTapCollectionView, self.underLineView, self.separatorLineView, self.searchResultCollectionView].addSubViews(self)
+    [self.searchTapCollectionView, self.underLineView, self.separatorLineView, self.searchResultPageCollectionView].addSubViews(self)
 
     self.searchTapCollectionView.snp.makeConstraints {
       $0.top.equalTo(self.safeAreaLayoutGuide)
@@ -73,9 +74,9 @@ class FeedSearchView: UIView {
       $0.height.equalTo(1)
     }
 
-    self.searchResultCollectionView.snp.makeConstraints {
+    self.searchResultPageCollectionView.snp.makeConstraints {
       $0.top.equalTo(self.separatorLineView.snp.bottom).offset(15)
-      $0.trailing.leading.equalTo(self.safeAreaLayoutGuide).inset(20)
+      $0.trailing.leading.equalTo(self)
       $0.bottom.equalTo(self.safeAreaLayoutGuide)
     }
   }

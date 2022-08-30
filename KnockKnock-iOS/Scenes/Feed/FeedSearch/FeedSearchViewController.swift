@@ -21,6 +21,7 @@ class FeedSearchViewController: BaseViewController<FeedSearchView> {
   // MARK: - Properties
 
   private let taps: [String] = ["인기", "계정", "태그", "장소"]
+  private let colors: [UIColor] = [UIColor.orange, UIColor.blue, UIColor.green, UIColor.black]
 
   // MARK: - Life Cycles
 
@@ -36,11 +37,12 @@ class FeedSearchViewController: BaseViewController<FeedSearchView> {
       $0.dataSource = self
       $0.registCell(type: TapCell.self)
     }
-    self.containerView.searchResultCollectionView.do {
+    self.containerView.searchResultPageCollectionView.do {
       $0.tag = SearchCollectionViewTag.result.rawValue
       $0.delegate = self
       $0.dataSource = self
-      $0.registCell(type: TapCell.self)
+      $0.registCell(type: SearchResultPageCell.self)
+      $0.isPagingEnabled = true
     }
   }
 }
@@ -68,7 +70,8 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
       return cell
 
     case .result:
-      let cell = collectionView.dequeueCell(withType: TapCell.self, for: indexPath)
+      let cell = collectionView.dequeueCell(withType: SearchResultPageCell.self, for: indexPath)
+      cell.backgroundColor = colors[indexPath.item]
 
       return cell
 
@@ -83,9 +86,23 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
     layout collectionViewLayout: UICollectionViewLayout,
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
-    return CGSize(
-      width: 25,
-      height: 40
-    )
+    let collectionViewTag = SearchCollectionViewTag(rawValue: collectionView.tag)
+
+    switch collectionViewTag {
+    case .tap:
+      return CGSize(
+        width: 25,
+        height: 40
+      )
+
+    case .result:
+      return CGSize(
+        width: self.containerView.frame.width,
+        height: self.containerView.searchResultPageCollectionView.frame.height
+      )
+
+    default:
+      assert(false)
+    }
   }
 }

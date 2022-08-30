@@ -106,6 +106,8 @@
 		618D8B5A28BDA12500828794 /* FeedSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618D8B5928BDA12500828794 /* FeedSearchViewController.swift */; };
 		618D8B5C28BDA12F00828794 /* FeedSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618D8B5B28BDA12F00828794 /* FeedSearchView.swift */; };
 		618D8B6028BDF6C900828794 /* TapViewTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618D8B5F28BDF6C900828794 /* TapViewTag.swift */; };
+		618D8B6228BDF8E500828794 /* SearchResultPageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618D8B6128BDF8E500828794 /* SearchResultPageCell.swift */; };
+		618D8B6428BDFD3200828794 /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618D8B6328BDFD3200828794 /* SearchResultCell.swift */; };
 		618FDAC527E80C6B00C2823F /* ShopSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDAC427E80C6B00C2823F /* ShopSearchViewController.swift */; };
 		618FDAC727E82A6F00C2823F /* AddressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDAC627E82A6F00C2823F /* AddressCell.swift */; };
 		618FDAC927E836BA00C2823F /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDAC827E836BA00C2823F /* PhotoCell.swift */; };
@@ -250,6 +252,8 @@
 		618D8B5928BDA12500828794 /* FeedSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSearchViewController.swift; sourceTree = "<group>"; };
 		618D8B5B28BDA12F00828794 /* FeedSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSearchView.swift; sourceTree = "<group>"; };
 		618D8B5F28BDF6C900828794 /* TapViewTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapViewTag.swift; sourceTree = "<group>"; };
+		618D8B6128BDF8E500828794 /* SearchResultPageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultPageCell.swift; sourceTree = "<group>"; };
+		618D8B6328BDFD3200828794 /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
 		618FDAC427E80C6B00C2823F /* ShopSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSearchViewController.swift; sourceTree = "<group>"; };
 		618FDAC627E82A6F00C2823F /* AddressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressCell.swift; sourceTree = "<group>"; };
 		618FDAC827E836BA00C2823F /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
@@ -384,6 +388,7 @@
 		201077FA27D3D24600280991 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				618D8B6528BDFD3D00828794 /* FeedSearch */,
 				613856DC289948FE00BE347E /* Home */,
 				617F9D68282A6EB200C2BC9A /* ChallengeDetailCell.swift */,
 				201077FD27D3D2AC00280991 /* ChallengeCell.swift */,
@@ -597,6 +602,15 @@
 				618D8B5B28BDA12F00828794 /* FeedSearchView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		618D8B6528BDFD3D00828794 /* FeedSearch */ = {
+			isa = PBXGroup;
+			children = (
+				618D8B6128BDF8E500828794 /* SearchResultPageCell.swift */,
+				618D8B6328BDFD3200828794 /* SearchResultCell.swift */,
+			);
+			path = FeedSearch;
 			sourceTree = "<group>";
 		};
 		61A45CF128A7710400070B22 /* Event */ = {
@@ -982,6 +996,7 @@
 				617F9D75282BEB2A00C2BC9A /* BottomMenuCell.swift in Sources */,
 				613856C3289553CB00BE347E /* FeedDetailInteractor.swift in Sources */,
 				2090811C27CA4F6B005A1573 /* StoreViewController.swift in Sources */,
+				618D8B6428BDFD3200828794 /* SearchResultCell.swift in Sources */,
 				611BD4AC27E48B9F007D5C79 /* FeedWritePresenter.swift in Sources */,
 				2090811E27CA4F77005A1573 /* MyViewController.swift in Sources */,
 				61B6D990288BCE6E00E60F08 /* FeedDetailView.swift in Sources */,
@@ -1045,6 +1060,7 @@
 				613856CF2898B6D500BE347E /* LikeRepository.swift in Sources */,
 				61FC60EB27B9244E00A51DBC /* SceneDelegate.swift in Sources */,
 				611BD4BA27E702F5007D5C79 /* PropertySelectView.swift in Sources */,
+				618D8B6228BDF8E500828794 /* SearchResultPageCell.swift in Sources */,
 				611BD4B227E4903A007D5C79 /* FeedWriteRouter.swift in Sources */,
 				61AB2E5928A620B700A1AE30 /* EventPageView.swift in Sources */,
 				611BD4C127E767CE007D5C79 /* shopSearchView.swift in Sources */,
