@@ -35,8 +35,10 @@ class FeedView: UIView {
   
   // MARK: - UIs
   
-  let searchBar = UISearchController().then {
+  let searchBar = UISearchController(searchResultsController: FeedSearchViewController()).then {
     $0.hidesNavigationBarDuringPresentation = false
+    $0.showsSearchResultsController = true
+    $0.searchBar.placeholder = "검색어를 입력하세요."
   }
 
   let gradientImageView = UIImageView().then {
