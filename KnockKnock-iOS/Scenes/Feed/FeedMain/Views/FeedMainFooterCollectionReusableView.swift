@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FooterCollectionReusableView: UICollectionReusableView {
+class FeedMainFooterCollectionReusableView: UICollectionReusableView {
 
   // MARK: - Constants
 

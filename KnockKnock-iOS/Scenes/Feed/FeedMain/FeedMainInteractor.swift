@@ -7,24 +7,24 @@
 
 import Foundation
 
-protocol FeedInteractorProtocol {
-  var presenter: FeedPresenterProtocol? { get set }
-  var worker: FeedWorkerProtocol? { get set }
+protocol FeedMainInteractorProtocol {
+  var presenter: FeedMainPresenterProtocol? { get set }
+  var worker: FeedMainWorkerProtocol? { get set }
 
-  func requestFeedMain(currentPage: Int, pageSize: Int, challengeId: Int)
-  func requestChallengeTitles()
+  func fetchFeedMain(currentPage: Int, pageSize: Int, challengeId: Int)
+  func fetchChallengeTitles()
   func setSelectedStatus(challengeTitles: [ChallengeTitle], selectedIndex: IndexPath)
 }
 
-final class FeedInteractor: FeedInteractorProtocol {
+final class FeedMainInteractor: FeedMainInteractorProtocol {
 
   // MARK: - Properties
   
-  var presenter: FeedPresenterProtocol?
-  var worker: FeedWorkerProtocol?
+  var presenter: FeedMainPresenterProtocol?
+  var worker: FeedMainWorkerProtocol?
 
-  func requestFeedMain(currentPage: Int, pageSize: Int, challengeId: Int) {
-    self.worker?.getFeedMain(
+  func fetchFeedMain(currentPage: Int, pageSize: Int, challengeId: Int) {
+    self.worker?.fetchFeedMain(
       currentPage: currentPage,
       pageSize: pageSize,
       challengeId: challengeId,
@@ -33,8 +33,8 @@ final class FeedInteractor: FeedInteractorProtocol {
     })
   }
 
-  func requestChallengeTitles() {
-    self.worker?.getChallengeTitles { [weak self] challengeTitle in
+  func fetchChallengeTitles() {
+    self.worker?.fetchChallengeTitles { [weak self] challengeTitle in
       var challengeTitle = challengeTitle
       challengeTitle[0].isSelected = true
 
