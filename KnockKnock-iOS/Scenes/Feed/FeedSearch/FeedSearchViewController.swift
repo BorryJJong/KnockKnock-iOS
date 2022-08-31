@@ -126,7 +126,7 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
   }
 
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    <#code#>
+    
   }
 
   func scrollViewWillEndDragging(

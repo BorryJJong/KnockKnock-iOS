@@ -1,5 +1,5 @@
 //
-//  FeedListVIew.swift
+//  FeedMainView.swift
 //  KnockKnock-iOS
 //
 //  Created by Daye on 2022/06/13.
@@ -7,14 +7,14 @@
 
 import UIKit
 
-protocol FeedViewProtocol: AnyObject {
-  var interactor: FeedInteractorProtocol? { get set }
+protocol FeedMainViewProtocol: AnyObject {
+  var interactor: FeedMainInteractorProtocol? { get set }
   
-  func requestFeedMain(feed: FeedMain)
-  func requestChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?)
+  func fetchFeedMain(feed: FeedMain)
+  func fetchChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?)
 }
 
-final class FeedViewController: BaseViewController<FeedView> {
+final class FeedMainViewController: BaseViewController<FeedMainView> {
   
   // MARK: - Enums
   
@@ -25,8 +25,8 @@ final class FeedViewController: BaseViewController<FeedView> {
   
   // MARK: - Properties
   
-  var interactor: FeedInteractorProtocol?
-  var router: FeedRouterProtocol?
+  var interactor: FeedMainInteractorProtocol?
+  var router: FeedMainRouterProtocol?
   
   var feedMain: FeedMain?
 
@@ -87,7 +87,7 @@ final class FeedViewController: BaseViewController<FeedView> {
   
   @objc func didTapViewMoreButton(_ sender: UIButton) {
     self.currentPage += 1
-    self.interactor?.requestFeedMain(
+    self.interactor?.fetchFeedMain(
       currentPage: self.currentPage,
       pageSize: self.pageSize,
       challengeId: self.challengeId
@@ -97,15 +97,15 @@ final class FeedViewController: BaseViewController<FeedView> {
 
 // MARK: - Extensions
 
-extension FeedViewController: FeedViewProtocol {
-  func requestFeedMain(feed: FeedMain) {
+extension FeedMainViewController: FeedMainViewProtocol {
+  func fetchFeedMain(feed: FeedMain) {
     self.feedMain = feed
     self.feedMain?.feeds.forEach {
       self.feedMainPost.append($0)
     }
   }
   
-  func requestChallengeTitles(
+  func fetchChallengeTitles(
     challengeTitle: [ChallengeTitle],
     index: IndexPath?
   ) {
@@ -125,7 +125,7 @@ extension FeedViewController: FeedViewProtocol {
   }
 }
 
-extension FeedViewController: UICollectionViewDataSource {
+extension FeedMainViewController: UICollectionViewDataSource {
   func collectionView(
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
@@ -188,7 +188,7 @@ extension FeedViewController: UICollectionViewDataSource {
     at indexPath: IndexPath
   ) -> UICollectionReusableView {
     let footer = collectionView.dequeueReusableSupplementaryFooterView(
-      withType: FooterCollectionReusableView.self,
+      withType: FeedMainFooterCollectionReusableView.self,
       for: indexPath
     )
     if let feedMain = self.feedMain {
@@ -208,7 +208,7 @@ extension FeedViewController: UICollectionViewDataSource {
   }
 }
 
-extension FeedViewController: UICollectionViewDelegate {
+extension FeedMainViewController: UICollectionViewDelegate {
   func collectionView(
     _ collectionView: UICollectionView,
     didSelectItemAt indexPath: IndexPath
@@ -224,7 +224,7 @@ extension FeedViewController: UICollectionViewDelegate {
       self.challengeId = indexPath.item
       self.currentPage = 1
       
-      self.interactor?.requestFeedMain(
+      self.interactor?.fetchFeedMain(
         currentPage: self.currentPage,
         pageSize: self.pageSize,
         challengeId: self.challengeId

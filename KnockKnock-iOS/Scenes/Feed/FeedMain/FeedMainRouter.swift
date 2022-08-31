@@ -7,19 +7,19 @@
 
 import UIKit
 
-protocol FeedRouterProtocol {
+protocol FeedMainRouterProtocol {
   static func createFeed() -> UIViewController
-  func navigateToFeedList(source: FeedViewProtocol)
+  func navigateToFeedList(source: FeedMainViewProtocol)
 }
 
-final class FeedRouter {
+final class FeedMainRouter {
 
   static func createFeed() -> UIViewController {
-    let view = FeedViewController()
-    let interactor = FeedInteractor()
-    let presenter = FeedPresenter()
-    let worker = FeedWorker(repository: FeedRepository())
-    let router = FeedRouter()
+    let view = FeedMainViewController()
+    let interactor = FeedMainInteractor()
+    let presenter = FeedMainPresenter()
+    let worker = FeedMainWorker(repository: FeedRepository())
+    let router = FeedMainRouter()
 
     view.interactor = interactor
     view.router = router
@@ -31,8 +31,8 @@ final class FeedRouter {
   }
 }
 
-extension FeedRouter: FeedRouterProtocol {
-  func navigateToFeedList(source: FeedViewProtocol) {
+extension FeedMainRouter: FeedMainRouterProtocol {
+  func navigateToFeedList(source: FeedMainViewProtocol) {
     let feedListViewController = FeedListRouter.createFeedList()
     if let sourceView = source as? UIViewController {
       sourceView.navigationController?.pushViewController(feedListViewController, animated: true)
