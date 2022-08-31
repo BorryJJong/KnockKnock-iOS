@@ -13,7 +13,12 @@ class FeedSearchViewController: BaseViewController<FeedSearchView> {
 
   // MARK: - Properties
 
-  private var currentIndex = 0.f
+  private var currentIndex = 0 {
+    didSet {
+      self.containerView.searchTapCollectionView.reloadData()
+      self.movePager()
+    }
+  }
 
   // MARK: - Constants
 
@@ -57,7 +62,7 @@ class FeedSearchViewController: BaseViewController<FeedSearchView> {
       withDuration: 0.3,
       animations: {
         self.containerView.underLineView.transform = CGAffineTransform(
-          translationX: 50 * self.currentIndex,
+          translationX: 50 * self.currentIndex.f,
           y: 0
         )
       }
@@ -72,7 +77,7 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    return 4
+    return self.taps.count
   }
 
   func collectionView(
@@ -86,6 +91,14 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
     case .tap:
       let cell = collectionView.dequeueCell(withType: TapCell.self, for: indexPath)
       cell.bind(tapName: self.taps[indexPath.item])
+
+      if indexPath.item == self.currentIndex {
+        cell.tapLabel.textColor = .green40
+        cell.tapLabel.font = .systemFont(ofSize: 15, weight: .bold)
+      } else {
+        cell.tapLabel.textColor = .gray70
+        cell.tapLabel.font = .systemFont(ofSize: 15, weight: .light)
+      }
 
       return cell
 
@@ -125,8 +138,18 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
     }
   }
 
-  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    
+  func collectionView(
+    _ collectionView: UICollectionView,
+    didSelectItemAt indexPath: IndexPath
+  ) {
+    self.currentIndex = indexPath.item
+    if collectionView.tag == SearchCollectionViewTag.tap.rawValue {
+      self.containerView.searchResultPageCollectionView.scrollToItem(
+        at: indexPath,
+        at: .centeredHorizontally,
+        animated: true
+      )
+    }
   }
 
   func scrollViewWillEndDragging(
@@ -147,14 +170,13 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
       roundedIndex = round(index)
     }
 
-    if self.currentIndex > roundedIndex {
+    if self.currentIndex.f > roundedIndex {
       self.currentIndex -= 1
-      roundedIndex = self.currentIndex
-    } else if currentIndex < roundedIndex {
+      roundedIndex = self.currentIndex.f
+    } else if currentIndex.f < roundedIndex {
       self.currentIndex += 1
-      roundedIndex = self.currentIndex
+      roundedIndex = self.currentIndex.f
     }
-    self.movePager()
 
     offset = CGPoint(
       x: roundedIndex * cellWidthIncludingSpacing - scrollView.contentInset.left,
