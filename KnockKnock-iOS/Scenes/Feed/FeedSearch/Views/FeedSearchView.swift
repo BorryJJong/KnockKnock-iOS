@@ -36,6 +36,7 @@ class FeedSearchView: UIView {
     collectionViewLayout: UICollectionViewFlowLayout().then {
       $0.scrollDirection = .horizontal
       $0.minimumLineSpacing = 0
+    
     }
   )
   

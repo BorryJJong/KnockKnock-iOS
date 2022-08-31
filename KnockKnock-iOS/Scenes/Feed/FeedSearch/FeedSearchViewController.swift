@@ -21,7 +21,6 @@ class FeedSearchViewController: BaseViewController<FeedSearchView> {
   // MARK: - Properties
 
   private let taps: [String] = ["인기", "계정", "태그", "장소"]
-  private let colors: [UIColor] = [UIColor.orange, UIColor.blue, UIColor.green, UIColor.black]
 
   // MARK: - Life Cycles
 
@@ -43,6 +42,7 @@ class FeedSearchViewController: BaseViewController<FeedSearchView> {
       $0.dataSource = self
       $0.registCell(type: SearchResultPageCell.self)
       $0.isPagingEnabled = true
+    
     }
   }
 }
@@ -71,7 +71,6 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
 
     case .result:
       let cell = collectionView.dequeueCell(withType: SearchResultPageCell.self, for: indexPath)
-      cell.backgroundColor = colors[indexPath.item]
 
       return cell
 
