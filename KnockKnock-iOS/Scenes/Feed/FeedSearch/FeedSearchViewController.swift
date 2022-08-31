@@ -11,6 +11,10 @@ import Then
 
 class FeedSearchViewController: BaseViewController<FeedSearchView> {
 
+  // MARK: - Properties
+
+  private var currentIndex = 0.f
+
   // MARK: - Constants
 
   private enum SearchCollectionViewTag: Int {
@@ -42,10 +46,26 @@ class FeedSearchViewController: BaseViewController<FeedSearchView> {
       $0.dataSource = self
       $0.registCell(type: SearchResultPageCell.self)
       $0.isPagingEnabled = true
-    
+
     }
   }
+
+  // MARK: - Pager 이동 애니메이션 메소드
+
+  private func movePager() {
+    UIView.animate(
+      withDuration: 0.3,
+      animations: {
+        self.containerView.underLineView.transform = CGAffineTransform(
+          translationX: 50 * self.currentIndex,
+          y: 0
+        )
+      }
+    )
+  }
 }
+
+  // MARK: - CollectionView DataSource, Delegate
 
 extension FeedSearchViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
   func collectionView(
@@ -103,5 +123,43 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
     default:
       assert(false)
     }
+  }
+
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    <#code#>
+  }
+
+  func scrollViewWillEndDragging(
+    _ scrollView: UIScrollView,
+    withVelocity velocity: CGPoint,
+    targetContentOffset: UnsafeMutablePointer<CGPoint>
+  ) {
+    let cellWidthIncludingSpacing = UIScreen.main.bounds.size.width
+    var offset = targetContentOffset.pointee
+    let index = (offset.x + scrollView.contentInset.left) / cellWidthIncludingSpacing
+    var roundedIndex = round(index)
+
+    if scrollView.contentOffset.x > targetContentOffset.pointee.x {
+      roundedIndex = floor(index)
+    } else if scrollView.contentOffset.x < targetContentOffset.pointee.x {
+      roundedIndex = ceil(index)
+    } else {
+      roundedIndex = round(index)
+    }
+
+    if self.currentIndex > roundedIndex {
+      self.currentIndex -= 1
+      roundedIndex = self.currentIndex
+    } else if currentIndex < roundedIndex {
+      self.currentIndex += 1
+      roundedIndex = self.currentIndex
+    }
+    self.movePager()
+
+    offset = CGPoint(
+      x: roundedIndex * cellWidthIncludingSpacing - scrollView.contentInset.left,
+      y: -scrollView.contentInset.top
+    )
+    targetContentOffset.pointee = offset
   }
 }
