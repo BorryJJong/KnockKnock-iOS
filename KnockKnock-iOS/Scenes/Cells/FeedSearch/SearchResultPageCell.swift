@@ -90,7 +90,11 @@ extension SearchResultPageCell: UICollectionViewDataSource, UICollectionViewDele
       for: indexPath
     )
     cell.backgroundColor = .white
-    cell.bind(tap: SearchTap.allCases[self.tapIndex])
+    if indexPath.section == 0 && self.tapIndex == 0 {
+      cell.bind(tap: SearchTap.allCases[self.tapIndex], isLogSection: false)
+    } else {
+      cell.bind(tap: SearchTap.allCases[self.tapIndex], isLogSection: true)
+    }
     return cell
   }
 

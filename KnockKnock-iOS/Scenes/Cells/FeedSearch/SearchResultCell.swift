@@ -45,8 +45,9 @@ final class SearchResultCell: BaseCollectionViewCell {
 
   // MARK: - Bind
 
-  func bind(tap: SearchTap) {
+  func bind(tap: SearchTap, isLogSection: Bool) {
     self.imageView.backgroundColor = .white
+    self.deleteButton.isHidden = !isLogSection
 
     switch tap {
     case .popular:
