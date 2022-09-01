@@ -76,7 +76,7 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    return self.taps.count
+    return SearchTap.allCases.count
   }
 
   func collectionView(
@@ -93,7 +93,7 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
         withType: TapCell.self,
         for: indexPath
       )
-      cell.bind(tapName: self.taps[indexPath.item])
+      cell.bind(tapName: SearchTap.allCases[indexPath.item].rawValue)
 
       if indexPath.item == self.currentIndex {
         cell.tapLabel.textColor = .green40

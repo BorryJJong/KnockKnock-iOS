@@ -90,6 +90,7 @@ extension SearchResultPageCell: UICollectionViewDataSource, UICollectionViewDele
       for: indexPath
     )
     cell.backgroundColor = .white
+    cell.bind(tap: SearchTap.allCases[self.tapIndex])
     return cell
   }
 

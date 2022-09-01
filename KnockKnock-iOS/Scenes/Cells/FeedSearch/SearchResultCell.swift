@@ -29,16 +29,39 @@ final class SearchResultCell: BaseCollectionViewCell {
   // MARK: - UIs
 
   private let imageView = UIImageView().then {
-    $0.image = KKDS.Image.ic_search_location_52
+    $0.backgroundColor = .white
+    $0.layer.cornerRadius = 26
+    $0.clipsToBounds = true
   }
 
   private let dataLabel = UILabel().then {
-    $0.text = "text!!"
+    $0.text = "검색 결과"
     $0.numberOfLines = 1
   }
 
   private let deleteButton = UIButton().then {
     $0.setImage(KKDS.Image.ic_close_10_gr, for: .normal)
+  }
+
+  // MARK: - Bind
+
+  func bind(tap: SearchTap) {
+    self.imageView.backgroundColor = .white
+
+    switch tap {
+    case .popular:
+      self.imageView.backgroundColor = .gray30
+      self.imageView.image = nil
+
+    case .account:
+      self.imageView.image = KKDS.Image.ic_person_24
+
+    case .tag:
+      self.imageView.image = KKDS.Image.ic_search_tag_52
+
+    case .place:
+      self.imageView.image = KKDS.Image.ic_search_location_52
+    }
   }
 
   // MARK: - Configure

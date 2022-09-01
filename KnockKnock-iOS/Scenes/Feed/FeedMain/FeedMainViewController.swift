@@ -95,7 +95,7 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
   }
 }
 
-// MARK: - Extensions
+// MARK: - FeedMainView Protocol
 
 extension FeedMainViewController: FeedMainViewProtocol {
   func fetchFeedMain(feed: FeedMain) {
@@ -124,6 +124,8 @@ extension FeedMainViewController: FeedMainViewProtocol {
     }
   }
 }
+
+// MARK: - CollectionView DataSource, Delegate
 
 extension FeedMainViewController: UICollectionViewDataSource {
   func collectionView(
