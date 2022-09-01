@@ -9,7 +9,7 @@ import UIKit
 
 import Then
 
-class FeedSearchViewController: BaseViewController<FeedSearchView> {
+final class FeedSearchViewController: BaseViewController<FeedSearchView> {
 
   // MARK: - Properties
 
@@ -89,7 +89,10 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
 
     switch collectionViewTag {
     case .tap:
-      let cell = collectionView.dequeueCell(withType: TapCell.self, for: indexPath)
+      let cell = collectionView.dequeueCell(
+        withType: TapCell.self,
+        for: indexPath
+      )
       cell.bind(tapName: self.taps[indexPath.item])
 
       if indexPath.item == self.currentIndex {
@@ -103,8 +106,12 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
       return cell
 
     case .result:
-      let cell = collectionView.dequeueCell(withType: SearchResultPageCell.self, for: indexPath)
-
+      let cell = collectionView.dequeueCell(
+        withType: SearchResultPageCell.self,
+        for: indexPath
+      )
+      cell.bind(index: indexPath)
+      
       return cell
 
     default:

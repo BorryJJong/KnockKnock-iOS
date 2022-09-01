@@ -10,32 +10,47 @@ import UIKit
 import Then
 import SnapKit
 
-class SearchResultPageCell: BaseCollectionViewCell {
+final class SearchResultPageCell: BaseCollectionViewCell {
+
+  // MARK: - Properties
+
+  private var tapIndex = 0 {
+    didSet {
+      self.searchResultCollectionView.reloadData()
+    }
+  }
 
   // MARK: - UIs
 
-  let SearchResultCollectionView = UICollectionView(
+  let searchResultCollectionView = UICollectionView(
     frame: .zero,
     collectionViewLayout: UICollectionViewFlowLayout().then {
       $0.scrollDirection = .vertical
     }
   )
 
+  // MARK: - Bind
+
+  func bind(index: IndexPath) {
+    self.tapIndex = index.row
+  }
+
   // MARK: - Configure
 
   override func setupConfigure() {
-    self.SearchResultCollectionView.do {
+    self.searchResultCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
       $0.registCell(type: SearchResultCell.self)
       $0.registHeaderView(type: FeedSearchResultHeaderReusableView.self)
+      $0.registFooterView(type: FeedSearchResultFooterReusableView.self)
     }
   }
 
   override func setupConstraints() {
-    [self.SearchResultCollectionView].addSubViews(self.contentView)
+    [self.searchResultCollectionView].addSubViews(self.contentView)
 
-    self.SearchResultCollectionView.snp.makeConstraints {
+    self.searchResultCollectionView.snp.makeConstraints {
       $0.top.bottom.equalToSuperview()
       $0.leading.trailing.equalToSuperview().inset(20)
     }
@@ -49,7 +64,15 @@ extension SearchResultPageCell: UICollectionViewDataSource, UICollectionViewDele
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    return 10
+    return 3
+  }
+
+  func numberOfSections(in collectionView: UICollectionView) -> Int {
+    if self.tapIndex == 0 {
+      return 2
+    } else {
+      return 1
+    }
   }
 
   func collectionView(
@@ -80,20 +103,59 @@ extension SearchResultPageCell: UICollectionViewDataSource, UICollectionViewDele
     viewForSupplementaryElementOfKind kind: String,
     at indexPath: IndexPath
   ) -> UICollectionReusableView {
-    let header = collectionView.dequeueReusableSupplementaryHeaderView(
-      withType: FeedSearchResultHeaderReusableView.self,
-      for: indexPath
-    )
-    return header
+
+    switch kind {
+    case UICollectionView.elementKindSectionHeader:
+      let header = collectionView.dequeueReusableSupplementaryHeaderView(
+        withType: FeedSearchResultHeaderReusableView.self,
+        for: indexPath
+      )
+    
+      return header
+
+    case UICollectionView.elementKindSectionFooter:
+      let footer = collectionView.dequeueReusableSupplementaryFooterView(
+        withType: FeedSearchResultFooterReusableView.self,
+        for: indexPath
+      )
+
+      if indexPath.section == 0 && self.tapIndex == 0 {
+        footer.isHidden = false
+      } else {
+        footer.isHidden = true
+      }
+
+      return footer
+
+    default:
+      assert(false)
+    }
   }
+
   func collectionView(
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
     referenceSizeForHeaderInSection section: Int
   ) -> CGSize {
-    return CGSize(
+    var headerSize = CGSize(
       width: self.frame.width,
       height: 25
+    )
+    if section == 0 && self.tapIndex == 0 {
+      headerSize.height = 0
+    }
+
+    return headerSize
+  }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    referenceSizeForFooterInSection section: Int
+  ) -> CGSize {
+    return CGSize(
+      width: self.frame.width,
+      height: 26
     )
   }
 }
