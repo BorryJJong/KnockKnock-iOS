@@ -11,7 +11,20 @@ import Then
 import SnapKit
 import KKDSKit
 
-class SearchResultCell: BaseCollectionViewCell {
+final class SearchResultCell: BaseCollectionViewCell {
+
+  // MARK: - Constants
+
+  private enum Metric {
+    static let imageViewTopMargin = 5.f
+    static let imageViewLeadingMargin = 20.f
+    static let imageViewWidth = 52.f
+
+    static let dataLabelLeadingMargin = 20.f
+    static let dataLabelTrailingMargin = -10.f
+
+    static let deleteButtonTrailingMargin = -20.f
+  }
 
   // MARK: - UIs
 
@@ -34,19 +47,19 @@ class SearchResultCell: BaseCollectionViewCell {
     [self.imageView, self.dataLabel, self.deleteButton].addSubViews(self.contentView)
 
     self.imageView.snp.makeConstraints {
-      $0.top.bottom.equalToSuperview().inset(5)
-      $0.leading.equalToSuperview().offset(20)
-      $0.width.height.equalTo(52)
+      $0.top.bottom.equalToSuperview().inset(Metric.imageViewTopMargin)
+      $0.leading.equalToSuperview().offset(Metric.imageViewLeadingMargin)
+      $0.width.height.equalTo(Metric.imageViewWidth)
     }
 
     self.dataLabel.snp.makeConstraints {
       $0.centerY.equalTo(self.imageView.snp.centerY)
-      $0.leading.equalTo(self.imageView.snp.trailing).offset(20)
-      $0.trailing.equalTo(self.deleteButton.snp.leading).offset(-10)
+      $0.leading.equalTo(self.imageView.snp.trailing).offset(Metric.dataLabelLeadingMargin)
+      $0.trailing.equalTo(self.deleteButton.snp.leading).offset(Metric.dataLabelTrailingMargin)
     }
 
     self.deleteButton.snp.makeConstraints {
-      $0.trailing.equalToSuperview().offset(-20)
+      $0.trailing.equalToSuperview().offset(Metric.deleteButtonTrailingMargin)
       $0.centerY.equalTo(self.imageView.snp.centerY)
     }
   }

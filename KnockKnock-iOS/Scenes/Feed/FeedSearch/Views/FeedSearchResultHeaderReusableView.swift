@@ -10,7 +10,13 @@ import UIKit
 import Then
 import SnapKit
 
-class FeedSearchResultHeaderReusableView: UICollectionReusableView {
+final class FeedSearchResultHeaderReusableView: UICollectionReusableView {
+
+  // MARK: - Constants
+
+  private enum Metric {
+    static let headerLabelBottomMargin = -5.f
+  }
 
   // MARK: - UIs
 
@@ -43,7 +49,7 @@ class FeedSearchResultHeaderReusableView: UICollectionReusableView {
     [self.headerLabel, self.deleteLogButton].addSubViews(self)
 
     self.headerLabel.snp.makeConstraints {
-      $0.bottom.equalToSuperview().offset(-5)
+      $0.bottom.equalToSuperview().offset(Metric.headerLabelBottomMargin)
       $0.leading.equalToSuperview()
     }
 

@@ -11,7 +11,23 @@ import SnapKit
 import KKDSKit
 import Then
 
-class FeedSearchView: UIView {
+final class FeedSearchView: UIView {
+
+  // MARK: - Constants
+
+  private enum Metric {
+    static let searchTapCollectionViewLeadingMargin = 20.f
+    static let searchTapCollectionViewHeight = 40.f
+
+    static let underLineViewTopMargin = 5.f
+    static let underLineViewLeadingMargin = 25.f
+    static let underLineViewWidth = 25.f
+    static let underLineViewHeight = 2.f
+
+    static let separatorLineViewHeight = 1.f
+
+    static let searchResultPageCollectionViewTopMargin = 15.f
+  }
 
   // MARK: - UIs
 
@@ -58,25 +74,25 @@ class FeedSearchView: UIView {
 
     self.searchTapCollectionView.snp.makeConstraints {
       $0.top.equalTo(self.safeAreaLayoutGuide)
-      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(20)
-      $0.height.equalTo(40)
+      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.searchTapCollectionViewLeadingMargin)
+      $0.height.equalTo(Metric.searchTapCollectionViewHeight)
     }
 
     self.underLineView.snp.makeConstraints {
-      $0.top.equalTo(self.searchTapCollectionView.snp.bottom).offset(5)
+      $0.top.equalTo(self.searchTapCollectionView.snp.bottom).offset(Metric.underLineViewTopMargin)
       $0.leading.equalTo(self.searchTapCollectionView.snp.leading)
-      $0.width.equalTo(25)
-      $0.height.equalTo(2)
+      $0.width.equalTo(Metric.underLineViewWidth)
+      $0.height.equalTo(Metric.underLineViewHeight)
     }
 
     self.separatorLineView.snp.makeConstraints {
       $0.top.equalTo(self.underLineView.snp.bottom)
       $0.leading.trailing.equalToSuperview()
-      $0.height.equalTo(1)
+      $0.height.equalTo(Metric.separatorLineViewHeight)
     }
 
     self.searchResultPageCollectionView.snp.makeConstraints {
-      $0.top.equalTo(self.separatorLineView.snp.bottom).offset(15)
+      $0.top.equalTo(self.separatorLineView.snp.bottom).offset(Metric.searchResultPageCollectionViewTopMargin)
       $0.trailing.leading.equalTo(self)
       $0.bottom.equalTo(self.safeAreaLayoutGuide)
     }

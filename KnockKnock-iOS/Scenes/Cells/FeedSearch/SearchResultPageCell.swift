@@ -12,6 +12,12 @@ import SnapKit
 
 final class SearchResultPageCell: BaseCollectionViewCell {
 
+  // MARK: - Constants
+
+  private enum Metric {
+    static let searchResultCollectionViewLadingMargin = 20.f
+  }
+
   // MARK: - Properties
 
   private var tapIndex = 0 {
@@ -52,7 +58,7 @@ final class SearchResultPageCell: BaseCollectionViewCell {
 
     self.searchResultCollectionView.snp.makeConstraints {
       $0.top.bottom.equalToSuperview()
-      $0.leading.trailing.equalToSuperview().inset(20)
+      $0.leading.trailing.equalToSuperview().inset(Metric.searchResultCollectionViewLadingMargin)
     }
   }
 }

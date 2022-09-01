@@ -10,7 +10,15 @@ import UIKit
 import Then
 import SnapKit
 
-class FeedSearchResultFooterReusableView: UICollectionReusableView {
+final class FeedSearchResultFooterReusableView: UICollectionReusableView {
+
+  // MARK: - Constants
+
+  private enum Metric {
+    static let lineViewTopMargin = 10.f
+    static let lineViewBottomMargin = -15.f
+    static let lineViewHeight = 1.f
+  }
 
   // MARK: - UIs
 
@@ -42,10 +50,9 @@ class FeedSearchResultFooterReusableView: UICollectionReusableView {
 
     self.lineView.snp.makeConstraints {
       $0.trailing.leading.equalToSuperview()
-      $0.top.equalToSuperview().offset(10)
-      $0.bottom.equalToSuperview().offset(-15)
-      $0.height.equalTo(1)
-      $0.width.equalToSuperview()
+      $0.top.equalToSuperview().offset(Metric.lineViewTopMargin)
+      $0.bottom.equalToSuperview().offset(Metric.lineViewBottomMargin)
+      $0.height.equalTo(Metric.lineViewHeight)
     }
   }
 }

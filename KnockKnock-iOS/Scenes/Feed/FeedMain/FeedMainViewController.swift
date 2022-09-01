@@ -49,12 +49,12 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
     self.extendedLayoutIncludesOpaqueBars = true
     self.navigationItem.hidesSearchBarWhenScrolling = false
 
-//    self.interactor?.requestFeedMain(
-//      currentPage: self.currentPage,
-//      pageSize: self.pageSize,
-//      challengeId: self.challengeId
-//    )
-//    self.interactor?.requestChallengeTitles()
+    self.interactor?.fetchFeedMain(
+      currentPage: self.currentPage,
+      pageSize: self.pageSize,
+      challengeId: self.challengeId
+    )
+    self.interactor?.fetchChallengeTitles()
   }
   
   override func viewWillAppear(_ animated: Bool) {

@@ -51,7 +51,6 @@ final class FeedSearchViewController: BaseViewController<FeedSearchView> {
       $0.dataSource = self
       $0.registCell(type: SearchResultPageCell.self)
       $0.isPagingEnabled = true
-
     }
   }
 
@@ -88,6 +87,7 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
     let collectionViewTag = SearchCollectionViewTag(rawValue: collectionView.tag)
 
     switch collectionViewTag {
+
     case .tap:
       let cell = collectionView.dequeueCell(
         withType: TapCell.self,
@@ -128,6 +128,7 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
     let collectionViewTag = SearchCollectionViewTag(rawValue: collectionView.tag)
 
     switch collectionViewTag {
+
     case .tap:
       return CGSize(
         width: 25,
@@ -150,6 +151,7 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
     didSelectItemAt indexPath: IndexPath
   ) {
     self.currentIndex = indexPath.item
+
     if collectionView.tag == SearchCollectionViewTag.tap.rawValue {
       self.containerView.searchResultPageCollectionView.scrollToItem(
         at: indexPath,
