@@ -27,6 +27,11 @@ final class CommentViewController: BaseViewController<CommentView> {
   var comments: [Comment] = []
   var reply: [Int: [Reply]] = [ : ]
 
+  lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(
+    target: self,
+    action: #selector(longPressGestureDidDetect(_:))
+  )
+
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
@@ -37,18 +42,31 @@ final class CommentViewController: BaseViewController<CommentView> {
   // MARK: - Configure
 
   override func setupConfigure() {
+    self.longPressGestureRecognizer.do {
+      $0.minimumPressDuration = 0.5
+      $0.delaysTouchesBegan = true
+    }
+
     self.containerView.commentCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
       $0.registCell(type: ReplyCell.self)
       $0.collectionViewLayout = self.containerView.commentCollectionViewLayout()
+      $0.addGestureRecognizer(self.longPressGestureRecognizer)
     }
+
     self.containerView.exitButton.do {
-      $0.addTarget(self, action: #selector(exitButtonDidTap(_:)), for: .touchUpInside)
+      $0.addTarget(
+        self,
+        action: #selector(exitButtonDidTap(_:)),
+        for: .touchUpInside
+      )
     }
+
     self.containerView.commentTextView.do {
       $0.delegate = self
     }
+
     self.addKeyboardNotification()
     self.hideKeyboardWhenTappedAround()
   }
@@ -79,7 +97,10 @@ final class CommentViewController: BaseViewController<CommentView> {
     self.setCommentsTextViewConstant(notification: notification, isAppearing: false)
   }
 
-  private func setCommentsTextViewConstant(notification: Notification, isAppearing: Bool) {
+  private func setCommentsTextViewConstant(
+    notification: Notification,
+    isAppearing: Bool
+  ) {
     let userInfo = notification.userInfo
 
     if let keyboardFrame = userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
@@ -101,6 +122,8 @@ final class CommentViewController: BaseViewController<CommentView> {
     }
   }
 
+  // MARK: - Button action
+
   @objc private func exitButtonDidTap(_ sender: UIButton) {
     self.router?.dismissCommentView(view: self)
   }
@@ -117,6 +140,10 @@ final class CommentViewController: BaseViewController<CommentView> {
     UIView.performWithoutAnimation {
       self.containerView.commentCollectionView.reloadSections([sender.tag])
     }
+  }
+
+  @objc private func longPressGestureDidDetect(_ sender: UILongPressGestureRecognizer) {
+    self.router?.presentBottomSheetView(source: self)
   }
 }
 
@@ -152,7 +179,10 @@ extension CommentViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
-    let cell = collectionView.dequeueCell(withType: ReplyCell.self, for: indexPath)
+    let cell = collectionView.dequeueCell(
+      withType: ReplyCell.self,
+      for: indexPath
+    )
     if let reply = self.reply[indexPath.section] {
       cell.bind(reply: reply[indexPath.item])
     }
@@ -164,12 +194,13 @@ extension CommentViewController: UICollectionViewDataSource {
     viewForSupplementaryElementOfKind kind: String,
     at indexPath: IndexPath
   ) -> UICollectionReusableView {
+
     let header = collectionView.dequeueReusableSupplementaryHeaderView(
       withType: CommentHeaderCollectionReusableView.self,
       for: indexPath
     )
     header.bind(comment: self.comments[indexPath.section])
-    
+
     header.replyMoreButton.tag = indexPath.section
     header.replyMoreButton.addTarget(
       self,

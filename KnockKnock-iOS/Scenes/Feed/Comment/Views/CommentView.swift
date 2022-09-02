@@ -9,6 +9,7 @@ import UIKit
 
 import KKDSKit
 import Then
+import SnapKit
 
 class CommentView: UIView {
 
@@ -128,38 +129,45 @@ class CommentView: UIView {
     [self.commentCollectionView].addSubViews(self)
     [self.commentInputView, self.commentTextView, self.registButton].addSubViews(self)
 
-    NSLayoutConstraint.activate([
-      self.headerView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-      self.headerView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-      self.headerView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.headerViewTrailingMargin),
-      self.headerView.heightAnchor.constraint(equalToConstant: Metric.headerViewHeight),
+    self.headerView.snp.makeConstraints {
+      $0.top.leading.equalTo(self.safeAreaLayoutGuide)
+      $0.trailing.equalTo(self.safeAreaLayoutGuide).offset(Metric.headerViewTrailingMargin)
+      $0.height.equalTo(Metric.headerViewHeight)
+    }
 
-      self.exitButton.trailingAnchor.constraint(equalTo: self.headerView.trailingAnchor, constant: Metric.exitButtonTrailingMargin),
-      self.exitButton.centerYAnchor.constraint(equalTo: self.headerView.centerYAnchor),
+    self.exitButton.snp.makeConstraints {
+      $0.trailing.equalToSuperview().offset(Metric.exitButtonTrailingMargin)
+      $0.centerY.equalToSuperview()
+    }
 
-      self.titleLabel.centerYAnchor.constraint(equalTo: self.headerView.centerYAnchor),
-      self.titleLabel.centerXAnchor.constraint(equalTo: self.headerView.centerXAnchor),
+    self.titleLabel.snp.makeConstraints {
+      $0.center.equalToSuperview()
+    }
 
-      self.commentCollectionView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor),
-      self.commentCollectionView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.commentCollectionViewLeadingMargin),
-      self.commentCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.commentCollectionViewTrailingMargin),
-      self.commentCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.commentCollectionViewBottomMargin),
+    self.commentCollectionView.snp.makeConstraints {
+      $0.top.equalTo(self.headerView.snp.bottom)
+      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.commentCollectionViewLeadingMargin)
+      $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(Metric.commentCollectionViewBottomMargin)
+    }
 
-      self.commentInputView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
-      self.commentInputView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
-      self.commentInputView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-      self.commentInputView.topAnchor.constraint(equalTo: self.commentTextView.topAnchor, constant: Metric.commentInputViewTopMargin),
+    self.commentInputView.snp.makeConstraints {
+      $0.bottom.trailing.leading.equalTo(self.safeAreaLayoutGuide)
+      $0.top.equalTo(self.commentTextView.snp.top).offset(Metric.commentInputViewTopMargin)
+    }
 
-      self.commentTextView.heightAnchor.constraint(equalToConstant: Metric.commentTextViewHeight),
-      self.commentTextView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.commentTextViewBottomMargin),
-      self.commentTextView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.commentTextViewTrailingMargin),
-      self.commentTextView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.commentTextViewLeadingMargin),
+    self.commentTextView.snp.makeConstraints {
+      $0.height.equalTo(Metric.commentTextViewHeight)
+      $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(Metric.commentTextViewBottomMargin)
+      $0.trailing.equalTo(self.safeAreaLayoutGuide).offset(Metric.commentTextViewTrailingMargin)
+      $0.leading.equalTo(self.safeAreaLayoutGuide).offset(Metric.commentTextViewLeadingMargin)
+    }
 
-      self.registButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.registButtonTrailingMargin),
-      self.registButton.bottomAnchor.constraint(equalTo: self.commentTextView.bottomAnchor),
-      self.registButton.widthAnchor.constraint(equalToConstant: Metric.registButtonWidth),
-      self.registButton.heightAnchor.constraint(equalToConstant: Metric.registButtonHeight)
-    ])
+    self.registButton.snp.makeConstraints {
+      $0.trailing.equalTo(self.safeAreaLayoutGuide).offset(Metric.registButtonTrailingMargin)
+      $0.bottom.equalTo(self.commentTextView)
+      $0.width.equalTo(Metric.registButtonWidth)
+      $0.height.equalTo(Metric.registButtonHeight)
+    }
   }
   
   func commentCollectionViewLayout() -> UICollectionViewCompositionalLayout {
