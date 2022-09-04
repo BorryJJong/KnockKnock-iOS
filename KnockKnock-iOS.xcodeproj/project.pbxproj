@@ -141,6 +141,8 @@
 		61B6D998288C40BF00E60F08 /* HomeSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D997288C40BF00E60F08 /* HomeSection.swift */; };
 		61B6D9B6288E69D400E60F08 /* FeedListHeaderReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D9B5288E69D400E60F08 /* FeedListHeaderReusableView.swift */; };
 		61C21CFD28C463E6009B5F4E /* DefaultCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C21CFC28C463E6009B5F4E /* DefaultCollectionViewCell.swift */; };
+		61C21D0228C46C9E009B5F4E /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 61C21D0128C46C9E009B5F4E /* FirebaseAnalytics */; };
+		61C21D0428C46C9E009B5F4E /* FirebaseAppDistribution-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 61C21D0328C46C9E009B5F4E /* FirebaseAppDistribution-Beta */; };
 		61E3087C287334C1001394B6 /* ImageScaleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E3087B287334C1001394B6 /* ImageScaleType.swift */; };
 		61E3088428768D71001394B6 /* UIStackView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E3088328768D71001394B6 /* UIStackView+Ext.swift */; };
 		61FC60E927B9244D00A51DBC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC60E827B9244D00A51DBC /* AppDelegate.swift */; };
@@ -304,6 +306,8 @@
 			files = (
 				613856D6289900FE00BE347E /* SnapKit in Frameworks */,
 				20AF1007285F2C74005C73EC /* KKDSKit in Frameworks */,
+				61C21D0428C46C9E009B5F4E /* FirebaseAppDistribution-Beta in Frameworks */,
+				61C21D0228C46C9E009B5F4E /* FirebaseAnalytics in Frameworks */,
 				34F6FB7E518CFAF1AD6C3455 /* Pods_KnockKnock_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -787,6 +791,8 @@
 			packageProductDependencies = (
 				20AF1006285F2C74005C73EC /* KKDSKit */,
 				613856D5289900FE00BE347E /* SnapKit */,
+				61C21D0128C46C9E009B5F4E /* FirebaseAnalytics */,
+				61C21D0328C46C9E009B5F4E /* FirebaseAppDistribution-Beta */,
 			);
 			productName = "KnockKnock-iOS";
 			productReference = 61FC60E527B9244D00A51DBC /* KnockKnock-iOS.app */;
@@ -818,6 +824,7 @@
 			mainGroup = 61FC60DC27B9244D00A51DBC;
 			packageReferences = (
 				613856D4289900FE00BE347E /* XCRemoteSwiftPackageReference "SnapKit" */,
+				61C21D0028C46C9E009B5F4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 61FC60E627B9244D00A51DBC /* Products */;
 			projectDirPath = "";
@@ -1267,6 +1274,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		61C21D0028C46C9E009B5F4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1278,6 +1293,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 613856D4289900FE00BE347E /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		61C21D0128C46C9E009B5F4E /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61C21D0028C46C9E009B5F4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		61C21D0328C46C9E009B5F4E /* FirebaseAppDistribution-Beta */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61C21D0028C46C9E009B5F4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseAppDistribution-Beta";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
