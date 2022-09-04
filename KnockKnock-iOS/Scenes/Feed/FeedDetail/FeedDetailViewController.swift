@@ -304,7 +304,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
         return footer
 
       default:
-        assert(false, "Unexpected element kind")
+        return .init()
       }
 
     case .like:
@@ -327,7 +327,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
         return footer
 
       default:
-        assert(false, "Unexpected element kind")
+        return .init()
       }
 
     case .comment:
@@ -346,7 +346,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       return header
       
     default:
-      assert(false, "Unexpected element kind")
+      return .init()
     }
   }
 

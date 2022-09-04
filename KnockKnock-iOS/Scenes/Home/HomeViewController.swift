@@ -87,9 +87,12 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     switch section {
     case .main, .tag:
       return 1
-      
-    default:
+
+    case .event, .banner, .popularPost, .store:
       return 6
+
+    default:
+      return 1
     }
   }
 
@@ -135,7 +138,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
       return footer
 
     default:
-      assert(false)
+      return .init()
     }
   }
 

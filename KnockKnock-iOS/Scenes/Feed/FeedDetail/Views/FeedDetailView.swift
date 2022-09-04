@@ -182,8 +182,31 @@ final class FeedDetailView: UIView {
     ])
   }
 
+  func createDefaultSection() -> NSCollectionLayoutSection {
+    let defaultItemSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .fractionalWidth(1)
+    )
+    let defaultItem = NSCollectionLayoutItem(layoutSize: defaultItemSize)
+
+    let defaultGroupSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .fractionalWidth(1)
+    )
+    let defaultGroup = NSCollectionLayoutGroup.horizontal(
+      layoutSize: defaultGroupSize,
+      subitems: [defaultItem]
+    )
+
+    let defaultSection = NSCollectionLayoutSection(group: defaultGroup)
+
+    return defaultSection
+  }
+
   func setPostCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+
     // section 1: Contents(images, context, tag, shopAddress)
+
     let estimatedWidth: CGFloat = 100
     let estimatedHeigth: CGFloat = 100
 
@@ -242,6 +265,7 @@ final class FeedDetailView: UIView {
     postContentsSection.boundarySupplementaryItems = [contentsHeader, contentsFooter]
 
     // Section 2: Like
+    
     let reactHeaderSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1),
       heightDimension: .estimated(estimatedHeigth)
@@ -332,7 +356,7 @@ final class FeedDetailView: UIView {
         return commentSection
 
       default:
-        assert(false)
+        return self.createDefaultSection()
       }
     }
     return layout
