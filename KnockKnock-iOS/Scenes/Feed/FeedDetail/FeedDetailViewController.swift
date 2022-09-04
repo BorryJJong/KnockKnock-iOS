@@ -61,7 +61,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       $0.registCell(type: LikeCell.self)
 
       $0.registCell(type: PostCommentCell.self)
-      $0.registCell(type: DefaultCell.self)
+      $0.registCell(type: DefaultCollectionViewCell.self)
 
       $0.collectionViewLayout = self.containerView.setPostCollectionViewLayout()
     }
@@ -265,7 +265,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
 
     default:
       let cell = collectionView.dequeueCell(
-        withType: DefaultCell.self,
+        withType: DefaultCollectionViewCell.self,
         for: indexPath
       )
 

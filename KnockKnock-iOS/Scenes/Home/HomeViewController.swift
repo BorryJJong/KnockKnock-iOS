@@ -196,7 +196,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
 
     default:
       let cell = collectionView.dequeueCell(
-        withType: DefaultCell.self,
+        withType: DefaultCollectionViewCell.self,
         for: indexPath
       )
 
