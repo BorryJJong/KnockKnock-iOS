@@ -143,6 +143,7 @@
 		61C21CFD28C463E6009B5F4E /* DefaultCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C21CFC28C463E6009B5F4E /* DefaultCollectionViewCell.swift */; };
 		61C21D0228C46C9E009B5F4E /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 61C21D0128C46C9E009B5F4E /* FirebaseAnalytics */; };
 		61C21D0428C46C9E009B5F4E /* FirebaseAppDistribution-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 61C21D0328C46C9E009B5F4E /* FirebaseAppDistribution-Beta */; };
+		61C21D0628C4C971009B5F4E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 61C21D0528C4C971009B5F4E /* GoogleService-Info.plist */; };
 		61E3087C287334C1001394B6 /* ImageScaleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E3087B287334C1001394B6 /* ImageScaleType.swift */; };
 		61E3088428768D71001394B6 /* UIStackView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E3088328768D71001394B6 /* UIStackView+Ext.swift */; };
 		61FC60E927B9244D00A51DBC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC60E827B9244D00A51DBC /* AppDelegate.swift */; };
@@ -286,6 +287,7 @@
 		61B6D997288C40BF00E60F08 /* HomeSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSection.swift; sourceTree = "<group>"; };
 		61B6D9B5288E69D400E60F08 /* FeedListHeaderReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedListHeaderReusableView.swift; sourceTree = "<group>"; };
 		61C21CFC28C463E6009B5F4E /* DefaultCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultCollectionViewCell.swift; sourceTree = "<group>"; };
+		61C21D0528C4C971009B5F4E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		61E3087B287334C1001394B6 /* ImageScaleType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageScaleType.swift; sourceTree = "<group>"; };
 		61E3088328768D71001394B6 /* UIStackView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Ext.swift"; sourceTree = "<group>"; };
 		61FC60E527B9244D00A51DBC /* KnockKnock-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KnockKnock-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -747,6 +749,7 @@
 		61FC60E727B9244D00A51DBC /* KnockKnock-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				61C21D0528C4C971009B5F4E /* GoogleService-Info.plist */,
 				61E3087A2873349B001394B6 /* Enum */,
 				61215AC728507D3F003FDCAA /* Network */,
 				201077ED27D39AB400280991 /* Repository */,
@@ -841,6 +844,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				204320C928367AD300E6FD06 /* .swiftlint.yml in Resources */,
+				61C21D0628C4C971009B5F4E /* GoogleService-Info.plist in Resources */,
 				61FC60F527B9244F00A51DBC /* LaunchScreen.storyboard in Resources */,
 				61FC60F227B9244F00A51DBC /* Assets.xcassets in Resources */,
 			);
@@ -1188,7 +1192,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = R4HW69RLJ5;
+				DEVELOPMENT_TEAM = 7YWVGV44MR;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "KnockKnock-iOS/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "사진 촬영을 위해 카메라 접근 권한이 필요합니다.";
@@ -1219,7 +1223,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = R4HW69RLJ5;
+				DEVELOPMENT_TEAM = 7YWVGV44MR;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "KnockKnock-iOS/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "사진 촬영을 위해 카메라 접근 권한이 필요합니다.";
