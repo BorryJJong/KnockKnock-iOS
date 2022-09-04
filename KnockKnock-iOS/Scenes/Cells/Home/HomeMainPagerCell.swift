@@ -114,13 +114,12 @@ final class HomeMainPagerCell: BaseCollectionViewCell {
 
   private func movePager(currentPage: CGFloat, itemCount: Int) {
     let itemCount = CGFloat(itemCount)
+    let lineViewLength = CGFloat(Metric.lineBackgroundViewWidth / itemCount)
 
     UIView.animate(withDuration: 0.5, animations: {
-      self.lineView.transform = CGAffineTransform(
-        translationX: CGFloat(Metric.lineBackgroundViewWidth / itemCount) * currentPage,
-        y: 0
-      )
+      self.lineView.frame.size = CGSize(width: (lineViewLength * currentPage) + lineViewLength, height: 2)
     })
+    self.lineView.widthConstraint?.constant = (lineViewLength * currentPage) + lineViewLength
   }
 }
 
