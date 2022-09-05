@@ -25,7 +25,10 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   
   var feed: [Feed] = []
   
-  lazy var tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapScrollViewSection(_:)))
+  lazy var tapGesture = UITapGestureRecognizer(
+    target: self,
+    action: #selector(tapScrollViewSection(_:))
+  )
   
   // MARK: - Life Cycles
   
@@ -50,7 +53,10 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   @objc func tapScrollViewSection(_ sender: UITapGestureRecognizer) {
     let collectionView = self.containerView.feedListCollectionView
     
-    let touchLocation: CGPoint = sender.location(ofTouch: 0, in: collectionView)
+    let touchLocation: CGPoint = sender.location(
+      ofTouch: 0,
+      in: collectionView
+    )
     let indexPath = collectionView.indexPathForItem(at: touchLocation)
     
     if let indexPath = indexPath {
@@ -101,7 +107,11 @@ extension FeedListViewController: UICollectionViewDataSource {
     return cell
   }
 
-  func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    viewForSupplementaryElementOfKind
+    kind: String, at indexPath: IndexPath
+  ) -> UICollectionReusableView {
     let header = collectionView.dequeueReusableSupplementaryHeaderView(
       withType: FeedListHeaderReusableView.self,
       for: indexPath
