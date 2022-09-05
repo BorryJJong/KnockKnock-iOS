@@ -55,16 +55,22 @@ struct FeedMainPost: Decodable {
 }
 
 struct FeedList: Decodable {
+  let feeds: [FeedListPost]
+  let isNext: Bool
+  let total: Int
+}
+
+struct FeedListPost: Decodable {
   let id: Int
   let userName: String
   let userImage: String
   let regDateToString: String
+  let content: String?
+  let imageScale: String = "1:1"
   let blogLikeCount: String
   let isLike: Bool
   let blogCommentCount: String
   let blogImages: [FeedImage]
-  let isNext: Bool
-  let total: Int
 }
 
 struct FeedImage: Decodable {

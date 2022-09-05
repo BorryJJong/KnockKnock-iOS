@@ -118,19 +118,19 @@ class FeedListCell: BaseCollectionViewCell {
 
   // MARK: - Bind
 
-  func bind(feed: Feed) {
+  func bind(feedList: FeedListPost) {
     self.imageScrollView.subviews.forEach{
       $0.removeFromSuperview()
     }
 
-    self.contentLabel.text = feed.content
-    self.setImageView(images: feed.images, scale: feed.scale)
+    self.contentLabel.text = feedList.content
+    self.setImageView(images: feedList.blogImages, scale: feedList.imageScale)
 
-    if feed.images.count > 1 {
+    if feedList.blogImages.count > 1 {
       self.imageNumberLabel.isHidden = false
       self.imagePageControl.isHidden = false
-      self.imagePageControl.numberOfPages = feed.images.count
-      self.imageNumberLabel.text = "1/\(feed.images.count)"
+      self.imagePageControl.numberOfPages = feedList.blogImages.count
+      self.imageNumberLabel.text = "1/\(feedList.blogImages.count)"
     } else {
       self.imageNumberLabel.isHidden = true
       self.imagePageControl.isHidden = true
@@ -153,11 +153,11 @@ class FeedListCell: BaseCollectionViewCell {
     }
   }
 
-  func setImageView(images: [String], scale: String) {
+  func setImageView(images: [FeedImage], scale: String) {
     for index in 0..<images.count {
 
       let imageView = UIImageView()
-      imageView.image = UIImage(named: images[index])
+      imageView.image = UIImage(named: images[index].fileUrl)
       imageView.contentMode = .scaleAspectFill
       imageView.layer.cornerRadius = 5
       imageView.clipsToBounds = true

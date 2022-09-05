@@ -13,7 +13,7 @@ protocol FeedListViewProtocol: AnyObject {
   var interactor: FeedListInteractorProtocol? { get set }
   var router: FeedListRouterProtocol? { get set }
   
-  func fetchFeedList(feed: [Feed])
+  func fetchFeedList(feedList: FeedList)
 }
 
 final class FeedListViewController: BaseViewController<FeedListView> {
@@ -23,7 +23,12 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   var interactor: FeedListInteractorProtocol?
   var router: FeedListRouterProtocol?
   
-  var feed: [Feed] = []
+  var feedList: FeedList?
+  var feedListPost: [FeedListPost] = [] {
+    didSet {
+      self.containerView.feedListCollectionView.reloadData()
+    }
+  }
   
   lazy var tapGesture = UITapGestureRecognizer(
     target: self,
@@ -34,7 +39,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.interactor?.fetchFeed()
+    self.interactor?.fetchFeedList(currentPage: 1, count: 1, feedId: 2, challengeId: 0)
     self.containerView.addGestureRecognizer(tapGesture)
   }
   
@@ -77,7 +82,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
 
 extension FeedListViewController: UICollectionViewDataSource {
   func numberOfSections(in collectionView: UICollectionView) -> Int {
-    return self.feed.count
+    return self.feedListPost.count
   }
 
   func collectionView(
@@ -97,7 +102,7 @@ extension FeedListViewController: UICollectionViewDataSource {
       for: indexPath
     )
 
-    cell.bind(feed: self.feed[indexPath.item])
+    cell.bind(feedList: self.feedListPost[indexPath.item])
     cell.commentsButton.addTarget(
       self,
       action: #selector(commentButtonDidTap(_:)),
@@ -127,7 +132,7 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
 
-    let scale = feed[indexPath.item].scale
+    let scale = feedListPost[indexPath.item].imageScale
     let scaleType = ImageScaleType(rawValue: scale)
     
     return scaleType?.cellSize(width: self.containerView.frame.width) ?? CGSize.init()
@@ -161,7 +166,9 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension FeedListViewController: FeedListViewProtocol {
-  func fetchFeedList(feed: [Feed]) {
-    self.feed = feed
+  func fetchFeedList(feedList: FeedList) {
+    self.feedList = feedList
+    self.feedListPost = feedList.feeds
+    print(feedList)
   }
 }
