@@ -29,6 +29,11 @@ final class FeedListViewController: BaseViewController<FeedListView> {
       self.containerView.feedListCollectionView.reloadData()
     }
   }
+
+  var currentPage: Int = 1
+  var count: Int = 1
+  var feedId: Int = 2
+  var challengeId: Int = 0
   
   lazy var tapGesture = UITapGestureRecognizer(
     target: self,
@@ -39,7 +44,12 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.interactor?.fetchFeedList(currentPage: 1, count: 1, feedId: 2, challengeId: 0)
+    self.interactor?.fetchFeedList(
+      currentPage: self.currentPage,
+      count: self.count,
+      feedId: self.feedId,
+      challengeId: self.challengeId
+    )
     self.containerView.addGestureRecognizer(tapGesture)
   }
   
