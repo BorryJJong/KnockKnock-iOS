@@ -20,7 +20,7 @@ protocol FeedRepositoryProtocol {
   func getFeedDetail(completionHandler: @escaping (FeedDetail) -> Void)
   func requestFeedList(
     currentPage: Int,
-    count: Int,
+    pageSize: Int,
     feedId: Int,
     challengeId: Int,
     completionHandler: @escaping (FeedList) -> Void
@@ -70,7 +70,7 @@ final class FeedRepository: FeedRepositoryProtocol {
 
   func requestFeedList(
     currentPage: Int,
-    count: Int,
+    pageSize: Int,
     feedId: Int,
     challengeId: Int,
     completionHandler: @escaping (FeedList) -> Void) {
@@ -79,7 +79,7 @@ final class FeedRepository: FeedRepositoryProtocol {
           object: FeedList.self,
           router: KKRouter.getFeedBlogPost(
             page: currentPage,
-            take: count,
+            take: pageSize,
             feedId: feedId,
             challengeId: challengeId
           ),

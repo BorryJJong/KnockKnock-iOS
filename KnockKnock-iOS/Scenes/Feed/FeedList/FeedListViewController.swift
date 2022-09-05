@@ -30,11 +30,11 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     }
   }
 
-  var currentPage: Int = 1
-  var count: Int = 1
+  private var currentPage: Int = 1
+  private var pageSize: Int = 1
+  private var challengeId: Int = 0
   var feedId: Int = 2
-  var challengeId: Int = 0
-  
+
   lazy var tapGesture = UITapGestureRecognizer(
     target: self,
     action: #selector(tapScrollViewSection(_:))
@@ -46,7 +46,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     super.viewDidLoad()
     self.interactor?.fetchFeedList(
       currentPage: self.currentPage,
-      count: self.count,
+      pageSize: self.pageSize,
       feedId: self.feedId,
       challengeId: self.challengeId
     )
@@ -124,8 +124,8 @@ extension FeedListViewController: UICollectionViewDataSource {
 
   func collectionView(
     _ collectionView: UICollectionView,
-    viewForSupplementaryElementOfKind
-    kind: String, at indexPath: IndexPath
+    viewForSupplementaryElementOfKind kind: String,
+    at indexPath: IndexPath
   ) -> UICollectionReusableView {
     let header = collectionView.dequeueReusableSupplementaryHeaderView(
       withType: FeedListHeaderReusableView.self,
@@ -179,6 +179,5 @@ extension FeedListViewController: FeedListViewProtocol {
   func fetchFeedList(feedList: FeedList) {
     self.feedList = feedList
     self.feedListPost = feedList.feeds
-    print(feedList)
   }
 }

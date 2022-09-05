@@ -34,7 +34,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
   ) {
     repository.requestFeedList(
       currentPage: currentPage,
-      count: count,
+      pageSize: count,
       feedId: feedId,
       challengeId: challengeId,
       completionHandler: { result in

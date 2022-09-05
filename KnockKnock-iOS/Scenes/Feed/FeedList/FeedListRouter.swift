@@ -8,14 +8,14 @@
 import UIKit
 
 protocol FeedListRouterProtocol {
-  static func createFeedList(index: Int) -> UIViewController
+  static func createFeedList(feedId: Int) -> UIViewController
 
   func navigateToFeedDetail(source: FeedListViewProtocol)
   func navigateToCommentView(source: FeedListViewProtocol)
 }
 
 final class FeedListRouter: FeedListRouterProtocol {
-  static func createFeedList(index: Int) -> UIViewController {
+  static func createFeedList(feedId: Int) -> UIViewController {
 
     let view = FeedListViewController()
     let interactor = FeedListInteractor()
@@ -29,7 +29,7 @@ final class FeedListRouter: FeedListRouterProtocol {
     interactor.worker = worker
     presenter.view = view
 
-    view.feedId = index
+    view.feedId = feedId
 
     return view
   }

@@ -233,7 +233,7 @@ extension FeedMainViewController: UICollectionViewDelegate {
     case CollectionViewTag.feed.rawValue:
       self.router?.navigateToFeedList(
         source: self,
-        index: feedMainPost[indexPath.item].id
+        feedId: feedMainPost[indexPath.item].id
       )
       
     default:

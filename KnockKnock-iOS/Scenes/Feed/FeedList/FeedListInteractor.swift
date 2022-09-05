@@ -13,7 +13,7 @@ protocol FeedListInteractorProtocol {
 
   func fetchFeedList(
     currentPage: Int,
-    count: Int,
+    pageSize: Int,
     feedId: Int,
     challengeId: Int
   )
@@ -25,13 +25,13 @@ final class FeedListInteractor: FeedListInteractorProtocol {
 
   func fetchFeedList(
     currentPage: Int,
-    count: Int,
+    pageSize: Int,
     feedId: Int,
     challengeId: Int
   ) {
     self.worker?.fetchFeedList(
       currentPage: currentPage,
-      count: count,
+      count: pageSize,
       feedId: feedId,
       challengeId: challengeId,
       completionHandler: { [weak self] feedList in
