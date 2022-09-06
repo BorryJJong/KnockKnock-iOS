@@ -97,7 +97,6 @@ class FeedListCell: BaseCollectionViewCell {
     $0.numberOfLines = 0
     $0.backgroundColor = .white
     $0.font = UIFont(name: "Apple SD Gothic Neo", size: 13)
-    $0.text = "패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. 패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. "
   }
 
   let likeButton = UIButton().then {
@@ -124,7 +123,10 @@ class FeedListCell: BaseCollectionViewCell {
     }
 
     self.contentLabel.text = feedList.content
-    self.setImageView(images: feedList.blogImages, scale: feedList.imageScale)
+    self.setImageView(
+      images: feedList.blogImages,
+      scale: feedList.imageScale
+    )
 
     if feedList.blogImages.count > 1 {
       self.imageNumberLabel.isHidden = false
@@ -153,7 +155,10 @@ class FeedListCell: BaseCollectionViewCell {
     }
   }
 
-  func setImageView(images: [FeedImage], scale: String) {
+  func setImageView(
+    images: [FeedImage],
+    scale: String
+  ) {
     for index in 0..<images.count {
 
       let imageView = UIImageView()
@@ -169,7 +174,10 @@ class FeedListCell: BaseCollectionViewCell {
       let width = self.contentView.frame.width
       let xPosition = width * CGFloat(index)
 
-      imageView.frame = imageSizeType?.imageSize(xPosition: xPosition, width: width) ?? CGRect.init()
+      imageView.frame = imageSizeType?.imageSize(
+        xPosition: xPosition,
+        width: width
+      ) ?? CGRect.init()
 
       self.imageScrollView.contentSize.width = width * CGFloat(index+1)
       self.imageScrollView.addSubview(imageView)
@@ -193,7 +201,6 @@ class FeedListCell: BaseCollectionViewCell {
       $0.layer.shadowRadius = 5
     }
   }
-
 
   override func setupConstraints() {
     [self.imageScrollView, self.imageNumberLabel, self.imagePageControl].addSubViews(self.contentView)

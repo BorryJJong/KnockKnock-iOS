@@ -11,7 +11,10 @@ import Then
 import KKDSKit
 
 extension UIImageView {
-  func setImageFromStringUrl(url: String, defaultImage: UIImage?) {
+  func setImageFromStringUrl(
+    url: String,
+    defaultImage: UIImage?
+  ) {
     if let defaultImage = defaultImage {
       self.image = URL(string: url)
         .flatMap { try? Data(contentsOf: $0) }
