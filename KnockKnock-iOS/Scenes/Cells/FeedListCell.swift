@@ -157,7 +157,10 @@ class FeedListCell: BaseCollectionViewCell {
     for index in 0..<images.count {
 
       let imageView = UIImageView()
-      imageView.image = UIImage(named: images[index].fileUrl)
+      imageView.setImageFromStringUrl(
+        url: images[index].fileUrl,
+        defaultImage: KKDS.Image.ic_no_data_60
+      )
       imageView.contentMode = .scaleAspectFill
       imageView.layer.cornerRadius = 5
       imageView.clipsToBounds = true

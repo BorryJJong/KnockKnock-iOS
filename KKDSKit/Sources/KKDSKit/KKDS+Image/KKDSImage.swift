@@ -82,6 +82,12 @@ public extension KKDS.Image {
   static var ic_tag_gradient_40_wh: UIImage       {.load(name: "ic_tag_gradient_40_wh")}
 }
 
+// MARK: - Icon Size 60
+
+public extension KKDS.Image {
+  static var ic_no_data_60: UIImage               { .load(name: "ic_no_data_60") }
+}
+
 // MARK: - background
 
 public extension KKDS.Image {

@@ -138,6 +138,7 @@
 		61B6D993288C2C2700E60F08 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D992288C2C2700E60F08 /* HomeView.swift */; };
 		61B6D998288C40BF00E60F08 /* HomeSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D997288C40BF00E60F08 /* HomeSection.swift */; };
 		61B6D9B6288E69D400E60F08 /* FeedListHeaderReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D9B5288E69D400E60F08 /* FeedListHeaderReusableView.swift */; };
+		61C21D0828C6FAA1009B5F4E /* UIImageView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C21D0728C6FAA1009B5F4E /* UIImageView+Ext.swift */; };
 		61E3087C287334C1001394B6 /* ImageScaleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E3087B287334C1001394B6 /* ImageScaleType.swift */; };
 		61E3088428768D71001394B6 /* UIStackView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E3088328768D71001394B6 /* UIStackView+Ext.swift */; };
 		61FC60E927B9244D00A51DBC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC60E827B9244D00A51DBC /* AppDelegate.swift */; };
@@ -278,6 +279,7 @@
 		61B6D992288C2C2700E60F08 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		61B6D997288C40BF00E60F08 /* HomeSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSection.swift; sourceTree = "<group>"; };
 		61B6D9B5288E69D400E60F08 /* FeedListHeaderReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedListHeaderReusableView.swift; sourceTree = "<group>"; };
+		61C21D0728C6FAA1009B5F4E /* UIImageView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Ext.swift"; sourceTree = "<group>"; };
 		61E3087B287334C1001394B6 /* ImageScaleType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageScaleType.swift; sourceTree = "<group>"; };
 		61E3088328768D71001394B6 /* UIStackView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Ext.swift"; sourceTree = "<group>"; };
 		61FC60E527B9244D00A51DBC /* KnockKnock-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KnockKnock-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -351,6 +353,7 @@
 				6143296528642745008BDCC9 /* UILabel+Ext.swift */,
 				61A8DC562881B173000512EC /* UIViewController+Ext.swift */,
 				61A8DC43287E8783000512EC /* UIDevice+Ext.swift */,
+				61C21D0728C6FAA1009B5F4E /* UIImageView+Ext.swift */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -972,6 +975,7 @@
 				613856E8289CD43F00BE347E /* EventCell.swift in Sources */,
 				61B6D993288C2C2700E60F08 /* HomeView.swift in Sources */,
 				616EB09928936F74001BD18C /* PostCommentCell.swift in Sources */,
+				61C21D0828C6FAA1009B5F4E /* UIImageView+Ext.swift in Sources */,
 				61A8DC4E287E90F6000512EC /* CommentPresenter.swift in Sources */,
 				616EB08D289120C7001BD18C /* PostFooterReusableView.swift in Sources */,
 				201077F427D3AA9800280991 /* ChallengeView.swift in Sources */,
