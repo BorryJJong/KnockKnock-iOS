@@ -90,6 +90,9 @@ final class StoreListCell: BaseCollectionViewCell {
     return labels
   }
 
+  /// label들의 총 길이를 구해서 Cell의 contentView width를 넘으면 cut 처리
+  /// labels width + 5 x n(marigns)  > contentView.width - 135(other ui's width, margins)이면,
+  /// 마지막 label의 trailing을 contentView.trailing으로 설정하고, 남은 라벨은 뷰에 추가하지 않음
   private func setPromotionStackView(promotions: [String]) {
 
     let labels = self.setPromotionView(promotions: promotions)
