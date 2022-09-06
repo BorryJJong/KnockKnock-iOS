@@ -31,7 +31,7 @@ final class StoreListCell: BaseCollectionViewCell {
 
   // MARK: - Properties
 
-  private let promotions = ["텀블러 할인", "사은품 증정", "포인트 적립", "텀블러 할인"]
+  private let promotions = ["텀블러 할인", "사은품 증정", "포인트 적립", "텀블러 할인", "포인트 적립", "텀블러 할인"]
 
   // MARK: - UIs
 
@@ -53,11 +53,7 @@ final class StoreListCell: BaseCollectionViewCell {
     $0.textColor = .gray70
   }
 
-  private let promotionStackView = UIStackView().then {
-    $0.axis = .horizontal
-    $0.spacing = 5
-    $0.alignment = .bottom
-  }
+  private let promotionsView = UIView()
 
   private let separatorLineView = UIView().then {
     $0.backgroundColor = .gray30
@@ -71,7 +67,9 @@ final class StoreListCell: BaseCollectionViewCell {
 
   // MARK: - Configure
 
-  private func setPromotionStackView(promotions: [String]) {
+  private func setPromotionView(promotions: [String]) -> [UILabel] {
+    var labels: [UILabel] = []
+
     for index in 0..<promotions.count {
       let label = BasePaddingLabel(
         padding: UIEdgeInsets(
@@ -87,13 +85,46 @@ final class StoreListCell: BaseCollectionViewCell {
           $0.layer.cornerRadius = 5
           $0.backgroundColor = .gray20
         }
-      if index == promotions.count - 1 {
-        label.setContentCompressionResistancePriority(
-          UILayoutPriority.defaultLow,
-          for: .horizontal
-        )
+      labels.append(label)
+    }
+    return labels
+  }
+
+  private func setPromotionStackView(promotions: [String]) {
+
+    let labels = self.setPromotionView(promotions: promotions)
+    var totalLength = -5.f
+
+    for index in 0..<labels.count {
+      self.promotionsView.addSubview(labels[index])
+
+      if index == 0 {
+        labels[index].snp.makeConstraints {
+          $0.leading.equalToSuperview()
+          $0.top.bottom.equalToSuperview()
+        }
+      } else {
+        labels[index].snp.makeConstraints {
+          $0.leading.equalTo(labels[index-1].snp.trailing).offset(5)
+          $0.top.bottom.equalToSuperview()
+        }
       }
-      self.promotionStackView.addArrangedSubview(label)
+
+      if let nsStringText = NSString(utf8String: labels[index].text ?? "") {
+        let labelWidth = nsStringText.size(
+          withAttributes: [
+            NSAttributedString.Key.font : labels[index].font
+          ]
+        ).width
+        totalLength += labelWidth + 5
+      }
+
+      if totalLength > (self.contentView.frame.width - 135) {
+        labels[index].snp.makeConstraints {
+          $0.trailing.equalToSuperview()
+        }
+        break
+      }
     }
   }
 
@@ -102,7 +133,7 @@ final class StoreListCell: BaseCollectionViewCell {
   }
 
   override func setupConstraints() {
-    [self.thumbnailImageView, self.storeNameLabel, self.storeInfoLabel, self.promotionStackView, self.separatorLineView].addSubViews(self.contentView)
+    [self.thumbnailImageView, self.storeNameLabel, self.storeInfoLabel, self.promotionsView, self.separatorLineView].addSubViews(self.contentView)
 
     self.thumbnailImageView.snp.makeConstraints {
       $0.bottom.equalTo(self.contentView).offset(Metric.thumbnailImageViewBottomMargin)
@@ -122,7 +153,7 @@ final class StoreListCell: BaseCollectionViewCell {
       $0.trailing.equalTo(self.contentView.snp.trailing)
     }
 
-    self.promotionStackView.snp.makeConstraints {
+    self.promotionsView.snp.makeConstraints {
       $0.leading.equalTo(self.thumbnailImageView.snp.trailing).offset(Metric.promotionStackViewLeadingMargin)
       $0.trailing.equalTo(self.contentView.snp.trailing)
       $0.top.equalTo(self.storeInfoLabel.snp.bottom).offset(Metric.promotionStackViewTopMargin)
