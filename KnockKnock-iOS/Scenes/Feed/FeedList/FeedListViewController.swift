@@ -112,7 +112,7 @@ extension FeedListViewController: UICollectionViewDataSource {
       for: indexPath
     )
 
-    cell.bind(feedList: self.feedListPost[indexPath.item])
+    cell.bind(feedList: self.feedListPost[indexPath.section])
     cell.commentsButton.addTarget(
       self,
       action: #selector(commentButtonDidTap(_:)),
@@ -131,7 +131,35 @@ extension FeedListViewController: UICollectionViewDataSource {
       withType: FeedListHeaderReusableView.self,
       for: indexPath
     )
+
+    header.bind(feed: self.feedListPost[indexPath.section])
+
     return header
+  }
+
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    let height = scrollView.frame.height
+    let contentSizeHeight = scrollView.contentSize.height
+    let offset = scrollView.contentOffset.y
+    let reachedBottom = (offset + height == contentSizeHeight)
+
+    if reachedBottom {
+      scrollViewDidReachBottom(scrollView)
+    }
+  }
+
+  func scrollViewDidReachBottom(_ scrollView: UIScrollView) {
+    if let isNext = self.feedList?.isNext {
+      if isNext {
+        self.currentPage += 1
+        self.interactor?.fetchFeedList(
+          currentPage: self.currentPage,
+          pageSize: self.pageSize,
+          feedId: self.feedId,
+          challengeId: self.challengeId
+        )
+      }
+    }
   }
 }
 
@@ -142,7 +170,7 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
 
-    let scale = feedListPost[indexPath.item].imageScale
+    let scale = feedListPost[indexPath.section].imageScale
     let scaleType = ImageScaleType(rawValue: scale)
     
     return scaleType?.cellSize(width: self.containerView.frame.width) ?? CGSize.init()
@@ -178,6 +206,8 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
 extension FeedListViewController: FeedListViewProtocol {
   func fetchFeedList(feedList: FeedList) {
     self.feedList = feedList
-    self.feedListPost = feedList.feeds
+    feedList.feeds.forEach {
+      self.feedListPost.append($0)
+    }
   }
 }

@@ -77,8 +77,13 @@ class FeedListHeaderReusableView: UICollectionReusableView {
   }
   // MARK: - Bind
 
-  func bind(feed: Feed) {
-    self.userIdLabel.text = "\(feed.userId)"
+  func bind(feed: FeedListPost) {
+    self.userIdLabel.text = "\(feed.id)"
+    self.postDateLabel.text = feed.regDateToString
+    self.profileImageView.setImageFromStringUrl(
+      url: feed.userImage,
+      defaultImage: KKDS.Image.ic_person_24
+    )
   }
 
   // MARK: - Configure
