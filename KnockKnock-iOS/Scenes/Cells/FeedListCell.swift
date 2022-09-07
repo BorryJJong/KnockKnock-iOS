@@ -103,6 +103,8 @@ class FeedListCell: BaseCollectionViewCell {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setImage(KKDS.Image.ic_like_24_off, for: .normal)
     $0.setTitle(" 0", for: .normal)
+    $0.setTitleColor(.black, for: .normal)
+    $0.titleLabel?.font = .systemFont(ofSize: 13, weight: .medium)
     $0.contentHorizontalAlignment = .center
     $0.semanticContentAttribute = .forceLeftToRight
   }
@@ -111,6 +113,8 @@ class FeedListCell: BaseCollectionViewCell {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setImage(KKDS.Image.ic_balloon_24_gr, for: .normal)
     $0.setTitle(" 0", for: .normal)
+    $0.setTitleColor(.black, for: .normal)
+    $0.titleLabel?.font = .systemFont(ofSize: 13, weight: .medium)
     $0.contentHorizontalAlignment = .center
     $0.semanticContentAttribute = .forceLeftToRight
   }
@@ -118,6 +122,17 @@ class FeedListCell: BaseCollectionViewCell {
   // MARK: - Bind
 
   func bind(feedList: FeedListPost) {
+    if feedList.isLike {
+      self.likeButton.setImage(KKDS.Image.ic_like_24_on, for: .normal)
+      self.likeButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .bold)
+    } else {
+      self.likeButton.setImage(KKDS.Image.ic_like_24_off, for: .normal)
+      self.likeButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .medium)
+    }
+
+    self.likeButton.setTitle(" \(feedList.blogLikeCount)", for: .normal)
+    self.commentsButton.setTitle(" \(feedList.blogCommentCount)", for: .normal)
+
     self.imageScrollView.subviews.forEach{
       $0.removeFromSuperview()
     }
