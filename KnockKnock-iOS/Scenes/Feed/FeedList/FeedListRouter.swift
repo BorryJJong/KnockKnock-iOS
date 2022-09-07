@@ -12,6 +12,7 @@ protocol FeedListRouterProtocol {
 
   func navigateToFeedDetail(source: FeedListViewProtocol)
   func navigateToCommentView(source: FeedListViewProtocol)
+  func presentBottomSheetView(source: FeedListViewProtocol)
 }
 
 final class FeedListRouter: FeedListRouterProtocol {
@@ -48,6 +49,25 @@ final class FeedListRouter: FeedListRouterProtocol {
     if let sourceView = source as? UIViewController {
       commentViewController.modalPresentationStyle = .fullScreen
       sourceView.present(commentViewController, animated: true, completion: nil)
+    }
+  }
+
+  func presentBottomSheetView(source: FeedListViewProtocol) {
+    let bottomSheetViewController = BottomSheetViewController().then {
+      $0.setBottomSheetContents(
+        contents: [
+          BottomSheetOption.report.rawValue,
+          BottomSheetOption.share.rawValue,
+          BottomSheetOption.hide.rawValue
+        ])
+      $0.modalPresentationStyle = .overFullScreen
+    }
+    if let sourceView = source as? UIViewController {
+      sourceView.present(
+        bottomSheetViewController,
+        animated: false,
+        completion: nil
+      )
     }
   }
 }

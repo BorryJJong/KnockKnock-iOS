@@ -82,7 +82,13 @@ final class FeedListViewController: BaseViewController<FeedListView> {
       }
     }
   }
-  
+
+  // MARK: - Button Actions
+
+  @objc func configureButtonDidTap(_ sender: UIButton) {
+    self.router?.presentBottomSheetView(source: self)
+  }
+
   @objc func commentButtonDidTap(_ sender: UIButton) {
     self.router?.navigateToCommentView(source: self)
   }
@@ -133,6 +139,11 @@ extension FeedListViewController: UICollectionViewDataSource {
     )
 
     header.bind(feed: self.feedListPost[indexPath.section])
+    header.configureButton.addTarget(
+      self,
+      action: #selector(self.configureButtonDidTap(_:)),
+      for: .touchUpInside
+    )
 
     return header
   }
