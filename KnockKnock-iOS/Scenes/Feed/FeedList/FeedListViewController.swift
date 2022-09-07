@@ -32,7 +32,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
 
   private var currentPage: Int = 1
   private var pageSize: Int = 1
-  private var challengeId: Int = 0
+  var challengeId: Int = 0
   var feedId: Int = 2
 
   lazy var tapGesture = UITapGestureRecognizer(
