@@ -8,6 +8,7 @@
 import UIKit
 
 import Then
+import SnapKit
 
 final class BottomSheetView: UIView {
 
@@ -25,6 +26,7 @@ final class BottomSheetView: UIView {
   }
 
   // MARK: - Properties
+
   let screenHeight = UIDevice.current.heightOfSafeArea()
   lazy var topConstant = self.safeAreaInsets.bottom + self.screenHeight
   lazy var bottomSheetViewTopConstraint: NSLayoutConstraint = self.bottomSheetView.topAnchor.constraint(
@@ -63,6 +65,11 @@ final class BottomSheetView: UIView {
     $0.registCell(type: BottomMenuCell.self)
   }
 
+  let alertView = AlertView().then {
+    $0.isHidden = true
+    $0.bind(content: "댓글을 삭제하시겠습니까?", isCancelActive: true)
+  }
+
   // MARK: - Initialize
 
   init() {
@@ -72,6 +79,12 @@ final class BottomSheetView: UIView {
 
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
+  }
+
+  // MARK: - Alert view 노출/숨김 처리
+
+  func setHiddenStatusAlertView(isHidden: Bool) {
+    self.alertView.isHidden = isHidden
   }
 
   // MARK: - Bottom Sheet Animation
@@ -108,6 +121,11 @@ final class BottomSheetView: UIView {
   private func setupConstraints() {
     [self.dimmedBackView, self.bottomSheetView].addSubViews(self)
     [self.dismissIndicatorView, self.tableView].addSubViews(self.bottomSheetView)
+    [self.alertView].addSubViews(self)
+
+    self.alertView.snp.makeConstraints {
+      $0.edges.equalToSuperview()
+    }
 
     NSLayoutConstraint.activate([
       self.dimmedBackView.topAnchor.constraint(equalTo: self.topAnchor),
