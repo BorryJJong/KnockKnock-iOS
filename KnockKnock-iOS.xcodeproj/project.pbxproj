@@ -145,6 +145,7 @@
 		61C21D0F28C75E97009B5F4E /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 61C21D0E28C75E97009B5F4E /* KakaoSDKUser */; };
 		61C21D1228C76524009B5F4E /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C21D1128C76524009B5F4E /* LoginViewController.swift */; };
 		61C21D1528C7653B009B5F4E /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C21D1428C7653B009B5F4E /* LoginView.swift */; };
+		61C21D1728CA2244009B5F4E /* ProfileSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C21D1628CA2244009B5F4E /* ProfileSettingView.swift */; };
 		61E3087C287334C1001394B6 /* ImageScaleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E3087B287334C1001394B6 /* ImageScaleType.swift */; };
 		61E3088428768D71001394B6 /* UIStackView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E3088328768D71001394B6 /* UIStackView+Ext.swift */; };
 		61FC60E927B9244D00A51DBC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC60E827B9244D00A51DBC /* AppDelegate.swift */; };
@@ -289,6 +290,7 @@
 		61B6D9B5288E69D400E60F08 /* FeedListHeaderReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedListHeaderReusableView.swift; sourceTree = "<group>"; };
 		61C21D1128C76524009B5F4E /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		61C21D1428C7653B009B5F4E /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		61C21D1628CA2244009B5F4E /* ProfileSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingView.swift; sourceTree = "<group>"; };
 		61E3087B287334C1001394B6 /* ImageScaleType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageScaleType.swift; sourceTree = "<group>"; };
 		61E3088328768D71001394B6 /* UIStackView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Ext.swift"; sourceTree = "<group>"; };
 		61FC60E527B9244D00A51DBC /* KnockKnock-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KnockKnock-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -722,6 +724,7 @@
 			isa = PBXGroup;
 			children = (
 				61C21D1428C7653B009B5F4E /* LoginView.swift */,
+				61C21D1628CA2244009B5F4E /* ProfileSettingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1014,6 +1017,7 @@
 				616EB09928936F74001BD18C /* PostCommentCell.swift in Sources */,
 				61A8DC4E287E90F6000512EC /* CommentPresenter.swift in Sources */,
 				616EB08D289120C7001BD18C /* PostFooterReusableView.swift in Sources */,
+				61C21D1728CA2244009B5F4E /* ProfileSettingView.swift in Sources */,
 				201077F427D3AA9800280991 /* ChallengeView.swift in Sources */,
 				201077FE27D3D2AC00280991 /* ChallengeCell.swift in Sources */,
 				616EB08B28910485001BD18C /* PostHeaderReusableView.swift in Sources */,
