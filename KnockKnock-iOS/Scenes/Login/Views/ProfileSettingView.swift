@@ -25,12 +25,12 @@ class ProfileSettingView: UIView {
     $0.image = KKDS.Image.ic_camera_24_gr
   }
 
-  private let profileButton = UIButton()
+  let profileButton = UIButton()
 
-  private let nicknameTextField = UITextField().then {
+  let nicknameTextField = UITextField().then {
     let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: $0.frame.height))
     $0.placeholder = "닉네임 입력"
-    $0.layer.borderColor = UIColor.green50?.cgColor
+    $0.layer.borderColor = UIColor.gray40?.cgColor
     $0.layer.borderWidth = 1
     $0.layer.cornerRadius = 3
     $0.tintColor = .green50
@@ -45,7 +45,7 @@ class ProfileSettingView: UIView {
     $0.textColor = .gray50
   }
 
-  private let confirmButton = UIButton().then {
+  let confirmButton = UIButton().then {
     $0.setTitle("완료", for: .normal)
     $0.titleLabel?.textColor = .white
     $0.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
