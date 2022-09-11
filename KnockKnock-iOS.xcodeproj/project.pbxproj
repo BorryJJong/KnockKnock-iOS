@@ -140,6 +140,10 @@
 		61B6D993288C2C2700E60F08 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D992288C2C2700E60F08 /* HomeView.swift */; };
 		61B6D998288C40BF00E60F08 /* HomeSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D997288C40BF00E60F08 /* HomeSection.swift */; };
 		61B6D9B6288E69D400E60F08 /* FeedListHeaderReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D9B5288E69D400E60F08 /* FeedListHeaderReusableView.swift */; };
+		61C21CFD28C463E6009B5F4E /* DefaultCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C21CFC28C463E6009B5F4E /* DefaultCollectionViewCell.swift */; };
+		61C21D0228C46C9E009B5F4E /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 61C21D0128C46C9E009B5F4E /* FirebaseAnalytics */; };
+		61C21D0428C46C9E009B5F4E /* FirebaseAppDistribution-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 61C21D0328C46C9E009B5F4E /* FirebaseAppDistribution-Beta */; };
+		61C21D0628C4C971009B5F4E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 61C21D0528C4C971009B5F4E /* GoogleService-Info.plist */; };
 		61E3087C287334C1001394B6 /* ImageScaleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E3087B287334C1001394B6 /* ImageScaleType.swift */; };
 		61E3088428768D71001394B6 /* UIStackView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E3088328768D71001394B6 /* UIStackView+Ext.swift */; };
 		61FC60E927B9244D00A51DBC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC60E827B9244D00A51DBC /* AppDelegate.swift */; };
@@ -282,6 +286,8 @@
 		61B6D992288C2C2700E60F08 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		61B6D997288C40BF00E60F08 /* HomeSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSection.swift; sourceTree = "<group>"; };
 		61B6D9B5288E69D400E60F08 /* FeedListHeaderReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedListHeaderReusableView.swift; sourceTree = "<group>"; };
+		61C21CFC28C463E6009B5F4E /* DefaultCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultCollectionViewCell.swift; sourceTree = "<group>"; };
+		61C21D0528C4C971009B5F4E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		61E3087B287334C1001394B6 /* ImageScaleType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageScaleType.swift; sourceTree = "<group>"; };
 		61E3088328768D71001394B6 /* UIStackView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Ext.swift"; sourceTree = "<group>"; };
 		61FC60E527B9244D00A51DBC /* KnockKnock-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KnockKnock-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -302,6 +308,8 @@
 			files = (
 				613856D6289900FE00BE347E /* SnapKit in Frameworks */,
 				20AF1007285F2C74005C73EC /* KKDSKit in Frameworks */,
+				61C21D0428C46C9E009B5F4E /* FirebaseAppDistribution-Beta in Frameworks */,
+				61C21D0228C46C9E009B5F4E /* FirebaseAnalytics in Frameworks */,
 				34F6FB7E518CFAF1AD6C3455 /* Pods_KnockKnock_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -403,6 +411,7 @@
 		201A288127BAAFDE004F7CD9 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				61C21CFB28C463CD009B5F4E /* Default */,
 				618D8B4A28BB355E00828794 /* AlertView.swift */,
 				617F9D72282BAF8E00C2BC9A /* BottomSheetView.swift */,
 				61FC60EC27B9244E00A51DBC /* MainTabBarController.swift */,
@@ -698,6 +707,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		61C21CFB28C463CD009B5F4E /* Default */ = {
+			isa = PBXGroup;
+			children = (
+				61C21CFC28C463E6009B5F4E /* DefaultCollectionViewCell.swift */,
+			);
+			path = Default;
+			sourceTree = "<group>";
+		};
 		61E3087A2873349B001394B6 /* Enum */ = {
 			isa = PBXGroup;
 			children = (
@@ -732,6 +749,7 @@
 		61FC60E727B9244D00A51DBC /* KnockKnock-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				61C21D0528C4C971009B5F4E /* GoogleService-Info.plist */,
 				61E3087A2873349B001394B6 /* Enum */,
 				61215AC728507D3F003FDCAA /* Network */,
 				201077ED27D39AB400280991 /* Repository */,
@@ -776,6 +794,8 @@
 			packageProductDependencies = (
 				20AF1006285F2C74005C73EC /* KKDSKit */,
 				613856D5289900FE00BE347E /* SnapKit */,
+				61C21D0128C46C9E009B5F4E /* FirebaseAnalytics */,
+				61C21D0328C46C9E009B5F4E /* FirebaseAppDistribution-Beta */,
 			);
 			productName = "KnockKnock-iOS";
 			productReference = 61FC60E527B9244D00A51DBC /* KnockKnock-iOS.app */;
@@ -807,6 +827,7 @@
 			mainGroup = 61FC60DC27B9244D00A51DBC;
 			packageReferences = (
 				613856D4289900FE00BE347E /* XCRemoteSwiftPackageReference "SnapKit" */,
+				61C21D0028C46C9E009B5F4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 61FC60E627B9244D00A51DBC /* Products */;
 			projectDirPath = "";
@@ -823,6 +844,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				204320C928367AD300E6FD06 /* .swiftlint.yml in Resources */,
+				61C21D0628C4C971009B5F4E /* GoogleService-Info.plist in Resources */,
 				61FC60F527B9244F00A51DBC /* LaunchScreen.storyboard in Resources */,
 				61FC60F227B9244F00A51DBC /* Assets.xcassets in Resources */,
 			);
@@ -940,6 +962,7 @@
 				61215ACB2852D5B5003FDCAA /* APIConstants.swift in Sources */,
 				61215AC928507D51003FDCAA /* KKRouter.swift in Sources */,
 				61B6D98A288A96A300E60F08 /* ChallengeDetailPresenter.swift in Sources */,
+				61C21CFD28C463E6009B5F4E /* DefaultCollectionViewCell.swift in Sources */,
 				618FDACF27E9642400C2823F /* UIButton+Ext.swift in Sources */,
 				61B6D984288A967A00E60F08 /* ChallengeDetailWorker.swift in Sources */,
 				6143294F285F2BCF008BDCC9 /* BasePaddingLabel.swift in Sources */,
@@ -1169,7 +1192,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = R4HW69RLJ5;
+				DEVELOPMENT_TEAM = 7YWVGV44MR;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "KnockKnock-iOS/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "사진 촬영을 위해 카메라 접근 권한이 필요합니다.";
@@ -1200,7 +1223,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = R4HW69RLJ5;
+				DEVELOPMENT_TEAM = 7YWVGV44MR;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "KnockKnock-iOS/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "사진 촬영을 위해 카메라 접근 권한이 필요합니다.";
@@ -1255,6 +1278,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		61C21D0028C46C9E009B5F4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1266,6 +1297,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 613856D4289900FE00BE347E /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		61C21D0128C46C9E009B5F4E /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61C21D0028C46C9E009B5F4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		61C21D0328C46C9E009B5F4E /* FirebaseAppDistribution-Beta */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61C21D0028C46C9E009B5F4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseAppDistribution-Beta";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

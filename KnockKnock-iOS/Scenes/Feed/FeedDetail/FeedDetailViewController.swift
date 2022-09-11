@@ -61,6 +61,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       $0.registCell(type: LikeCell.self)
 
       $0.registCell(type: PostCommentCell.self)
+      $0.registCell(type: DefaultCollectionViewCell.self)
 
       $0.collectionViewLayout = self.containerView.setPostCollectionViewLayout()
     }
@@ -208,7 +209,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       return self.visibleComments.count
       
     default:
-      assert(false)
+      return 0
     }
   }
 
@@ -263,7 +264,12 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       return cell
 
     default:
-      assert(false)
+      let cell = collectionView.dequeueCell(
+        withType: DefaultCollectionViewCell.self,
+        for: indexPath
+      )
+
+      return cell
     }
   }
 
@@ -298,7 +304,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
         return footer
 
       default:
-        assert(false, "Unexpected element kind")
+        return .init()
       }
 
     case .like:
@@ -321,7 +327,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
         return footer
 
       default:
-        assert(false, "Unexpected element kind")
+        return .init()
       }
 
     case .comment:
@@ -340,7 +346,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       return header
       
     default:
-      assert(false, "Unexpected element kind")
+      return .init()
     }
   }
 

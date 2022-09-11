@@ -111,7 +111,7 @@ final class HomeView: UIView {
         return eventSection
 
       default:
-        assert(false)
+        return self.setDefaultSection()
       }
     }
 
@@ -397,5 +397,26 @@ final class HomeView: UIView {
       trailing: 0
     )
     return eventSection
+  }
+
+  private func setDefaultSection() -> NSCollectionLayoutSection {
+    let defaultItemSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .fractionalWidth(1)
+    )
+    let defaultItem = NSCollectionLayoutItem(layoutSize: defaultItemSize)
+
+    let defaultGroupSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .fractionalWidth(1)
+    )
+    let defaultGroup = NSCollectionLayoutGroup.horizontal(
+      layoutSize: defaultGroupSize,
+      subitems: [defaultItem]
+    )
+
+    let defaultSection = NSCollectionLayoutSection(group: defaultGroup)
+
+    return defaultSection
   }
 }
