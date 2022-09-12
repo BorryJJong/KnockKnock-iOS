@@ -93,9 +93,9 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
         withType: TapCell.self,
         for: indexPath
       )
-      let isCurrent = indexPath.item == self.currentIndex 
+      let isSelected = indexPath.item == self.currentIndex 
 
-      cell.bind(tapName: SearchTap.allCases[indexPath.item].rawValue, isCurrent: isCurrent)
+      cell.bind(tapName: SearchTap.allCases[indexPath.item].rawValue, isSelected: isSelected)
 
       return cell
 

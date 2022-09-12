@@ -19,10 +19,10 @@ final class TapCell: BaseCollectionViewCell {
 
   // MARK: - Bind
 
-  func bind(tapName: String, isCurrent: Bool) {
+  func bind(tapName: String, isSelected: Bool) {
     self.tapLabel.do {
       $0.text = tapName
-      if isCurrent {
+      if isSelected {
         $0.textColor = .green40
         $0.font = .systemFont(ofSize: 15, weight: .bold)
       } else {
