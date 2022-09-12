@@ -19,8 +19,17 @@ final class TapCell: BaseCollectionViewCell {
 
   // MARK: - Bind
 
-  func bind(tapName: String) {
-    self.tapLabel.text = tapName
+  func bind(tapName: String, isCurrent: Bool) {
+    self.tapLabel.do {
+      $0.text = tapName
+      if isCurrent {
+        $0.textColor = .green40
+        $0.font = .systemFont(ofSize: 15, weight: .bold)
+      } else {
+        $0.textColor = .gray70
+        $0.font = .systemFont(ofSize: 15, weight: .light)
+      }
+    }
   }
 
   // MARK: - Configure

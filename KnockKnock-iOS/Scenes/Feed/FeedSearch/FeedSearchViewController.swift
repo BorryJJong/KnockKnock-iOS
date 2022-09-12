@@ -93,15 +93,9 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
         withType: TapCell.self,
         for: indexPath
       )
-      cell.bind(tapName: SearchTap.allCases[indexPath.item].rawValue)
+      let isCurrent = indexPath.item == self.currentIndex 
 
-      if indexPath.item == self.currentIndex {
-        cell.tapLabel.textColor = .green40
-        cell.tapLabel.font = .systemFont(ofSize: 15, weight: .bold)
-      } else {
-        cell.tapLabel.textColor = .gray70
-        cell.tapLabel.font = .systemFont(ofSize: 15, weight: .light)
-      }
+      cell.bind(tapName: SearchTap.allCases[indexPath.item].rawValue, isCurrent: isCurrent)
 
       return cell
 
