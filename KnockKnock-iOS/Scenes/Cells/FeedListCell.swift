@@ -170,7 +170,7 @@ class FeedListCell: BaseCollectionViewCell {
     }
   }
 
-  func setImageView(
+  private func setImageView(
     images: [FeedImage],
     scale: String
   ) {
