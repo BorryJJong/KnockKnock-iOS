@@ -17,6 +17,21 @@ final class TapCell: BaseCollectionViewCell {
     $0.textColor = .black
   }
 
+  // MARK: - Bind
+
+  func bind(tapName: String, isSelected: Bool) {
+    self.tapLabel.do {
+      $0.text = tapName
+      if isSelected {
+        $0.textColor = .green40
+        $0.font = .systemFont(ofSize: 15, weight: .bold)
+      } else {
+        $0.textColor = .gray70
+        $0.font = .systemFont(ofSize: 15, weight: .light)
+      }
+    }
+  }
+
   // MARK: - Configure
 
   override func setupConfigure() {
