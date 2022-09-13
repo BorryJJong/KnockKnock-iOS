@@ -100,7 +100,7 @@ final class HomeMainPagerCell: BaseCollectionViewCell {
     let mainSection = NSCollectionLayoutSection(group: mainGroup)
     mainSection.orthogonalScrollingBehavior = .paging
 
-    mainSection.visibleItemsInvalidationHandler = ({ (visibleItems, point, env) in
+    mainSection.visibleItemsInvalidationHandler = ({ (_, point, _) in
       self.currentIndex = round(point.x / UIScreen.main.bounds.width)
       self.movePager(currentPage: self.currentIndex, itemCount: self.mainImages.count)
     })
@@ -117,9 +117,14 @@ final class HomeMainPagerCell: BaseCollectionViewCell {
     let lineViewLength = CGFloat(Metric.lineBackgroundViewWidth / itemCount)
 
     UIView.animate(withDuration: 0.5, animations: {
-      self.lineView.frame.size = CGSize(width: (lineViewLength * currentPage) + lineViewLength, height: 2)
+      self.lineView.snp.remakeConstraints {
+        $0.size.equalTo(CGSize(width: (lineViewLength * currentPage) + lineViewLength, height: 2))
+      }
+      self.layoutIfNeeded()
     })
-    self.lineView.widthConstraint?.constant = (lineViewLength * currentPage) + lineViewLength
+    self.lineView.snp.updateConstraints {
+      $0.width.equalTo((lineViewLength * currentPage) + lineViewLength)
+    }
   }
 }
 
