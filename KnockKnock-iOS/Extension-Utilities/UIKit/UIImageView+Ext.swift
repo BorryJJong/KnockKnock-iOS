@@ -13,13 +13,39 @@ import KKDSKit
 extension UIImageView {
   func setImageFromStringUrl(
     url: String,
-    defaultImage: UIImage?
+    defaultImage: UIImage
   ) {
-    if let defaultImage = defaultImage {
-      self.image = URL(string: url)
-        .flatMap { try? Data(contentsOf: $0) }
-        .flatMap { UIImage(data: $0) }
-      ?? defaultImage
+    Task{
+      do {
+        self.image = try await self.fetchImage(
+          url: url,
+          defaultImage: defaultImage
+        )
+      }
+      catch NetworkErrorType.invalidURLString {
+        print("Network error - invalidURLString")
+      } catch NetworkErrorType.invalidServerResponse {
+        print("Network error - invalidServerResponse")
+      }
     }
+  }
+
+  func fetchImage(url: String, defaultImage: UIImage) async throws -> UIImage {
+    guard let url = URL(string: url) else {
+      throw NetworkErrorType.invalidURLString
+    }
+
+    let (data, response) = try await URLSession.shared.data(from: url)
+
+    guard let httpResponse = response as? HTTPURLResponse,
+          httpResponse.statusCode == 200 else {
+      print(response)
+      throw NetworkErrorType.invalidServerResponse
+
+    }
+
+    let image = UIImage(data: data)
+
+    return image ?? defaultImage
   }
 }

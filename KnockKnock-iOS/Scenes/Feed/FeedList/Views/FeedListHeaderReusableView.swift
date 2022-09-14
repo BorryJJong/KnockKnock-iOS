@@ -82,7 +82,7 @@ class FeedListHeaderReusableView: UICollectionReusableView {
     self.userIdLabel.text = "\(feed.id)" // feed.userName으로 변경할 것
     self.postDateLabel.text = feed.regDateToString
     self.profileImageView.setImageFromStringUrl(
-      url: feed.userImage,
+      url: "https://dy-yb.github.io/images/profile.jpg", // feed.userImage
       defaultImage: KKDS.Image.ic_person_24
     )
   }
