@@ -9,9 +9,17 @@ import UIKit
 
 import Then
 
+protocol FeedSearchViewProtocol {
+  var interactor: FeedSearchInteractorProtocol? { get set }
+  var router: FeedSearchRouterProtocol? { get set }
+}
+
 final class FeedSearchViewController: BaseViewController<FeedSearchView> {
 
   // MARK: - Properties
+
+  var interactor: FeedSearchInteractorProtocol?
+  var router: FeedSearchRouterProtocol?
 
   private var currentIndex = 0 {
     didSet {
