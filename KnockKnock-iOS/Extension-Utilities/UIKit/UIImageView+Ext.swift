@@ -15,37 +15,22 @@ extension UIImageView {
     url: String,
     defaultImage: UIImage
   ) {
-    Task{
-      do {
-        self.image = try await self.fetchImage(
-          url: url,
-          defaultImage: defaultImage
-        )
+    DispatchQueue.global(qos: .background).async {
+      if let url = URL(string: url) {
+        URLSession.shared.dataTask(with: url) { (data, _, err) in
+          if err != nil {
+            DispatchQueue.main.async {
+              self.image = defaultImage
+            }
+            return
+          }
+          DispatchQueue.main.async {
+            if let data = data, let image = UIImage(data: data) {
+              self.image = image
+            }
+          }
+        }.resume()
       }
-      catch NetworkErrorType.invalidURLString {
-        print("Network error - invalidURLString")
-      } catch NetworkErrorType.invalidServerResponse {
-        print("Network error - invalidServerResponse")
-      }
     }
-  }
-
-  func fetchImage(url: String, defaultImage: UIImage) async throws -> UIImage {
-    guard let url = URL(string: url) else {
-      throw NetworkErrorType.invalidURLString
-    }
-
-    let (data, response) = try await URLSession.shared.data(from: url)
-
-    guard let httpResponse = response as? HTTPURLResponse,
-          httpResponse.statusCode == 200 else {
-      print(response)
-      throw NetworkErrorType.invalidServerResponse
-
-    }
-
-    let image = UIImage(data: data)
-
-    return image ?? defaultImage
   }
 }
