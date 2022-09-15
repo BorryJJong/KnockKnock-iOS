@@ -146,16 +146,16 @@ final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableVie
     self.waysStackView.subviews.forEach {
       $0.removeFromSuperview()
     }
-    self.mainImageView.image = challengeDetail.image
-      .flatMap { URL(string: $0) }
-      .flatMap { try? Data(contentsOf: $0) }
-      .flatMap { UIImage(data: $0) }
-    ?? UIImage(named: "challenge")
+//    self.mainImageView.image = challengeDetail.ch
+//      .flatMap { URL(string: $0) }
+//      .flatMap { try? Data(contentsOf: $0) }
+//      .flatMap { UIImage(data: $0) }
+//    ?? UIImage(named: "challenge")
 
-    self.summaryLabel.setLineHeight(fontSize: 14, content: challengeDetail.summary)
+//    self.summaryLabel.setLineHeight(fontSize: 14, content: challengeDetail.summary)
     self.setParticipantsImageStackView(participants: challengeDetail.participants)
-    self.titleLabel.text = challengeDetail.title
-    self.setWayStackView(ways: challengeDetail.practice)
+//    self.titleLabel.text = challengeDetail.title
+//    self.setWayStackView(ways: challengeDetail.practice)
   }
 
   // MARK: - Configure
