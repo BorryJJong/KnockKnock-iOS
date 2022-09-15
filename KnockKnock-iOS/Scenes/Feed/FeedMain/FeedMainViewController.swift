@@ -9,9 +9,10 @@ import UIKit
 
 protocol FeedMainViewProtocol: AnyObject {
   var interactor: FeedMainInteractorProtocol? { get set }
-  
+
   func fetchFeedMain(feed: FeedMain)
   func fetchChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?)
+  func fetchSearchLog(searchLog: [SearchLog])
 }
 
 final class FeedMainViewController: BaseViewController<FeedMainView> {
@@ -36,7 +37,8 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
     }
   }
   var challengeTitles: [ChallengeTitle] = []
-  
+  private var searchLogs: [SearchLog] = []
+
   var currentPage = 1
   let pageSize = 1 // pageSize 논의 필요, 페이지네이션 작동 테스트를 위해 1로 임시 설정
   var challengeId = 0
@@ -64,8 +66,10 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
   // MARK: - Configure
   
   override func setupConfigure() {
+
     self.navigationItem.searchController = containerView.searchBar
-    
+    self.navigationItem.searchController?.searchBar.searchTextField.delegate = self
+
     self.containerView.tagCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
@@ -104,7 +108,11 @@ extension FeedMainViewController: FeedMainViewProtocol {
       self.feedMainPost.append($0)
     }
   }
-  
+
+  func fetchSearchLog(searchLog: [SearchLog]) {
+    self.searchLogs = searchLog
+  }
+
   func fetchChallengeTitles(
     challengeTitle: [ChallengeTitle],
     index: IndexPath?
@@ -121,6 +129,21 @@ extension FeedMainViewController: FeedMainViewProtocol {
       }
     } else {
       self.containerView.tagCollectionView.reloadData()
+    }
+  }
+}
+
+// MARK: - SearchTextField Delegate
+
+extension FeedMainViewController: UISearchTextFieldDelegate {
+
+  func textFieldDidEndEditing(_ textField: UITextField) {
+    if let keyword = textField.text {
+      let log = SearchLog(regDate: Date(), category: "인기", keyword: keyword)
+      self.interactor?.saveSearchLog(searchLog: log)
+      self.interactor?.getSearchLog()
+
+      print(searchLogs)
     }
   }
 }

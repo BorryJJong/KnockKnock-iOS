@@ -9,10 +9,12 @@ import UIKit
 
 protocol FeedMainRouterProtocol {
   static func createFeed() -> UIViewController
+
   func navigateToFeedList(source: FeedMainViewProtocol)
+  func passDataToFeedSearch(source: FeedMainViewProtocol)
 }
 
-final class FeedMainRouter {
+final class FeedMainRouter: FeedMainRouterProtocol {
 
   static func createFeed() -> UIViewController {
     let view = FeedMainViewController()
@@ -29,9 +31,11 @@ final class FeedMainRouter {
 
     return view
   }
-}
 
-extension FeedMainRouter: FeedMainRouterProtocol {
+  func passDataToFeedSearch(source: FeedMainViewProtocol) {
+    
+  }
+
   func navigateToFeedList(source: FeedMainViewProtocol) {
     let feedListViewController = FeedListRouter.createFeedList()
     if let sourceView = source as? UIViewController {

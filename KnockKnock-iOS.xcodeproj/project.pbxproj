@@ -157,6 +157,7 @@
 		61E87EB928D1894A0005CAA6 /* FeedSearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E87EB828D1894A0005CAA6 /* FeedSearchPresenter.swift */; };
 		61E87EBB28D189570005CAA6 /* FeedSearchWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E87EBA28D189570005CAA6 /* FeedSearchWorker.swift */; };
 		61E87EBD28D189640005CAA6 /* FeedSearchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E87EBC28D189640005CAA6 /* FeedSearchRouter.swift */; };
+		61E87EBF28D1A1F20005CAA6 /* SearchLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E87EBE28D1A1F20005CAA6 /* SearchLog.swift */; };
 		61FC60E927B9244D00A51DBC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC60E827B9244D00A51DBC /* AppDelegate.swift */; };
 		61FC60EB27B9244E00A51DBC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC60EA27B9244E00A51DBC /* SceneDelegate.swift */; };
 		61FC60ED27B9244E00A51DBC /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC60EC27B9244E00A51DBC /* MainTabBarController.swift */; };
@@ -312,6 +313,7 @@
 		61E87EB828D1894A0005CAA6 /* FeedSearchPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSearchPresenter.swift; sourceTree = "<group>"; };
 		61E87EBA28D189570005CAA6 /* FeedSearchWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSearchWorker.swift; sourceTree = "<group>"; };
 		61E87EBC28D189640005CAA6 /* FeedSearchRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSearchRouter.swift; sourceTree = "<group>"; };
+		61E87EBE28D1A1F20005CAA6 /* SearchLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLog.swift; sourceTree = "<group>"; };
 		61FC60E527B9244D00A51DBC /* KnockKnock-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KnockKnock-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		61FC60E827B9244D00A51DBC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		61FC60EA27B9244E00A51DBC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -346,6 +348,7 @@
 				6143296728644187008BDCC9 /* Feed.swift */,
 				619DEE9B28868E7E00C80095 /* Comment.swift */,
 				613856CC2898B64000BE347E /* Like.swift */,
+				61E87EBE28D1A1F20005CAA6 /* SearchLog.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -1073,6 +1076,7 @@
 				616EB08B28910485001BD18C /* PostHeaderReusableView.swift in Sources */,
 				618D8B5A28BDA12500828794 /* FeedSearchViewController.swift in Sources */,
 				6143297A28687B74008BDCC9 /* FeedListPresenter.swift in Sources */,
+				61E87EBF28D1A1F20005CAA6 /* SearchLog.swift in Sources */,
 				618FDAC927E836BA00C2823F /* PhotoCell.swift in Sources */,
 				61AB2E5428A3775300A1AE30 /* Double+Ext.swift in Sources */,
 				61B6D998288C40BF00E60F08 /* HomeSection.swift in Sources */,

@@ -28,6 +28,8 @@ final class FeedSearchViewController: BaseViewController<FeedSearchView> {
     }
   }
 
+  var searchLog: [SearchLog] = []
+
   // MARK: - Constants
 
   private enum SearchCollectionViewTag: Int {
@@ -75,6 +77,12 @@ final class FeedSearchViewController: BaseViewController<FeedSearchView> {
       }
     )
   }
+}
+
+  // MARK: - FeedSearchViewProtocol
+
+extension FeedSearchViewController: FeedSearchViewProtocol {
+
 }
 
   // MARK: - CollectionView DataSource, Delegate
