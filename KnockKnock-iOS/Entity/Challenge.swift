@@ -41,16 +41,19 @@ struct ChallengeTitle: Decodable {
 }
 
 struct ChallengeDetail: Decodable {
-  let image: String?
-  let title: String
-  let summary: String
-  let practice: [String]
-  let contents: [ChallengeContent]
+  let challenge: [ChallengeHeader]
   let participants: [Participant]
+  let contents: [ChallengeContent]
+}
+
+struct ChallengeHeader: Decodable {
+  let id: Int
+  let title: String
+  let subTitle: String
 }
 
 struct ChallengeContent: Decodable {
   let title: String
-  let image: String?
+  let image: String
   let content: String
 }
