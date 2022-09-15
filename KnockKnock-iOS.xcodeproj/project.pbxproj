@@ -144,6 +144,7 @@
 		61E3087C287334C1001394B6 /* ImageScaleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E3087B287334C1001394B6 /* ImageScaleType.swift */; };
 		61E3088428768D71001394B6 /* UIStackView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E3088328768D71001394B6 /* UIStackView+Ext.swift */; };
 		61E87EB528D17CAF0005CAA6 /* NetworkErrorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E87EB428D17CAF0005CAA6 /* NetworkErrorType.swift */; };
+		61E87EC328D30E9F0005CAA6 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E87EC228D30E9F0005CAA6 /* ImageCacheManager.swift */; };
 		61FC60E927B9244D00A51DBC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC60E827B9244D00A51DBC /* AppDelegate.swift */; };
 		61FC60EB27B9244E00A51DBC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC60EA27B9244E00A51DBC /* SceneDelegate.swift */; };
 		61FC60ED27B9244E00A51DBC /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC60EC27B9244E00A51DBC /* MainTabBarController.swift */; };
@@ -288,6 +289,7 @@
 		61E3087B287334C1001394B6 /* ImageScaleType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageScaleType.swift; sourceTree = "<group>"; };
 		61E3088328768D71001394B6 /* UIStackView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Ext.swift"; sourceTree = "<group>"; };
 		61E87EB428D17CAF0005CAA6 /* NetworkErrorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkErrorType.swift; sourceTree = "<group>"; };
+		61E87EC228D30E9F0005CAA6 /* ImageCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManager.swift; sourceTree = "<group>"; };
 		61FC60E527B9244D00A51DBC /* KnockKnock-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KnockKnock-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		61FC60E827B9244D00A51DBC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		61FC60EA27B9244E00A51DBC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -524,6 +526,7 @@
 				61215AC4284F856D003FDCAA /* KKNetworkManager.swift */,
 				61215AC828507D51003FDCAA /* KKRouter.swift */,
 				61215ACA2852D5B5003FDCAA /* APIConstants.swift */,
+				61E87EC228D30E9F0005CAA6 /* ImageCacheManager.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -965,6 +968,7 @@
 				6143296A28644458008BDCC9 /* FeedRepository.swift in Sources */,
 				61B6D97F2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift in Sources */,
 				613856DB289948F500BE347E /* StoreCell.swift in Sources */,
+				61E87EC328D30E9F0005CAA6 /* ImageCacheManager.swift in Sources */,
 				61A5EA2528B3B72100A0214D /* StoreListViewController.swift in Sources */,
 				614329552862EFE0008BDCC9 /* FeedListView.swift in Sources */,
 				613856DE289A795200BE347E /* HomeHeaderCollectionReusableView.swift in Sources */,

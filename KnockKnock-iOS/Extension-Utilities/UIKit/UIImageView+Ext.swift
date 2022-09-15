@@ -7,14 +7,18 @@
 
 import UIKit
 
-import Then
-import KKDSKit
-
 extension UIImageView {
   func setImageFromStringUrl(
     url: String,
     defaultImage: UIImage
   ) {
+    let cacheKey = NSString(string: url)
+
+    if let cachedImage = ImageCacheManager.shared.object(forKey: cacheKey) {
+      self.image = cachedImage
+      return
+    }
+
     DispatchQueue.global(qos: .background).async {
       if let url = URL(string: url) {
         URLSession.shared.dataTask(with: url) { (data, _, err) in
