@@ -17,8 +17,8 @@ enum KKRouter: URLRequestConvertible {
     return URL(string: API.BASE_URL)!
   }
 
-  case createFeed(Int)
-  case updateFeed(Int)
+//  case createFeed(Int)
+//  case updateFeed(Int)
   case getChallengeResponse
   case getChallengeDetail(id: Int)
   case getChallengeTitles
@@ -31,15 +31,16 @@ enum KKRouter: URLRequestConvertible {
         .getChallengeTitles,
         .getChallengeDetail:
       return .get
-    case .createFeed: return .post
-    case .updateFeed: return .patch
+//    case .createFeed: return .post
+//    case .updateFeed: return .patch
     }
   }
 
   var path: String {
     switch self {
-    case .getChallengeResponse, .getChallengeDetail: return "challenges"
-    case .createFeed, .updateFeed: return "feed"
+    case .getChallengeResponse: return "challenges"
+    case .getChallengeDetail(let id): return "challenges/\(id)"
+//    case .createFeed, .updateFeed: return "feed"
     case .getFeedMain: return "feed/main"
     case .getChallengeTitles: return "challenges/titles"
     }
@@ -47,12 +48,10 @@ enum KKRouter: URLRequestConvertible {
 
   var parameters: Parameters? {
     switch self {
-    case .getChallengeResponse, .getChallengeTitles:
+    case  .getChallengeDetail, .getChallengeResponse, .getChallengeTitles:
       return nil
-    case let .createFeed(id),
-      let .updateFeed(id),
-      let .getChallengeDetail(id):
-      return ["id": id]
+//    case let .getChallengeDetail(id):
+//      return ["id": id]
 
     case let .getFeedMain(page, take, challengeId):
       return [
@@ -70,7 +69,12 @@ enum KKRouter: URLRequestConvertible {
 
     switch method {
     case .get:
-      request = try URLEncoding.default.encode(request, with: parameters)
+      switch self {
+      case .getChallengeDetail:
+        break
+      default:
+        request = try URLEncoding.default.encode(request, with: parameters)
+      }
     case .post, .patch, .delete:
       request = try JSONEncoding.default.encode(request, with: parameters)
       request.setValue("application/json", forHTTPHeaderField: "Accept")

@@ -35,7 +35,6 @@ final class ChallengeDetailCell: BaseCollectionViewCell {
     $0.textColor = .green50
     $0.font = .systemFont(ofSize: 17, weight: .bold)
     $0.textAlignment = .left
-    $0.text = "제로웨이스트를 실천 해야하는 이유"
   }
 
   private let exampleImageView = UIImageView().then {

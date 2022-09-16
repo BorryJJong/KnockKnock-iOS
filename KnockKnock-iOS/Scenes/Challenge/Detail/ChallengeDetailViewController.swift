@@ -24,7 +24,11 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
   var router: ChallengeDetailRouterProtocol?
 
   var challengeId: Int = 12
-  var challengeDetail: ChallengeDetail?
+  var challengeDetail: ChallengeDetail? {
+    didSet {
+      self.containerView.challengeDetailCollectionView.reloadData()
+    }
+  }
 
   lazy var backBarButtonItem = UIBarButtonItem(
     image: KKDS.Image.ic_back_24_wh,
