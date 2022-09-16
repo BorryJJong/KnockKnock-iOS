@@ -9,7 +9,7 @@ import UIKit
 
 protocol ChallengeRouterProtocol: AnyObject {
   static func createChallenge() -> UIViewController
-  func navigateToChallengeDetail(source: ChallengeViewProtocol)
+  func navigateToChallengeDetail(source: ChallengeViewProtocol, challengeId: Int)
 }
 
 final class ChallengeRouter: ChallengeRouterProtocol {
@@ -30,12 +30,20 @@ final class ChallengeRouter: ChallengeRouterProtocol {
     return view
   }
 
-  func navigateToChallengeDetail(source: ChallengeViewProtocol) {
-    let challengeDetailViewController = ChallengeDetailRouter.createChallengeDetail()
+  func navigateToChallengeDetail(
+    source: ChallengeViewProtocol,
+    challengeId: Int
+  ) {
+    let challengeDetailViewController = ChallengeDetailRouter.createChallengeDetail(
+      challengeId: challengeId
+    )
     challengeDetailViewController.hidesBottomBarWhenPushed = true
     
     if let sourceView = source as? UIViewController {
-      sourceView.navigationController?.pushViewController(challengeDetailViewController, animated: true)
+      sourceView.navigationController?.pushViewController(
+        challengeDetailViewController,
+        animated: true
+      )
     }
   }
 }
