@@ -53,6 +53,7 @@ struct ChallengeHeader: Decodable {
 }
 
 struct ChallengeContent: Decodable {
+  let image: String
   let rule: [String]
   let subContents: [ChallengeSubContents]
 }
