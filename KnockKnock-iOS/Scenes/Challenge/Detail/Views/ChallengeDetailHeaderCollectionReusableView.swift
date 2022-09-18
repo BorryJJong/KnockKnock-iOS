@@ -9,6 +9,7 @@ import UIKit
 
 import Then
 import KKDSKit
+import SnapKit
 
 final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableView {
 
@@ -50,6 +51,9 @@ final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableVie
     static let wayLabelLeadingMargin = 20.f
     static let wayLabelTrailingMargin = -20.f
     static let wayLabelHeight = 130.f
+
+    static let wayStackViewLeadingMargin = 20.f
+    static let wayStackViewTopMargin = 10.f
   }
 
   // MARK: - UIs
@@ -146,11 +150,11 @@ final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableVie
     self.waysStackView.subviews.forEach {
       $0.removeFromSuperview()
     }
-//    self.mainImageView.image = challengeDetail.content.image
-//      .flatMap { URL(string: $0) }
-//      .flatMap { try? Data(contentsOf: $0) }
-//      .flatMap { UIImage(data: $0) }
-//    ?? UIImage(named: "challenge")
+    self.mainImageView.image = challengeDetail.content.image
+      .flatMap { URL(string: $0) }
+      .flatMap { try? Data(contentsOf: $0) }
+      .flatMap { UIImage(data: $0) }
+    ?? UIImage(named: "challenge")
 
     self.summaryLabel.setLineHeight(fontSize: 14, content: challengeDetail.challenge.subTitle)
     self.setParticipantsImageStackView(participants: challengeDetail.participants)
@@ -211,53 +215,66 @@ final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableVie
 
   func setupConstraints() {
     [self.participantImageStackView, self.participantLabel].addSubViews(self.participantView)
-    [self.mainImageView, self.topGradientImageView, self.participantView, self.participantSeperatorView, self.titleLabel, self.summaryLabel, self.summarySeperatorView, self.wayHeaderLabel, self.waysStackView].addSubViews(self)
+    [self.mainImageView, self.topGradientImageView, self.participantView, self.participantSeperatorView].addSubViews(self)
+    [self.titleLabel, self.summaryLabel, self.summarySeperatorView, self.wayHeaderLabel, self.waysStackView].addSubViews(self)
 
-    NSLayoutConstraint.activate([
-      self.topGradientImageView.topAnchor.constraint(equalTo: self.topAnchor),
-      self.topGradientImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-      self.topGradientImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-      
-      self.mainImageView.topAnchor.constraint(equalTo: self.topAnchor),
-      self.mainImageView.widthAnchor.constraint(equalTo: self.widthAnchor),
-      self.mainImageView.heightAnchor.constraint(equalTo: self.widthAnchor),
+    self.mainImageView.snp.makeConstraints {
+      $0.top.equalToSuperview()
+      $0.width.height.equalTo(self.snp.width)
+    }
 
-      self.participantView.topAnchor.constraint(equalTo: self.mainImageView.bottomAnchor, constant: Metric.participantViewTopMargin),
-      self.participantView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-      self.participantView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.participantViewTrailingMargin),
-      self.participantView.heightAnchor.constraint(equalToConstant: Metric.participantViewHeight),
+    self.topGradientImageView.snp.makeConstraints {
+      $0.top.leading.trailing.equalToSuperview()
+    }
 
-      self.participantImageStackView.topAnchor.constraint(equalTo: self.participantView.topAnchor, constant: Metric.participantImageStackViewTopMargin),
-      self.participantImageStackView.leadingAnchor.constraint(equalTo: self.participantView.leadingAnchor, constant: Metric.participantImageStackViewLeadingMargin),
+    self.participantView.snp.makeConstraints {
+      $0.top.equalTo(self.mainImageView.snp.bottom).offset(Metric.participantViewTopMargin)
+      $0.leading.equalToSuperview()
+      $0.trailing.equalToSuperview().offset(Metric.participantViewTrailingMargin)
+      $0.height.equalTo(Metric.participantViewHeight)
+    }
 
-      self.participantLabel.centerYAnchor.constraint(equalTo: self.participantImageStackView.centerYAnchor),
-      self.participantLabel.leadingAnchor.constraint(equalTo: self.participantImageStackView.trailingAnchor, constant: Metric.participantLabelViewLeadingMargin),
+    self.participantImageStackView.snp.makeConstraints {
+      $0.top.equalToSuperview().offset(Metric.participantImageStackViewTopMargin)
+      $0.leading.equalToSuperview().offset(Metric.participantImageStackViewLeadingMargin)
+    }
 
-      self.participantSeperatorView.heightAnchor.constraint(equalToConstant: Metric.participantSeperatorViewHeight),
-      self.participantSeperatorView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.participantSeperatorViewLeadingMargin),
-      self.participantSeperatorView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.participantSeperatorViewTrailingMargin),
-      self.participantSeperatorView.topAnchor.constraint(equalTo: self.participantView.bottomAnchor, constant: Metric.participantSeperatorViewTopMargin),
+    self.participantLabel.snp.makeConstraints {
+      $0.centerY.equalTo(self.participantImageStackView)
+      $0.leading.equalTo(self.participantImageStackView.snp.trailing).offset(Metric.participantLabelViewLeadingMargin)
+    }
 
-      self.titleLabel.topAnchor.constraint(equalTo: self.participantSeperatorView.bottomAnchor, constant: Metric.titleLabelTopMargin),
-      self.titleLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.titleLabelLeadingMargin),
-      self.titleLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.titleLabelTrailingMargin),
+    self.participantSeperatorView.snp.makeConstraints {
+      $0.height.equalTo(Metric.participantSeperatorViewHeight)
+      $0.leading.trailing.equalToSuperview().inset(Metric.participantSeperatorViewLeadingMargin)
+      $0.top.equalTo(self.participantView.snp.bottom).offset(Metric.participantSeperatorViewTopMargin)
+    }
 
-      self.summaryLabel.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: Metric.summaryLabelTopMargin),
-      self.summaryLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.summaryLabelLeadingMargin),
-      self.summaryLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.summaryLabelTrailingMargin),
+    self.titleLabel.snp.makeConstraints {
+      $0.top.equalTo(self.participantSeperatorView.snp.bottom).offset(Metric.titleLabelTopMargin)
+      $0.leading.trailing.equalToSuperview().inset(Metric.titleLabelLeadingMargin)
+    }
 
-      self.summarySeperatorView.heightAnchor.constraint(equalToConstant: Metric.summarySeperatorViewHeight),
-      self.summarySeperatorView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.summarySeperatorViewLeadingMargin),
-      self.summarySeperatorView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.summarySeperatorViewTrailingMargin),
-      self.summarySeperatorView.topAnchor.constraint(equalTo: self.summaryLabel.bottomAnchor, constant: Metric.summarySeperatorViewTopMargin),
+    self.summaryLabel.snp.makeConstraints {
+      $0.top.equalTo(self.titleLabel.snp.bottom).offset(Metric.summaryLabelTopMargin)
+      $0.leading.trailing.equalToSuperview().inset(Metric.summaryLabelLeadingMargin)
+    }
 
-      self.wayHeaderLabel.topAnchor.constraint(equalTo: self.summarySeperatorView.bottomAnchor, constant: Metric.wayHeaderLabelTopMargin),
-      self.wayHeaderLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.wayHeaderLabelLeadingMargin),
+    self.summarySeperatorView.snp.makeConstraints {
+      $0.height.equalTo(Metric.summarySeperatorViewHeight)
+      $0.leading.trailing.equalToSuperview().offset(Metric.summarySeperatorViewLeadingMargin)
+      $0.top.equalTo(self.summaryLabel.snp.bottom).offset(Metric.summarySeperatorViewTopMargin)
+    }
 
-      self.waysStackView.topAnchor.constraint(equalTo: self.wayHeaderLabel.bottomAnchor, constant: Metric.wayLabelTopMargin),
-      self.waysStackView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.wayLabelLeadingMargin),
-      self.waysStackView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.wayLabelTrailingMargin),
-      self.waysStackView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor)
-    ])
+    self.wayHeaderLabel.snp.makeConstraints {
+      $0.top.equalTo(self.summarySeperatorView.snp.bottom).offset(Metric.wayHeaderLabelTopMargin)
+      $0.leading.equalToSuperview().inset(Metric.wayHeaderLabelLeadingMargin)
+    }
+
+    self.waysStackView.snp.makeConstraints {
+      $0.top.equalTo(self.wayHeaderLabel.snp.bottom).offset(Metric.wayStackViewTopMargin)
+      $0.leading.trailing.equalToSuperview().inset(Metric.wayStackViewLeadingMargin)
+      $0.bottom.equalToSuperview()
+    }
   }
 }

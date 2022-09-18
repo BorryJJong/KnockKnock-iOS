@@ -9,6 +9,7 @@ import UIKit
 
 import Then
 import KKDSKit
+import SnapKit
 
 class ChallengeDetailView: UIView {
 
@@ -65,22 +66,37 @@ class ChallengeDetailView: UIView {
   private func setupConstraints() {
     [self.challengeDetailCollectionView, self.bottomGradientImageView, self.participateButton].addSubViews(self)
 
-    NSLayoutConstraint.activate([
-      self.challengeDetailCollectionView.topAnchor.constraint(equalTo: self.topAnchor),
-      self.challengeDetailCollectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-      self.challengeDetailCollectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-      self.challengeDetailCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.challengDetailCollectionViewBottomMargin),
+    self.challengeDetailCollectionView.snp.makeConstraints {
+      $0.top.leading.trailing.equalToSuperview()
+      $0.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom)
+    }
 
-      self.bottomGradientImageView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
-      self.bottomGradientImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-      self.bottomGradientImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-      self.bottomGradientImageView.topAnchor.constraint(equalTo: self.participateButton.topAnchor, constant: Metric.backgroundGradientImageViewTopMargin),
+    self.bottomGradientImageView.snp.makeConstraints {
+      $0.bottom.leading.trailing.equalTo(self.safeAreaLayoutGuide)
+      $0.top.equalTo(self.participateButton.snp.top).offset(Metric.backgroundGradientImageViewTopMargin)
+    }
 
-      self.participateButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.participateButtonBottomMargin),
-      self.participateButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.participateButtonLeadingMargin),
-      self.participateButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.participateButtonTrailingMargin),
-      self.participateButton.heightAnchor.constraint(equalToConstant: Metric.participateButtonHeight)
-    ])
+    self.participateButton.snp.makeConstraints {
+      $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(Metric.participateButtonBottomMargin)
+      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.participateButtonLeadingMargin)
+    }
+//
+//    NSLayoutConstraint.activate([
+//      self.challengeDetailCollectionView.topAnchor.constraint(equalTo: self.topAnchor),
+//      self.challengeDetailCollectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+//      self.challengeDetailCollectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+//      self.challengeDetailCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.challengDetailCollectionViewBottomMargin),
+//
+//      self.bottomGradientImageView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
+//      self.bottomGradientImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+//      self.bottomGradientImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+//      self.bottomGradientImageView.topAnchor.constraint(equalTo: self.participateButton.topAnchor, constant: Metric.backgroundGradientImageViewTopMargin),
+//
+//      self.participateButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.participateButtonBottomMargin),
+//      self.participateButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.participateButtonLeadingMargin),
+//      self.participateButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.participateButtonTrailingMargin),
+//      self.participateButton.heightAnchor.constraint(equalToConstant: Metric.participateButtonHeight)
+//    ])
   }
 
   func challengeCollectionViewLayout() -> UICollectionViewCompositionalLayout {

@@ -34,7 +34,8 @@ final class ChallengeDetailCell: BaseCollectionViewCell {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.textColor = .green50
     $0.font = .systemFont(ofSize: 17, weight: .bold)
-    $0.textAlignment = .left
+    $0.textAlignment = .natural
+    $0.numberOfLines = 0
   }
 
   private let exampleImageView = UIImageView().then {
@@ -62,7 +63,7 @@ final class ChallengeDetailCell: BaseCollectionViewCell {
       .flatMap { try? Data(contentsOf: $0) }
       .flatMap { UIImage(data: $0) }
     ?? UIImage(named: "challenge")
-    
+
     self.contentsLabel.setLineHeight(fontSize: 14, content: challengeContent.content)
   }
 
@@ -75,7 +76,7 @@ final class ChallengeDetailCell: BaseCollectionViewCell {
       self.titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: Metric.titleLabelTopMargin),
       self.titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: Metric.titleLabelLeadingMargin),
       self.titleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: Metric.titleLabelTrailingMargin),
-      self.titleLabel.heightAnchor.constraint(equalToConstant: Metric.titleLabelHeight),
+//      self.titleLabel.heightAnchor.constraint(equalToConstant: Metric.titleLabelHeight),
 
       self.exampleImageView.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: Metric.exampleImageViewTopMargin),
       self.exampleImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: Metric.exampleImageViewLeadingMargin),
