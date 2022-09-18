@@ -80,36 +80,29 @@ class ChallengeDetailView: UIView {
       $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(Metric.participateButtonBottomMargin)
       $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.participateButtonLeadingMargin)
     }
-//
-//    NSLayoutConstraint.activate([
-//      self.challengeDetailCollectionView.topAnchor.constraint(equalTo: self.topAnchor),
-//      self.challengeDetailCollectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-//      self.challengeDetailCollectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-//      self.challengeDetailCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.challengDetailCollectionViewBottomMargin),
-//
-//      self.bottomGradientImageView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
-//      self.bottomGradientImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-//      self.bottomGradientImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-//      self.bottomGradientImageView.topAnchor.constraint(equalTo: self.participateButton.topAnchor, constant: Metric.backgroundGradientImageViewTopMargin),
-//
-//      self.participateButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.participateButtonBottomMargin),
-//      self.participateButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.participateButtonLeadingMargin),
-//      self.participateButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.participateButtonTrailingMargin),
-//      self.participateButton.heightAnchor.constraint(equalToConstant: Metric.participateButtonHeight)
-//    ])
   }
 
   func challengeCollectionViewLayout() -> UICollectionViewCompositionalLayout {
     let estimatedHeigth: CGFloat = 400
 
-    let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(estimatedHeigth))
-    let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+    let headerSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .estimated(estimatedHeigth)
+    )
+    let header = NSCollectionLayoutBoundarySupplementaryItem(
+      layoutSize: headerSize,
+      elementKind: UICollectionView.elementKindSectionHeader,
+      alignment: .top
+    )
 
     let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                           heightDimension: .estimated(estimatedHeigth))
     let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-    let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(estimatedHeigth))
+    let groupSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .estimated(estimatedHeigth)
+    )
     let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
     let section = NSCollectionLayoutSection(group: group)

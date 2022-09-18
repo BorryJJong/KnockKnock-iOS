@@ -76,7 +76,6 @@ final class ChallengeDetailCell: BaseCollectionViewCell {
       self.titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: Metric.titleLabelTopMargin),
       self.titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: Metric.titleLabelLeadingMargin),
       self.titleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: Metric.titleLabelTrailingMargin),
-//      self.titleLabel.heightAnchor.constraint(equalToConstant: Metric.titleLabelHeight),
 
       self.exampleImageView.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: Metric.exampleImageViewTopMargin),
       self.exampleImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: Metric.exampleImageViewLeadingMargin),
