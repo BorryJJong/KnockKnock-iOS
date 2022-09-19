@@ -28,7 +28,7 @@ final class FeedSearchViewController: BaseViewController<FeedSearchView> {
     }
   }
 
-  var searchLog: [SearchLog] = []
+  var searchLog: [SearchLog] = [] 
 
   // MARK: - Constants
 

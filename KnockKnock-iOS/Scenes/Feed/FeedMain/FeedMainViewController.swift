@@ -37,12 +37,28 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
     }
   }
   var challengeTitles: [ChallengeTitle] = []
-  private var searchLogs: [SearchLog] = []
+  var searchLogs: [SearchLog] = [] {
+    didSet {
+      self.navigationItem.searchController?.searchResultsController?.viewDidLoad()
+    }
+  }
 
   var currentPage = 1
   let pageSize = 1 // pageSize 논의 필요, 페이지네이션 작동 테스트를 위해 1로 임시 설정
   var challengeId = 0
-  
+
+  // MARK: - UIs
+
+  let searchBar = UISearchController(
+    searchResultsController: FeedSearchRouter.createFeedSearch(searchLog: searchLogs)
+  ).then {
+    $0.hidesNavigationBarDuringPresentation = false
+    $0.showsSearchResultsController = true
+    $0.searchBar.placeholder = "검색어를 입력하세요."
+    $0.searchBar.tintColor = .black
+    $0.searchBar.setValue("취소", forKey: "cancelButtonText")
+  }
+
   // MARK: - Lify Cycles
   
   override func viewDidLoad() {
@@ -67,8 +83,9 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
   
   override func setupConfigure() {
 
-    self.navigationItem.searchController = containerView.searchBar
+    self.navigationItem.searchController = searchBar
     self.navigationItem.searchController?.searchBar.searchTextField.delegate = self
+//    self.navigationItem.searchController?.searchResultsUpdater = self
 
     self.containerView.tagCollectionView.do {
       $0.delegate = self
@@ -140,11 +157,10 @@ extension FeedMainViewController: UISearchTextFieldDelegate {
   func textFieldDidEndEditing(_ textField: UITextField) {
     if let keyword = textField.text {
       let log = SearchLog(regDate: Date(), category: "인기", keyword: keyword)
-      self.interactor?.saveSearchLog(searchLog: log)
-      self.interactor?.getSearchLog()
-
-      print(searchLogs)
+      self.searchLogs.append(log)
+      self.interactor?.saveSearchLog(searchLog: self.searchLogs)
     }
+    self.interactor?.getSearchLog()
   }
 }
 

@@ -11,7 +11,7 @@ protocol FeedMainWorkerProtocol: AnyObject {
   func fetchFeedMain(currentPage: Int, pageSize: Int, challengeId: Int, completionHandler: @escaping (FeedMain) -> Void)
   func fetchChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void)
   
-  func saveSearchLog(searchLog: SearchLog)
+  func saveSearchLog(searchLog: [SearchLog])
   func getSearchLog(completionHandler: @escaping ([SearchLog]) -> Void)
 }
 
@@ -24,12 +24,14 @@ final class FeedMainWorker: FeedMainWorkerProtocol {
     self.repository = repository
   }
 
-  func saveSearchLog(searchLog: SearchLog) {
-    let log: [String: Any] = [
-      "regDate": searchLog.regDate,
-      "keyword": searchLog.keyword,
-      "category": searchLog.category
-    ]
+  func saveSearchLog(searchLog: [SearchLog]) {
+    let log = searchLog.map {
+      [
+        "regDate": $0.regDate,
+        "keyword": $0.keyword,
+        "category": $0.category
+      ]
+    }
     userDefaults.set(log, forKey: "searchLog")
   }
 

@@ -45,9 +45,10 @@ final class SearchResultCell: BaseCollectionViewCell {
 
   // MARK: - Bind
 
-  func bind(tap: SearchTap, isLogSection: Bool) {
+  func bind(tap: SearchTap, isLogSection: Bool, keyword: String) {
     self.imageView.backgroundColor = .white
     self.deleteButton.isHidden = !isLogSection
+    self.dataLabel.text = keyword
 
     switch tap {
     case .popular:

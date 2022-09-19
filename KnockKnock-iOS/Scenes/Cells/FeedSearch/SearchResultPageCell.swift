@@ -26,6 +26,12 @@ final class SearchResultPageCell: BaseCollectionViewCell {
     }
   }
 
+  var searchLog: [SearchLog] = [] {
+    didSet{
+      self.searchResultCollectionView.reloadData()
+    }
+  }
+
   // MARK: - UIs
 
   let searchResultCollectionView = UICollectionView(

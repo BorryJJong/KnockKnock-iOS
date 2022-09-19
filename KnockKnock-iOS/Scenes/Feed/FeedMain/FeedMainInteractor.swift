@@ -14,7 +14,7 @@ protocol FeedMainInteractorProtocol {
   func fetchFeedMain(currentPage: Int, pageSize: Int, challengeId: Int)
   func fetchChallengeTitles()
   func setSelectedStatus(challengeTitles: [ChallengeTitle], selectedIndex: IndexPath)
-  func saveSearchLog(searchLog: SearchLog)
+  func saveSearchLog(searchLog: [SearchLog])
   func getSearchLog()
 }
 
@@ -25,13 +25,13 @@ final class FeedMainInteractor: FeedMainInteractorProtocol {
   var presenter: FeedMainPresenterProtocol?
   var worker: FeedMainWorkerProtocol?
 
-  func saveSearchLog(searchLog: SearchLog) {
+  func saveSearchLog(searchLog: [SearchLog]) {
     self.worker?.saveSearchLog(searchLog: searchLog)
   }
 
   func getSearchLog() {
-    self.worker?.getSearchLog { [weak self] logs in
-      self?.presenter?.presentSearchLog(searchLog: logs)
+    self.worker?.getSearchLog { [weak self] log in
+      self?.presenter?.presentSearchLog(searchLog: log)
     }
   }
 
