@@ -8,12 +8,12 @@
 import UIKit
 
 protocol FeedSearchRouterProtocol {
-  static func createFeedSearch(searchLog: [SearchLog]) -> UIViewController
+  static func createFeedSearch() -> UIViewController
 
 }
 
 final class FeedSearchRouter: FeedSearchRouterProtocol {
-  static func createFeedSearch(searchLog: [SearchLog]) -> UIViewController {
+  static func createFeedSearch() -> UIViewController {
     let view = FeedSearchViewController()
     let interactor = FeedSearchInteractor()
     let presenter = FeedSearchPresenter()
@@ -22,9 +22,9 @@ final class FeedSearchRouter: FeedSearchRouterProtocol {
 
     view.interactor = interactor
     view.router = router
-    view.searchLog = searchLog
     interactor.presenter = presenter
     interactor.worker = worker
+    presenter.view = view
     
     return view
   }

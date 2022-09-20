@@ -12,7 +12,7 @@ protocol FeedMainPresenterProtocol {
   
   func presentFeedMain(feed: FeedMain)
   func presentGetChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?)
-  func presentSearchLog(searchLog: [SearchLog])
+
 }
 
 final class FeedMainPresenter: FeedMainPresenterProtocol {
@@ -29,8 +29,5 @@ final class FeedMainPresenter: FeedMainPresenterProtocol {
     self.view?.fetchChallengeTitles(challengeTitle: challengeTitle, index: index)
   }
 
-  func presentSearchLog(searchLog: [SearchLog]) {
-    self.view?.fetchSearchLog(searchLog: searchLog)
-  }
 
 }

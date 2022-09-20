@@ -12,6 +12,8 @@ import Then
 protocol FeedSearchViewProtocol {
   var interactor: FeedSearchInteractorProtocol? { get set }
   var router: FeedSearchRouterProtocol? { get set }
+
+  func fetchSearchLog(searchLog: [SearchLog])
 }
 
 final class FeedSearchViewController: BaseViewController<FeedSearchView> {
@@ -28,7 +30,11 @@ final class FeedSearchViewController: BaseViewController<FeedSearchView> {
     }
   }
 
-  var searchLog: [SearchLog] = [] 
+  var searchLog: [SearchLog] = [] {
+    didSet {
+      self.containerView.searchResultPageCollectionView.reloadData()
+    }
+  }
 
   // MARK: - Constants
 
@@ -46,6 +52,7 @@ final class FeedSearchViewController: BaseViewController<FeedSearchView> {
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setupConfigure()
+    self.interactor?.getSearchLog()
   }
 
   override func setupConfigure() {
@@ -82,7 +89,9 @@ final class FeedSearchViewController: BaseViewController<FeedSearchView> {
   // MARK: - FeedSearchViewProtocol
 
 extension FeedSearchViewController: FeedSearchViewProtocol {
-
+  func fetchSearchLog(searchLog: [SearchLog]){
+    self.searchLog = searchLog
+  }
 }
 
   // MARK: - CollectionView DataSource, Delegate
@@ -120,7 +129,7 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
         withType: SearchResultPageCell.self,
         for: indexPath
       )
-      cell.bind(index: indexPath)
+      cell.bind(index: indexPath, searchLog: self.searchLog)
       
       return cell
 

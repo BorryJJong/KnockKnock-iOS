@@ -37,20 +37,17 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
     }
   }
   var challengeTitles: [ChallengeTitle] = []
-  var searchLogs: [SearchLog] = [] {
-    didSet {
-      self.navigationItem.searchController?.searchResultsController?.viewDidLoad()
-    }
-  }
-
+  var searchLogs: [SearchLog] = []
+  var popularPost: [String] = []
+  
   var currentPage = 1
   let pageSize = 1 // pageSize 논의 필요, 페이지네이션 작동 테스트를 위해 1로 임시 설정
   var challengeId = 0
 
   // MARK: - UIs
 
-  let searchBar = UISearchController(
-    searchResultsController: FeedSearchRouter.createFeedSearch(searchLog: searchLogs)
+  lazy var searchBar = UISearchController(
+    searchResultsController: FeedSearchRouter.createFeedSearch()
   ).then {
     $0.hidesNavigationBarDuringPresentation = false
     $0.showsSearchResultsController = true
@@ -85,7 +82,6 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
 
     self.navigationItem.searchController = searchBar
     self.navigationItem.searchController?.searchBar.searchTextField.delegate = self
-//    self.navigationItem.searchController?.searchResultsUpdater = self
 
     self.containerView.tagCollectionView.do {
       $0.delegate = self
@@ -160,7 +156,6 @@ extension FeedMainViewController: UISearchTextFieldDelegate {
       self.searchLogs.append(log)
       self.interactor?.saveSearchLog(searchLog: self.searchLogs)
     }
-    self.interactor?.getSearchLog()
   }
 }
 

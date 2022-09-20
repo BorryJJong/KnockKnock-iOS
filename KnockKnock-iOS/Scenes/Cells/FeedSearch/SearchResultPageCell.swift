@@ -43,8 +43,9 @@ final class SearchResultPageCell: BaseCollectionViewCell {
 
   // MARK: - Bind
 
-  func bind(index: IndexPath) {
+  func bind(index: IndexPath, searchLog: [SearchLog]) {
     self.tapIndex = index.row
+    self.searchLog = searchLog
   }
 
   // MARK: - Configure
@@ -76,7 +77,11 @@ extension SearchResultPageCell: UICollectionViewDataSource, UICollectionViewDele
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    return 3
+    if section == 0 && self.tapIndex == 0 {
+      return 3
+    } else {
+      return self.searchLog.count
+    }
   }
 
   func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -97,9 +102,9 @@ extension SearchResultPageCell: UICollectionViewDataSource, UICollectionViewDele
     )
     cell.backgroundColor = .white
     if indexPath.section == 0 && self.tapIndex == 0 {
-      cell.bind(tap: SearchTap.allCases[self.tapIndex], isLogSection: false)
+      cell.bind(tap: SearchTap.allCases[self.tapIndex], isLogSection: false, keyword: nil)
     } else {
-      cell.bind(tap: SearchTap.allCases[self.tapIndex], isLogSection: true)
+      cell.bind(tap: SearchTap.allCases[self.tapIndex], isLogSection: true, keyword: self.searchLog[indexPath.item].keyword)
     }
     return cell
   }
