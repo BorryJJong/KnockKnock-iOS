@@ -26,7 +26,7 @@ final class SearchResultPageCell: BaseCollectionViewCell {
     }
   }
 
-  var searchLog: [SearchLog] = [] {
+  var searchKeyword: [SearchKeyword] = [] {
     didSet{
       self.searchResultCollectionView.reloadData()
     }
@@ -43,9 +43,9 @@ final class SearchResultPageCell: BaseCollectionViewCell {
 
   // MARK: - Bind
 
-  func bind(index: IndexPath, searchLog: [SearchLog]) {
+  func bind(index: IndexPath, searchKeyword: [SearchKeyword]) {
     self.tapIndex = index.row
-    self.searchLog = searchLog
+    self.searchKeyword = searchKeyword
   }
 
   // MARK: - Configure
@@ -77,10 +77,14 @@ extension SearchResultPageCell: UICollectionViewDataSource, UICollectionViewDele
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    if section == 0 && self.tapIndex == 0 {
-      return 3
-    } else {
-      return self.searchLog.count
+    let tap = SearchTap[self.tapIndex]
+    switch tap {
+    case "인기":
+      if section == 0 {
+        return 3
+      }
+    default:
+      return self.searchKeyword.count
     }
   }
 
@@ -100,11 +104,19 @@ extension SearchResultPageCell: UICollectionViewDataSource, UICollectionViewDele
       withType: SearchResultCell.self,
       for: indexPath
     )
-    cell.backgroundColor = .white
+    print(searchKeyword)
     if indexPath.section == 0 && self.tapIndex == 0 {
-      cell.bind(tap: SearchTap.allCases[self.tapIndex], isLogSection: false, keyword: nil)
+      cell.bind(
+        tap: SearchTap.allCases[self.tapIndex],
+        isLogSection: false,
+        keyword: SearchKeyword(category: "인기", keyword: "용기내칠린지")
+      )
     } else {
-      cell.bind(tap: SearchTap.allCases[self.tapIndex], isLogSection: true, keyword: self.searchLog[indexPath.item].keyword)
+      cell.bind(
+        tap: SearchTap.allCases[self.tapIndex],
+        isLogSection: true,
+        keyword: self.searchKeyword[indexPath.item]
+      )
     }
     return cell
   }

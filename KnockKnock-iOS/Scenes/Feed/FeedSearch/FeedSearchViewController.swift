@@ -13,7 +13,7 @@ protocol FeedSearchViewProtocol {
   var interactor: FeedSearchInteractorProtocol? { get set }
   var router: FeedSearchRouterProtocol? { get set }
 
-  func fetchSearchLog(searchLog: [SearchLog])
+  func fetchSearchLog(searchKeyword: [SearchKeyword])
 }
 
 final class FeedSearchViewController: BaseViewController<FeedSearchView> {
@@ -30,7 +30,7 @@ final class FeedSearchViewController: BaseViewController<FeedSearchView> {
     }
   }
 
-  var searchLog: [SearchLog] = [] {
+  var searchKeyword: [SearchKeyword] = [] {
     didSet {
       self.containerView.searchResultPageCollectionView.reloadData()
     }
@@ -89,8 +89,8 @@ final class FeedSearchViewController: BaseViewController<FeedSearchView> {
   // MARK: - FeedSearchViewProtocol
 
 extension FeedSearchViewController: FeedSearchViewProtocol {
-  func fetchSearchLog(searchLog: [SearchLog]){
-    self.searchLog = searchLog
+  func fetchSearchLog(searchKeyword: [SearchKeyword]){
+    self.searchKeyword = searchKeyword
   }
 }
 
@@ -129,7 +129,7 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
         withType: SearchResultPageCell.self,
         for: indexPath
       )
-      cell.bind(index: indexPath, searchLog: self.searchLog)
+      cell.bind(index: indexPath, searchKeyword: self.searchKeyword)
       
       return cell
 

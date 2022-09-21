@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct SearchLog {
-  let regDate: Date
+struct SearchKeyword {
+//  let regDate: Date
   let category: String
   let keyword: String
 }

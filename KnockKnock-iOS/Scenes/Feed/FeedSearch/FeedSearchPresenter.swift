@@ -9,13 +9,13 @@ import UIKit
 
 protocol FeedSearchPresenterProtocol {
   var view: FeedSearchViewProtocol? { get set }
-  func presentSearchLog(searchLog: [SearchLog])
+  func presentSearchLog(searchKeyword: [SearchKeyword])
 }
 
 final class FeedSearchPresenter: FeedSearchPresenterProtocol {
   var view: FeedSearchViewProtocol?
 
-  func presentSearchLog(searchLog: [SearchLog]) {
-    self.view?.fetchSearchLog(searchLog: searchLog)
+  func presentSearchLog(searchKeyword: [SearchKeyword]) {
+    self.view?.fetchSearchLog(searchKeyword: searchKeyword)
   }
 }

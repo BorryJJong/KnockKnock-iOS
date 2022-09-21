@@ -20,7 +20,7 @@ final class FeedSearchInteractor: FeedSearchInteractorProtocol {
 
   func getSearchLog() {
     self.worker?.getSearchLog { [weak self] log in
-      self?.presenter?.presentSearchLog(searchLog: log)
+      self?.presenter?.presentSearchLog(searchKeyword: log)
     }
   }
 }

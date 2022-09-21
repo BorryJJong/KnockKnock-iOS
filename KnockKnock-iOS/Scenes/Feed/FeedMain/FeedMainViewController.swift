@@ -12,7 +12,7 @@ protocol FeedMainViewProtocol: AnyObject {
 
   func fetchFeedMain(feed: FeedMain)
   func fetchChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?)
-  func fetchSearchLog(searchLog: [SearchLog])
+  func fetchSearchLog(searchKeyword: [SearchKeyword])
 }
 
 final class FeedMainViewController: BaseViewController<FeedMainView> {
@@ -37,7 +37,7 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
     }
   }
   var challengeTitles: [ChallengeTitle] = []
-  var searchLogs: [SearchLog] = []
+  var searchKeyword: [SearchKeyword] = []
   var popularPost: [String] = []
   
   var currentPage = 1
@@ -122,8 +122,8 @@ extension FeedMainViewController: FeedMainViewProtocol {
     }
   }
 
-  func fetchSearchLog(searchLog: [SearchLog]) {
-    self.searchLogs = searchLog
+  func fetchSearchLog(searchKeyword: [SearchKeyword]) {
+    self.searchKeyword = searchKeyword
   }
 
   func fetchChallengeTitles(
@@ -152,9 +152,9 @@ extension FeedMainViewController: UISearchTextFieldDelegate {
 
   func textFieldDidEndEditing(_ textField: UITextField) {
     if let keyword = textField.text {
-      let log = SearchLog(regDate: Date(), category: "인기", keyword: keyword)
-      self.searchLogs.append(log)
-      self.interactor?.saveSearchLog(searchLog: self.searchLogs)
+      let searchLog = SearchKeyword(category: "태그", keyword: keyword)
+      self.searchKeyword.append(searchLog)
+      self.interactor?.saveSearchLog(searchKeyword: self.searchKeyword)
     }
   }
 }
