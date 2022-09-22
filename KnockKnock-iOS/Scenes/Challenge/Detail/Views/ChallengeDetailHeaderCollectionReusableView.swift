@@ -208,6 +208,7 @@ final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableVie
         $0.attributedText = attributedString
         $0.numberOfLines = 0
         $0.textAlignment = .left
+        $0.lineBreakStrategy = .hangulWordPriority
       }
       self.waysStackView.addArrangedSubview(waysLabel)
     }

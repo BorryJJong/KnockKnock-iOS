@@ -7,6 +7,9 @@
 
 import UIKit
 
+import SnapKit
+import Then
+
 final class ChallengeDetailCell: BaseCollectionViewCell {
 
   // MARK: - Constants
@@ -25,7 +28,7 @@ final class ChallengeDetailCell: BaseCollectionViewCell {
     static let contentsLabelTopMargin = 15.f
     static let contentsLabelLeadingMargin = 20.f
     static let contentsLabelTrailingMargin = -20.f
-    static let contentsLabelBottomMargin = -20.f
+    static let contentsLabelBottomMargin = 0.f
   }
 
   // MARK: - UIs
@@ -36,6 +39,7 @@ final class ChallengeDetailCell: BaseCollectionViewCell {
     $0.font = .systemFont(ofSize: 17, weight: .bold)
     $0.textAlignment = .natural
     $0.numberOfLines = 0
+    $0.lineBreakStrategy = .hangulWordPriority
   }
 
   private let exampleImageView = UIImageView().then {
@@ -55,7 +59,7 @@ final class ChallengeDetailCell: BaseCollectionViewCell {
 
   // MARK: - Bind
 
-  func bind(challengeContent: ChallengeSubContents) {
+  func bind(challengeContent: ChallengeSubContents, isLast: Bool) {
     self.titleLabel.text = challengeContent.title
 
     self.exampleImageView.image = challengeContent.image
@@ -65,6 +69,11 @@ final class ChallengeDetailCell: BaseCollectionViewCell {
     ?? UIImage(named: "challenge")
 
     self.contentsLabel.setLineHeight(fontSize: 14, content: challengeContent.content)
+    if isLast {
+      self.contentsLabel.snp.updateConstraints {
+        $0.bottom.equalToSuperview().offset(-70)
+      }
+    }
   }
 
   // MARK: - Configure
@@ -72,20 +81,21 @@ final class ChallengeDetailCell: BaseCollectionViewCell {
   override func setupConstraints() {
     [self.titleLabel, self.exampleImageView, self.contentsLabel].addSubViews(self.contentView)
 
-    NSLayoutConstraint.activate([
-      self.titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: Metric.titleLabelTopMargin),
-      self.titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: Metric.titleLabelLeadingMargin),
-      self.titleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: Metric.titleLabelTrailingMargin),
+    self.titleLabel.snp.makeConstraints {
+      $0.top.equalToSuperview().offset(Metric.titleLabelTopMargin)
+      $0.leading.trailing.equalToSuperview().inset(Metric.titleLabelLeadingMargin)
+    }
 
-      self.exampleImageView.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: Metric.exampleImageViewTopMargin),
-      self.exampleImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: Metric.exampleImageViewLeadingMargin),
-      self.exampleImageView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: Metric.exampleImageViewTrailingMargin),
-      self.exampleImageView.heightAnchor.constraint(equalToConstant: Metric.exampleImageViewHeight),
+    self.exampleImageView.snp.makeConstraints {
+      $0.top.equalTo(self.titleLabel.snp.bottom).offset(Metric.exampleImageViewTopMargin)
+      $0.leading.trailing.equalToSuperview().inset(Metric.exampleImageViewLeadingMargin)
+      $0.height.equalTo(Metric.exampleImageViewHeight)
+    }
 
-      self.contentsLabel.topAnchor.constraint(equalTo: self.exampleImageView.bottomAnchor, constant: Metric.contentsLabelTopMargin),
-      self.contentsLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: Metric.contentsLabelLeadingMargin),
-      self.contentsLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: Metric.contentsLabelTrailingMargin),
-      self.contentsLabel.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: Metric.contentsLabelBottomMargin)
-    ])
+    self.contentsLabel.snp.makeConstraints {
+      $0.top.equalTo(self.exampleImageView.snp.bottom).offset(Metric.contentsLabelTopMargin)
+      $0.leading.trailing.equalToSuperview().inset(Metric.contentsLabelLeadingMargin)
+      $0.bottom.equalToSuperview().offset(Metric.contentsLabelBottomMargin)
+    }
   }
 }

@@ -83,7 +83,7 @@ class ChallengeDetailView: UIView {
   }
 
   func challengeCollectionViewLayout() -> UICollectionViewCompositionalLayout {
-    let estimatedHeigth: CGFloat = 400
+    let estimatedHeigth: CGFloat = 200
 
     let headerSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1),
@@ -95,8 +95,10 @@ class ChallengeDetailView: UIView {
       alignment: .top
     )
 
-    let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                          heightDimension: .estimated(estimatedHeigth))
+    let itemSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .estimated(estimatedHeigth)
+    )
     let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
     let groupSize = NSCollectionLayoutSize(

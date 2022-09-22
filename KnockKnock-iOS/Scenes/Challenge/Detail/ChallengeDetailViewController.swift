@@ -136,7 +136,9 @@ extension ChallengeDetailViewController: UICollectionViewDataSource {
     )
 
     if let challengeDetail = self.challengeDetail {
-      cell.bind(challengeContent: challengeDetail.content.subContents[indexPath.item])
+      let isLast = challengeDetail.content.subContents.count - 1 == indexPath.item
+      print(isLast)
+      cell.bind(challengeContent: challengeDetail.content.subContents[indexPath.item], isLast: isLast)
     }
 
     return cell
