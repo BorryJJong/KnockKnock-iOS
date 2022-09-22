@@ -26,7 +26,6 @@ final class FeedMainWorker: FeedMainWorkerProtocol {
   func saveSearchLog(searchKeyword: [SearchKeyword]) {
     let log = searchKeyword.map {
       [
-//        "regDate": $0.regDate,
         "keyword": $0.keyword,
         "category": $0.category
       ]

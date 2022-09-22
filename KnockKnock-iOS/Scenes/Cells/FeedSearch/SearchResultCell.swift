@@ -48,27 +48,13 @@ final class SearchResultCell: BaseCollectionViewCell {
   func bind(tap: SearchTap, isLogSection: Bool, keyword: SearchKeyword) {
     self.imageView.backgroundColor = .white
     self.deleteButton.isHidden = !isLogSection
-      self.dataLabel.text = keyword.keyword
+    self.dataLabel.text = keyword.keyword
 
-      switch tap {
-      case .popular:
-        let category = SearchTap(rawValue: keyword.category)
+    switch tap {
+    case .popular:
+      let category = SearchTap(rawValue: keyword.category)
 
-        switch category {
-        case .account:
-          self.imageView.image = KKDS.Image.ic_person_24
-
-        case .tag:
-          self.imageView.image = KKDS.Image.ic_search_tag_52
-
-        case .place:
-          self.imageView.image = KKDS.Image.ic_search_location_52
-
-        default:
-          self.imageView.backgroundColor = .gray30
-          self.imageView.image = nil
-        }
-
+      switch category {
       case .account:
         self.imageView.image = KKDS.Image.ic_person_24
 
@@ -77,7 +63,21 @@ final class SearchResultCell: BaseCollectionViewCell {
 
       case .place:
         self.imageView.image = KKDS.Image.ic_search_location_52
+
+      default:
+        self.imageView.backgroundColor = .gray30
+        self.imageView.image = nil
       }
+
+    case .account:
+      self.imageView.image = KKDS.Image.ic_person_24
+
+    case .tag:
+      self.imageView.image = KKDS.Image.ic_search_tag_52
+
+    case .place:
+      self.imageView.image = KKDS.Image.ic_search_location_52
+    }
     
   }
 

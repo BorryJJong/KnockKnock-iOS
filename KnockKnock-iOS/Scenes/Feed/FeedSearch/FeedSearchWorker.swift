@@ -20,9 +20,9 @@ final class FeedSearchWorker: FeedSearchWorkerProtocol {
     guard let log = userDefaults.object(forKey: "searchLog") as? [[String: Any]] else { return }
 
     searchKeyword = log.compactMap {
-//      guard let regDate = $0["regDate"] as? Date else { return nil }
       guard let keyword = $0["keyword"] as? String else { return nil }
       guard let category = $0["category"] as? String else { return nil }
+      
       return SearchKeyword(category: category, keyword: keyword)
     }
     completionHandler(searchKeyword)

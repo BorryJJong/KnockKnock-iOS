@@ -28,6 +28,4 @@ final class FeedMainPresenter: FeedMainPresenterProtocol {
   func presentGetChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?) {
     self.view?.fetchChallengeTitles(challengeTitle: challengeTitle, index: index)
   }
-
-
 }

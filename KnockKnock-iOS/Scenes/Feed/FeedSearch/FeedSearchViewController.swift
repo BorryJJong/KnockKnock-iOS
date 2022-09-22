@@ -33,8 +33,33 @@ final class FeedSearchViewController: BaseViewController<FeedSearchView> {
   var searchKeyword: [SearchKeyword] = [] {
     didSet {
       self.containerView.searchResultPageCollectionView.reloadData()
+
+      guard let tagKeyword: [SearchKeyword] = self.interactor?.distributeSearchLog(
+        searchLog: searchKeyword,
+        category: SearchTap.tag
+      ) else { return }
+      guard let accountKeyword: [SearchKeyword] = self.interactor?.distributeSearchLog(
+        searchLog: searchKeyword,
+        category: SearchTap.account
+      ) else { return }
+      guard let placeKeyword: [SearchKeyword] = self.interactor?.distributeSearchLog(
+        searchLog: searchKeyword,
+        category: SearchTap.place
+      ) else { return }
+
+      self.keywords.updateValue(searchKeyword, forKey: SearchTap.popular)
+      self.keywords.updateValue(tagKeyword, forKey: SearchTap.tag)
+      self.keywords.updateValue(accountKeyword, forKey: SearchTap.account)
+      self.keywords.updateValue(placeKeyword, forKey: SearchTap.place)
     }
   }
+
+  var keywords: [SearchTap: [SearchKeyword]] = [
+    SearchTap.popular: [],
+    SearchTap.tag: [],
+    SearchTap.account: [],
+    SearchTap.place: []
+  ]
 
   // MARK: - Constants
 
@@ -42,11 +67,7 @@ final class FeedSearchViewController: BaseViewController<FeedSearchView> {
     case tap = 0
     case result = 1
   }
-
-  // MARK: - Properties
-
-  private let taps: [String] = ["인기", "계정", "태그", "장소"]
-
+  
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
@@ -86,7 +107,7 @@ final class FeedSearchViewController: BaseViewController<FeedSearchView> {
   }
 }
 
-  // MARK: - FeedSearchViewProtocol
+// MARK: - FeedSearchViewProtocol
 
 extension FeedSearchViewController: FeedSearchViewProtocol {
   func fetchSearchLog(searchKeyword: [SearchKeyword]){
@@ -94,7 +115,7 @@ extension FeedSearchViewController: FeedSearchViewProtocol {
   }
 }
 
-  // MARK: - CollectionView DataSource, Delegate
+// MARK: - CollectionView DataSource, Delegate
 
 extension FeedSearchViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
   func collectionView(
@@ -118,7 +139,7 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
         withType: TapCell.self,
         for: indexPath
       )
-      let isSelected = indexPath.item == self.currentIndex 
+      let isSelected = indexPath.item == self.currentIndex
 
       cell.bind(tapName: SearchTap.allCases[indexPath.item].rawValue, isSelected: isSelected)
 
@@ -129,7 +150,7 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
         withType: SearchResultPageCell.self,
         for: indexPath
       )
-      cell.bind(index: indexPath, searchKeyword: self.searchKeyword)
+      cell.bind(index: indexPath, searchKeyword: self.keywords)
       
       return cell
 
