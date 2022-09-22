@@ -125,7 +125,7 @@ final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableVie
     $0.axis = .vertical
     $0.distribution = .fill
     $0.alignment = .leading
-    $0.spacing = 10
+    $0.spacing = 5
     $0.layoutMargins = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
     $0.isLayoutMarginsRelativeArrangement = true
     $0.backgroundColor = .gray20
@@ -185,31 +185,17 @@ final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableVie
   
   private func setWayStackView(ways: [String]) {
     let wayLabelFont = UIFont.systemFont(ofSize: 12, weight: .regular)
-    let bulletImage = KKDS.Image.ic_bullet_3_gr
 
     for way in ways {
-      let attributedString = NSMutableAttributedString(string: "")
-
-      let imageAttachment = NSTextAttachment()
-      imageAttachment.image = bulletImage
-      imageAttachment.bounds = CGRect(
-        x: 0,
-        y: (wayLabelFont.capHeight - bulletImage.size.height).rounded() / 2,
-        width: bulletImage.size.width,
-        height: bulletImage.size.height
-      )
-
-      attributedString.append(NSAttributedString(attachment: imageAttachment))
-      attributedString.append(NSAttributedString(string: "  \(way)"))
 
       let waysLabel = UILabel().then {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.font = wayLabelFont
-        $0.attributedText = attributedString
         $0.numberOfLines = 0
         $0.textAlignment = .left
         $0.lineBreakStrategy = .hangulWordPriority
       }
+
+      waysLabel.setBulletPoint(string: way, font: wayLabelFont)
+
       self.waysStackView.addArrangedSubview(waysLabel)
     }
   }
