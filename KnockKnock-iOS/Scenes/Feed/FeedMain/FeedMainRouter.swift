@@ -11,7 +11,6 @@ protocol FeedMainRouterProtocol {
   static func createFeed() -> UIViewController
 
   func navigateToFeedList(source: FeedMainViewProtocol)
-  func passDataToFeedSearch(source: FeedMainViewProtocol)
 }
 
 final class FeedMainRouter: FeedMainRouterProtocol {
@@ -30,10 +29,6 @@ final class FeedMainRouter: FeedMainRouterProtocol {
     presenter.view = view
 
     return view
-  }
-
-  func passDataToFeedSearch(source: FeedMainViewProtocol) {
-    
   }
 
   func navigateToFeedList(source: FeedMainViewProtocol) {

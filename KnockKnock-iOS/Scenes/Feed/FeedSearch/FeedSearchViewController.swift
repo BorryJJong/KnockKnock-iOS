@@ -30,7 +30,7 @@ final class FeedSearchViewController: BaseViewController<FeedSearchView> {
     }
   }
 
-  var searchKeywords: [SearchTap: [SearchKeyword]] = [
+  private var searchKeywords: [SearchTap: [SearchKeyword]] = [
     SearchTap.popular: [],
     SearchTap.tag: [],
     SearchTap.account: [],

@@ -154,7 +154,7 @@ extension FeedMainViewController: UISearchTextFieldDelegate {
     if let keyword = textField.text {
       let searchLog = SearchKeyword(category: "계정", keyword: keyword)
       self.searchKeyword.append(searchLog)
-      self.interactor?.saveSearchLog(searchKeyword: self.searchKeyword)
+      self.interactor?.saveSearchKeyword(searchKeyword: self.searchKeyword)
     }
   }
 }

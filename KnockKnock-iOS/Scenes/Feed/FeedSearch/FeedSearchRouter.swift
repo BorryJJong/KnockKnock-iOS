@@ -9,7 +9,6 @@ import UIKit
 
 protocol FeedSearchRouterProtocol {
   static func createFeedSearch() -> UIViewController
-
 }
 
 final class FeedSearchRouter: FeedSearchRouterProtocol {
