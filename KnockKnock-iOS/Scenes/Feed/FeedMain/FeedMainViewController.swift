@@ -152,7 +152,7 @@ extension FeedMainViewController: UISearchTextFieldDelegate {
 
   func textFieldDidEndEditing(_ textField: UITextField) {
     if let keyword = textField.text {
-      let searchLog = SearchKeyword(category: "태그", keyword: keyword)
+      let searchLog = SearchKeyword(category: "계정", keyword: keyword)
       self.searchKeyword.append(searchLog)
       self.interactor?.saveSearchLog(searchKeyword: self.searchKeyword)
     }

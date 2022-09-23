@@ -11,48 +11,54 @@ protocol FeedSearchInteractorProtocol {
   var presenter: FeedSearchPresenterProtocol? { get set }
   var worker: FeedSearchWorkerProtocol? { get set }
 
-  func getSearchLog()
-  func distributeSearchLog(searchLog: [SearchKeyword], category: SearchTap) -> [SearchKeyword]
+  func getSearchKeywords()
+  func distributeSearchKeywords(searchKeywords: [SearchKeyword]) -> [SearchTap: [SearchKeyword]]
 }
 
 final class FeedSearchInteractor: FeedSearchInteractorProtocol {
   var presenter: FeedSearchPresenterProtocol?
   var worker: FeedSearchWorkerProtocol?
 
-  func getSearchLog() {
-    self.worker?.getSearchLog { [weak self] log in
-      self?.presenter?.presentSearchLog(searchKeyword: log)
+  func getSearchKeywords() {
+    self.worker?.getSearchKeywords { [weak self] keywords in
+      if let searchKeywords = self?.distributeSearchKeywords(searchKeywords: keywords) {
+        self?.presenter?.presentSearchKeywords(searchKeywords: searchKeywords)
+      }
+
     }
   }
 
-  func distributeSearchLog(searchLog: [SearchKeyword], category: SearchTap) -> [SearchKeyword] {
-    var tagKeyword: [SearchKeyword] = []
-    var accountKeyword: [SearchKeyword] = []
-    var placeKeyword: [SearchKeyword] = []
+  func distributeSearchKeywords(searchKeywords: [SearchKeyword]) -> [SearchTap: [SearchKeyword]] {
+    var keywords: [SearchTap: [SearchKeyword]] = [
+      SearchTap.popular: [],
+      SearchTap.tag: [],
+      SearchTap.account: [],
+      SearchTap.place: []
+    ]
 
-    for i in 0..<searchLog.count {
-      let tap = SearchTap(rawValue: searchLog[i].category)
+    var tagKeywords: [SearchKeyword] = []
+    var accountKeywords: [SearchKeyword] = []
+    var placeKeywords: [SearchKeyword] = []
+
+    for i in 0..<searchKeywords.count {
+      let tap = SearchTap(rawValue: searchKeywords[i].category)
       switch tap {
       case .account:
-        accountKeyword.append(searchLog[i])
+        accountKeywords.append(searchKeywords[i])
       case .tag:
-        tagKeyword.append(searchLog[i])
+        tagKeywords.append(searchKeywords[i])
       case .place:
-        placeKeyword.append(searchLog[i])
+        placeKeywords.append(searchKeywords[i])
       default:
-        return []
+        print("error")
       }
     }
 
-    switch category {
-    case .popular:
-      return searchLog
-    case .account:
-      return accountKeyword
-    case .tag:
-      return tagKeyword
-    case .place:
-      return placeKeyword
-    }
+    keywords.updateValue(searchKeywords, forKey: SearchTap.popular)
+    keywords.updateValue(tagKeywords, forKey: SearchTap.tag)
+    keywords.updateValue(accountKeywords, forKey: SearchTap.account)
+    keywords.updateValue(placeKeywords, forKey: SearchTap.place)
+
+    return keywords
   }
 }

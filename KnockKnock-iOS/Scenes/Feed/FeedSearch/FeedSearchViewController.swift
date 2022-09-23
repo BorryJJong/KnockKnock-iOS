@@ -13,7 +13,7 @@ protocol FeedSearchViewProtocol {
   var interactor: FeedSearchInteractorProtocol? { get set }
   var router: FeedSearchRouterProtocol? { get set }
 
-  func fetchSearchLog(searchKeyword: [SearchKeyword])
+  func fetchSearchKeywords(searchKeywords: [SearchTap: [SearchKeyword]])
 }
 
 final class FeedSearchViewController: BaseViewController<FeedSearchView> {
@@ -30,36 +30,16 @@ final class FeedSearchViewController: BaseViewController<FeedSearchView> {
     }
   }
 
-  var searchKeyword: [SearchKeyword] = [] {
-    didSet {
-      self.containerView.searchResultPageCollectionView.reloadData()
-
-      guard let tagKeyword: [SearchKeyword] = self.interactor?.distributeSearchLog(
-        searchLog: searchKeyword,
-        category: SearchTap.tag
-      ) else { return }
-      guard let accountKeyword: [SearchKeyword] = self.interactor?.distributeSearchLog(
-        searchLog: searchKeyword,
-        category: SearchTap.account
-      ) else { return }
-      guard let placeKeyword: [SearchKeyword] = self.interactor?.distributeSearchLog(
-        searchLog: searchKeyword,
-        category: SearchTap.place
-      ) else { return }
-
-      self.keywords.updateValue(searchKeyword, forKey: SearchTap.popular)
-      self.keywords.updateValue(tagKeyword, forKey: SearchTap.tag)
-      self.keywords.updateValue(accountKeyword, forKey: SearchTap.account)
-      self.keywords.updateValue(placeKeyword, forKey: SearchTap.place)
-    }
-  }
-
-  var keywords: [SearchTap: [SearchKeyword]] = [
+  var searchKeywords: [SearchTap: [SearchKeyword]] = [
     SearchTap.popular: [],
     SearchTap.tag: [],
     SearchTap.account: [],
     SearchTap.place: []
-  ]
+  ] {
+    didSet {
+      self.containerView.searchResultPageCollectionView.reloadData()
+    }
+  }
 
   // MARK: - Constants
 
@@ -67,13 +47,13 @@ final class FeedSearchViewController: BaseViewController<FeedSearchView> {
     case tap = 0
     case result = 1
   }
-  
+
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setupConfigure()
-    self.interactor?.getSearchLog()
+    self.interactor?.getSearchKeywords()
   }
 
   override func setupConfigure() {
@@ -110,8 +90,8 @@ final class FeedSearchViewController: BaseViewController<FeedSearchView> {
 // MARK: - FeedSearchViewProtocol
 
 extension FeedSearchViewController: FeedSearchViewProtocol {
-  func fetchSearchLog(searchKeyword: [SearchKeyword]){
-    self.searchKeyword = searchKeyword
+  func fetchSearchKeywords(searchKeywords: [SearchTap: [SearchKeyword]]){
+    self.searchKeywords = searchKeywords
   }
 }
 
@@ -150,7 +130,7 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
         withType: SearchResultPageCell.self,
         for: indexPath
       )
-      cell.bind(index: indexPath, searchKeyword: self.keywords)
+      cell.bind(index: indexPath, searchKeyword: self.searchKeywords)
       
       return cell
 

@@ -104,10 +104,13 @@ extension SearchResultPageCell: UICollectionViewDataSource, UICollectionViewDele
       }
     case 1:
       return self.accountKeywords.count
+
     case 2:
       return self.tagKeywords.count
+
     case 3:
       return self.placeKeywords.count
+      
     default:
       return 0
     }

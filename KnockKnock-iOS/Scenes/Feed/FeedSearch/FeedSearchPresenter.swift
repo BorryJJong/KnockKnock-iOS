@@ -9,13 +9,13 @@ import UIKit
 
 protocol FeedSearchPresenterProtocol {
   var view: FeedSearchViewProtocol? { get set }
-  func presentSearchLog(searchKeyword: [SearchKeyword])
+  func presentSearchKeywords(searchKeywords: [SearchTap: [SearchKeyword]])
 }
 
 final class FeedSearchPresenter: FeedSearchPresenterProtocol {
   var view: FeedSearchViewProtocol?
 
-  func presentSearchLog(searchKeyword: [SearchKeyword]) {
-    self.view?.fetchSearchLog(searchKeyword: searchKeyword)
+  func presentSearchKeywords(searchKeywords: [SearchTap: [SearchKeyword]]) {
+    self.view?.fetchSearchKeywords(searchKeywords: searchKeywords)
   }
 }
