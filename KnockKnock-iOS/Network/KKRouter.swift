@@ -14,7 +14,15 @@ enum KKRouter: URLRequestConvertible {
   typealias Parameters = [String: Any]
 
   var baseURL: URL {
-    return URL(string: API.BASE_URL)!
+    switch self {
+    case .requestShopAddress:
+      return URL(string: API.NAVER_GEOCODE_URL)!
+    default:
+      return URL(string: API.BASE_URL)!
+    }
+  }
+  var naverID: String {
+    return API.NAVER_CLIENT_ID
   }
 
   case createFeed(Int)
@@ -22,10 +30,11 @@ enum KKRouter: URLRequestConvertible {
   case getChallengeResponse
   case getChallengeTitles
   case getFeedMain(page: Int, take: Int, challengeId: Int)
+  case requestShopAddress(query: String)
 
   var method: HTTPMethod {
     switch self {
-    case .getChallengeResponse, .getFeedMain, .getChallengeTitles: return .get
+    case .getChallengeResponse, .getFeedMain, .getChallengeTitles, .requestShopAddress: return .get
     case .createFeed: return .post
     case .updateFeed: return .patch
     }
@@ -37,12 +46,13 @@ enum KKRouter: URLRequestConvertible {
     case .createFeed, .updateFeed: return "feed"
     case .getFeedMain: return "feed/main"
     case .getChallengeTitles: return "challenges/titles"
+    case .requestShopAddress: return ""
     }
   }
 
   var parameters: Parameters? {
     switch self {
-    case .getChallengeResponse, .getChallengeTitles:
+    case .getChallengeResponse, .getChallengeTitles, .requestShopAddress:
       return nil
     case let .createFeed(id), let .updateFeed(id):
       return ["id": id]
