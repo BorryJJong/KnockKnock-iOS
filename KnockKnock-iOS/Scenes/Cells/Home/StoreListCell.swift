@@ -68,26 +68,18 @@ final class StoreListCell: BaseCollectionViewCell {
   // MARK: - Configure
 
   private func setPromotionView(promotions: [String]) -> [UILabel] {
-    var labels: [UILabel] = []
-
-    for index in 0..<promotions.count {
-      let label = BasePaddingLabel(
-        padding: UIEdgeInsets(
-          top: 5,
-          left: 5,
-          bottom: 5,
-          right: 5
-        )).then {
-          $0.text = promotions[index]
-          $0.font = .systemFont(ofSize: 10)
-          $0.textColor = .gray70
-          $0.clipsToBounds = true
-          $0.layer.cornerRadius = 5
-          $0.backgroundColor = .gray20
-        }
-      labels.append(label)
+    return promotions.map { promotion in
+      BasePaddingLabel(
+        padding: .init(top: 5, left: 5, bottom: 5, right: 5)
+      ).then {
+        $0.text = promotion
+        $0.font = .systemFont(ofSize: 10)
+        $0.textColor = .gray70
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 5
+        $0.backgroundColor = .gray20
+      }
     }
-    return labels
   }
 
   /// label들의 총 길이를 구해서 Cell의 contentView width를 넘으면 cut 처리
@@ -116,7 +108,7 @@ final class StoreListCell: BaseCollectionViewCell {
       if let nsStringText = NSString(utf8String: labels[index].text ?? "") {
         let labelWidth = nsStringText.size(
           withAttributes: [
-            NSAttributedString.Key.font : labels[index].font
+            NSAttributedString.Key.font: labels[index].font ?? .systemFont(ofSize: 12)
           ]
         ).width
         totalLength += labelWidth + 5
