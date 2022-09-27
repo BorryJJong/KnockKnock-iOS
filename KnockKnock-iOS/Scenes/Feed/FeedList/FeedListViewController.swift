@@ -13,7 +13,7 @@ protocol FeedListViewProtocol: AnyObject {
   var interactor: FeedListInteractorProtocol? { get set }
   var router: FeedListRouterProtocol? { get set }
   
-  func fetchFeedList(feed: [Feed])
+  func fetchFeedList(feedList: FeedList)
 }
 
 final class FeedListViewController: BaseViewController<FeedListView> {
@@ -23,15 +23,33 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   var interactor: FeedListInteractorProtocol?
   var router: FeedListRouterProtocol?
   
-  var feed: [Feed] = []
-  
-  lazy var tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapScrollViewSection(_:)))
+  var feedList: FeedList?
+  var feedListPost: [FeedListPost] = [] {
+    didSet {
+      self.containerView.feedListCollectionView.reloadData()
+    }
+  }
+
+  private var currentPage: Int = 1
+  private var pageSize: Int = 1
+  var challengeId: Int = 0
+  var feedId: Int = 2
+
+  lazy var tapGesture = UITapGestureRecognizer(
+    target: self,
+    action: #selector(tapScrollViewSection(_:))
+  )
   
   // MARK: - Life Cycles
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.interactor?.fetchFeed()
+    self.interactor?.fetchFeedList(
+      currentPage: self.currentPage,
+      pageSize: self.pageSize,
+      feedId: self.feedId,
+      challengeId: self.challengeId
+    )
     self.containerView.addGestureRecognizer(tapGesture)
   }
   
@@ -50,7 +68,10 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   @objc func tapScrollViewSection(_ sender: UITapGestureRecognizer) {
     let collectionView = self.containerView.feedListCollectionView
     
-    let touchLocation: CGPoint = sender.location(ofTouch: 0, in: collectionView)
+    let touchLocation: CGPoint = sender.location(
+      ofTouch: 0,
+      in: collectionView
+    )
     let indexPath = collectionView.indexPathForItem(at: touchLocation)
     
     if let indexPath = indexPath {
@@ -61,7 +82,13 @@ final class FeedListViewController: BaseViewController<FeedListView> {
       }
     }
   }
-  
+
+  // MARK: - Button Actions
+
+  @objc func configureButtonDidTap(_ sender: UIButton) {
+    self.router?.presentBottomSheetView(source: self)
+  }
+
   @objc func commentButtonDidTap(_ sender: UIButton) {
     self.router?.navigateToCommentView(source: self)
   }
@@ -71,7 +98,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
 
 extension FeedListViewController: UICollectionViewDataSource {
   func numberOfSections(in collectionView: UICollectionView) -> Int {
-    return self.feed.count
+    return self.feedListPost.count
   }
 
   func collectionView(
@@ -91,7 +118,7 @@ extension FeedListViewController: UICollectionViewDataSource {
       for: indexPath
     )
 
-    cell.bind(feed: self.feed[indexPath.item])
+    cell.bind(feedList: self.feedListPost[indexPath.section])
     cell.commentsButton.addTarget(
       self,
       action: #selector(commentButtonDidTap(_:)),
@@ -101,12 +128,49 @@ extension FeedListViewController: UICollectionViewDataSource {
     return cell
   }
 
-  func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    viewForSupplementaryElementOfKind kind: String,
+    at indexPath: IndexPath
+  ) -> UICollectionReusableView {
     let header = collectionView.dequeueReusableSupplementaryHeaderView(
       withType: FeedListHeaderReusableView.self,
       for: indexPath
     )
+
+    header.bind(feed: self.feedListPost[indexPath.section])
+    header.configureButton.addTarget(
+      self,
+      action: #selector(self.configureButtonDidTap(_:)),
+      for: .touchUpInside
+    )
+
     return header
+  }
+
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    let height = scrollView.frame.height
+    let contentSizeHeight = scrollView.contentSize.height
+    let offset = scrollView.contentOffset.y
+    let reachedBottom = (offset + height == contentSizeHeight)
+
+    if reachedBottom {
+      scrollViewDidReachBottom(scrollView)
+    }
+  }
+
+  func scrollViewDidReachBottom(_ scrollView: UIScrollView) {
+    if let isNext = self.feedList?.isNext {
+      if isNext {
+        self.currentPage += 1
+        self.interactor?.fetchFeedList(
+          currentPage: self.currentPage,
+          pageSize: self.pageSize,
+          feedId: self.feedId,
+          challengeId: self.challengeId
+        )
+      }
+    }
   }
 }
 
@@ -117,7 +181,7 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
 
-    let scale = feed[indexPath.item].scale
+    let scale = feedListPost[indexPath.section].imageScale
     let scaleType = ImageScaleType(rawValue: scale)
     
     return scaleType?.cellSize(width: self.containerView.frame.width) ?? CGSize.init()
@@ -151,7 +215,10 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension FeedListViewController: FeedListViewProtocol {
-  func fetchFeedList(feed: [Feed]) {
-    self.feed = feed
+  func fetchFeedList(feedList: FeedList) {
+    self.feedList = feedList
+    feedList.feeds.forEach {
+      self.feedListPost.append($0)
+    }
   }
 }

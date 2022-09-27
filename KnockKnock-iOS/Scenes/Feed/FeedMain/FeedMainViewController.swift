@@ -266,7 +266,11 @@ extension FeedMainViewController: UICollectionViewDelegate {
       )
       
     case CollectionViewTag.feed.rawValue:
-      self.router?.navigateToFeedList(source: self)
+      self.router?.navigateToFeedList(
+        source: self,
+        feedId: feedMainPost[indexPath.item].id,
+        challengeId: self.challengeId
+      )
       
     default:
       return

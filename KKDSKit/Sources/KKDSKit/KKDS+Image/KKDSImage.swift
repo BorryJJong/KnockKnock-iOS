@@ -90,6 +90,12 @@ public extension KKDS.Image {
   static var ic_search_tag_52: UIImage       { .load(name: "ic_search_tag_52") }
 }
 
+// MARK: - Icon Size 60
+
+public extension KKDS.Image {
+  static var ic_no_data_60: UIImage               { .load(name: "ic_no_data_60") }
+}
+
 // MARK: - background
 
 public extension KKDS.Image {

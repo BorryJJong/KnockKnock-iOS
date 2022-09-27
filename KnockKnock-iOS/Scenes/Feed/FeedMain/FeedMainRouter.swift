@@ -10,7 +10,11 @@ import UIKit
 protocol FeedMainRouterProtocol {
   static func createFeed() -> UIViewController
 
-  func navigateToFeedList(source: FeedMainViewProtocol)
+  func navigateToFeedList(
+    source: FeedMainViewProtocol,
+    feedId: Int,
+    challengeId: Int
+  )
 }
 
 final class FeedMainRouter: FeedMainRouterProtocol {
@@ -31,10 +35,20 @@ final class FeedMainRouter: FeedMainRouterProtocol {
     return view
   }
 
-  func navigateToFeedList(source: FeedMainViewProtocol) {
-    let feedListViewController = FeedListRouter.createFeedList()
+  func navigateToFeedList(
+    source: FeedMainViewProtocol,
+    feedId: Int,
+    challengeId: Int
+  ) {
+    let feedListViewController = FeedListRouter.createFeedList(
+      feedId: feedId,
+      challengeId: challengeId
+    )
     if let sourceView = source as? UIViewController {
-      sourceView.navigationController?.pushViewController(feedListViewController, animated: true)
+      sourceView.navigationController?.pushViewController(
+        feedListViewController,
+        animated: true
+      )
     }
   }
 }
