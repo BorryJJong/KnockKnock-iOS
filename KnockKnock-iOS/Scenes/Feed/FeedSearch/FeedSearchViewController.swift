@@ -9,14 +9,35 @@ import UIKit
 
 import Then
 
+protocol FeedSearchViewProtocol {
+  var interactor: FeedSearchInteractorProtocol? { get set }
+  var router: FeedSearchRouterProtocol? { get set }
+
+  func fetchSearchKeywords(searchKeywords: [SearchTap: [SearchKeyword]])
+}
+
 final class FeedSearchViewController: BaseViewController<FeedSearchView> {
 
   // MARK: - Properties
+
+  var interactor: FeedSearchInteractorProtocol?
+  var router: FeedSearchRouterProtocol?
 
   private var currentIndex = 0 {
     didSet {
       self.containerView.searchTapCollectionView.reloadData()
       self.movePager()
+    }
+  }
+
+  private var searchKeywords: [SearchTap: [SearchKeyword]] = [
+    SearchTap.popular: [],
+    SearchTap.tag: [],
+    SearchTap.account: [],
+    SearchTap.place: []
+  ] {
+    didSet {
+      self.containerView.searchResultPageCollectionView.reloadData()
     }
   }
 
@@ -27,15 +48,12 @@ final class FeedSearchViewController: BaseViewController<FeedSearchView> {
     case result = 1
   }
 
-  // MARK: - Properties
-
-  private let taps: [String] = ["인기", "계정", "태그", "장소"]
-
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setupConfigure()
+    self.interactor?.getSearchKeywords()
   }
 
   override func setupConfigure() {
@@ -69,7 +87,15 @@ final class FeedSearchViewController: BaseViewController<FeedSearchView> {
   }
 }
 
-  // MARK: - CollectionView DataSource, Delegate
+// MARK: - FeedSearchViewProtocol
+
+extension FeedSearchViewController: FeedSearchViewProtocol {
+  func fetchSearchKeywords(searchKeywords: [SearchTap: [SearchKeyword]]){
+    self.searchKeywords = searchKeywords
+  }
+}
+
+// MARK: - CollectionView DataSource, Delegate
 
 extension FeedSearchViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
   func collectionView(
@@ -93,7 +119,7 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
         withType: TapCell.self,
         for: indexPath
       )
-      let isSelected = indexPath.item == self.currentIndex 
+      let isSelected = indexPath.item == self.currentIndex
 
       cell.bind(tapName: SearchTap.allCases[indexPath.item].rawValue, isSelected: isSelected)
 
@@ -104,7 +130,7 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
         withType: SearchResultPageCell.self,
         for: indexPath
       )
-      cell.bind(index: indexPath)
+      cell.bind(index: indexPath, searchKeyword: self.searchKeywords)
       
       return cell
 

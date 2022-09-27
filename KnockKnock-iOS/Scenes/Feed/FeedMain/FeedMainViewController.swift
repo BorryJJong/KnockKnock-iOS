@@ -9,9 +9,10 @@ import UIKit
 
 protocol FeedMainViewProtocol: AnyObject {
   var interactor: FeedMainInteractorProtocol? { get set }
-  
+
   func fetchFeedMain(feed: FeedMain)
   func fetchChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?)
+  func fetchSearchLog(searchKeyword: [SearchKeyword])
 }
 
 final class FeedMainViewController: BaseViewController<FeedMainView> {
@@ -36,11 +37,27 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
     }
   }
   var challengeTitles: [ChallengeTitle] = []
+  var searchKeyword: [SearchKeyword] = []
+  var popularPost: [String] = []
   
   var currentPage = 1
   let pageSize = 1 // pageSize 논의 필요, 페이지네이션 작동 테스트를 위해 1로 임시 설정
   var challengeId = 0
-  
+
+  // MARK: - UIs
+
+  lazy var searchBar = UISearchController(
+    searchResultsController: FeedSearchRouter.createFeedSearch()
+  ).then {
+    $0.hidesNavigationBarDuringPresentation = false
+    $0.showsSearchResultsController = true
+
+    $0.searchBar.delegate = self
+    $0.searchBar.placeholder = "검색어를 입력하세요."
+    $0.searchBar.tintColor = .black
+    $0.searchBar.setValue("취소", forKey: "cancelButtonText")
+  }
+
   // MARK: - Lify Cycles
   
   override func viewDidLoad() {
@@ -60,12 +77,13 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
   }
-  
+
   // MARK: - Configure
   
   override func setupConfigure() {
-    self.navigationItem.searchController = containerView.searchBar
-    
+
+    self.navigationItem.searchController = searchBar
+
     self.containerView.tagCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
@@ -104,7 +122,11 @@ extension FeedMainViewController: FeedMainViewProtocol {
       self.feedMainPost.append($0)
     }
   }
-  
+
+  func fetchSearchLog(searchKeyword: [SearchKeyword]) {
+    self.searchKeyword = searchKeyword
+  }
+
   func fetchChallengeTitles(
     challengeTitle: [ChallengeTitle],
     index: IndexPath?
@@ -121,6 +143,17 @@ extension FeedMainViewController: FeedMainViewProtocol {
       }
     } else {
       self.containerView.tagCollectionView.reloadData()
+    }
+  }
+}
+
+// MARK: - SearchTextField Delegate
+extension FeedMainViewController: UISearchBarDelegate {
+  func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    if let keyword = searchBar.searchTextField.text {
+      let searchLog = SearchKeyword(category: "계정", keyword: keyword)
+      self.searchKeyword.append(searchLog)
+      self.interactor?.saveSearchKeyword(searchKeyword: self.searchKeyword)
     }
   }
 }

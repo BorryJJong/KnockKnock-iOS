@@ -33,7 +33,8 @@ final class FeedRepository: FeedRepositoryProtocol {
       currentPage: Int,
       totalCount: Int,
       challengeId: Int,
-      completionHandler: @escaping (FeedMain) -> Void) {
+      completionHandler: @escaping (FeedMain) -> Void
+    ) {
         
       KKNetworkManager.shared
         .request(

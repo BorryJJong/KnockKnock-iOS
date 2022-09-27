@@ -13,4 +13,3 @@ enum SearchTap: String, CaseIterable {
   case tag = "태그"
   case place = "장소"
 }
-
