@@ -34,14 +34,6 @@ class FeedMainView: UIView {
   }
   
   // MARK: - UIs
-  
-  let searchBar = UISearchController(searchResultsController: FeedSearchViewController()).then {
-    $0.hidesNavigationBarDuringPresentation = false
-    $0.showsSearchResultsController = true
-    $0.searchBar.placeholder = "검색어를 입력하세요."
-    $0.searchBar.tintColor = .black
-    $0.searchBar.setValue("취소", forKey: "cancelButtonText")
-  }
 
   private let gradientImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false

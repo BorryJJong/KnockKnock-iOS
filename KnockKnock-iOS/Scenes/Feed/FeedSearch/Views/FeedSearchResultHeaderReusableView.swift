@@ -43,6 +43,17 @@ final class FeedSearchResultHeaderReusableView: UICollectionReusableView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  // MARK: - Bind
+
+  func bind(isEmpty: Bool) {
+    self.deleteLogButton.isHidden = isEmpty
+    if isEmpty {
+      self.headerLabel.text = "최근 검색기록이 없습니다."
+    } else {
+      self.headerLabel.text = "최근 검색"
+    }
+  }
+
   // MARK: - Configure
 
   private func setupConstraints() {

@@ -14,6 +14,8 @@ protocol FeedMainInteractorProtocol {
   func fetchFeedMain(currentPage: Int, pageSize: Int, challengeId: Int)
   func fetchChallengeTitles()
   func setSelectedStatus(challengeTitles: [ChallengeTitle], selectedIndex: IndexPath)
+
+  func saveSearchKeyword(searchKeyword: [SearchKeyword])
 }
 
 final class FeedMainInteractor: FeedMainInteractorProtocol {
@@ -22,6 +24,10 @@ final class FeedMainInteractor: FeedMainInteractorProtocol {
   
   var presenter: FeedMainPresenterProtocol?
   var worker: FeedMainWorkerProtocol?
+
+  func saveSearchKeyword(searchKeyword: [SearchKeyword]) {
+    self.worker?.saveSearchKeyword(searchKeyword: searchKeyword)
+  }
 
   func fetchFeedMain(currentPage: Int, pageSize: Int, challengeId: Int) {
     self.worker?.fetchFeedMain(
