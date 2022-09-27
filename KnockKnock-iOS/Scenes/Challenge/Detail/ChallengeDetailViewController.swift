@@ -23,7 +23,12 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
   var interactor: ChallengeDetailInteractorProtocol?
   var router: ChallengeDetailRouterProtocol?
 
-  var challengeDetail: ChallengeDetail?
+  var challengeId: Int = 12
+  var challengeDetail: ChallengeDetail? {
+    didSet {
+      self.containerView.challengeDetailCollectionView.reloadData()
+    }
+  }
 
   lazy var backBarButtonItem = UIBarButtonItem(
     image: KKDS.Image.ic_back_24_wh,
@@ -50,7 +55,7 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.interactor?.getChallengeDetail()
+    self.interactor?.getChallengeDetail(challengeId: challengeId)
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -116,9 +121,9 @@ extension ChallengeDetailViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    guard let contents = self.challengeDetail?.contents else { return 0 }
+    guard let contents = self.challengeDetail?.content else { return 0 }
     
-    return contents.count
+    return contents.subContents.count
   }
 
   func collectionView(
@@ -131,7 +136,9 @@ extension ChallengeDetailViewController: UICollectionViewDataSource {
     )
 
     if let challengeDetail = self.challengeDetail {
-      cell.bind(challengeContent: challengeDetail.contents[indexPath.item])
+      let isLast = challengeDetail.content.subContents.count - 1 == indexPath.item
+      print(isLast)
+      cell.bind(challengeContent: challengeDetail.content.subContents[indexPath.item], isLast: isLast)
     }
 
     return cell

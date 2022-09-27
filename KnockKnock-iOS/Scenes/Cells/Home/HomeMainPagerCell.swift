@@ -20,6 +20,8 @@ final class HomeMainPagerCell: BaseCollectionViewCell {
     static let lineBackgroundViewHeight = 2.f
     static let lineBackgroundViewLeadingMargin = 20.f
     static let lineBackgroundViewBottomMargin = -30.f
+
+    static let lineViewHeight = 2.f
   }
 
   // MARK: - Properties
@@ -71,6 +73,7 @@ final class HomeMainPagerCell: BaseCollectionViewCell {
     self.lineView.snp.makeConstraints {
       $0.top.bottom.leading.equalToSuperview()
       $0.width.equalTo(Metric.lineBackgroundViewWidth / CGFloat(self.mainImages.count))
+      $0.height.equalTo(Metric.lineViewHeight)
     }
 
     self.lineBackgroundView.snp.makeConstraints {
@@ -100,7 +103,7 @@ final class HomeMainPagerCell: BaseCollectionViewCell {
     let mainSection = NSCollectionLayoutSection(group: mainGroup)
     mainSection.orthogonalScrollingBehavior = .paging
 
-    mainSection.visibleItemsInvalidationHandler = ({ (visibleItems, point, env) in
+    mainSection.visibleItemsInvalidationHandler = ({ (_, point, _) in
       self.currentIndex = round(point.x / UIScreen.main.bounds.width)
       self.movePager(currentPage: self.currentIndex, itemCount: self.mainImages.count)
     })
@@ -110,16 +113,19 @@ final class HomeMainPagerCell: BaseCollectionViewCell {
     return layout
   }
 
-  // MARK: - Pager 위치 이동 애니메이션 메소드
+  // MARK: - Pager(lineView) width 변화 애니메이션 메소드
 
   private func movePager(currentPage: CGFloat, itemCount: Int) {
     let itemCount = CGFloat(itemCount)
+    let lineViewLength = CGFloat(Metric.lineBackgroundViewWidth / itemCount)
+    let updateWidth = ((lineViewLength * currentPage) + lineViewLength)
+
+    self.lineView.snp.updateConstraints {
+      $0.width.equalTo(updateWidth)
+    }
 
     UIView.animate(withDuration: 0.5, animations: {
-      self.lineView.transform = CGAffineTransform(
-        translationX: CGFloat(Metric.lineBackgroundViewWidth / itemCount) * currentPage,
-        y: 0
-      )
+      self.layoutIfNeeded()
     })
   }
 }
