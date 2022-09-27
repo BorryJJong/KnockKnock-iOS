@@ -51,6 +51,8 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
   ).then {
     $0.hidesNavigationBarDuringPresentation = false
     $0.showsSearchResultsController = true
+
+    $0.searchBar.delegate = self
     $0.searchBar.placeholder = "검색어를 입력하세요."
     $0.searchBar.tintColor = .black
     $0.searchBar.setValue("취소", forKey: "cancelButtonText")
@@ -75,13 +77,12 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
   }
-  
+
   // MARK: - Configure
   
   override func setupConfigure() {
 
     self.navigationItem.searchController = searchBar
-    self.navigationItem.searchController?.searchBar.searchTextField.delegate = self
 
     self.containerView.tagCollectionView.do {
       $0.delegate = self
@@ -147,11 +148,9 @@ extension FeedMainViewController: FeedMainViewProtocol {
 }
 
 // MARK: - SearchTextField Delegate
-
-extension FeedMainViewController: UISearchTextFieldDelegate {
-
-  func textFieldDidEndEditing(_ textField: UITextField) {
-    if let keyword = textField.text {
+extension FeedMainViewController: UISearchBarDelegate {
+  func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    if let keyword = searchBar.searchTextField.text {
       let searchLog = SearchKeyword(category: "계정", keyword: keyword)
       self.searchKeyword.append(searchLog)
       self.interactor?.saveSearchKeyword(searchKeyword: self.searchKeyword)
