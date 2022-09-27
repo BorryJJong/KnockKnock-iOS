@@ -73,7 +73,14 @@ enum KKRouter: URLRequestConvertible {
 
     switch method {
     case .get:
-      request = try URLEncoding.default.encode(request, with: parameters)
+      switch self {
+      case .requestShopAddress:
+        request = try URLEncoding.default.encode(request, with: parameters)
+        request.setValue(API.NAVER_CLIENT_ID, forHTTPHeaderField: "X-NCP-APIGW-API-KEY-ID")
+        request.setValue(API.NAVER_CLIENT_SECRET, forHTTPHeaderField: "X-NCP-APIGW-API-KEY")
+      default:
+        request = try URLEncoding.default.encode(request, with: parameters)
+      }
     case .post, .patch, .delete:
       request = try JSONEncoding.default.encode(request, with: parameters)
       request.setValue("application/json", forHTTPHeaderField: "Accept")
