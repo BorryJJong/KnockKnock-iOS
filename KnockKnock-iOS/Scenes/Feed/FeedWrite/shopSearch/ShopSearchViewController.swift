@@ -10,11 +10,19 @@ import UIKit
 import KKDSKit
 import Then
 
-class ShopSearchViewController: BaseViewController<ShopSearchView> {
+protocol ShopSearchViewProtocol {
+  var interactor: ShopSearchInteractorProtocol? { get set }
+  var router: ShopSearchRouterProtocol? { get set }
+}
+
+final class ShopSearchViewController: BaseViewController<ShopSearchView>, ShopSearchViewProtocol {
 
   // MARK: - Properties
 
   let addressDummy = ["스타벅스 오류동역점", "스타벅스 신도림점", "스타벅스 구로디지털타워점"]
+
+  var interactor: ShopSearchInteractorProtocol?
+  var router: ShopSearchRouterProtocol?
 
   // MARK: - UIs
 

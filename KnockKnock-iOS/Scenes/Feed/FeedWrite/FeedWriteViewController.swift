@@ -12,6 +12,7 @@ import YPImagePicker
 
 protocol FeedWriteViewProtocol: AnyObject {
   var interactor: FeedWriteInteractorProtocol? { get set }
+  var router: FeedWriteRouterProtocol? { get set }
 }
 
 final class FeedWriteViewController: BaseViewController<FeedWriteView> {
@@ -19,6 +20,8 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   // MARK: - Properties
 
   var interactor: FeedWriteInteractorProtocol?
+  var router: FeedWriteRouterProtocol?
+
   var pickedPhotos: [UIImage] = []
 
   // MARK: - Life cycle
@@ -27,6 +30,8 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     super.viewDidLoad()
   }
 
+  // MARK: - Configure
+
   override func setupConfigure() {
     self.navigationItem.title = "새 게시글"
     self.containerView.photoCollectionView.do {
@@ -34,26 +39,33 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
       $0.dataSource = self
       $0.registCell(type: PhotoCell.self)
     }
+
     self.containerView.contentTextView.do {
       $0.delegate = self
     }
+
     self.containerView.tagSelectButton.addTarget(
       self,
       action: #selector(tagSelectButtonDidTap(_:)),
       for: .touchUpInside)
+
     self.containerView.promotionSelectButton.addTarget(
       self,
       action: #selector(promotionSelectButtonDidTap(_:)),
       for: .touchUpInside)
+
     self.containerView.shopSearchButton.addTarget(
       self,
       action: #selector(shopSearchButtonDidTap(_:)),
       for: .touchUpInside)
+
     self.containerView.photoAddButton.addTarget(
       self,
       action: #selector(photoAddButtonDidTap(_:)),
       for: .touchUpInside)
   }
+
+  // MARK: - Button Actions
 
   @objc func tagSelectButtonDidTap(_ sender: UIButton) {
     self.navigationController?.pushViewController(PropertySelectViewController(), animated: true)
@@ -64,7 +76,9 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   }
 
   @objc func shopSearchButtonDidTap(_ sender: UIButton) {
-    self.navigationController?.pushViewController(ShopSearchViewController(), animated: true)
+    let viewController = ShopSearchRouter.createShopSearch()
+    self.navigationController?.pushViewController(viewController, animated: true)
+//    self.router?.navigateToShopSearch(source: self)
   }
 
   @objc func photoAddButtonDidTap(_ sender: UIButton) {
@@ -75,6 +89,8 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     self.pickedPhotos.remove(at: sender.tag)
     self.containerView.photoCollectionView.reloadData()
   }
+
+  // MARK: - ImagePicker
 
   func callImagePicker() {
     let config = YPImagePickerConfiguration().with {
@@ -108,6 +124,8 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   }
 }
 
+  // MARK: - TextView Delegate
+
 extension FeedWriteViewController: UITextViewDelegate {
   func textViewDidBeginEditing(_ textView: UITextView) {
     if textView.textColor == .gray40 {
@@ -123,6 +141,8 @@ extension FeedWriteViewController: UITextViewDelegate {
     }
   }
 }
+
+  // MARK: - CollectionView DataSource
 
 extension FeedWriteViewController: UICollectionViewDataSource {
   func collectionView(
@@ -154,6 +174,8 @@ extension FeedWriteViewController: UICollectionViewDataSource {
     return cell
   }
 }
+
+  // MARK: - CollectionView Delegate
 
 extension FeedWriteViewController: UICollectionViewDelegateFlowLayout {
   func collectionView(

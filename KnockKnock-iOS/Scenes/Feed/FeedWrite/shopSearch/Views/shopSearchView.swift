@@ -129,12 +129,30 @@ final class ShopSearchView: UIView {
   }
 
   private func addTextFieldPadding(_ textField: UITextField) {
-    let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: textField.frame.height))
+    let leftPaddingView = UIView(
+      frame: CGRect(
+        x: 0,
+        y: 0,
+        width: 10,
+        height: textField.frame.height
+      ))
     textField.leftView = leftPaddingView
     textField.leftViewMode = .always
 
-    let rightPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: textField.frame.height))
-    let iconView = UIImageView(frame: CGRect(x: 0, y: -5, width: 10, height: 10))
+    let rightPaddingView = UIView(
+      frame: CGRect(
+        x: 0,
+        y: 0,
+        width: 20,
+        height: textField.frame.height
+      ))
+    let iconView = UIImageView(
+      frame: CGRect(
+        x: 0,
+        y: -5,
+        width: 10,
+        height: 10
+      ))
     iconView.image = KKDS.Image.ic_down_10_bk
     rightPaddingView.addSubview(iconView)
 
