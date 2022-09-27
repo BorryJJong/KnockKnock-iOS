@@ -8,6 +8,7 @@
 import UIKit
 
 import Then
+import KKDSKit
 
 final class ShopSearchView: UIView {
 
@@ -40,25 +41,19 @@ final class ShopSearchView: UIView {
 
   let cityTextField = UITextField().then {
     $0.placeholder = "시/도 전체"
-    $0.rightView = UIImageView(image: UIImage(named: "ic_down_bk"))
-    $0.rightViewMode = .always
     $0.layer.borderWidth = 1
     $0.layer.borderColor = UIColor.gray30?.cgColor
     $0.layer.cornerRadius = 5
+    $0.tintColor = .clear
   }
-
-  let cityPickerView = UIPickerView()
 
   let regionTextField = UITextField().then {
     $0.placeholder = "구/동 전체"
-    $0.rightView = UIImageView(image: UIImage(named: "ic_down_bk"))
-    $0.rightViewMode = .always
     $0.layer.borderWidth = 1
     $0.layer.borderColor = UIColor.gray30?.cgColor
     $0.layer.cornerRadius = 5
+    $0.tintColor = .clear
   }
-
-  let regionPickerView = UIPickerView()
 
   lazy var cityRegionStackView = UIStackView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
@@ -114,14 +109,40 @@ final class ShopSearchView: UIView {
     $0.addArrangedSubview(statusLabel)
   }
 
+  // MARK: - Initialize
+
   init() {
     super.init(frame: .zero)
     self.setupConstraints()
+    self.setupConfigure()
   }
 
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
   }
+
+  // MARK: - Configure
+
+  private func setupConfigure() {
+    self.addTextFieldPadding(self.cityTextField)
+    self.addTextFieldPadding(self.regionTextField)
+  }
+
+  private func addTextFieldPadding(_ textField: UITextField) {
+    let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: textField.frame.height))
+    textField.leftView = leftPaddingView
+    textField.leftViewMode = .always
+
+    let rightPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: textField.frame.height))
+    let iconView = UIImageView(frame: CGRect(x: 0, y: -5, width: 10, height: 10))
+    iconView.image = KKDS.Image.ic_down_10_bk
+    rightPaddingView.addSubview(iconView)
+
+    textField.rightView = rightPaddingView
+    textField.rightViewMode = .always
+  }
+
+  // MARK: - Constraints
 
   private func setupConstraints() {
     [self.cityRegionStackView, self.addressTextField, self.addressSearchButton, self.seperatorLineView, self.statusStackView, self.resultTableView].addSubViews(self)
