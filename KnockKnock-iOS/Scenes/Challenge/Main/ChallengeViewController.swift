@@ -129,7 +129,13 @@ extension ChallengeViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension ChallengeViewController: UICollectionViewDelegate {
-  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    self.router?.navigateToChallengeDetail(source: self)
+  func collectionView(
+    _ collectionView: UICollectionView,
+    didSelectItemAt indexPath: IndexPath
+  ) {
+    self.router?.navigateToChallengeDetail(
+      source: self,
+      challengeId: challenges[indexPath.item].id
+    )
   }
 }

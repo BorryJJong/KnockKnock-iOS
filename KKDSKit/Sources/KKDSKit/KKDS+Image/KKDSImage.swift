@@ -20,15 +20,16 @@ public extension KKDS.Image {
 // MARK: - Icon size 10
 
 public extension KKDS.Image {
-  static var ic_left_10_gr: UIImage               { .load(name: "ic_left_10_gr")}
-  static var ic_page_10_wh_on: UIImage            {.load(name: "ic_page_10_wh_on")}
-  static var ic_page_10_wh_off: UIImage           {.load(name: "ic_page_10_wh_off")}
+  static var ic_close_10_gr: UIImage              { .load(name: "ic_close_10_gr") }
+  static var ic_left_10_gr: UIImage               { .load(name: "ic_left_10_gr") }
+  static var ic_page_10_wh_on: UIImage            { .load(name: "ic_page_10_wh_on") }
+  static var ic_page_10_wh_off: UIImage           { .load(name: "ic_page_10_wh_off") }
 }
 
 // MARK: - Icon size 16
 
 public extension KKDS.Image {
-  static var ic_like_circle_16: UIImage              { .load(name: "ic_like_circle_16")}
+  static var ic_like_circle_16: UIImage           { .load(name: "ic_like_circle_16") }
 }
 
 // MARK: - Icon size 20
@@ -73,13 +74,20 @@ public extension KKDS.Image {
   static var ic_search_24_gr: UIImage             { .load(name: "ic_search_24_gr") }
   static var ic_search_24_wh: UIImage             { .load(name: "ic_search_24_wh") }
   static var ic_set_24_bk: UIImage                { .load(name: "ic_set_24_bk") }
-  static var ic_next_24_bk: UIImage                { .load(name: "ic_next_24_bk") }
+  static var ic_next_24_bk: UIImage               { .load(name: "ic_next_24_bk") }
 }
 
 // MARK: - Icon Size 40
 
 public extension KKDS.Image {
-  static var ic_tag_gradient_40_wh: UIImage       {.load(name: "ic_tag_gradient_40_wh")}
+  static var ic_tag_gradient_40_wh: UIImage       { .load(name: "ic_tag_gradient_40_wh") }
+}
+
+// MARK: - Icon Size 52
+
+public extension KKDS.Image {
+  static var ic_search_location_52: UIImage       { .load(name: "ic_search_location_52") }
+  static var ic_search_tag_52: UIImage       { .load(name: "ic_search_tag_52") }
 }
 
 // MARK: - Icon Size 60
@@ -91,9 +99,9 @@ public extension KKDS.Image {
 // MARK: - background
 
 public extension KKDS.Image {
-  static var ic_bg_gradient_wh: UIImage           {.load(name: "ic_bg_gradient_wh")}
-  static var ic_bg_gradient_top_bk: UIImage       {.load(name: "ic_bg_gradient_top_bk")}
-  static var ic_bg_gradient_bottom_bk: UIImage    {.load(name: "ic_bg_gradient_bottom_bk")}
+  static var ic_bg_gradient_wh: UIImage           { .load(name: "ic_bg_gradient_wh") }
+  static var ic_bg_gradient_top_bk: UIImage       { .load(name: "ic_bg_gradient_top_bk") }
+  static var ic_bg_gradient_bottom_bk: UIImage    { .load(name: "ic_bg_gradient_bottom_bk") }
 }
 
 // MARK: - Tab
