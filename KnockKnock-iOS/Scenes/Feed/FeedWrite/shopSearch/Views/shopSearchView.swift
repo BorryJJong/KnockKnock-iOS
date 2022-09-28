@@ -55,7 +55,7 @@ final class ShopSearchView: UIView {
     $0.tintColor = .clear
   }
 
-  lazy var cityRegionStackView = UIStackView().then {
+  private lazy var cityRegionStackView = UIStackView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.axis = .horizontal
     $0.spacing = Metric.cityRegionStackViewSpacing
@@ -76,7 +76,7 @@ final class ShopSearchView: UIView {
     $0.setImage(#imageLiteral(resourceName: "ic_search"), for: .normal)
   }
 
-  let seperatorLineView = UIView().then {
+  private let seperatorLineView = UIView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .black
   }
@@ -89,12 +89,12 @@ final class ShopSearchView: UIView {
     $0.isHidden = true
   }
 
-  let statusImageView = UIImageView().then {
+  private let statusImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.image = UIImage(named: "ic_feed_shopSearch")
   }
 
-  let statusLabel = UILabel().then {
+  private let statusLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.textColor = .gray60
     $0.text = "매장주소를 검색해보세요."
@@ -119,6 +119,18 @@ final class ShopSearchView: UIView {
 
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
+  }
+
+  // MARK: - Bind
+
+  func bind(isNoResult: Bool) {
+    if isNoResult {
+      self.resultTableView.isHidden = true
+      self.statusImageView.image = KKDS.Image.ic_no_data_60
+      self.statusLabel.text = "검색결과가 없습니다."
+    } else {
+      self.resultTableView.isHidden = false
+    }
   }
 
   // MARK: - Configure

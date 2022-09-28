@@ -31,6 +31,8 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
 
   var addressResult: AddressResult? {
     didSet {
+      let isNoResult = addressResult?.meta.totalCount == 0
+      self.containerView.bind(isNoResult: isNoResult)
       self.containerView.resultTableView.reloadData()
     }
   }
