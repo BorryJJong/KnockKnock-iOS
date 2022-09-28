@@ -68,17 +68,15 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   // MARK: - Button Actions
 
   @objc func tagSelectButtonDidTap(_ sender: UIButton) {
-    self.navigationController?.pushViewController(PropertySelectViewController(), animated: true)
+    self.router?.navigateToProperty(source: self, propertyType: .tag)
   }
 
   @objc func promotionSelectButtonDidTap(_ sender: UIButton) {
-    self.navigationController?.pushViewController(PropertySelectViewController(), animated: true)
+    self.router?.navigateToProperty(source: self, propertyType: .promotion)
   }
 
   @objc func shopSearchButtonDidTap(_ sender: UIButton) {
-    let viewController = ShopSearchRouter.createShopSearch()
-    self.navigationController?.pushViewController(viewController, animated: true)
-//    self.router?.navigateToShopSearch(source: self)
+    self.router?.navigateToShopSearch(source: self)
   }
 
   @objc func photoAddButtonDidTap(_ sender: UIButton) {
@@ -122,6 +120,11 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     }
     self.present(picker, animated: true, completion: nil)
   }
+}
+
+
+extension FeedWriteViewController: FeedWriteViewProtocol {
+  
 }
 
   // MARK: - TextView Delegate
@@ -199,8 +202,6 @@ extension FeedWriteViewController: UICollectionViewDelegateFlowLayout {
 extension FeedWriteViewController: UICollectionViewDelegate {
 }
 
-extension FeedWriteViewController: FeedWriteViewProtocol {
-}
 
 extension YPImagePickerConfiguration: Then {
 }

@@ -11,6 +11,7 @@ protocol FeedWriteRouterProtocol: AnyObject {
   static func createFeedWrite() -> UIViewController
 
   func navigateToShopSearch(source: FeedWriteViewProtocol)
+  func navigateToProperty(source: FeedWriteViewProtocol, propertyType: PropertyType)
 }
 
 final class FeedWriteRouter: FeedWriteRouterProtocol {
@@ -35,6 +36,15 @@ final class FeedWriteRouter: FeedWriteRouterProtocol {
 
     if let sourceView = source as? UIViewController {
       sourceView.navigationController?.pushViewController(shopSearchViewController, animated: true)
+    }
+  }
+
+  func navigateToProperty(source: FeedWriteViewProtocol, propertyType: PropertyType) {
+    let propertyViewController = PropertySelectViewController()
+
+    if let sourceView = source as? UIViewController {
+      propertyViewController.propertyType = propertyType
+      sourceView.navigationController?.pushViewController(propertyViewController, animated: true)
     }
   }
 }
