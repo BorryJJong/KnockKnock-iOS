@@ -53,3 +53,38 @@ struct FeedMainPost: Decodable {
   let thumbnailUrl: String
   let isImageMore: Bool
 }
+
+// MARK: - 매장검색
+
+struct AddressResult: Codable {
+  let meta: AddressMeta
+  let documents: [AddressDocuments]
+}
+
+struct AddressMeta: Codable {
+  let pageableCount: Int
+  let totalCount: Int
+  let isEnd: Bool
+
+  enum CodingKeys: String, CodingKey {
+    case pageableCount = "pageable_count"
+    case totalCount = "total_count"
+    case isEnd = "is_end"
+  }
+}
+
+struct AddressDocuments: Codable {
+  let placeName: String
+  let addressName: String
+  let roadAddressName: String
+  let longtitude: String
+  let latitude: String
+
+  enum CodingKeys: String, CodingKey {
+    case placeName = "place_name"
+    case addressName = "address_name"
+    case roadAddressName = "road_address_name"
+    case longtitude = "x"
+    case latitude = "y"
+  }
+}

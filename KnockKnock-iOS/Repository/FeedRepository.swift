@@ -7,8 +7,6 @@
 
 import Foundation
 
-import Alamofire
-
 protocol FeedRepositoryProtocol {
   func requestFeedMain(currentPage: Int, totalCount: Int, challengeId: Int, completionHandler: @escaping (FeedMain) -> Void)
   func requestChallengeTitles(completionHandler: @escaping (([ChallengeTitle])) -> Void)

@@ -12,8 +12,7 @@ enum API {
   // MARK: - URL
 
   static let BASE_URL = "http://13.209.245.135:3000/"
-  static let NAVER_GEOCODE_URL = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode"
+  static let KAKAO_LOCAL_URL = "https://dapi.kakao.com/v2/local/search/"
 
-  static let NAVER_CLIENT_ID = "ottk0ftnk8"
-  static let NAVER_CLIENT_SECRET = "mZmilacYGwl4o8TxXRwkHKljh6FeSklf3NXlAMGC"
+  static let KAKAO_REST_API_KEY = "KakaoAK 754d4ea04671ab9d7e2add279d718b0e"
 }

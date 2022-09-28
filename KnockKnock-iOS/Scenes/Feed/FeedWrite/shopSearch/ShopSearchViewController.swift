@@ -13,9 +13,11 @@ import Then
 protocol ShopSearchViewProtocol {
   var interactor: ShopSearchInteractorProtocol? { get set }
   var router: ShopSearchRouterProtocol? { get set }
+
+  func fetchShopAddress(address: AddressResult)
 }
 
-final class ShopSearchViewController: BaseViewController<ShopSearchView>, ShopSearchViewProtocol {
+final class ShopSearchViewController: BaseViewController<ShopSearchView> {
 
   // MARK: - Properties
 
@@ -23,6 +25,12 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView>, ShopSe
 
   var interactor: ShopSearchInteractorProtocol?
   var router: ShopSearchRouterProtocol?
+
+  var addressResult: AddressResult? {
+    didSet {
+      print(addressResult)
+    }
+  }
 
   // MARK: - UIs
 
@@ -82,6 +90,14 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView>, ShopSe
 
   @objc private func searchButtonDidTap(_ sender: UIButton) {
     self.containerView.resultTableView.isHidden = false
+
+    let city = self.containerView.cityTextField.text ?? ""
+    let region = self.containerView.regionTextField.text ?? ""
+    let address = self.containerView.addressTextField.text ?? ""
+
+    let keyword = "\(city) \(region) \(address)"
+
+    self.interactor?.fetchShopAddress(keyword: keyword)
   }
 
   @objc private func doneButtonDidTap(_ sender: UIBarButtonItem) {
@@ -90,6 +106,14 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView>, ShopSe
 
   @objc func tapBackBarButton(_ sender: UIBarButtonItem) {
     self.navigationController?.popViewController(animated: true)
+  }
+}
+
+  // MARK: - ShopSearchView Protocol
+
+extension ShopSearchViewController: ShopSearchViewProtocol {
+  func fetchShopAddress(address: AddressResult) {
+    self.addressResult = address
   }
 }
 

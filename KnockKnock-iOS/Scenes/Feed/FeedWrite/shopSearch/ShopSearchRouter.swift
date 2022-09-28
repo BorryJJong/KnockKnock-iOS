@@ -17,7 +17,7 @@ final class ShopSearchRouter: ShopSearchRouterProtocol {
     let view = ShopSearchViewController()
     let interactor = ShopSearchInteractor()
     let presenter = ShopSearchPresenter()
-    let worker = ShopSearchWorker()
+    let worker = ShopSearchWorker(repository: ShopSearchRepository())
     let router = ShopSearchRouter()
 
     view.interactor = interactor

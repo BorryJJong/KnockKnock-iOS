@@ -16,13 +16,10 @@ enum KKRouter: URLRequestConvertible {
   var baseURL: URL {
     switch self {
     case .requestShopAddress:
-      return URL(string: API.NAVER_GEOCODE_URL)!
+      return URL(string: API.KAKAO_LOCAL_URL)!
     default:
       return URL(string: API.BASE_URL)!
     }
-  }
-  var naverID: String {
-    return API.NAVER_CLIENT_ID
   }
 
   case createFeed(Int)
@@ -46,14 +43,17 @@ enum KKRouter: URLRequestConvertible {
     case .createFeed, .updateFeed: return "feed"
     case .getFeedMain: return "feed/main"
     case .getChallengeTitles: return "challenges/titles"
-    case .requestShopAddress: return ""
+    case .requestShopAddress: return "keyword.json"
     }
   }
 
   var parameters: Parameters? {
     switch self {
-    case .getChallengeResponse, .getChallengeTitles, .requestShopAddress:
+    case .getChallengeResponse, .getChallengeTitles:
       return nil
+    case let .requestShopAddress(query):
+      return ["query": query]
+      
     case let .createFeed(id), let .updateFeed(id):
       return ["id": id]
 
@@ -76,8 +76,7 @@ enum KKRouter: URLRequestConvertible {
       switch self {
       case .requestShopAddress:
         request = try URLEncoding.default.encode(request, with: parameters)
-        request.setValue(API.NAVER_CLIENT_ID, forHTTPHeaderField: "X-NCP-APIGW-API-KEY-ID")
-        request.setValue(API.NAVER_CLIENT_SECRET, forHTTPHeaderField: "X-NCP-APIGW-API-KEY")
+        request.setValue(API.KAKAO_REST_API_KEY, forHTTPHeaderField: "Authorization")
       default:
         request = try URLEncoding.default.encode(request, with: parameters)
       }
