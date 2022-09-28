@@ -30,6 +30,14 @@ final class AdressCell: BaseTableViewCell {
     $0.font = .systemFont(ofSize: 14)
   }
 
+  // MARK: - Bind
+
+  func bind(address: String) {
+    self.addressLabel.text = address
+  }
+
+  // MARK: - Constraints
+
   override func setupConstraints() {
     [self.iconImageView, self.addressLabel].addSubViews(self)
 

@@ -23,12 +23,15 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
 
   let addressDummy = ["스타벅스 오류동역점", "스타벅스 신도림점", "스타벅스 구로디지털타워점"]
 
+  let cityList = ["서울특별시", "부산광역시", "대구광역시", "인천광역시", "대전광역시", "울산광역시", "세종특별자치시",
+                  "경기도", "강원도", "전라북도", "전라남도", "경상북도", "경상남도"]
+
   var interactor: ShopSearchInteractorProtocol?
   var router: ShopSearchRouterProtocol?
 
   var addressResult: AddressResult? {
     didSet {
-      print(addressResult)
+      self.containerView.resultTableView.reloadData()
     }
   }
 
@@ -133,7 +136,7 @@ extension ShopSearchViewController: UITextFieldDelegate {
 
 extension ShopSearchViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return addressDummy.count
+    return self.addressResult?.documents.count ?? 0
   }
 
   func tableView(
@@ -141,7 +144,11 @@ extension ShopSearchViewController: UITableViewDataSource {
     cellForRowAt indexPath: IndexPath
   ) -> UITableViewCell {
     let cell = tableView.dequeueCell(withType: AdressCell.self, for: indexPath)
-    cell.addressLabel.text = addressDummy[indexPath.row]
+
+    if let address = self.addressResult?.documents[indexPath.row].placeName {
+      cell.bind(address: address)
+    }
+    
     return cell
   }
 }

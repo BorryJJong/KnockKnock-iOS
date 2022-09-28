@@ -9,6 +9,8 @@ import UIKit
 
 protocol ShopSearchRouterProtocol: AnyObject {
   static func createShopSearch() -> UIViewController
+
+  func presentBottomSheetView(source: ShopSearchViewProtocol)
 }
 
 final class ShopSearchRouter: ShopSearchRouterProtocol {
@@ -27,5 +29,23 @@ final class ShopSearchRouter: ShopSearchRouterProtocol {
     interactor.presenter = presenter
 
     return view
+  }
+
+  func presentBottomSheetView(source: ShopSearchViewProtocol) {
+    let bottomSheetViewController = BottomSheetViewController().then {
+      $0.setBottomSheetContents(
+        contents: [
+          BottomSheetOption.delete.rawValue,
+          BottomSheetOption.edit.rawValue
+        ])
+      $0.modalPresentationStyle = .overFullScreen
+    }
+    if let sourceView = source as? UIViewController {
+      sourceView.present(
+        bottomSheetViewController,
+        animated: false,
+        completion: nil
+      )
+    }
   }
 }
