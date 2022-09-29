@@ -22,12 +22,14 @@ enum KKRouter: URLRequestConvertible {
   case getChallengeTitles
   case getFeedMain(page: Int, take: Int, challengeId: Int)
   case getFeedBlogPost(page: Int, take: Int, feedId: Int, challengeId: Int)
+  case getFeed(id: Int)
 
   var method: HTTPMethod {
     switch self {
     case .getChallengeResponse,
         .getFeedBlogPost,
         .getFeedMain,
+        .getFeed,
         .getChallengeTitles,
         .getChallengeDetail:
       return .get
@@ -41,12 +43,13 @@ enum KKRouter: URLRequestConvertible {
     case .getFeedMain: return "feed/main"
     case .getChallengeTitles: return "challenges/titles"
     case .getFeedBlogPost: return "feed/blog-post"
+    case .getFeed(let id): return "feed/\(id)"
     }
   }
 
   var parameters: Parameters? {
     switch self {
-    case  .getChallengeDetail, .getChallengeResponse, .getChallengeTitles:
+    case  .getChallengeDetail, .getChallengeResponse, .getChallengeTitles, .getFeed:
       return nil
 
     case let .getFeedMain(page, take, challengeId):
@@ -73,7 +76,7 @@ enum KKRouter: URLRequestConvertible {
     switch method {
     case .get:
       switch self {
-      case .getChallengeDetail:
+      case .getChallengeDetail, .getFeed:
         break
       default:
         request = try URLEncoding.default.encode(request, with: parameters)
