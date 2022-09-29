@@ -25,7 +25,10 @@ final class ChallengeView: UIView {
 
   // MARK: - UI
 
-  let challengeCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
+  let challengeCollectionView = UICollectionView(
+    frame: .zero,
+    collectionViewLayout: .init()
+  ).then {
     let flowLayout = UICollectionViewFlowLayout.init()
     flowLayout.scrollDirection = .vertical
     $0.collectionViewLayout = flowLayout

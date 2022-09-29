@@ -54,7 +54,7 @@ final class HomeViewController: BaseViewController<HomeView> {
 
   func setNavigationItem() {
     self.navigationItem.backButtonTitle = ""
-    self.navigationController?.navigationBar.tintColor = .black
+    self.navigationController?.navigationBar.setDefaultAppearance()
   }
 
   // MARK: - button action
