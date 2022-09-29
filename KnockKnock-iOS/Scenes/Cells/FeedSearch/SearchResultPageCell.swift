@@ -57,7 +57,9 @@ final class SearchResultPageCell: BaseCollectionViewCell {
     collectionViewLayout: UICollectionViewFlowLayout().then {
       $0.scrollDirection = .vertical
     }
-  )
+  ).then {
+    $0.backgroundColor = .clear
+  }
 
   // MARK: - Bind
 

@@ -38,6 +38,7 @@ final class HomeMainPagerCell: BaseCollectionViewCell {
     }).then {
       $0.contentInsetAdjustmentBehavior = .never
       $0.alwaysBounceVertical = false
+      $0.backgroundColor = .clear
     }
 
   private let lineView = UIView().then {
