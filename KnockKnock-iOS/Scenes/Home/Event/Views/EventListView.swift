@@ -21,7 +21,9 @@ class EventListView: UIView {
       $0.minimumLineSpacing = 20
       $0.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 20)
     }
-  )
+  ).then {
+    $0.backgroundColor = .clear
+  }
 
   // MARK: - Initailize
 

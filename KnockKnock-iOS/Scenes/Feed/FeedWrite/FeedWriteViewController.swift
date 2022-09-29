@@ -29,26 +29,33 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
   override func setupConfigure() {
     self.navigationItem.title = "새 게시글"
+    self.navigationController?.navigationBar.setDefaultAppearance()
+
     self.containerView.photoCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
       $0.registCell(type: PhotoCell.self)
     }
+
     self.containerView.contentTextView.do {
       $0.delegate = self
     }
+
     self.containerView.tagSelectButton.addTarget(
       self,
       action: #selector(tagSelectButtonDidTap(_:)),
       for: .touchUpInside)
+
     self.containerView.promotionSelectButton.addTarget(
       self,
       action: #selector(promotionSelectButtonDidTap(_:)),
       for: .touchUpInside)
+
     self.containerView.shopSearchButton.addTarget(
       self,
       action: #selector(shopSearchButtonDidTap(_:)),
       for: .touchUpInside)
+
     self.containerView.photoAddButton.addTarget(
       self,
       action: #selector(photoAddButtonDidTap(_:)),

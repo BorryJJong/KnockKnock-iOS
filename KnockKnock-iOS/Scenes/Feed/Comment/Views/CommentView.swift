@@ -65,6 +65,7 @@ class CommentView: UIView {
       $0.scrollDirection = .vertical
     }).then {
       $0.translatesAutoresizingMaskIntoConstraints = false
+      $0.backgroundColor = .clear
       $0.registHeaderView(type: CommentHeaderCollectionReusableView.self)
     }
 

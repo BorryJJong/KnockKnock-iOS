@@ -48,6 +48,7 @@ class FeedMainView: UIView {
   ).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.alwaysBounceVertical = false
+    $0.backgroundColor = .clear
   }
 
   let feedCollectionView = UICollectionView(
@@ -59,6 +60,7 @@ class FeedMainView: UIView {
     }
   ).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.backgroundColor = .clear
     $0.registFooterView(type: FeedMainFooterCollectionReusableView.self)
   }
   

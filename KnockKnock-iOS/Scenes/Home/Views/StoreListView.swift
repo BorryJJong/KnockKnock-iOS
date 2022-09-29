@@ -36,7 +36,9 @@ final class StoreListView: UIView {
       $0.scrollDirection = .vertical
       $0.minimumLineSpacing = 15
     }
-  )
+  ).then {
+    $0.backgroundColor = .clear
+  }
 
   // MARK: - Initailize
 

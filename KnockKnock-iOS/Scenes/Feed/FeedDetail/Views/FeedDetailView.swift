@@ -51,6 +51,7 @@ final class FeedDetailView: UIView {
       $0.scrollDirection = .horizontal
     }).then {
       $0.translatesAutoresizingMaskIntoConstraints = false
+      $0.backgroundColor = .clear
     }
 
   private let imagePageControl = UIPageControl().then {

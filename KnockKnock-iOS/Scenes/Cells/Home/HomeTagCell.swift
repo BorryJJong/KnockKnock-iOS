@@ -22,6 +22,7 @@ final class HomeTagCell: BaseCollectionViewCell {
     }).then {
       $0.alwaysBounceVertical = false
       $0.contentInsetAdjustmentBehavior = .never
+      $0.backgroundColor = .clear
     }
   
   private let gradientImageView = UIImageView().then {
