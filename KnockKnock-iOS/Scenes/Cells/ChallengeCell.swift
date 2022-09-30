@@ -42,6 +42,7 @@ final class ChallengeCell: BaseCollectionViewCell {
     static let titleLabelTopMargin = 10.f
 
     static let contentsLabelTopMargin = 5.f
+    static let contentsLabelBottomMargin = -40.f
   }
 
   // MARK: - UI
@@ -49,6 +50,7 @@ final class ChallengeCell: BaseCollectionViewCell {
   private let challengeImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.layer.cornerRadius = 5
+    $0.clipsToBounds = true
     $0.image = UIImage(named: "challenge")
   }
   private let titleLabel = UILabel().then {
@@ -152,7 +154,7 @@ final class ChallengeCell: BaseCollectionViewCell {
       self.challengeImageView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
       self.challengeImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
       self.challengeImageView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
-      self.challengeImageView.heightAnchor.constraint(equalToConstant: Metric.challengeHeight),
+      self.challengeImageView.heightAnchor.constraint(equalTo: self.contentView.widthAnchor, multiplier: 0.75),
 
       self.newChallengeLabel.topAnchor.constraint(equalTo: self.challengeImageView.topAnchor, constant: Metric.newChallengeLabelTopMargin),
       self.newChallengeLabel.leadingAnchor.constraint(equalTo: self.challengeImageView.leadingAnchor, constant: Metric.newChallengeLabelLeadingMargin),
@@ -167,7 +169,7 @@ final class ChallengeCell: BaseCollectionViewCell {
       self.participantView.topAnchor.constraint(equalTo: self.challengeImageView.bottomAnchor, constant: Metric.participantViewTopMargin),
       self.participantView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
       self.participantView.trailingAnchor.constraint(equalTo: self.challengeImageView.trailingAnchor, constant: Metric.participantViewTrailingMargin),
-      self.participantView.heightAnchor.constraint(equalToConstant: Metric.participantViewHeight),
+      self.participantView.bottomAnchor.constraint(equalTo: self.participantView.topAnchor, constant: Metric.participantViewHeight),
 
       self.participantImageStackView.topAnchor.constraint(equalTo: self.participantView.topAnchor, constant: Metric.participantImageStackViewTopMargin),
       self.participantImageStackView.leadingAnchor.constraint(equalTo: self.participantView.leadingAnchor),
@@ -186,7 +188,7 @@ final class ChallengeCell: BaseCollectionViewCell {
       self.contentsLabel.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: Metric.contentsLabelTopMargin),
       self.contentsLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
       self.contentsLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
-      self.contentsLabel.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
+      self.contentsLabel.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: Metric.contentsLabelBottomMargin)
     ])
   }
 }

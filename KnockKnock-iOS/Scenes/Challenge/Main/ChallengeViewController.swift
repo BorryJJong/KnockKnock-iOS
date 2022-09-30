@@ -42,6 +42,7 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
     self.containerView.challengeCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
+      $0.collectionViewLayout = self.containerView.challengeCollectionViewLayout()
       $0.registCell(type: ChallengeCell.self)
     }
     self.containerView.sortChallengeButton.addTarget(
@@ -59,8 +60,7 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
     )
 
     self.navigationItem.title = "챌린지"
-    self.navigationController?.navigationBar.barTintColor = .white
-    self.navigationController?.navigationBar.tintColor = .black
+    self.navigationController?.navigationBar.setDefaultAppearance()
     self.navigationItem.rightBarButtonItem = searchBarButtonItem
   }
 
@@ -100,36 +100,14 @@ extension ChallengeViewController: UICollectionViewDataSource {
   }
 }
 
-extension ChallengeViewController: UICollectionViewDelegateFlowLayout {
-  func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    sizeForItemAt indexPath: IndexPath
-  ) -> CGSize {
-    return CGSize(
-      width: (self.containerView.frame.width - 40),
-      height: (self.containerView.frame.height - 100) / 2)
-  }
-  
-  func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    minimumLineSpacingForSectionAt section: Int
-  ) -> CGFloat {
-    return 40
-  }
-  
-  func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    minimumInteritemSpacingForSectionAt section: Int
-  ) -> CGFloat {
-    return 20
-  }
-}
-
 extension ChallengeViewController: UICollectionViewDelegate {
-  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    self.router?.navigateToChallengeDetail(source: self)
+  func collectionView(
+    _ collectionView: UICollectionView,
+    didSelectItemAt indexPath: IndexPath
+  ) {
+    self.router?.navigateToChallengeDetail(
+      source: self,
+      challengeId: challenges[indexPath.item].id
+    )
   }
 }

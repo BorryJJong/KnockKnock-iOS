@@ -22,45 +22,55 @@ enum KKRouter: URLRequestConvertible {
     }
   }
 
-  case createFeed(Int)
-  case updateFeed(Int)
   case getChallengeResponse
+  case getChallengeDetail(id: Int)
   case getChallengeTitles
   case getFeedMain(page: Int, take: Int, challengeId: Int)
   case requestShopAddress(query: String)
+  case getFeedBlogPost(page: Int, take: Int, feedId: Int, challengeId: Int)
 
   var method: HTTPMethod {
     switch self {
-    case .getChallengeResponse, .getFeedMain, .getChallengeTitles, .requestShopAddress: return .get
-    case .createFeed: return .post
-    case .updateFeed: return .patch
+    case .getChallengeResponse,
+        .getFeedBlogPost,
+        .getFeedMain,
+        .getChallengeTitles,
+        .getChallengeDetail,
+        .requestShopAddress:
+      return .get
     }
   }
 
   var path: String {
     switch self {
     case .getChallengeResponse: return "challenges"
-    case .createFeed, .updateFeed: return "feed"
+    case .getChallengeDetail(let id): return "challenges/\(id)"
     case .getFeedMain: return "feed/main"
     case .getChallengeTitles: return "challenges/titles"
     case .requestShopAddress: return "keyword.json"
+    case .getFeedBlogPost: return "feed/blog-post"
     }
   }
 
   var parameters: Parameters? {
     switch self {
-    case .getChallengeResponse, .getChallengeTitles:
+    case  .getChallengeDetail, .getChallengeResponse, .getChallengeTitles:
       return nil
+
     case let .requestShopAddress(query):
       return ["query": query]
-      
-    case let .createFeed(id), let .updateFeed(id):
-      return ["id": id]
 
     case let .getFeedMain(page, take, challengeId):
       return [
         "page": page,
         "take": take,
+        "challengeId": challengeId
+      ]
+    case let .getFeedBlogPost(page, take, feedId, challengeId):
+      return [
+        "page": page,
+        "take": take,
+        "feedId": feedId,
         "challengeId": challengeId
       ]
     }
@@ -74,9 +84,14 @@ enum KKRouter: URLRequestConvertible {
     switch method {
     case .get:
       switch self {
+
       case .requestShopAddress:
         request = try URLEncoding.default.encode(request, with: parameters)
         request.setValue(API.KAKAO_REST_API_KEY, forHTTPHeaderField: "Authorization")
+
+      case .getChallengeDetail:
+        break
+        
       default:
         request = try URLEncoding.default.encode(request, with: parameters)
       }

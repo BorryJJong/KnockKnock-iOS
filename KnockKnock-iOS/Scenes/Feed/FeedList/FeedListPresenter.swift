@@ -9,13 +9,13 @@ import UIKit
 
 protocol FeedListPresenterProtocol {
   var view: FeedListViewController? { get set }
-  func presentFetchFeedList(feed: [Feed])
+  func presentFetchFeedList(feedList: FeedList)
 }
 
 final class FeedListPresenter: FeedListPresenterProtocol {
   var view: FeedListViewController?
 
-  func presentFetchFeedList(feed: [Feed]) {
-    self.view?.fetchFeedList(feed: feed)
+  func presentFetchFeedList(feedList: FeedList) {
+    self.view?.fetchFeedList(feedList: feedList)
   }
 }

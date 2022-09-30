@@ -34,6 +34,8 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
   override func setupConfigure() {
     self.navigationItem.title = "새 게시글"
+    self.navigationController?.navigationBar.setDefaultAppearance()
+
     self.containerView.photoCollectionView.do {
       $0.delegate = self
       $0.dataSource = self

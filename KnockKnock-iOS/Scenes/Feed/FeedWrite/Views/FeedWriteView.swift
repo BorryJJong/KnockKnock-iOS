@@ -67,6 +67,7 @@ class FeedWriteView: UIView {
     }
   ).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.backgroundColor = .clear
   }
 
   let photoAddButton = UIButton().then {

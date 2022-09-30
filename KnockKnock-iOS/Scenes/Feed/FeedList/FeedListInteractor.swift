@@ -11,16 +11,32 @@ protocol FeedListInteractorProtocol {
   var presenter: FeedListPresenterProtocol? { get set }
   var worker: FeedListWorkerProtocol? { get set }
 
-  func fetchFeed()
+  func fetchFeedList(
+    currentPage: Int,
+    pageSize: Int,
+    feedId: Int,
+    challengeId: Int
+  )
 }
 
 final class FeedListInteractor: FeedListInteractorProtocol {
   var presenter: FeedListPresenterProtocol?
   var worker: FeedListWorkerProtocol?
 
-  func fetchFeed() {
-    self.worker?.fetchFeed { [weak self] feed in
-      self?.presenter?.presentFetchFeedList(feed: feed)
-    }
+  func fetchFeedList(
+    currentPage: Int,
+    pageSize: Int,
+    feedId: Int,
+    challengeId: Int
+  ) {
+    self.worker?.fetchFeedList(
+      currentPage: currentPage,
+      count: pageSize,
+      feedId: feedId,
+      challengeId: challengeId,
+      completionHandler: { [weak self] feedList in
+        self?.presenter?.presentFetchFeedList(feedList: feedList)
+      }
+    )
   }
 }

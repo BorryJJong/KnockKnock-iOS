@@ -21,6 +21,7 @@ final class HomeView: UIView {
       $0.scrollDirection = .vertical
     }).then {
       $0.contentInsetAdjustmentBehavior = .never
+      $0.backgroundColor = .clear
     }
 
   // MARK: - Initailize
