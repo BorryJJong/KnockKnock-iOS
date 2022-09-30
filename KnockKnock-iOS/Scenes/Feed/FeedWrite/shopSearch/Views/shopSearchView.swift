@@ -15,11 +15,15 @@ final class ShopSearchView: UIView {
   // MARK: - Properties
 
   private enum Metric {
-    static let cityRegionStackViewHeight = 40.f
-    static let cityRegionStackViewTopMargin = 20.f
-    static let cityRegionStackViewLeadingMargin = 20.f
-    static let cityRegionStackViewTrailingMargin = -20.f
-    static let cityRegionStackViewSpacing = 5.f
+    static let cityTextFieldHeight = 40.f
+    static let cityTextFieldTopMargin = 20.f
+    static let cityTextFieldLeadingMargin = 20.f
+    static let cityTextFieldTrailingMargin = -(2.5).f
+
+    static let regionTextFieldHeight = 40.f
+    static let regionTextFieldTopMargin = 20.f
+    static let regionTextFieldLeadingMargin = (2.5).f
+    static let regionTextFieldTrailingMargin = -20.f
 
     static let addressTextFieldTopMargin = 5.f
     static let addressTextFieldLeadingMargin = 20.f
@@ -40,6 +44,7 @@ final class ShopSearchView: UIView {
   // MARK: - UI
 
   let cityTextField = UITextField().then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.placeholder = "시/도 전체"
     $0.layer.borderWidth = 1
     $0.layer.borderColor = UIColor.gray30?.cgColor
@@ -47,7 +52,13 @@ final class ShopSearchView: UIView {
     $0.tintColor = .clear
   }
 
+  let cityButton = UIButton().then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.backgroundColor = .clear
+  }
+
   let regionTextField = UITextField().then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.placeholder = "구/동 전체"
     $0.layer.borderWidth = 1
     $0.layer.borderColor = UIColor.gray30?.cgColor
@@ -55,13 +66,9 @@ final class ShopSearchView: UIView {
     $0.tintColor = .clear
   }
 
-  private lazy var cityRegionStackView = UIStackView().then {
+  let regionButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.axis = .horizontal
-    $0.spacing = Metric.cityRegionStackViewSpacing
-    $0.distribution = .fillEqually
-    $0.addArrangedSubview(self.cityTextField)
-    $0.addArrangedSubview(self.regionTextField)
+    $0.backgroundColor = .clear
   }
 
   let addressTextField = UITextField().then {
@@ -175,16 +182,33 @@ final class ShopSearchView: UIView {
   // MARK: - Constraints
 
   private func setupConstraints() {
-    [self.cityRegionStackView, self.addressTextField, self.addressSearchButton, self.seperatorLineView, self.statusStackView, self.resultTableView].addSubViews(self)
+    [self.cityTextField, self.regionTextField, self.cityButton, self.regionButton,
+     self.addressTextField, self.addressSearchButton,
+     self.seperatorLineView, self.statusStackView, self.resultTableView].addSubViews(self)
 
     NSLayoutConstraint.activate([
-      self.cityRegionStackView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.cityRegionStackViewTopMargin),
-      self.cityRegionStackView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.cityRegionStackViewLeadingMargin),
-      self.cityRegionStackView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.cityRegionStackViewTrailingMargin),
-      self.cityRegionStackView.heightAnchor.constraint(equalToConstant: Metric.cityRegionStackViewHeight),
+      self.cityTextField.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.cityTextFieldTopMargin),
+      self.cityTextField.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerXAnchor, constant: Metric.cityTextFieldTrailingMargin),
+      self.cityTextField.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.cityTextFieldLeadingMargin),
+      self.cityTextField.heightAnchor.constraint(equalToConstant: Metric.cityTextFieldHeight),
+
+      self.regionTextField.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.regionTextFieldTopMargin),
+      self.regionTextField.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.regionTextFieldTrailingMargin),
+      self.regionTextField.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerXAnchor, constant: Metric.regionTextFieldLeadingMargin),
+      self.regionTextField.heightAnchor.constraint(equalToConstant: Metric.regionTextFieldHeight),
+
+      self.cityButton.topAnchor.constraint(equalTo: self.cityTextField.topAnchor),
+      self.cityButton.leadingAnchor.constraint(equalTo: self.cityTextField.leadingAnchor),
+      self.cityButton.trailingAnchor.constraint(equalTo: self.cityTextField.trailingAnchor),
+      self.cityButton.bottomAnchor.constraint(equalTo: self.cityTextField.bottomAnchor),
+
+      self.regionButton.topAnchor.constraint(equalTo: self.regionTextField.topAnchor),
+      self.regionButton.leadingAnchor.constraint(equalTo: self.regionTextField.leadingAnchor),
+      self.regionButton.trailingAnchor.constraint(equalTo: self.regionTextField.trailingAnchor),
+      self.regionButton.bottomAnchor.constraint(equalTo: self.regionTextField.bottomAnchor),
 
       self.addressTextField.heightAnchor.constraint(equalToConstant: Metric.addressTextFieldHeight),
-      self.addressTextField.topAnchor.constraint(equalTo: self.cityRegionStackView.bottomAnchor, constant: Metric.addressTextFieldTopMargin),
+      self.addressTextField.topAnchor.constraint(equalTo: self.cityTextField.bottomAnchor, constant: Metric.addressTextFieldTopMargin),
       self.addressTextField.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.addressTextFieldLeadingMargin),
       self.addressTextField.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.addressTextFieldTrailingMargin),
 

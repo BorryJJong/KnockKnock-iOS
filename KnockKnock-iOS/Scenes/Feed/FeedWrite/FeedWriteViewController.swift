@@ -33,6 +33,7 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   // MARK: - Configure
 
   override func setupConfigure() {
+    self.hideKeyboardWhenTappedAround()
     self.navigationItem.title = "새 게시글"
     self.navigationController?.navigationBar.setDefaultAppearance()
 
@@ -124,7 +125,6 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   }
 }
 
-
 extension FeedWriteViewController: FeedWriteViewProtocol {
   
 }
@@ -203,7 +203,6 @@ extension FeedWriteViewController: UICollectionViewDelegateFlowLayout {
 
 extension FeedWriteViewController: UICollectionViewDelegate {
 }
-
 
 extension YPImagePickerConfiguration: Then {
 }
