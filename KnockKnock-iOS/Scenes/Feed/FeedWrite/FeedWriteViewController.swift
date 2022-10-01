@@ -18,7 +18,7 @@ protocol FeedWriteViewProtocol: AnyObject {
 final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
   // MARK: - Properties
-
+  
   var interactor: FeedWriteInteractorProtocol?
   var router: FeedWriteRouterProtocol?
 
@@ -127,6 +127,13 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
 extension FeedWriteViewController: FeedWriteViewProtocol {
   
+}
+
+extension FeedWriteViewController: ShopSearchDelegate {
+  func getAddress(address: String) {
+    print(address)
+    self.containerView.shopSearchButton.setTitle(address, for: .normal)
+  }
 }
 
   // MARK: - TextView Delegate

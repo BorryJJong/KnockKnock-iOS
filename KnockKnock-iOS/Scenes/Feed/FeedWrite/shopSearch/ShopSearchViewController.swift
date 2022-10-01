@@ -27,7 +27,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
                   "경기도", "강원도", "전라북도", "전라남도", "경상북도", "경상남도"]
 
   var interactor: ShopSearchInteractorProtocol?
-  var router: ShopSearchRouterProtocol?
+  var router: ShopSearchRouterProtocol? & ShopSearchDelegate?
 
   var addressResult: AddressResult? {
     didSet {
@@ -80,6 +80,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
 
     self.containerView.resultTableView.do {
       $0.dataSource = self
+      $0.delegate = self
     }
 
     self.containerView.cityTextField.do {
@@ -114,7 +115,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   }
 }
 
-  // MARK: - ShopSearchView Protocol
+// MARK: - ShopSearchView Protocol
 
 extension ShopSearchViewController: ShopSearchViewProtocol {
   func fetchShopAddress(address: AddressResult) {
@@ -122,7 +123,7 @@ extension ShopSearchViewController: ShopSearchViewProtocol {
   }
 }
 
-  // MARK: - TextField Delegate
+// MARK: - TextField Delegate
 
 extension ShopSearchViewController: UITextFieldDelegate {
   func textField(
@@ -134,7 +135,7 @@ extension ShopSearchViewController: UITextFieldDelegate {
   }
 }
 
-  // MARK: - TableView DataSource
+// MARK: - TableView DataSource
 
 extension ShopSearchViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -152,5 +153,16 @@ extension ShopSearchViewController: UITableViewDataSource {
     }
     
     return cell
+  }
+}
+
+// MARK: - TableView Delegate
+
+extension ShopSearchViewController: UITableViewDelegate {
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    if let address = self.addressResult?.documents[indexPath.row].placeName {
+      
+      self.router?.passToFeedWriteView(source: self, address: address)
+    }
   }
 }

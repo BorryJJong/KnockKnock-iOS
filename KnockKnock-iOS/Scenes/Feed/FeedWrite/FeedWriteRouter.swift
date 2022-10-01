@@ -32,9 +32,11 @@ final class FeedWriteRouter: FeedWriteRouterProtocol {
   }
 
   func navigateToShopSearch(source: FeedWriteViewProtocol) {
-    let shopSearchViewController = ShopSearchRouter.createShopSearch()
+    let shopSearchRouter = ShopSearchRouter()
+    let shopSearchViewController = shopSearchRouter.createShopSearch()
 
     if let sourceView = source as? UIViewController {
+      shopSearchRouter.shopSearchDelegate = sourceView as! ShopSearchDelegate
       sourceView.navigationController?.pushViewController(shopSearchViewController, animated: true)
     }
   }

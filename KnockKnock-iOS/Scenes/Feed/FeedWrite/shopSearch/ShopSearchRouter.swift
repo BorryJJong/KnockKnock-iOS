@@ -11,9 +11,17 @@ protocol ShopSearchRouterProtocol: AnyObject {
   static func createShopSearch() -> UIViewController
 
   func presentBottomSheetView(source: ShopSearchViewProtocol)
+  func passToFeedWriteView(source: ShopSearchViewProtocol, address: String)
+}
+
+protocol ShopSearchDelegate: AnyObject {
+  func getAddress(address: String)
 }
 
 final class ShopSearchRouter: ShopSearchRouterProtocol {
+
+  var shopSearchDelegate: ShopSearchDelegate?
+
   static func createShopSearch() -> UIViewController {
 
     let view = ShopSearchViewController()
@@ -29,6 +37,13 @@ final class ShopSearchRouter: ShopSearchRouterProtocol {
     interactor.presenter = presenter
 
     return view
+  }
+
+  func passToFeedWriteView(source: ShopSearchViewProtocol, address: String) {
+    if let sourceView = source as? UIViewController {
+      self.shopSearchDelegate?.getAddress(address: address)
+      sourceView.navigationController?.popViewController(animated: true)
+    }
   }
 
   func presentBottomSheetView(source: ShopSearchViewProtocol) {
