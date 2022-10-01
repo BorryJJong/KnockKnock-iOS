@@ -51,6 +51,8 @@ extension PropertySelectViewController: UITableViewDataSource {
       cell.bind(content: promotionList[indexPath.row])
     case .tag:
       cell.bind(content: tagList[indexPath.row])
+    case .address:
+      print("error")
     }
 
     return cell

@@ -10,4 +10,5 @@ import Foundation
 enum PropertyType {
   case tag
   case promotion
+  case address
 }

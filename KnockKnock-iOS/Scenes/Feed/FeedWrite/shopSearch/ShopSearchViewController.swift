@@ -27,7 +27,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
                   "경기도", "강원도", "전라북도", "전라남도", "경상북도", "경상남도"]
 
   var interactor: ShopSearchInteractorProtocol?
-  var router: ShopSearchRouterProtocol? & ShopSearchDelegate?
+  var router: ShopSearchRouterProtocol?
 
   var addressResult: AddressResult? {
     didSet {
