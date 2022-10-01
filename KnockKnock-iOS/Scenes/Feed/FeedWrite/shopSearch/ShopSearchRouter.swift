@@ -10,8 +10,8 @@ import UIKit
 protocol ShopSearchRouterProtocol: AnyObject {
   static func createShopSearch() -> UIViewController
 
-  func presentBottomSheetView(source: ShopSearchViewProtocol)
-  func passToFeedWriteView(source: ShopSearchViewProtocol, address: String)
+  func presentBottomSheetView(source: ShopSearchViewProtocol, content: [String])
+  func passToFeedWriteView(source: ShopSearchViewProtocol, address: String?)
 }
 
 final class ShopSearchRouter: ShopSearchRouterProtocol {
@@ -35,23 +35,21 @@ final class ShopSearchRouter: ShopSearchRouterProtocol {
 
   func passToFeedWriteView(
     source: ShopSearchViewProtocol,
-    address: String
+    address: String?
   ) {
-    if let sourceView = source as? ShopSearchViewController,
-       let index = sourceView.navigationController?.viewControllers.count,
-       let feedWriteViewController = sourceView.navigationController?.viewControllers[index - 2] as? FeedWriteViewProtocol {
+    guard let sourceView = source as? ShopSearchViewController else { return }
+
+    if let index = sourceView.navigationController?.viewControllers.count,
+       let feedWriteViewController = sourceView.navigationController?.viewControllers[index - 2] as? FeedWriteViewProtocol,
+       let address = address {
       feedWriteViewController.getAddress(address: address)
-      sourceView.navigationController?.popViewController(animated: true)
     }
+    sourceView.navigationController?.popViewController(animated: true)
   }
 
-  func presentBottomSheetView(source: ShopSearchViewProtocol) {
+  func presentBottomSheetView(source: ShopSearchViewProtocol, content: [String]) {
     let bottomSheetViewController = BottomSheetViewController().then {
-      $0.setBottomSheetContents(
-        contents: [
-          BottomSheetOption.delete.rawValue,
-          BottomSheetOption.edit.rawValue
-        ])
+      $0.setBottomSheetContents(contents: content)
       $0.modalPresentationStyle = .overFullScreen
     }
     

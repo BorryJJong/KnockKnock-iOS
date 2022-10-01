@@ -11,13 +11,6 @@ import Then
 
 final class PropertySelectView: UIView {
 
-  // MARK: - Properties
-
-  enum Property {
-    case tag
-    case promotion
-  }
-
   // MARK: - UI
 
   let propertyTableView = UITableView().then {

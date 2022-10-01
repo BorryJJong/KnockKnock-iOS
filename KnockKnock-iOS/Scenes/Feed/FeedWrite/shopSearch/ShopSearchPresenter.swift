@@ -15,7 +15,7 @@ protocol ShopSearchPresenterProtocol {
 }
 
 final class ShopSearchPresenter: ShopSearchPresenterProtocol {
-  var view: ShopSearchViewProtocol?
+  weak var view: ShopSearchViewProtocol?
 
   func presentShopAddress(address: AddressResult) {
     self.view?.fetchShopAddress(address: address)

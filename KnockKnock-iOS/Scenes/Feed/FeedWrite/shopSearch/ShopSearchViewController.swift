@@ -10,7 +10,7 @@ import UIKit
 import KKDSKit
 import Then
 
-protocol ShopSearchViewProtocol {
+protocol ShopSearchViewProtocol: AnyObject {
   var interactor: ShopSearchInteractorProtocol? { get set }
   var router: ShopSearchRouterProtocol? { get set }
 
@@ -86,6 +86,10 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
     self.containerView.cityTextField.do {
       $0.delegate = self
     }
+    
+    self.containerView.cityButton.do {
+      $0.addTarget(self, action: #selector(cityButtonDidTap(_:)), for: .touchUpInside)
+    }
 
     self.containerView.regionTextField.do {
       $0.delegate = self
@@ -107,11 +111,15 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   }
 
   @objc private func doneButtonDidTap(_ sender: UIBarButtonItem) {
-    self.navigationController?.popViewController(animated: true)
+    self.router?.passToFeedWriteView(source: self, address: nil)
   }
 
   @objc func tapBackBarButton(_ sender: UIBarButtonItem) {
     self.navigationController?.popViewController(animated: true)
+  }
+
+  @objc func cityButtonDidTap(_ sender: UIButton) {
+    self.router?.presentBottomSheetView(source: self, content: self.cityList)
   }
 }
 
