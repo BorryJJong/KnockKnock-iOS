@@ -11,13 +11,6 @@ import Then
 
 final class PropertySelectView: UIView {
 
-  // MARK: - Properties
-
-  enum Property {
-    case tag
-    case promotion
-  }
-
   // MARK: - UI
 
   let propertyTableView = UITableView().then {
@@ -27,6 +20,8 @@ final class PropertySelectView: UIView {
     $0.registCell(type: PropertyCell.self)
   }
 
+  // MARK: - Initialize
+
   init() {
     super.init(frame: .zero)
     self.setupConstraints()
@@ -35,6 +30,8 @@ final class PropertySelectView: UIView {
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
   }
+
+  // MARK: - Constraints
 
   private func setupConstraints() {
     [self.propertyTableView].addSubViews(self)

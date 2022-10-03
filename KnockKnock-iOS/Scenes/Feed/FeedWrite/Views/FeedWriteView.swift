@@ -161,6 +161,8 @@ class FeedWriteView: UIView {
     $0.backgroundColor = .gray40
   }
 
+  // MARK: - Initialize
+
   init() {
     super.init(frame: .zero)
     self.setupConstraints()
@@ -169,6 +171,22 @@ class FeedWriteView: UIView {
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
   }
+
+  // MARK: - Bind
+
+  func bind(propertyType: PropertyType, content: String) {
+
+    switch propertyType {
+    case .tag:
+      self.tagLabel.text = content
+    case .promotion:
+      self.promotionLabel.text = content
+    case .address:
+      self.shopLabel.text = content
+    }
+  }
+
+  // MARK: - Constraints
 
   private func setupConstraints() {
     [self.photoAddButton, self.photoCollectionView].addSubViews(self)

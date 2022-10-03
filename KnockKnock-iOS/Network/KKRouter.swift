@@ -14,13 +14,19 @@ enum KKRouter: URLRequestConvertible {
   typealias Parameters = [String: Any]
 
   var baseURL: URL {
-    return URL(string: API.BASE_URL)!
+    switch self {
+    case .requestShopAddress:
+      return URL(string: API.KAKAO_LOCAL_URL)!
+    default:
+      return URL(string: API.BASE_URL)!
+    }
   }
 
   case getChallengeResponse
   case getChallengeDetail(id: Int)
   case getChallengeTitles
   case getFeedMain(page: Int, take: Int, challengeId: Int)
+  case requestShopAddress(query: String)
   case getFeedBlogPost(page: Int, take: Int, feedId: Int, challengeId: Int)
 
   var method: HTTPMethod {
@@ -29,7 +35,8 @@ enum KKRouter: URLRequestConvertible {
         .getFeedBlogPost,
         .getFeedMain,
         .getChallengeTitles,
-        .getChallengeDetail:
+        .getChallengeDetail,
+        .requestShopAddress:
       return .get
     }
   }
@@ -40,6 +47,7 @@ enum KKRouter: URLRequestConvertible {
     case .getChallengeDetail(let id): return "challenges/\(id)"
     case .getFeedMain: return "feed/main"
     case .getChallengeTitles: return "challenges/titles"
+    case .requestShopAddress: return "keyword.json"
     case .getFeedBlogPost: return "feed/blog-post"
     }
   }
@@ -48,6 +56,9 @@ enum KKRouter: URLRequestConvertible {
     switch self {
     case  .getChallengeDetail, .getChallengeResponse, .getChallengeTitles:
       return nil
+
+    case let .requestShopAddress(query):
+      return ["query": query]
 
     case let .getFeedMain(page, take, challengeId):
       return [
@@ -73,8 +84,14 @@ enum KKRouter: URLRequestConvertible {
     switch method {
     case .get:
       switch self {
+
+      case .requestShopAddress:
+        request = try URLEncoding.default.encode(request, with: parameters)
+        request.setValue(API.KAKAO_REST_API_KEY, forHTTPHeaderField: "Authorization")
+
       case .getChallengeDetail:
         break
+        
       default:
         request = try URLEncoding.default.encode(request, with: parameters)
       }

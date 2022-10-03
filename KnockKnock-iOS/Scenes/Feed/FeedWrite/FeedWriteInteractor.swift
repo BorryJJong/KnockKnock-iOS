@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FeedWriteInteractorProtocol: AnyObject {
-  var presenter: FeedWritePresenterProtocol? { get set }
+  var presenter: FeedWritePresenterProtocol? { get }
   var worker: FeedWriteWorkerProtocol? { get set }
 }
 
@@ -16,6 +16,6 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
 
   // MARK: - Properties
 
-  var presenter: FeedWritePresenterProtocol?
+  weak var presenter: FeedWritePresenterProtocol?
   var worker: FeedWriteWorkerProtocol?
 }

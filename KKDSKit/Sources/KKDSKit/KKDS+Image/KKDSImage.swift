@@ -21,6 +21,7 @@ public extension KKDS.Image {
 
 public extension KKDS.Image {
   static var ic_close_10_gr: UIImage              { .load(name: "ic_close_10_gr") }
+  static var ic_down_10_bk: UIImage              { .load(name: "ic_down_10_bk") }
   static var ic_left_10_gr: UIImage               { .load(name: "ic_left_10_gr") }
   static var ic_page_10_wh_on: UIImage            { .load(name: "ic_page_10_wh_on") }
   static var ic_page_10_wh_off: UIImage           { .load(name: "ic_page_10_wh_off") }
