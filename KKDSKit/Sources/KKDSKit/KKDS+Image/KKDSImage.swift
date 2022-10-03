@@ -97,6 +97,12 @@ public extension KKDS.Image {
   static var ic_no_data_60: UIImage               { .load(name: "ic_no_data_60") }
 }
 
+// MARK: - Icon Size 86
+
+public extension KKDS.Image {
+  static var ic_my_img_86: UIImage                { .load(name: "ic_my_img_86") }
+}
+
 // MARK: - background
 
 public extension KKDS.Image {
@@ -127,6 +133,12 @@ public extension KKDS.Image {
   static var etc_bar_8_gr: UIImage                { .load(name: "etc_bar_8_gr") }
   static var etc_bar_30_gr: UIImage               { .load(name: "etc_bar_30_gr") }
 }
+
+// MARK: - Login
+public extension KKDS.Image {
+  static var ic_kakao_login: UIImage              { .load(name: "ic_kakao_login") }
+}
+
 
 extension UIImage {
   public static func load(name: String) -> UIImage {
