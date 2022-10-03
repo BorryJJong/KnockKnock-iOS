@@ -13,6 +13,25 @@ import Then
 
 final class ProfileSettingView: UIView {
 
+  // MARK: - Constants
+
+  private enum Metric {
+    static let profileImageViewTopMargin = 20.f
+    static let profileImageViewWidth = 86.f
+
+    static let cameraImageViewWidth = 24.f
+    static let nicknameTextFieldLeadingMargin = 20.f
+    static let nicknameTextFieldTopMargin = 30.f
+    static let nicknameTextFiedlHeight = 45.f
+
+    static let noticeLabelTopMargin = 10.f
+    static let noticeLabelLeadingMargin = 20.f
+
+    static let confirmButtonLeadingMargin = 20.f
+    static let confirmButtonBottomMargin = -10.f
+    static let confirmButtonHeight = 47.f
+  }
+
   // MARK: - UIs
 
   private let profileImageView = UIImageView().then {
@@ -72,14 +91,14 @@ final class ProfileSettingView: UIView {
 
     self.profileImageView.snp.makeConstraints {
       $0.centerX.equalTo(self.safeAreaLayoutGuide)
-      $0.top.equalTo(self.safeAreaLayoutGuide).offset(20)
-      $0.width.height.equalTo(86)
+      $0.top.equalTo(self.safeAreaLayoutGuide).offset(Metric.profileImageViewTopMargin)
+      $0.width.height.equalTo(Metric.profileImageViewWidth)
     }
 
     self.cameraImageView.snp.makeConstraints {
       $0.trailing.equalTo(self.profileImageView.snp.trailing)
       $0.bottom.equalTo(self.profileImageView.snp.bottom)
-      $0.width.height.equalTo(24)
+      $0.width.height.equalTo(Metric.cameraImageViewWidth)
     }
 
     self.profileButton.snp.makeConstraints {
@@ -87,21 +106,20 @@ final class ProfileSettingView: UIView {
     }
 
     self.nicknameTextField.snp.makeConstraints {
-      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(20)
-      $0.top.equalTo(self.profileButton.snp.bottom).offset(30)
-      $0.height.equalTo(45)
+      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.nicknameTextFieldLeadingMargin)
+      $0.top.equalTo(self.profileButton.snp.bottom).offset(Metric.nicknameTextFieldTopMargin)
+      $0.height.equalTo(Metric.nicknameTextFiedlHeight)
     }
 
     self.noticeLabel.snp.makeConstraints {
-      $0.top.equalTo(self.nicknameTextField.snp.bottom).offset(10)
-      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(20)
+      $0.top.equalTo(self.nicknameTextField.snp.bottom).offset(Metric.noticeLabelTopMargin)
+      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.noticeLabelLeadingMargin)
     }
 
     self.confirmButton.snp.makeConstraints {
-      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(20)
-      $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(-10)
-      $0.height.equalTo(47)
+      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.confirmButtonLeadingMargin)
+      $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(Metric.confirmButtonBottomMargin)
+      $0.height.equalTo(Metric.confirmButtonHeight)
     }
-
   }
 }

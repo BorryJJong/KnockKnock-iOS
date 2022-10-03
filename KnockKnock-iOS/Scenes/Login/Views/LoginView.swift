@@ -13,6 +13,12 @@ import KKDSKit
 
 final class LoginView: UIView {
 
+  // MARK: - Constants
+
+  private enum Metric {
+    static let kakaoLoginButonLeadingMargin = 20.f
+  }
+
   // MARK: - UIs
 
   let kakaoLoginButton = UIButton().then {
@@ -36,7 +42,7 @@ final class LoginView: UIView {
     [self.kakaoLoginButton].addSubViews(self)
 
     self.kakaoLoginButton.snp.makeConstraints {
-      $0.leading.trailing.equalToSuperview().inset(20)
+      $0.leading.trailing.equalToSuperview().inset(Metric.kakaoLoginButonLeadingMargin)
       $0.centerY.equalToSuperview()
     }
   }
