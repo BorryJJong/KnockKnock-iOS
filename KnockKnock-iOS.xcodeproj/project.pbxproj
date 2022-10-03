@@ -72,16 +72,13 @@
 		613856E8289CD43F00BE347E /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613856E7289CD43F00BE347E /* EventCell.swift */; };
 		613856EA289E664A00BE347E /* LikeDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613856E9289E664A00BE347E /* LikeDetailCell.swift */; };
 		613856EC289F738D00BE347E /* HomeMainPagerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613856EB289F738D00BE347E /* HomeMainPagerCell.swift */; };
-
+		6139004528E5605900CC9950 /* UINavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6139004428E5605900CC9950 /* UINavigationBar.swift */; };
 		6139FF6628E2CA5A00CC9950 /* ShopSearchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6139FF6528E2CA5A00CC9950 /* ShopSearchRouter.swift */; };
 		6139FF6928E2CAEA00CC9950 /* ShopSearchInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6139FF6828E2CAEA00CC9950 /* ShopSearchInteractor.swift */; };
 		6139FF6B28E2CB0200CC9950 /* ShopSearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6139FF6A28E2CB0200CC9950 /* ShopSearchPresenter.swift */; };
 		6139FF6D28E2CB1000CC9950 /* ShopSearchWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6139FF6C28E2CB1000CC9950 /* ShopSearchWorker.swift */; };
 		6139FF6F28E2DC9000CC9950 /* ShopSearchRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6139FF6E28E2DC9000CC9950 /* ShopSearchRepository.swift */; };
 		6139FF7128E4165D00CC9950 /* PropertyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6139FF7028E4165D00CC9950 /* PropertyType.swift */; };
-
-		6139004528E5605900CC9950 /* UINavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6139004428E5605900CC9950 /* UINavigationBar.swift */; };
-
 		6143294D285DD2A0008BDCC9 /* FeedMainFooterCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6143294C285DD2A0008BDCC9 /* FeedMainFooterCollectionReusableView.swift */; };
 		6143294F285F2BCF008BDCC9 /* BasePaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6143294E285F2BCF008BDCC9 /* BasePaddingLabel.swift */; };
 		614329552862EFE0008BDCC9 /* FeedListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614329542862EFE0008BDCC9 /* FeedListView.swift */; };
@@ -157,6 +154,7 @@
 		61B6D993288C2C2700E60F08 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D992288C2C2700E60F08 /* HomeView.swift */; };
 		61B6D998288C40BF00E60F08 /* HomeSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D997288C40BF00E60F08 /* HomeSection.swift */; };
 		61B6D9B6288E69D400E60F08 /* FeedListHeaderReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D9B5288E69D400E60F08 /* FeedListHeaderReusableView.swift */; };
+		61BD0A9528EAC88A003038B7 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 61BD0A9428EAC88A003038B7 /* Alamofire */; };
 		61C21CFD28C463E6009B5F4E /* DefaultCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C21CFC28C463E6009B5F4E /* DefaultCollectionViewCell.swift */; };
 		61C21D0228C46C9E009B5F4E /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 61C21D0128C46C9E009B5F4E /* FirebaseAnalytics */; };
 		61C21D0428C46C9E009B5F4E /* FirebaseAppDistribution-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 61C21D0328C46C9E009B5F4E /* FirebaseAppDistribution-Beta */; };
@@ -243,16 +241,13 @@
 		613856E7289CD43F00BE347E /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 		613856E9289E664A00BE347E /* LikeDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeDetailCell.swift; sourceTree = "<group>"; };
 		613856EB289F738D00BE347E /* HomeMainPagerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMainPagerCell.swift; sourceTree = "<group>"; };
-
+		6139004428E5605900CC9950 /* UINavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationBar.swift; sourceTree = "<group>"; };
 		6139FF6528E2CA5A00CC9950 /* ShopSearchRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSearchRouter.swift; sourceTree = "<group>"; };
 		6139FF6828E2CAEA00CC9950 /* ShopSearchInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSearchInteractor.swift; sourceTree = "<group>"; };
 		6139FF6A28E2CB0200CC9950 /* ShopSearchPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSearchPresenter.swift; sourceTree = "<group>"; };
 		6139FF6C28E2CB1000CC9950 /* ShopSearchWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSearchWorker.swift; sourceTree = "<group>"; };
 		6139FF6E28E2DC9000CC9950 /* ShopSearchRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSearchRepository.swift; sourceTree = "<group>"; };
 		6139FF7028E4165D00CC9950 /* PropertyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyType.swift; sourceTree = "<group>"; };
-
-		6139004428E5605900CC9950 /* UINavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationBar.swift; sourceTree = "<group>"; };
-
 		6143294C285DD2A0008BDCC9 /* FeedMainFooterCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMainFooterCollectionReusableView.swift; sourceTree = "<group>"; };
 		6143294E285F2BCF008BDCC9 /* BasePaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePaddingLabel.swift; sourceTree = "<group>"; };
 		614329542862EFE0008BDCC9 /* FeedListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedListView.swift; sourceTree = "<group>"; };
@@ -359,6 +354,7 @@
 				613856D6289900FE00BE347E /* SnapKit in Frameworks */,
 				20AF1007285F2C74005C73EC /* KKDSKit in Frameworks */,
 				61C21D0428C46C9E009B5F4E /* FirebaseAppDistribution-Beta in Frameworks */,
+				61BD0A9528EAC88A003038B7 /* Alamofire in Frameworks */,
 				61C21D0228C46C9E009B5F4E /* FirebaseAnalytics in Frameworks */,
 				34F6FB7E518CFAF1AD6C3455 /* Pods_KnockKnock_iOS.framework in Frameworks */,
 			);
@@ -832,10 +828,8 @@
 				616EB090289154B8001BD18C /* FeedDetailSection.swift */,
 				618D8B5F28BDF6C900828794 /* SearchTap.swift */,
 				618D8B4C28BC61A100828794 /* BottomSheetOption.swift */,
-
 				6139FF7028E4165D00CC9950 /* PropertyType.swift */,
 				61E87EB428D17CAF0005CAA6 /* NetworkErrorType.swift */,
-
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -910,6 +904,7 @@
 				613856D5289900FE00BE347E /* SnapKit */,
 				61C21D0128C46C9E009B5F4E /* FirebaseAnalytics */,
 				61C21D0328C46C9E009B5F4E /* FirebaseAppDistribution-Beta */,
+				61BD0A9428EAC88A003038B7 /* Alamofire */,
 			);
 			productName = "KnockKnock-iOS";
 			productReference = 61FC60E527B9244D00A51DBC /* KnockKnock-iOS.app */;
@@ -942,6 +937,7 @@
 			packageReferences = (
 				613856D4289900FE00BE347E /* XCRemoteSwiftPackageReference "SnapKit" */,
 				61C21D0028C46C9E009B5F4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				61BD0A9328EAC88A003038B7 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 61FC60E627B9244D00A51DBC /* Products */;
 			projectDirPath = "";
@@ -1416,6 +1412,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		61BD0A9328EAC88A003038B7 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		61C21D0028C46C9E009B5F4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
@@ -1435,6 +1439,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 613856D4289900FE00BE347E /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		61BD0A9428EAC88A003038B7 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61BD0A9328EAC88A003038B7 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 		61C21D0128C46C9E009B5F4E /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
