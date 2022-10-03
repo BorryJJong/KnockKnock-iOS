@@ -11,7 +11,7 @@ import SnapKit
 import KKDSKit
 import Then
 
-class ProfileSettingView: UIView {
+final class ProfileSettingView: UIView {
 
   // MARK: - UIs
 
