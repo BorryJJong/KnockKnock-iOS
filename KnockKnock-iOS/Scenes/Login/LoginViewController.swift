@@ -33,9 +33,8 @@ final class LoginViewController: BaseViewController<LoginView> {
   // MARK: - Button Actions
 
   @objc func kakaoLoginButtonDidTap(_ sender: UIButton) {
-//    self.navigationController?.pushViewController(ProfileSettingViewController(), animated: true)
     if (UserApi.isKakaoTalkLoginAvailable()) {
-      UserApi.shared.loginWithKakaoTalk(completion: { (oauthToken, error) in
+      UserApi.shared.loginWithKakaoAccount(completion: { (oauthToken, error) in
         if let error = error {
           print(error)
         } else {
