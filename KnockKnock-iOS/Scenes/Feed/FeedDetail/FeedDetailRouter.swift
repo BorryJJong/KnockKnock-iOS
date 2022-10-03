@@ -8,12 +8,12 @@
 import UIKit
 
 protocol FeedDetailRouterProtocol {
-  static func createFeedDetail() -> UIViewController
+  static func createFeedDetail(feedId: Int) -> UIViewController
   func navigateToLikeDetail(source: FeedDetailViewProtocol, like: [Like])
 }
 
 final class FeedDetailRouter: FeedDetailRouterProtocol {
-  static func createFeedDetail() -> UIViewController {
+  static func createFeedDetail(feedId: Int) -> UIViewController {
     let view = FeedDetailViewController()
     let interactor = FeedDetailInteractor()
     let presenter = FeedDetailPresenter()
@@ -24,6 +24,7 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
     )
     let router = FeedDetailRouter()
 
+    view.feedId = feedId
     view.interactor = interactor
     view.router = router
     interactor.presenter = presenter

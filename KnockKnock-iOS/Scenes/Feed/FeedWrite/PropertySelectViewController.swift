@@ -11,14 +11,11 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
   
   // MARK: - Properties
   
-  enum Property {
-    case tag
-    case promotion
-  }
-  
   let tagList = ["#거꾸로챌린지", "#용기내챌린지", "#GOGO챌린지", "#1일 1환경챌린지"]
   let promotionList = ["없음", "텀블러 할인", "사은품 증정", "용기 할인"]
-  
+
+  var propertyType = PropertyType.promotion
+
   // MARK: - Life cylce
   
   override func viewDidLoad() {
@@ -48,7 +45,15 @@ extension PropertySelectViewController: UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueCell(withType: PropertyCell.self, for: indexPath)
-    cell.propertyLabel.text = tagList[indexPath.row]
+
+    switch propertyType {
+    case .promotion:
+      cell.bind(content: promotionList[indexPath.row])
+    case .tag:
+      cell.bind(content: tagList[indexPath.row])
+    case .address:
+      print("error")
+    }
 
     return cell
   }

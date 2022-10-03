@@ -34,7 +34,7 @@ final class BottomSheetView: UIView {
     constant: topConstant
   )
 
-  let bottomHeight: CGFloat = 150
+  var bottomHeight: CGFloat = 150
 
   // MARK: - UIs
 

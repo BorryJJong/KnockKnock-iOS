@@ -12,13 +12,18 @@ import YPImagePicker
 
 protocol FeedWriteViewProtocol: AnyObject {
   var interactor: FeedWriteInteractorProtocol? { get set }
+  var router: FeedWriteRouterProtocol? { get set }
+
+  func getAddress(address: String)
 }
 
 final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
   // MARK: - Properties
-
+  
   var interactor: FeedWriteInteractorProtocol?
+  var router: FeedWriteRouterProtocol?
+
   var pickedPhotos: [UIImage] = []
 
   // MARK: - Life cycle
@@ -27,7 +32,10 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     super.viewDidLoad()
   }
 
+  // MARK: - Configure
+
   override func setupConfigure() {
+    self.hideKeyboardWhenTappedAround()
     self.navigationItem.title = "새 게시글"
     self.navigationController?.navigationBar.setDefaultAppearance()
 
@@ -62,16 +70,18 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
       for: .touchUpInside)
   }
 
+  // MARK: - Button Actions
+
   @objc func tagSelectButtonDidTap(_ sender: UIButton) {
-    self.navigationController?.pushViewController(PropertySelectViewController(), animated: true)
+    self.router?.navigateToProperty(source: self, propertyType: .tag)
   }
 
   @objc func promotionSelectButtonDidTap(_ sender: UIButton) {
-    self.navigationController?.pushViewController(PropertySelectViewController(), animated: true)
+    self.router?.navigateToProperty(source: self, propertyType: .promotion)
   }
 
   @objc func shopSearchButtonDidTap(_ sender: UIButton) {
-    self.navigationController?.pushViewController(ShopSearchViewController(), animated: true)
+    self.router?.navigateToShopSearch(source: self)
   }
 
   @objc func photoAddButtonDidTap(_ sender: UIButton) {
@@ -82,6 +92,8 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     self.pickedPhotos.remove(at: sender.tag)
     self.containerView.photoCollectionView.reloadData()
   }
+
+  // MARK: - ImagePicker
 
   func callImagePicker() {
     let config = YPImagePickerConfiguration().with {
@@ -115,6 +127,14 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   }
 }
 
+extension FeedWriteViewController: FeedWriteViewProtocol {
+  func getAddress(address: String) {
+    self.containerView.bind(propertyType: .address, content: address)
+  }
+}
+
+  // MARK: - TextView Delegate
+
 extension FeedWriteViewController: UITextViewDelegate {
   func textViewDidBeginEditing(_ textView: UITextView) {
     if textView.textColor == .gray40 {
@@ -130,6 +150,8 @@ extension FeedWriteViewController: UITextViewDelegate {
     }
   }
 }
+
+  // MARK: - CollectionView DataSource
 
 extension FeedWriteViewController: UICollectionViewDataSource {
   func collectionView(
@@ -162,6 +184,8 @@ extension FeedWriteViewController: UICollectionViewDataSource {
   }
 }
 
+  // MARK: - CollectionView Delegate
+
 extension FeedWriteViewController: UICollectionViewDelegateFlowLayout {
   func collectionView(
     _ collectionView: UICollectionView,
@@ -182,9 +206,6 @@ extension FeedWriteViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension FeedWriteViewController: UICollectionViewDelegate {
-}
-
-extension FeedWriteViewController: FeedWriteViewProtocol {
 }
 
 extension YPImagePickerConfiguration: Then {

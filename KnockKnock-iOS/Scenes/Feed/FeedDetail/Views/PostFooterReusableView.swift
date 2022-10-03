@@ -76,6 +76,13 @@ final class PostFooterReusableView: UICollectionReusableView {
     super.init(coder: aDecoder)
   }
 
+  // MARK: - Bind
+
+  func bind(shopAddress: String) {
+//    self.shopNameLabel.text = shopName // shopName data 없음
+    self.shopAddressLabel.text = shopAddress
+  }
+
   // MARK: - Constraints
 
   private func setupConstraints() {

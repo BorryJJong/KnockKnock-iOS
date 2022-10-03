@@ -46,6 +46,13 @@ final class PropertyCell: BaseTableViewCell {
       self.propertyLabel.textColor = .black
     }
   }
+
+  // MARK: - Bind
+
+  func bind(content: String) {
+    self.propertyLabel.text = content
+  }
+
   // MARK: - Configure
   
   override func setupConstraints() {
