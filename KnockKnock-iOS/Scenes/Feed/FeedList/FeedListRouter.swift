@@ -10,7 +10,8 @@ import UIKit
 protocol FeedListRouterProtocol {
   static func createFeedList(feedId: Int, challengeId: Int) -> UIViewController
 
-  func navigateToFeedDetail(source: FeedListViewProtocol)
+  func navigateToFeedMain(source: FeedListViewProtocol)
+  func navigateToFeedDetail(source: FeedListViewProtocol, feedId: Int)
   func navigateToCommentView(source: FeedListViewProtocol)
   func presentBottomSheetView(source: FeedListViewProtocol)
 }
@@ -36,8 +37,14 @@ final class FeedListRouter: FeedListRouterProtocol {
     return view
   }
 
-  func navigateToFeedDetail(source: FeedListViewProtocol) {
-    let feedDetailViewController = FeedDetailRouter.createFeedDetail()
+  func navigateToFeedMain(source: FeedListViewProtocol) {
+    if let sourceView = source as? UIViewController {
+      sourceView.navigationController?.popViewController(animated: true)
+    }
+  }
+
+  func navigateToFeedDetail(source: FeedListViewProtocol, feedId: Int) {
+    let feedDetailViewController = FeedDetailRouter.createFeedDetail(feedId: feedId)
     if let sourceView = source as? UIViewController {
       feedDetailViewController.hidesBottomBarWhenPushed = true
       sourceView.navigationController?.pushViewController(feedDetailViewController, animated: true)

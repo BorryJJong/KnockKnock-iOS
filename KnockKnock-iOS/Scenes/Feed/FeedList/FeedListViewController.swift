@@ -87,7 +87,10 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     if let indexPath = indexPath {
       if let cell = collectionView.cellForItem(at: indexPath) {
         if !cell.isSelected {
-          self.router?.navigateToFeedDetail(source: self)
+          self.router?.navigateToFeedDetail(
+            source: self,
+            feedId: self.feedListPost[indexPath.section].id
+          )
         }
       }
     }
@@ -96,7 +99,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   // MARK: - Button Actions
 
   @objc private func backButtonDidTap(_ sender: UIButton) {
-    self.navigationController?.popViewController(animated: true)
+    self.router?.navigateToFeedMain(source: self)
   }
 
   @objc func configureButtonDidTap(_ sender: UIButton) {

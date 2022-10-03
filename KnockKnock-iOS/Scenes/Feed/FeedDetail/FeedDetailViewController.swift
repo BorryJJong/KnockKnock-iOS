@@ -30,6 +30,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   var feedDetail: FeedDetail? {
     didSet {
       self.containerView.postCollectionView.reloadData()
+
       if let feed = feedDetail?.data.feed {
         self.containerView.navigationView.bind(feed: feed)
       }
