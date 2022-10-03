@@ -10,14 +10,28 @@ import Foundation
 protocol FeedMainWorkerProtocol: AnyObject {
   func fetchFeedMain(currentPage: Int, pageSize: Int, challengeId: Int, completionHandler: @escaping (FeedMain) -> Void)
   func fetchChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void)
+  
+  func saveSearchKeyword(searchKeyword: [SearchKeyword])
 }
 
 final class FeedMainWorker: FeedMainWorkerProtocol {
 
   private let repository: FeedRepositoryProtocol
+  private let userDefaults = UserDefaults.standard
 
   init(repository: FeedRepositoryProtocol) {
     self.repository = repository
+  }
+
+  func saveSearchKeyword(searchKeyword: [SearchKeyword]) {
+    let keyword = searchKeyword.map {
+      [
+        "keyword": $0.keyword,
+        "category": $0.category
+      ]
+    }
+    userDefaults.set(keyword, forKey: "searchLog")
+    print("저장완료")
   }
 
   func fetchFeedMain(

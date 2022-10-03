@@ -54,7 +54,7 @@ final class HomeViewController: BaseViewController<HomeView> {
 
   func setNavigationItem() {
     self.navigationItem.backButtonTitle = ""
-    self.navigationController?.navigationBar.tintColor = .black
+    self.navigationController?.navigationBar.setDefaultAppearance()
   }
 
   // MARK: - button action
@@ -87,9 +87,12 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     switch section {
     case .main, .tag:
       return 1
-      
-    default:
+
+    case .event, .banner, .popularPost, .store:
       return 6
+
+    default:
+      return 1
     }
   }
 
@@ -135,7 +138,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
       return footer
 
     default:
-      assert(false)
+      return .init()
     }
   }
 
@@ -195,7 +198,12 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
       return cell
 
     default:
-      assert(false)
+      let cell = collectionView.dequeueCell(
+        withType: DefaultCollectionViewCell.self,
+        for: indexPath
+      )
+
+      return cell
     }
   }
 }

@@ -26,7 +26,6 @@ final class EventPageView: UIView {
     static let separatorViewHeight = 1.f
   }
 
-
   // MARK: - UIs
 
   let eventPageViewController = UIPageViewController(
@@ -40,7 +39,9 @@ final class EventPageView: UIView {
       $0.scrollDirection = .horizontal
       $0.minimumLineSpacing = 30
     }
-  )
+  ).then {
+    $0.backgroundColor = .clear
+  }
 
   let underLineView = UIView().then {
     $0.backgroundColor = .green40

@@ -34,12 +34,8 @@ class FeedMainView: UIView {
   }
   
   // MARK: - UIs
-  
-  let searchBar = UISearchController().then {
-    $0.hidesNavigationBarDuringPresentation = false
-  }
 
-  let gradientImageView = UIImageView().then {
+  private let gradientImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.image = UIImage(named: "tagButton_gradient")
   }
@@ -52,6 +48,7 @@ class FeedMainView: UIView {
   ).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.alwaysBounceVertical = false
+    $0.backgroundColor = .clear
   }
 
   let feedCollectionView = UICollectionView(
@@ -63,6 +60,7 @@ class FeedMainView: UIView {
     }
   ).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.backgroundColor = .clear
     $0.registFooterView(type: FeedMainFooterCollectionReusableView.self)
   }
   

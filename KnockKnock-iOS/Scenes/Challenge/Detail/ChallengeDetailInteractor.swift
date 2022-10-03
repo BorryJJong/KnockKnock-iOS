@@ -11,16 +11,18 @@ protocol ChallengeDetailInteractorProtocol {
   var presenter: ChallengeDetailPresenterProtocol? { get set }
   var worker: ChallengeDetailWorkerProtocol? { get set }
 
-  func getChallengeDetail()
+  func getChallengeDetail(challengeId: Int)
 }
 
 final class ChallengeDetailInteractor: ChallengeDetailInteractorProtocol {
   var presenter: ChallengeDetailPresenterProtocol?
   var worker: ChallengeDetailWorkerProtocol?
 
-  func getChallengeDetail() {
-    self.worker?.getChallengeDetail { [weak self] challengeDetail in
-      self?.presenter?.presentChallengeDetail(challengeDetail: challengeDetail)
-    }
+  func getChallengeDetail(challengeId: Int) {
+    self.worker?.getChallengeDetail(
+      challengeId: challengeId,
+      completionHandler: { challengeDetail in
+      self.presenter?.presentChallengeDetail(challengeDetail: challengeDetail)
+    })
   }
 }

@@ -97,13 +97,14 @@ class FeedListCell: BaseCollectionViewCell {
     $0.numberOfLines = 0
     $0.backgroundColor = .white
     $0.font = UIFont(name: "Apple SD Gothic Neo", size: 13)
-    $0.text = "패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. 패키지 상품을 받았을때의 기쁨 후엔 늘 골치아픈 쓰레기와 분리수거의 노동시간이 뒤따릅니다. "
   }
 
   let likeButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setImage(KKDS.Image.ic_like_24_off, for: .normal)
     $0.setTitle(" 0", for: .normal)
+    $0.setTitleColor(.black, for: .normal)
+    $0.titleLabel?.font = .systemFont(ofSize: 13, weight: .medium)
     $0.contentHorizontalAlignment = .center
     $0.semanticContentAttribute = .forceLeftToRight
   }
@@ -112,25 +113,41 @@ class FeedListCell: BaseCollectionViewCell {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setImage(KKDS.Image.ic_balloon_24_gr, for: .normal)
     $0.setTitle(" 0", for: .normal)
+    $0.setTitleColor(.black, for: .normal)
+    $0.titleLabel?.font = .systemFont(ofSize: 13, weight: .medium)
     $0.contentHorizontalAlignment = .center
     $0.semanticContentAttribute = .forceLeftToRight
   }
 
   // MARK: - Bind
 
-  func bind(feed: Feed) {
+  func bind(feedList: FeedListPost) {
+    if feedList.isLike {
+      self.likeButton.setImage(KKDS.Image.ic_like_24_on, for: .normal)
+      self.likeButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .bold)
+    } else {
+      self.likeButton.setImage(KKDS.Image.ic_like_24_off, for: .normal)
+      self.likeButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .medium)
+    }
+
+    self.likeButton.setTitle(" \(feedList.blogLikeCount)", for: .normal)
+    self.commentsButton.setTitle(" \(feedList.blogCommentCount)", for: .normal)
+
     self.imageScrollView.subviews.forEach{
       $0.removeFromSuperview()
     }
 
-    self.contentLabel.text = feed.content
-    self.setImageView(images: feed.images, scale: feed.scale)
+    self.contentLabel.text = feedList.content
+    self.setImageView(
+      images: feedList.blogImages,
+      scale: feedList.imageScale
+    )
 
-    if feed.images.count > 1 {
+    if feedList.blogImages.count > 1 {
       self.imageNumberLabel.isHidden = false
       self.imagePageControl.isHidden = false
-      self.imagePageControl.numberOfPages = feed.images.count
-      self.imageNumberLabel.text = "1/\(feed.images.count)"
+      self.imagePageControl.numberOfPages = feedList.blogImages.count
+      self.imageNumberLabel.text = "1/\(feedList.blogImages.count)"
     } else {
       self.imageNumberLabel.isHidden = true
       self.imagePageControl.isHidden = true
@@ -153,11 +170,17 @@ class FeedListCell: BaseCollectionViewCell {
     }
   }
 
-  func setImageView(images: [String], scale: String) {
+  private func setImageView(
+    images: [FeedImage],
+    scale: String
+  ) {
     for index in 0..<images.count {
 
       let imageView = UIImageView()
-      imageView.image = UIImage(named: images[index])
+      imageView.setImageFromStringUrl(
+        url: "https://dy-yb.github.io/images/profile.jpg", // images[index].fileUrl
+        defaultImage: KKDS.Image.ic_no_data_60
+      )
       imageView.contentMode = .scaleAspectFill
       imageView.layer.cornerRadius = 5
       imageView.clipsToBounds = true
@@ -166,7 +189,10 @@ class FeedListCell: BaseCollectionViewCell {
       let width = self.contentView.frame.width
       let xPosition = width * CGFloat(index)
 
-      imageView.frame = imageSizeType?.imageSize(xPosition: xPosition, width: width) ?? CGRect.init()
+      imageView.frame = imageSizeType?.imageSize(
+        xPosition: xPosition,
+        width: width
+      ) ?? CGRect.init()
 
       self.imageScrollView.contentSize.width = width * CGFloat(index+1)
       self.imageScrollView.addSubview(imageView)
@@ -190,7 +216,6 @@ class FeedListCell: BaseCollectionViewCell {
       $0.layer.shadowRadius = 5
     }
   }
-
 
   override func setupConstraints() {
     [self.imageScrollView, self.imageNumberLabel, self.imagePageControl].addSubViews(self.contentView)

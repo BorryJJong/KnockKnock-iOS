@@ -12,6 +12,7 @@ protocol FeedMainPresenterProtocol {
   
   func presentFeedMain(feed: FeedMain)
   func presentGetChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?)
+
 }
 
 final class FeedMainPresenter: FeedMainPresenterProtocol {

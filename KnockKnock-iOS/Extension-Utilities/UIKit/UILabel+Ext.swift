@@ -7,7 +7,33 @@
 
 import UIKit
 
+import Then
+
 extension UILabel {
+
+  func setBulletPoint(string: String, font: UIFont) {
+    let paragraphStyle = NSMutableParagraphStyle().then {
+      $0.headIndent = 15
+      $0.minimumLineHeight = 18
+      $0.tabStops = [
+        NSTextTab(
+          textAlignment: .left,
+          location: 15
+        )]
+    }
+    let stringAttributes = [
+      NSAttributedString.Key.font: font,
+      NSAttributedString.Key.foregroundColor: UIColor.black,
+      NSAttributedString.Key.paragraphStyle: paragraphStyle
+    ]
+
+    let string = "•\t\(string)"
+
+    attributedText = NSAttributedString(
+      string: string,
+      attributes: stringAttributes
+    )
+  }
 
   // MARK: Line height 설정
 
@@ -17,16 +43,17 @@ extension UILabel {
     style.minimumLineHeight = lineHeight
     style.maximumLineHeight = lineHeight
 
-    self.attributedText = NSAttributedString(string: content,
-    attributes: [
-      .paragraphStyle: style,
-      .font: UIFont.systemFont(ofSize: fontSize, weight: .regular)
-    ])
+    self.attributedText = NSAttributedString(
+      string: content,
+      attributes: [
+        .paragraphStyle: style,
+        .font: UIFont.systemFont(ofSize: fontSize, weight: .regular)
+      ])
   }
 
   // MARK: - "...더보기"
 
-/// label의 폰트, 사이즈를 계산해서 최종적으로 화면에 보여질 글자의 길이를 저장할 변수
+  /// label의 폰트, 사이즈를 계산해서 최종적으로 화면에 보여질 글자의 길이를 저장할 변수
   var visibleTextLength: Int {
 
     let font: UIFont = self.font
@@ -116,8 +143,8 @@ extension UILabel {
         .replacingCharacters(
           in: NSRange(
             location: safeTrimmedString.count - readMoreLength,
-            length: readMoreLength)
-          , with: ""
+            length: readMoreLength),
+          with: ""
         ) + trailingText
 
       let answerAttributed = NSMutableAttributedString(

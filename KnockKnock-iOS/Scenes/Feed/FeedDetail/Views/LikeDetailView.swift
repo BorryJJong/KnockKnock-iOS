@@ -26,7 +26,9 @@ final class LikeDetailView: UIView {
     collectionViewLayout: UICollectionViewFlowLayout().then {
       $0.scrollDirection = .vertical
     }
-  )
+  ).then {
+    $0.backgroundColor = .clear
+  }
 
   // MARK: - initialize
 

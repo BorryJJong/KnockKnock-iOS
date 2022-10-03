@@ -8,7 +8,13 @@
 import UIKit
 
 protocol FeedListWorkerProtocol {
-  func fetchFeed(completionHandler: @escaping ([Feed]) -> Void)
+  func fetchFeedList(
+    currentPage: Int,
+    count: Int,
+    feedId: Int,
+    challengeId: Int,
+    completionHandler: @escaping (FeedList) -> Void
+  )
 }
 
 final class FeedListWorker: FeedListWorkerProtocol {
@@ -19,9 +25,20 @@ final class FeedListWorker: FeedListWorkerProtocol {
     self.repository = repository
   }
 
-  func fetchFeed(completionHandler: @escaping ([Feed]) -> Void) {
-    repository.fetchFeed(completionHandler: { result in
-      completionHandler(result)
-    })
+  func fetchFeedList(
+    currentPage: Int,
+    count: Int,
+    feedId: Int,
+    challengeId: Int,
+    completionHandler: @escaping (FeedList) -> Void
+  ) {
+    repository.requestFeedList(
+      currentPage: currentPage,
+      pageSize: count,
+      feedId: feedId,
+      challengeId: challengeId,
+      completionHandler: { result in
+        completionHandler(result)
+      })
   }
 }

@@ -42,7 +42,6 @@ class FeedListHeaderReusableView: UICollectionReusableView {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.layer.cornerRadius = 16
     $0.clipsToBounds = true
-    $0.image = KKDS.Image.ic_person_24
   }
 
   private let userIdLabel = UILabel().then {
@@ -58,7 +57,7 @@ class FeedListHeaderReusableView: UICollectionReusableView {
     $0.text = "1시간전"
   }
 
-  private let configureButton = UIButton().then {
+  let configureButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setTitleColor(.black, for: .normal)
     $0.setImage(KKDS.Image.ic_more_20_gr, for: .normal)
@@ -75,10 +74,16 @@ class FeedListHeaderReusableView: UICollectionReusableView {
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
   }
+
   // MARK: - Bind
 
-  func bind(feed: Feed) {
-    self.userIdLabel.text = "\(feed.userId)"
+  func bind(feed: FeedListPost) {
+    self.userIdLabel.text = "\(feed.id)" // feed.userName으로 변경할 것
+    self.postDateLabel.text = feed.regDateToString
+    self.profileImageView.setImageFromStringUrl(
+      url: "https://dy-yb.github.io/images/profile.jpg", // feed.userImage
+      defaultImage: KKDS.Image.ic_person_24
+    )
   }
 
   // MARK: - Configure
