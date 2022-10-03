@@ -11,7 +11,7 @@ protocol FeedDetailInteractorProtocol {
   var worker: FeedDetailWorkerProtocol? { get set }
   var presenter: FeedDetailPresenterProtocol? { get set }
 
-  func getFeedDeatil()
+  func getFeedDeatil(feedId: Int)
   func getAllComments()
   func setVisibleComments(comments: [Comment])
   func getLike()
@@ -21,10 +21,12 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   var worker: FeedDetailWorkerProtocol?
   var presenter: FeedDetailPresenterProtocol?
 
-  func getFeedDeatil() {
-    self.worker?.getFeedDetail { [weak self] feedDetail in
-      self?.presenter?.presentFeedDetail(feedDetail: feedDetail)
-    }
+  func getFeedDeatil(feedId: Int) {
+    self.worker?.getFeedDetail(
+      feedId: feedId,
+      complitionHandler: { [weak self] feedDetail in
+        self?.presenter?.presentFeedDetail(feedDetail: feedDetail)
+    })
   }
 
   func getLike() {

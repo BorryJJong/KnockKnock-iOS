@@ -7,14 +7,7 @@
 
 import Foundation
 
-struct Feed: Decodable {
-  let userId: Int
-  let content: String
-  let images: [String]
-  let scale: String
-}
-
-struct FeedDetail: Decodable {
+struct FeedPost: Decodable {
   let id: Int
   let userId: Int
   let content: String
@@ -22,12 +15,20 @@ struct FeedDetail: Decodable {
   let locationX: String
   let locationY: String
   let regDate: String
-  let nickname: String
-  let image: String?
+  let userName: String
+  let userImage: String?
+  let scale: String = "1:1"
+}
+
+struct FeedDetail: Decodable {
+  let data: FeedDetailData
+}
+
+struct FeedDetailData: Decodable {
+  let feed: FeedPost?
   let promotions: [Promotion]
-  let challenge: [Challenge]
-  let images: [String]
-  let scale: String
+  let challenges: [Challenge]
+  let images: [FeedImage]
 }
 
 struct Promotion: Decodable {

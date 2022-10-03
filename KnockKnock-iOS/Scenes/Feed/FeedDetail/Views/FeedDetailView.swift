@@ -45,6 +45,8 @@ final class FeedDetailView: UIView {
 
   // MARK: - UIs
 
+  let navigationView = FeedDetailNavigationBarView()
+
   let postCollectionView = UICollectionView(
     frame: .zero,
     collectionViewLayout: UICollectionViewFlowLayout().then {

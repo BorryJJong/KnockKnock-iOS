@@ -17,7 +17,7 @@ protocol FeedDetailPresenterProtocol {
 }
 
 final class FeedDetailPresenter: FeedDetailPresenterProtocol {
-  var view: FeedDetailViewProtocol?
+  weak var view: FeedDetailViewProtocol?
 
   func presentFeedDetail(feedDetail: FeedDetail) {
     self.view?.getFeedDetail(feedDetail: feedDetail)
