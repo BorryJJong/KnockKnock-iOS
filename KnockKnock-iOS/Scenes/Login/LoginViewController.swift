@@ -16,6 +16,13 @@ final class LoginViewController: BaseViewController<LoginView> {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+  }
+
+  // MARK: - Configure
+
+  override func setupConfigure() {
+    self.navigationController?.navigationBar.setDefaultAppearance()
+
     self.containerView.kakaoLoginButton.addTarget(
       self,
       action: #selector(self.kakaoLoginButtonDidTap(_:)),
@@ -26,15 +33,15 @@ final class LoginViewController: BaseViewController<LoginView> {
   // MARK: - Button Actions
 
   @objc func kakaoLoginButtonDidTap(_ sender: UIButton) {
-    self.navigationController?.pushViewController(ProfileSettingViewController(), animated: true)
-//    if (UserApi.isKakaoTalkLoginAvailable()) {
-//      UserApi.shared.loginWithKakaoTalk(completion: { (oauthToken, error) in
-//        if let error = error {
-//          print(error)
-//        } else {
-//          _ = oauthToken
-//        }
-//      })
-//    }
+//    self.navigationController?.pushViewController(ProfileSettingViewController(), animated: true)
+    if (UserApi.isKakaoTalkLoginAvailable()) {
+      UserApi.shared.loginWithKakaoTalk(completion: { (oauthToken, error) in
+        if let error = error {
+          print(error)
+        } else {
+          print(oauthToken)
+        }
+      })
+    }
   }
 }
