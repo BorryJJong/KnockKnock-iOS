@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
 
-    KakaoSDK.initSDK(appKey: "b9a1e7f94579107a50b5e58c9ce13adc")
+    KakaoSDK.initSDK(appKey: API.KAKAO_APP_KEY)
     FirebaseApp.configure()
 
     return true
