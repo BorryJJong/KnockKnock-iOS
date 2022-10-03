@@ -25,7 +25,10 @@ final class ChallengeView: UIView {
 
   // MARK: - UI
 
-  let challengeCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
+  let challengeCollectionView = UICollectionView(
+    frame: .zero,
+    collectionViewLayout: .init()
+  ).then {
     let flowLayout = UICollectionViewFlowLayout.init()
     flowLayout.scrollDirection = .vertical
     $0.collectionViewLayout = flowLayout
@@ -73,31 +76,54 @@ final class ChallengeView: UIView {
   }
   
   private func setupConstraints() {
-      [self.numOfNewChallengeLabel, self.totalChallengeLabel, self.sortChallengeButton].addSubViews(self.headerView)
-      [self.headerView, self.challengeCollectionView].addSubViews(self)
+    [self.numOfNewChallengeLabel, self.totalChallengeLabel, self.sortChallengeButton].addSubViews(self.headerView)
+    [self.headerView, self.challengeCollectionView].addSubViews(self)
 
-      NSLayoutConstraint.activate([
-        self.headerView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.headerViewTopMargin),
-        self.headerView.heightAnchor.constraint(equalToConstant: Metric.headerViewHeight),
-        self.headerView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.headerViewLeadingMargin),
-        self.headerView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.headerViewTrailingMargin),
+    NSLayoutConstraint.activate([
+      self.headerView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.headerViewTopMargin),
+      self.headerView.heightAnchor.constraint(equalToConstant: Metric.headerViewHeight),
+      self.headerView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.headerViewLeadingMargin),
+      self.headerView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.headerViewTrailingMargin),
 
-        self.totalChallengeLabel.topAnchor.constraint(equalTo: self.headerView.topAnchor),
-        self.totalChallengeLabel.bottomAnchor.constraint(equalTo: self.headerView.bottomAnchor),
-        self.totalChallengeLabel.leadingAnchor.constraint(equalTo: self.headerView.leadingAnchor),
+      self.totalChallengeLabel.topAnchor.constraint(equalTo: self.headerView.topAnchor),
+      self.totalChallengeLabel.bottomAnchor.constraint(equalTo: self.headerView.bottomAnchor),
+      self.totalChallengeLabel.leadingAnchor.constraint(equalTo: self.headerView.leadingAnchor),
 
-        self.numOfNewChallengeLabel.topAnchor.constraint(equalTo: self.headerView.topAnchor),
-        self.numOfNewChallengeLabel.bottomAnchor.constraint(equalTo: self.headerView.bottomAnchor),
-        self.numOfNewChallengeLabel.leadingAnchor.constraint(equalTo: self.totalChallengeLabel.trailingAnchor),
+      self.numOfNewChallengeLabel.topAnchor.constraint(equalTo: self.headerView.topAnchor),
+      self.numOfNewChallengeLabel.bottomAnchor.constraint(equalTo: self.headerView.bottomAnchor),
+      self.numOfNewChallengeLabel.leadingAnchor.constraint(equalTo: self.totalChallengeLabel.trailingAnchor),
 
-        self.sortChallengeButton.topAnchor.constraint(equalTo: self.headerView.topAnchor),
-        self.sortChallengeButton.trailingAnchor.constraint(equalTo: self.headerView.trailingAnchor),
-        self.sortChallengeButton.bottomAnchor.constraint(equalTo: self.headerView.bottomAnchor),
+      self.sortChallengeButton.topAnchor.constraint(equalTo: self.headerView.topAnchor),
+      self.sortChallengeButton.trailingAnchor.constraint(equalTo: self.headerView.trailingAnchor),
+      self.sortChallengeButton.bottomAnchor.constraint(equalTo: self.headerView.bottomAnchor),
 
-        self.challengeCollectionView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor, constant: Metric.challengeCollectionViewTopMargin),
-        self.challengeCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
-        self.challengeCollectionView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-        self.challengeCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor)
-      ])
-    }
+      self.challengeCollectionView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor, constant: Metric.challengeCollectionViewTopMargin),
+      self.challengeCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
+      self.challengeCollectionView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
+      self.challengeCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor)
+    ])
+  }
+
+  func challengeCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+    let estimatedHeigth: CGFloat = 300
+
+    let itemSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .estimated(estimatedHeigth)
+    )
+    let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+    let groupSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .estimated(estimatedHeigth)
+    )
+    let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+
+    let section = NSCollectionLayoutSection(group: group)
+    section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+
+    let layout = UICollectionViewCompositionalLayout(section: section)
+
+    return layout
+  }
 }

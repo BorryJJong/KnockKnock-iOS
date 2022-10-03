@@ -35,6 +35,7 @@ class ChallengeDetailView: UIView {
       $0.scrollDirection = .vertical
     }).then {
       $0.translatesAutoresizingMaskIntoConstraints = false
+      $0.backgroundColor = .clear
       $0.contentInsetAdjustmentBehavior = .never
     }
 

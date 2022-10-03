@@ -20,6 +20,7 @@ class FeedListView: UIView {
     $0.minimumLineSpacing = 50
   }).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.backgroundColor = .clear
   }
 
   // MARK: - Initailize

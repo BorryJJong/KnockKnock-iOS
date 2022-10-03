@@ -37,7 +37,9 @@ final class FeedSearchView: UIView {
       $0.scrollDirection = .horizontal
       $0.minimumLineSpacing = 25
     }
-  )
+  ).then {
+    $0.backgroundColor = .clear
+  }
 
   let underLineView = UIView().then {
     $0.backgroundColor = .green40
@@ -52,9 +54,10 @@ final class FeedSearchView: UIView {
     collectionViewLayout: UICollectionViewFlowLayout().then {
       $0.scrollDirection = .horizontal
       $0.minimumLineSpacing = 0
-    
     }
-  )
+  ).then {
+    $0.backgroundColor = .clear
+  }
   
   // MARK: - Initialize
 

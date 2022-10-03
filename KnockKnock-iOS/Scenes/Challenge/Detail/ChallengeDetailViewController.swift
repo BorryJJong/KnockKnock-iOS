@@ -78,9 +78,7 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
   private func setNavigationItem() {
     let topAppearance = UINavigationBarAppearance().then {
       $0.configureWithOpaqueBackground()
-      $0.backgroundColor = .clear
-      $0.shadowImage = UIImage()
-      $0.shadowColor = .clear
+      $0.configureWithTransparentBackground()
     }
 
     let scrollAppearance = UINavigationBarAppearance().then {
@@ -94,7 +92,8 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
 
     self.navigationController?.navigationBar.standardAppearance = scrollAppearance
     self.navigationController?.navigationBar.scrollEdgeAppearance = topAppearance
-    self.navigationController?.navigationBar.isTranslucent = true
+
+    self.navigationController?.navigationBar.setDefaultAppearance()
     self.navigationController?.navigationBar.tintColor = .white
 
     self.navigationItem.leftBarButtonItem = self.backBarButtonItem
