@@ -8,6 +8,7 @@
 import UIKit
 
 import Then
+import KKDSKit
 
 protocol FeedListViewProtocol: AnyObject {
   var interactor: FeedListInteractorProtocol? { get set }
@@ -54,6 +55,15 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   }
   
   override func setupConfigure() {
+    let backButton = UIBarButtonItem(
+      image: KKDS.Image.ic_back_24_bk,
+      style: .done,
+      target: self,
+      action: #selector(backButtonDidTap(_:))
+    )
+
+    self.navigationItem.leftBarButtonItem = backButton
+
     self.containerView.feedListCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
@@ -84,6 +94,10 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   }
 
   // MARK: - Button Actions
+
+  @objc private func backButtonDidTap(_ sender: UIButton) {
+    self.navigationController?.popViewController(animated: true)
+  }
 
   @objc func configureButtonDidTap(_ sender: UIButton) {
     self.router?.presentBottomSheetView(source: self)
