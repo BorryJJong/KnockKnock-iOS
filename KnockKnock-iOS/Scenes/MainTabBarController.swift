@@ -54,7 +54,7 @@ final class MainTabBarController: UITabBarController {
   
   let home = HomeRouter.createHome()
   let feed = FeedMainRouter.createFeed()
-  let post = FeedWriteViewController()
+  let post = FeedWriteRouter.createFeedWrite()
   let challenge = ChallengeRouter.createChallenge()
   let my = MyViewController()
   

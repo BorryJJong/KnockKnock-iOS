@@ -7,8 +7,6 @@
 
 import Foundation
 
-import Alamofire
-
 protocol FeedRepositoryProtocol {
   func requestFeedMain(
     currentPage: Int,
