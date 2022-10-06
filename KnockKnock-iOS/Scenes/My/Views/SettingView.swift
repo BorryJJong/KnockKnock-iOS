@@ -9,6 +9,7 @@ import UIKit
 
 import SnapKit
 import Then
+import KKDSKit
 
 final class SettingView: UIView {
 
@@ -24,10 +25,8 @@ final class SettingView: UIView {
       $0.backgroundColor = .white
     }
 
-  let logoutButton = UIButton().then {
+  let logoutButton = KKDS.Button.button_middle.then {
     $0.setTitle("로그아웃", for: .normal)
-    $0.layer.borderColor = UIColor.gray40?.cgColor
-    $0.layer.borderWidth = 1
   }
 
   // MARK: - Initialize
@@ -44,10 +43,18 @@ final class SettingView: UIView {
   // MARK: - Constraints
 
   private func setupConstraints() {
-    [self.settingCollectionView].addSubViews(self)
+    [self.settingCollectionView, self.logoutButton].addSubViews(self)
 
     self.settingCollectionView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
+      $0.top.leading.trailing.equalToSuperview()
+      $0.bottom.equalTo(self.logoutButton.snp.top).offset(-30)
+    }
+
+    self.logoutButton.snp.makeConstraints {
+      $0.centerX.equalToSuperview()
+      $0.bottom.equalToSuperview().offset(-60)
+      $0.height.equalTo(40)
+      $0.width.equalToSuperview().inset(20)
     }
   }
 }
