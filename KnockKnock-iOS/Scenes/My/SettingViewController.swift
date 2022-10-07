@@ -9,10 +9,14 @@ import UIKit
 
 final class SettingViewController: BaseViewController<SettingView> {
 
+  // MARK: - Life Cycles
+
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setupConfigure()
   }
+
+  // MARK: - Configure
 
   override func setupConfigure() {
     self.containerView.settingCollectionView.do {
@@ -21,6 +25,8 @@ final class SettingViewController: BaseViewController<SettingView> {
     }
   }
 }
+
+  // MARK: - CollectionView DataSource
 
 extension SettingViewController: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
