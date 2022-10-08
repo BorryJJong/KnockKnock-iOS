@@ -31,11 +31,12 @@ final class SettingCell: BaseCollectionViewCell {
     [self.titleLabel, self.enterButton].addSubViews(self.contentView)
 
     self.titleLabel.snp.makeConstraints {
-      $0.centerY.leading.equalToSuperview()
+      $0.leading.equalToSuperview().inset(20)
+      $0.centerY.equalToSuperview()
     }
 
     self.enterButton.snp.makeConstraints {
-      $0.trailing.equalToSuperview()
+      $0.trailing.equalToSuperview().inset(20)
       $0.centerY.equalTo(self.titleLabel)
     }
   }

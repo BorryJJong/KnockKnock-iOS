@@ -20,14 +20,8 @@ final class SettingView: UIView {
     collectionViewLayout: UICollectionViewFlowLayout().then{
       $0.scrollDirection = .vertical
     }).then {
-      let config =  UICollectionLayoutListConfiguration(appearance: .grouped)
-      $0.collectionViewLayout = UICollectionViewCompositionalLayout.list(using: config)
       $0.backgroundColor = .white
     }
-
-  let logoutButton = KKDS.Button.button_middle.then {
-    $0.setTitle("로그아웃", for: .normal)
-  }
 
   // MARK: - Initialize
 
@@ -43,18 +37,10 @@ final class SettingView: UIView {
   // MARK: - Constraints
 
   private func setupConstraints() {
-    [self.settingCollectionView, self.logoutButton].addSubViews(self)
+    [self.settingCollectionView].addSubViews(self)
 
     self.settingCollectionView.snp.makeConstraints {
-      $0.top.leading.trailing.equalToSuperview()
-      $0.bottom.equalTo(self.logoutButton.snp.top).offset(-30)
-    }
-
-    self.logoutButton.snp.makeConstraints {
-      $0.centerX.equalToSuperview()
-      $0.bottom.equalToSuperview().offset(-60)
-      $0.height.equalTo(40)
-      $0.width.equalToSuperview().inset(20)
+      $0.edges.equalToSuperview()
     }
   }
 }

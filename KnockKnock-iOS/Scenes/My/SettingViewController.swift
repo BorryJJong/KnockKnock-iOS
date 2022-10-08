@@ -19,9 +19,15 @@ final class SettingViewController: BaseViewController<SettingView> {
   // MARK: - Configure
 
   override func setupConfigure() {
+    self.navigationController?.navigationBar.setDefaultAppearance()
+    self.navigationItem.title = "설정"
+
     self.containerView.settingCollectionView.do {
       $0.dataSource = self
+      $0.delegate = self
       $0.registCell(type: SettingCell.self)
+      $0.registHeaderView(type: SettingHeaderCollectionReusableView.self)
+      $0.registFooterView(type: SettingFooterCollectionReusableView.self)
     }
   }
 }
@@ -29,7 +35,10 @@ final class SettingViewController: BaseViewController<SettingView> {
   // MARK: - CollectionView DataSource
 
 extension SettingViewController: UICollectionViewDataSource {
-  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    cellForItemAt indexPath: IndexPath
+  ) -> UICollectionViewCell {
     let cell = collectionView.dequeueCell(withType: SettingCell.self, for: indexPath)
 
     return cell
@@ -45,5 +54,80 @@ extension SettingViewController: UICollectionViewDataSource {
   func numberOfSections(in collectionView: UICollectionView) -> Int {
     return 3
   }
+}
 
+extension SettingViewController: UICollectionViewDelegateFlowLayout {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    sizeForItemAt indexPath: IndexPath
+  ) -> CGSize {
+    return CGSize(width: self.containerView.frame.width, height: 30)
+  }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    minimumLineSpacingForSectionAt section: Int
+  ) -> CGFloat {
+    return 15
+  }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    insetForSectionAt section: Int
+  ) -> UIEdgeInsets {
+    return UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
+  }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    referenceSizeForFooterInSection section: Int
+  ) -> CGSize {
+    if section == 2 {
+      return CGSize(width: self.containerView.frame.width, height: 130)
+    } else {
+      return CGSize(width: self.containerView.frame.width, height: 50)
+    }
+  }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    referenceSizeForHeaderInSection section: Int
+  ) -> CGSize {
+    return CGSize(width: self.containerView.frame.width, height: 50)
+  }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    viewForSupplementaryElementOfKind kind: String,
+    at indexPath: IndexPath
+  ) -> UICollectionReusableView {
+    switch kind {
+    case UICollectionView.elementKindSectionHeader:
+      let header = collectionView.dequeueReusableSupplementaryHeaderView(
+        withType: SettingHeaderCollectionReusableView.self,
+        for: indexPath
+      )
+
+      header.bind(title: "test")
+
+      return header
+    case UICollectionView.elementKindSectionFooter:
+      let footer = collectionView.dequeueReusableSupplementaryFooterView(
+        withType: SettingFooterCollectionReusableView.self,
+        for: indexPath
+      )
+
+      footer.bind(isLast: indexPath.section == 2)
+
+      return footer
+
+    default:
+      return UICollectionReusableView()
+    }
+  }
 }
