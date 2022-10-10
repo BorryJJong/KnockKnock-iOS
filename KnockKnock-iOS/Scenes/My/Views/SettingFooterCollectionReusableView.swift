@@ -29,9 +29,7 @@ final class SettingFooterCollectionReusableView: UICollectionReusableView {
     $0.backgroundColor = .gray10
   }
 
-  let logoutButton = KKDS.Button.button_middle.then {
-    $0.setTitle("로그아웃", for: .normal)
-  }
+  let logoutButton = MiddleButton(title: "로그아웃")
 
   // MARK: - Initailize
 
