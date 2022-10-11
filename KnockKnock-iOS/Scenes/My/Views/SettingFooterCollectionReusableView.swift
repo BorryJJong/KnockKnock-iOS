@@ -26,7 +26,7 @@ final class SettingFooterCollectionReusableView: UICollectionReusableView {
 
   // MARK: - UIs
   private let separatorView = UIView().then {
-    $0.backgroundColor = .gray10
+    $0.backgroundColor = KKDS.Color.gray10
   }
 
   let logoutButton = MiddleButton(title: "로그아웃")

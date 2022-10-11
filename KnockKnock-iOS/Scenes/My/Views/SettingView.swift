@@ -20,7 +20,7 @@ final class SettingView: UIView {
     collectionViewLayout: UICollectionViewFlowLayout().then{
       $0.scrollDirection = .vertical
     }).then {
-      $0.backgroundColor = .white
+      $0.backgroundColor = .clear
     }
 
   // MARK: - Initialize

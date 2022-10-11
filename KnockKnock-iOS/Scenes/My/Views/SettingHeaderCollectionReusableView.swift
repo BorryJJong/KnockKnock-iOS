@@ -20,13 +20,12 @@ final class SettingHeaderCollectionReusableView: UICollectionReusableView {
     static let titleLabelTopMargin = 15.f
   }
 
-
   // MARK: - UIs
   
   private let titleLabel = UILabel().then {
     $0.text = "test"
     $0.font = .systemFont(ofSize: 13, weight: .medium)
-    $0.textColor = .gray70
+    $0.textColor = KKDS.Color.gray70
   }
 
   // MARK: - Initailize

@@ -19,7 +19,8 @@ final class SettingViewController: BaseViewController<SettingView> {
   // MARK: - Configure
 
   override func setupConfigure() {
-    self.navigationController?.navigationBar.setDefaultAppearance()
+    self.navigationController?.navigationBar.barTintColor = .white
+    self.navigationController?.navigationBar.shadowImage = UIImage()
     self.navigationItem.title = "설정"
 
     self.containerView.settingCollectionView.do {
