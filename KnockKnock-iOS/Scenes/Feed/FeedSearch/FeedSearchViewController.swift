@@ -135,9 +135,8 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
       return cell
 
     default:
-      assert(false)
+      return .init()
     }
-
   }
 
   func collectionView(
@@ -162,7 +161,7 @@ extension FeedSearchViewController: UICollectionViewDataSource, UICollectionView
       )
 
     default:
-      assert(false)
+      return .init()
     }
   }
 
