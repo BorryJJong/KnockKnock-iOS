@@ -7,20 +7,35 @@
 
 import Foundation
 
-struct Comment: Decodable {
-  let userID: String
-  let image: String
-  let contents: String
-  let replies: [Reply]
-  let date: String
+struct CommentResponse: Decodable {
+  let data: [CommentData]?
+}
 
-  var isOpen: Bool = false
-  var isReply: Bool = false
+struct CommentData: Decodable {
+  let id: Int
+  let userId: Int
+  let nickname: String
+  let image: String?
+  let content: String
+  let regDate: String
+  let isDeleted: Int
+  let replyCnt: Int
+  let reply: [Reply]?
 }
 
 struct Reply: Decodable {
-  let userID: String
+  let id: Int
+  let userId: Int
+  let nickname: String
   let image: String
-  let contents: String
-  let date: String
+  let content: String
+  let regDate: String
+  let isDeleted: Bool
+}
+
+struct Comment: Decodable {
+  let commentData: CommentData
+  
+  var isOpen: Bool = false
+  var isReply: Bool = false
 }

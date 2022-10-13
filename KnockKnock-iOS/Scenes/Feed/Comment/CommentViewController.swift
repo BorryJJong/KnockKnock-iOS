@@ -24,6 +24,7 @@ final class CommentViewController: BaseViewController<CommentView> {
   var router: CommentRouterProtocol?
   var interactor: CommentInteractorProtocol?
 
+  var feedId: Int = 6
   var comments: [Comment] = []
   var reply: [Int: [Reply]] = [ : ]
 
@@ -36,7 +37,7 @@ final class CommentViewController: BaseViewController<CommentView> {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.interactor?.getComments()
+    self.interactor?.getComments(feedId: feedId)
   }
 
   // MARK: - Configure
@@ -132,7 +133,7 @@ final class CommentViewController: BaseViewController<CommentView> {
     self.comments[sender.tag].isOpen.toggle()
 
     if self.comments[sender.tag].isOpen {
-      self.reply[sender.tag] = self.comments[sender.tag].replies
+      self.reply[sender.tag] = self.comments[sender.tag].commentData.reply
     } else {
       self.reply[sender.tag] = []
     }

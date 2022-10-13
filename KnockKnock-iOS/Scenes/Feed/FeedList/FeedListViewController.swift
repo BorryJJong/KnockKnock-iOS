@@ -107,7 +107,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   }
 
   @objc func commentButtonDidTap(_ sender: UIButton) {
-    self.router?.navigateToCommentView(source: self)
+    self.router?.navigateToCommentView(feedId: 6, source: self)
   }
 }
 
@@ -136,6 +136,7 @@ extension FeedListViewController: UICollectionViewDataSource {
     )
 
     cell.bind(feedList: self.feedListPost[indexPath.section])
+    
     cell.commentsButton.addTarget(
       self,
       action: #selector(commentButtonDidTap(_:)),

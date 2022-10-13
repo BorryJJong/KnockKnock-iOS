@@ -10,17 +10,20 @@ import Foundation
 protocol CommentInteractorProtocol {
   var worker: CommentWorkerProtocol? { get set }
   var presenter: CommentPresenterProtocol? { get set }
-
-  func getComments()
+  
+  func getComments(feedId: Int)
 }
 
 final class CommentInteractor: CommentInteractorProtocol {
   var worker: CommentWorkerProtocol?
   var presenter: CommentPresenterProtocol?
-
-  func getComments() {
-    self.worker?.getComments { [weak self] comment in
-      self?.presenter?.presentComments(comments: comment)
-    }
+  
+  func getComments(feedId: Int) {
+    self.worker?.getComments(
+      feedId: feedId,
+      completionHandler: { [weak self] comment in
+        self?.presenter?.presentComments(comments: comment)
+      }
+    )
   }
 }

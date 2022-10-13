@@ -30,7 +30,6 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   var feedDetail: FeedDetail? {
     didSet {
       self.containerView.postCollectionView.reloadData()
-
       if let feed = feedDetail?.data.feed {
         self.containerView.navigationView.bind(feed: feed)
       }
@@ -38,8 +37,18 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   }
   var feedId: Int = 6
   var like: [Like] = []
-  var allComments: [Comment] = []
-  var visibleComments: [Comment] = []
+  var allComments: [Comment] = [] {
+    didSet {
+      self.interactor?.setVisibleComments(comments: allComments)
+    }
+  }
+  var visibleComments: [Comment] = [] {
+    didSet {
+      self.containerView.postCollectionView.reloadSections(
+        IndexSet(integer: FeedDetailSection.comment.rawValue)
+      )
+    }
+  }
 
   // MARK: - Life Cycles
 
@@ -50,8 +59,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
 
     self.interactor?.getFeedDeatil(feedId: feedId)
     self.interactor?.getLike()
-    self.interactor?.getAllComments()
-    self.interactor?.setVisibleComments(comments: self.allComments)
+    self.interactor?.getAllComments(feedId: feedId)
   }
 
   // MARK: - Configure
@@ -350,7 +358,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       var count = self.allComments.count
 
       self.allComments.forEach {
-        count += $0.replies.count
+        count += $0.commentData.replyCnt
       }
 
       header.bind(count: count, section: .comment)

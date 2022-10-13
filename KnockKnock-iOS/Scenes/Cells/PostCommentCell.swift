@@ -76,9 +76,11 @@ final class PostCommentCell: BaseCollectionViewCell {
   // MARK: - Bind
 
   func bind(comment: Comment) {
-    self.setReplyMoreButton(count: comment.replies.count, isOpen: comment.isOpen)
-    self.userIdLabel.text = comment.userID
-    self.commentLabel.text = comment.contents
+    let reply = comment.commentData.reply
+    self.setReplyMoreButton(count: reply?.count ?? 0, isOpen: comment.isOpen)
+
+    self.userIdLabel.text = comment.commentData.nickname
+    self.commentLabel.text = comment.commentData.content
 
     if comment.isReply {
       self.profileImageView.trailingConstraint?.constant = 66
