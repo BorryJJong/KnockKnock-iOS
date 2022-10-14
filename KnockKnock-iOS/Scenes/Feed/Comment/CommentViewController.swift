@@ -68,6 +68,10 @@ final class CommentViewController: BaseViewController<CommentView> {
       $0.delegate = self
     }
 
+    self.containerView.registButton.do {
+      $0.addTarget(self, action: #selector(self.regitstButtonDidTap(_:)), for: .touchUpInside)
+    }
+
     self.addKeyboardNotification()
     self.hideKeyboardWhenTappedAround()
   }
@@ -145,6 +149,10 @@ final class CommentViewController: BaseViewController<CommentView> {
 
   @objc private func longPressGestureDidDetect(_ sender: UILongPressGestureRecognizer) {
     self.router?.presentBottomSheetView(source: self)
+  }
+
+  @objc private func regitstButtonDidTap(_ sender: UIButton) {
+    let content = self.containerView.commentTextView.text
   }
 }
 

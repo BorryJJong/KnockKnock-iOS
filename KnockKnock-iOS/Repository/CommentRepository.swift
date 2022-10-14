@@ -29,4 +29,9 @@ final class CommentRepository: CommentRepositoryProtocol {
         }
       )
   }
+
+  func requestAddComment(feedId: Int, userId: Int, content: String, commentId: Int) {
+    KKNetworkManager.shared
+      .upload(router: KKRouter.postAddComment(postId: feedId, userId: userId, content: content, commentId: commentId), multipartFormData: <#T##MultipartFormData#>)
+  }
 }
