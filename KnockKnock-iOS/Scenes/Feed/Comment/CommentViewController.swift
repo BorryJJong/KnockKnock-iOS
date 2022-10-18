@@ -153,6 +153,7 @@ final class CommentViewController: BaseViewController<CommentView> {
 
   @objc private func regitstButtonDidTap(_ sender: UIButton) {
     let content = self.containerView.commentTextView.text
+    CommentRepository().requestAddComment(feedId: 6, userId: 1, content: content ?? "test", commentId: nil)
   }
 }
 

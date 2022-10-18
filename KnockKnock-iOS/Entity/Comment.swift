@@ -27,10 +27,10 @@ struct Reply: Decodable {
   let id: Int
   let userId: Int
   let nickname: String
-  let image: String
+  let image: String?
   let content: String
   let regDate: String
-  let isDeleted: Bool
+  let isDeleted: Int?
 }
 
 struct Comment: Decodable {

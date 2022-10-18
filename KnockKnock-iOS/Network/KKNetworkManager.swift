@@ -33,19 +33,19 @@ final class KKNetworkManager {
         }
     }
 
-    func upload(
-      router: KKRouter,
-      multipartFormData: @escaping MultipartFormData
-    ) {
-      AF.upload(multipartFormData: multipartFormData, with: router)
-        .validate(statusCode: 200..<500)
-        .responseData { response in
-          switch response.result {
-          case .success:
-            print(response)
-          case .failure(let err):
-            print(err.asAFError)
-          }
-        }
-    }
+//    func upload(
+//      multipartFormData: @escaping ((MultipartFormData) -> Void),
+//      router: KKRouter
+//    ) {
+//      AF.upload(multipartFormData: multipartFormData, with: router)
+//        .validate(statusCode: 200..<500)
+//        .responseData { response in
+//          switch response.result {
+//          case .success:
+//            print(response)
+//          case .failure(let err):
+//            print(err.asAFError)
+//          }
+//        }
+//    }
 }

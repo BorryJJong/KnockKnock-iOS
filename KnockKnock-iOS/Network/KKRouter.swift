@@ -33,7 +33,7 @@ enum KKRouter: URLRequestConvertible {
 
   case getComment(id: Int)
 
-  case postAddComment(postId: Int, userId: Int, content: String, commentId: String)
+  case postAddComment
 
   var method: HTTPMethod {
     switch self {
@@ -70,7 +70,7 @@ enum KKRouter: URLRequestConvertible {
     switch self {
     case  .getChallengeDetail, .getChallengeResponse,
         .getChallengeTitles, .getFeed,
-        .getComment:
+        .getComment, .postAddComment:
       return nil
 
     case let .requestShopAddress(query):
@@ -89,33 +89,7 @@ enum KKRouter: URLRequestConvertible {
         "feedId": feedId,
         "challengeId": challengeId
       ]
-    case let .postAddComment(postId, userId, content, commentId):
-      return [
-        "postId": postId,
-        "userId": userId,
-        "content": content,
-        "commentId": commentId
-      ]
     }
-  }
-
-  func createBody(parameters: [String: Any]?) -> MultipartFormData {
-//    var body = Data()
-//    if let parameters = parameters {
-//      for (key, value) in parameters {
-//        body.append("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n".data(using: .utf8)!)
-//        body.append("\(value)\r\n".data(using: .utf8)!)
-//      }
-//    }
-//    return body
-
-    var multipartFormData = MultipartFormData()
-    if let parameters = parameters {
-      for (key, value) in parameters {
-        multipartFormData.append("\(value)".data(using: .utf8)!, withName: key)
-      }
-    }
-    return multipartFormData
   }
 
   func asURLRequest() throws -> URLRequest {
@@ -138,10 +112,9 @@ enum KKRouter: URLRequestConvertible {
       }
 
     case .post, .patch, .delete:
-      request = try JSONEncoding.default.encode(request)
-      request.httpBody = self.createBody(parameters: parameters)
+      request = try JSONEncoding.default.encode(request, with: parameters)
       request.setValue("application/json", forHTTPHeaderField: "Accept")
-      request.setValue("form-data", forHTTPHeaderField: "Content-Type")
+      request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
     default:
       break
