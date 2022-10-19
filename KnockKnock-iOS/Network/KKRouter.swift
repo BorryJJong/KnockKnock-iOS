@@ -33,7 +33,7 @@ enum KKRouter: URLRequestConvertible {
 
   case getComment(id: Int)
 
-  case postAddComment
+  case postAddComment(comment: Parameters)
 
   var method: HTTPMethod {
     switch self {
@@ -70,7 +70,7 @@ enum KKRouter: URLRequestConvertible {
     switch self {
     case  .getChallengeDetail, .getChallengeResponse,
         .getChallengeTitles, .getFeed,
-        .getComment, .postAddComment:
+        .getComment:
       return nil
 
     case let .requestShopAddress(query):
@@ -89,6 +89,8 @@ enum KKRouter: URLRequestConvertible {
         "feedId": feedId,
         "challengeId": challengeId
       ]
+    case let .postAddComment(comment):
+      return comment
     }
   }
 
@@ -112,7 +114,8 @@ enum KKRouter: URLRequestConvertible {
       }
 
     case .post, .patch, .delete:
-      request = try JSONEncoding.default.encode(request, with: parameters)
+      request = try JSONEncoding.default.encode(request)
+      request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
       request.setValue("application/json", forHTTPHeaderField: "Accept")
       request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 

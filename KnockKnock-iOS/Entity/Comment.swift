@@ -39,3 +39,8 @@ struct Comment: Decodable {
   var isOpen: Bool = false
   var isReply: Bool = false
 }
+
+struct AddCommentResponse: Decodable {
+  let code: Int
+  let message: String
+}
