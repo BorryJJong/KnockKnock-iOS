@@ -57,7 +57,7 @@ final class PostCommentCell: BaseCollectionViewCell {
     $0.textColor = .gray70
   }
 
-  private let replyWriteButton = UIButton().then {
+  let replyWriteButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setTitleColor(.gray70, for: .normal)
     $0.setImage(KKDS.Image.etc_bar_8_gr, for: .normal)

@@ -10,6 +10,7 @@ import UIKit
 protocol FeedDetailWorkerProtocol {
   func getFeedDetail(feedId: Int, complitionHandler: @escaping (FeedDetail) -> Void)
   func getAllComments(feedId: Int, complitionHandler: @escaping ([Comment]) -> Void)
+  func requestAddComment(feedId: Int, userId: Int, content: String, commentId: Int?)
   func getLike(complitionHandler: @escaping ([Like]) -> Void)
 }
 
@@ -54,5 +55,19 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
     self.likeRepository.getlike(completionHandler: { like in
       complitionHandler(like)
     })
+  }
+
+  func requestAddComment(
+    feedId: Int,
+    userId: Int,
+    content: String,
+    commentId: Int?
+  ) {
+    self.commentRepository.requestAddComment(
+      feedId: feedId,
+      userId: userId,
+      content: content,
+      commentId: commentId
+    )
   }
 }

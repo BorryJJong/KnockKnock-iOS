@@ -12,6 +12,7 @@ protocol CommentInteractorProtocol {
   var presenter: CommentPresenterProtocol? { get set }
   
   func getComments(feedId: Int)
+  func requestAddComment(feedId: Int, userId: Int, content: String, commentId: Int?)
 }
 
 final class CommentInteractor: CommentInteractorProtocol {
@@ -24,6 +25,20 @@ final class CommentInteractor: CommentInteractorProtocol {
       completionHandler: { [weak self] comment in
         self?.presenter?.presentComments(comments: comment)
       }
+    )
+  }
+
+  func requestAddComment(
+    feedId: Int,
+    userId: Int,
+    content: String,
+    commentId: Int?
+  ) {
+    self.worker?.requestAddComment(
+      feedId: feedId,
+      userId: userId,
+      content: content,
+      commentId: commentId
     )
   }
 }

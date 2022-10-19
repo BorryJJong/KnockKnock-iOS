@@ -25,7 +25,13 @@ final class CommentViewController: BaseViewController<CommentView> {
   var interactor: CommentInteractorProtocol?
 
   var feedId: Int = 6
-  var comments: [Comment] = []
+  var userId: Int = 1
+  var commentId: Int?
+  var comments: [Comment] = [] {
+    didSet {
+      self.containerView.commentCollectionView.reloadData()
+    }
+  }
   var reply: [Int: [Reply]] = [ : ]
 
   lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(
@@ -69,7 +75,11 @@ final class CommentViewController: BaseViewController<CommentView> {
     }
 
     self.containerView.registButton.do {
-      $0.addTarget(self, action: #selector(self.regitstButtonDidTap(_:)), for: .touchUpInside)
+      $0.addTarget(
+        self,
+        action: #selector(self.regitstButtonDidTap(_:)),
+        for: .touchUpInside
+      )
     }
 
     self.addKeyboardNotification()
@@ -133,6 +143,11 @@ final class CommentViewController: BaseViewController<CommentView> {
     self.router?.dismissCommentView(view: self)
   }
 
+  @objc private func replyWriteButtonDidTap(_ sender: UIButton) {
+    self.commentId = sender.tag
+    self.containerView.commentTextView.becomeFirstResponder()
+  }
+
   @objc private func replyMoreButtonDidTap(_ sender: UIButton) {
     self.comments[sender.tag].isOpen.toggle()
 
@@ -152,8 +167,17 @@ final class CommentViewController: BaseViewController<CommentView> {
   }
 
   @objc private func regitstButtonDidTap(_ sender: UIButton) {
-    let content = self.containerView.commentTextView.text
-    CommentRepository().requestAddComment(feedId: 6, userId: 1, content: content ?? "test", commentId: nil)
+    if let content = self.containerView.commentTextView.text {
+      self.interactor?.requestAddComment(
+        feedId: self.feedId,
+        userId: self.userId,
+        content: content,
+        commentId: self.commentId
+      )
+      self.containerView.commentTextView.text = nil
+      self.interactor?.getComments(feedId: self.feedId)
+      self.commentId = nil
+    }
   }
 }
 
@@ -165,7 +189,7 @@ extension CommentViewController: CommentViewProtocol {
     for index in 0 ..< comments.count {
       self.reply[index] = []
     }
-    self.containerView.commentCollectionView.reloadData()
+//    self.containerView.commentCollectionView.reloadData()
   }
 }
 
@@ -215,6 +239,13 @@ extension CommentViewController: UICollectionViewDataSource {
     header.replyMoreButton.addTarget(
       self,
       action: #selector(replyMoreButtonDidTap(_:)),
+      for: .touchUpInside
+    )
+
+    header.replyWriteButton.tag = self.comments[indexPath.section].commentData.id
+    header.replyWriteButton.addTarget(
+      self,
+      action: #selector(replyWriteButtonDidTap(_:)),
       for: .touchUpInside
     )
 

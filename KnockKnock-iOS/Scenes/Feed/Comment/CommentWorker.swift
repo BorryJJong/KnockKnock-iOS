@@ -9,6 +9,7 @@ import Foundation
 
 protocol CommentWorkerProtocol {
   func getComments(feedId: Int, completionHandler: @escaping ([Comment]) -> Void)
+  func requestAddComment(feedId: Int, userId: Int, content: String, commentId: Int?)
 }
 
 final class CommentWorker: CommentWorkerProtocol {
@@ -28,6 +29,20 @@ final class CommentWorker: CommentWorkerProtocol {
         }
         completionHandler(data)
       }
+    )
+  }
+  
+  func requestAddComment(
+    feedId: Int,
+    userId: Int,
+    content: String,
+    commentId: Int?
+  ) {
+    self.repository.requestAddComment(
+      feedId: feedId,
+      userId: userId,
+      content: content,
+      commentId: commentId
     )
   }
 }

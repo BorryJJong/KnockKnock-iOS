@@ -36,6 +36,8 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     }
   }
   var feedId: Int = 6
+  var userId: Int = 1
+  var commentId: Int?
   var like: [Like] = []
   var allComments: [Comment] = [] {
     didSet {
@@ -85,6 +87,9 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     self.containerView.commentTextView.do {
       $0.delegate = self
     }
+    self.containerView.registButton.do {
+      $0.addTarget(self, action: #selector(self.registButtonDidTap(_:)), for: .touchUpInside)
+    }
     self.addKeyboardNotification()
     self.hideKeyboardWhenTappedAround()
   }
@@ -97,6 +102,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       target: self,
       action: #selector(backButtonDidTap(_:))
     )
+    
     let moreButton = UIBarButtonItem(
       image: KKDS.Image.ic_more_20_gr,
       style: .plain,
@@ -129,6 +135,24 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     UIView.performWithoutAnimation {
       self.containerView.postCollectionView.reloadSections([FeedDetailSection.comment.rawValue])
     }
+  }
+
+  @objc private func registButtonDidTap(_ sender: UIButton) {
+    if let content = self.containerView.commentTextView.text {
+      self.interactor?.requestAddComment(
+        feedId: self.feedId,
+        userId: self.userId,
+        content: content,
+        commentId: self.commentId
+      )
+    }
+    self.commentId = nil
+    self.interactor?.getAllComments(feedId: self.feedId)
+  }
+
+  @objc private func replyWriteButtonDidTap(_ sender: UIButton) {
+    self.commentId = sender.tag
+    self.containerView.commentTextView.becomeFirstResponder()
   }
 
   // MARK: - Keyboard Show & Hide
@@ -272,6 +296,12 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       cell.replyMoreButton.addTarget(
         self,
         action: #selector(replyMoreButtonDidTap(_:)),
+        for: .touchUpInside
+      )
+      cell.replyWriteButton.tag = self.visibleComments[indexPath.item].commentData.id
+      cell.replyWriteButton.addTarget(
+        self,
+        action: #selector(self.replyWriteButtonDidTap(_:)),
         for: .touchUpInside
       )
 
