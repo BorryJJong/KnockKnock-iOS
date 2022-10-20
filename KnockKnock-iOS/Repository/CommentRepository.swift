@@ -9,7 +9,7 @@ import Foundation
 
 protocol CommentRepositoryProtocol {
   func requestComments(feedId: Int, completionHandler: @escaping ([CommentData]) -> Void)
-  func requestAddComment(feedId: Int, userId: Int, content: String, commentId: Int?)
+  func requestAddComment(comment: AddCommentRequest, completionHandler: @escaping (AddCommentResponse) -> Void)
 }
 
 final class CommentRepository: CommentRepositoryProtocol {
@@ -30,12 +30,15 @@ final class CommentRepository: CommentRepositoryProtocol {
       )
   }
 
-  func requestAddComment(feedId: Int, userId: Int, content: String, commentId: Int?) {
+  func requestAddComment(
+    comment: AddCommentRequest,
+    completionHandler: @escaping (AddCommentResponse) -> Void
+  ) {
     let parameters = [
-      "postId": feedId,
-      "userId": userId,
-      "content": content,
-      "commentId": commentId
+      "postId": comment.feedId,
+      "userId": comment.userId,
+      "content": comment.content,
+      "commentId": comment.commentId
     ] as [String: Any]
 
     KKNetworkManager
@@ -44,7 +47,7 @@ final class CommentRepository: CommentRepositoryProtocol {
         object: AddCommentResponse.self,
         router: KKRouter.postAddComment(comment: parameters),
         success: { response in
-          print("\(response.message)(\(response.code))")
+          completionHandler(response)
         },
         failure: { error in
           print(error)

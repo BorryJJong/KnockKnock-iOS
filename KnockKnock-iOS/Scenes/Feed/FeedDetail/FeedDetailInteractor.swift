@@ -14,7 +14,7 @@ protocol FeedDetailInteractorProtocol {
   func getFeedDeatil(feedId: Int)
   func getAllComments(feedId: Int)
   func setVisibleComments(comments: [Comment])
-  func requestAddComment(feedId: Int, userId: Int, content: String, commentId: Int?)
+  func requestAddComment(comment: AddCommentRequest, completionHandler: @escaping (String) -> Void)
   func getLike()
 }
 
@@ -50,16 +50,14 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   }
   
   func requestAddComment(
-    feedId: Int,
-    userId: Int,
-    content: String,
-    commentId: Int?
+    comment: AddCommentRequest,
+    completionHandler: @escaping (String) -> Void
   ) {
     self.worker?.requestAddComment(
-      feedId: feedId,
-      userId: userId,
-      content: content,
-      commentId: commentId
+      comment: comment,
+      completionHandler: { response in
+        completionHandler(response)
+      }
     )
   }
 }

@@ -156,7 +156,6 @@ final class CommentViewController: BaseViewController<CommentView> {
     } else {
       self.reply[sender.tag] = []
     }
-    
     UIView.performWithoutAnimation {
       self.containerView.commentCollectionView.reloadSections([sender.tag])
     }
@@ -169,13 +168,20 @@ final class CommentViewController: BaseViewController<CommentView> {
   @objc private func regitstButtonDidTap(_ sender: UIButton) {
     if let content = self.containerView.commentTextView.text {
       self.interactor?.requestAddComment(
-        feedId: self.feedId,
-        userId: self.userId,
-        content: content,
-        commentId: self.commentId
+        comment: AddCommentRequest(
+          feedId: self.feedId,
+          userId: self.userId,
+          content: content,
+          commentId: self.commentId
+        ),
+        completionHandler: { response in
+          if response == "success" {
+              self.interactor?.getComments(feedId: self.feedId)
+          }
+        }
       )
-      self.containerView.commentTextView.text = nil
-      self.interactor?.getComments(feedId: self.feedId)
+      self.containerView.commentTextView.text = ""
+      self.containerView.setPlaceholder()
       self.commentId = nil
     }
   }
@@ -189,7 +195,6 @@ extension CommentViewController: CommentViewProtocol {
     for index in 0 ..< comments.count {
       self.reply[index] = []
     }
-//    self.containerView.commentCollectionView.reloadData()
   }
 }
 
@@ -264,7 +269,9 @@ extension CommentViewController: UITextViewDelegate {
   }
 
   func textViewDidEndEditing(_ textView: UITextView) {
-    self.containerView.setPlaceholder()
+    if textView.text == "" {
+      self.containerView.setPlaceholder()
+    }
   }
 
   func textViewDidChange(_ textView: UITextView) {

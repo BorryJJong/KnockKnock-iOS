@@ -140,14 +140,22 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   @objc private func registButtonDidTap(_ sender: UIButton) {
     if let content = self.containerView.commentTextView.text {
       self.interactor?.requestAddComment(
-        feedId: self.feedId,
-        userId: self.userId,
-        content: content,
-        commentId: self.commentId
+        comment: AddCommentRequest(
+          feedId: self.feedId,
+          userId: self.userId,
+          content: content,
+          commentId: self.commentId
+        ),
+        completionHandler: { response in
+          if response == "success" {
+            self.interactor?.getAllComments(feedId: self.feedId)
+          }
+        }
       )
     }
+    self.containerView.commentTextView.text = ""
+    self.containerView.setPlaceholder()
     self.commentId = nil
-    self.interactor?.getAllComments(feedId: self.feedId)
   }
 
   @objc private func replyWriteButtonDidTap(_ sender: UIButton) {
