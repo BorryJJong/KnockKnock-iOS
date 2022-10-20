@@ -13,7 +13,10 @@ protocol CommentRepositoryProtocol {
 }
 
 final class CommentRepository: CommentRepositoryProtocol {
-  func requestComments(feedId: Int, completionHandler: @escaping ([CommentData]) -> Void) {
+  func requestComments(
+    feedId: Int,
+    completionHandler: @escaping ([CommentData]) -> Void
+  ) {
     KKNetworkManager
       .shared
       .request(
