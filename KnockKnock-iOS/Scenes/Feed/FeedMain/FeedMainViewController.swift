@@ -59,10 +59,10 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
   }
 
   // MARK: - Lify Cycles
-  
+
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+    LoadingIndicator.showLoading()
     self.extendedLayoutIncludesOpaqueBars = true
     self.navigationItem.hidesSearchBarWhenScrolling = false
 

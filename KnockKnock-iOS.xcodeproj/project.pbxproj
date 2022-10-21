@@ -55,6 +55,7 @@
 		61215AE228572055003FDCAA /* FeedMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AE128572055003FDCAA /* FeedMainViewController.swift */; };
 		61215AE428577933003FDCAA /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AE328577933003FDCAA /* FeedCell.swift */; };
 		61215AE628577A9C003FDCAA /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AE528577A9C003FDCAA /* TagCell.swift */; };
+		61299F07290128270006F579 /* LodingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61299F06290128270006F579 /* LodingIndicator.swift */; };
 		613856C3289553CB00BE347E /* FeedDetailInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613856C2289553CB00BE347E /* FeedDetailInteractor.swift */; };
 		613856C52895548D00BE347E /* FeedDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613856C42895548D00BE347E /* FeedDetailPresenter.swift */; };
 		613856C7289554E600BE347E /* FeedDetailWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613856C6289554E600BE347E /* FeedDetailWorker.swift */; };
@@ -237,6 +238,7 @@
 		61215AE128572055003FDCAA /* FeedMainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMainViewController.swift; sourceTree = "<group>"; };
 		61215AE328577933003FDCAA /* FeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
 		61215AE528577A9C003FDCAA /* TagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
+		61299F06290128270006F579 /* LodingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LodingIndicator.swift; sourceTree = "<group>"; };
 		613856C2289553CB00BE347E /* FeedDetailInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailInteractor.swift; sourceTree = "<group>"; };
 		613856C42895548D00BE347E /* FeedDetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailPresenter.swift; sourceTree = "<group>"; };
 		613856C6289554E600BE347E /* FeedDetailWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailWorker.swift; sourceTree = "<group>"; };
@@ -390,6 +392,7 @@
 		201077EC27D39A8B00280991 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
+				61299F06290128270006F579 /* LodingIndicator.swift */,
 				201077EE27D39FFB00280991 /* Challenge.swift */,
 				6143296728644187008BDCC9 /* FeedPost.swift */,
 				619DEE9B28868E7E00C80095 /* Comment.swift */,
@@ -1093,6 +1096,7 @@
 				6143296828644187008BDCC9 /* FeedPost.swift in Sources */,
 				61215AE428577933003FDCAA /* FeedCell.swift in Sources */,
 				618D8B4D28BC61A100828794 /* BottomSheetOption.swift in Sources */,
+				61299F07290128270006F579 /* LodingIndicator.swift in Sources */,
 				61AB2E5D28A6257E00A1AE30 /* TapCell.swift in Sources */,
 				61E87EB928D1894A0005CAA6 /* FeedSearchPresenter.swift in Sources */,
 				201077FC27D3D26E00280991 /* BaseTableViewCell.swift in Sources */,
