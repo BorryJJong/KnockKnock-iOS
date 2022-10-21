@@ -127,20 +127,33 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
 extension FeedWriteViewController: FeedWriteViewProtocol {
   func getAddress(address: String) {
-    self.containerView.bind(propertyType: .address, content: address)
+    self.containerView.bind(
+      propertyType: .address,
+      content: address
+    )
   }
 }
 
 extension FeedWriteViewController: PropertyDelegate {
-  func getSelectedProperty(selection: [String]) {
+  func getSelectedProperty(
+    propertyType: PropertyType,
+    selection: [String]
+  ) {
     let content = selection.joined(separator: ", ")
-    self.containerView.bind(propertyType: .promotion, content: content)
+
+    self.containerView.bind(
+      propertyType: propertyType,
+      content: content
+    )
   }
 }
 
 extension FeedWriteViewController: ShopSearchDelegate {
   func getShopData(shopData: String) {
-    self.containerView.bind(propertyType: .address, content: shopData)
+    self.containerView.bind(
+      propertyType: .address,
+      content: shopData
+    )
   }
 }
 

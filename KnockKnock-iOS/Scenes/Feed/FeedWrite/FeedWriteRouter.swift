@@ -11,7 +11,7 @@ protocol FeedWriteRouterProtocol: AnyObject {
   static func createFeedWrite() -> UIViewController
 
   func navigateToShopSearch(source: FeedWriteViewProtocol & ShopSearchDelegate)
-  func navigateToProperty(source: FeedWriteViewProtocol, propertyType: PropertyType)
+  func navigateToProperty(source: FeedWriteViewProtocol & PropertyDelegate, propertyType: PropertyType)
 }
 
 final class FeedWriteRouter: FeedWriteRouterProtocol {
@@ -40,11 +40,13 @@ final class FeedWriteRouter: FeedWriteRouterProtocol {
     }
   }
 
-  func navigateToProperty(source: FeedWriteViewProtocol, propertyType: PropertyType) {
-    let propertyViewController = PropertySelectViewController()
+  func navigateToProperty(source: FeedWriteViewProtocol & PropertyDelegate, propertyType: PropertyType) {
+    let propertyViewController = PropertySelectRouter.createPropertySelectView(
+      delegate: source,
+      propertyType: propertyType
+    )
 
     if let sourceView = source as? UIViewController {
-      propertyViewController.propertyType = propertyType
       sourceView.navigationController?.pushViewController(propertyViewController, animated: true)
     }
   }

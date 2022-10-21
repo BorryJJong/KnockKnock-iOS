@@ -7,6 +7,12 @@
 
 import UIKit
 
+import Then
+import KKDSKit
+
+protocol PropertySelectViewProtocol {
+}
+
 final class PropertySelectViewController: BaseViewController<PropertySelectView> {
   
   // MARK: - Properties
@@ -15,6 +21,18 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
   let promotionList = ["없음", "텀블러 할인", "사은품 증정", "용기 할인"]
 
   var propertyType = PropertyType.promotion
+  var router: PropertySelectRouterProtocol?
+
+  // MARK: - UIs
+
+  private lazy var backBarButtonItem = UIBarButtonItem(
+    image: KKDS.Image.ic_back_24_wh,
+    style: .plain,
+    target: self,
+    action: #selector(tapBackBarButton(_:))
+  ).then {
+    $0.tintColor = .black
+  }
 
   // MARK: - Life cylce
   
@@ -28,15 +46,33 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
       barButtonSystemItem: .done,
       target: self,
       action: #selector(doneButtonDidTap(_:)))
+    self.navigationItem.leftBarButtonItem = self.backBarButtonItem
     self.containerView.propertyTableView.do {
       $0.dataSource = self
     }
   }
 
+  // MARK: - Button Actions
+
   @objc private func doneButtonDidTap(_ sender: UIBarButtonItem) {
-    self.navigationController?.popViewController(animated: true)
+    self.router?.passDataToFeedWriteView(
+      source: self,
+      propertyType: self.propertyType,
+      selectedProperties: promotionList
+    )
+  }
+
+  @objc func tapBackBarButton(_ sender: UIBarButtonItem) {
+    self.router?.navigateToFeedWriteView(source: self)
   }
 }
+
+// MARK: - PropertySelectViewProtocol
+
+extension PropertySelectViewController: PropertySelectViewProtocol {
+}
+
+// MARK: - TableView DataSource
 
 extension PropertySelectViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
