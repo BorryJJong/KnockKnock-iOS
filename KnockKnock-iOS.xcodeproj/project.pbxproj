@@ -103,6 +103,7 @@
 		616EB095289230CB001BD18C /* ReactHeaderReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616EB094289230CB001BD18C /* ReactHeaderReusableView.swift */; };
 		616EB0972892341F001BD18C /* ReactFooterReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616EB0962892341F001BD18C /* ReactFooterReusableView.swift */; };
 		616EB09928936F74001BD18C /* PostCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616EB09828936F74001BD18C /* PostCommentCell.swift */; };
+		61725C192902428E00A84D87 /* PropertySelectRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61725C182902428E00A84D87 /* PropertySelectRouter.swift */; };
 		617F9D65282A5AED00C2BC9A /* ChallengeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D64282A5AED00C2BC9A /* ChallengeDetailView.swift */; };
 		617F9D67282A5B0300C2BC9A /* ChallengeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D66282A5B0300C2BC9A /* ChallengeDetailViewController.swift */; };
 		617F9D69282A6EB200C2BC9A /* ChallengeDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D68282A6EB200C2BC9A /* ChallengeDetailCell.swift */; };
@@ -272,6 +273,7 @@
 		616EB094289230CB001BD18C /* ReactHeaderReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactHeaderReusableView.swift; sourceTree = "<group>"; };
 		616EB0962892341F001BD18C /* ReactFooterReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactFooterReusableView.swift; sourceTree = "<group>"; };
 		616EB09828936F74001BD18C /* PostCommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCommentCell.swift; sourceTree = "<group>"; };
+		61725C182902428E00A84D87 /* PropertySelectRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertySelectRouter.swift; sourceTree = "<group>"; };
 		617F9D64282A5AED00C2BC9A /* ChallengeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailView.swift; sourceTree = "<group>"; };
 		617F9D66282A5B0300C2BC9A /* ChallengeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailViewController.swift; sourceTree = "<group>"; };
 		617F9D68282A6EB200C2BC9A /* ChallengeDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailCell.swift; sourceTree = "<group>"; };
@@ -569,6 +571,7 @@
 				611BD4AB27E48B9F007D5C79 /* FeedWritePresenter.swift */,
 				611BD4B127E4903A007D5C79 /* FeedWriteRouter.swift */,
 				611BD4AF27E49024007D5C79 /* FeedWriteWorker.swift */,
+				61725C182902428E00A84D87 /* PropertySelectRouter.swift */,
 			);
 			path = FeedWrite;
 			sourceTree = "<group>";
@@ -1161,6 +1164,7 @@
 				611BD4B027E49024007D5C79 /* FeedWriteWorker.swift in Sources */,
 				2010780827D48FDD00280991 /* Int+Ext.swift in Sources */,
 				616EB091289154B8001BD18C /* FeedDetailSection.swift in Sources */,
+				61725C192902428E00A84D87 /* PropertySelectRouter.swift in Sources */,
 				613856CF2898B6D500BE347E /* LikeRepository.swift in Sources */,
 				61FC60EB27B9244E00A51DBC /* SceneDelegate.swift in Sources */,
 				611BD4BA27E702F5007D5C79 /* PropertySelectView.swift in Sources */,

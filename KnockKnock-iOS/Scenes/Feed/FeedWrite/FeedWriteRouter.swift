@@ -10,11 +10,12 @@ import UIKit
 protocol FeedWriteRouterProtocol: AnyObject {
   static func createFeedWrite() -> UIViewController
 
-  func navigateToShopSearch(source: FeedWriteViewProtocol)
+  func navigateToShopSearch(source: FeedWriteViewProtocol & ShopSearchDelegate)
   func navigateToProperty(source: FeedWriteViewProtocol, propertyType: PropertyType)
 }
 
 final class FeedWriteRouter: FeedWriteRouterProtocol {
+
   static func createFeedWrite() -> UIViewController {
     let view = FeedWriteViewController()
     let interactor = FeedWriteInteractor()
@@ -31,8 +32,8 @@ final class FeedWriteRouter: FeedWriteRouterProtocol {
     return view
   }
 
-  func navigateToShopSearch(source: FeedWriteViewProtocol) {
-    let shopSearchViewController = ShopSearchRouter.createShopSearch()
+  func navigateToShopSearch(source: FeedWriteViewProtocol & ShopSearchDelegate) {
+    let shopSearchViewController = ShopSearchRouter.createShopSearch(delegate: source)
 
     if let sourceView = source as? UIViewController {
       sourceView.navigationController?.pushViewController(shopSearchViewController, animated: true)

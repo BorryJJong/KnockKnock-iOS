@@ -8,15 +8,21 @@
 import UIKit
 
 protocol ShopSearchRouterProtocol: AnyObject {
-  static func createShopSearch() -> UIViewController
+  static func createShopSearch(delegate: ShopSearchDelegate) -> UIViewController
 
   func presentBottomSheetView(source: ShopSearchViewProtocol, content: [String])
   func passToFeedWriteView(source: ShopSearchViewProtocol, address: String?)
 }
 
+protocol ShopSearchDelegate: AnyObject {
+  func getShopData(shopData: String)
+}
+
 final class ShopSearchRouter: ShopSearchRouterProtocol {
 
-  static func createShopSearch() -> UIViewController {
+  weak var delegate: ShopSearchDelegate?
+
+  static func createShopSearch(delegate: ShopSearchDelegate) -> UIViewController {
 
     let view = ShopSearchViewController()
     let interactor = ShopSearchInteractor()
@@ -29,6 +35,7 @@ final class ShopSearchRouter: ShopSearchRouterProtocol {
     presenter.view = view
     interactor.worker = worker
     interactor.presenter = presenter
+    router.delegate = delegate
 
     return view
   }
@@ -39,10 +46,8 @@ final class ShopSearchRouter: ShopSearchRouterProtocol {
   ) {
     guard let sourceView = source as? ShopSearchViewController else { return }
 
-    if let index = sourceView.navigationController?.viewControllers.count,
-       let feedWriteViewController = sourceView.navigationController?.viewControllers[index - 2] as? FeedWriteViewProtocol,
-       let address = address {
-      feedWriteViewController.getAddress(address: address)
+    if let address = address {
+      self.delegate?.getShopData(shopData: address)
     }
     sourceView.navigationController?.popViewController(animated: true)
   }
