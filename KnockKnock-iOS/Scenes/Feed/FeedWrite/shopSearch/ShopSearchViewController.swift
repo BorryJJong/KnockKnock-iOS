@@ -109,11 +109,11 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   }
 
   @objc private func doneButtonDidTap(_ sender: UIBarButtonItem) {
-    self.router?.passToFeedWriteView(source: self, address: nil)
+    self.router?.passDataToFeedWriteView(source: self, address: nil)
   }
 
   @objc func tapBackBarButton(_ sender: UIBarButtonItem) {
-    self.navigationController?.popViewController(animated: true)
+    self.router?.navigateToFeedWriteView(source: self)
   }
 
   @objc func cityButtonDidTap(_ sender: UIButton) {
@@ -167,7 +167,7 @@ extension ShopSearchViewController: UITableViewDataSource {
 extension ShopSearchViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     if let address = self.addressResult?.documents[indexPath.row].placeName {
-      self.router?.passToFeedWriteView(source: self, address: address)
+      self.router?.passDataToFeedWriteView(source: self, address: address)
     }
   }
 }
