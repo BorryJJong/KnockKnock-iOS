@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import KKDSKit
 
 final class PostHeaderReusableView: UICollectionReusableView {
 
@@ -104,19 +105,25 @@ final class PostHeaderReusableView: UICollectionReusableView {
 
   // MARK: - Bind
 
-  func bind(feed: FeedDetail) {
-    self.contentLabel.setLineHeight(fontSize: 14, content: feed.content)
+  func bind(feedData: FeedDetailData) {
+    self.contentLabel.setLineHeight(
+      fontSize: 14,
+      content: feedData.feed?.content ?? ""
+    )
 
     self.imageScrollView.subviews.forEach{
       $0.removeFromSuperview()
     }
-    self.setImageView(images: feed.images, scale: feed.scale)
+    self.setImageView(
+      images: feedData.images.map { $0.fileUrl },
+      scale: "1:1"
+    )
 
-    if feed.images.count > 1 {
+    if feedData.images.count > 1 {
       self.imageNumberLabel.isHidden = false
       self.imagePageControl.isHidden = false
-      self.imagePageControl.numberOfPages = feed.images.count
-      self.imageNumberLabel.text = "1/\(feed.images.count)"
+      self.imagePageControl.numberOfPages = feedData.images.count
+      self.imageNumberLabel.text = "1/\(feedData.images.count)"
     } else {
       self.imageNumberLabel.isHidden = true
       self.imagePageControl.isHidden = true
@@ -127,7 +134,10 @@ final class PostHeaderReusableView: UICollectionReusableView {
     for index in 0..<images.count {
 
       let imageView = UIImageView()
-      imageView.image = UIImage(named: images[index])
+      imageView.setImageFromStringUrl(
+        url: images[index],
+        defaultImage: KKDS.Image.ic_no_data_60
+      )
       imageView.contentMode = .scaleAspectFill
       imageView.clipsToBounds = true
 
@@ -135,7 +145,10 @@ final class PostHeaderReusableView: UICollectionReusableView {
       let width = self.frame.width
       let xPosition = width * CGFloat(index)
 
-      imageView.frame = imageSizeType?.imageSize(xPosition: xPosition, width: width) ?? CGRect.init()
+      imageView.frame = imageSizeType?.imageSize(
+        xPosition: xPosition,
+        width: width
+      ) ?? CGRect.init()
 
       self.imageScrollView.contentSize.width = width * CGFloat(index+1)
       if index == 0 {

@@ -10,7 +10,7 @@ import UIKit
 import Then
 import KKDSKit
 
-protocol FeedDetailViewProtocol {
+protocol FeedDetailViewProtocol: AnyObject {
   var interactor: FeedDetailInteractorProtocol? { get set }
   var router: FeedDetailRouterProtocol? { get set }
 
@@ -27,7 +27,16 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   var interactor: FeedDetailInteractorProtocol?
   var router: FeedDetailRouterProtocol?
 
-  var feedDetail: FeedDetail?
+  var feedDetail: FeedDetail? {
+    didSet {
+      self.containerView.postCollectionView.reloadData()
+
+      if let feed = feedDetail?.data.feed {
+        self.containerView.navigationView.bind(feed: feed)
+      }
+    }
+  }
+  var feedId: Int = 6
   var like: [Like] = []
   var allComments: [Comment] = []
   var visibleComments: [Comment] = []
@@ -39,7 +48,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     self.setNavigationBar()
     self.setupConfigure()
 
-    self.interactor?.getFeedDeatil()
+    self.interactor?.getFeedDeatil(feedId: feedId)
     self.interactor?.getLike()
     self.interactor?.getAllComments()
     self.interactor?.setVisibleComments(comments: self.allComments)
@@ -73,7 +82,6 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   }
 
   private func setNavigationBar() {
-    let navigationView = FeedDetailNavigationBarView()
 
     let backButton = UIBarButtonItem(
       image: KKDS.Image.ic_back_24_bk,
@@ -90,7 +98,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
 
     self.navigationItem.leftBarButtonItems = [
       backButton,
-      UIBarButtonItem.init(customView: navigationView)
+      UIBarButtonItem.init(customView: self.containerView.navigationView)
     ]
     self.navigationItem.rightBarButtonItem = moreButton
     self.navigationController?.navigationBar.tintColor = .black
@@ -200,7 +208,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
   ) -> Int {
     switch FeedDetailSection(rawValue: section) {
     case .content:
-      return self.feedDetail?.challenge.count ?? 0
+      return self.feedDetail?.data.challenges.count ?? 0
 
     case .like:
       return self.like.count + 1
@@ -230,7 +238,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
         for: indexPath
       )
       if let feedDetail = self.feedDetail {
-        cell.bind(text: feedDetail.challenge[indexPath.item].title)
+        cell.bind(text: feedDetail.data.challenges[indexPath.item].title)
       }
       return cell
 
@@ -290,7 +298,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
           for: indexPath
         )
         if let feedDetail = self.feedDetail {
-          header.bind(feed: feedDetail)
+          header.bind(feedData: feedDetail.data)
         }
 
         return header
@@ -300,6 +308,10 @@ extension FeedDetailViewController: UICollectionViewDataSource {
           withType: PostFooterReusableView.self,
           for: indexPath
         )
+
+        if let feedDetail = self.feedDetail {
+          footer.bind(shopAddress: feedDetail.data.feed?.storeAddress ?? "")
+        }
 
         return footer
 

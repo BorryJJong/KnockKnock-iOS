@@ -228,7 +228,7 @@ extension SearchResultPageCell: UICollectionViewDataSource, UICollectionViewDele
       return footer
 
     default:
-      assert(false)
+      return .init()
     }
   }
 
