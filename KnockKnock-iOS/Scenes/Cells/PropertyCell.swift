@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import KKDSKit
 
 final class PropertyCell: BaseTableViewCell {
   
@@ -16,6 +17,16 @@ final class PropertyCell: BaseTableViewCell {
     static let propertyLabelBottomMargin = -15.f
     static let propertyLabelLeadingMargin = 20.f
     static let checkImageTrailingMargin = -20.f
+  }
+
+  private lazy var isCheck: Bool = false {
+    didSet {
+      let propertyLabelColor = isCheck ? UIColor.black : UIColor.green50
+      let checkImage = isCheck ? KKDS.Image.ic_checkbox_20_off : KKDS.Image.ic_checkbox_20_on
+
+      self.propertyLabel.textColor = propertyLabelColor
+      self.checkImageView.image = checkImage
+    }
   }
   
   // MARK: - UI
@@ -31,23 +42,17 @@ final class PropertyCell: BaseTableViewCell {
     $0.image = UIImage(named: "ic_checkbox_off")
   }
   
-  lazy var checkButton = UIButton().then {
+  let checkButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .clear
-    $0.addTarget(self, action: #selector(checkButtonDidTap(_:)), for: .touchUpInside)
-  }
-  
-  @objc func checkButtonDidTap(_ sender: UIButton) {
-    if self.propertyLabel.textColor == .black {
-      self.checkImageView.image = UIImage(named: "ic_checkbox_on")
-      self.propertyLabel.textColor = .green50
-    } else {
-      self.checkImageView.image = UIImage(named: "ic_checkbox_off")
-      self.propertyLabel.textColor = .black
-    }
   }
 
   // MARK: - Bind
+
+  override func setSelected(_ selected: Bool, animated: Bool) {
+    super.setSelected(selected, animated: animated)
+    self.isCheck.toggle()
+  }
 
   func bind(content: String) {
     self.propertyLabel.text = content
@@ -56,7 +61,7 @@ final class PropertyCell: BaseTableViewCell {
   // MARK: - Configure
   
   override func setupConstraints() {
-    [self.propertyLabel, self.checkImageView, self.checkButton].addSubViews(self.contentView)
+    [self.propertyLabel, self.checkImageView].addSubViews(self.contentView)
 
     NSLayoutConstraint.activate([
       self.propertyLabel.centerYAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.centerYAnchor),
@@ -67,10 +72,10 @@ final class PropertyCell: BaseTableViewCell {
       self.checkImageView.centerYAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.centerYAnchor),
       self.checkImageView.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor, constant: Metric.checkImageTrailingMargin),
       
-      self.checkButton.topAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.topAnchor),
-      self.checkButton.bottomAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.bottomAnchor),
-      self.checkButton.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor),
-      self.checkButton.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor)
+//      self.checkButton.topAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.topAnchor),
+//      self.checkButton.bottomAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.bottomAnchor),
+//      self.checkButton.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor),
+//      self.checkButton.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor)
     ])
   }
 }

@@ -20,7 +20,9 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
   let tagList = ["#거꾸로챌린지", "#용기내챌린지", "#GOGO챌린지", "#1일 1환경챌린지"]
   let promotionList = ["없음", "텀블러 할인", "사은품 증정", "용기 할인"]
 
+  var selectedProperties: [String] = []
   var propertyType = PropertyType.promotion
+  
   var router: PropertySelectRouterProtocol?
 
   // MARK: - UIs
@@ -42,13 +44,18 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
   
   override func setupConfigure() {
     self.navigationItem.title = "태그"
+
     self.navigationItem.rightBarButtonItem = UIBarButtonItem(
       barButtonSystemItem: .done,
       target: self,
-      action: #selector(doneButtonDidTap(_:)))
+      action: #selector(doneButtonDidTap(_:))
+    )
+
     self.navigationItem.leftBarButtonItem = self.backBarButtonItem
+
     self.containerView.propertyTableView.do {
       $0.dataSource = self
+      $0.delegate = self
     }
   }
 
@@ -58,7 +65,7 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
     self.router?.passDataToFeedWriteView(
       source: self,
       propertyType: self.propertyType,
-      selectedProperties: promotionList
+      selectedProperties: self.selectedProperties
     )
   }
 
@@ -85,12 +92,48 @@ extension PropertySelectViewController: UITableViewDataSource {
     switch propertyType {
     case .promotion:
       cell.bind(content: promotionList[indexPath.row])
+
     case .tag:
       cell.bind(content: tagList[indexPath.row])
+
     case .address:
       print("error")
     }
 
     return cell
+  }
+}
+
+extension PropertySelectViewController: UITableViewDelegate {
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+    switch propertyType {
+    case .tag:
+      self.selectedProperties.append(self.tagList[indexPath.item])
+
+    case .promotion:
+      self.selectedProperties.append(self.promotionList[indexPath.item])
+
+    case .address:
+      print("error")
+    }
+  }
+
+  func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+    switch propertyType {
+    case .tag:
+      if let index = self.selectedProperties.firstIndex(of: self.tagList[indexPath.item]) {
+        self.selectedProperties.remove(at: index)
+      }
+
+    case .promotion:
+      if let index = self.selectedProperties.firstIndex(of: self.promotionList[indexPath.item]) {
+        self.selectedProperties.remove(at: index)
+      }
+
+    case .address:
+      print("error")
+    }
+
   }
 }
