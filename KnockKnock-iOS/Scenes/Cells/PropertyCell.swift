@@ -42,11 +42,6 @@ final class PropertyCell: BaseTableViewCell {
     $0.image = UIImage(named: "ic_checkbox_off")
   }
   
-  let checkButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .clear
-  }
-
   // MARK: - Bind
 
   override func setSelected(_ selected: Bool, animated: Bool) {
@@ -70,12 +65,7 @@ final class PropertyCell: BaseTableViewCell {
       self.propertyLabel.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor, constant: Metric.propertyLabelLeadingMargin),
       
       self.checkImageView.centerYAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.centerYAnchor),
-      self.checkImageView.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor, constant: Metric.checkImageTrailingMargin),
-      
-//      self.checkButton.topAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.topAnchor),
-//      self.checkButton.bottomAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.bottomAnchor),
-//      self.checkButton.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor),
-//      self.checkButton.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor)
+      self.checkImageView.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor, constant: Metric.checkImageTrailingMargin)
     ])
   }
 }
