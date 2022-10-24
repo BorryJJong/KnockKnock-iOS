@@ -7,42 +7,51 @@
 
 import UIKit
 
+import Then
+
 final class LoadingIndicator {
+  private static let shared = LoadingIndicator()
+  private var backgroundView: UIView?
+
   static func showLoading() {
-    DispatchQueue.main.async {
-      guard let window = UIApplication.shared.windows.last else { return }
+    guard let window = UIApplication.shared.windows.last else { return }
 
-      let loadingIndicatorView: UIActivityIndicatorView
+    let loadingIndicatorView: UIActivityIndicatorView
 
-      if let existedView = window.subviews.first(where: {
-        $0 is UIActivityIndicatorView
-      }) as? UIActivityIndicatorView {
-        loadingIndicatorView = existedView
-      } else {
-        loadingIndicatorView = UIActivityIndicatorView(style: .large)
-        loadingIndicatorView.frame = window.frame
-        loadingIndicatorView.color = .white
-
-        window.backgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.2)
-        window.addSubview(loadingIndicatorView)
+    if let existedView = window.subviews.first(where: {
+      $0 is UIActivityIndicatorView
+    }) as? UIActivityIndicatorView {
+      loadingIndicatorView = existedView
+    } else {
+      let backgroundView = UIView().then {
+        $0.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
+        $0.frame = window.frame
       }
-      loadingIndicatorView.startAnimating()
+      loadingIndicatorView = UIActivityIndicatorView(style: .large)
+      loadingIndicatorView.frame = window.frame
+      loadingIndicatorView.color = .white
 
-      DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-        LoadingIndicator.hideLoading()
-      }
+      window.backgroundColor = .clear
+      window.addSubview(backgroundView)
+      window.addSubview(loadingIndicatorView)
+
+      shared.backgroundView = backgroundView
+    }
+    loadingIndicatorView.startAnimating()
+
+    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+      LoadingIndicator.hideLoading()
     }
   }
 
   static func hideLoading() {
-    DispatchQueue.main.async {
-      guard let window = UIApplication.shared.windows.last else { return }
-      window.backgroundColor = .clear
-      window.subviews.filter({
-        $0 is UIActivityIndicatorView
-      }).forEach {
-        $0.removeFromSuperview()
-      }
+    guard let window = UIApplication.shared.windows.last else { return }
+
+    window.subviews.filter({
+      $0 is UIActivityIndicatorView
+    }).forEach {
+      $0.removeFromSuperview()
     }
+    shared.backgroundView?.removeFromSuperview()
   }
 }
