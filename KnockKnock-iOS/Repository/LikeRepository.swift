@@ -8,11 +8,11 @@
 import Foundation
 
 protocol LikeRepositoryProtocol {
-  func getlike(completionHandler: @escaping ([Like]) -> Void)
+  func requestLike(completionHandler: @escaping ([Like]) -> Void)
 }
 
 final class LikeRepository: LikeRepositoryProtocol {
-  func getlike(completionHandler: @escaping ([Like]) -> Void) {
+  func requestLike(completionHandler: @escaping ([Like]) -> Void) {
     let like = [
       Like(userId: 2, nickname: "ksungmin94", image: nil),
       Like(userId: 2, nickname: "jerrychoi", image: nil),

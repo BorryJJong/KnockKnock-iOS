@@ -44,7 +44,7 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
   }
 
   func getLike(complitionHandler: @escaping ([Like]) -> Void) {
-    self.likeRepository.getlike(completionHandler: { like in
+    self.likeRepository.requestLike(completionHandler: { like in
       complitionHandler(like)
     })
   }
