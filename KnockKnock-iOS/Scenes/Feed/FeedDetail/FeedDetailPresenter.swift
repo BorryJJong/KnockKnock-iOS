@@ -37,8 +37,8 @@ final class FeedDetailPresenter: FeedDetailPresenterProtocol {
     for comment in allComments {
       if comment.commentData.reply?.count != 0 && comment.isOpen {
         comments.append(comment)
-        if let reply = comment.commentData.reply {
-          for reply in reply {
+        if let replyArray = comment.commentData.reply {
+          for reply in replyArray {
             comments.append(
               Comment(
                 commentData: CommentData(

@@ -23,13 +23,10 @@ final class CommentWorker: CommentWorkerProtocol {
   }
 
   func getComments(feedId: Int, completionHandler: @escaping ([Comment]) -> Void) {
-    var data: [Comment] = []
     self.repository.requestComments(
       feedId: feedId,
       completionHandler: { result in
-        result.forEach {
-          data.append(Comment(commentData: $0))
-        }
+        let data = result.map { Comment(commentData: $0) }
         completionHandler(data)
       }
     )
