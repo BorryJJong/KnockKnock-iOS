@@ -145,12 +145,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
           userId: self.userId,
           content: content,
           commentId: self.commentId
-        ),
-        completionHandler: { response in
-          if response == "success" {
-            self.interactor?.getAllComments(feedId: self.feedId)
-          }
-        }
+        )
       )
     }
     self.containerView.commentTextView.text = ""

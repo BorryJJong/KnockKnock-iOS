@@ -173,12 +173,7 @@ final class CommentViewController: BaseViewController<CommentView> {
           userId: self.userId,
           content: content,
           commentId: self.commentId
-        ),
-        completionHandler: { response in
-          if response == "success" {
-              self.interactor?.getComments(feedId: self.feedId)
-          }
-        }
+        )
       )
       self.containerView.commentTextView.text = ""
       self.containerView.setPlaceholder()

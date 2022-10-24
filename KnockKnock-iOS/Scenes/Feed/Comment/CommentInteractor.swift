@@ -12,7 +12,7 @@ protocol CommentInteractorProtocol {
   var presenter: CommentPresenterProtocol? { get set }
   
   func getComments(feedId: Int)
-  func requestAddComment(comment: AddCommentRequest, completionHandler: @escaping ((String) -> Void))
+  func requestAddComment(comment: AddCommentRequest)
 }
 
 final class CommentInteractor: CommentInteractorProtocol {
@@ -29,13 +29,14 @@ final class CommentInteractor: CommentInteractorProtocol {
   }
 
   func requestAddComment(
-    comment: AddCommentRequest,
-    completionHandler: @escaping ((String) -> Void)
+    comment: AddCommentRequest
   ) {
     self.worker?.requestAddComment(
       comment: comment,
       completionHandler: { response in
-        completionHandler(response)
+        if response == "success" {
+          self.getComments(feedId: comment.feedId)
+        }
       }
     )
   }
