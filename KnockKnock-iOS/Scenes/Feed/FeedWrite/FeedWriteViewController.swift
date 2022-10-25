@@ -13,6 +13,8 @@ import YPImagePicker
 protocol FeedWriteViewProtocol: AnyObject {
   var interactor: FeedWriteInteractorProtocol? { get set }
   var router: FeedWriteRouterProtocol? { get set }
+
+  func fetchProperty(propertyType: PropertyType, content: String)
 }
 
 final class FeedWriteViewController: BaseViewController<FeedWriteView> {
@@ -126,10 +128,10 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 }
 
 extension FeedWriteViewController: FeedWriteViewProtocol {
-  func getAddress(address: String) {
+  func fetchProperty(propertyType: PropertyType, content: String) {
     self.containerView.bind(
-      propertyType: .address,
-      content: address
+      propertyType: propertyType,
+      content: content
     )
   }
 }
@@ -144,15 +146,6 @@ extension FeedWriteViewController: PropertyDelegate {
     self.containerView.bind(
       propertyType: propertyType,
       content: content
-    )
-  }
-}
-
-extension FeedWriteViewController: ShopSearchDelegate {
-  func getShopData(shopData: String) {
-    self.containerView.bind(
-      propertyType: .address,
-      content: shopData
     )
   }
 }

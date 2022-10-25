@@ -16,6 +16,13 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
 
   // MARK: - Properties
 
-  weak var presenter: FeedWritePresenterProtocol?
+  var presenter: FeedWritePresenterProtocol?
   var worker: FeedWriteWorkerProtocol?
+  
+}
+
+extension FeedWriteInteractor: ShopSearchDelegate {
+  func getShopData(shopData: String) {
+    self.presenter?.fetchProperty(propertyType: .address, content: shopData)
+  }
 }
