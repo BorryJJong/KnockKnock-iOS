@@ -22,7 +22,21 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
 }
 
 extension FeedWriteInteractor: ShopSearchDelegate {
-  func getShopData(shopData: String) {
-    self.presenter?.fetchProperty(propertyType: .address, content: shopData)
+  func fetchShopData(shopData: String) {
+    self.presenter?.fetchProperty(
+      propertyType: .address,
+      content: shopData
+    )
+  }
+}
+
+extension FeedWriteInteractor: PropertyDelegate {
+  func fetchSelectedProperty(
+    propertyType: PropertyType,
+    selection: [String]
+  ) {
+    let content = selection.joined(separator: ", ")
+
+    self.presenter?.fetchProperty(propertyType: propertyType, content: content)
   }
 }

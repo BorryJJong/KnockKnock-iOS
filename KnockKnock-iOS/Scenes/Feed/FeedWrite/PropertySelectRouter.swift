@@ -8,7 +8,7 @@
 import UIKit
 
 protocol PropertyDelegate: AnyObject {
-  func getSelectedProperty(propertyType: PropertyType, selection: [String])
+  func fetchSelectedProperty(propertyType: PropertyType, selection: [String])
 }
 
 protocol PropertySelectRouterProtocol {
@@ -43,7 +43,7 @@ final class PropertySelectRouter: PropertySelectRouterProtocol {
     propertyType: PropertyType,
     selectedProperties: [String]
   ) {
-    self.delegate?.getSelectedProperty(
+    self.delegate?.fetchSelectedProperty(
       propertyType: propertyType,
       selection: selectedProperties
     )

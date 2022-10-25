@@ -16,7 +16,7 @@ protocol ShopSearchRouterProtocol: AnyObject {
 }
 
 protocol ShopSearchDelegate: AnyObject {
-  func getShopData(shopData: String)
+  func fetchShopData(shopData: String)
 }
 
 final class ShopSearchRouter: ShopSearchRouterProtocol {
@@ -46,7 +46,7 @@ final class ShopSearchRouter: ShopSearchRouterProtocol {
     address: String?
   ) {
     if let address = address {
-      self.delegate?.getShopData(shopData: address)
+      self.delegate?.fetchShopData(shopData: address)
     }
     self.navigateToFeedWriteView(source: source)
   }

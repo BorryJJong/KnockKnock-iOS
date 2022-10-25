@@ -136,20 +136,6 @@ extension FeedWriteViewController: FeedWriteViewProtocol {
   }
 }
 
-extension FeedWriteViewController: PropertyDelegate {
-  func getSelectedProperty(
-    propertyType: PropertyType,
-    selection: [String]
-  ) {
-    let content = selection.joined(separator: ", ")
-
-    self.containerView.bind(
-      propertyType: propertyType,
-      content: content
-    )
-  }
-}
-
   // MARK: - TextView Delegate
 
 extension FeedWriteViewController: UITextViewDelegate {
