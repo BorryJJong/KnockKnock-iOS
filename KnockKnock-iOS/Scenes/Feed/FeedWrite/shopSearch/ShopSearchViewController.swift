@@ -15,16 +15,16 @@ protocol ShopSearchViewProtocol: AnyObject {
   var router: ShopSearchRouterProtocol? { get set }
 
   func fetchShopAddress(address: AddressResult)
+  func fetchCountyList(county: [String])
+  func fetchCityList(cityList: [String])
 }
 
 final class ShopSearchViewController: BaseViewController<ShopSearchView> {
 
   // MARK: - Properties
 
-  let addressDummy = ["스타벅스 오류동역점", "스타벅스 신도림점", "스타벅스 구로디지털타워점"]
-
-  let cityList = ["서울특별시", "부산광역시", "대구광역시", "인천광역시", "대전광역시", "울산광역시", "세종특별자치시",
-                  "경기도", "강원도", "전라북도", "전라남도", "경상북도", "경상남도"]
+  var cityList: [String] = []
+  var countyList: [String] = []
 
   var interactor: ShopSearchInteractorProtocol?
   var router: ShopSearchRouterProtocol?
@@ -61,6 +61,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    self.interactor?.fetchCityList()
   }
 
   // MARK: - Configure
@@ -121,6 +122,10 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   @objc func cityButtonDidTap(_ sender: UIButton) {
     self.router?.presentBottomSheetView(source: self, content: self.cityList)
   }
+//
+//  @objc func countyButtonDidTap(_ sender: UIButton) {
+//    self.router?.presentBottomSheetView(source: self, content: self.countyList)
+//  }
 }
 
 // MARK: - ShopSearchView Protocol
@@ -128,6 +133,14 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
 extension ShopSearchViewController: ShopSearchViewProtocol {
   func fetchShopAddress(address: AddressResult) {
     self.addressResult = address
+  }
+
+  func fetchCountyList(county: [String]) {
+    self.countyList = county
+  }
+
+  func fetchCityList(cityList: [String]) {
+    self.cityList = cityList
   }
 }
 

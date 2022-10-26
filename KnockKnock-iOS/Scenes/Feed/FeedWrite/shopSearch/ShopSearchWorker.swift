@@ -9,6 +9,7 @@ import UIKit
 
 protocol ShopSearchWorkerProtocol {
   func fetchShopAddress(keyword: String, completionHandler: @escaping (AddressResult) -> Void)
+  func fetchDistricts(completionHandler: @escaping (DistrictsData) -> Void)
 }
 
 final class ShopSearchWorker: ShopSearchWorkerProtocol {
@@ -23,10 +24,18 @@ final class ShopSearchWorker: ShopSearchWorkerProtocol {
     keyword: String,
     completionHandler: @escaping (AddressResult) -> Void
   ) {
-    repository.requestShopAddress(
+    self.repository.requestShopAddress(
       keyword: keyword,
       completionHandler: { result in
         completionHandler(result)
       })
+  }
+
+  func fetchDistricts(
+    completionHandler: @escaping (DistrictsData) -> Void
+  ) {
+    if let districtsData = self.repository.fetchDistricts() {
+      completionHandler(districtsData)
+    }
   }
 }
