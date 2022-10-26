@@ -57,16 +57,16 @@ final class ShopSearchView: UIView {
     $0.backgroundColor = .clear
   }
 
-  let regionTextField = UITextField().then {
+  let countyTextField = UITextField().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.placeholder = "구/동 전체"
+    $0.placeholder = "시/군/구 전체"
     $0.layer.borderWidth = 1
     $0.layer.borderColor = UIColor.gray30?.cgColor
     $0.layer.cornerRadius = 5
     $0.tintColor = .clear
   }
 
-  let regionButton = UIButton().then {
+  let countyButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .clear
   }
@@ -144,7 +144,7 @@ final class ShopSearchView: UIView {
 
   private func setupConfigure() {
     self.addTextFieldPadding(self.cityTextField)
-    self.addTextFieldPadding(self.regionTextField)
+    self.addTextFieldPadding(self.countyTextField)
   }
 
   private func addTextFieldPadding(_ textField: UITextField) {
@@ -182,7 +182,7 @@ final class ShopSearchView: UIView {
   // MARK: - Constraints
 
   private func setupConstraints() {
-    [self.cityTextField, self.regionTextField, self.cityButton, self.regionButton,
+    [self.cityTextField, self.countyTextField, self.cityButton, self.countyButton,
      self.addressTextField, self.addressSearchButton,
      self.seperatorLineView, self.statusStackView, self.resultTableView].addSubViews(self)
 
@@ -192,20 +192,20 @@ final class ShopSearchView: UIView {
       self.cityTextField.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.cityTextFieldLeadingMargin),
       self.cityTextField.heightAnchor.constraint(equalToConstant: Metric.cityTextFieldHeight),
 
-      self.regionTextField.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.regionTextFieldTopMargin),
-      self.regionTextField.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.regionTextFieldTrailingMargin),
-      self.regionTextField.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerXAnchor, constant: Metric.regionTextFieldLeadingMargin),
-      self.regionTextField.heightAnchor.constraint(equalToConstant: Metric.regionTextFieldHeight),
+      self.countyTextField.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.regionTextFieldTopMargin),
+      self.countyTextField.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.regionTextFieldTrailingMargin),
+      self.countyTextField.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerXAnchor, constant: Metric.regionTextFieldLeadingMargin),
+      self.countyTextField.heightAnchor.constraint(equalToConstant: Metric.regionTextFieldHeight),
 
       self.cityButton.topAnchor.constraint(equalTo: self.cityTextField.topAnchor),
       self.cityButton.leadingAnchor.constraint(equalTo: self.cityTextField.leadingAnchor),
       self.cityButton.trailingAnchor.constraint(equalTo: self.cityTextField.trailingAnchor),
       self.cityButton.bottomAnchor.constraint(equalTo: self.cityTextField.bottomAnchor),
 
-      self.regionButton.topAnchor.constraint(equalTo: self.regionTextField.topAnchor),
-      self.regionButton.leadingAnchor.constraint(equalTo: self.regionTextField.leadingAnchor),
-      self.regionButton.trailingAnchor.constraint(equalTo: self.regionTextField.trailingAnchor),
-      self.regionButton.bottomAnchor.constraint(equalTo: self.regionTextField.bottomAnchor),
+      self.countyButton.topAnchor.constraint(equalTo: self.countyTextField.topAnchor),
+      self.countyButton.leadingAnchor.constraint(equalTo: self.countyTextField.leadingAnchor),
+      self.countyButton.trailingAnchor.constraint(equalTo: self.countyTextField.trailingAnchor),
+      self.countyButton.bottomAnchor.constraint(equalTo: self.countyTextField.bottomAnchor),
 
       self.addressTextField.heightAnchor.constraint(equalToConstant: Metric.addressTextFieldHeight),
       self.addressTextField.topAnchor.constraint(equalTo: self.cityTextField.bottomAnchor, constant: Metric.addressTextFieldTopMargin),

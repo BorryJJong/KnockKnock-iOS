@@ -92,7 +92,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
       $0.addTarget(self, action: #selector(cityButtonDidTap(_:)), for: .touchUpInside)
     }
 
-    self.containerView.regionTextField.do {
+    self.containerView.countyTextField.do {
       $0.delegate = self
     }
   }
@@ -103,7 +103,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
     self.containerView.resultTableView.isHidden = false
 
     let city = self.containerView.cityTextField.text ?? ""
-    let region = self.containerView.regionTextField.text ?? ""
+    let region = self.containerView.countyTextField.text ?? ""
     let address = self.containerView.addressTextField.text ?? ""
 
     let keyword = "\(city) \(region) \(address)"
