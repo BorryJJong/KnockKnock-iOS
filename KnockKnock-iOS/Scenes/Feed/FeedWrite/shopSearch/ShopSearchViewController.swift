@@ -89,7 +89,11 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
     }
     
     self.containerView.cityButton.do {
-      $0.addTarget(self, action: #selector(self.cityButtonDidTap(_:)), for: .touchUpInside)
+      $0.addTarget(
+        self,
+        action: #selector(self.cityButtonDidTap(_:)),
+        for: .touchUpInside
+      )
     }
 
     self.containerView.countyTextField.do {
@@ -97,7 +101,11 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
     }
 
     self.containerView.countyButton.do {
-      $0.addTarget(self, action: #selector(self.countyButtonDidTap(_:)), for: .touchUpInside)
+      $0.addTarget(
+        self,
+        action: #selector(self.countyButtonDidTap(_:)),
+        for: .touchUpInside
+      )
     }
   }
 
@@ -125,6 +133,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
 
   @objc func cityButtonDidTap(_ sender: UIButton) {
     self.router?.presentBottomSheetView(source: self, content: self.cityList)
+    self.containerView.setButtonStatus(isCitySelected: true)
   }
 
   @objc func countyButtonDidTap(_ sender: UIButton) {

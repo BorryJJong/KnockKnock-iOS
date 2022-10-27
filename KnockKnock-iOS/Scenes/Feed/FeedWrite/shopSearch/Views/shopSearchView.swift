@@ -9,6 +9,7 @@ import UIKit
 
 import Then
 import KKDSKit
+import SwiftUI
 
 final class ShopSearchView: UIView {
 
@@ -41,10 +42,16 @@ final class ShopSearchView: UIView {
     static let resultTableViewTrailingMargin = -20.f
   }
 
+  private enum TextFieldTag: Int {
+    case city = 1
+    case county = 2
+  }
+
   // MARK: - UI
 
   let cityTextField = UITextField().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.tag = TextFieldTag.city.rawValue
     $0.placeholder = "시/도 전체"
     $0.layer.borderWidth = 1
     $0.layer.borderColor = UIColor.gray30?.cgColor
@@ -59,16 +66,21 @@ final class ShopSearchView: UIView {
 
   let countyTextField = UITextField().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.tag = TextFieldTag.county.rawValue
+    $0.isEnabled = false
     $0.placeholder = "시/군/구 전체"
     $0.layer.borderWidth = 1
     $0.layer.borderColor = UIColor.gray30?.cgColor
     $0.layer.cornerRadius = 5
     $0.tintColor = .clear
+    $0.backgroundColor = KKDS.Color.gray10
+    $0.textColor = KKDS.Color.gray30
   }
 
   let countyButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .clear
+    $0.isEnabled = false
   }
 
   let addressTextField = UITextField().then {
@@ -116,6 +128,28 @@ final class ShopSearchView: UIView {
     $0.addArrangedSubview(statusLabel)
   }
 
+  let cityDownIconView = UIImageView(
+    frame: CGRect(
+      x: 0,
+      y: -5,
+      width: 10,
+      height: 10
+    )
+  ).then {
+    $0.image = KKDS.Image.ic_down_10_bk
+  }
+
+  let countyDownIconView = UIImageView(
+    frame: CGRect(
+      x: 0,
+      y: -5,
+      width: 10,
+      height: 10
+    )
+  ).then {
+    $0.image = KKDS.Image.ic_down_10_gr
+  }
+
   // MARK: - Initialize
 
   init() {
@@ -140,6 +174,20 @@ final class ShopSearchView: UIView {
     }
   }
 
+  func setButtonStatus(isCitySelected: Bool) {
+    self.countyButton.isEnabled = isCitySelected
+    if self.countyButton.isEnabled {
+      self.countyButton.isEnabled = true
+      self.countyTextField.backgroundColor = .white
+      self.countyTextField.textColor = KKDS.Color.gray30
+      self.countyDownIconView.image = KKDS.Image.ic_down_10_bk
+    } else {
+      self.countyTextField.backgroundColor = KKDS.Color.gray10
+      self.countyTextField.textColor = KKDS.Color.gray30
+      self.countyDownIconView.image = KKDS.Image.ic_down_10_gr
+    }
+  }
+
   // MARK: - Configure
 
   private func setupConfigure() {
@@ -154,7 +202,8 @@ final class ShopSearchView: UIView {
         y: 0,
         width: 10,
         height: textField.frame.height
-      ))
+      )
+    )
     textField.leftView = leftPaddingView
     textField.leftViewMode = .always
 
@@ -164,16 +213,16 @@ final class ShopSearchView: UIView {
         y: 0,
         width: 20,
         height: textField.frame.height
-      ))
-    let iconView = UIImageView(
-      frame: CGRect(
-        x: 0,
-        y: -5,
-        width: 10,
-        height: 10
-      ))
-    iconView.image = KKDS.Image.ic_down_10_bk
-    rightPaddingView.addSubview(iconView)
+      )
+    )
+
+    let textFieldTag = TextFieldTag(rawValue: textField.tag)
+
+    if textFieldTag == .city {
+      rightPaddingView.addSubview(self.cityDownIconView)
+    } else if textFieldTag == .county {
+      rightPaddingView.addSubview(self.countyDownIconView)
+    }
 
     textField.rightView = rightPaddingView
     textField.rightViewMode = .always
