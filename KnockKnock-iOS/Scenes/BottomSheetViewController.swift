@@ -54,9 +54,9 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
 
   // MARK: - Bind
 
-  func setBottomSheetContents(contents: [String]) {
+  func setBottomSheetContents(contents: [String], bottomSheetType: BottomSheetType) {
     self.options = contents
-    self.containerView.bottomHeight = (contents.count * 50).f
+    self.containerView.bottomSheetType = bottomSheetType
   }
 
   // MARK: - Gesture
