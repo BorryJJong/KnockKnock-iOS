@@ -13,4 +13,6 @@ enum BottomSheetOption: String {
   case report = "신고하기"
   case share = "공유하기"
   case hide = "숨기기"
+  case city = "시/도"
+  case county = "시/군/구"
 }

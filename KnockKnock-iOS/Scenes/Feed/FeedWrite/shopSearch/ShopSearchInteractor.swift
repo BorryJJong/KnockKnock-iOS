@@ -56,3 +56,9 @@ final class ShopSearchInteractor: ShopSearchInteractorProtocol {
     )
   }
 }
+
+extension ShopSearchInteractor: DistrictSelectDelegate {
+  func fetchSelectedCity(city: String) {
+    self.presenter?.presentSelectedCity(city: city)
+  }
+}

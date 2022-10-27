@@ -17,6 +17,8 @@ protocol ShopSearchViewProtocol: AnyObject {
   func fetchShopAddress(address: AddressResult)
   func fetchCountyList(county: [String])
   func fetchCityList(cityList: [String])
+
+  func fetchSelectedCity(city: String)
 }
 
 final class ShopSearchViewController: BaseViewController<ShopSearchView> {
@@ -75,7 +77,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
     self.containerView.addressSearchButton.do {
       $0.addTarget(
         self,
-        action: #selector(searchButtonDidTap(_:)),
+        action: #selector(self.searchButtonDidTap(_:)),
         for: .touchUpInside)
     }
 
@@ -154,6 +156,10 @@ extension ShopSearchViewController: ShopSearchViewProtocol {
 
   func fetchCityList(cityList: [String]) {
     self.cityList = cityList
+  }
+
+  func fetchSelectedCity(city: String) {
+    self.containerView.cityTextField.text = city
   }
 }
 

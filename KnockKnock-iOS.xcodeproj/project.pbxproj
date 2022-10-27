@@ -126,6 +126,7 @@
 		619DEE9E2887B41B00C80095 /* CommentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619DEE9D2887B41B00C80095 /* CommentRepository.swift */; };
 		61A028372908D10100943A40 /* districts.json in Resources */ = {isa = PBXBuildFile; fileRef = 61A028362908D10100943A40 /* districts.json */; };
 		61A028392908D1F600943A40 /* DistrictsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A028382908D1F600943A40 /* DistrictsData.swift */; };
+		61A0283D29090B4500943A40 /* BottomSheetRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A0283C29090B4500943A40 /* BottomSheetRouter.swift */; };
 		61A5EA2328B3B71300A0214D /* StoreListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A5EA2228B3B71300A0214D /* StoreListView.swift */; };
 		61A5EA2528B3B72100A0214D /* StoreListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A5EA2428B3B72100A0214D /* StoreListViewController.swift */; };
 		61A5EA2728B3BEDC00A0214D /* StoreListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A5EA2628B3BEDC00A0214D /* StoreListCell.swift */; };
@@ -309,6 +310,7 @@
 		619DEE9D2887B41B00C80095 /* CommentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRepository.swift; sourceTree = "<group>"; };
 		61A028362908D10100943A40 /* districts.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = districts.json; sourceTree = "<group>"; };
 		61A028382908D1F600943A40 /* DistrictsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictsData.swift; sourceTree = "<group>"; };
+		61A0283C29090B4500943A40 /* BottomSheetRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetRouter.swift; sourceTree = "<group>"; };
 		61A5EA2228B3B71300A0214D /* StoreListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListView.swift; sourceTree = "<group>"; };
 		61A5EA2428B3B72100A0214D /* StoreListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListViewController.swift; sourceTree = "<group>"; };
 		61A5EA2628B3BEDC00A0214D /* StoreListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListCell.swift; sourceTree = "<group>"; };
@@ -492,11 +494,10 @@
 		201A288127BAAFDE004F7CD9 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				61A0283A29090B1C00943A40 /* BottomSheet */,
 				61C21CFB28C463CD009B5F4E /* Default */,
 				618D8B4A28BB355E00828794 /* AlertView.swift */,
-				617F9D72282BAF8E00C2BC9A /* BottomSheetView.swift */,
 				61FC60EC27B9244E00A51DBC /* MainTabBarController.swift */,
-				617F9D70282BAC1300C2BC9A /* BottomSheetViewController.swift */,
 				201077F027D3A94800280991 /* BaseComponent */,
 				201077FA27D3D24600280991 /* Cells */,
 				61C21D1028C764F7009B5F4E /* Login */,
@@ -722,6 +723,24 @@
 				61A028362908D10100943A40 /* districts.json */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		61A0283A29090B1C00943A40 /* BottomSheet */ = {
+			isa = PBXGroup;
+			children = (
+				61A0283B29090B2D00943A40 /* Views */,
+				617F9D70282BAC1300C2BC9A /* BottomSheetViewController.swift */,
+				61A0283C29090B4500943A40 /* BottomSheetRouter.swift */,
+			);
+			path = BottomSheet;
+			sourceTree = "<group>";
+		};
+		61A0283B29090B2D00943A40 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				617F9D72282BAF8E00C2BC9A /* BottomSheetView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		61A45CF128A7710400070B22 /* Event */ = {
@@ -1159,6 +1178,7 @@
 				61B95F5728F196F700B870A3 /* SettingFooterCollectionReusableView.swift in Sources */,
 				61215AC928507D51003FDCAA /* KKRouter.swift in Sources */,
 				61B6D98A288A96A300E60F08 /* ChallengeDetailPresenter.swift in Sources */,
+				61A0283D29090B4500943A40 /* BottomSheetRouter.swift in Sources */,
 				61C21CFD28C463E6009B5F4E /* DefaultCollectionViewCell.swift in Sources */,
 				618FDACF27E9642400C2823F /* UIButton+Ext.swift in Sources */,
 				61B6D984288A967A00E60F08 /* ChallengeDetailWorker.swift in Sources */,

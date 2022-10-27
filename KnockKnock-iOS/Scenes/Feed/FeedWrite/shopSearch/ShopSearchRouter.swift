@@ -14,7 +14,13 @@ protocol ShopSearchRouterProtocol: AnyObject {
   func passToFeedWriteView(source: ShopSearchViewProtocol, address: String?)
 }
 
+protocol DistrictSelectDelegate: AnyObject {
+  func fetchSelectedCity(city: String)
+} 
+
 final class ShopSearchRouter: ShopSearchRouterProtocol {
+
+  var districtSelectDelegate: DistrictSelectDelegate?
 
   static func createShopSearch() -> UIViewController {
 
@@ -29,6 +35,7 @@ final class ShopSearchRouter: ShopSearchRouterProtocol {
     presenter.view = view
     interactor.worker = worker
     interactor.presenter = presenter
+    router.districtSelectDelegate = interactor
 
     return view
   }
@@ -48,17 +55,17 @@ final class ShopSearchRouter: ShopSearchRouterProtocol {
   }
 
   func presentBottomSheetView(source: ShopSearchViewProtocol, content: [String]) {
-    let bottomSheetViewController = BottomSheetViewController().then {
-      $0.setBottomSheetContents(contents: content)
-      $0.modalPresentationStyle = .overFullScreen
-    }
-    
-    if let sourceView = source as? UIViewController {
-      sourceView.present(
-        bottomSheetViewController,
-        animated: false,
-        completion: nil
-      )
+    if let bottomSheetViewController = BottomSheetRouter.createBottomSheet(delegate: self.districtSelectDelegate!) as? BottomSheetViewController {
+      bottomSheetViewController.setBottomSheetContents(contents: content)
+      bottomSheetViewController.modalPresentationStyle = .overFullScreen
+
+      if let sourceView = source as? UIViewController {
+        sourceView.present(
+          bottomSheetViewController,
+          animated: false,
+          completion: nil
+        )
+      }
     }
   }
 }

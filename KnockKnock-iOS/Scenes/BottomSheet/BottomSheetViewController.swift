@@ -73,12 +73,12 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
     self.containerView.dimmedBackView.addGestureRecognizer(dimmedTap)
     self.containerView.dimmedBackView.isUserInteractionEnabled = true
 
-//    let swipeGesture = UISwipeGestureRecognizer(
-//      target: self,
-//      action: #selector(panGesture)
-//    )
-//    swipeGesture.direction = .down
-//    self.view.addGestureRecognizer(swipeGesture)
+    let swipeGesture = UISwipeGestureRecognizer(
+      target: self,
+      action: #selector(panGesture)
+    )
+    swipeGesture.direction = .down
+    self.view.addGestureRecognizer(swipeGesture)
   }
 
   @objc private func dimmedViewTapped(_ tapRecognizer: UITapGestureRecognizer) {
@@ -165,7 +165,7 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
       // 추후 케이스 별 코드 작성 필요
 
     default:
-      self.dismiss(animated: false)
+      self.router?.passDataToShopSearch(source: self, city: options[indexPath.row])
     }
   }
 }

@@ -8,27 +8,34 @@
 import UIKit
 
 protocol BottomSheetRouterProtocol: AnyObject {
-  static func createBottomSheet() -> UIViewController
+  static func createBottomSheet(delegate: DistrictSelectDelegate) -> UIViewController
 
-  func passDataToShopSearch()
+  func passDataToShopSearch(source: BottomSheetViewProtocol, city: String)
   func navigateToShopSearch(source: BottomSheetViewProtocol)
 }
 
 final class BottomSheetRouter: BottomSheetRouterProtocol {
-  static func createBottomSheet() -> UIViewController {
+
+  weak var delegate: DistrictSelectDelegate?
+
+  static func createBottomSheet(delegate: DistrictSelectDelegate) -> UIViewController {
     let view = BottomSheetViewController()
     let router = BottomSheetRouter()
 
     view.router = router
+    router.delegate = delegate
 
     return view
   }
 
-  func passDataToShopSearch() {
-
+  func passDataToShopSearch(source: BottomSheetViewProtocol, city: String) {
+    self.delegate?.fetchSelectedCity(city: city)
+    self.navigateToShopSearch(source: source)
   }
 
   func navigateToShopSearch(source: BottomSheetViewProtocol) {
-    
+    if let sourceView = source as? UIViewController {
+      sourceView.dismiss(animated: true)
+    }
   }
 }
