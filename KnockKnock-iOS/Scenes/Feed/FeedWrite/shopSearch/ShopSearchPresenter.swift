@@ -15,6 +15,7 @@ protocol ShopSearchPresenterProtocol {
   func presentCityList(cityList: [String])
 
   func presentSelectedCity(city: String)
+  func presentSelectedCounty(county: String)
 }
 
 final class ShopSearchPresenter: ShopSearchPresenterProtocol {
@@ -34,5 +35,9 @@ final class ShopSearchPresenter: ShopSearchPresenterProtocol {
 
   func presentSelectedCity(city: String) {
     self.view?.fetchSelectedCity(city: city)
+  }
+
+  func presentSelectedCounty(county: String) {
+    self.view?.fetchSelectedCounty(county: county)
   }
 }

@@ -19,6 +19,7 @@ protocol ShopSearchViewProtocol: AnyObject {
   func fetchCityList(cityList: [String])
 
   func fetchSelectedCity(city: String)
+  func fetchSelectedCounty(county: String)
 }
 
 final class ShopSearchViewController: BaseViewController<ShopSearchView> {
@@ -134,12 +135,19 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   }
 
   @objc func cityButtonDidTap(_ sender: UIButton) {
-    self.router?.presentBottomSheetView(source: self, content: self.cityList)
-    self.containerView.setButtonStatus(isCitySelected: true)
+    self.router?.presentBottomSheetView(
+      source: self,
+      content: self.cityList,
+      districtsType: .city
+    )
   }
 
   @objc func countyButtonDidTap(_ sender: UIButton) {
-    self.router?.presentBottomSheetView(source: self, content: self.countyList)
+    self.router?.presentBottomSheetView(
+      source: self,
+      content: self.countyList,
+      districtsType: .county
+    )
   }
 }
 
@@ -160,6 +168,13 @@ extension ShopSearchViewController: ShopSearchViewProtocol {
 
   func fetchSelectedCity(city: String) {
     self.containerView.cityTextField.text = city
+    self.containerView.setButtonStatus(isCitySelected: true)
+
+    self.interactor?.fetchCountyList(city: city)
+  }
+
+  func fetchSelectedCounty(county: String) {
+    self.containerView.countyTextField.text = county
   }
 }
 

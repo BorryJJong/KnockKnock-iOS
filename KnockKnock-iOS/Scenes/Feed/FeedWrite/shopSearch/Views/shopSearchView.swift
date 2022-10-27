@@ -106,6 +106,7 @@ final class ShopSearchView: UIView {
     $0.rowHeight = UITableView.automaticDimension
     $0.registCell(type: AdressCell.self)
     $0.isHidden = true
+    $0.contentInsetAdjustmentBehavior = .never
   }
 
   private let statusImageView = UIImageView().then {
@@ -176,11 +177,16 @@ final class ShopSearchView: UIView {
 
   func setButtonStatus(isCitySelected: Bool) {
     self.countyButton.isEnabled = isCitySelected
+
     if self.countyButton.isEnabled {
-      self.countyButton.isEnabled = true
       self.countyTextField.backgroundColor = .white
-      self.countyTextField.textColor = KKDS.Color.gray30
       self.countyDownIconView.image = KKDS.Image.ic_down_10_bk
+      
+      if self.countyTextField.text == nil {
+        self.countyTextField.textColor = KKDS.Color.gray30
+      } else {
+        self.countyTextField.textColor = KKDS.Color.black
+      }
     } else {
       self.countyTextField.backgroundColor = KKDS.Color.gray10
       self.countyTextField.textColor = KKDS.Color.gray30

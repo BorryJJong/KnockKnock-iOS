@@ -127,6 +127,7 @@
 		61A028372908D10100943A40 /* districts.json in Resources */ = {isa = PBXBuildFile; fileRef = 61A028362908D10100943A40 /* districts.json */; };
 		61A028392908D1F600943A40 /* DistrictsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A028382908D1F600943A40 /* DistrictsData.swift */; };
 		61A0283D29090B4500943A40 /* BottomSheetRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A0283C29090B4500943A40 /* BottomSheetRouter.swift */; };
+		61A02840290A4FD000943A40 /* DistrictsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A0283F290A4FD000943A40 /* DistrictsType.swift */; };
 		61A5EA2328B3B71300A0214D /* StoreListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A5EA2228B3B71300A0214D /* StoreListView.swift */; };
 		61A5EA2528B3B72100A0214D /* StoreListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A5EA2428B3B72100A0214D /* StoreListViewController.swift */; };
 		61A5EA2728B3BEDC00A0214D /* StoreListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A5EA2628B3BEDC00A0214D /* StoreListCell.swift */; };
@@ -311,6 +312,7 @@
 		61A028362908D10100943A40 /* districts.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = districts.json; sourceTree = "<group>"; };
 		61A028382908D1F600943A40 /* DistrictsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictsData.swift; sourceTree = "<group>"; };
 		61A0283C29090B4500943A40 /* BottomSheetRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetRouter.swift; sourceTree = "<group>"; };
+		61A0283F290A4FD000943A40 /* DistrictsType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictsType.swift; sourceTree = "<group>"; };
 		61A5EA2228B3B71300A0214D /* StoreListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListView.swift; sourceTree = "<group>"; };
 		61A5EA2428B3B72100A0214D /* StoreListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListViewController.swift; sourceTree = "<group>"; };
 		61A5EA2628B3BEDC00A0214D /* StoreListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListCell.swift; sourceTree = "<group>"; };
@@ -919,6 +921,7 @@
 				618D8B4C28BC61A100828794 /* BottomSheetOption.swift */,
 				6139FF7028E4165D00CC9950 /* PropertyType.swift */,
 				61E87EB428D17CAF0005CAA6 /* NetworkErrorType.swift */,
+				61A0283F290A4FD000943A40 /* DistrictsType.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -1217,6 +1220,7 @@
 				61FC60E927B9244D00A51DBC /* AppDelegate.swift in Sources */,
 				611BD4BC27E70393007D5C79 /* PropertySelectViewController.swift in Sources */,
 				617F9D65282A5AED00C2BC9A /* ChallengeDetailView.swift in Sources */,
+				61A02840290A4FD000943A40 /* DistrictsType.swift in Sources */,
 				61C21D1528C7653B009B5F4E /* LoginView.swift in Sources */,
 				61A8DC59288506A6000512EC /* CommentHeaderCollectionReusableView.swift in Sources */,
 				619DEE9C28868E7E00C80095 /* Comment.swift in Sources */,

@@ -61,4 +61,8 @@ extension ShopSearchInteractor: DistrictSelectDelegate {
   func fetchSelectedCity(city: String) {
     self.presenter?.presentSelectedCity(city: city)
   }
+
+  func fetchSelectedCounty(county: String) {
+    self.presenter?.presentSelectedCounty(county: county)
+  }
 }

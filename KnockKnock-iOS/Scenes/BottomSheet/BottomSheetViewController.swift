@@ -13,27 +13,29 @@ protocol BottomSheetViewProtocol {
 }
 
 final class BottomSheetViewController: BaseViewController<BottomSheetView> {
-
+  
   // MARK: - Properties
-
+  
   private var options: [String] = []
+  var districtsType: DistrictsType?
+  
   var router: BottomSheetRouterProtocol?
-
+  
   // MARK: - Life Cycle
-
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setupConfigure()
     self.setupGestureRecognizer()
   }
-
+  
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     self.containerView.showBottomSheet()
   }
   
   // MARK: - Configure
-
+  
   override func setupConfigure() {
     self.view.backgroundColor = .clear
     self.containerView.tableView.do {
@@ -55,16 +57,16 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
       )
     }
   }
-
+  
   // MARK: - Bind
-
+  
   func setBottomSheetContents(contents: [String]) {
     self.options = contents
     self.containerView.bottomHeight = (contents.count * 50).f
   }
-
+  
   // MARK: - Gesture
-
+  
   private func setupGestureRecognizer() {
     let dimmedTap = UITapGestureRecognizer(
       target: self,
@@ -72,7 +74,7 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
     )
     self.containerView.dimmedBackView.addGestureRecognizer(dimmedTap)
     self.containerView.dimmedBackView.isUserInteractionEnabled = true
-
+    
     let swipeGesture = UISwipeGestureRecognizer(
       target: self,
       action: #selector(panGesture)
@@ -80,26 +82,26 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
     swipeGesture.direction = .down
     self.view.addGestureRecognizer(swipeGesture)
   }
-
+  
   @objc private func dimmedViewTapped(_ tapRecognizer: UITapGestureRecognizer) {
     self.containerView.hideBottomSheet(view: self)
   }
-
+  
   @objc func panGesture(_ recognizer: UISwipeGestureRecognizer) {
     if recognizer.state == .ended {
-
+      
       switch recognizer.direction {
       case .down:
         self.containerView.hideBottomSheet(view: self)
-
+        
       default:
         break
       }
     }
   }
-
+  
   // MARK: - Alert View Button Actions
-
+  
   @objc private func alertCancelButtonDidTap(_ sender: UIButton) {
     self.containerView.do {
       $0.bottomSheetView.isHidden = false
@@ -107,7 +109,7 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
       $0.tableView.reloadData()
     }
   }
-
+  
   @objc private func alertConfirmButtonDidTap(_ sender: UIButton) {
     self.containerView.hideBottomSheet(view: self)
   }
@@ -128,7 +130,7 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
   ) -> Int {
     return self.options.count
   }
-
+  
   func tableView(
     _ tableView: UITableView,
     cellForRowAt indexPath: IndexPath
@@ -139,33 +141,43 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
     )
     cell.setData(labelText: options[indexPath.row])
     cell.setSelected(true, animated: false)
-
+    
     return cell
   }
-
+  
   func tableView(
     _ tableView: UITableView,
     didSelectRowAt indexPath: IndexPath
   ) {
-    let option = BottomSheetOption(rawValue: options[indexPath.row])
-    
-    switch option {
-    case .delete:
-      self.containerView.do {
-        $0.setHiddenStatusAlertView(isHidden: false)
-        $0.alertView.bind(
-          content: "댓글을 삭제하시겠습니까?",
-          isCancelActive: true
-        )
+    if let districtsType = self.districtsType {
+      switch districtsType {
+      case .city:
+        self.router?.passCityDataToShopSearch(source: self, city: options[indexPath.row])
+      case .county:
+        self.router?.passCountyDataToShopSearch(source: self, county: options[indexPath.row])
       }
-
-    case .edit:
-      self.containerView.hideBottomSheet(view: self)
+    } else {
       
-      // 추후 케이스 별 코드 작성 필요
-
-    default:
-      self.router?.passDataToShopSearch(source: self, city: options[indexPath.row])
+      let option = BottomSheetOption(rawValue: options[indexPath.row])
+      
+      switch option {
+      case .delete:
+        self.containerView.do {
+          $0.setHiddenStatusAlertView(isHidden: false)
+          $0.alertView.bind(
+            content: "댓글을 삭제하시겠습니까?",
+            isCancelActive: true
+          )
+        }
+        
+      case .edit:
+        self.containerView.hideBottomSheet(view: self)
+        
+        // 추후 케이스 별 코드 작성 필요
+        
+      default:
+        self.router?.passCountyDataToShopSearch(source: self, county: options[indexPath.row])
+      }
     }
   }
 }

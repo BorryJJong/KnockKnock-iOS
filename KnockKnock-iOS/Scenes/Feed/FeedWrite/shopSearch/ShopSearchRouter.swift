@@ -10,12 +10,13 @@ import UIKit
 protocol ShopSearchRouterProtocol: AnyObject {
   static func createShopSearch() -> UIViewController
 
-  func presentBottomSheetView(source: ShopSearchViewProtocol, content: [String])
+  func presentBottomSheetView(source: ShopSearchViewProtocol, content: [String], districtsType: DistrictsType)
   func passToFeedWriteView(source: ShopSearchViewProtocol, address: String?)
 }
 
 protocol DistrictSelectDelegate: AnyObject {
   func fetchSelectedCity(city: String)
+  func fetchSelectedCounty(county: String)
 } 
 
 final class ShopSearchRouter: ShopSearchRouterProtocol {
@@ -54,18 +55,25 @@ final class ShopSearchRouter: ShopSearchRouterProtocol {
     sourceView.navigationController?.popViewController(animated: true)
   }
 
-  func presentBottomSheetView(source: ShopSearchViewProtocol, content: [String]) {
-    if let bottomSheetViewController = BottomSheetRouter.createBottomSheet(delegate: self.districtSelectDelegate!) as? BottomSheetViewController {
-      bottomSheetViewController.setBottomSheetContents(contents: content)
-      bottomSheetViewController.modalPresentationStyle = .overFullScreen
+  func presentBottomSheetView(
+    source: ShopSearchViewProtocol,
+    content: [String],
+    districtsType: DistrictsType
+  ) {
+    guard let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
+      delegate: self.districtSelectDelegate!,
+      districtsType: districtsType
+    ) as? BottomSheetViewController else { return }
 
-      if let sourceView = source as? UIViewController {
-        sourceView.present(
-          bottomSheetViewController,
-          animated: false,
-          completion: nil
-        )
-      }
+    bottomSheetViewController.setBottomSheetContents(contents: content)
+    bottomSheetViewController.modalPresentationStyle = .overFullScreen
+
+    if let sourceView = source as? UIViewController {
+      sourceView.present(
+        bottomSheetViewController,
+        animated: false,
+        completion: nil
+      )
     }
   }
 }
