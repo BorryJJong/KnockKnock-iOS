@@ -176,7 +176,7 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
         // 추후 케이스 별 코드 작성 필요
         
       default:
-        self.router?.passCountyDataToShopSearch(source: self, county: options[indexPath.row])
+        print("Error")
       }
     }
   }
