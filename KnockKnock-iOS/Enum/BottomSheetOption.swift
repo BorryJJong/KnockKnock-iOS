@@ -18,6 +18,5 @@ enum BottomSheetOption: String {
 enum BottomSheetType: CGFloat {
   case small = 0.9
   case medium = 0.8
-  case large = 0.3
-//  case full = 0.2
+  case large = 0.2
 }

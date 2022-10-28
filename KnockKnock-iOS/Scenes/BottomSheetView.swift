@@ -32,12 +32,7 @@ final class BottomSheetView: UIView {
   let screenHeight = UIDevice.current.heightOfSafeArea(includeBottomInset: true)
   
   lazy var topConstant = self.screenHeight
-
   lazy var bottomHeight: CGFloat = bottomSheetType.rawValue * screenHeight
-
-  var bottomSheetPanMinTopConstant: CGFloat = 30.f
-
-  lazy var bottomSheetPanStartingTopConstant = bottomSheetPanMinTopConstant
 
   // MARK: - UIs
 
@@ -62,6 +57,7 @@ final class BottomSheetView: UIView {
     $0.separatorColor = .clear
     $0.rowHeight = UITableView.automaticDimension
     $0.registCell(type: BottomMenuCell.self)
+    $0.isScrollEnabled = true
   }
 
   let alertView = AlertView().then {
@@ -88,31 +84,6 @@ final class BottomSheetView: UIView {
 
   // MARK: - Bottom Sheet Animation
 
-//  @objc func panGesture(_ recognizer: UIPanGestureRecognizer) {
-//    let translationY = recognizer.translation(in: self).y
-//    let velocity = recognizer.velocity(in: self)
-//
-//    switch recognizer.state {
-//    case .began:
-//      self.bottomSheetPanStartingTopConstant = self.topConstant
-//
-//    case .changed:
-//      if self.bottomSheetPanStartingTopConstant + translationY > bottomSheetPanMinTopConstant {
-//        self.topConstant = bottomSheetPanStartingTopConstant + translationY
-//        self.bottomSheetView.snp.updateConstraints {
-//          $0.top.equalToSuperview().offset(self.topConstant)
-//        }
-//      }
-//    case .ended:
-//      if velocity.y > 1500 {
-//        hideBottomSheet(view: self)
-//      }
-//    default:
-//      break
-//
-//    }
-//  }
-
   func showBottomSheet() {
     self.bottomSheetView.snp.updateConstraints {
       $0.top.equalToSuperview().offset(self.bottomHeight)
@@ -126,7 +97,6 @@ final class BottomSheetView: UIView {
   }
 
   func hideBottomSheet(view: BottomSheetViewController) {
-
     self.bottomSheetView.snp.updateConstraints {
       $0.top.equalToSuperview().offset(self.screenHeight)
     }
