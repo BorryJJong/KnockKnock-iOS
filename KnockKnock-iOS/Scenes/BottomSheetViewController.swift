@@ -69,28 +69,43 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
     self.containerView.dimmedBackView.addGestureRecognizer(dimmedTap)
     self.containerView.dimmedBackView.isUserInteractionEnabled = true
 
-    let swipeGesture = UISwipeGestureRecognizer(
+    let gesture = UIPanGestureRecognizer(
       target: self,
-      action: #selector(panGesture)
+      action: #selector(self.panGesture(_:))
     )
-    swipeGesture.direction = .down
-    self.view.addGestureRecognizer(swipeGesture)
+    gesture.delaysTouchesBegan = false
+    gesture.delaysTouchesEnded = false
+
+    self.view.addGestureRecognizer(gesture)
   }
 
   @objc private func dimmedViewTapped(_ tapRecognizer: UITapGestureRecognizer) {
     self.containerView.hideBottomSheet(view: self)
   }
 
-  @objc func panGesture(_ recognizer: UISwipeGestureRecognizer) {
-    if recognizer.state == .ended {
+  @objc func panGesture(_ recognizer: UIPanGestureRecognizer) {
+    let translationY = recognizer.translation(in: self.containerView).y
+    let velocity = recognizer.velocity(in: self.containerView)
 
-      switch recognizer.direction {
-      case .down:
-        self.containerView.hideBottomSheet(view: self)
+    switch recognizer.state {
+    case .began:
+      self.containerView.bottomSheetPanStartingTopConstant = self.containerView.topConstant
 
-      default:
-        break
+    case .changed:
+      if self.containerView.bottomSheetPanStartingTopConstant + translationY > self.containerView.bottomSheetPanMinTopConstant {
+        self.containerView.topConstant = self.containerView.bottomSheetPanStartingTopConstant + translationY
+        self.containerView.bottomSheetView.snp.updateConstraints {
+          $0.top.equalToSuperview().offset(self.containerView.topConstant)
+        }
       }
+    case .ended:
+      if velocity.y > 1500 {
+        self.containerView.hideBottomSheet(view: self)
+        return
+      }
+    default:
+      break
+
     }
   }
 

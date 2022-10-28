@@ -29,10 +29,15 @@ final class BottomSheetView: UIView {
 
   var bottomSheetType: BottomSheetType = .medium
 
-  let screenHeight = UIDevice.current.heightOfSafeArea()
-  lazy var topConstant = self.safeAreaInsets.bottom + self.screenHeight
+  let screenHeight = UIDevice.current.heightOfSafeArea(includeBottomInset: true)
+  
+  lazy var topConstant = self.screenHeight
 
   lazy var bottomHeight: CGFloat = bottomSheetType.rawValue * screenHeight
+
+  var bottomSheetPanMinTopConstant: CGFloat = 30.f
+
+  lazy var bottomSheetPanStartingTopConstant = bottomSheetPanMinTopConstant
 
   // MARK: - UIs
 
@@ -83,15 +88,35 @@ final class BottomSheetView: UIView {
 
   // MARK: - Bottom Sheet Animation
 
-  func showBottomSheet() {
-    let safeAreaHeight: CGFloat = self.safeAreaLayoutGuide.layoutFrame.height
-    let bottomPadding: CGFloat = self.safeAreaInsets.bottom
+//  @objc func panGesture(_ recognizer: UIPanGestureRecognizer) {
+//    let translationY = recognizer.translation(in: self).y
+//    let velocity = recognizer.velocity(in: self)
+//
+//    switch recognizer.state {
+//    case .began:
+//      self.bottomSheetPanStartingTopConstant = self.topConstant
+//
+//    case .changed:
+//      if self.bottomSheetPanStartingTopConstant + translationY > bottomSheetPanMinTopConstant {
+//        self.topConstant = bottomSheetPanStartingTopConstant + translationY
+//        self.bottomSheetView.snp.updateConstraints {
+//          $0.top.equalToSuperview().offset(self.topConstant)
+//        }
+//      }
+//    case .ended:
+//      if velocity.y > 1500 {
+//        hideBottomSheet(view: self)
+//      }
+//    default:
+//      break
+//
+//    }
+//  }
 
+  func showBottomSheet() {
     self.bottomSheetView.snp.updateConstraints {
-      $0.top.equalTo((safeAreaHeight + bottomPadding) - self.bottomHeight)
-        print(safeAreaHeight)
-            print( bottomPadding)
-              print(self.bottomHeight)
+      $0.top.equalToSuperview().offset(self.bottomHeight)
+      print(bottomHeight)
     }
 
     UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseIn, animations: {
@@ -101,13 +126,11 @@ final class BottomSheetView: UIView {
   }
 
   func hideBottomSheet(view: BottomSheetViewController) {
-    let safeAreaHeight = self.safeAreaLayoutGuide.layoutFrame.height
-    let bottomPadding = self.safeAreaInsets.bottom
 
     self.bottomSheetView.snp.updateConstraints {
-      $0.top.equalToSuperview().offset(safeAreaHeight + bottomPadding)
+      $0.top.equalToSuperview().offset(self.screenHeight)
     }
-//    self.bottomSheetViewTopConstraint.constant = safeAreaHeight + bottomPadding
+
     UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseIn, animations: {
       self.dimmedBackView.alpha = 0.0
       self.layoutIfNeeded()
