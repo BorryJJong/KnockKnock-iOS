@@ -29,6 +29,8 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     feedId: Int,
     challengeId: Int
   ) {
+    LoadingIndicator.showLoading()
+    
     self.worker?.fetchFeedList(
       currentPage: currentPage,
       count: pageSize,

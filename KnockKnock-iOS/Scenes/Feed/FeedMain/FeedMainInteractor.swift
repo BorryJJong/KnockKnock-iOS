@@ -30,6 +30,8 @@ final class FeedMainInteractor: FeedMainInteractorProtocol {
   }
 
   func fetchFeedMain(currentPage: Int, pageSize: Int, challengeId: Int) {
+    LoadingIndicator.showLoading()
+    
     self.worker?.fetchFeedMain(
       currentPage: currentPage,
       pageSize: pageSize,

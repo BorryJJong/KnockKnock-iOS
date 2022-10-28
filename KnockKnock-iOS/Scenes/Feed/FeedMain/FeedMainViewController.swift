@@ -62,7 +62,6 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    LoadingIndicator.showLoading()
     self.extendedLayoutIncludesOpaqueBars = true
     self.navigationItem.hidesSearchBarWhenScrolling = false
 

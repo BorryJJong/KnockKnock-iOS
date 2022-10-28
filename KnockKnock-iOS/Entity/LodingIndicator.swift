@@ -38,20 +38,19 @@ final class LoadingIndicator {
       shared.backgroundView = backgroundView
     }
     loadingIndicatorView.startAnimating()
-
-    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-      LoadingIndicator.hideLoading()
-    }
   }
 
   static func hideLoading() {
     guard let window = UIApplication.shared.windows.last else { return }
 
-    window.subviews.filter({
-      $0 is UIActivityIndicatorView
-    }).forEach {
-      $0.removeFromSuperview()
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+      window.subviews.filter({
+        $0 is UIActivityIndicatorView
+      }).forEach {
+        $0.removeFromSuperview()
+      }
+      shared.backgroundView?.removeFromSuperview()
+
     }
-    shared.backgroundView?.removeFromSuperview()
   }
 }

@@ -16,6 +16,7 @@ final class FeedListPresenter: FeedListPresenterProtocol {
   var view: FeedListViewController?
 
   func presentFetchFeedList(feedList: FeedList) {
+    LoadingIndicator.hideLoading()
     self.view?.fetchFeedList(feedList: feedList)
   }
 }
