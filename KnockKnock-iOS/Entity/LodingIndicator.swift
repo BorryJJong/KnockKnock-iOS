@@ -8,6 +8,7 @@
 import UIKit
 
 import Then
+import Lottie
 
 final class LoadingIndicator {
   private static let shared = LoadingIndicator()
@@ -15,21 +16,19 @@ final class LoadingIndicator {
 
   static func showLoading() {
     guard let window = UIApplication.shared.windows.last else { return }
-
-    let loadingIndicatorView: UIActivityIndicatorView
+    var loadingIndicatorView = LottieAnimationView(name: "zero_waste_loading")
 
     if let existedView = window.subviews.first(where: {
-      $0 is UIActivityIndicatorView
-    }) as? UIActivityIndicatorView {
+      $0 is LottieAnimationView
+    }) as? LottieAnimationView {
       loadingIndicatorView = existedView
     } else {
       let backgroundView = UIView().then {
-        $0.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
+        $0.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.5)
         $0.frame = window.frame
       }
-      loadingIndicatorView = UIActivityIndicatorView(style: .large)
-      loadingIndicatorView.frame = window.frame
-      loadingIndicatorView.color = .white
+      loadingIndicatorView.frame = CGRect(x: 0, y: 0, width: 120, height: 120)
+      loadingIndicatorView.center = window.center
 
       window.backgroundColor = .clear
       window.addSubview(backgroundView)
@@ -37,15 +36,17 @@ final class LoadingIndicator {
 
       shared.backgroundView = backgroundView
     }
-    loadingIndicatorView.startAnimating()
+    loadingIndicatorView.contentMode = .scaleAspectFit
+    loadingIndicatorView.play()
+    loadingIndicatorView.loopMode = .loop
   }
 
   static func hideLoading() {
     guard let window = UIApplication.shared.windows.last else { return }
 
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
       window.subviews.filter({
-        $0 is UIActivityIndicatorView
+        $0 is LottieAnimationView
       }).forEach {
         $0.removeFromSuperview()
       }

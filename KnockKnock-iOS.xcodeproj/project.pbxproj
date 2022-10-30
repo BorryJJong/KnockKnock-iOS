@@ -125,6 +125,8 @@
 		618FDACF27E9642400C2823F /* UIButton+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618FDACE27E9642400C2823F /* UIButton+Ext.swift */; };
 		619DEE9C28868E7E00C80095 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619DEE9B28868E7E00C80095 /* Comment.swift */; };
 		619DEE9E2887B41B00C80095 /* CommentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619DEE9D2887B41B00C80095 /* CommentRepository.swift */; };
+		61A02843290E347900943A40 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 61A02842290E347900943A40 /* Lottie */; };
+		61A02846290E358F00943A40 /* zero_waste_loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 61A02845290E358F00943A40 /* zero_waste_loading.json */; };
 		61A5EA2328B3B71300A0214D /* StoreListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A5EA2228B3B71300A0214D /* StoreListView.swift */; };
 		61A5EA2528B3B72100A0214D /* StoreListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A5EA2428B3B72100A0214D /* StoreListViewController.swift */; };
 		61A5EA2728B3BEDC00A0214D /* StoreListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A5EA2628B3BEDC00A0214D /* StoreListCell.swift */; };
@@ -307,6 +309,7 @@
 		618FDACE27E9642400C2823F /* UIButton+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Ext.swift"; sourceTree = "<group>"; };
 		619DEE9B28868E7E00C80095 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		619DEE9D2887B41B00C80095 /* CommentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRepository.swift; sourceTree = "<group>"; };
+		61A02845290E358F00943A40 /* zero_waste_loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = zero_waste_loading.json; sourceTree = "<group>"; };
 		61A5EA2228B3B71300A0214D /* StoreListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListView.swift; sourceTree = "<group>"; };
 		61A5EA2428B3B72100A0214D /* StoreListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListViewController.swift; sourceTree = "<group>"; };
 		61A5EA2628B3BEDC00A0214D /* StoreListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListCell.swift; sourceTree = "<group>"; };
@@ -379,6 +382,7 @@
 				61C21D0F28C75E97009B5F4E /* KakaoSDKUser in Frameworks */,
 				61C21D0428C46C9E009B5F4E /* FirebaseAppDistribution-Beta in Frameworks */,
 				61BD0A9A28EAD3A5003038B7 /* Alamofire in Frameworks */,
+				61A02843290E347900943A40 /* Lottie in Frameworks */,
 				61C21D0228C46C9E009B5F4E /* FirebaseAnalytics in Frameworks */,
 				34F6FB7E518CFAF1AD6C3455 /* Pods_KnockKnock_iOS.framework in Frameworks */,
 				61C21D0D28C75E97009B5F4E /* KakaoSDKCommon in Frameworks */,
@@ -714,6 +718,14 @@
 			path = FeedSearch;
 			sourceTree = "<group>";
 		};
+		61A02844290E358100943A40 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				61A02845290E358F00943A40 /* zero_waste_loading.json */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		61A45CF128A7710400070B22 /* Event */ = {
 			isa = PBXGroup;
 			children = (
@@ -917,6 +929,7 @@
 		61FC60E727B9244D00A51DBC /* KnockKnock-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				61A02844290E358100943A40 /* Utils */,
 				61C21D0528C4C971009B5F4E /* GoogleService-Info.plist */,
 				61E3087A2873349B001394B6 /* Enum */,
 				61215AC728507D3F003FDCAA /* Network */,
@@ -968,6 +981,7 @@
 				61C21D0128C46C9E009B5F4E /* FirebaseAnalytics */,
 				61C21D0328C46C9E009B5F4E /* FirebaseAppDistribution-Beta */,
 				61BD0A9928EAD3A5003038B7 /* Alamofire */,
+				61A02842290E347900943A40 /* Lottie */,
 			);
 			productName = "KnockKnock-iOS";
 			productReference = 61FC60E527B9244D00A51DBC /* KnockKnock-iOS.app */;
@@ -1002,6 +1016,7 @@
 				61C21D0928C75E97009B5F4E /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 				61C21D0028C46C9E009B5F4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				61BD0A9828EAD3A5003038B7 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				61A02841290E347900943A40 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			productRefGroup = 61FC60E627B9244D00A51DBC /* Products */;
 			projectDirPath = "";
@@ -1017,6 +1032,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61A02846290E358F00943A40 /* zero_waste_loading.json in Resources */,
 				204320C928367AD300E6FD06 /* .swiftlint.yml in Resources */,
 				61C21D0628C4C971009B5F4E /* GoogleService-Info.plist in Resources */,
 				61FC60F527B9244F00A51DBC /* LaunchScreen.storyboard in Resources */,
@@ -1486,6 +1502,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		61A02841290E347900943A40 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 		61BD0A9828EAD3A5003038B7 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -1521,6 +1545,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 613856D4289900FE00BE347E /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		61A02842290E347900943A40 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61A02841290E347900943A40 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
 		};
 		61BD0A9928EAD3A5003038B7 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
