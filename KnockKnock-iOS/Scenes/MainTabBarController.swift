@@ -31,7 +31,7 @@ final class MainTabBarController: UITabBarController {
       selectedImage: KKDS.Image.ic_bottom_home_27_on
     ),
     .feed: UITabBarItem(
-      title: "검색",
+      title: "피드",
       image: KKDS.Image.ic_bottom_store_27_off,
       selectedImage: KKDS.Image.ic_bottom_store_27_on
     ),
