@@ -1,5 +1,5 @@
 //
-//  SettingCollectionReuasbleHeaderView.swift
+//  MyHeaderCollectionReusableView.swift
 //  KnockKnock-iOS
 //
 //  Created by Daye on 2022/10/07.
@@ -11,7 +11,7 @@ import Then
 import KKDSKit
 import SnapKit
 
-final class SettingHeaderCollectionReusableView: UICollectionReusableView {
+final class MyHeaderCollectionReusableView: UICollectionReusableView {
 
   // MARK: - Constants
 

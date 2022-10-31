@@ -1,5 +1,5 @@
 //
-//  SettingView.swift
+//  MyView.swift
 //  KnockKnock-iOS
 //
 //  Created by Daye on 2022/10/05.
@@ -11,7 +11,7 @@ import SnapKit
 import Then
 import KKDSKit
 
-final class SettingView: UIView {
+final class MyView: UIView {
 
   // MARK: - UIs
 

@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  MyFooterCollectionReusableView.swift
 //  KnockKnock-iOS
 //
 //  Created by Daye on 2022/10/08.
@@ -11,7 +11,7 @@ import SnapKit
 import Then
 import KKDSKit
 
-final class SettingFooterCollectionReusableView: UICollectionReusableView {
+final class MyFooterCollectionReusableView: UICollectionReusableView {
 
   // MARK: - Constants
 
