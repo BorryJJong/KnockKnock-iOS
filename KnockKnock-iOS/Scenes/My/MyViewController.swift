@@ -26,7 +26,7 @@ final class MyViewController: BaseViewController<MyView> {
     self.containerView.settingCollectionView.do {
       $0.dataSource = self
       $0.delegate = self
-      $0.registCell(type: SettingCell.self)
+      $0.registCell(type: MyCell.self)
       $0.registHeaderView(type: MyHeaderCollectionReusableView.self)
       $0.registFooterView(type: MyFooterCollectionReusableView.self)
     }
@@ -40,7 +40,7 @@ extension MyViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
-    let cell = collectionView.dequeueCell(withType: SettingCell.self, for: indexPath)
+    let cell = collectionView.dequeueCell(withType: MyCell.self, for: indexPath)
 
     return cell
   }
@@ -54,6 +54,13 @@ extension MyViewController: UICollectionViewDataSource {
 
   func numberOfSections(in collectionView: UICollectionView) -> Int {
     return 3
+  }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    didSelectItemAt indexPath: IndexPath
+  ) {
+    self.navigationController?.pushViewController(NoticeViewController(), animated: true)
   }
 }
 

@@ -1,5 +1,5 @@
 //
-//  SettingCell.swift
+//  MyCell.swift
 //  KnockKnock-iOS
 //
 //  Created by Daye on 2022/10/05.
@@ -11,7 +11,7 @@ import SnapKit
 import KKDSKit
 import Then
 
-final class SettingCell: BaseCollectionViewCell {
+final class MyCell: BaseCollectionViewCell {
 
   // MARK: - UI
 
