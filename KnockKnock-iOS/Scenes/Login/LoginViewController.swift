@@ -33,12 +33,6 @@ final class LoginViewController: BaseViewController<LoginView> {
   // MARK: - Button Actions
 
   @objc func kakaoLoginButtonDidTap(_ sender: UIButton) {
-    UserApi.shared.loginWithKakaoAccount(completion: { (oauthToken, error) in
-      if let error = error {
-        print(error)
-      } else {
-        print(oauthToken)
-      }
-    })
+
   }
 }
