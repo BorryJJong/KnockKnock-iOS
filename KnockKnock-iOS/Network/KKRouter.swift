@@ -22,6 +22,9 @@ enum KKRouter: URLRequestConvertible {
     }
   }
 
+  case socialLogin(loginInfo: Parameters)
+  case signUp(userInfo: Parameters)
+
   case getChallengeResponse
   case getChallengeDetail(id: Int)
   case getChallengeTitles
@@ -40,11 +43,19 @@ enum KKRouter: URLRequestConvertible {
         .getChallengeDetail,
         .requestShopAddress:
       return .get
+
+    case .socialLogin,
+        .signUp:
+
+      return .post
     }
   }
 
   var path: String {
     switch self {
+
+    case .socialLogin: return "users/social-login"
+    case .signUp: return "users/sign-up"
     case .getChallengeResponse: return "challenges"
     case .getChallengeDetail(let id): return "challenges/\(id)"
     case .getFeedMain: return "feed/main"
@@ -57,6 +68,12 @@ enum KKRouter: URLRequestConvertible {
 
   var parameters: Parameters? {
     switch self {
+    case let .socialLogin(loginInfo):
+      return loginInfo
+
+    case let .signUp(userInfo):
+      return userInfo
+
     case  .getChallengeDetail, .getChallengeResponse, .getChallengeTitles, .getFeed:
       return nil
 
@@ -94,9 +111,6 @@ enum KKRouter: URLRequestConvertible {
         request = try URLEncoding.default.encode(request, with: parameters)
         request.setValue(API.KAKAO_REST_API_KEY, forHTTPHeaderField: "Authorization")
 
-      case .getChallengeDetail:
-        break
-        
       default:
         request = try URLEncoding.default.encode(request, with: parameters)
       }

@@ -33,6 +33,6 @@ final class LoginViewController: BaseViewController<LoginView> {
   // MARK: - Button Actions
 
   @objc func kakaoLoginButtonDidTap(_ sender: UIButton) {
-
+    LoginRepository().requestToken(socialType: .kakao)
   }
 }

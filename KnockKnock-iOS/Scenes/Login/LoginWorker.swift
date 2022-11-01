@@ -8,6 +8,7 @@
 import UIKit
 
 protocol LoginWorkerProtocol {
+  
 }
 
 final class LoginWorker: LoginWorkerProtocol {
