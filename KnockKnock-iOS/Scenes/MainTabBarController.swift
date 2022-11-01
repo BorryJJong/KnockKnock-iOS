@@ -56,7 +56,7 @@ final class MainTabBarController: UITabBarController {
   let feed = FeedMainRouter.createFeed()
   let post = FeedWriteRouter.createFeedWrite()
   let challenge = ChallengeRouter.createChallenge()
-  let my = SettingViewController()
+  let my = LoginViewController()
   //  let my = MyViewController()
   
   // MARK: - Initialize
