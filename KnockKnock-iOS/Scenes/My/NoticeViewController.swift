@@ -7,6 +7,8 @@
 
 import UIKit
 
+import KKDSKit
+
 final class NoticeViewController: BaseViewController<NoticeView> {
 
   // MARK: - Life Cycles
@@ -19,6 +21,14 @@ final class NoticeViewController: BaseViewController<NoticeView> {
   // MARK: - Configure
 
   override func setupConfigure() {
+    let backButton = UIBarButtonItem(
+      image: KKDS.Image.ic_back_24_bk,
+      style: .done,
+      target: self,
+      action: #selector(self.backButtonDidTap(_:))
+    )
+
+    self.navigationItem.leftBarButtonItem = backButton
     self.navigationController?.navigationBar.setDefaultAppearance()
     self.navigationItem.title = "공지사항"
 
@@ -28,6 +38,12 @@ final class NoticeViewController: BaseViewController<NoticeView> {
       $0.delegate = self
       $0.dataSource = self
     }
+  }
+
+  // MARK: - Button Actions
+
+  @objc private func backButtonDidTap(_ sender: UIButton) {
+    self.navigationController?.popViewController(animated: true)
   }
 }
 
@@ -46,8 +62,21 @@ extension NoticeViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
-    let cell = collectionView.dequeueCell(withType: NoticeCell.self, for: indexPath)
+    let cell = collectionView.dequeueCell(
+      withType: NoticeCell.self,
+      for: indexPath
+    )
 
     return cell
+  }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    didSelectItemAt indexPath: IndexPath
+  ) {
+    self.navigationController?.pushViewController(
+      NoticeDetailViewController(),
+      animated: true
+    )
   }
 }
