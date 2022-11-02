@@ -12,6 +12,19 @@ import SnapKit
 
 final class NoticeCell: BaseCollectionViewCell {
 
+  // MARK: - Constants
+
+  private enum Metric {
+    static let titleLabelLeadingMargin = 20.f
+
+    static let dateLabelLeadingMargin = 20.f
+    static let dateLabelTopMargin = 3.f
+
+    static let separatorLineViewLeadingMargin = 20.f
+    static let separatorLineViewTopMargin = 20.f
+    static let separatorLineViewHeight = 1.f
+  }
+
   // MARK: - UIs
 
   private let titleLabel = UILabel().then {
@@ -38,19 +51,19 @@ final class NoticeCell: BaseCollectionViewCell {
 
     self.titleLabel.snp.makeConstraints {
       $0.top.equalToSuperview()
-      $0.leading.trailing.equalToSuperview().inset(20)
+      $0.leading.trailing.equalToSuperview().inset(Metric.titleLabelLeadingMargin)
     }
 
     self.dateLabel.snp.makeConstraints {
-      $0.top.equalTo(self.titleLabel.snp.bottom).offset(3)
-      $0.leading.trailing.equalToSuperview().inset(20)
+      $0.top.equalTo(self.titleLabel.snp.bottom).offset(Metric.dateLabelTopMargin)
+      $0.leading.trailing.equalToSuperview().inset(Metric.dateLabelLeadingMargin)
     }
 
     self.separatorLineView.snp.makeConstraints {
-      $0.height.equalTo(1)
-      $0.top.equalTo(self.dateLabel.snp.bottom).offset(20)
+      $0.height.equalTo(Metric.separatorLineViewHeight)
+      $0.top.equalTo(self.dateLabel.snp.bottom).offset(Metric.separatorLineViewTopMargin)
       $0.bottom.equalToSuperview()
-      $0.leading.trailing.equalToSuperview().inset(20)
+      $0.leading.trailing.equalToSuperview().inset(Metric.separatorLineViewLeadingMargin)
     }
   }
 }

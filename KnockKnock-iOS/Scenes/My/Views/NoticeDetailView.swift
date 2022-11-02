@@ -13,6 +13,19 @@ import Then
 
 final class NoticeDetailView: UIView {
 
+  // MARK: - Constants
+
+  private enum Metric {
+    static let titleLabelTopMargin = 20.f
+
+    static let dateLabelTopMargin = 5.f
+    static let dateLabelLeadingMargin = 20.f
+
+    static let separatorLineViewLeadingMargin = 20.f
+    static let separatorLineViewTopMargin = 20.f
+    static let separatorLineViewHeight = 1.f
+  }
+
   // MARK: - UIs
 
   private let titleLabel = UILabel().then {
@@ -65,18 +78,18 @@ final class NoticeDetailView: UIView {
     [self.titleLabel, self.dateLabel, self.separatorLineView, self.contentTextView].addSubViews(self)
 
     self.titleLabel.snp.makeConstraints {
-      $0.top.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(20)
+      $0.top.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.titleLabelTopMargin)
     }
 
     self.dateLabel.snp.makeConstraints {
-      $0.top.equalTo(self.titleLabel.snp.bottom).offset(5)
-      $0.leading.equalTo(self.safeAreaLayoutGuide).offset(20)
+      $0.top.equalTo(self.titleLabel.snp.bottom).offset(Metric.dateLabelTopMargin)
+      $0.leading.equalTo(self.safeAreaLayoutGuide).offset(Metric.dateLabelLeadingMargin)
     }
 
     self.separatorLineView.snp.makeConstraints {
-      $0.height.equalTo(1)
-      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(20)
-      $0.top.equalTo(self.dateLabel.snp.bottom).offset(20)
+      $0.height.equalTo(Metric.separatorLineViewHeight)
+      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.separatorLineViewLeadingMargin)
+      $0.top.equalTo(self.dateLabel.snp.bottom).offset(Metric.separatorLineViewTopMargin)
     }
 
     self.contentTextView.snp.makeConstraints {

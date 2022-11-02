@@ -12,6 +12,12 @@ import SnapKit
 
 final class NoticeView: UIView {
 
+  // MARK: - Constants
+
+  private enum Metric {
+    static let noticeCollectionViewTopMargin = 20.f
+  }
+
   // MARK: - UIs
 
   let noticeCollectionView = UICollectionView(
@@ -40,7 +46,7 @@ final class NoticeView: UIView {
 
     self.noticeCollectionView.snp.makeConstraints {
       $0.leading.trailing.bottom.equalTo(self.safeAreaLayoutGuide)
-      $0.top.equalTo(self.safeAreaLayoutGuide).offset(20)
+      $0.top.equalTo(self.safeAreaLayoutGuide).offset(Metric.noticeCollectionViewTopMargin)
     }
   }
 

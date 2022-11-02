@@ -13,6 +13,14 @@ import Then
 
 final class MyCell: BaseCollectionViewCell {
 
+  // MARK: - Constants
+
+  private enum Metric {
+    static let titleLabelLeadingMargin = 20.f
+
+    static let enterButtonTrailingMargin = 20.f
+  }
+
   // MARK: - UI
 
   private let titleLabel = UILabel().then {
@@ -31,12 +39,12 @@ final class MyCell: BaseCollectionViewCell {
     [self.titleLabel, self.enterButton].addSubViews(self.contentView)
 
     self.titleLabel.snp.makeConstraints {
-      $0.leading.equalToSuperview().inset(20)
+      $0.leading.equalToSuperview().inset(Metric.titleLabelLeadingMargin)
       $0.centerY.equalToSuperview()
     }
 
     self.enterButton.snp.makeConstraints {
-      $0.trailing.equalToSuperview().inset(20)
+      $0.trailing.equalToSuperview().inset(Metric.enterButtonTrailingMargin)
       $0.centerY.equalTo(self.titleLabel)
     }
   }
