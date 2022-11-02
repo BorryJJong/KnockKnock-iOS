@@ -11,6 +11,10 @@ import KKDSKit
 
 final class NoticeViewController: BaseViewController<NoticeView> {
 
+  // MARK: - Properties
+
+  var router: NoticeRouterProtocol?
+
   // MARK: - Life Cycles
 
   override func viewDidLoad() {

@@ -7,7 +7,15 @@
 
 import UIKit
 
+protocol MyViewProtocol {
+  
+}
+
 final class MyViewController: BaseViewController<MyView> {
+
+  // MARK: - Properties
+
+  var router: MyRouterProtocol?
 
   // MARK: - Life Cycles
 

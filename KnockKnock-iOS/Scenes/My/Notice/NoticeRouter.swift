@@ -11,10 +11,12 @@ protocol NoticeRouterProtocol {
   static func createNoticeView() -> UIViewController
 }
 
-final class NoticeRouter {
+final class NoticeRouter: NoticeRouterProtocol {
   static func createNoticeView() -> UIViewController {
     let view = NoticeViewController()
     let router = NoticeRouter()
+
+    view.router = router
 
     return view
   }
