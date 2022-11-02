@@ -56,6 +56,7 @@ final class ProfileSettingView: UIView {
     $0.clearButtonMode = .whileEditing
     $0.leftView = paddingView
     $0.leftViewMode = .always
+    $0.autocorrectionType = .no
   }
 
   private let noticeLabel = UILabel().then {
@@ -81,6 +82,16 @@ final class ProfileSettingView: UIView {
 
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  // MARK: - Bind
+
+  func bind(isClicked: Bool) {
+    if isClicked {
+      self.nicknameTextField.layer.borderColor = KKDS.Color.green50.cgColor
+    } else {
+      self.nicknameTextField.layer.borderColor = KKDS.Color.gray40.cgColor
+    }
   }
 
   // MARK: - Configure

@@ -10,22 +10,29 @@ import Foundation
 import KakaoSDKUser
 
 protocol LoginRepositoryProtocol {
-  func loginWithKakao()
+  func requestToken(socialType: SocialType, completionHandler: @escaping (LoginResponse) -> Void)
 }
 
-final class LoginRepository {
+final class LoginRepository: LoginRepositoryProtocol {
 
-  func requestToken(socialType: SocialType) {
-    var token: String = ""
+  // signUp
 
+  func signUp(socialType: SocialType) {
+
+  }
+
+  // login
+
+  func requestToken(
+    socialType: SocialType,
+    completionHandler: @escaping (LoginResponse) -> Void
+  ) {
     switch socialType {
     case .kakao:
       self.loginWithKakao(completionHandler: { accessToken in
 
-        token = accessToken
-
         let parameters = [
-          "socialUuid": token,
+          "socialUuid": "sUhGzYLIvkRbD2pCy2sxLqG2-eNPVXf-lL43w6U4CilwngAAAYQytWtw",
           "socialType": socialType.rawValue
         ]
 
@@ -35,7 +42,7 @@ final class LoginRepository {
             object: LoginResponse.self,
             router: KKRouter.socialLogin(loginInfo: parameters),
             success: { response in
-              print(response)
+              completionHandler(response)
             },
             failure: { error in
               print(error)

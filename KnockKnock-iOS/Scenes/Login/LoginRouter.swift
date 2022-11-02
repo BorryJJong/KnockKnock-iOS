@@ -9,18 +9,37 @@ import UIKit
 
 protocol LoginRouterProtocol {
   static func createLoginView() -> UIViewController
+  func navigateToProfileSettingView(source: LoginViewProtocol)
 }
 
 final class LoginRouter: LoginRouterProtocol {
+
   static func createLoginView() -> UIViewController {
     let view = LoginViewController()
-//    let intractor = LoginInteractor()
-//    let presenter = LoginPresenter()
-//    let worker = LoginWorker()
+    let interactor = LoginInteractor()
+    let presenter = LoginPresenter()
+    let worker = LoginWorker(repository: LoginRepository())
     let router = LoginRouter()
+
+    view.interactor = interactor
+    view.router = router
+    interactor.presenter = presenter
+    interactor.worker = worker
+    presenter.view = view
 
     return view
   }
 
-}
+  func navigateToProfileSettingView(source: LoginViewProtocol) {
+    let profileSettingViewController = ProfileSettingViewController()
 
+    if let sourceView = source as? UIViewController {
+      sourceView.navigationController?.pushViewController(profileSettingViewController, animated: true)
+    }
+  }
+
+  func navigateToHomeView(source: LoginViewProtocol) {
+    
+  }
+
+}

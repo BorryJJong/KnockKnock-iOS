@@ -8,9 +8,15 @@
 import UIKit
 
 import Then
-import KakaoSDKUser
+
+protocol LoginViewProtocol: AnyObject {
+  func fetchLoginResult(isExistedUser: Bool)
+}
 
 final class LoginViewController: BaseViewController<LoginView> {
+
+  var interactor: LoginInteractorProtocol?
+  var router: LoginRouterProtocol?
 
   // MARK: - Life Cycles
 
@@ -33,6 +39,16 @@ final class LoginViewController: BaseViewController<LoginView> {
   // MARK: - Button Actions
 
   @objc func kakaoLoginButtonDidTap(_ sender: UIButton) {
-    LoginRepository().requestToken(socialType: .kakao)
+    self.interactor?.fetchLoginResult(socialType: SocialType.kakao)
+  }
+}
+
+extension LoginViewController: LoginViewProtocol {
+  func fetchLoginResult(isExistedUser: Bool) {
+    if isExistedUser {
+      print("hi!")
+    } else {
+      self.router?.navigateToProfileSettingView(source: self)
+    }
   }
 }
