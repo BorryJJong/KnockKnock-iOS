@@ -29,13 +29,26 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   var interactor: ShopSearchInteractorProtocol?
   var router: ShopSearchRouterProtocol?
 
+  var addressList: [String] = [] {
+    didSet {
+      print(addressList.count)
+      self.containerView.resultTableView.reloadData()
+    }
+  }
+
   var addressResult: AddressResult? {
     didSet {
       let isNoResult = addressResult?.meta.totalCount == 0
       self.containerView.bind(isNoResult: isNoResult)
-      self.containerView.resultTableView.reloadData()
+
+      addressResult?.documents.forEach {
+        self.addressList.append($0.placeName)
+      }
     }
   }
+
+  private var page: Int = 1
+  private var searchKeyword = ""
 
   // MARK: - UIs
 
@@ -105,9 +118,10 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
     let region = self.containerView.regionTextField.text ?? ""
     let address = self.containerView.addressTextField.text ?? ""
 
-    let keyword = "\(city) \(region) \(address)"
+    self.searchKeyword = "\(city) \(region) \(address)"
 
-    self.interactor?.fetchShopAddress(keyword: keyword)
+    self.interactor?.fetchShopAddress(keyword: self.searchKeyword, page: self.page)
+    self.dismissKeyboard()
   }
 
   @objc private func doneButtonDidTap(_ sender: UIBarButtonItem) {
@@ -147,7 +161,8 @@ extension ShopSearchViewController: UITextFieldDelegate {
 
 extension ShopSearchViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return self.addressResult?.documents.count ?? 0
+//    return self.addressResult?.documents.count ?? 0
+    return self.addressList.count
   }
 
   func tableView(
@@ -156,11 +171,31 @@ extension ShopSearchViewController: UITableViewDataSource {
   ) -> UITableViewCell {
     let cell = tableView.dequeueCell(withType: AdressCell.self, for: indexPath)
 
-    if let address = self.addressResult?.documents[indexPath.row].placeName {
-      cell.bind(address: address)
-    }
+//    if let address = self.addressResult?.documents[indexPath.row].placeName {
+    cell.bind(address: self.addressList[indexPath.row])
+//    }
     
     return cell
+  }
+
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    let height = scrollView.frame.height
+    let contentSizeHeight = scrollView.contentSize.height
+    let offset = scrollView.contentOffset.y
+    let reachedBottom = (offset > contentSizeHeight - height)
+
+    if reachedBottom {
+      scrollViewDidReachBottom(scrollView)
+    }
+  }
+
+  func scrollViewDidReachBottom(_ scrollView: UIScrollView) {
+    if let isEnd = self.addressResult?.meta.isEnd {
+      if !isEnd {
+        self.page += 1
+        self.interactor?.fetchShopAddress(keyword: self.searchKeyword, page: self.page)
+      }
+    }
   }
 }
 
@@ -168,9 +203,9 @@ extension ShopSearchViewController: UITableViewDataSource {
 
 extension ShopSearchViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    if let address = self.addressResult?.documents[indexPath.row].placeName {
+//    if let address = self.addressResult?.documents[indexPath.row].placeName {
       
-      self.router?.passToFeedWriteView(source: self, address: address)
-    }
+    self.router?.passToFeedWriteView(source: self, address: self.addressList[indexPath.row])
+//    }
   }
 }
