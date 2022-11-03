@@ -26,12 +26,12 @@ struct FeedDetail: Decodable {
 
 struct FeedDetailData: Decodable {
   let feed: FeedPost?
-  let promotions: [Promotion]
+  let promotions: [PromotionData]
   let challenges: [Challenge]
   let images: [FeedImage]
 }
 
-struct Promotion: Decodable {
+struct PromotionData: Decodable {
   let id: Int
   let promotionId: Int
   let title: String
