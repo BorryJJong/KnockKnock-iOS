@@ -56,6 +56,13 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
         for: .touchUpInside
       )
     }
+    self.containerView.alertView.confirmButton.do {
+      $0.addTarget(
+        self,
+        action: #selector(self.alertConfirmButtonDidTap(_:)),
+        for: .touchUpInside
+      )
+    }
     self.hideKeyboardWhenTappedAround()
   }
 
@@ -72,7 +79,13 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
   }
 
   @objc private func confirmButtonDidTap(_ sender: UIButton) {
-    print(self.interactor?.loginInfo)
+    self.containerView.do {
+      $0.setHiddenStatusAlertView(isHidden: false)
+    }
+  }
+
+  @objc private func alertConfirmButtonDidTap(_ sender: UIButton) {
+    self.navigationController?.popViewController(animated: true)
   }
 }
 
@@ -89,9 +102,11 @@ extension ProfileSettingViewController: UITextFieldDelegate {
     if textField.hasText {
       textField.layer.borderColor = UIColor.green50?.cgColor
       self.containerView.confirmButton.backgroundColor = .green50
+      self.containerView.confirmButton.isEnabled = true
     } else {
       textField.layer.borderColor = UIColor.gray30?.cgColor
       self.containerView.confirmButton.backgroundColor = .gray40
+      self.containerView.confirmButton.isEnabled = false
     }
   }
 }
