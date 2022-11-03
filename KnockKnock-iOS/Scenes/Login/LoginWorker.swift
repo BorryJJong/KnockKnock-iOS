@@ -8,7 +8,10 @@
 import UIKit
 
 protocol LoginWorkerProtocol {
-  func fetchLoginResult(socialType: SocialType, completionHandler: @escaping (LoginResponse) -> Void)
+  func fetchLoginResult(
+    socialType: SocialType,
+    completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
+  )
 }
 
 final class LoginWorker: LoginWorkerProtocol {
@@ -18,11 +21,14 @@ final class LoginWorker: LoginWorkerProtocol {
     self.repository = repository
   }
 
-  func fetchLoginResult(socialType: SocialType, completionHandler: @escaping (LoginResponse) -> Void) {
+  func fetchLoginResult(
+    socialType: SocialType,
+    completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
+  ) {
     self.repository.requestToken(
       socialType: socialType,
-      completionHandler: { response in
-      completionHandler(response)
+      completionHandler: { response, loginInfo in
+      completionHandler(response, loginInfo)
     })
   }
 }

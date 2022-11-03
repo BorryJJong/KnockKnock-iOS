@@ -9,7 +9,7 @@ import UIKit
 
 protocol LoginRouterProtocol {
   static func createLoginView() -> UIViewController
-  func navigateToProfileSettingView(source: LoginViewProtocol)
+  func navigateToProfileSettingView(source: LoginViewProtocol, loginInfo: LoginInfo)
 }
 
 final class LoginRouter: LoginRouterProtocol {
@@ -30,11 +30,16 @@ final class LoginRouter: LoginRouterProtocol {
     return view
   }
 
-  func navigateToProfileSettingView(source: LoginViewProtocol) {
-    let profileSettingViewController = ProfileSettingViewController()
+  func navigateToProfileSettingView(source: LoginViewProtocol, loginInfo: LoginInfo) {
+    let profileSettingViewController = ProfileSettingRouter.createProfileSettingView(
+      loginInfo: loginInfo
+    )
 
     if let sourceView = source as? UIViewController {
-      sourceView.navigationController?.pushViewController(profileSettingViewController, animated: true)
+      sourceView.navigationController?.pushViewController(
+        profileSettingViewController,
+        animated: true
+      )
     }
   }
 

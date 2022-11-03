@@ -9,7 +9,17 @@ import UIKit
 
 import KKDSKit
 
+protocol ProfileSettingViewProtocol: AnyObject {
+  var router: ProfileSettingRouterProtocol? { get set }
+  var interactor: ProfileSettingInteractorProtocol? { get set }
+}
+
 final class ProfileSettingViewController: BaseViewController<ProfileSettingView> {
+
+  // MARK: - Properties
+
+  var router: ProfileSettingRouterProtocol?
+  var interactor: ProfileSettingInteractorProtocol?
 
   // MARK: - Life Cycles
 
@@ -39,6 +49,13 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
         for: .touchDown
       )
     }
+    self.containerView.confirmButton.do {
+      $0.addTarget(
+        self,
+        action: #selector(self.confirmButtonDidTap(_:)),
+        for: .touchUpInside
+      )
+    }
     self.hideKeyboardWhenTappedAround()
   }
 
@@ -54,6 +71,15 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
     self.navigationController?.popViewController(animated: true)
   }
 
+  @objc private func confirmButtonDidTap(_ sender: UIButton) {
+    print(self.interactor?.loginInfo)
+  }
+}
+
+  // MARK: - Profile Setting View Protocol
+
+extension ProfileSettingViewController: ProfileSettingViewProtocol {
+  
 }
 
   // MARK: - TextField delegate
