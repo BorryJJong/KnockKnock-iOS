@@ -12,6 +12,7 @@ protocol PropertySelectInteractorProtocol {
   var presenter: PropertySelectPresenterProtocol? { get set }
 
   func fetchPromotionList()
+  func fetchTagList()
 }
 
 final class PropertySelectInteractor: PropertySelectInteractorProtocol {
@@ -21,6 +22,12 @@ final class PropertySelectInteractor: PropertySelectInteractorProtocol {
   func fetchPromotionList() {
     self.worker?.requestPromotionList(completionHandler: { promotionList in
       self.presenter?.presentPromotionList(promotionList: promotionList)
+    })
+  }
+
+  func fetchTagList() {
+    self.worker?.requestTagList(completionHandler: { tagList in
+      self.presenter?.presentTagList(tagList: tagList)
     })
   }
 }

@@ -15,16 +15,19 @@ protocol PropertySelectViewProtocol: AnyObject {
   var interactor: PropertySelectInteractorProtocol? { get set }
 
   func fetchPromotionList(promotionList: [Promotion])
+  func fetchTagList(tagList: [ChallengeTitle])
 }
 
 final class PropertySelectViewController: BaseViewController<PropertySelectView> {
   
   // MARK: - Properties
   
-  let tagList: [Promotion] = []
+  var tagList: [ChallengeTitle] = []
   var promotionList: [Promotion] = []
 
-  var selectedProperties: [Promotion] = []
+  var selectedTags: [ChallengeTitle] = []
+  var selectedPromotions: [Promotion] = []
+
   var propertyType = PropertyType.promotion
   
   var router: PropertySelectRouterProtocol?
@@ -45,7 +48,6 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.interactor?.fetchPromotionList()
   }
   
   override func setupConfigure() {
@@ -56,8 +58,16 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
       target: self,
       action: #selector(doneButtonDidTap(_:))
     )
-
     self.navigationItem.leftBarButtonItem = self.backBarButtonItem
+
+    switch propertyType {
+    case .tag:
+      self.interactor?.fetchTagList()
+    case .promotion:
+      self.interactor?.fetchPromotionList()
+    case .address:
+      print("error")
+    }
 
     self.containerView.propertyTableView.do {
       $0.dataSource = self
@@ -68,11 +78,17 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
   // MARK: - Button Actions
 
   @objc private func doneButtonDidTap(_ sender: UIBarButtonItem) {
-    self.router?.passDataToFeedWriteView(
-      source: self,
-      propertyType: self.propertyType,
-      selectedProperties: self.selectedProperties
-    )
+    if self.propertyType == .promotion {
+      self.router?.passPromotionToFeedWriteView(
+        source: self,
+        selectedPromotion: self.selectedPromotions
+      )
+    } else if self.propertyType == .tag {
+      self.router?.passTagToFeedWriteView(
+        source: self,
+        selectedTag: self.selectedTags
+      )
+    }
   }
 
   @objc func tapBackBarButton(_ sender: UIBarButtonItem) {
@@ -86,6 +102,11 @@ extension PropertySelectViewController: PropertySelectViewProtocol {
   func fetchPromotionList(promotionList: [Promotion]) {
     self.promotionList = promotionList
     self.promotionList.insert(Promotion(id: 0, type: "없음"), at: 0)
+    self.containerView.propertyTableView.reloadData()
+  }
+
+  func fetchTagList(tagList: [ChallengeTitle]) {
+    self.tagList = tagList
     self.containerView.propertyTableView.reloadData()
   }
 }
@@ -114,7 +135,7 @@ extension PropertySelectViewController: UITableViewDataSource {
       cell.bind(content: promotionList[indexPath.row].type)
 
     case .tag:
-      cell.bind(content: tagList[indexPath.row].type)
+      cell.bind(content: tagList[indexPath.row].title)
 
     case .address:
       print("error")
@@ -129,10 +150,10 @@ extension PropertySelectViewController: UITableViewDelegate {
 
     switch propertyType {
     case .tag:
-      self.selectedProperties.append(self.tagList[indexPath.item])
+      self.selectedTags.append(self.tagList[indexPath.item])
 
     case .promotion:
-      self.selectedProperties.append(self.promotionList[indexPath.item])
+      self.selectedPromotions.append(self.promotionList[indexPath.item])
 
     case .address:
       print("error")
@@ -142,13 +163,13 @@ extension PropertySelectViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
     switch propertyType {
     case .tag:
-      if let index = self.selectedProperties.firstIndex(of: self.tagList[indexPath.item]) {
-        self.selectedProperties.remove(at: index)
+      if let index = self.selectedTags.firstIndex(of: self.tagList[indexPath.item]) {
+        self.selectedTags.remove(at: index)
       }
 
     case .promotion:
-      if let index = self.selectedProperties.firstIndex(of: self.promotionList[indexPath.item]) {
-        self.selectedProperties.remove(at: index)
+      if let index = self.selectedPromotions.firstIndex(of: self.promotionList[indexPath.item]) {
+        self.selectedPromotions.remove(at: index)
       }
 
     case .address:

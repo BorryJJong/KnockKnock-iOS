@@ -31,15 +31,21 @@ extension FeedWriteInteractor: ShopSearchDelegate {
 }
 
 extension FeedWriteInteractor: PropertyDelegate {
-  func fetchSelectedProperty(
-    propertyType: PropertyType,
-    selection: [Promotion]
-  ) {
+  func fetchSelectedPromotion(selection: [Promotion]) {
     let promotion = selection.map {
       $0.type
     }
     let content = promotion.joined(separator: ", ")
 
-    self.presenter?.fetchProperty(propertyType: propertyType, content: content)
+    self.presenter?.fetchProperty(propertyType: PropertyType.promotion, content: content)
+  }
+
+  func fetchSelectedTag(selection: [ChallengeTitle]) {
+    let tag = selection.map {
+      $0.title
+    }
+    let content = tag.joined(separator: ", ")
+
+    self.presenter?.fetchProperty(propertyType: PropertyType.tag, content: content)
   }
 }

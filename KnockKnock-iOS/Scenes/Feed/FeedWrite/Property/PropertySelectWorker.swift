@@ -9,6 +9,7 @@ import UIKit
 
 protocol PropertySelectWorkerProtocol {
   func requestPromotionList(completionHandler: @escaping ([Promotion]) -> Void)
+  func requestTagList(completionHandler: @escaping ([ChallengeTitle]) -> Void)
 }
 
 final class PropertySelectWorker: PropertySelectWorkerProtocol {
@@ -26,11 +27,23 @@ final class PropertySelectWorker: PropertySelectWorkerProtocol {
         router: KKRouter.getPromotions,
         success: { response in
           completionHandler(response)
-        },
-        failure: { error in
+        }, failure: { error in
           print(error)
         }
       )
   }
 
+  func requestTagList(completionHandler: @escaping ([ChallengeTitle]) -> Void) {
+    KKNetworkManager
+      .shared
+      .request(
+        object: [ChallengeTitle].self,
+        router: KKRouter.getChallengeTitles,
+        success: { response in
+          completionHandler(response)
+        }, failure: { error in
+          print(error)
+        }
+      )
+  }
 }

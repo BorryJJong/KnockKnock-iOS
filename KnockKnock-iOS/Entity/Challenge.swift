@@ -25,7 +25,7 @@ struct Participant: Decodable {
   let image: String?
 }
 
-struct ChallengeTitle: Decodable {
+struct ChallengeTitle: Decodable, Equatable {
   let id: Int
   let title: String
   var isSelected: Bool

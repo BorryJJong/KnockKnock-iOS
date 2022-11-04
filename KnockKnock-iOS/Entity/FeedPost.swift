@@ -20,6 +20,12 @@ struct FeedPost: Decodable {
   let scale: String = "1:1"
 }
 
+struct Property: Equatable {
+  let id: Int
+  let title: String
+}
+
+
 struct FeedDetail: Decodable {
   let data: FeedDetailData
 }
