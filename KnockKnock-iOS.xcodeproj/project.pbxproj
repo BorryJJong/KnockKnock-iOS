@@ -129,7 +129,7 @@
 		61A028552910D3BE00943A40 /* LoginWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A028542910D3BE00943A40 /* LoginWorker.swift */; };
 		61A028572910D3CE00943A40 /* LoginRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A028562910D3CE00943A40 /* LoginRouter.swift */; };
 		61A028592910D5E700943A40 /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A028582910D5E700943A40 /* AccountManager.swift */; };
-		61A0285B2910DF1A00943A40 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A0285A2910DF1A00943A40 /* User.swift */; };
+		61A0285B2910DF1A00943A40 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A0285A2910DF1A00943A40 /* Account.swift */; };
 		61A0285D2910E66E00943A40 /* SocialType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A0285C2910E66E00943A40 /* SocialType.swift */; };
 		61A0286F29139D6400943A40 /* ProfileSettingRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A0286E29139D6400943A40 /* ProfileSettingRouter.swift */; };
 		61A028712913A31600943A40 /* ProfileSettingInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A028702913A31600943A40 /* ProfileSettingInteractor.swift */; };
@@ -321,7 +321,7 @@
 		61A028542910D3BE00943A40 /* LoginWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginWorker.swift; sourceTree = "<group>"; };
 		61A028562910D3CE00943A40 /* LoginRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRouter.swift; sourceTree = "<group>"; };
 		61A028582910D5E700943A40 /* AccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountManager.swift; sourceTree = "<group>"; };
-		61A0285A2910DF1A00943A40 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		61A0285A2910DF1A00943A40 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		61A0285C2910E66E00943A40 /* SocialType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialType.swift; sourceTree = "<group>"; };
 		61A0286E29139D6400943A40 /* ProfileSettingRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingRouter.swift; sourceTree = "<group>"; };
 		61A028702913A31600943A40 /* ProfileSettingInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingInteractor.swift; sourceTree = "<group>"; };
@@ -417,7 +417,7 @@
 				619DEE9B28868E7E00C80095 /* Comment.swift */,
 				613856CC2898B64000BE347E /* Like.swift */,
 				61E87EBE28D1A1F20005CAA6 /* SearchKeyword.swift */,
-				61A0285A2910DF1A00943A40 /* User.swift */,
+				61A0285A2910DF1A00943A40 /* Account.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -1269,7 +1269,7 @@
 				61B6D988288A969100E60F08 /* ChallengeDetailRouter.swift in Sources */,
 				613856EA289E664A00BE347E /* LikeDetailCell.swift in Sources */,
 				6143295C2862F6BB008BDCC9 /* FeedMainRouter.swift in Sources */,
-				61A0285B2910DF1A00943A40 /* User.swift in Sources */,
+				61A0285B2910DF1A00943A40 /* Account.swift in Sources */,
 				616EB08F28915470001BD18C /* LikeCell.swift in Sources */,
 				6105D2F628AFD544001413DF /* EventListView.swift in Sources */,
 				61215AE228572055003FDCAA /* FeedMainViewController.swift in Sources */,

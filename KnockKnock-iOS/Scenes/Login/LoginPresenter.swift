@@ -10,18 +10,18 @@ import UIKit
 protocol LoginPresenterProtocol {
   var view: LoginViewProtocol? { get set }
 
-  func presentLoginResult(loginResult: LoginResponse, loginInfo: LoginInfo)
+  func presentLoginResult(loginResponse: LoginResponse, loginInfo: LoginInfo)
 }
 
 final class LoginPresenter: LoginPresenterProtocol {
   weak var view: LoginViewProtocol?
 
   func presentLoginResult(
-    loginResult: LoginResponse,
+    loginResponse: LoginResponse,
     loginInfo: LoginInfo
   ) {
     self.view?.fetchLoginResult(
-      loginResult: loginResult,
+      loginResponse: loginResponse,
       loginInfo: loginInfo
     )
   }

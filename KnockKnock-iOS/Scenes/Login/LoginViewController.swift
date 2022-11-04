@@ -10,7 +10,7 @@ import UIKit
 import Then
 
 protocol LoginViewProtocol: AnyObject {
-  func fetchLoginResult(loginResult: LoginResponse, loginInfo: LoginInfo)
+  func fetchLoginResult(loginResponse: LoginResponse, loginInfo: LoginInfo)
 }
 
 final class LoginViewController: BaseViewController<LoginView> {
@@ -45,11 +45,11 @@ final class LoginViewController: BaseViewController<LoginView> {
 
 extension LoginViewController: LoginViewProtocol {
   func fetchLoginResult(
-    loginResult: LoginResponse,
+    loginResponse: LoginResponse,
     loginInfo: LoginInfo
   ) {
-    if loginResult.isExistUser {
-      print("login success")
+    if loginResponse.isExistUser {
+      self.interactor?.saveTokens(loginResponse: loginResponse)
     } else {
       self.router?.navigateToProfileSettingView(source: self, loginInfo: loginInfo)
     }

@@ -12,6 +12,7 @@ protocol LoginInteractorProtocol {
   var worker: LoginWorkerProtocol? { get set }
 
   func fetchLoginResult(socialType: SocialType)
+  func saveTokens(loginResponse: LoginResponse)
 }
 
 final class LoginInteractor: LoginInteractorProtocol {
@@ -26,11 +27,16 @@ final class LoginInteractor: LoginInteractorProtocol {
       socialType: socialType,
       completionHandler: { loginResponse, loginInfo in
         self.presenter?.presentLoginResult(
-          loginResult: loginResponse,
+          loginResponse: loginResponse,
           loginInfo: loginInfo
         )
     })
   }
 
-  // token save function needed.
+  func saveTokens(loginResponse: LoginResponse) {
+    if let authInfo = loginResponse.authInfo{
+      UserDefaults.standard.set(authInfo.accessToken, forKey: "accessToken")
+      UserDefaults.standard.set(authInfo.refreashToken, forKey: "refreshToken")
+    }
+  }
 }
