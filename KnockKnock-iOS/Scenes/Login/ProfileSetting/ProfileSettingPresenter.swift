@@ -9,6 +9,7 @@ import UIKit
 
 protocol ProfileSettingPresenterProtocol {
   var view: ProfileSettingViewProtocol? { get set }
+//  func 
 }
 
 final class ProfileSettingPresenter: ProfileSettingPresenterProtocol {

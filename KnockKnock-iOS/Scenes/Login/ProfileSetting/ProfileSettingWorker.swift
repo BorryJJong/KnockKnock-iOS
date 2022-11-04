@@ -8,8 +8,33 @@
 import UIKit
 
 protocol ProfileSettingWorkerProtocol {
+  func requestSignUp(
+    loginInfo: LoginInfo,
+    nickname: String,
+    image: String,
+    completionHandler: @escaping (SignUpResponse) -> Void
+  )
 }
 
 final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
+  private let repository: LoginRepositoryProtocol
 
+  init(repository: LoginRepositoryProtocol) {
+    self.repository = repository
+  }
+
+  func requestSignUp(
+    loginInfo: LoginInfo,
+    nickname: String,
+    image: String,
+    completionHandler: @escaping (SignUpResponse) -> Void
+  ) {
+    self.repository.signUp(
+      loginInfo: loginInfo,
+      nickname: nickname,
+      image: image,
+      completionHandler: { response in
+        print(response)
+    })
+  }
 }

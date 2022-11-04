@@ -19,6 +19,11 @@ struct SignUpInfo {
   let image: String
 }
 
+struct SignUpResponse: Decodable {
+  let isExistUser: Bool
+  let authInfo: AuthInfo?
+}
+
 struct LoginResponse: Decodable {
   let isExistUser: Bool
   let authInfo: AuthInfo?

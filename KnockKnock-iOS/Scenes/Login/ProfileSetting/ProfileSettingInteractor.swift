@@ -12,6 +12,8 @@ protocol ProfileSettingInteractorProtocol {
   var presenter: ProfileSettingPresenterProtocol? { get set }
 
   var loginInfo: LoginInfo? { get set }
+
+  func requestSignUp(nickname: String, image: String)
 }
 
 final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
@@ -23,4 +25,18 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
 
   var loginInfo: LoginInfo?
 
+  func requestSignUp(nickname: String, image: String) {
+
+    if let loginInfo = loginInfo {
+      self.worker?.requestSignUp(
+        loginInfo: loginInfo,
+        nickname: nickname,
+        image: image,
+        completionHandler: { response in
+          // userdefaults token 저장하기
+          print(response)
+        }
+      )
+    }
+  }
 }

@@ -79,6 +79,10 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
   }
 
   @objc private func confirmButtonDidTap(_ sender: UIButton) {
+    let nickname = self.containerView.nicknameTextField.text ?? ""
+
+    self.interactor?.requestSignUp(nickname: nickname, image: "")
+
     self.containerView.do {
       $0.setHiddenStatusAlertView(isHidden: false)
     }

@@ -14,14 +14,43 @@ protocol LoginRepositoryProtocol {
     socialType: SocialType,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
   )
+  func signUp(
+    loginInfo: LoginInfo,
+    nickname: String,
+    image: String,
+    completionHandler: @escaping (SignUpResponse) -> Void
+  )
 }
 
 final class LoginRepository: LoginRepositoryProtocol {
 
   // signUp
 
-  func signUp(socialType: SocialType) {
+  func signUp(
+    loginInfo: LoginInfo,
+    nickname: String,
+    image: String,
+    completionHandler: @escaping (SignUpResponse) -> Void
+  ) {
 
+    let parameters = [
+      "socialUuid": loginInfo.socialUuid,
+      "socialType": loginInfo.socialType,
+      "nickname" : nickname,
+      "image": image
+    ]
+
+    KKNetworkManager
+      .shared
+      .request(
+        object: SignUpResponse.self,
+        router: KKRouter.signUp(userInfo: parameters),
+        success: { success in
+          completionHandler(success)
+        }, failure: { error in
+          print(error)
+        }
+      )
   }
 
   // login

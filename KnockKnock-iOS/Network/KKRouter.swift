@@ -36,17 +36,16 @@ enum KKRouter: URLRequestConvertible {
   var method: HTTPMethod {
     switch self {
     case .getChallengeResponse,
-        .getFeedBlogPost,
-        .getFeedMain,
-        .getFeed,
-        .getChallengeTitles,
-        .getChallengeDetail,
-        .requestShopAddress:
+         .getFeedBlogPost,
+         .getFeedMain,
+         .getFeed,
+         .getChallengeTitles,
+         .getChallengeDetail,
+         .requestShopAddress:
       return .get
 
     case .socialLogin,
-        .signUp:
-
+         .signUp:
       return .post
     }
   }
