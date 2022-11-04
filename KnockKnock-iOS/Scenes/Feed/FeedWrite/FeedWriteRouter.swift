@@ -47,11 +47,14 @@ final class FeedWriteRouter: FeedWriteRouterProtocol {
     }
   }
 
-  func navigateToProperty(source: FeedWriteViewProtocol, propertyType: PropertyType) {
+  func navigateToProperty(
+    source: FeedWriteViewProtocol,
+    propertyType: PropertyType
+  ) {
     if let delegate = self.propertyDelegate {
       let propertyViewController = PropertySelectRouter.createPropertySelectView(
         delegate: delegate,
-        propertyType: propertyType
+        propertyType: propertyType.self
       )
 
       if let sourceView = source as? UIViewController {

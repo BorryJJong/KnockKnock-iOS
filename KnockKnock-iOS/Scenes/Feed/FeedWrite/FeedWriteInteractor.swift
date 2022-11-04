@@ -33,9 +33,12 @@ extension FeedWriteInteractor: ShopSearchDelegate {
 extension FeedWriteInteractor: PropertyDelegate {
   func fetchSelectedProperty(
     propertyType: PropertyType,
-    selection: [String]
+    selection: [Promotion]
   ) {
-    let content = selection.joined(separator: ", ")
+    let promotion = selection.map {
+      $0.type
+    }
+    let content = promotion.joined(separator: ", ")
 
     self.presenter?.fetchProperty(propertyType: propertyType, content: content)
   }

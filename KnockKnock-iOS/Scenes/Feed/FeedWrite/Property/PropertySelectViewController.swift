@@ -10,20 +10,25 @@ import UIKit
 import Then
 import KKDSKit
 
-protocol PropertySelectViewProtocol {
+protocol PropertySelectViewProtocol: AnyObject {
+  var router: PropertySelectRouterProtocol? { get set }
+  var interactor: PropertySelectInteractorProtocol? { get set }
+
+  func fetchPromotionList(promotionList: [Promotion])
 }
 
 final class PropertySelectViewController: BaseViewController<PropertySelectView> {
   
   // MARK: - Properties
   
-  let tagList = ["#거꾸로챌린지", "#용기내챌린지", "#GOGO챌린지", "#1일 1환경챌린지"]
-  let promotionList = ["없음", "텀블러 할인", "사은품 증정", "용기 할인"]
+  let tagList: [Promotion] = []
+  var promotionList: [Promotion] = []
 
-  var selectedProperties: [String] = []
+  var selectedProperties: [Promotion] = []
   var propertyType = PropertyType.promotion
   
   var router: PropertySelectRouterProtocol?
+  var interactor: PropertySelectInteractorProtocol?
 
   // MARK: - UIs
 
@@ -40,6 +45,7 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    self.interactor?.fetchPromotionList()
   }
   
   override func setupConfigure() {
@@ -77,13 +83,27 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
 // MARK: - PropertySelectViewProtocol
 
 extension PropertySelectViewController: PropertySelectViewProtocol {
+  func fetchPromotionList(promotionList: [Promotion]) {
+    self.promotionList = promotionList
+    self.promotionList.insert(Promotion(id: 0, type: "없음"), at: 0)
+    self.containerView.propertyTableView.reloadData()
+  }
 }
 
 // MARK: - TableView DataSource
 
 extension PropertySelectViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return tagList.count
+    switch propertyType {
+    case .promotion:
+      return self.promotionList.count
+
+    case .tag:
+      return self.tagList.count
+
+    default:
+      return 0
+    }
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -91,10 +111,10 @@ extension PropertySelectViewController: UITableViewDataSource {
 
     switch propertyType {
     case .promotion:
-      cell.bind(content: promotionList[indexPath.row])
+      cell.bind(content: promotionList[indexPath.row].type)
 
     case .tag:
-      cell.bind(content: tagList[indexPath.row])
+      cell.bind(content: tagList[indexPath.row].type)
 
     case .address:
       print("error")

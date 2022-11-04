@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Promotion: Decodable {
+struct Promotion: Decodable, Equatable {
   let id: Int
   let type: String
 }

@@ -8,13 +8,21 @@
 import UIKit
 
 protocol PropertyDelegate: AnyObject {
-  func fetchSelectedProperty(propertyType: PropertyType, selection: [String])
+  func fetchSelectedProperty(propertyType: PropertyType, selection: [Promotion])
 }
 
 protocol PropertySelectRouterProtocol {
-  static func createPropertySelectView(delegate: PropertyDelegate, propertyType: PropertyType) -> UIViewController
+  static func createPropertySelectView(
+    delegate: PropertyDelegate,
+    propertyType: PropertyType
+  ) -> UIViewController
 
-  func passDataToFeedWriteView(source: PropertySelectViewProtocol, propertyType: PropertyType, selectedProperties: [String])
+  func passDataToFeedWriteView(
+    source: PropertySelectViewProtocol,
+    propertyType: PropertyType,
+    selectedProperties: [Promotion]
+  )
+
   func navigateToFeedWriteView(source: PropertySelectViewProtocol)
 }
 
@@ -28,11 +36,17 @@ final class PropertySelectRouter: PropertySelectRouterProtocol {
   ) -> UIViewController {
 
     let view = PropertySelectViewController()
+    let interactor = PropertySelectInteractor()
+    let presenter = PropertySelectPresenter()
+    let worker = PropertySelectWorker(repository: FeedRepository())
     let router = PropertySelectRouter()
 
     view.router = router
     view.propertyType = propertyType
-
+    view.interactor = interactor
+    interactor.presenter = presenter
+    interactor.worker = worker
+    presenter.view = view
     router.delegate = delegate
 
     return view
@@ -41,7 +55,7 @@ final class PropertySelectRouter: PropertySelectRouterProtocol {
   func passDataToFeedWriteView(
     source: PropertySelectViewProtocol,
     propertyType: PropertyType,
-    selectedProperties: [String]
+    selectedProperties: [Promotion]
   ) {
     self.delegate?.fetchSelectedProperty(
       propertyType: propertyType,
