@@ -16,7 +16,7 @@ final class ProfileSettingRouter: ProfileSettingRouterProtocol {
     let view = ProfileSettingViewController()
     let interactor = ProfileSettingInteractor()
     let presenter = ProfileSettingPresenter()
-    let worker = ProfileSettingWorker(repository: LoginRepository())
+    let worker = ProfileSettingWorker(accountManager: AccountManager())
     let router = ProfileSettingRouter()
 
     view.interactor = interactor

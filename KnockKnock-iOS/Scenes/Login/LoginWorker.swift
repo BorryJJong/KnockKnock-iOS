@@ -15,20 +15,20 @@ protocol LoginWorkerProtocol {
 }
 
 final class LoginWorker: LoginWorkerProtocol {
-  private let repository: LoginRepositoryProtocol
+  private let accountManager: AccountManagerProtocol
 
-  init(repository: LoginRepositoryProtocol) {
-    self.repository = repository
+  init(accountManager: AccountManagerProtocol) {
+    self.accountManager = accountManager
   }
 
   func fetchLoginResult(
     socialType: SocialType,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
   ) {
-    self.repository.requestToken(
+    self.accountManager.requestToken(
       socialType: socialType,
-      completionHandler: { response, loginInfo in
-      completionHandler(response, loginInfo)
+      completionHandler: { loginResponse, loginInfo in
+      completionHandler(loginResponse, loginInfo)
     })
   }
 }

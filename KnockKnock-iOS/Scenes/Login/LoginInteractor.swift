@@ -24,8 +24,11 @@ final class LoginInteractor: LoginInteractorProtocol {
   ) {
     self.worker?.fetchLoginResult(
       socialType: socialType,
-      completionHandler: { response, loginInfo in
-        self.presenter?.presentLoginResult(loginResult: response, loginInfo: loginInfo)
+      completionHandler: { loginResponse, loginInfo in
+        self.presenter?.presentLoginResult(
+          loginResult: loginResponse,
+          loginInfo: loginInfo
+        )
     })
   }
 

@@ -1,5 +1,5 @@
 //
-//  LoginRepository.swift
+//  AccountManager.swift
 //  KnockKnock-iOS
 //
 //  Created by Daye on 2022/11/01.
@@ -9,7 +9,7 @@ import Foundation
 
 import KakaoSDKUser
 
-protocol LoginRepositoryProtocol {
+protocol AccountManagerProtocol {
   func requestToken(
     socialType: SocialType,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
@@ -22,7 +22,7 @@ protocol LoginRepositoryProtocol {
   )
 }
 
-final class LoginRepository: LoginRepositoryProtocol {
+final class AccountManager: AccountManagerProtocol {
 
   // signUp
 
@@ -36,7 +36,7 @@ final class LoginRepository: LoginRepositoryProtocol {
     let parameters = [
       "socialUuid": loginInfo.socialUuid,
       "socialType": loginInfo.socialType,
-      "nickname" : nickname,
+      "nickname": nickname,
       "image": image
     ]
 

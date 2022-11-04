@@ -12,13 +12,6 @@ struct LoginInfo {
   let socialType: String
 }
 
-struct SignUpInfo {
-  let socialUuid: String
-  let socialType: String
-  let nickname: String
-  let image: String
-}
-
 struct SignUpResponse: Decodable {
   let isExistUser: Bool
   let authInfo: AuthInfo?

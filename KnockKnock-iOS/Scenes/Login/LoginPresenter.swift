@@ -16,7 +16,13 @@ protocol LoginPresenterProtocol {
 final class LoginPresenter: LoginPresenterProtocol {
   weak var view: LoginViewProtocol?
 
-  func presentLoginResult(loginResult: LoginResponse, loginInfo: LoginInfo) {
-    self.view?.fetchLoginResult(loginResult: loginResult, loginInfo: loginInfo)
+  func presentLoginResult(
+    loginResult: LoginResponse,
+    loginInfo: LoginInfo
+  ) {
+    self.view?.fetchLoginResult(
+      loginResult: loginResult,
+      loginInfo: loginInfo
+    )
   }
 }

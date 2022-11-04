@@ -18,7 +18,7 @@ final class LoginRouter: LoginRouterProtocol {
     let view = LoginViewController()
     let interactor = LoginInteractor()
     let presenter = LoginPresenter()
-    let worker = LoginWorker(repository: LoginRepository())
+    let worker = LoginWorker(accountManager: AccountManager())
     let router = LoginRouter()
 
     view.interactor = interactor
@@ -42,9 +42,4 @@ final class LoginRouter: LoginRouterProtocol {
       )
     }
   }
-
-  func navigateToHomeView(source: LoginViewProtocol) {
-    
-  }
-
 }

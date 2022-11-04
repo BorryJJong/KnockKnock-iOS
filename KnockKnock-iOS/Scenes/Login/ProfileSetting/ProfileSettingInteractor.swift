@@ -25,8 +25,10 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
 
   var loginInfo: LoginInfo?
 
-  func requestSignUp(nickname: String, image: String) {
-
+  func requestSignUp(
+    nickname: String,
+    image: String
+  ) {
     if let loginInfo = loginInfo {
       self.worker?.requestSignUp(
         loginInfo: loginInfo,

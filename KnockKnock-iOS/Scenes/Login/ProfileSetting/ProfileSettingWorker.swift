@@ -17,10 +17,10 @@ protocol ProfileSettingWorkerProtocol {
 }
 
 final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
-  private let repository: LoginRepositoryProtocol
+  private let accountManager: AccountManagerProtocol
 
-  init(repository: LoginRepositoryProtocol) {
-    self.repository = repository
+  init(accountManager: AccountManagerProtocol) {
+    self.accountManager = accountManager
   }
 
   func requestSignUp(
@@ -29,7 +29,7 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
     image: String,
     completionHandler: @escaping (SignUpResponse) -> Void
   ) {
-    self.repository.signUp(
+    self.accountManager.signUp(
       loginInfo: loginInfo,
       nickname: nickname,
       image: image,
