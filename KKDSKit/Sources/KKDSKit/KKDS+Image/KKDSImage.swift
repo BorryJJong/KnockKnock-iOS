@@ -139,7 +139,6 @@ public extension KKDS.Image {
   static var ic_kakao_login: UIImage              { .load(name: "ic_kakao_login") }
 }
 
-
 extension UIImage {
   public static func load(name: String) -> UIImage {
     guard let image = UIImage(named: name, in: KKDS.bundle, compatibleWith: nil) else {

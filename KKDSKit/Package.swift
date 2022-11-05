@@ -5,11 +5,14 @@ import PackageDescription
 
 let package = Package(
   name: "KKDSKit",
+  platforms: [
+    .iOS(.v11)
+  ],
   products: [
     .library(
       name: "KKDSKit",
       targets: ["KKDSKit"]
-    ),
+    )
   ],
   dependencies: [],
   targets: [
@@ -20,6 +23,6 @@ let package = Package(
     ),
     .testTarget(
       name: "KKDSKitTests",
-      dependencies: ["KKDSKit"]),
+      dependencies: ["KKDSKit"])
   ]
 )
