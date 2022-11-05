@@ -31,8 +31,8 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
 
   var addressList: [String] = [] {
     didSet {
-      print(addressList.count)
       self.containerView.resultTableView.reloadData()
+      self.fetchMore = true
     }
   }
 
@@ -41,14 +41,13 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
       let isNoResult = addressResult?.meta.totalCount == 0
       self.containerView.bind(isNoResult: isNoResult)
 
-      addressResult?.documents.forEach {
-        self.addressList.append($0.placeName)
-      }
+      self.addressList += addressResult?.documents.map { $0.placeName } ?? []
     }
   }
 
   private var page: Int = 1
   private var searchKeyword = ""
+  private var fetchMore = true
 
   // MARK: - UIs
 
@@ -120,6 +119,8 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
 
     self.searchKeyword = "\(city) \(region) \(address)"
 
+    self.addressList = []
+    self.page = 1
     self.interactor?.fetchShopAddress(keyword: self.searchKeyword, page: self.page)
     self.dismissKeyboard()
   }
@@ -161,7 +162,6 @@ extension ShopSearchViewController: UITextFieldDelegate {
 
 extension ShopSearchViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//    return self.addressResult?.documents.count ?? 0
     return self.addressList.count
   }
 
@@ -171,10 +171,8 @@ extension ShopSearchViewController: UITableViewDataSource {
   ) -> UITableViewCell {
     let cell = tableView.dequeueCell(withType: AdressCell.self, for: indexPath)
 
-//    if let address = self.addressResult?.documents[indexPath.row].placeName {
     cell.bind(address: self.addressList[indexPath.row])
-//    }
-    
+
     return cell
   }
 
@@ -184,7 +182,7 @@ extension ShopSearchViewController: UITableViewDataSource {
     let offset = scrollView.contentOffset.y
     let reachedBottom = (offset > contentSizeHeight - height)
 
-    if reachedBottom {
+    if reachedBottom && fetchMore {
       scrollViewDidReachBottom(scrollView)
     }
   }
@@ -192,8 +190,14 @@ extension ShopSearchViewController: UITableViewDataSource {
   func scrollViewDidReachBottom(_ scrollView: UIScrollView) {
     if let isEnd = self.addressResult?.meta.isEnd {
       if !isEnd {
+        self.fetchMore = false
         self.page += 1
-        self.interactor?.fetchShopAddress(keyword: self.searchKeyword, page: self.page)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+          self.interactor?.fetchShopAddress(
+            keyword: self.searchKeyword,
+            page: self.page
+          )
+        })
       }
     }
   }
@@ -203,9 +207,6 @@ extension ShopSearchViewController: UITableViewDataSource {
 
 extension ShopSearchViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//    if let address = self.addressResult?.documents[indexPath.row].placeName {
-      
     self.router?.passToFeedWriteView(source: self, address: self.addressList[indexPath.row])
-//    }
   }
 }

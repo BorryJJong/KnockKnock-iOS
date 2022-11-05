@@ -23,7 +23,7 @@ final class ShopSearchRepository: ShopSearchRepositoryProtocol {
   ) {
     KKNetworkManager.shared.request(
       object: AddressResult.self,
-      router: KKRouter.requestShopAddress(query: keyword, page: page, size: 10),
+      router: KKRouter.requestShopAddress(query: keyword, page: page, size: 15),
       success: { response in
         completionHandler(response)
       },

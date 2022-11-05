@@ -17,6 +17,7 @@ protocol FeedWriteViewProtocol: AnyObject {
   func getAddress(address: String)
 }
 
+
 final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
   // MARK: - Properties
