@@ -17,6 +17,7 @@ protocol FeedListInteractorProtocol {
     feedId: Int,
     challengeId: Int
   )
+  func requestLike(id: Int, userId: Int)
 }
 
 final class FeedListInteractor: FeedListInteractorProtocol {
@@ -38,5 +39,11 @@ final class FeedListInteractor: FeedListInteractorProtocol {
         self?.presenter?.presentFetchFeedList(feedList: feedList)
       }
     )
+  }
+
+  func requestLike(id: Int, userId: Int) {
+    self.worker?.requestLike(id: id, userId: userId, completionHandler: {
+//      self?.presenter?.
+    })
   }
 }

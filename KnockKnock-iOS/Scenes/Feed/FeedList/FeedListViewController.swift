@@ -109,6 +109,10 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   @objc func commentButtonDidTap(_ sender: UIButton) {
     self.router?.navigateToCommentView(source: self)
   }
+
+  @objc func likeButtonDidTap(_ sender: UIButton) {
+    self.interactor.
+  }
 }
 
 // MARK: - Extensions
@@ -138,7 +142,13 @@ extension FeedListViewController: UICollectionViewDataSource {
     cell.bind(feedList: self.feedListPost[indexPath.section])
     cell.commentsButton.addTarget(
       self,
-      action: #selector(commentButtonDidTap(_:)),
+      action: #selector(self.commentButtonDidTap(_:)),
+      for: .touchUpInside
+    )
+
+    cell.likeButton.addTarget(
+      self,
+      action: #selector(self.likeButtonDidTap(_:)),
       for: .touchUpInside
     )
 

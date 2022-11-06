@@ -15,6 +15,7 @@ protocol FeedListWorkerProtocol {
     challengeId: Int,
     completionHandler: @escaping (FeedList) -> Void
   )
+  func requestLike(id: Int, userId: Int, completionHandler: @escaping (Bool) -> Void) 
 }
 
 final class FeedListWorker: FeedListWorkerProtocol {
@@ -40,5 +41,11 @@ final class FeedListWorker: FeedListWorkerProtocol {
       completionHandler: { result in
         completionHandler(result)
       })
+  }
+
+  func requestLike(id: Int, userId: Int, completionHandler: @escaping (Bool) -> Void) {
+    self.likeRepository.requestLike(id: id, userId: userId, completionHandler: { result in
+      completionHandler(result)
+    })
   }
 }
