@@ -15,6 +15,7 @@ protocol FeedListViewProtocol: AnyObject {
   var router: FeedListRouterProtocol? { get set }
   
   func fetchFeedList(feedList: FeedList)
+  func fetchFeedLikeResult(isSuccess: Bool)
 }
 
 final class FeedListViewController: BaseViewController<FeedListView> {
@@ -111,7 +112,32 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   }
 
   @objc func likeButtonDidTap(_ sender: UIButton) {
-    self.interactor.
+    sender.isSelected.toggle()
+    
+    let title = self.setLikeButtonTitle(
+      currentNum: sender.titleLabel?.text,
+      isSelected: sender.isSelected
+    )
+    sender.setTitle(title, for: .normal)
+    self.interactor?.requestLike(id: sender.tag, userId: 1)
+  }
+
+  func setLikeButtonTitle(currentNum: String?, isSelected: Bool) -> String {
+    var number = 0
+    var newTitle = " "
+
+    let numberFormatter = NumberFormatter().then {
+      $0.numberStyle = .decimal
+    }
+
+    if let title = currentNum?.filter({ $0.isNumber }) {
+      if let titleToInt = Int(title) {
+        number = isSelected ? (titleToInt + 1) : (titleToInt - 1)
+        newTitle = numberFormatter.string(from: NSNumber(value: number)) ?? ""
+      }
+    }
+
+    return " \(newTitle)"
   }
 }
 
@@ -145,7 +171,8 @@ extension FeedListViewController: UICollectionViewDataSource {
       action: #selector(self.commentButtonDidTap(_:)),
       for: .touchUpInside
     )
-
+    cell.likeButton.tag = indexPath.section
+    cell.commentsButton.tag = indexPath.section
     cell.likeButton.addTarget(
       self,
       action: #selector(self.likeButtonDidTap(_:)),
@@ -247,5 +274,9 @@ extension FeedListViewController: FeedListViewProtocol {
     feedList.feeds.forEach {
       self.feedListPost.append($0)
     }
+  }
+
+  func fetchFeedLikeResult(isSuccess: Bool) {
+    print(isSuccess)
   }
 }

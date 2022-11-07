@@ -42,8 +42,8 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   }
 
   func requestLike(id: Int, userId: Int) {
-    self.worker?.requestLike(id: id, userId: userId, completionHandler: {
-//      self?.presenter?.
+    self.worker?.requestLike(id: id, userId: userId, completionHandler: { result in
+      self.presenter?.presentFeedLikeResult(isSuccess: result)
     })
   }
 }

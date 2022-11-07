@@ -21,9 +21,11 @@ protocol FeedListWorkerProtocol {
 final class FeedListWorker: FeedListWorkerProtocol {
 
   private let repository: FeedRepositoryProtocol
+  private let likeRepository: LikeRepositoryProtocol
 
-  init(repository: FeedRepositoryProtocol) {
+  init(repository: FeedRepositoryProtocol, likeRepository: LikeRepositoryProtocol) {
     self.repository = repository
+    self.likeRepository = likeRepository
   }
 
   func fetchFeedList(

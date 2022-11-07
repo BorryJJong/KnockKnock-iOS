@@ -32,4 +32,22 @@ final class KKNetworkManager {
           }
         }
     }
+
+  func requstLike<T> (
+    object: T.Type,
+    router: KKRouter,
+    success: @escaping Success<T>,
+    failure: @escaping Failure
+  ) {
+      AF.request(router)
+        .validate(statusCode: 200..<500)
+        .response { response in
+          switch response.result {
+          case .success:
+            print("success")
+          case .failure(let err):
+            failure(err)
+          }
+        }
+    }
 }

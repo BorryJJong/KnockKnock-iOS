@@ -22,7 +22,7 @@ final class FeedListRouter: FeedListRouterProtocol {
     let view = FeedListViewController()
     let interactor = FeedListInteractor()
     let presenter = FeedListPresenter()
-    let worker = FeedListWorker(repository: FeedRepository())
+    let worker = FeedListWorker(repository: FeedRepository(), likeRepository: LikeRepository())
     let router = FeedListRouter()
 
     view.interactor = interactor

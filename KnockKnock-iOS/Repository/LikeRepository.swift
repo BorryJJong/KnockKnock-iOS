@@ -17,7 +17,7 @@ final class LikeRepository: LikeRepositoryProtocol {
   func requestLike(id: Int, userId: Int, completionHandler: @escaping (Bool) -> Void) {
     KKNetworkManager
       .shared
-      .request(
+      .requstLike(
         object: Bool.self,
         router: KKRouter.postFeedLike(
           id: id,
@@ -27,6 +27,16 @@ final class LikeRepository: LikeRepositoryProtocol {
         }, failure: { error in
           print(error)
         })
+    //      .request(
+    //        object: Bool.self,
+    //        router: KKRouter.postFeedLike(
+    //          id: id,
+    //          userId: userId
+    //        ), success: { result in
+    //          completionHandler(result)
+    //        }, failure: { error in
+    //          print(error)
+    //        })
   }
 
   func requestLikeList(completionHandler: @escaping ([Like]) -> Void) {

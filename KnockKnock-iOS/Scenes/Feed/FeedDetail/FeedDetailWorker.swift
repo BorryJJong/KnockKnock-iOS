@@ -11,7 +11,7 @@ protocol FeedDetailWorkerProtocol {
   func getFeedDetail(feedId: Int, complitionHandler: @escaping (FeedDetail) -> Void)
   func getAllComments(complitionHandler: @escaping ([Comment]) -> Void)
   func getLike(complitionHandler: @escaping ([Like]) -> Void)
- 
+}
 
 final class FeedDetailWorker: FeedDetailWorkerProtocol {
 
