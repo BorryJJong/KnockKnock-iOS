@@ -168,6 +168,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   @objc private func keyboardWillHide(_ notification: Notification) {
     self.setCommentsTextViewConstant(isAppearing: false)
     self.setContainerViewConstant(notification: notification, isAppearing: false)
+    
     if self.containerView.commentTextView.text.isEmpty {
       self.containerView.likeButton.isHidden = false
       self.containerView.commentTextView.leadingConstraint?.constant = 0

@@ -69,6 +69,23 @@ final class CommentViewController: BaseViewController<CommentView> {
 
     self.addKeyboardNotification()
     self.hideKeyboardWhenTappedAround()
+    self.changeStatusBarBgColor(bgColor: .white
+    )
+  }
+
+  func changeStatusBarBgColor(bgColor: UIColor?) {
+    if #available(iOS 13.0, *) {
+      let window = UIApplication.shared.windows.first
+      let statusBarManager = window?.windowScene?.statusBarManager
+
+      let statusBarView = UIView(frame: statusBarManager?.statusBarFrame ?? .zero)
+      statusBarView.backgroundColor = bgColor
+
+      window?.addSubview(statusBarView)
+    } else {
+      let statusBarView = UIApplication.shared.value(forKey: "statusBar") as? UIView
+      statusBarView?.backgroundColor = bgColor
+    }
   }
 
   // MARK: - Keyboard Show & Hide
@@ -90,17 +107,22 @@ final class CommentViewController: BaseViewController<CommentView> {
   }
 
   @objc private func keyboardWillShow(_ notification: Notification) {
-    self.setCommentsTextViewConstant(notification: notification, isAppearing: true)
+    self.setContainerViewConstant(notification: notification, isAppearing: true)
+    self.setCommentsTextViewConstant(isAppearing: true)
   }
 
   @objc private func keyboardWillHide(_ notification: Notification) {
-    self.setCommentsTextViewConstant(notification: notification, isAppearing: false)
+    self.setContainerViewConstant(notification: notification, isAppearing: false)
+    self.setCommentsTextViewConstant(isAppearing: false)
   }
 
-  private func setCommentsTextViewConstant(
-    notification: Notification,
-    isAppearing: Bool
-  ) {
+  private func setCommentsTextViewConstant(isAppearing: Bool) {
+    let textViewHeightConstant = isAppearing ? 15.f : -19.f
+
+    self.containerView.commentTextView.bottomConstraint?.constant = textViewHeightConstant
+  }
+
+  private func setContainerViewConstant(notification: Notification, isAppearing: Bool) {
     let userInfo = notification.userInfo
 
     if let keyboardFrame = userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
@@ -112,9 +134,9 @@ final class CommentViewController: BaseViewController<CommentView> {
           .keyboardAnimationDurationUserInfoKey
       ] as? NSNumber else { return }
 
-      let heightConstant = isAppearing ? (-keyboardHeight + 15) : -19
+      let viewHeightConstant = isAppearing ? (-keyboardHeight) : 0
 
-      self.containerView.commentTextView.bottomConstraint?.constant = heightConstant
+      self.containerView.contentView.bottomConstraint?.constant = viewHeightConstant
 
       UIView.animate(withDuration: animationDurationValue.doubleValue) {
         self.containerView.layoutIfNeeded()
@@ -210,6 +232,15 @@ extension CommentViewController: UICollectionViewDataSource {
 }
 
 extension CommentViewController: UICollectionViewDelegateFlowLayout {
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    if self.containerView.commentCollectionView.isDragging {
+      let offset = scrollView.contentOffset.y
+
+      if offset <= 0 {
+        self.dismissKeyboard()
+      }
+    }
+  }
 }
 
 // MARK: - TextField delegate

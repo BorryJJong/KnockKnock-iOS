@@ -23,7 +23,7 @@ class CommentView: UIView {
 
     static let commentCollectionViewLeadingMargin = 20.f
     static let commentCollectionViewTrailingMargin = -20.f
-    static let commentCollectionViewBottomMargin = -70.f
+    static let commentCollectionViewBottomMargin = 70.f
 
     static let commentInputViewTopMargin = -20.f
 
@@ -45,8 +45,10 @@ class CommentView: UIView {
   // MARK: - UIs
 
   private let headerView = UIView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.backgroundColor = .white
   }
+
+  let contentView = UIView()
 
   private let titleLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
@@ -67,11 +69,17 @@ class CommentView: UIView {
       $0.translatesAutoresizingMaskIntoConstraints = false
       $0.backgroundColor = .clear
       $0.registHeaderView(type: CommentHeaderCollectionReusableView.self)
+      $0.contentInset = .init(
+        top: 0,
+        left: 0,
+        bottom: Metric.commentCollectionViewBottomMargin,
+        right: 0
+      )
     }
 
   let commentInputView = UIView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .white
+    $0.backgroundColor = .red
     $0.layer.borderWidth = 1
     $0.layer.borderColor = UIColor.white.cgColor
     $0.layer.masksToBounds = false
@@ -125,10 +133,11 @@ class CommentView: UIView {
   // MARK: - Constraints
 
   func setupConstraints() {
+    [self.contentView].addSubViews(self)
+    [self.commentCollectionView].addSubViews(self.contentView)
+    [self.commentInputView, self.commentTextView, self.registButton].addSubViews(self.contentView)
     [self.headerView].addSubViews(self)
     [self.titleLabel, self.exitButton].addSubViews(self.headerView)
-    [self.commentCollectionView].addSubViews(self)
-    [self.commentInputView, self.commentTextView, self.registButton].addSubViews(self)
 
     self.headerView.snp.makeConstraints {
       $0.top.leading.equalTo(self.safeAreaLayoutGuide)
@@ -145,26 +154,31 @@ class CommentView: UIView {
       $0.center.equalToSuperview()
     }
 
-    self.commentCollectionView.snp.makeConstraints {
+    self.contentView.snp.makeConstraints {
       $0.top.equalTo(self.headerView.snp.bottom)
-      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.commentCollectionViewLeadingMargin)
-      $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(Metric.commentCollectionViewBottomMargin)
+      $0.trailing.leading.bottom.equalTo(self.safeAreaLayoutGuide)
+    }
+
+    self.commentCollectionView.snp.makeConstraints {
+      $0.top.equalTo(self.contentView)
+      $0.leading.trailing.equalTo(self.contentView)
+      $0.bottom.equalTo(self.contentView)
     }
 
     self.commentInputView.snp.makeConstraints {
-      $0.bottom.trailing.leading.equalTo(self.safeAreaLayoutGuide)
+      $0.bottom.trailing.leading.equalTo(self.contentView)
       $0.top.equalTo(self.commentTextView.snp.top).offset(Metric.commentInputViewTopMargin)
     }
 
     self.commentTextView.snp.makeConstraints {
       $0.height.equalTo(Metric.commentTextViewHeight)
-      $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(Metric.commentTextViewBottomMargin)
-      $0.trailing.equalTo(self.safeAreaLayoutGuide).offset(Metric.commentTextViewTrailingMargin)
-      $0.leading.equalTo(self.safeAreaLayoutGuide).offset(Metric.commentTextViewLeadingMargin)
+      $0.bottom.equalTo(self.contentView).offset(Metric.commentTextViewBottomMargin)
+      $0.trailing.equalTo(self.contentView).offset(Metric.commentTextViewTrailingMargin)
+      $0.leading.equalTo(self.contentView).offset(Metric.commentTextViewLeadingMargin)
     }
 
     self.registButton.snp.makeConstraints {
-      $0.trailing.equalTo(self.safeAreaLayoutGuide).offset(Metric.registButtonTrailingMargin)
+      $0.trailing.equalTo(self.contentView).offset(Metric.registButtonTrailingMargin)
       $0.bottom.equalTo(self.commentTextView)
       $0.width.equalTo(Metric.registButtonWidth)
       $0.height.equalTo(Metric.registButtonHeight)
@@ -185,7 +199,7 @@ class CommentView: UIView {
     let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
     let section = NSCollectionLayoutSection(group: group)
-    section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0.0, bottom: 15, trailing: 0.0)
+    section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 15, trailing: 20)
     section.interGroupSpacing = 15
     section.boundarySupplementaryItems = [header]
 
