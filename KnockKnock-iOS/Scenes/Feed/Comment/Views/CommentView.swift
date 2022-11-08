@@ -186,24 +186,33 @@ class CommentView: UIView {
   }
   
   func commentCollectionViewLayout() -> UICollectionViewCompositionalLayout {
-    let estimatedHeigth: CGFloat = 400
+    let estimatedHeigth: CGFloat = 100
 
-    let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(estimatedHeigth))
-    let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+    let commentItemSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .estimated(estimatedHeigth)
+    )
+    let commentItem = NSCollectionLayoutItem(layoutSize: commentItemSize)
 
-    let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                            heightDimension: .estimated(estimatedHeigth))
-    let item = NSCollectionLayoutItem(layoutSize: itemSize)
+    let commentGroupSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .estimated(estimatedHeigth)
+    )
+    let commentGroup = NSCollectionLayoutGroup.vertical(
+      layoutSize: commentGroupSize,
+      subitems: [commentItem]
+    )
 
-    let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(estimatedHeigth))
-    let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+    let commentSection = NSCollectionLayoutSection(group: commentGroup)
+    commentSection.interGroupSpacing = 15
+    commentSection.contentInsets = NSDirectionalEdgeInsets(
+      top: 15,
+      leading: 20,
+      bottom: 15,
+      trailing: 20
+    )
 
-    let section = NSCollectionLayoutSection(group: group)
-    section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 15, trailing: 20)
-    section.interGroupSpacing = 15
-    section.boundarySupplementaryItems = [header]
-
-    let layout = UICollectionViewCompositionalLayout(section: section)
+    let layout = UICollectionViewCompositionalLayout(section: commentSection)
 
     return layout
   }

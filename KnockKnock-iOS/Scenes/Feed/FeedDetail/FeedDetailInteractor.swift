@@ -24,7 +24,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   func getFeedDeatil(feedId: Int) {
     self.worker?.getFeedDetail(
       feedId: feedId,
-      complitionHandler: { [weak self] feedDetail in
+      completionHandler: { [weak self] feedDetail in
         self?.presenter?.presentFeedDetail(feedDetail: feedDetail)
     })
   }
@@ -36,7 +36,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   }
 
   func getAllComments() {
-    self.worker?.getAllComments(complitionHandler: {[weak self] comments in
+    self.worker?.getAllComments(completionHandler: {[weak self] comments in
       self?.presenter?.presentAllComments(allComments: comments)
     })
   }

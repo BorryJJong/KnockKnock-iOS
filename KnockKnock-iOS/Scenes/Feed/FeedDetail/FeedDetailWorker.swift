@@ -8,9 +8,9 @@
 import UIKit
 
 protocol FeedDetailWorkerProtocol {
-  func getFeedDetail(feedId: Int, complitionHandler: @escaping (FeedDetail) -> Void)
-  func getAllComments(complitionHandler: @escaping ([Comment]) -> Void)
-  func getLike(complitionHandler: @escaping ([Like]) -> Void)
+  func getFeedDetail(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void)
+  func getAllComments(completionHandler: @escaping ([Comment]) -> Void)
+  func getLike(completionHandler: @escaping ([Like]) -> Void)
 }
 
 final class FeedDetailWorker: FeedDetailWorkerProtocol {
@@ -29,23 +29,23 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
     self.likeRepository = likeRepository
   }
 
-  func getFeedDetail(feedId: Int, complitionHandler: @escaping (FeedDetail) -> Void) {
+  func getFeedDetail(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void) {
     self.feedRepository.requestFeedDetail(
       feedId: feedId,
       completionHandler: { feed in
-        complitionHandler(feed)
+        completionHandler(feed)
       })
   }
 
-  func getAllComments(complitionHandler: @escaping (([Comment]) -> Void)) {
+  func getAllComments(completionHandler: @escaping (([Comment]) -> Void)) {
     self.commentRepository.getComments(completionHandler: { comment in
-      complitionHandler(comment)
+      completionHandler(comment)
     })
   }
 
-  func getLike(complitionHandler: @escaping ([Like]) -> Void) {
+  func getLike(completionHandler: @escaping ([Like]) -> Void) {
     self.likeRepository.getlike(completionHandler: { like in
-      complitionHandler(like)
+      completionHandler(like)
     })
   }
 }

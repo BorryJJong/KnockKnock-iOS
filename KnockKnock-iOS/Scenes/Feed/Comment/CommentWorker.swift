@@ -8,7 +8,7 @@
 import Foundation
 
 protocol CommentWorkerProtocol {
-  func getComments(completionHandler: @escaping ([Comment]) -> Void)
+  func getAllComments(completionHandler: @escaping ([Comment]) -> Void)
 }
 
 final class CommentWorker: CommentWorkerProtocol {
@@ -18,7 +18,7 @@ final class CommentWorker: CommentWorkerProtocol {
     self.repository = repository
   }
 
-  func getComments(completionHandler: @escaping ([Comment]) -> Void) {
+  func getAllComments(completionHandler: @escaping ([Comment]) -> Void) {
     self.repository.getComments(completionHandler: { result in
       completionHandler(result)
     })
