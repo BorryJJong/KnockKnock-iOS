@@ -10,17 +10,12 @@ import Foundation
 protocol CommentPresenterProtocol {
   var view: CommentViewProtocol? { get set }
 
-//  func presentComments(comments: [Comment])
   func presentAllComments(allComments: [Comment])
   func setVisibleComments(visibleComments: [Comment])
 }
 
 final class CommentPresenter: CommentPresenterProtocol {
   var view: CommentViewProtocol?
-
-//  func presentComments(comments: [Comment]) {
-//    self.view?.getComments(comments: comments)
-//  }
 
   func presentAllComments(allComments: [Comment]) {
     self.view?.getAllComments(allComments: allComments)
