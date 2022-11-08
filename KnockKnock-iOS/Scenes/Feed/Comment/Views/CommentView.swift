@@ -68,7 +68,6 @@ class CommentView: UIView {
     }).then {
       $0.translatesAutoresizingMaskIntoConstraints = false
       $0.backgroundColor = .clear
-      $0.registHeaderView(type: CommentHeaderCollectionReusableView.self)
       $0.contentInset = .init(
         top: 0,
         left: 0,
