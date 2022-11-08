@@ -136,10 +136,7 @@ final class CommentViewController: BaseViewController<CommentView> {
     } else {
       self.reply[sender.tag] = []
     }
-    
-    UIView.performWithoutAnimation {
-      self.containerView.commentCollectionView.reloadSections([sender.tag])
-    }
+    self.containerView.commentCollectionView.reloadData()
   }
 
   @objc private func longPressGestureDidDetect(_ sender: UILongPressGestureRecognizer) {
