@@ -30,22 +30,29 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
     self.likeRepository = likeRepository
   }
 
-  func getFeedDetail(feedId: Int, complitionHandler: @escaping (FeedDetail) -> Void) {
+  func getFeedDetail(
+    feedId: Int,
+    complitionHandler: @escaping (FeedDetail) -> Void
+  ) {
     self.feedRepository.requestFeedDetail(
       feedId: feedId,
       completionHandler: { feed in
         complitionHandler(feed)
-      })
+      }
+    )
   }
 
-  func getAllComments(feedId: Int, complitionHandler: @escaping (([Comment]) -> Void)) {
+  func getAllComments(
+    feedId: Int,
+    complitionHandler: @escaping ([Comment]) -> Void
+  ) {
     var data: [Comment] = []
     self.commentRepository.requestComments(
       feedId: feedId,
       completionHandler: { comment in
-        comment.forEach {
-          data.append(Comment(commentData: $0))
-        }
+        let commentData = comment.map { Comment(commentData: $0) }
+        data += commentData
+
         complitionHandler(data)
       }
     )

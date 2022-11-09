@@ -28,9 +28,7 @@ final class CommentInteractor: CommentInteractorProtocol {
     )
   }
 
-  func requestAddComment(
-    comment: AddCommentRequest
-  ) {
+  func requestAddComment(comment: AddCommentRequest) {
     self.worker?.requestAddComment(
       comment: comment,
       completionHandler: { response in

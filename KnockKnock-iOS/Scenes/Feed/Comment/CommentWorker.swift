@@ -22,7 +22,10 @@ final class CommentWorker: CommentWorkerProtocol {
     self.repository = repository
   }
 
-  func getComments(feedId: Int, completionHandler: @escaping ([Comment]) -> Void) {
+  func getComments(
+    feedId: Int,
+    completionHandler: @escaping ([Comment]) -> Void
+  ) {
     self.repository.requestComments(
       feedId: feedId,
       completionHandler: { result in
