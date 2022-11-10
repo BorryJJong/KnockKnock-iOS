@@ -11,3 +11,8 @@ struct Promotion: Decodable, Equatable {
   let id: Int
   let type: String
 }
+
+struct SelectablePromotion {
+  let promotionInfo: Promotion
+  var isSelected: Bool
+}

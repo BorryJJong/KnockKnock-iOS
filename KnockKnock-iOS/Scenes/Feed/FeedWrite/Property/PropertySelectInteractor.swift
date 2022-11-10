@@ -20,7 +20,13 @@ final class PropertySelectInteractor: PropertySelectInteractorProtocol {
   var presenter: PropertySelectPresenterProtocol?
 
   func fetchPromotionList() {
-    self.worker?.requestPromotionList(completionHandler: { promotionList in
+    self.worker?.requestPromotionList(completionHandler: { promotions in
+      let promotionList = promotions.map {
+        SelectablePromotion(
+          promotionInfo: $0,
+          isSelected: false
+        )
+      }
       self.presenter?.presentPromotionList(promotionList: promotionList)
     })
   }

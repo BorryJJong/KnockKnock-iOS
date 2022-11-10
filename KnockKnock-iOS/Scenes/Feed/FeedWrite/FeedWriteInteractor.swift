@@ -31,9 +31,9 @@ extension FeedWriteInteractor: ShopSearchDelegate {
 }
 
 extension FeedWriteInteractor: PropertyDelegate {
-  func fetchSelectedPromotion(selection: [Promotion]) {
+  func fetchSelectedPromotion(selection: [SelectablePromotion]) {
     let promotion = selection.map {
-      $0.type
+      $0.promotionInfo.type
     }
     let content = promotion.joined(separator: ", ")
 

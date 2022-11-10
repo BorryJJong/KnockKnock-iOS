@@ -14,7 +14,7 @@ protocol PropertySelectViewProtocol: AnyObject {
   var router: PropertySelectRouterProtocol? { get set }
   var interactor: PropertySelectInteractorProtocol? { get set }
 
-  func fetchPromotionList(promotionList: [Promotion])
+  func fetchPromotionList(promotionList: [SelectablePromotion])
   func fetchTagList(tagList: [ChallengeTitle])
 }
 
@@ -23,10 +23,9 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
   // MARK: - Properties
   
   var tagList: [ChallengeTitle] = []
-  var promotionList: [Promotion] = []
 
   var selectedTags: [ChallengeTitle] = []
-  var selectedPromotions: [Promotion] = []
+  var selectablePromotion: [SelectablePromotion] = []
 
   var propertyType = PropertyType.promotion
   
@@ -81,7 +80,7 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
     if self.propertyType == .promotion {
       self.router?.passPromotionToFeedWriteView(
         source: self,
-        selectedPromotion: self.selectedPromotions
+        selectedPromotion: self.selectablePromotion
       )
     } else if self.propertyType == .tag {
       self.router?.passTagToFeedWriteView(
@@ -99,9 +98,16 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
 // MARK: - PropertySelectViewProtocol
 
 extension PropertySelectViewController: PropertySelectViewProtocol {
-  func fetchPromotionList(promotionList: [Promotion]) {
-    self.promotionList = promotionList
-    self.promotionList.insert(Promotion(id: 0, type: "없음"), at: 0)
+  func fetchPromotionList(promotionList: [SelectablePromotion]) {
+    self.selectablePromotion = promotionList
+    self.selectablePromotion.insert(
+      SelectablePromotion(
+        promotionInfo: Promotion(
+          id: 0,
+          type: "없음"
+        ), isSelected: false
+      ), at: 0
+    )
     self.containerView.propertyTableView.reloadData()
   }
 
@@ -117,7 +123,7 @@ extension PropertySelectViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     switch propertyType {
     case .promotion:
-      return self.promotionList.count
+      return self.selectablePromotion.count
 
     case .tag:
       return self.tagList.count
@@ -132,7 +138,7 @@ extension PropertySelectViewController: UITableViewDataSource {
 
     switch propertyType {
     case .promotion:
-      cell.bind(content: promotionList[indexPath.row].type)
+      cell.bind(content: selectablePromotion[indexPath.row].promotionInfo.type)
 
     case .tag:
       cell.bind(content: tagList[indexPath.row].title)
@@ -153,28 +159,10 @@ extension PropertySelectViewController: UITableViewDelegate {
       self.selectedTags.append(self.tagList[indexPath.item])
 
     case .promotion:
-      self.selectedPromotions.append(self.promotionList[indexPath.item])
+      self.selectablePromotion[indexPath.row].isSelected.toggle()
 
     case .address:
       print("error")
     }
-  }
-
-  func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-    switch propertyType {
-    case .tag:
-      if let index = self.selectedTags.firstIndex(of: self.tagList[indexPath.item]) {
-        self.selectedTags.remove(at: index)
-      }
-
-    case .promotion:
-      if let index = self.selectedPromotions.firstIndex(of: self.promotionList[indexPath.item]) {
-        self.selectedPromotions.remove(at: index)
-      }
-
-    case .address:
-      print("error")
-    }
-
   }
 }
