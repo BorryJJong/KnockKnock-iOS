@@ -45,6 +45,7 @@ final class CommentViewController: BaseViewController<CommentView> {
       $0.registCell(type: PostCommentCell.self)
       $0.collectionViewLayout = self.containerView.commentCollectionViewLayout()
       $0.scrollsToTop = true
+      $0.layoutIfNeeded()
     }
 
     self.containerView.exitButton.do {
@@ -61,23 +62,6 @@ final class CommentViewController: BaseViewController<CommentView> {
 
     self.addKeyboardNotification()
     self.hideKeyboardWhenTappedAround()
-    self.changeStatusBarBgColor(bgColor: .white
-    )
-  }
-
-  func changeStatusBarBgColor(bgColor: UIColor?) {
-    if #available(iOS 13.0, *) {
-      let window = UIApplication.shared.windows.first
-      let statusBarManager = window?.windowScene?.statusBarManager
-
-      let statusBarView = UIView(frame: statusBarManager?.statusBarFrame ?? .zero)
-      statusBarView.backgroundColor = bgColor
-
-      window?.addSubview(statusBarView)
-    } else {
-      let statusBarView = UIApplication.shared.value(forKey: "statusBar") as? UIView
-      statusBarView?.backgroundColor = bgColor
-    }
   }
 
   // MARK: - Keyboard Show & Hide
@@ -128,7 +112,7 @@ final class CommentViewController: BaseViewController<CommentView> {
 
       let viewHeightConstant = isAppearing ? (-keyboardHeight) : 0
 
-      self.containerView.contentView.bottomConstraint?.constant = viewHeightConstant
+      self.containerView.contentView.frame.origin.y = viewHeightConstant + 100
 
       UIView.animate(withDuration: animationDurationValue.doubleValue) {
         self.containerView.layoutIfNeeded()

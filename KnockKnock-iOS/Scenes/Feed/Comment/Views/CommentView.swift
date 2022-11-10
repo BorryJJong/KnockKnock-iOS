@@ -16,7 +16,7 @@ class CommentView: UIView {
   // MARK: - Constants
 
   private enum Metric {
-    static let headerViewHeight = 50.f
+    static let headerViewHeight = 100.f
     static let headerViewTrailingMargin = -10.f
 
     static let exitButtonTrailingMargin = -10.f
@@ -78,7 +78,7 @@ class CommentView: UIView {
 
   let commentInputView = UIView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .red
+    $0.backgroundColor = .white
     $0.layer.borderWidth = 1
     $0.layer.borderColor = UIColor.white.cgColor
     $0.layer.masksToBounds = false
@@ -139,18 +139,19 @@ class CommentView: UIView {
     [self.titleLabel, self.exitButton].addSubViews(self.headerView)
 
     self.headerView.snp.makeConstraints {
-      $0.top.leading.equalTo(self.safeAreaLayoutGuide)
+      $0.top.leading.equalToSuperview()
       $0.trailing.equalTo(self.safeAreaLayoutGuide).offset(Metric.headerViewTrailingMargin)
       $0.height.equalTo(Metric.headerViewHeight)
     }
 
     self.exitButton.snp.makeConstraints {
       $0.trailing.equalToSuperview().offset(Metric.exitButtonTrailingMargin)
-      $0.centerY.equalToSuperview()
+      $0.centerY.equalTo(self.safeAreaLayoutGuide.snp.top).offset(25)
     }
 
     self.titleLabel.snp.makeConstraints {
-      $0.center.equalToSuperview()
+      $0.centerX.equalToSuperview()
+      $0.centerY.equalTo(self.safeAreaLayoutGuide.snp.top).offset(25)
     }
 
     self.contentView.snp.makeConstraints {
@@ -159,7 +160,7 @@ class CommentView: UIView {
     }
 
     self.commentCollectionView.snp.makeConstraints {
-      $0.top.equalTo(self.contentView)
+      $0.top.equalTo(self.headerView.snp.bottom)
       $0.leading.trailing.equalTo(self.contentView)
       $0.bottom.equalTo(self.contentView)
     }
@@ -205,9 +206,9 @@ class CommentView: UIView {
     let commentSection = NSCollectionLayoutSection(group: commentGroup)
     commentSection.interGroupSpacing = 15
     commentSection.contentInsets = NSDirectionalEdgeInsets(
-      top: 15,
+      top: 0,
       leading: 20,
-      bottom: 15,
+      bottom: 0,
       trailing: 20
     )
 
