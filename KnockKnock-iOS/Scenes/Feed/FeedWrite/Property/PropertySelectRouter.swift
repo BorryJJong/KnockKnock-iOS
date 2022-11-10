@@ -20,11 +20,11 @@ protocol PropertySelectRouterProtocol {
 
   func passTagToFeedWriteView(
     source: PropertySelectViewProtocol,
-    selectedTag: [ChallengeTitle]
+    tagList: [ChallengeTitle]
   )
   func passPromotionToFeedWriteView(
     source: PropertySelectViewProtocol,
-    selectedPromotion: [SelectablePromotion]
+    promotionList: [SelectablePromotion]
   )
 
   func navigateToFeedWriteView(source: PropertySelectViewProtocol)
@@ -58,22 +58,24 @@ final class PropertySelectRouter: PropertySelectRouterProtocol {
 
   func passTagToFeedWriteView(
     source: PropertySelectViewProtocol,
-    selectedTag: [ChallengeTitle]
+    tagList: [ChallengeTitle]
   ) {
+    let selection = tagList.filter { $0.isSelected == true }
+
     self.delegate?.fetchSelectedTag(
-      selection: selectedTag
+      selection: selection
     )
     self.navigateToFeedWriteView(source: source)
   }
 
   func passPromotionToFeedWriteView(
     source: PropertySelectViewProtocol,
-    selectedPromotion: [SelectablePromotion]
+    promotionList: [SelectablePromotion]
   ) {
-    let promotion = selectedPromotion.filter { $0.isSelected == true }
+    let selection = promotionList.filter { $0.isSelected == true }
 
     self.delegate?.fetchSelectedPromotion(
-      selection: promotion
+      selection: selection
     )
     self.navigateToFeedWriteView(source: source)
   }

@@ -24,8 +24,7 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
   
   var tagList: [ChallengeTitle] = []
 
-  var selectedTags: [ChallengeTitle] = []
-  var selectablePromotion: [SelectablePromotion] = []
+  var promotionList: [SelectablePromotion] = []
 
   var propertyType = PropertyType.promotion
   
@@ -80,12 +79,12 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
     if self.propertyType == .promotion {
       self.router?.passPromotionToFeedWriteView(
         source: self,
-        selectedPromotion: self.selectablePromotion
+        promotionList: self.promotionList
       )
     } else if self.propertyType == .tag {
       self.router?.passTagToFeedWriteView(
         source: self,
-        selectedTag: self.selectedTags
+        tagList: self.tagList
       )
     }
   }
@@ -99,8 +98,8 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
 
 extension PropertySelectViewController: PropertySelectViewProtocol {
   func fetchPromotionList(promotionList: [SelectablePromotion]) {
-    self.selectablePromotion = promotionList
-    self.selectablePromotion.insert(
+    self.promotionList = promotionList
+    self.promotionList.insert(
       SelectablePromotion(
         promotionInfo: Promotion(
           id: 0,
@@ -123,7 +122,7 @@ extension PropertySelectViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     switch propertyType {
     case .promotion:
-      return self.selectablePromotion.count
+      return self.promotionList.count
 
     case .tag:
       return self.tagList.count
@@ -138,7 +137,7 @@ extension PropertySelectViewController: UITableViewDataSource {
 
     switch propertyType {
     case .promotion:
-      cell.bind(content: selectablePromotion[indexPath.row].promotionInfo.type)
+      cell.bind(content: promotionList[indexPath.row].promotionInfo.type)
 
     case .tag:
       cell.bind(content: tagList[indexPath.row].title)
@@ -156,10 +155,10 @@ extension PropertySelectViewController: UITableViewDelegate {
 
     switch propertyType {
     case .tag:
-      self.selectedTags.append(self.tagList[indexPath.item])
+      self.tagList[indexPath.row].isSelected.toggle()
 
     case .promotion:
-      self.selectablePromotion[indexPath.row].isSelected.toggle()
+      self.promotionList[indexPath.row].isSelected.toggle()
 
     case .address:
       print("error")
