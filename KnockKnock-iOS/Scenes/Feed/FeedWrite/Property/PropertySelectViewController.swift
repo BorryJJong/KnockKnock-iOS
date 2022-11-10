@@ -117,6 +117,7 @@ extension PropertySelectViewController: PropertySelectViewProtocol {
 
   func fetchTagList(tagList: [ChallengeTitle]) {
     self.tagList = tagList
+    self.tagList.remove(at: 0)
     self.containerView.propertyTableView.reloadData()
   }
 }

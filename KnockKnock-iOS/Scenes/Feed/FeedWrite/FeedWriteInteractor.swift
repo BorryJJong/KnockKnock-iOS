@@ -38,10 +38,14 @@ extension FeedWriteInteractor: PropertyDelegate {
     self.fetchProperty(selections: promotionList)
 
     let selection = promotionList.filter { $0.isSelected == true }
-    
-    let content = selection.map {
+
+    var content = selection.map {
       $0.promotionInfo.type
     }.joined(separator: ", ")
+
+    if selection.isEmpty {
+      content = "프로모션"
+    }
 
     self.presenter?.fetchProperty(
       propertyType: PropertyType.promotion,
@@ -54,9 +58,13 @@ extension FeedWriteInteractor: PropertyDelegate {
 
     let selection = tagList.filter { $0.isSelected == true }
 
-    let content = selection.map {
+    var content = selection.map {
       $0.title
     }.joined(separator: ", ")
+
+    if selection.isEmpty {
+      content = "#태그"
+    }
 
     self.presenter?.fetchProperty(
       propertyType: PropertyType.tag,
