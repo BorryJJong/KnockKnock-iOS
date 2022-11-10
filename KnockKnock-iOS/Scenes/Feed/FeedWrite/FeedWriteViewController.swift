@@ -15,6 +15,8 @@ protocol FeedWriteViewProtocol: AnyObject {
   var router: FeedWriteRouterProtocol? { get set }
 
   func fetchProperty(propertyType: PropertyType, content: String)
+  
+  func fetchSelectedProperty(selection: [Any])
 }
 
 final class FeedWriteViewController: BaseViewController<FeedWriteView> {
@@ -23,6 +25,9 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   
   var interactor: FeedWriteInteractorProtocol?
   var router: FeedWriteRouterProtocol?
+
+  private var selectedPromotion: [SelectablePromotion] = []
+  private var selectedTag: [ChallengeTitle] = []
 
   var pickedPhotos: [UIImage] = []
 
@@ -73,11 +78,21 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   // MARK: - Button Actions
 
   @objc func tagSelectButtonDidTap(_ sender: UIButton) {
-    self.router?.navigateToProperty(source: self, propertyType: .tag)
+    self.router?.navigateToProperty(
+      source: self,
+      propertyType: .tag,
+      promotionList: nil,
+      tagList: self.selectedTag
+    )
   }
 
   @objc func promotionSelectButtonDidTap(_ sender: UIButton) {
-    self.router?.navigateToProperty(source: self, propertyType: .promotion)
+    self.router?.navigateToProperty(
+      source: self,
+      propertyType: .promotion,
+      promotionList: self.selectedPromotion,
+      tagList: nil
+    )
   }
 
   @objc func shopSearchButtonDidTap(_ sender: UIButton) {
@@ -133,6 +148,16 @@ extension FeedWriteViewController: FeedWriteViewProtocol {
       propertyType: propertyType,
       content: content
     )
+  }
+
+  func fetchSelectedProperty(selection: [Any]) {
+    if let promotion = selection as? [SelectablePromotion] {
+      self.selectedPromotion = promotion
+    }
+
+    if let tag = selection as? [ChallengeTitle] {
+      self.selectedTag = tag
+    }
   }
 }
 

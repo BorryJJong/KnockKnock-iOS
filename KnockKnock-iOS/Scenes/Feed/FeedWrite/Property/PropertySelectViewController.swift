@@ -23,7 +23,6 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
   // MARK: - Properties
   
   var tagList: [ChallengeTitle] = []
-
   var promotionList: [SelectablePromotion] = []
 
   var propertyType = PropertyType.promotion
@@ -60,9 +59,15 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
 
     switch propertyType {
     case .tag:
-      self.interactor?.fetchTagList()
+      if self.tagList.isEmpty {
+        self.interactor?.fetchTagList()
+      }
+
     case .promotion:
-      self.interactor?.fetchPromotionList()
+      if self.promotionList.isEmpty {
+        self.interactor?.fetchPromotionList()
+      }
+
     case .address:
       print("error")
     }
@@ -137,10 +142,12 @@ extension PropertySelectViewController: UITableViewDataSource {
 
     switch propertyType {
     case .promotion:
-      cell.bind(content: promotionList[indexPath.row].promotionInfo.type)
+      let promotion = promotionList[indexPath.row]
+      cell.bind(content: promotion.promotionInfo.type, isSelected: promotion.isSelected)
 
     case .tag:
-      cell.bind(content: tagList[indexPath.row].title)
+      let tag = tagList[indexPath.row]
+      cell.bind(content: tag.title, isSelected: tag.isSelected)
 
     case .address:
       print("error")
@@ -156,9 +163,11 @@ extension PropertySelectViewController: UITableViewDelegate {
     switch propertyType {
     case .tag:
       self.tagList[indexPath.row].isSelected.toggle()
+      tableView.reloadRows(at: [indexPath], with: .none)
 
     case .promotion:
       self.promotionList[indexPath.row].isSelected.toggle()
+      tableView.reloadRows(at: [indexPath], with: .none)
 
     case .address:
       print("error")

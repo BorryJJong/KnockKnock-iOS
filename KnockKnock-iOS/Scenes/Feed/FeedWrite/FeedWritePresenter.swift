@@ -11,6 +11,8 @@ protocol FeedWritePresenterProtocol: AnyObject {
   var view: FeedWriteViewProtocol? { get set }
 
   func fetchProperty(propertyType: PropertyType, content: String)
+  
+  func presentSelectedProperty(selections: [Any])
 }
 
 final class FeedWritePresenter: FeedWritePresenterProtocol {
@@ -18,5 +20,9 @@ final class FeedWritePresenter: FeedWritePresenterProtocol {
 
   func fetchProperty(propertyType: PropertyType, content: String) {
     self.view?.fetchProperty(propertyType: propertyType, content: content)
+  }
+
+  func presentSelectedProperty(selections: [Any]) {
+    self.view?.fetchSelectedProperty(selection: selections)
   }
 }

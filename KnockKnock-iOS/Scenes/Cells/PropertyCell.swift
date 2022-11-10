@@ -44,13 +44,20 @@ final class PropertyCell: BaseTableViewCell {
   
   // MARK: - Bind
 
-  override func setSelected(_ selected: Bool, animated: Bool) {
-    super.setSelected(selected, animated: animated)
-    self.isCheck.toggle()
-  }
+//  override func setSelected(_ selected: Bool, animated: Bool) {
+//    super.setSelected(selected, animated: animated)
+//    self.isCheck.toggle()
+//  }
 
-  func bind(content: String) {
+  func bind(content: String, isSelected: Bool) {
     self.propertyLabel.text = content
+
+    let propertyLabelColor = isSelected ? UIColor.green50 : UIColor.black
+    let checkImage = isSelected ?  KKDS.Image.ic_checkbox_20_on : KKDS.Image.ic_checkbox_20_off
+
+    self.propertyLabel.textColor = propertyLabelColor
+    self.checkImageView.image = checkImage
+
   }
 
   // MARK: - Configure

@@ -18,7 +18,10 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
 
   var presenter: FeedWritePresenterProtocol?
   var worker: FeedWriteWorkerProtocol?
-  
+
+  func fetchProperty(selections: [Any]) {
+    self.presenter?.presentSelectedProperty(selections: selections)
+  }
 }
 
 extension FeedWriteInteractor: ShopSearchDelegate {
@@ -31,7 +34,11 @@ extension FeedWriteInteractor: ShopSearchDelegate {
 }
 
 extension FeedWriteInteractor: PropertyDelegate {
-  func fetchSelectedPromotion(selection: [SelectablePromotion]) {
+  func fetchSelectedPromotion(promotionList: [SelectablePromotion]) {
+    self.fetchProperty(selections: promotionList)
+
+    let selection = promotionList.filter { $0.isSelected == true }
+    
     let content = selection.map {
       $0.promotionInfo.type
     }.joined(separator: ", ")
@@ -42,11 +49,18 @@ extension FeedWriteInteractor: PropertyDelegate {
     )
   }
 
-  func fetchSelectedTag(selection: [ChallengeTitle]) {
+  func fetchSelectedTag(tagList: [ChallengeTitle]) {
+    self.fetchProperty(selections: tagList)
+
+    let selection = tagList.filter { $0.isSelected == true }
+
     let content = selection.map {
       $0.title
     }.joined(separator: ", ")
 
-    self.presenter?.fetchProperty(propertyType: PropertyType.tag, content: content)
+    self.presenter?.fetchProperty(
+      propertyType: PropertyType.tag,
+      content: content
+    )
   }
 }

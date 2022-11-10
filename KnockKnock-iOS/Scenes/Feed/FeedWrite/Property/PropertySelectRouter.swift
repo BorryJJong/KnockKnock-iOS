@@ -8,14 +8,16 @@
 import UIKit
 
 protocol PropertyDelegate: AnyObject {
-  func fetchSelectedPromotion(selection: [SelectablePromotion])
-  func fetchSelectedTag(selection: [ChallengeTitle])
+  func fetchSelectedPromotion(promotionList: [SelectablePromotion])
+  func fetchSelectedTag(tagList: [ChallengeTitle])
 }
 
 protocol PropertySelectRouterProtocol {
   static func createPropertySelectView(
     delegate: PropertyDelegate,
-    propertyType: PropertyType
+    propertyType: PropertyType,
+    promotionList: [SelectablePromotion]?,
+    tagList: [ChallengeTitle]?
   ) -> UIViewController
 
   func passTagToFeedWriteView(
@@ -36,7 +38,9 @@ final class PropertySelectRouter: PropertySelectRouterProtocol {
 
   static func createPropertySelectView(
     delegate: PropertyDelegate,
-    propertyType: PropertyType
+    propertyType: PropertyType,
+    promotionList: [SelectablePromotion]?,
+    tagList: [ChallengeTitle]?
   ) -> UIViewController {
 
     let view = PropertySelectViewController()
@@ -53,6 +57,13 @@ final class PropertySelectRouter: PropertySelectRouterProtocol {
     presenter.view = view
     router.delegate = delegate
 
+    if let promotionList = promotionList {
+      view.promotionList = promotionList
+    }
+    if let tagList = tagList {
+      view.tagList = tagList
+    }
+
     return view
   }
 
@@ -60,10 +71,8 @@ final class PropertySelectRouter: PropertySelectRouterProtocol {
     source: PropertySelectViewProtocol,
     tagList: [ChallengeTitle]
   ) {
-    let selection = tagList.filter { $0.isSelected == true }
-
     self.delegate?.fetchSelectedTag(
-      selection: selection
+      tagList: tagList
     )
     self.navigateToFeedWriteView(source: source)
   }
@@ -72,10 +81,8 @@ final class PropertySelectRouter: PropertySelectRouterProtocol {
     source: PropertySelectViewProtocol,
     promotionList: [SelectablePromotion]
   ) {
-    let selection = promotionList.filter { $0.isSelected == true }
-
     self.delegate?.fetchSelectedPromotion(
-      selection: selection
+      promotionList: promotionList
     )
     self.navigateToFeedWriteView(source: source)
   }
