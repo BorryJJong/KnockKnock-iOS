@@ -166,11 +166,25 @@ extension PropertySelectViewController: UITableViewDelegate {
       tableView.reloadRows(at: [indexPath], with: .none)
 
     case .promotion:
-      self.promotionList[indexPath.row].isSelected.toggle()
-      tableView.reloadRows(at: [indexPath], with: .none)
+      if indexPath.row == 0 {
+        for index in 1 ..< promotionList.count {
+          promotionList[index].isSelected = false
+        }
+        self.promotionList[indexPath.row].isSelected.toggle()
+
+        tableView.reloadData()
+
+      } else if self.promotionList[0].isSelected {
+        self.promotionList[indexPath.row].isSelected = false
+
+      } else {
+        self.promotionList[indexPath.row].isSelected.toggle()
+        tableView.reloadRows(at: [indexPath], with: .none)
+      }
 
     case .address:
       print("error")
+
     }
   }
 }
