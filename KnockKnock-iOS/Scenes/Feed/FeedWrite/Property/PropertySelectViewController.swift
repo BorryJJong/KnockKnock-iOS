@@ -40,7 +40,7 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
   ).then {
     $0.tintColor = .black
   }
-
+  
   // MARK: - Life cylce
   
   override func viewDidLoad() {
@@ -51,10 +51,14 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
     self.navigationItem.title = "태그"
 
     self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-      barButtonSystemItem: .done,
+      title: "완료",
+      style: .done,
       target: self,
-      action: #selector(doneButtonDidTap(_:))
-    )
+      action: #selector(self.doneButtonDidTap(_:))
+    ).then {
+      $0.tintColor = KKDS.Color.green50
+    }
+
     self.navigationItem.leftBarButtonItem = self.backBarButtonItem
 
     switch propertyType {
@@ -163,6 +167,7 @@ extension PropertySelectViewController: UITableViewDelegate {
 
     switch propertyType {
     case .tag:
+      // 5개 초과 선택 시 비활성화
       self.tagList[indexPath.row].isSelected.toggle()
       tableView.reloadRows(at: [indexPath], with: .none)
 

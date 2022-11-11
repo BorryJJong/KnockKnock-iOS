@@ -18,16 +18,6 @@ final class PropertyCell: BaseTableViewCell {
     static let propertyLabelLeadingMargin = 20.f
     static let checkImageTrailingMargin = -20.f
   }
-
-  private lazy var isCheck: Bool = false {
-    didSet {
-      let propertyLabelColor = isCheck ? UIColor.black : UIColor.green50
-      let checkImage = isCheck ? KKDS.Image.ic_checkbox_20_off : KKDS.Image.ic_checkbox_20_on
-
-      self.propertyLabel.textColor = propertyLabelColor
-      self.checkImageView.image = checkImage
-    }
-  }
   
   // MARK: - UI
   
@@ -44,11 +34,6 @@ final class PropertyCell: BaseTableViewCell {
   
   // MARK: - Bind
 
-//  override func setSelected(_ selected: Bool, animated: Bool) {
-//    super.setSelected(selected, animated: animated)
-//    self.isCheck.toggle()
-//  }
-
   func bind(content: String, isSelected: Bool) {
     self.propertyLabel.text = content
 
@@ -57,7 +42,6 @@ final class PropertyCell: BaseTableViewCell {
 
     self.propertyLabel.textColor = propertyLabelColor
     self.checkImageView.image = checkImage
-
   }
 
   // MARK: - Configure
