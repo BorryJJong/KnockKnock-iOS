@@ -167,8 +167,13 @@ extension PropertySelectViewController: UITableViewDelegate {
 
     switch propertyType {
     case .tag:
-      // 5개 초과 선택 시 비활성화
       self.tagList[indexPath.row].isSelected.toggle()
+
+      let selectionCount = self.tagList.filter { $0.isSelected == true }.count
+
+      if selectionCount > 5 {
+        self.tagList[indexPath.row].isSelected.toggle()
+      }
       tableView.reloadRows(at: [indexPath], with: .none)
 
     case .promotion:
