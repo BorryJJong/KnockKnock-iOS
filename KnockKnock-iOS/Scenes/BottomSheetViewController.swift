@@ -15,9 +15,6 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
 
   private var options: [String] = []
 
-  private var bottomSheetPanMinTopConstant: CGFloat = 30
-  private lazy var bottomSheetPanStartingTopConstant: CGFloat = self.bottomSheetPanMinTopConstant
-
   // MARK: - Life Cycle
 
   override func viewDidLoad() {
@@ -79,7 +76,7 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
     gesture.delaysTouchesBegan = false
     gesture.delaysTouchesEnded = false
 
-    self.view.addGestureRecognizer(gesture)
+    self.containerView.addGestureRecognizer(gesture)
   }
 
   @objc private func dimmedViewTapped(_ tapRecognizer: UITapGestureRecognizer) {
@@ -94,17 +91,23 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
     switch recognizer.state {
 
     case .began:
-      self.bottomSheetPanStartingTopConstant = self.containerView.bottomHeight
+      self.containerView.bottomSheetPanStartingTopConstant = self.containerView.bottomSheetHeight
 
     case .changed:
-      if self.bottomSheetPanStartingTopConstant + translationY > bottomSheetPanMinTopConstant {
-        self.containerView.bottomHeight = bottomSheetPanStartingTopConstant + translationY
+      let movePostion = self.containerView.bottomSheetPanStartingTopConstant + translationY
+
+      if self.containerView.bottomSheetMinHeight > movePostion &&
+          movePostion > self.containerView.bottomSheetPanMinTopConstant {
+        self.containerView.bottomSheetHeight = self.containerView.bottomSheetPanStartingTopConstant + translationY
+
         self.containerView.bottomSheetView.snp.updateConstraints {
-          $0.top.equalToSuperview().offset(self.containerView.bottomHeight)
+          $0.top.equalToSuperview().offset(self.containerView.bottomSheetHeight)
         }
       }
 
     case .ended:
+      self.containerView.showBottomSheet()
+
       if velocity.y > 1500 {
         self.containerView.hideBottomSheet(view: self)
         return

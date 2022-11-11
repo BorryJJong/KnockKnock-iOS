@@ -30,8 +30,11 @@ final class BottomSheetView: UIView {
   var bottomSheetType: BottomSheetType = .medium
 
   let screenHeight = UIDevice.current.heightOfSafeArea(includeBottomInset: true)
-  
-  lazy var bottomHeight: CGFloat = bottomSheetType.rawValue * screenHeight
+
+  lazy var bottomSheetHeight: CGFloat = bottomSheetType.rawValue * screenHeight
+  lazy var bottomSheetMinHeight: CGFloat = self.screenHeight * BottomSheetType.medium.rawValue
+  lazy var bottomSheetPanMinTopConstant: CGFloat = self.bottomSheetHeight
+  lazy var bottomSheetPanStartingTopConstant: CGFloat = self.bottomSheetPanMinTopConstant
 
   // MARK: - UIs
 
@@ -83,16 +86,36 @@ final class BottomSheetView: UIView {
 
   // MARK: - Bottom Sheet Animation
 
+  /// values 중에서 number와 더 가까운 값을 찾아 반환하는 메소드
+  private func nearest(to number: CGFloat, inValues values: [CGFloat]) -> CGFloat {
+    guard let nearestValue = values.min(by: {abs(number - $0) < abs(number - $1)}) else {
+      return number
+    }
+    return nearestValue
+  }
+
   func showBottomSheet() {
+    let nearestValue = nearest(
+      to: self.bottomSheetHeight,
+      inValues: [
+        self.bottomSheetMinHeight,
+        self.bottomSheetPanMinTopConstant
+      ]
+    )
+
     self.bottomSheetView.snp.updateConstraints {
-      $0.top.equalToSuperview().offset(self.bottomHeight)
-      print(bottomHeight)
+      $0.top.equalToSuperview().offset(nearestValue)
     }
 
-    UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseIn, animations: {
-      self.dimmedBackView.alpha = 0.5
-      self.layoutIfNeeded()
-    }, completion: nil)
+    UIView.animate(
+      withDuration: 0.2,
+      delay: 0,
+      options: .curveEaseIn,
+      animations: {
+        self.dimmedBackView.alpha = 0.5
+        self.layoutIfNeeded()
+      }, completion: nil
+    )
   }
 
   func hideBottomSheet(view: BottomSheetViewController) {
