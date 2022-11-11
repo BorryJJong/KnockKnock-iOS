@@ -31,7 +31,6 @@ final class BottomSheetView: UIView {
 
   let screenHeight = UIDevice.current.heightOfSafeArea(includeBottomInset: true)
   
-  lazy var topConstant = self.screenHeight
   lazy var bottomHeight: CGFloat = bottomSheetType.rawValue * screenHeight
 
   // MARK: - UIs
@@ -128,7 +127,7 @@ final class BottomSheetView: UIView {
 
     self.bottomSheetView.snp.makeConstraints {
       $0.leading.trailing.equalTo(self.safeAreaLayoutGuide)
-      $0.top.equalToSuperview().offset(topConstant)
+      $0.top.equalToSuperview().offset(screenHeight)
       $0.bottom.equalToSuperview()
     }
 

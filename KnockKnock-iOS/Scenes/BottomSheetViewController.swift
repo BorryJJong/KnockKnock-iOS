@@ -15,6 +15,9 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
 
   private var options: [String] = []
 
+  private var bottomSheetPanMinTopConstant: CGFloat = 30
+  private lazy var bottomSheetPanStartingTopConstant: CGFloat = self.bottomSheetPanMinTopConstant
+
   // MARK: - Life Cycle
 
   override func viewDidLoad() {
@@ -84,9 +87,22 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
   }
 
   @objc func panGesture(_ recognizer: UIPanGestureRecognizer) {
+    let translationY = recognizer.translation(in: self.containerView).y
+
     let velocity = recognizer.velocity(in: self.containerView)
 
     switch recognizer.state {
+
+    case .began:
+      self.bottomSheetPanStartingTopConstant = self.containerView.bottomHeight
+
+    case .changed:
+      if self.bottomSheetPanStartingTopConstant + translationY > bottomSheetPanMinTopConstant {
+        self.containerView.bottomHeight = bottomSheetPanStartingTopConstant + translationY
+        self.containerView.bottomSheetView.snp.updateConstraints {
+          $0.top.equalToSuperview().offset(self.containerView.bottomHeight)
+        }
+      }
 
     case .ended:
       if velocity.y > 1500 {
