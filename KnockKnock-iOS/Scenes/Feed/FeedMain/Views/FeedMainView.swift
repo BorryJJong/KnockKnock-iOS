@@ -100,7 +100,7 @@ class FeedMainView: UIView {
 
   func tagCollectionViewLayout() -> UICollectionViewCompositionalLayout {
     let estimatedWidth: CGFloat = 50
-    let estimatedHeigth: CGFloat = 60
+    let estimatedHeigth: CGFloat = 30
 
     let tagItemSize = NSCollectionLayoutSize(widthDimension: .estimated(estimatedWidth),
                                              heightDimension: .estimated(estimatedHeigth))
