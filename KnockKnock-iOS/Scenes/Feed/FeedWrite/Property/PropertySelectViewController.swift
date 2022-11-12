@@ -48,7 +48,17 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
   }
   
   override func setupConfigure() {
-    self.navigationItem.title = "태그"
+    switch self.propertyType {
+    case .tag:
+      self.navigationItem.title = "태그"
+
+    case .promotion:
+      self.navigationItem.title = "프로모션"
+
+    case .address:
+      self.navigationItem.title = "매장검색"
+
+    }
 
     self.navigationItem.rightBarButtonItem = UIBarButtonItem(
       title: "완료",
@@ -79,6 +89,12 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
     self.containerView.propertyTableView.do {
       $0.dataSource = self
       $0.delegate = self
+      
+      if self.propertyType == .tag {
+        $0.tableHeaderView = self.containerView.propertyTableHeaderView
+      } else {
+        $0.tableHeaderView = UIView()
+      }
     }
   }
 
@@ -148,6 +164,7 @@ extension PropertySelectViewController: UITableViewDataSource {
     switch propertyType {
     case .promotion:
       let promotion = promotionList[indexPath.row]
+
       cell.bind(content: promotion.promotionInfo.type, isSelected: promotion.isSelected)
 
     case .tag:
