@@ -15,7 +15,7 @@ protocol FeedRepositoryProtocol {
     completionHandler: @escaping (FeedMain) -> Void
   )
   func requestChallengeTitles(completionHandler: @escaping (([ChallengeTitle])) -> Void)
-  func requestPromotionList(completionHandler: @escaping ([Promotion]) -> Void)
+  func requestPromotionList(completionHandler: @escaping ([PromotionInfo]) -> Void)
   func requestFeedDetail(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void)
   func requestFeedList(
     currentPage: Int,
@@ -112,11 +112,11 @@ final class FeedRepository: FeedRepositoryProtocol {
 
   // MARK: - Feed Write APIs
 
-  func requestPromotionList(completionHandler: @escaping ([Promotion]) -> Void) {
+  func requestPromotionList(completionHandler: @escaping ([PromotionInfo]) -> Void) {
     KKNetworkManager
       .shared
       .request(
-        object: [Promotion].self,
+        object: [PromotionInfo].self,
         router: KKRouter.getPromotions,
         success: { response in
           completionHandler(response)

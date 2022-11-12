@@ -14,7 +14,7 @@ protocol FeedWriteRouterProtocol: AnyObject {
   func navigateToProperty(
     source: FeedWriteViewProtocol,
     propertyType: PropertyType,
-    promotionList: [SelectablePromotion]?,
+    promotionList: [Promotion]?,
     tagList: [ChallengeTitle]?
   )
 }
@@ -55,7 +55,7 @@ final class FeedWriteRouter: FeedWriteRouterProtocol {
   func navigateToProperty(
     source: FeedWriteViewProtocol,
     propertyType: PropertyType,
-    promotionList: [SelectablePromotion]?,
+    promotionList: [Promotion]?,
     tagList: [ChallengeTitle]?
   ) {
     if let delegate = self.propertyDelegate {

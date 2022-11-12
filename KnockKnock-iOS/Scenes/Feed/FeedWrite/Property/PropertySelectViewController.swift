@@ -14,7 +14,7 @@ protocol PropertySelectViewProtocol: AnyObject {
   var router: PropertySelectRouterProtocol? { get set }
   var interactor: PropertySelectInteractorProtocol? { get set }
 
-  func fetchPromotionList(promotionList: [SelectablePromotion])
+  func fetchPromotionList(promotionList: [Promotion])
   func fetchTagList(tagList: [ChallengeTitle])
 }
 
@@ -23,7 +23,7 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
   // MARK: - Properties
   
   var tagList: [ChallengeTitle] = []
-  var promotionList: [SelectablePromotion] = []
+  var promotionList: [Promotion] = []
 
   var propertyType = PropertyType.promotion
   
@@ -106,11 +106,11 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
 // MARK: - PropertySelectViewProtocol
 
 extension PropertySelectViewController: PropertySelectViewProtocol {
-  func fetchPromotionList(promotionList: [SelectablePromotion]) {
+  func fetchPromotionList(promotionList: [Promotion]) {
     self.promotionList = promotionList
     self.promotionList.insert(
-      SelectablePromotion(
-        promotionInfo: Promotion(
+      Promotion(
+        promotionInfo: PromotionInfo(
           id: 0,
           type: "없음"
         ), isSelected: false

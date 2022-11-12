@@ -26,7 +26,7 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   var interactor: FeedWriteInteractorProtocol?
   var router: FeedWriteRouterProtocol?
 
-  private var selectedPromotion: [SelectablePromotion] = []
+  private var selectedPromotion: [Promotion] = []
   private var selectedTag: [ChallengeTitle] = []
 
   var pickedPhotos: [UIImage] = []
@@ -151,7 +151,7 @@ extension FeedWriteViewController: FeedWriteViewProtocol {
   }
 
   func fetchSelectedProperty(selection: [Any]) {
-    if let promotion = selection as? [SelectablePromotion] {
+    if let promotion = selection as? [Promotion] {
       self.selectedPromotion = promotion
     }
 

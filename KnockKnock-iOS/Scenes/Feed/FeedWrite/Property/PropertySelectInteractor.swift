@@ -22,7 +22,7 @@ final class PropertySelectInteractor: PropertySelectInteractorProtocol {
   func fetchPromotionList() {
     self.worker?.requestPromotionList(completionHandler: { promotions in
       let promotionList = promotions.map {
-        SelectablePromotion(
+        Promotion(
           promotionInfo: $0,
           isSelected: false
         )

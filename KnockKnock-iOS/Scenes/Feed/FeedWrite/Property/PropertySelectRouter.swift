@@ -8,7 +8,7 @@
 import UIKit
 
 protocol PropertyDelegate: AnyObject {
-  func fetchSelectedPromotion(promotionList: [SelectablePromotion])
+  func fetchSelectedPromotion(promotionList: [Promotion])
   func fetchSelectedTag(tagList: [ChallengeTitle])
 }
 
@@ -16,7 +16,7 @@ protocol PropertySelectRouterProtocol {
   static func createPropertySelectView(
     delegate: PropertyDelegate,
     propertyType: PropertyType,
-    promotionList: [SelectablePromotion]?,
+    promotionList: [Promotion]?,
     tagList: [ChallengeTitle]?
   ) -> UIViewController
 
@@ -26,7 +26,7 @@ protocol PropertySelectRouterProtocol {
   )
   func passPromotionToFeedWriteView(
     source: PropertySelectViewProtocol,
-    promotionList: [SelectablePromotion]
+    promotionList: [Promotion]
   )
 
   func navigateToFeedWriteView(source: PropertySelectViewProtocol)
@@ -39,7 +39,7 @@ final class PropertySelectRouter: PropertySelectRouterProtocol {
   static func createPropertySelectView(
     delegate: PropertyDelegate,
     propertyType: PropertyType,
-    promotionList: [SelectablePromotion]?,
+    promotionList: [Promotion]?,
     tagList: [ChallengeTitle]?
   ) -> UIViewController {
 
@@ -79,7 +79,7 @@ final class PropertySelectRouter: PropertySelectRouterProtocol {
 
   func passPromotionToFeedWriteView(
     source: PropertySelectViewProtocol,
-    promotionList: [SelectablePromotion]
+    promotionList: [Promotion]
   ) {
     self.delegate?.fetchSelectedPromotion(
       promotionList: promotionList

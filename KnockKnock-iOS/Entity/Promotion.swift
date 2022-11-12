@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct Promotion: Decodable, Equatable {
+struct PromotionInfo: Decodable {
   let id: Int
   let type: String
 }
 
-struct SelectablePromotion {
-  let promotionInfo: Promotion
+struct Promotion {
+  let promotionInfo: PromotionInfo
   var isSelected: Bool
 }

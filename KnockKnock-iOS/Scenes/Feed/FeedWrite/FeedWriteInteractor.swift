@@ -34,7 +34,7 @@ extension FeedWriteInteractor: ShopSearchDelegate {
 }
 
 extension FeedWriteInteractor: PropertyDelegate {
-  func fetchSelectedPromotion(promotionList: [SelectablePromotion]) {
+  func fetchSelectedPromotion(promotionList: [Promotion]) {
     self.fetchProperty(selections: promotionList)
 
     let selection = promotionList.filter { $0.isSelected == true }

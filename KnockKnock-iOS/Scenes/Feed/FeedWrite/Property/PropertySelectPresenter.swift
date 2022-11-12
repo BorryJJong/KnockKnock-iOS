@@ -10,14 +10,14 @@ import UIKit
 protocol PropertySelectPresenterProtocol {
   var view: PropertySelectViewProtocol? { get set }
 
-  func presentPromotionList(promotionList: [SelectablePromotion])
+  func presentPromotionList(promotionList: [Promotion])
   func presentTagList(tagList: [ChallengeTitle])
 }
 
 final class PropertySelectPresenter: PropertySelectPresenterProtocol {
   weak var view: PropertySelectViewProtocol?
 
-  func presentPromotionList(promotionList: [SelectablePromotion]) {
+  func presentPromotionList(promotionList: [Promotion]) {
     self.view?.fetchPromotionList(promotionList: promotionList)
   }
 
