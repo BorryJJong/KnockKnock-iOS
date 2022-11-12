@@ -14,7 +14,7 @@ protocol FeedWriteViewProtocol: AnyObject {
   var interactor: FeedWriteInteractorProtocol? { get set }
   var router: FeedWriteRouterProtocol? { get set }
 
-  func getAddress(address: String)
+  func fetchProperty(propertyType: PropertyType, content: String)
 }
 
 final class FeedWriteViewController: BaseViewController<FeedWriteView> {
@@ -128,8 +128,11 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 }
 
 extension FeedWriteViewController: FeedWriteViewProtocol {
-  func getAddress(address: String) {
-    self.containerView.bind(propertyType: .address, content: address)
+  func fetchProperty(propertyType: PropertyType, content: String) {
+    self.containerView.bind(
+      propertyType: propertyType,
+      content: content
+    )
   }
 }
 

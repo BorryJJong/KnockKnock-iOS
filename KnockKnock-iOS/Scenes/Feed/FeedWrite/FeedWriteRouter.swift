@@ -15,6 +15,10 @@ protocol FeedWriteRouterProtocol: AnyObject {
 }
 
 final class FeedWriteRouter: FeedWriteRouterProtocol {
+
+  var shopSearchDelegate: ShopSearchDelegate?
+  var propertyDelegate: PropertyDelegate?
+
   static func createFeedWrite() -> UIViewController {
     let view = FeedWriteViewController()
     let interactor = FeedWriteInteractor()
@@ -27,24 +31,32 @@ final class FeedWriteRouter: FeedWriteRouterProtocol {
     interactor.presenter = presenter
     interactor.worker = worker
     presenter.view = view
+    router.shopSearchDelegate = interactor
+    router.propertyDelegate = interactor
 
     return view
   }
 
   func navigateToShopSearch(source: FeedWriteViewProtocol) {
-    let shopSearchViewController = ShopSearchRouter.createShopSearch()
+    if let delegate = self.shopSearchDelegate {
+      let shopSearchViewController = ShopSearchRouter.createShopSearch(delegate: delegate)
 
-    if let sourceView = source as? UIViewController {
-      sourceView.navigationController?.pushViewController(shopSearchViewController, animated: true)
+      if let sourceView = source as? UIViewController {
+        sourceView.navigationController?.pushViewController(shopSearchViewController, animated: true)
+      }
     }
   }
 
   func navigateToProperty(source: FeedWriteViewProtocol, propertyType: PropertyType) {
-    let propertyViewController = PropertySelectViewController()
+    if let delegate = self.propertyDelegate {
+      let propertyViewController = PropertySelectRouter.createPropertySelectView(
+        delegate: delegate,
+        propertyType: propertyType
+      )
 
-    if let sourceView = source as? UIViewController {
-      propertyViewController.propertyType = propertyType
-      sourceView.navigationController?.pushViewController(propertyViewController, animated: true)
+      if let sourceView = source as? UIViewController {
+        sourceView.navigationController?.pushViewController(propertyViewController, animated: true)
+      }
     }
   }
 }
