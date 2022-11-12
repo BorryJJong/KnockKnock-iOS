@@ -19,9 +19,7 @@ final class BottomSheetView: UIView {
     static let dismissIndicatorViewHeight = 5.f
     static let dismissIndicatorViewTopMargin = 10.f
 
-    static let tableViewTopMargin = 15.f
-    static let tableViewLeadingMargin = 20.f
-    static let tableViewTrailingMargin = -20.f
+    static let tableViewTopMargin = 30.f
     static let tableViewBottomMargin = 20.f
   }
 
@@ -31,7 +29,7 @@ final class BottomSheetView: UIView {
 
   let screenHeight = UIDevice.current.heightOfSafeArea(includeBottomInset: true)
 
-  lazy var bottomSheetHeight: CGFloat = bottomSheetType.rawValue * screenHeight
+  lazy var bottomSheetHeight: CGFloat = self.bottomSheetType.rawValue * self.screenHeight
   lazy var bottomSheetMinHeight: CGFloat = self.screenHeight * BottomSheetType.medium.rawValue
   lazy var bottomSheetPanMinTopConstant: CGFloat = self.bottomSheetHeight
   lazy var bottomSheetPanStartingTopConstant: CGFloat = self.bottomSheetPanMinTopConstant
@@ -60,6 +58,7 @@ final class BottomSheetView: UIView {
     $0.rowHeight = UITableView.automaticDimension
     $0.registCell(type: BottomMenuCell.self)
     $0.isScrollEnabled = true
+    $0.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 20, right: -20)
   }
 
   let alertView = AlertView().then {
@@ -163,8 +162,7 @@ final class BottomSheetView: UIView {
 
     self.tableView.snp.makeConstraints {
       $0.top.equalTo(self.bottomSheetView.snp.top).offset(Metric.tableViewTopMargin)
-      $0.leading.equalTo(self.bottomSheetView.snp.leading).offset(Metric.tableViewLeadingMargin)
-      $0.trailing.equalTo(self.bottomSheetView.snp.trailing).offset(Metric.tableViewTrailingMargin)
+      $0.leading.trailing.equalTo(self.bottomSheetView)
       $0.bottom.equalTo(self.bottomSheetView.snp.bottom).offset(Metric.tableViewBottomMargin)
     }
   }

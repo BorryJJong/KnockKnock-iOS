@@ -76,7 +76,7 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
     gesture.delaysTouchesBegan = false
     gesture.delaysTouchesEnded = false
 
-    self.containerView.addGestureRecognizer(gesture)
+    self.containerView.bottomSheetView.addGestureRecognizer(gesture)
   }
 
   @objc private func dimmedViewTapped(_ tapRecognizer: UITapGestureRecognizer) {
