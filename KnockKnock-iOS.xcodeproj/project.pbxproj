@@ -411,6 +411,7 @@
 		201077ED27D39AB400280991 /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				61A028362908D10100943A40 /* districts.json */,
 				20EAE2962814054F009242A1 /* ChellengeRepository.swift */,
 				6143296928644458008BDCC9 /* FeedRepository.swift */,
 				619DEE9D2887B41B00C80095 /* CommentRepository.swift */,
@@ -719,14 +720,6 @@
 			path = FeedSearch;
 			sourceTree = "<group>";
 		};
-		61A028332907CF7A00943A40 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				61A028362908D10100943A40 /* districts.json */,
-			);
-			path = Utils;
-			sourceTree = "<group>";
-		};
 		61A0283A29090B1C00943A40 /* BottomSheet */ = {
 			isa = PBXGroup;
 			children = (
@@ -949,7 +942,6 @@
 		61FC60E727B9244D00A51DBC /* KnockKnock-iOS */ = {
 			isa = PBXGroup;
 			children = (
-				61A028332907CF7A00943A40 /* Utils */,
 				61C21D0528C4C971009B5F4E /* GoogleService-Info.plist */,
 				61E3087A2873349B001394B6 /* Enum */,
 				61215AC728507D3F003FDCAA /* Network */,
