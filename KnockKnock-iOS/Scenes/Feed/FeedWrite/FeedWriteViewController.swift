@@ -15,8 +15,9 @@ protocol FeedWriteViewProtocol: AnyObject {
   var router: FeedWriteRouterProtocol? { get set }
 
   func fetchProperty(propertyType: PropertyType, content: String)
-  
-  func fetchSelectedProperty(selection: [Any])
+
+  func fetchSelectedPromotions(promotionList: [Promotion])
+  func fetchSelectedTags(tagList: [ChallengeTitle])
 }
 
 final class FeedWriteViewController: BaseViewController<FeedWriteView> {
@@ -142,6 +143,8 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   }
 }
 
+// MARK: - Feed Write View Protocol
+
 extension FeedWriteViewController: FeedWriteViewProtocol {
   func fetchProperty(propertyType: PropertyType, content: String) {
     self.containerView.bind(
@@ -149,15 +152,12 @@ extension FeedWriteViewController: FeedWriteViewProtocol {
       content: content
     )
   }
+  func fetchSelectedPromotions(promotionList: [Promotion]){
+    self.selectedPromotion = promotionList
+  }
 
-  func fetchSelectedProperty(selection: [Any]) {
-    if let promotion = selection as? [Promotion] {
-      self.selectedPromotion = promotion
-    }
-
-    if let tag = selection as? [ChallengeTitle] {
-      self.selectedTag = tag
-    }
+  func fetchSelectedTags(tagList: [ChallengeTitle]){
+    self.selectedTag = tagList
   }
 }
 

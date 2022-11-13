@@ -19,8 +19,12 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
   var presenter: FeedWritePresenterProtocol?
   var worker: FeedWriteWorkerProtocol?
 
-  func fetchProperty(selections: [Any]) {
-    self.presenter?.presentSelectedProperty(selections: selections)
+  func fetchPromotion(promotionList: [Promotion]) {
+    self.presenter?.presentSelectedPromotions(promotionList: promotionList)
+  }
+
+  func fetchTag(tagList: [ChallengeTitle]) {
+    self.presenter?.presentSelectedTags(tagList: tagList)
   }
 }
 
@@ -35,7 +39,7 @@ extension FeedWriteInteractor: ShopSearchDelegate {
 
 extension FeedWriteInteractor: PropertyDelegate {
   func fetchSelectedPromotion(promotionList: [Promotion]) {
-    self.fetchProperty(selections: promotionList)
+    self.fetchPromotion(promotionList: promotionList)
 
     let selection = promotionList.filter { $0.isSelected == true }
 
@@ -54,7 +58,7 @@ extension FeedWriteInteractor: PropertyDelegate {
   }
 
   func fetchSelectedTag(tagList: [ChallengeTitle]) {
-    self.fetchProperty(selections: tagList)
+    self.fetchTag(tagList: tagList)
 
     let selection = tagList.filter { $0.isSelected == true }
 
