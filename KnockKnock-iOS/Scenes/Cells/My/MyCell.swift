@@ -43,7 +43,12 @@ final class MyCell: BaseCollectionViewCell {
 
   // MARK: - Bind
 
-  func bind(title: String, isSwitch: Bool, isVersion: Bool, versionInfo: String) {
+  func bind(
+    title: String,
+    isSwitch: Bool,
+    isVersion: Bool,
+    versionInfo: String
+  ) {
     self.titleLabel.text = title
 
     self.enterButton.isHidden = isSwitch
