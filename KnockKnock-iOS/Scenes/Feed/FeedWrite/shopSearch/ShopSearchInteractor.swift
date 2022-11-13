@@ -48,8 +48,8 @@ final class ShopSearchInteractor: ShopSearchInteractorProtocol {
     self.worker?.fetchDistricts(
       completionHandler: { districtsData in
         districtsData.data.forEach {
-          if let data = $0[city] {
-            self.presenter?.presentCounty(county: data)
+          if let county = $0[city] {
+            self.presenter?.presentCounty(county: county)
           }
         }
       }
