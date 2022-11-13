@@ -9,7 +9,6 @@ import UIKit
 
 import Then
 import KKDSKit
-import SwiftUI
 
 final class ShopSearchView: UIView {
 
