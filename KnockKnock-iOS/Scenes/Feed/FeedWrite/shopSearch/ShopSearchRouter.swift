@@ -61,7 +61,7 @@ final class ShopSearchRouter: ShopSearchRouterProtocol {
     content: [String]
   ) {
     let bottomSheetViewController = BottomSheetViewController().then {
-      $0.setBottomSheetContents(contents: content)
+      $0.setBottomSheetContents(contents: content, bottomSheetType: .large)
       $0.modalPresentationStyle = .overFullScreen
     }
     
