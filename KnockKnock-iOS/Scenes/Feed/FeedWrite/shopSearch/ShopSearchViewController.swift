@@ -86,10 +86,6 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
       $0.dataSource = self
       $0.delegate = self
     }
-
-    self.containerView.cityTextField.do {
-      $0.delegate = self
-    }
     
     self.containerView.cityButton.do {
       $0.addTarget(
@@ -97,10 +93,6 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
         action: #selector(self.cityButtonDidTap(_:)),
         for: .touchUpInside
       )
-    }
-
-    self.containerView.countyTextField.do {
-      $0.delegate = self
     }
 
     self.containerView.countyButton.do {
@@ -117,8 +109,8 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   @objc private func searchButtonDidTap(_ sender: UIButton) {
     self.containerView.resultTableView.isHidden = false
 
-    let city = self.containerView.cityTextField.text ?? ""
-    let region = self.containerView.countyTextField.text ?? ""
+    let city = self.containerView.cityLabel.text ?? ""
+    let region = self.containerView.countyLabel.text ?? ""
     let address = self.containerView.addressTextField.text ?? ""
 
     let keyword = "\(city) \(region) \(address)"
@@ -167,26 +159,14 @@ extension ShopSearchViewController: ShopSearchViewProtocol {
   }
 
   func fetchSelectedCity(city: String) {
-    self.containerView.cityTextField.text = city
+    self.containerView.cityLabel.text = city
     self.containerView.setButtonStatus(isCitySelected: true)
 
     self.interactor?.fetchCountyList(city: city)
   }
 
   func fetchSelectedCounty(county: String) {
-    self.containerView.countyTextField.text = county
-  }
-}
-
-// MARK: - TextField Delegate
-
-extension ShopSearchViewController: UITextFieldDelegate {
-  func textField(
-    _ textField: UITextField,
-    shouldChangeCharactersIn range: NSRange,
-    replacementString string: String
-  ) -> Bool {
-    return false
+    self.containerView.countyLabel.text = county
   }
 }
 
