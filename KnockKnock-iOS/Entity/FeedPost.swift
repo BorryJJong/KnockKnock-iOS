@@ -20,18 +20,24 @@ struct FeedPost: Decodable {
   let scale: String = "1:1"
 }
 
+struct Property: Equatable {
+  let id: Int
+  let title: String
+}
+
+
 struct FeedDetail: Decodable {
   let data: FeedDetailData
 }
 
 struct FeedDetailData: Decodable {
   let feed: FeedPost?
-  let promotions: [Promotion]
+  let promotions: [PromotionData]
   let challenges: [Challenge]
   let images: [FeedImage]
 }
 
-struct Promotion: Decodable {
+struct PromotionData: Decodable {
   let id: Int
   let promotionId: Int
   let title: String

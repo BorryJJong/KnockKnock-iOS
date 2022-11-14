@@ -30,28 +30,40 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   var feedDetail: FeedDetail? {
     didSet {
       self.containerView.postCollectionView.reloadData()
-
       if let feed = feedDetail?.data.feed {
         self.containerView.navigationView.bind(feed: feed)
       }
     }
   }
   var feedId: Int = 6
+  var userId: Int = 1
+  var commentId: Int?
   var like: [Like] = []
-  var allComments: [Comment] = []
-  var visibleComments: [Comment] = []
+  var allComments: [Comment] = [] {
+    didSet {
+      self.interactor?.setVisibleComments(comments: allComments)
+    }
+  }
+  var visibleComments: [Comment] = [] {
+    didSet {
+      self.containerView.postCollectionView.reloadSections(
+        IndexSet(integer: FeedDetailSection.comment.rawValue)
+      )
+    }
+  }
 
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    LoadingIndicator.showLoading()
+
     self.setNavigationBar()
     self.setupConfigure()
 
     self.interactor?.getFeedDeatil(feedId: feedId)
     self.interactor?.getLike()
-    self.interactor?.getAllComments()
-    self.interactor?.setVisibleComments(comments: self.allComments)
+    self.interactor?.getAllComments(feedId: feedId)
   }
 
   // MARK: - Configure
@@ -77,6 +89,9 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     self.containerView.commentTextView.do {
       $0.delegate = self
     }
+    self.containerView.registButton.do {
+      $0.addTarget(self, action: #selector(self.registButtonDidTap(_:)), for: .touchUpInside)
+    }
     self.addKeyboardNotification()
     self.hideKeyboardWhenTappedAround()
   }
@@ -89,6 +104,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       target: self,
       action: #selector(backButtonDidTap(_:))
     )
+    
     let moreButton = UIBarButtonItem(
       image: KKDS.Image.ic_more_20_gr,
       style: .plain,
@@ -121,6 +137,27 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     UIView.performWithoutAnimation {
       self.containerView.postCollectionView.reloadSections([FeedDetailSection.comment.rawValue])
     }
+  }
+
+  @objc private func registButtonDidTap(_ sender: UIButton) {
+    if let content = self.containerView.commentTextView.text {
+      self.interactor?.requestAddComment(
+        comment: AddCommentRequest(
+          feedId: self.feedId,
+          userId: self.userId,
+          content: content,
+          commentId: self.commentId
+        )
+      )
+    }
+    self.containerView.commentTextView.text = ""
+    self.containerView.setPlaceholder()
+    self.commentId = nil
+  }
+
+  @objc private func replyWriteButtonDidTap(_ sender: UIButton) {
+    self.commentId = sender.tag
+    self.containerView.commentTextView.becomeFirstResponder()
   }
 
   // MARK: - Keyboard Show & Hide
@@ -266,6 +303,12 @@ extension FeedDetailViewController: UICollectionViewDataSource {
         action: #selector(replyMoreButtonDidTap(_:)),
         for: .touchUpInside
       )
+      cell.replyWriteButton.tag = self.visibleComments[indexPath.item].commentData.id
+      cell.replyWriteButton.addTarget(
+        self,
+        action: #selector(self.replyWriteButtonDidTap(_:)),
+        for: .touchUpInside
+      )
 
       cell.bind(comment: self.visibleComments[indexPath.item])
 
@@ -350,7 +393,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       var count = self.allComments.count
 
       self.allComments.forEach {
-        count += $0.replies.count
+        count += $0.commentData.replyCnt
       }
 
       header.bind(count: count, section: .comment)

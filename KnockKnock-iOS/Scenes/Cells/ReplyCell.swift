@@ -56,8 +56,8 @@ final class ReplyCell: BaseCollectionViewCell {
   // MARK: - Bind
 
   func bind(reply: Reply) {
-    self.userIdLabel.text = reply.userID
-    self.commentLabel.text = reply.contents
+    self.userIdLabel.text = reply.nickname
+    self.commentLabel.text = reply.content
   }
 
   // MARK: - Configure
