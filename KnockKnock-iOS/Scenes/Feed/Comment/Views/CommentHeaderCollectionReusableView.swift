@@ -1,22 +1,21 @@
 //
-//  PostCommentCell.swift
+//  HeaderCollectionReusableView.swift
 //  KnockKnock-iOS
 //
-//  Created by Daye on 2022/07/29.
+//  Created by Daye on 2022/07/18.
 //
 
 import UIKit
 
 import KKDSKit
-import Then
 
-final class PostCommentCell: BaseCollectionViewCell {
+final class CommentHeaderCollectionReusableView: UICollectionReusableView {
 
   // MARK: - Constants
 
   private enum Metric {
-    static let profileImageViewTrailingMargin = 32.f
-    static let profileImageViewBottomMargin = 32.f
+    static let profileImageViewWidth = 32.f
+    static let profileImageViewHeight = 32.f
 
     static let userIdLabelLeadingMargin = 10.f
 
@@ -73,29 +72,29 @@ final class PostCommentCell: BaseCollectionViewCell {
     $0.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
   }
   
+  // MARK: - Initailize
+
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    self.setupConstraints()
+  }
+
+  required init?(coder aDecoder: NSCoder) {
+    super.init(coder: aDecoder)
+  }
+
   // MARK: - Bind
 
   func bind(comment: Comment) {
     let reply = comment.commentData.reply
     self.setReplyMoreButton(count: reply?.count ?? 0, isOpen: comment.isOpen)
-
     self.userIdLabel.text = comment.commentData.nickname
     self.commentLabel.text = comment.commentData.content
-
-    if comment.isReply {
-      self.profileImageView.trailingConstraint?.constant = 66
-      self.profileImageView.bottomConstraint?.constant = 24
-      self.profileImageView.leadingConstraint?.constant = 42
-    } else {
-      self.profileImageView.trailingConstraint?.constant = 32
-      self.profileImageView.bottomConstraint?.constant = 32
-      self.profileImageView.leadingConstraint?.constant = 0
-    }
   }
 
   // MARK: - Configure
 
-  private func setReplyMoreButton(count: Int, isOpen: Bool) {
+  func setReplyMoreButton(count: Int, isOpen: Bool) {
     if count == 0 {
       self.replyMoreButton.isHidden = true
       self.replyMoreButton.bottomConstraint?.constant = 20
@@ -111,14 +110,14 @@ final class PostCommentCell: BaseCollectionViewCell {
     }
   }
 
-  override func setupConstraints() {
+  func setupConstraints() {
     [self.profileImageView, self.userIdLabel, self.commentLabel, self.writtenDateLabel, self.replyWriteButton, self.replyMoreButton].addSubViews(self)
 
     NSLayoutConstraint.activate([
       self.profileImageView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
       self.profileImageView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-      self.profileImageView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.profileImageViewTrailingMargin),
-      self.profileImageView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.profileImageViewBottomMargin),
+      self.profileImageView.widthAnchor.constraint(equalToConstant: Metric.profileImageViewWidth),
+      self.profileImageView.heightAnchor.constraint(equalToConstant: Metric.profileImageViewHeight),
 
       self.userIdLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
       self.userIdLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: Metric.userIdLabelLeadingMargin),

@@ -9,8 +9,9 @@ import UIKit
 
 protocol FeedDetailWorkerProtocol {
   func getFeedDetail(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void)
-  func getAllComments(completionHandler: @escaping ([Comment]) -> Void)
   func getLike(completionHandler: @escaping ([Like]) -> Void)
+  func getAllComments(feedId: Int, completionHandler: @escaping ([Comment]) -> Void)
+  func requestAddComment(comment: AddCommentRequest, completionHandler: @escaping (String) -> Void)
 }
 
 final class FeedDetailWorker: FeedDetailWorkerProtocol {
@@ -29,23 +30,49 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
     self.likeRepository = likeRepository
   }
 
-  func getFeedDetail(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void) {
+  func getFeedDetail(
+    feedId: Int,
+    completionHandler: @escaping (FeedDetail) -> Void
+  ) {
     self.feedRepository.requestFeedDetail(
       feedId: feedId,
       completionHandler: { feed in
         completionHandler(feed)
-      })
+      }
+    )
   }
 
-  func getAllComments(completionHandler: @escaping (([Comment]) -> Void)) {
-    self.commentRepository.getComments(completionHandler: { comment in
-      completionHandler(comment)
-    })
+  func getAllComments(
+    feedId: Int,
+    completionHandler: @escaping ([Comment]) -> Void
+  ) {
+    var data: [Comment] = []
+    self.commentRepository.requestComments(
+      feedId: feedId,
+      completionHandler: { comment in
+        let commentData = comment.map { Comment(commentData: $0) }
+        data += commentData
+
+        completionHandler(data)
+      }
+    )
   }
 
   func getLike(completionHandler: @escaping ([Like]) -> Void) {
     self.likeRepository.getlike(completionHandler: { like in
       completionHandler(like)
     })
+  }
+
+  func requestAddComment(
+    comment: AddCommentRequest,
+    completionHandler: @escaping ((String) -> Void)
+  ) {
+    self.commentRepository.requestAddComment(
+      comment: comment,
+      completionHandler: { response in
+        completionHandler(response.message)
+      }
+    )
   }
 }

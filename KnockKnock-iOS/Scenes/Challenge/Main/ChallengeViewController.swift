@@ -66,7 +66,13 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
 
   @objc func tapSortChallengeButton(_ sender: UIButton) {
     let bottomSheetViewController = BottomSheetViewController()
-    bottomSheetViewController.setBottomSheetContents(contents: ["수정", "삭제"])
+    bottomSheetViewController.setBottomSheetContents(
+      contents: [
+        BottomSheetOption.edit.rawValue,
+        BottomSheetOption.delete.rawValue
+      ],
+      bottomSheetType: .small
+    )
     bottomSheetViewController.modalPresentationStyle = .overFullScreen
     self.present(bottomSheetViewController, animated: false, completion: nil)
   }

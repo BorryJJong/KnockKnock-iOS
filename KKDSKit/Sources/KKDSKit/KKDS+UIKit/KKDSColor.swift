@@ -41,4 +41,3 @@ extension UIColor {
     return color
   }
 }
-

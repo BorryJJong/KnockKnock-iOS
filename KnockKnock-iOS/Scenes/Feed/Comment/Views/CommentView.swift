@@ -208,7 +208,7 @@ class CommentView: UIView {
     commentSection.contentInsets = NSDirectionalEdgeInsets(
       top: 0,
       leading: 20,
-      bottom: 0,
+      bottom: 15,
       trailing: 20
     )
 

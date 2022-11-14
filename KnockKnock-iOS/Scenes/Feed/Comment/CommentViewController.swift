@@ -25,15 +25,33 @@ final class CommentViewController: BaseViewController<CommentView> {
   var router: CommentRouterProtocol?
   var interactor: CommentInteractorProtocol?
 
-  private var allComments: [Comment] = []
-  private var visibleComments: [Comment] = []
+  var allComments: [Comment] = [] {
+    didSet {
+      self.interactor?.setVisibleComments(comments: allComments)
+    }
+  }
+  var visibleComments: [Comment] = [] {
+    didSet {
+      self.containerView.commentCollectionView.reloadData()
+    }
+  }
+
+  var feedId: Int = 6
+  var userId: Int = 1
+  var commentId: Int?
+  var comments: [Comment] = [] {
+    didSet {
+      self.containerView.commentCollectionView.reloadData()
+    }
+  }
 
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.interactor?.getAllComments()
-    self.interactor?.setVisibleComments(comments: self.allComments)
+
+    LoadingIndicator.showLoading()
+    self.interactor?.getAllComments(feedId: self.feedId)
   }
 
   // MARK: - Configure
@@ -58,6 +76,14 @@ final class CommentViewController: BaseViewController<CommentView> {
 
     self.containerView.commentTextView.do {
       $0.delegate = self
+    }
+
+    self.containerView.registButton.do {
+      $0.addTarget(
+        self,
+        action: #selector(self.regitstButtonDidTap(_:)),
+        for: .touchUpInside
+      )
     }
 
     self.addKeyboardNotification()
@@ -126,6 +152,11 @@ final class CommentViewController: BaseViewController<CommentView> {
     self.router?.dismissCommentView(view: self)
   }
 
+  @objc private func replyWriteButtonDidTap(_ sender: UIButton) {
+    self.commentId = sender.tag
+    self.containerView.commentTextView.becomeFirstResponder()
+  }
+
   @objc private func replyMoreButtonDidTap(_ sender: UIButton) {
     self.visibleComments[sender.tag].isOpen.toggle()
 
@@ -136,6 +167,22 @@ final class CommentViewController: BaseViewController<CommentView> {
 
   @objc private func longPressGestureDidDetect(_ sender: UILongPressGestureRecognizer) {
     self.router?.presentBottomSheetView(source: self)
+  }
+
+  @objc private func regitstButtonDidTap(_ sender: UIButton) {
+    if let content = self.containerView.commentTextView.text {
+      self.interactor?.requestAddComment(
+        comment: AddCommentRequest(
+          feedId: self.feedId,
+          userId: self.userId,
+          content: content,
+          commentId: self.commentId
+        )
+      )
+      self.containerView.commentTextView.text = ""
+      self.containerView.setPlaceholder()
+      self.commentId = nil
+    }
   }
 }
 
@@ -202,7 +249,9 @@ extension CommentViewController: UITextViewDelegate {
   }
 
   func textViewDidEndEditing(_ textView: UITextView) {
-    self.containerView.setPlaceholder()
+    if textView.text == "" {
+      self.containerView.setPlaceholder()
+    }
   }
 
   func textViewDidChange(_ textView: UITextView) {
