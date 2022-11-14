@@ -19,32 +19,28 @@ final class BottomSheetView: UIView {
     static let dismissIndicatorViewHeight = 5.f
     static let dismissIndicatorViewTopMargin = 10.f
 
-    static let tableViewTopMargin = 15.f
-    static let tableViewLeadingMargin = 20.f
-    static let tableViewTrailingMargin = -20.f
+    static let tableViewTopMargin = 30.f
     static let tableViewBottomMargin = 20.f
   }
 
   // MARK: - Properties
 
-  let screenHeight = UIDevice.current.heightOfSafeArea()
-  lazy var topConstant = self.safeAreaInsets.bottom + self.screenHeight
-  lazy var bottomSheetViewTopConstraint: NSLayoutConstraint = self.bottomSheetView.topAnchor.constraint(
-    equalTo: self.safeAreaLayoutGuide.topAnchor,
-    constant: topConstant
-  )
+  var bottomSheetType: BottomSheetType = .medium
 
-  var bottomHeight: CGFloat = 150
+  let screenHeight = UIDevice.current.heightOfSafeArea(includeBottomInset: true)
+
+  lazy var bottomSheetHeight: CGFloat = self.bottomSheetType.rawValue * self.screenHeight
+  lazy var bottomSheetMinHeight: CGFloat = self.screenHeight * BottomSheetType.medium.rawValue
+  lazy var bottomSheetPanMinTopConstant: CGFloat = self.bottomSheetHeight
+  lazy var bottomSheetPanStartingTopConstant: CGFloat = self.bottomSheetPanMinTopConstant
 
   // MARK: - UIs
 
   let dimmedBackView = UIView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
   }
 
   let bottomSheetView = UIView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .white
     $0.layer.cornerRadius = 27
     $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -52,17 +48,17 @@ final class BottomSheetView: UIView {
   }
 
   let dismissIndicatorView = UIView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .systemGray2
     $0.layer.cornerRadius = 3
   }
 
   let tableView = UITableView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.isScrollEnabled = false
     $0.separatorColor = .clear
     $0.rowHeight = UITableView.automaticDimension
     $0.registCell(type: BottomMenuCell.self)
+    $0.isScrollEnabled = true
+    $0.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 20, right: -20)
   }
 
   let alertView = AlertView().then {
@@ -89,23 +85,43 @@ final class BottomSheetView: UIView {
 
   // MARK: - Bottom Sheet Animation
 
+  /// values 중에서 number와 더 가까운 값을 찾아 반환하는 메소드
+  private func nearest(to number: CGFloat, inValues values: [CGFloat]) -> CGFloat {
+    guard let nearestValue = values.min(by: {abs(number - $0) < abs(number - $1)}) else {
+      return number
+    }
+    return nearestValue
+  }
+
   func showBottomSheet() {
-    let safeAreaHeight: CGFloat = self.safeAreaLayoutGuide.layoutFrame.height
-    let bottomPadding: CGFloat = self.safeAreaInsets.bottom
+    let nearestValue = nearest(
+      to: self.bottomSheetHeight,
+      inValues: [
+        self.bottomSheetMinHeight,
+        self.bottomSheetPanMinTopConstant
+      ]
+    )
 
-    self.bottomSheetViewTopConstraint.constant = (safeAreaHeight + bottomPadding) - self.bottomHeight
+    self.bottomSheetView.snp.updateConstraints {
+      $0.top.equalToSuperview().offset(nearestValue)
+    }
 
-    UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseIn, animations: {
-      self.dimmedBackView.alpha = 0.5
-      self.layoutIfNeeded()
-    }, completion: nil)
+    UIView.animate(
+      withDuration: 0.2,
+      delay: 0,
+      options: .curveEaseIn,
+      animations: {
+        self.dimmedBackView.alpha = 0.5
+        self.layoutIfNeeded()
+      }, completion: nil
+    )
   }
 
   func hideBottomSheet(view: BottomSheetViewController) {
-    let safeAreaHeight = self.safeAreaLayoutGuide.layoutFrame.height
-    let bottomPadding = self.safeAreaInsets.bottom
+    self.bottomSheetView.snp.updateConstraints {
+      $0.top.equalToSuperview().offset(self.screenHeight)
+    }
 
-    self.bottomSheetViewTopConstraint.constant = safeAreaHeight + bottomPadding
     UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseIn, animations: {
       self.dimmedBackView.alpha = 0.0
       self.layoutIfNeeded()
@@ -127,26 +143,27 @@ final class BottomSheetView: UIView {
       $0.edges.equalToSuperview()
     }
 
-    NSLayoutConstraint.activate([
-      self.dimmedBackView.topAnchor.constraint(equalTo: self.topAnchor),
-      self.dimmedBackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-      self.dimmedBackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-      self.dimmedBackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+    self.dimmedBackView.snp.makeConstraints {
+      $0.edges.equalToSuperview()
+    }
 
-      self.bottomSheetView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-      self.bottomSheetView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
-      self.bottomSheetView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-      bottomSheetViewTopConstraint,
+    self.bottomSheetView.snp.makeConstraints {
+      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide)
+      $0.top.equalToSuperview().offset(screenHeight)
+      $0.bottom.equalToSuperview()
+    }
 
-      self.dismissIndicatorView.widthAnchor.constraint(equalToConstant: Metric.dismissIndicatorViewWidth),
-      self.dismissIndicatorView.heightAnchor.constraint(equalToConstant: Metric.dismissIndicatorViewHeight),
-      self.dismissIndicatorView.topAnchor.constraint(equalTo: self.bottomSheetView.topAnchor, constant: Metric.dismissIndicatorViewTopMargin),
-      self.dismissIndicatorView.centerXAnchor.constraint(equalTo: self.bottomSheetView.centerXAnchor),
+    self.dismissIndicatorView.snp.makeConstraints {
+      $0.width.equalTo(Metric.dismissIndicatorViewWidth)
+      $0.height.equalTo(Metric.dismissIndicatorViewHeight)
+      $0.top.equalTo(self.bottomSheetView.snp.top).offset(Metric.dismissIndicatorViewTopMargin)
+      $0.centerX.equalTo(self.bottomSheetView.snp.centerX)
+    }
 
-      self.tableView.topAnchor.constraint(equalTo: self.bottomSheetView.topAnchor, constant: Metric.tableViewTopMargin),
-      self.tableView.leadingAnchor.constraint(equalTo: self.bottomSheetView.leadingAnchor, constant: Metric.tableViewLeadingMargin),
-      self.tableView.trailingAnchor.constraint(equalTo: self.bottomSheetView.trailingAnchor, constant: Metric.tableViewTrailingMargin),
-      self.tableView.bottomAnchor.constraint(equalTo: self.bottomSheetView.bottomAnchor, constant: Metric.tableViewBottomMargin)
-    ])
+    self.tableView.snp.makeConstraints {
+      $0.top.equalTo(self.bottomSheetView.snp.top).offset(Metric.tableViewTopMargin)
+      $0.leading.trailing.equalTo(self.bottomSheetView)
+      $0.bottom.equalTo(self.bottomSheetView.snp.bottom).offset(Metric.tableViewBottomMargin)
+    }
   }
 }

@@ -43,6 +43,8 @@ final class CommentViewController: BaseViewController<CommentView> {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+
+    LoadingIndicator.showLoading()
     self.interactor?.getComments(feedId: feedId)
   }
 

@@ -44,7 +44,9 @@ final class CommentRouter: CommentRouterProtocol {
         contents: [
           BottomSheetOption.delete.rawValue,
           BottomSheetOption.edit.rawValue
-        ])
+        ],
+        bottomSheetType: .small
+      )
       $0.modalPresentationStyle = .overFullScreen
     }
     if let sourceView = source as? UIViewController {

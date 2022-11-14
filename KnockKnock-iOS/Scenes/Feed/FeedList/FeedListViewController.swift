@@ -45,6 +45,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    
     self.interactor?.fetchFeedList(
       currentPage: self.currentPage,
       pageSize: self.pageSize,

@@ -20,6 +20,7 @@ final class FeedDetailPresenter: FeedDetailPresenterProtocol {
   weak var view: FeedDetailViewProtocol?
 
   func presentFeedDetail(feedDetail: FeedDetail) {
+    LoadingIndicator.hideLoading()
     self.view?.getFeedDetail(feedDetail: feedDetail)
   }
 

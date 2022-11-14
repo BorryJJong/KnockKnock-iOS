@@ -66,7 +66,7 @@ final class FeedListRouter: FeedListRouterProtocol {
           BottomSheetOption.report.rawValue,
           BottomSheetOption.share.rawValue,
           BottomSheetOption.hide.rawValue
-        ])
+        ], bottomSheetType: .medium)
       $0.modalPresentationStyle = .overFullScreen
     }
     if let sourceView = source as? UIViewController {

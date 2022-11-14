@@ -32,6 +32,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
     challengeId: Int,
     completionHandler: @escaping (FeedList) -> Void
   ) {
+    LoadingIndicator.showLoading()
     repository.requestFeedList(
       currentPage: currentPage,
       pageSize: count,
@@ -39,6 +40,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
       challengeId: challengeId,
       completionHandler: { result in
         completionHandler(result)
-      })
+      }
+    )
   }
 }

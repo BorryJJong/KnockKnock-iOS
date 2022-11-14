@@ -56,6 +56,8 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    LoadingIndicator.showLoading()
+
     self.setNavigationBar()
     self.setupConfigure()
 

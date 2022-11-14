@@ -18,6 +18,7 @@ final class PropertySelectView: UIView {
     $0.backgroundColor = .white
     $0.rowHeight = UITableView.automaticDimension
     $0.registCell(type: PropertyCell.self)
+    $0.allowsMultipleSelection = true
   }
 
   // MARK: - Initialize
