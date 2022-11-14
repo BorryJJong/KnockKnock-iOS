@@ -24,12 +24,16 @@ enum KKRouter: URLRequestConvertible {
 
   case getChallengeResponse
   case getChallengeDetail(id: Int)
+
   case getChallengeTitles
   case getPromotions
   case getFeedMain(page: Int, take: Int, challengeId: Int)
   case requestShopAddress(query: String)
   case getFeedBlogPost(page: Int, take: Int, feedId: Int, challengeId: Int)
   case getFeed(id: Int)
+
+  case getComment(id: Int)
+  case postAddComment(comment: Parameters)
 
   var method: HTTPMethod {
     switch self {
@@ -40,8 +44,12 @@ enum KKRouter: URLRequestConvertible {
         .getChallengeTitles,
         .getPromotions,
         .getChallengeDetail,
-        .requestShopAddress:
+        .requestShopAddress,
+        .getComment:
       return .get
+
+    case .postAddComment:
+      return .post
     }
   }
 
@@ -55,16 +63,20 @@ enum KKRouter: URLRequestConvertible {
     case .requestShopAddress: return "keyword.json"
     case .getFeedBlogPost: return "feed/blog-post"
     case .getFeed(let id): return "feed/\(id)"
+    case .getComment(let id): return "feed/\(id)/comment"
+    case .postAddComment: return "feed/comment"
     }
   }
 
   var parameters: Parameters? {
     switch self {
+
     case  .getChallengeDetail,
         .getChallengeResponse,
         .getChallengeTitles,
         .getFeed,
-        .getPromotions:
+        .getPromotions,
+        .getComment:
       return nil
 
     case let .requestShopAddress(query):
@@ -83,6 +95,8 @@ enum KKRouter: URLRequestConvertible {
         "feedId": feedId,
         "challengeId": challengeId
       ]
+    case let .postAddComment(comment):
+      return comment
     }
   }
 
@@ -94,7 +108,8 @@ enum KKRouter: URLRequestConvertible {
     switch method {
     case .get:
       switch self {
-      case .getChallengeDetail, .getFeed, .getPromotions:
+
+      case .getChallengeDetail, .getFeed, .getPromotions, .getComment:
         break
 
       case .requestShopAddress:
@@ -104,9 +119,13 @@ enum KKRouter: URLRequestConvertible {
       default:
         request = try URLEncoding.default.encode(request, with: parameters)
       }
+
     case .post, .patch, .delete:
-      request = try JSONEncoding.default.encode(request, with: parameters)
+      request = try JSONEncoding.default.encode(request)
+      request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
       request.setValue("application/json", forHTTPHeaderField: "Accept")
+      request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
     default:
       break
     }

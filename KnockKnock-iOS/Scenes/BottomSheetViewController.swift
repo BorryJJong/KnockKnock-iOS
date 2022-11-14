@@ -54,9 +54,9 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
 
   // MARK: - Bind
 
-  func setBottomSheetContents(contents: [String]) {
+  func setBottomSheetContents(contents: [String], bottomSheetType: BottomSheetType) {
     self.options = contents
-    self.containerView.bottomHeight = (contents.count * 50).f
+    self.containerView.bottomSheetType = bottomSheetType
   }
 
   // MARK: - Gesture
@@ -69,28 +69,53 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
     self.containerView.dimmedBackView.addGestureRecognizer(dimmedTap)
     self.containerView.dimmedBackView.isUserInteractionEnabled = true
 
-    let swipeGesture = UISwipeGestureRecognizer(
+    let gesture = UIPanGestureRecognizer(
       target: self,
-      action: #selector(panGesture)
+      action: #selector(self.panGesture(_:))
     )
-    swipeGesture.direction = .down
-    self.view.addGestureRecognizer(swipeGesture)
+    gesture.delaysTouchesBegan = false
+    gesture.delaysTouchesEnded = false
+
+    self.containerView.bottomSheetView.addGestureRecognizer(gesture)
   }
 
   @objc private func dimmedViewTapped(_ tapRecognizer: UITapGestureRecognizer) {
     self.containerView.hideBottomSheet(view: self)
   }
 
-  @objc func panGesture(_ recognizer: UISwipeGestureRecognizer) {
-    if recognizer.state == .ended {
+  @objc func panGesture(_ recognizer: UIPanGestureRecognizer) {
+    let translationY = recognizer.translation(in: self.containerView).y
 
-      switch recognizer.direction {
-      case .down:
-        self.containerView.hideBottomSheet(view: self)
+    let velocity = recognizer.velocity(in: self.containerView)
 
-      default:
-        break
+    switch recognizer.state {
+
+    case .began:
+      self.containerView.bottomSheetPanStartingTopConstant = self.containerView.bottomSheetHeight
+
+    case .changed:
+      let movePostion = self.containerView.bottomSheetPanStartingTopConstant + translationY
+
+      if self.containerView.bottomSheetMinHeight > movePostion &&
+          movePostion > self.containerView.bottomSheetPanMinTopConstant {
+        self.containerView.bottomSheetHeight = self.containerView.bottomSheetPanStartingTopConstant + translationY
+
+        self.containerView.bottomSheetView.snp.updateConstraints {
+          $0.top.equalToSuperview().offset(self.containerView.bottomSheetHeight)
+        }
       }
+
+    case .ended:
+      self.containerView.showBottomSheet()
+
+      if velocity.y > 1500 {
+        self.containerView.hideBottomSheet(view: self)
+        return
+      }
+
+    default:
+      break
+
     }
   }
 
