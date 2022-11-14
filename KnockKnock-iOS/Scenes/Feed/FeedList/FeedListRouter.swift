@@ -12,7 +12,7 @@ protocol FeedListRouterProtocol {
 
   func navigateToFeedMain(source: FeedListViewProtocol)
   func navigateToFeedDetail(source: FeedListViewProtocol, feedId: Int)
-  func navigateToCommentView(source: FeedListViewProtocol)
+  func navigateToCommentView(feedId: Int, source: FeedListViewProtocol)
   func presentBottomSheetView(source: FeedListViewProtocol)
 }
 
@@ -51,8 +51,8 @@ final class FeedListRouter: FeedListRouterProtocol {
     }
   }
 
-  func navigateToCommentView(source: FeedListViewProtocol) {
-    let commentViewController = CommentRouter.createCommentView()
+  func navigateToCommentView(feedId: Int, source: FeedListViewProtocol) {
+    let commentViewController = CommentRouter.createCommentView(feedId: feedId)
     if let sourceView = source as? UIViewController {
       commentViewController.modalPresentationStyle = .fullScreen
       sourceView.present(commentViewController, animated: true, completion: nil)
