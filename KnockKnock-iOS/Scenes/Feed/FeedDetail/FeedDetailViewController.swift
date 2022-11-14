@@ -16,7 +16,7 @@ protocol FeedDetailViewProtocol: AnyObject {
 
   func getFeedDetail(feedDetail: FeedDetail)
   func getAllComments(allComments: [Comment])
-  func setVisibleComments(comments: [Comment])
+  func fetchVisibleComments(comments: [Comment])
   func getLike(like: [Like])
 }
 
@@ -39,16 +39,15 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   var userId: Int = 1
   var commentId: Int?
   var like: [Like] = []
-  var allComments: [Comment] = [] {
-    didSet {
-      self.interactor?.setVisibleComments(comments: allComments)
-    }
-  }
+
+  var allComments: [Comment] = []
   var visibleComments: [Comment] = [] {
     didSet {
-      self.containerView.postCollectionView.reloadSections(
-        IndexSet(integer: FeedDetailSection.comment.rawValue)
-      )
+      UIView.performWithoutAnimation {
+        self.containerView.postCollectionView.reloadSections(
+          IndexSet(integer: FeedDetailSection.comment.rawValue)
+        )
+      }
     }
   }
 
@@ -63,7 +62,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
 
     self.interactor?.getFeedDeatil(feedId: feedId)
     self.interactor?.getLike()
-    self.interactor?.getAllComments(feedId: feedId)
+    self.interactor?.fetchAllComments(feedId: feedId)
   }
 
   // MARK: - Configure
@@ -150,7 +149,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   @objc private func replyMoreButtonDidTap(_ sender: UIButton) {
     self.visibleComments[sender.tag].isOpen.toggle()
 
-    self.interactor?.setVisibleComments(comments: self.visibleComments)
+    self.interactor?.fetchVisibleComments(comments: self.visibleComments)
     
     UIView.performWithoutAnimation {
       self.containerView.postCollectionView.reloadSections([FeedDetailSection.comment.rawValue])
@@ -254,7 +253,7 @@ extension FeedDetailViewController: FeedDetailViewProtocol {
     self.allComments = allComments
   }
 
-  func setVisibleComments(comments: [Comment]) {
+  func fetchVisibleComments(comments: [Comment]) {
     self.visibleComments = comments
   }
 
@@ -330,6 +329,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
         action: #selector(replyMoreButtonDidTap(_:)),
         for: .touchUpInside
       )
+
       cell.replyWriteButton.tag = self.visibleComments[indexPath.item].commentData.id
       cell.replyWriteButton.addTarget(
         self,

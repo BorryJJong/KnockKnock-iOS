@@ -14,8 +14,7 @@ protocol CommentViewProtocol {
   var router: CommentRouterProtocol? { get set }
   var interactor: CommentInteractorProtocol? { get set }
 
-  func getAllComments(allComments: [Comment])
-  func setVisibleComments(comments: [Comment])
+  func fetchVisibleComments(comments: [Comment])
 }
 
 final class CommentViewController: BaseViewController<CommentView> {
@@ -25,11 +24,6 @@ final class CommentViewController: BaseViewController<CommentView> {
   var router: CommentRouterProtocol?
   var interactor: CommentInteractorProtocol?
 
-  var allComments: [Comment] = [] {
-    didSet {
-      self.interactor?.setVisibleComments(comments: allComments)
-    }
-  }
   var visibleComments: [Comment] = [] {
     didSet {
       self.containerView.commentCollectionView.reloadData()
@@ -51,7 +45,7 @@ final class CommentViewController: BaseViewController<CommentView> {
     super.viewDidLoad()
 
     LoadingIndicator.showLoading()
-    self.interactor?.getAllComments(feedId: self.feedId)
+    self.interactor?.fetchAllComments(feedId: self.feedId)
   }
 
   // MARK: - Configure
@@ -160,8 +154,7 @@ final class CommentViewController: BaseViewController<CommentView> {
   @objc private func replyMoreButtonDidTap(_ sender: UIButton) {
     self.visibleComments[sender.tag].isOpen.toggle()
 
-    self.interactor?.setVisibleComments(comments: self.visibleComments)
-
+    self.interactor?.fetchVisibleComments(comments: self.visibleComments)
     self.containerView.commentCollectionView.reloadData()
   }
 
@@ -189,11 +182,7 @@ final class CommentViewController: BaseViewController<CommentView> {
 // MARK: - CommentViewProtocol
 
 extension CommentViewController: CommentViewProtocol {
-  func getAllComments(allComments: [Comment]) {
-    self.allComments = allComments
-  }
-
-  func setVisibleComments(comments: [Comment]) {
+  func fetchVisibleComments(comments: [Comment]) {
     self.visibleComments = comments
   }
 }
@@ -223,7 +212,14 @@ extension CommentViewController: UICollectionViewDataSource {
       for: .touchUpInside
     )
 
+    cell.replyWriteButton.tag = self.visibleComments[indexPath.item].commentData.id
+
     cell.bind(comment: self.visibleComments[indexPath.item])
+    cell.replyWriteButton.addTarget(
+      self,
+      action: #selector(self.replyWriteButtonDidTap(_:)),
+      for: .touchUpInside
+    )
 
     return cell
   }

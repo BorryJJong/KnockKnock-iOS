@@ -10,25 +10,19 @@ import Foundation
 protocol CommentPresenterProtocol {
   var view: CommentViewProtocol? { get set }
 
-  func presentAllComments(allComments: [Comment])
-  func setVisibleComments(allComments: [Comment])
+  func presentVisibleComments(allComments: [Comment])
 }
 
 final class CommentPresenter: CommentPresenterProtocol {
   var view: CommentViewProtocol?
 
-  func presentAllComments(allComments: [Comment]) {
-    LoadingIndicator.hideLoading()
-    self.view?.getAllComments(allComments: allComments)
-  }
-
-  func setVisibleComments(allComments: [Comment]) {
+  func presentVisibleComments(allComments: [Comment]) {
     var comments: [Comment] = []
-    print(comments)
 
     for comment in allComments {
       if comment.commentData.reply?.count != 0 && comment.isOpen {
         comments.append(comment)
+
         if let replyArray = comment.commentData.reply {
           for reply in replyArray {
             comments.append(
@@ -55,6 +49,7 @@ final class CommentPresenter: CommentPresenterProtocol {
         }
       }
     }
-    self.view?.setVisibleComments(comments: comments)
+    self.view?.fetchVisibleComments(comments: comments)
+    LoadingIndicator.hideLoading()
   }
 }
