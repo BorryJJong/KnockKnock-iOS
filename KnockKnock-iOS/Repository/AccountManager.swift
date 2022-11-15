@@ -92,15 +92,26 @@ final class AccountManager: AccountManagerProtocol {
   }
 
   func loginWithKakao(completionHandler: @escaping (String) -> Void) {
-    // 추후에 웹으로 로그인 -> 앱으로 로그인 변경 필요
-    UserApi.shared.loginWithKakaoAccount(completion: { (oauthToken, error) in
-      if let error = error {
-        print(error)
-      } else {
-        if let oauthToken = oauthToken {
-          completionHandler(oauthToken.accessToken)
+    if UserApi.isKakaoTalkLoginAvailable() {
+      UserApi.shared.loginWithKakaoTalk(completion: { (oauthToken, error) in
+        if let error = error {
+          print(error)
+        } else {
+          if let oauthToken = oauthToken {
+            completionHandler(oauthToken.accessToken)
+          }
         }
-      }
-    })
+      })
+    } else {
+      UserApi.shared.loginWithKakaoAccount(completion: { (oauthToken, error) in
+        if let error = error {
+          print(error)
+        } else {
+          if let oauthToken = oauthToken {
+            completionHandler(oauthToken.accessToken)
+          }
+        }
+      })
+    }
   }
 }
