@@ -44,11 +44,6 @@ final class ShopSearchView: UIView {
     static let resultTableViewTrailingMargin = -20.f
   }
 
-  private enum TextFieldTag: Int {
-    case city = 1
-    case county = 2
-  }
-
   // MARK: - UI
 
   let cityLabel = UILabel().then {
