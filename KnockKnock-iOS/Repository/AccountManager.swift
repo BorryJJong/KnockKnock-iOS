@@ -11,7 +11,6 @@ import KakaoSDKUser
 
 protocol AccountManagerProtocol {
   func requestToken(
-    socialType: SocialType,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
   )
   func signUp(
@@ -22,7 +21,7 @@ protocol AccountManagerProtocol {
   )
 }
 
-final class AccountManager: AccountManagerProtocol {
+final class KakaoAccountManager: AccountManagerProtocol {
 
   // signUp
 
@@ -56,21 +55,18 @@ final class AccountManager: AccountManagerProtocol {
   // login
 
   func requestToken(
-    socialType: SocialType,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
   ) {
-    switch socialType {
-    case .kakao:
       self.loginWithKakao(completionHandler: { accessToken in
 
         let loginInfo = LoginInfo(
           socialUuid: accessToken,
-          socialType: socialType.rawValue
+          socialType: SocialType.kakao.rawValue
         )
 
         let parameters = [
           "socialUuid": accessToken,
-          "socialType": socialType.rawValue
+          "socialType": SocialType.kakao.rawValue
         ]
 
         KKNetworkManager
@@ -86,9 +82,6 @@ final class AccountManager: AccountManagerProtocol {
             }
           )
       })
-    case .apple:
-      print("Apple")
-    }
   }
 
   func loginWithKakao(completionHandler: @escaping (String) -> Void) {

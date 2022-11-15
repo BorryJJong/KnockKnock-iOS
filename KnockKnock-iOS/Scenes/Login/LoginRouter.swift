@@ -18,7 +18,7 @@ final class LoginRouter: LoginRouterProtocol {
     let view = LoginViewController()
     let interactor = LoginInteractor()
     let presenter = LoginPresenter()
-    let worker = LoginWorker(accountManager: AccountManager())
+    let worker = LoginWorker(kakaoAccountManager: KakaoAccountManager())
     let router = LoginRouter()
 
     view.interactor = interactor

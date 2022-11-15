@@ -15,20 +15,24 @@ protocol LoginWorkerProtocol {
 }
 
 final class LoginWorker: LoginWorkerProtocol {
-  private let accountManager: AccountManagerProtocol
+  private let kakaoAccountManager: AccountManagerProtocol
 
-  init(accountManager: AccountManagerProtocol) {
-    self.accountManager = accountManager
+  init(kakaoAccountManager: AccountManagerProtocol) {
+    self.kakaoAccountManager = kakaoAccountManager
   }
 
   func fetchLoginResult(
     socialType: SocialType,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
   ) {
-    self.accountManager.requestToken(
-      socialType: socialType,
-      completionHandler: { loginResponse, loginInfo in
-      completionHandler(loginResponse, loginInfo)
-    })
+    switch socialType {
+    case .kakao:
+      self.kakaoAccountManager.requestToken(
+        completionHandler: { loginResponse, loginInfo in
+        completionHandler(loginResponse, loginInfo)
+      })
+    case .apple:
+      print("apple")
+    }
   }
 }

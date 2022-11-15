@@ -17,10 +17,10 @@ protocol ProfileSettingWorkerProtocol {
 }
 
 final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
-  private let accountManager: AccountManagerProtocol
+  private let kakaoAccountManager: AccountManagerProtocol
 
-  init(accountManager: AccountManagerProtocol) {
-    self.accountManager = accountManager
+  init(kakaoAccountManager: AccountManagerProtocol) {
+    self.kakaoAccountManager = kakaoAccountManager
   }
 
   func requestSignUp(
@@ -29,7 +29,7 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
     image: String,
     completionHandler: @escaping (SignUpResponse) -> Void
   ) {
-    self.accountManager.signUp(
+    self.kakaoAccountManager.signUp(
       loginInfo: loginInfo,
       nickname: nickname,
       image: image,
