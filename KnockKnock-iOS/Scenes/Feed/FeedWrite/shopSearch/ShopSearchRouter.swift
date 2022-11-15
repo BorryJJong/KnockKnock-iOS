@@ -10,7 +10,7 @@ import UIKit
 protocol ShopSearchRouterProtocol: AnyObject {
   static func createShopSearch(delegate: ShopSearchDelegate) -> UIViewController
 
-  func presentBottomSheetView(source: ShopSearchViewProtocol, content: [String])
+  func presentBottomSheetView(source: ShopSearchViewProtocol, content: [String], districtsType: DistrictsType)
   func passDataToFeedWriteView(source: ShopSearchViewProtocol, address: String?)
   func navigateToFeedWriteView(source: ShopSearchViewProtocol)
 }
@@ -19,12 +19,17 @@ protocol ShopSearchDelegate: AnyObject {
   func fetchShopData(shopData: String)
 }
 
+protocol DistrictSelectDelegate: AnyObject {
+  func fetchSelectedCity(city: String)
+  func fetchSelectedCounty(county: String)
+} 
+
 final class ShopSearchRouter: ShopSearchRouterProtocol {
 
+  weak var districtSelectDelegate: DistrictSelectDelegate?
   weak var delegate: ShopSearchDelegate?
 
   static func createShopSearch(delegate: ShopSearchDelegate) -> UIViewController {
-
     let view = ShopSearchViewController()
     let interactor = ShopSearchInteractor()
     let presenter = ShopSearchPresenter()
@@ -36,6 +41,7 @@ final class ShopSearchRouter: ShopSearchRouterProtocol {
     presenter.view = view
     interactor.worker = worker
     interactor.presenter = presenter
+    router.districtSelectDelegate = interactor
     router.delegate = delegate
 
     return view
@@ -58,13 +64,17 @@ final class ShopSearchRouter: ShopSearchRouterProtocol {
 
   func presentBottomSheetView(
     source: ShopSearchViewProtocol,
-    content: [String]
+    content: [String],
+    districtsType: DistrictsType
   ) {
-    let bottomSheetViewController = BottomSheetViewController().then {
-      $0.setBottomSheetContents(contents: content, bottomSheetType: .large)
-      $0.modalPresentationStyle = .overFullScreen
-    }
-    
+    guard let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
+      delegate: self.districtSelectDelegate!,
+      districtsType: districtsType
+    ) as? BottomSheetViewController else { return }
+
+    bottomSheetViewController.setBottomSheetContents(contents: content, bottomSheetType: .large)
+    bottomSheetViewController.modalPresentationStyle = .overFullScreen
+
     if let sourceView = source as? UIViewController {
       sourceView.present(
         bottomSheetViewController,
