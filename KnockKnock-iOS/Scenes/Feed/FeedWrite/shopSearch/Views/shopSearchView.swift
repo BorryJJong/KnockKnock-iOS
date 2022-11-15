@@ -16,15 +16,17 @@ final class ShopSearchView: UIView {
   // MARK: - Properties
 
   private enum Metric {
-    static let cityTextFieldHeight = 40.f
-    static let cityTextFieldTopMargin = 20.f
-    static let cityTextFieldLeadingMargin = 20.f
-    static let cityTextFieldTrailingMargin = -(2.5).f
+    static let cityButtonHeight = 40.f
+    static let cityButtonTopMargin = 20.f
+    static let cityButtonLeadingMargin = 20.f
+    static let cityButtonTrailingMargin = -(2.5).f
 
-    static let regionTextFieldHeight = 40.f
-    static let regionTextFieldTopMargin = 20.f
-    static let regionTextFieldLeadingMargin = (2.5).f
-    static let regionTextFieldTrailingMargin = -20.f
+    static let buttonIconTrailingMargin = 10.f
+
+    static let countyButtonHeight = 40.f
+    static let countyButtonTopMargin = 20.f
+    static let countyButtonLeadingMargin = (2.5).f
+    static let countyButtonTrailingMargin = -20.f
 
     static let addressTextFieldTopMargin = 5.f
     static let addressTextFieldLeadingMargin = 20.f
@@ -201,27 +203,27 @@ final class ShopSearchView: UIView {
      self.seperatorLineView, self.statusStackView, self.resultTableView].addSubViews(self)
 
     self.cityButton.snp.makeConstraints {
-      $0.top.equalTo(self.safeAreaLayoutGuide).offset(Metric.cityTextFieldTopMargin)
+      $0.top.equalTo(self.safeAreaLayoutGuide).offset(Metric.cityButtonTopMargin)
       $0.trailing.equalTo(self.safeAreaLayoutGuide.snp.centerX)
-      $0.leading.equalTo(self.safeAreaLayoutGuide).offset(Metric.cityTextFieldLeadingMargin)
-      $0.height.equalTo(Metric.cityTextFieldHeight)
+      $0.leading.equalTo(self.safeAreaLayoutGuide).offset(Metric.cityButtonLeadingMargin)
+      $0.height.equalTo(Metric.cityButtonHeight)
     }
 
     self.cityLabel.snp.makeConstraints {
       $0.top.trailing.height.equalTo(self.cityButton)
-      $0.leading.equalTo(self.cityButton).offset(10)
+      $0.leading.equalTo(self.cityButton).offset(Metric.buttonIconTrailingMargin)
     }
 
     self.countyButton.snp.makeConstraints {
-      $0.top.equalTo(self.safeAreaLayoutGuide).offset(Metric.regionTextFieldTopMargin)
-      $0.trailing.equalTo(self.safeAreaLayoutGuide).offset(Metric.regionTextFieldTrailingMargin)
-      $0.leading.equalTo(self.safeAreaLayoutGuide.snp.centerX).offset(Metric.regionTextFieldLeadingMargin)
-      $0.height.equalTo(Metric.regionTextFieldHeight)
+      $0.top.equalTo(self.safeAreaLayoutGuide).offset(Metric.countyButtonTopMargin)
+      $0.trailing.equalTo(self.safeAreaLayoutGuide).offset(Metric.countyButtonTrailingMargin)
+      $0.leading.equalTo(self.safeAreaLayoutGuide.snp.centerX).offset(Metric.countyButtonLeadingMargin)
+      $0.height.equalTo(Metric.countyButtonHeight)
     }
 
     self.countyLabel.snp.makeConstraints {
       $0.top.trailing.height.equalTo(self.countyButton)
-      $0.leading.equalTo(self.countyButton).offset(10)
+      $0.leading.equalTo(self.countyButton).offset(Metric.buttonIconTrailingMargin)
     }
 
     NSLayoutConstraint.activate([
