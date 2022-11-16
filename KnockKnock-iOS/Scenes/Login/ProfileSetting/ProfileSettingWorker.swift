@@ -36,7 +36,7 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
       completionHandler: { signUpResponse in
         if let authInfo = signUpResponse.authInfo {
           UserDefaults.standard.set(authInfo.accessToken, forKey: "accessToken")
-          UserDefaults.standard.set(authInfo.refreashToken, forKey: "refreshToken")
+          UserDefaults.standard.set(authInfo.refreshToken, forKey: "refreshToken")
           UserDefaults.standard.set(nickname, forKey: "nickname")
         }
     })

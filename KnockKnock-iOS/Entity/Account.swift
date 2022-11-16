@@ -24,5 +24,5 @@ struct LoginResponse: Decodable {
 
 struct AuthInfo: Decodable {
   let accessToken: String
-  let refreashToken: String
+  let refreshToken: String
 }
