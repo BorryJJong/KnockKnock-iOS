@@ -56,7 +56,10 @@ extension MyViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
-    let cell = collectionView.dequeueCell(withType: MyCell.self, for: indexPath)
+    let cell = collectionView.dequeueCell(
+      withType: MyCell.self,
+      for: indexPath
+    )
     
     let isSwitch = indexPath == IndexPath(item: 2, section: 0)
     let isVersion = indexPath == IndexPath(item: 1, section: 1)
@@ -86,7 +89,10 @@ extension MyViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     didSelectItemAt indexPath: IndexPath
   ) {
-    self.navigationController?.pushViewController(NoticeViewController(), animated: true)
+    self.navigationController?.pushViewController(
+      self.router?.navigateToNoticeView(source: self),
+      animated: true
+    )
   }
 }
 
@@ -96,7 +102,10 @@ extension MyViewController: UICollectionViewDelegateFlowLayout {
     layout collectionViewLayout: UICollectionViewLayout,
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
-    return CGSize(width: self.containerView.frame.width, height: 30)
+    return CGSize(
+      width: self.containerView.frame.width,
+      height: 30
+    )
   }
   
   func collectionView(
