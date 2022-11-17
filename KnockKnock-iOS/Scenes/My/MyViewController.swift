@@ -70,7 +70,10 @@ extension MyViewController: MyViewProtocol {
 // MARK: - CollectionView DataSource
 
 extension MyViewController: UITableViewDataSource {
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  func tableView(
+    _ tableView: UITableView,
+    numberOfRowsInSection section: Int
+  ) -> Int {
     return self.menuData[section].count
   }
 
@@ -78,10 +81,24 @@ extension MyViewController: UITableViewDataSource {
     return self.menuData.count
   }
 
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueCell(withType: MyCell.self, for: indexPath)
+  func tableView(
+    _ tableView: UITableView,
+    cellForRowAt indexPath: IndexPath
+  ) -> UITableViewCell {
+    let cell = tableView.dequeueCell(
+      withType: MyCell.self,
+      for: indexPath
+    )
 
-    cell.model = self.menuData[indexPath.section][indexPath.row]
+    let menu = self.menuData[indexPath.section][indexPath.row]
+
+    cell.model = menu
+
+    if menu.type == .alert {
+      cell.accessoryType = .none
+    } else {
+      cell.accessoryType = .disclosureIndicator
+    }
 
     return cell
   }

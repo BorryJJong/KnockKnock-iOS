@@ -18,7 +18,9 @@ final class MyCell: BaseTableViewCell<MyItem> {
   private enum Metric {
     static let titleLabelLeadingMargin = 20.f
 
-    static let enterButtonTrailingMargin = 20.f
+    static let versionLabelTrailingMargin = 5.f
+
+    static let alertSwitchTrailingMargin = 20.f
   }
 
   // MARK: - UI
@@ -29,15 +31,15 @@ final class MyCell: BaseTableViewCell<MyItem> {
     $0.textColor = .black
   }
 
-  private let enterButton = UIButton().then {
-    $0.setImage(KKDS.Image.ic_left_10_gr, for: .normal)
-    $0.setTitleColor(KKDS.Color.gray70, for: .normal)
-    $0.titleLabel?.font = .systemFont(ofSize: 13, weight: .medium)
-    $0.semanticContentAttribute = .forceRightToLeft
+  private let versionLabel = UILabel().then {
+    $0.text = "V 0.1.1"
+    $0.textColor = KKDS.Color.gray70
+    $0.font = .systemFont(ofSize: 13, weight: .light)
   }
 
   private let alertSwitch = UISwitch().then {
     $0.onTintColor = KKDS.Color.green50
+    $0.tintColor = KKDS.Color.gray20
     $0.isOn = false
   }
 
@@ -50,33 +52,27 @@ final class MyCell: BaseTableViewCell<MyItem> {
 
     titleLabel.text = model?.title
 
-    self.enterButton.isHidden = type == .alert
+    self.versionLabel.isHidden = !(type == .version)
     self.alertSwitch.isHidden = !(type == .alert)
-
-    if type == .version {
-      self.enterButton.setTitle("V 0.1.1 ", for: .normal)
-    } else{
-      self.enterButton.setTitle(nil, for: .normal)
-    }
   }
 
   // MARK: - Configure
 
   override func setupConstraints() {
-    [self.titleLabel, self.enterButton, self.alertSwitch].addSubViews(self.contentView)
+    [self.titleLabel, self.versionLabel, self.alertSwitch].addSubViews(self.contentView)
 
     self.titleLabel.snp.makeConstraints {
       $0.leading.equalToSuperview().inset(Metric.titleLabelLeadingMargin)
       $0.centerY.equalToSuperview()
     }
 
-    self.enterButton.snp.makeConstraints {
-      $0.trailing.equalToSuperview().inset(Metric.enterButtonTrailingMargin)
+    self.versionLabel.snp.makeConstraints {
+      $0.trailing.equalToSuperview().inset(Metric.versionLabelTrailingMargin)
       $0.centerY.equalTo(self.titleLabel)
     }
 
     self.alertSwitch.snp.makeConstraints {
-      $0.trailing.equalToSuperview().inset(Metric.enterButtonTrailingMargin)
+      $0.trailing.equalToSuperview().inset(Metric.alertSwitchTrailingMargin)
       $0.centerY.equalTo(self.titleLabel)
     }
   }
