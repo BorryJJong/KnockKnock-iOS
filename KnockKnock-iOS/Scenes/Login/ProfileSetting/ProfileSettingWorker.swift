@@ -18,9 +18,14 @@ protocol ProfileSettingWorkerProtocol {
 
 final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
   private let kakaoAccountManager: AccountManagerProtocol
+  private let localDataManager: LocalDataManagerProtocol
 
-  init(kakaoAccountManager: AccountManagerProtocol) {
+  init(
+    kakaoAccountManager: AccountManagerProtocol,
+    localDataManager: LocalDataManagerProtocol
+  ) {
     self.kakaoAccountManager = kakaoAccountManager
+    self.localDataManager = localDataManager
   }
 
   func requestSignUp(
@@ -35,9 +40,11 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
       image: image,
       completionHandler: { signUpResponse in
         if let authInfo = signUpResponse.authInfo {
-          UserDefaults.standard.set(authInfo.accessToken, forKey: "accessToken")
-          UserDefaults.standard.set(authInfo.refreshToken, forKey: "refreshToken")
-          UserDefaults.standard.set(nickname, forKey: "nickname")
+          self.localDataManager.saveToken(
+            accessToken: authInfo.accessToken,
+            refreshToken: authInfo.refreshToken,
+            nickname: nickname
+          )
         }
     })
   }

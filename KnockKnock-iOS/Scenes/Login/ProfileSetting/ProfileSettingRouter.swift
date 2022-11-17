@@ -16,7 +16,10 @@ final class ProfileSettingRouter: ProfileSettingRouterProtocol {
     let view = ProfileSettingViewController()
     let interactor = ProfileSettingInteractor()
     let presenter = ProfileSettingPresenter()
-    let worker = ProfileSettingWorker(kakaoAccountManager: KakaoAccountManager())
+    let worker = ProfileSettingWorker(
+      kakaoAccountManager: KakaoAccountManager(),
+      localDataManager: LocalDataManager()
+    )
     let router = ProfileSettingRouter()
 
     view.interactor = interactor

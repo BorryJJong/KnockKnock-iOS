@@ -40,6 +40,13 @@ final class LoginView: UIView {
     $0.contentMode = .scaleAspectFit
   }
 
+  // 테스트용 로그아웃 버튼
+  let logoutButton = UIButton().then {
+    $0.backgroundColor = .black
+    $0.setTitle("LOGOUT", for: .normal)
+    $0.contentMode = .scaleAspectFit
+  }
+
   // MARK: - Initialize
 
   override init(frame: CGRect) {
@@ -54,12 +61,18 @@ final class LoginView: UIView {
   // MARK: - Configure
 
   private func setupConstraints() {
-    [self.kakaoLoginButton, self.titleLabel, self.subTitleLabel].addSubViews(self)
+    [self.kakaoLoginButton, self.logoutButton, self.titleLabel, self.subTitleLabel].addSubViews(self)
 
     self.kakaoLoginButton.snp.makeConstraints {
       $0.leading.trailing.equalToSuperview().inset(Metric.kakaoLoginButonLeadingMargin)
       $0.height.equalTo(45)
       $0.centerY.equalToSuperview()
+    }
+
+    self.logoutButton.snp.makeConstraints {
+      $0.height.equalTo(45)
+      $0.leading.trailing.equalTo(self.kakaoLoginButton)
+      $0.top.equalTo(self.kakaoLoginButton.snp.bottom).offset(50)
     }
 
     self.titleLabel.snp.makeConstraints {
