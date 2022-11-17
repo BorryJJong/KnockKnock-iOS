@@ -19,7 +19,10 @@ final class LoginRouter: LoginRouterProtocol {
     let view = LoginViewController()
     let interactor = LoginInteractor()
     let presenter = LoginPresenter()
-    let worker = LoginWorker(kakaoAccountManager: KakaoAccountManager())
+    let worker = LoginWorker(
+      kakaoAccountManager: KakaoAccountManager(),
+      localDataManager: LocalDataManager()
+    )
     let router = LoginRouter()
 
     view.interactor = interactor
@@ -31,7 +34,10 @@ final class LoginRouter: LoginRouterProtocol {
     return view
   }
 
-  func navigateToProfileSettingView(source: LoginViewProtocol, loginInfo: LoginInfo) {
+  func navigateToProfileSettingView(
+    source: LoginViewProtocol,
+    loginInfo: LoginInfo
+  ) {
     let profileSettingViewController = ProfileSettingRouter.createProfileSettingView(
       loginInfo: loginInfo
     )
@@ -44,10 +50,16 @@ final class LoginRouter: LoginRouterProtocol {
     }
   }
 
+  // login 성공 시 홈 화면으로 이동
   func navigateToHome() {
     let main = MainTabBarController()
+
     guard let window = UIApplication.shared.windows.first else { return }
 
-    window.replaceRootViewController(main, animated: true, completion: nil)
+    window.replaceRootViewController(
+      main,
+      animated: true,
+      completion: nil
+    )
   }
 }

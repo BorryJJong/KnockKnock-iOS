@@ -35,8 +35,7 @@ final class LoginInteractor: LoginInteractorProtocol {
 
   func saveTokens(loginResponse: LoginResponse) {
     if let authInfo = loginResponse.authInfo{
-      UserDefaults.standard.set(authInfo.accessToken, forKey: "accessToken")
-      UserDefaults.standard.set(authInfo.refreshToken, forKey: "refreshToken")
+      self.worker?.saveToken(authInfo: authInfo)
     }
   }
 }
