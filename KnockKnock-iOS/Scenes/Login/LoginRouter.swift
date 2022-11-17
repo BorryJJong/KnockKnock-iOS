@@ -10,6 +10,7 @@ import UIKit
 protocol LoginRouterProtocol {
   static func createLoginView() -> UIViewController
   func navigateToProfileSettingView(source: LoginViewProtocol, loginInfo: LoginInfo)
+  func navigateToHome()
 }
 
 final class LoginRouter: LoginRouterProtocol {
@@ -41,5 +42,12 @@ final class LoginRouter: LoginRouterProtocol {
         animated: true
       )
     }
+  }
+
+  func navigateToHome() {
+    let main = MainTabBarController()
+    guard let window = UIApplication.shared.windows.first else { return }
+
+    window.replaceRootViewController(main, animated: true, completion: nil)
   }
 }

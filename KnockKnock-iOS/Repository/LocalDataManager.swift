@@ -30,4 +30,12 @@ final class LocalDataManager: LocalDataManagerProtocol {
     UserDefaults.standard.removeObject(forKey: "accessToken")
     UserDefaults.standard.removeObject(forKey: "refreshToken")
   }
+
+  func checkTokenIsExisted() -> Bool {
+    if UserDefaults.standard.object(forKey: "accessToken") as? String != nil {
+      return true
+    } else {
+      return false
+    }
+  }
 }

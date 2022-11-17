@@ -61,6 +61,7 @@ extension LoginViewController: LoginViewProtocol {
   ) {
     if loginResponse.isExistUser {
       self.interactor?.saveTokens(loginResponse: loginResponse)
+      self.router?.navigateToHome()
     } else {
       self.router?.navigateToProfileSettingView(source: self, loginInfo: loginInfo)
     }
