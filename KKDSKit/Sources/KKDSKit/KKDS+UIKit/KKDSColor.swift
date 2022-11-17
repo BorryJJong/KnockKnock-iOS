@@ -15,6 +15,7 @@ public extension KKDS {
 
 public extension KKDS.Color {
   static var black: UIColor                 { .load(name: "black") }
+
   static var gray10: UIColor                { .load(name: "gray10") }
   static var gray20: UIColor                { .load(name: "gray20") }
   static var gray30: UIColor                { .load(name: "gray30") }
@@ -42,4 +43,3 @@ extension UIColor {
     return color
   }
 }
-

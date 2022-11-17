@@ -49,6 +49,12 @@ final class MyViewController: BaseViewController<MyView> {
   }
 }
 
+// MARK: - My View Protocol
+
+extension MyViewController: MyViewProtocol {
+  
+}
+
 // MARK: - CollectionView DataSource
 
 extension MyViewController: UICollectionViewDataSource {
@@ -89,12 +95,12 @@ extension MyViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     didSelectItemAt indexPath: IndexPath
   ) {
-    self.navigationController?.pushViewController(
-      self.router?.navigateToNoticeView(source: self),
-      animated: true
-    )
+
+    self.router?.navigateToNoticeView(source: self)
   }
 }
+
+
 
 extension MyViewController: UICollectionViewDelegateFlowLayout {
   func collectionView(

@@ -147,7 +147,8 @@ class CommentView: UIView {
 
     self.commentCollectionView.snp.makeConstraints {
       $0.top.equalTo(self.headerView.snp.bottom)
-      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.commentCollectionViewLeadingMargin)
+      $0.trailing.equalToSuperview()
+      $0.leading.equalTo(self.safeAreaLayoutGuide).inset(Metric.commentCollectionViewLeadingMargin)
       $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(Metric.commentCollectionViewBottomMargin)
     }
 

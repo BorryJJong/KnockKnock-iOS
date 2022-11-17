@@ -9,21 +9,24 @@ import UIKit
 
 import Then
 import KKDSKit
+import SnapKit
 
 final class ShopSearchView: UIView {
 
   // MARK: - Properties
 
   private enum Metric {
-    static let cityTextFieldHeight = 40.f
-    static let cityTextFieldTopMargin = 20.f
-    static let cityTextFieldLeadingMargin = 20.f
-    static let cityTextFieldTrailingMargin = -(2.5).f
+    static let cityButtonHeight = 40.f
+    static let cityButtonTopMargin = 20.f
+    static let cityButtonLeadingMargin = 20.f
+    static let cityButtonTrailingMargin = -(2.5).f
 
-    static let regionTextFieldHeight = 40.f
-    static let regionTextFieldTopMargin = 20.f
-    static let regionTextFieldLeadingMargin = (2.5).f
-    static let regionTextFieldTrailingMargin = -20.f
+    static let buttonIconTrailingMargin = 10.f
+
+    static let countyButtonHeight = 40.f
+    static let countyButtonTopMargin = 20.f
+    static let countyButtonLeadingMargin = (2.5).f
+    static let countyButtonTrailingMargin = -20.f
 
     static let addressTextFieldTopMargin = 5.f
     static let addressTextFieldLeadingMargin = 20.f
@@ -43,32 +46,37 @@ final class ShopSearchView: UIView {
 
   // MARK: - UI
 
-  let cityTextField = UITextField().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.placeholder = "시/도 전체"
-    $0.layer.borderWidth = 1
-    $0.layer.borderColor = UIColor.gray30?.cgColor
-    $0.layer.cornerRadius = 5
-    $0.tintColor = .clear
+  let cityLabel = UILabel().then {
+    $0.text = "시/도 전체"
+    $0.textColor = KKDS.Color.black
+    $0.font = .systemFont(ofSize: 14, weight: .medium)
   }
 
   let cityButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .clear
-  }
-
-  let regionTextField = UITextField().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.placeholder = "구/동 전체"
+    $0.setImage(KKDS.Image.ic_down_10_bk, for: .normal)
+    $0.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
     $0.layer.borderWidth = 1
     $0.layer.borderColor = UIColor.gray30?.cgColor
     $0.layer.cornerRadius = 5
-    $0.tintColor = .clear
+    $0.contentHorizontalAlignment = .trailing
+    $0.backgroundColor = .clear
   }
 
-  let regionButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .clear
+  let countyLabel = UILabel().then {
+    $0.text = "시/군/구 전체"
+    $0.textColor = KKDS.Color.gray30
+    $0.font = .systemFont(ofSize: 14, weight: .medium)
+  }
+
+  let countyButton = UIButton().then {
+    $0.setImage(KKDS.Image.ic_down_10_gr, for: .normal)
+    $0.contentHorizontalAlignment = .trailing
+    $0.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
+    $0.layer.borderWidth = 1
+    $0.layer.borderColor = UIColor.gray30?.cgColor
+    $0.layer.cornerRadius = 5
+    $0.backgroundColor = KKDS.Color.gray10
+    $0.isEnabled = false
   }
 
   let addressTextField = UITextField().then {
@@ -76,6 +84,7 @@ final class ShopSearchView: UIView {
     $0.placeholder = "매장주소 입력"
     $0.rightView = UIImageView(image: UIImage(named: "ic_input_cancle"))
     $0.rightViewMode = .whileEditing
+    $0.font = .systemFont(ofSize: 14, weight: .medium)
   }
 
   lazy var addressSearchButton = UIButton().then {
@@ -94,6 +103,7 @@ final class ShopSearchView: UIView {
     $0.rowHeight = UITableView.automaticDimension
     $0.registCell(type: AdressCell.self)
     $0.isHidden = true
+    $0.contentInsetAdjustmentBehavior = .never
   }
 
   private let statusImageView = UIImageView().then {
@@ -116,12 +126,33 @@ final class ShopSearchView: UIView {
     $0.addArrangedSubview(statusLabel)
   }
 
+  let cityDownIconView = UIImageView(
+    frame: CGRect(
+      x: 0,
+      y: -5,
+      width: 10,
+      height: 10
+    )
+  ).then {
+    $0.image = KKDS.Image.ic_down_10_bk
+  }
+
+  let countyDownIconView = UIImageView(
+    frame: CGRect(
+      x: 0,
+      y: -5,
+      width: 10,
+      height: 10
+    )
+  ).then {
+    $0.image = KKDS.Image.ic_down_10_gr
+  }
+
   // MARK: - Initialize
 
   init() {
     super.init(frame: .zero)
     self.setupConstraints()
-    self.setupConfigure()
   }
 
   required init?(coder aDecoder: NSCoder) {
@@ -140,75 +171,59 @@ final class ShopSearchView: UIView {
     }
   }
 
-  // MARK: - Configure
+  func setButtonStatus(isCitySelected: Bool) {
+    self.countyButton.isEnabled = isCitySelected
 
-  private func setupConfigure() {
-    self.addTextFieldPadding(self.cityTextField)
-    self.addTextFieldPadding(self.regionTextField)
-  }
+    if self.countyButton.isEnabled {
+      self.countyButton.backgroundColor = .white
+      self.countyButton.setImage(KKDS.Image.ic_down_10_bk, for: .normal)
 
-  private func addTextFieldPadding(_ textField: UITextField) {
-    let leftPaddingView = UIView(
-      frame: CGRect(
-        x: 0,
-        y: 0,
-        width: 10,
-        height: textField.frame.height
-      ))
-    textField.leftView = leftPaddingView
-    textField.leftViewMode = .always
-
-    let rightPaddingView = UIView(
-      frame: CGRect(
-        x: 0,
-        y: 0,
-        width: 20,
-        height: textField.frame.height
-      ))
-    let iconView = UIImageView(
-      frame: CGRect(
-        x: 0,
-        y: -5,
-        width: 10,
-        height: 10
-      ))
-    iconView.image = KKDS.Image.ic_down_10_bk
-    rightPaddingView.addSubview(iconView)
-
-    textField.rightView = rightPaddingView
-    textField.rightViewMode = .always
+      if self.countyLabel.text == nil {
+        self.countyLabel.textColor = KKDS.Color.gray30
+      } else {
+        self.countyLabel.textColor = KKDS.Color.black
+      }
+    } else {
+      self.countyButton.backgroundColor = KKDS.Color.gray10
+      self.countyLabel.textColor = KKDS.Color.gray30
+      self.countyDownIconView.image = KKDS.Image.ic_down_10_gr
+    }
   }
 
   // MARK: - Constraints
 
   private func setupConstraints() {
-    [self.cityTextField, self.regionTextField, self.cityButton, self.regionButton,
+    [self.cityLabel, self.countyButton, self.countyLabel, self.cityButton,
      self.addressTextField, self.addressSearchButton,
      self.seperatorLineView, self.statusStackView, self.resultTableView].addSubViews(self)
 
+    self.cityButton.snp.makeConstraints {
+      $0.top.equalTo(self.safeAreaLayoutGuide).offset(Metric.cityButtonTopMargin)
+      $0.trailing.equalTo(self.safeAreaLayoutGuide.snp.centerX)
+      $0.leading.equalTo(self.safeAreaLayoutGuide).offset(Metric.cityButtonLeadingMargin)
+      $0.height.equalTo(Metric.cityButtonHeight)
+    }
+
+    self.cityLabel.snp.makeConstraints {
+      $0.top.trailing.height.equalTo(self.cityButton)
+      $0.leading.equalTo(self.cityButton).offset(Metric.buttonIconTrailingMargin)
+    }
+
+    self.countyButton.snp.makeConstraints {
+      $0.top.equalTo(self.safeAreaLayoutGuide).offset(Metric.countyButtonTopMargin)
+      $0.trailing.equalTo(self.safeAreaLayoutGuide).offset(Metric.countyButtonTrailingMargin)
+      $0.leading.equalTo(self.safeAreaLayoutGuide.snp.centerX).offset(Metric.countyButtonLeadingMargin)
+      $0.height.equalTo(Metric.countyButtonHeight)
+    }
+
+    self.countyLabel.snp.makeConstraints {
+      $0.top.trailing.height.equalTo(self.countyButton)
+      $0.leading.equalTo(self.countyButton).offset(Metric.buttonIconTrailingMargin)
+    }
+
     NSLayoutConstraint.activate([
-      self.cityTextField.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.cityTextFieldTopMargin),
-      self.cityTextField.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerXAnchor, constant: Metric.cityTextFieldTrailingMargin),
-      self.cityTextField.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.cityTextFieldLeadingMargin),
-      self.cityTextField.heightAnchor.constraint(equalToConstant: Metric.cityTextFieldHeight),
-
-      self.regionTextField.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.regionTextFieldTopMargin),
-      self.regionTextField.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.regionTextFieldTrailingMargin),
-      self.regionTextField.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerXAnchor, constant: Metric.regionTextFieldLeadingMargin),
-      self.regionTextField.heightAnchor.constraint(equalToConstant: Metric.regionTextFieldHeight),
-
-      self.cityButton.topAnchor.constraint(equalTo: self.cityTextField.topAnchor),
-      self.cityButton.leadingAnchor.constraint(equalTo: self.cityTextField.leadingAnchor),
-      self.cityButton.trailingAnchor.constraint(equalTo: self.cityTextField.trailingAnchor),
-      self.cityButton.bottomAnchor.constraint(equalTo: self.cityTextField.bottomAnchor),
-
-      self.regionButton.topAnchor.constraint(equalTo: self.regionTextField.topAnchor),
-      self.regionButton.leadingAnchor.constraint(equalTo: self.regionTextField.leadingAnchor),
-      self.regionButton.trailingAnchor.constraint(equalTo: self.regionTextField.trailingAnchor),
-      self.regionButton.bottomAnchor.constraint(equalTo: self.regionTextField.bottomAnchor),
-
       self.addressTextField.heightAnchor.constraint(equalToConstant: Metric.addressTextFieldHeight),
-      self.addressTextField.topAnchor.constraint(equalTo: self.cityTextField.bottomAnchor, constant: Metric.addressTextFieldTopMargin),
+      self.addressTextField.topAnchor.constraint(equalTo: self.countyButton.bottomAnchor, constant: Metric.addressTextFieldTopMargin),
       self.addressTextField.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.addressTextFieldLeadingMargin),
       self.addressTextField.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.addressTextFieldTrailingMargin),
 

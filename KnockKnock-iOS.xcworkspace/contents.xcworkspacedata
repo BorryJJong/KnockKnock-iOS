@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:/Users/daye/git_BorryJJong/KnockKnock-iOS/KnockKnock-iOS/Scenes/Cells/MyListCell.swift">
+   </FileRef>
+   <FileRef
       location = "group:KnockKnock-iOS.xcodeproj">
    </FileRef>
    <FileRef
