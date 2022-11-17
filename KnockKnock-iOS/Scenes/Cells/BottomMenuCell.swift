@@ -10,7 +10,7 @@ import UIKit
 import Then
 import KKDSKit
 
-final class BottomMenuCell: BaseTableViewCell {
+final class BottomMenuCell: BaseTableViewCell<Void> {
 
   // MARK: - UIs
 

@@ -11,7 +11,7 @@ import SnapKit
 import KKDSKit
 import Then
 
-final class MyCell: BaseCollectionViewCell {
+final class MyCell: BaseTableViewCell<MyItem> {
 
   // MARK: - Constants
 
@@ -43,19 +43,18 @@ final class MyCell: BaseCollectionViewCell {
 
   // MARK: - Bind
 
-  func bind(
-    title: String,
-    isSwitch: Bool,
-    isVersion: Bool,
-    versionInfo: String
-  ) {
-    self.titleLabel.text = title
+  override func bind(_ model: MyItem?) {
+    super.bind(model)
 
-    self.enterButton.isHidden = isSwitch
-    self.alertSwitch.isHidden = !isSwitch
+    let type = model?.type
 
-    if isVersion {
-      self.enterButton.setTitle("V \(versionInfo) ", for: .normal)
+    titleLabel.text = model?.title
+
+    self.enterButton.isHidden = type == .alert
+    self.alertSwitch.isHidden = !(type == .alert)
+
+    if type == .version {
+      self.enterButton.setTitle("V 0.1.1 ", for: .normal)
     } else{
       self.enterButton.setTitle(nil, for: .normal)
     }

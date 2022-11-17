@@ -15,13 +15,12 @@ final class MyView: UIView {
 
   // MARK: - UIs
 
-  let settingCollectionView = UICollectionView(
-    frame: .zero,
-    collectionViewLayout: UICollectionViewFlowLayout().then{
-      $0.scrollDirection = .vertical
-    }).then {
-      $0.backgroundColor = .clear
-    }
+  let myTableView = UITableView().then {
+    $0.isScrollEnabled = false
+    $0.separatorColor = .clear
+    $0.rowHeight = UITableView.automaticDimension
+    $0.registCell(type: MyCell.self)
+  }
 
   // MARK: - Initialize
 
@@ -37,9 +36,9 @@ final class MyView: UIView {
   // MARK: - Constraints
 
   private func setupConstraints() {
-    [self.settingCollectionView].addSubViews(self)
+    [self.myTableView].addSubViews(self)
 
-    self.settingCollectionView.snp.makeConstraints {
+    self.myTableView.snp.makeConstraints {
       $0.edges.equalToSuperview()
     }
   }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BaseTableViewCell: UITableViewCell {
+class BaseTableViewCell<T>: UITableViewCell {
   
   // MARK: - Initialize
   
@@ -20,6 +20,16 @@ class BaseTableViewCell: UITableViewCell {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
+
+  var model: T? {
+    didSet {
+      if let model = model {
+        bind(model)
+      }
+    }
+  }
+
+  func bind(_ model: T?) { }
+
   func setupConstraints() { /* override point */ }
 }

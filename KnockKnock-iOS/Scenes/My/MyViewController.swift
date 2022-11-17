@@ -17,13 +17,27 @@ final class MyViewController: BaseViewController<MyView> {
   
   var router: MyRouterProtocol?
 
+  private let menuData: [MyItemList] = {
+    let profile = MyItem(title: "프로필 수정", type: .plain)
+    let signout = MyItem(title: "탈퇴하기", type: .plain)
+    let push = MyItem(title: "앱 PUSH 알림", type: .alert)
+
+    let notice = MyItem(title: "공지사항", type: .plain)
+    let version = MyItem(title: "버전정보", type: .version)
+
+    let service = MyItem(title: "서비스 이용약관", type: .plain)
+    let privacy = MyItem(title: "개인정보 처리방침", type: .plain)
+    let location = MyItem(title: "위치기반 서비스 이용약관", type: .plain)
+    let openSource = MyItem(title: "오픈소스 라이선스", type: .plain)
+
+    let myInfoSection = [profile, signout, push]
+    let customerSection = [notice, version]
+    let policySection = [service, privacy, location, openSource]
+
+    return [myInfoSection, customerSection, policySection]
+  }()
+
   private let versionInfo = "0.1.1"
-  private let headerContent = [ "내 정보", "고객지원", "약관 및 정책" ]
-  private let titleContent = [
-    ["프로필수정", "탈퇴하기", "앱 PUSH 알림"],
-    ["공지사항", "버전정보"],
-    ["서비스 이용약관", "개인정보 처리방침", "위치기반 서비스 이용약관", "오픈소스 라이선스"]
-  ]
   
   // MARK: - Life Cycles
   
@@ -39,12 +53,10 @@ final class MyViewController: BaseViewController<MyView> {
     self.navigationController?.navigationBar.shadowImage = UIImage()
     self.navigationItem.title = "마이"
     
-    self.containerView.settingCollectionView.do {
+    self.containerView.myTableView.do {
       $0.dataSource = self
       $0.delegate = self
       $0.registCell(type: MyCell.self)
-      $0.registHeaderView(type: MyHeaderCollectionReusableView.self)
-      $0.registFooterView(type: MyFooterCollectionReusableView.self)
     }
   }
 }
@@ -57,126 +69,24 @@ extension MyViewController: MyViewProtocol {
 
 // MARK: - CollectionView DataSource
 
-extension MyViewController: UICollectionViewDataSource {
-  func collectionView(
-    _ collectionView: UICollectionView,
-    cellForItemAt indexPath: IndexPath
-  ) -> UICollectionViewCell {
-    let cell = collectionView.dequeueCell(
-      withType: MyCell.self,
-      for: indexPath
-    )
-    
-    let isSwitch = indexPath == IndexPath(item: 2, section: 0)
-    let isVersion = indexPath == IndexPath(item: 1, section: 1)
-    
-    cell.bind(
-      title: self.titleContent[indexPath.section][indexPath.item],
-      isSwitch: isSwitch,
-      isVersion: isVersion,
-      versionInfo: versionInfo
-    )
-    
+extension MyViewController: UITableViewDataSource {
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    return self.menuData[section].count
+  }
+
+  func numberOfSections(in tableView: UITableView) -> Int {
+    return self.menuData.count
+  }
+
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let cell = tableView.dequeueCell(withType: MyCell.self, for: indexPath)
+
+    cell.model = self.menuData[indexPath.section][indexPath.row]
+
     return cell
   }
-  
-  func collectionView(
-    _ collectionView: UICollectionView,
-    numberOfItemsInSection section: Int
-  ) -> Int {
-    return self.titleContent[section].count
-  }
-  
-  func numberOfSections(in collectionView: UICollectionView) -> Int {
-    return self.headerContent.count
-  }
-  
-  func collectionView(
-    _ collectionView: UICollectionView,
-    didSelectItemAt indexPath: IndexPath
-  ) {
-
-    self.router?.navigateToNoticeView(source: self)
-  }
 }
 
+extension MyViewController: UITableViewDelegate {
 
-
-extension MyViewController: UICollectionViewDelegateFlowLayout {
-  func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    sizeForItemAt indexPath: IndexPath
-  ) -> CGSize {
-    return CGSize(
-      width: self.containerView.frame.width,
-      height: 30
-    )
-  }
-  
-  func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    minimumLineSpacingForSectionAt section: Int
-  ) -> CGFloat {
-    return 15
-  }
-  
-  func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    insetForSectionAt section: Int
-  ) -> UIEdgeInsets {
-    return UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
-  }
-  
-  func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    referenceSizeForFooterInSection section: Int
-  ) -> CGSize {
-    if section == 2 {
-      return CGSize(width: self.containerView.frame.width, height: 130)
-    } else {
-      return CGSize(width: self.containerView.frame.width, height: 50)
-    }
-  }
-  
-  func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    referenceSizeForHeaderInSection section: Int
-  ) -> CGSize {
-    return CGSize(width: self.containerView.frame.width, height: 50)
-  }
-  
-  func collectionView(
-    _ collectionView: UICollectionView,
-    viewForSupplementaryElementOfKind kind: String,
-    at indexPath: IndexPath
-  ) -> UICollectionReusableView {
-    switch kind {
-    case UICollectionView.elementKindSectionHeader:
-      let header = collectionView.dequeueReusableSupplementaryHeaderView(
-        withType: MyHeaderCollectionReusableView.self,
-        for: indexPath
-      )
-      
-      header.bind(title: self.headerContent[indexPath.section])
-      
-      return header
-    case UICollectionView.elementKindSectionFooter:
-      let footer = collectionView.dequeueReusableSupplementaryFooterView(
-        withType: MyFooterCollectionReusableView.self,
-        for: indexPath
-      )
-      
-      footer.bind(isLast: indexPath.section == 2)
-      
-      return footer
-      
-    default:
-      return UICollectionReusableView()
-    }
-  }
-}
+} 
