@@ -154,5 +154,25 @@ extension MyViewController: UITableViewDataSource {
 }
 
 extension MyViewController: UITableViewDelegate {
+  func tableView(
+     _ tableView: UITableView,
+     didSelectRowAt indexPath: IndexPath
+   ) {
 
+     let menu = self.menuData[indexPath.section]
+
+     switch menu.section {
+     case .myInfo:
+       print("profile")
+
+     case .customer:
+       if menu.myItems[indexPath.item].title == "공지사항" {
+         self.router?.navigateToNoticeView(source: self)
+       }
+
+     case .policy:
+       print("policy")
+     }
+
+   }
 } 
