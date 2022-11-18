@@ -23,7 +23,7 @@ final class ProfileSettingRouter: ProfileSettingRouterProtocol {
     let router = ProfileSettingRouter()
 
     view.interactor = interactor
-    view.router = router
+    interactor.router = router
     interactor.presenter = presenter
     interactor.worker = worker
     interactor.loginInfo = loginInfo

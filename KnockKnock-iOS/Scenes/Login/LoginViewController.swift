@@ -10,6 +10,7 @@ import UIKit
 import Then
 
 protocol LoginViewProtocol: AnyObject {
+  var interactor: LoginInteractorProtocol? { get set }
 }
 
 final class LoginViewController: BaseViewController<LoginView> {

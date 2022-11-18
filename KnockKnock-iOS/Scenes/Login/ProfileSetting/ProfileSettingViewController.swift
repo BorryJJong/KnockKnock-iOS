@@ -10,7 +10,6 @@ import UIKit
 import KKDSKit
 
 protocol ProfileSettingViewProtocol: AnyObject {
-  var router: ProfileSettingRouterProtocol? { get set }
   var interactor: ProfileSettingInteractorProtocol? { get set }
 }
 
@@ -18,7 +17,6 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
 
   // MARK: - Properties
 
-  var router: ProfileSettingRouterProtocol?
   var interactor: ProfileSettingInteractorProtocol?
 
   // MARK: - Life Cycles

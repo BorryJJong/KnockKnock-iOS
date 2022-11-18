@@ -10,6 +10,7 @@ import UIKit
 protocol ProfileSettingInteractorProtocol {
   var worker: ProfileSettingWorkerProtocol? { get set }
   var presenter: ProfileSettingPresenterProtocol? { get set }
+  var router: ProfileSettingRouterProtocol? { get set }
 
   var loginInfo: LoginInfo? { get set }
 
@@ -22,6 +23,7 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
 
   var worker: ProfileSettingWorkerProtocol?
   var presenter: ProfileSettingPresenterProtocol?
+  var router: ProfileSettingRouterProtocol?
 
   var loginInfo: LoginInfo?
 
