@@ -9,6 +9,7 @@ import UIKit
 
 import Then
 import YPImagePicker
+import KKDSKit
 
 protocol FeedWriteViewProtocol: AnyObject {
   var interactor: FeedWriteInteractorProtocol? { get set }
@@ -99,19 +100,29 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     let config = YPImagePickerConfiguration().with {
       $0.library.maxNumberOfItems = 5
       $0.library.mediaType = .photo
+      $0.library.isSquareByDefault = true
+      $0.onlySquareImagesFromCamera = true
       $0.startOnScreen = .library
       $0.showsPhotoFilters = false
-      $0.showsCrop = .rectangle(ratio: 1)
+      $0.colors.tintColor = KKDS.Color.green50
+      $0.wordings.libraryTitle = "갤러리"
+      $0.wordings.cameraTitle = "카메라"
+      $0.wordings.cancel = "취소"
+      $0.wordings.next = "완료"
+      $0.wordings.save = "완료"
+      $0.wordings.warningMaxItemsLimit = "최대 5장까지 선택 가능합니다."
+      $0.icons.multipleSelectionOnIcon = KKDS.Image.ic_more_img_20_on
+      $0.icons.multipleSelectionOffIcon = KKDS.Image.ic_more_img_20_off
     }
     let picker = YPImagePicker(configuration: config)
 
     self.pickedPhotos = []
 
-    picker.didFinishPicking { [unowned picker] items, cancelled in
-      if cancelled {
-        picker.dismiss(animated: true, completion: nil)
-        return
+    picker.didFinishPicking { [unowned picker] items, canceled in
+      if canceled {
+        print("canceled")
       }
+
       for item in items {
         switch item {
         case let .photo(photo):
