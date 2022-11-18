@@ -15,9 +15,13 @@ final class MyView: UIView {
 
   // MARK: - UIs
 
-  let myTableView = UITableView().then {
+  let myTableView = UITableView(
+    frame: .zero,
+    style: .grouped
+  ).then {
     $0.isScrollEnabled = false
     $0.separatorColor = .clear
+    $0.backgroundColor = .white
     $0.rowHeight = UITableView.automaticDimension
     $0.registCell(type: MyCell.self)
   }

@@ -7,7 +7,12 @@
 
 import Foundation
 
-typealias MyItemList = [MyItem]
+typealias MyMenu = [MyItemList]
+
+struct MyItemList {
+  let section: MySection
+  let myItems: [MyItem]
+}
 
 struct MyItem {
   let title: String

@@ -17,7 +17,7 @@ final class MyViewController: BaseViewController<MyView> {
   
   var router: MyRouterProtocol?
 
-  private let menuData: [MyItemList] = {
+  private let menuData: MyMenu = {
     let profile = MyItem(title: "프로필 수정", type: .plain)
     let signout = MyItem(title: "탈퇴하기", type: .plain)
     let push = MyItem(title: "앱 PUSH 알림", type: .alert)
@@ -30,12 +30,14 @@ final class MyViewController: BaseViewController<MyView> {
     let location = MyItem(title: "위치기반 서비스 이용약관", type: .plain)
     let openSource = MyItem(title: "오픈소스 라이선스", type: .plain)
 
-    let myInfoSection = [profile, signout, push]
-    let customerSection = [notice, version]
-    let policySection = [service, privacy, location, openSource]
+    let myInfoSection = MyItemList(section: MySection.myInfo, myItems: [profile, signout, push])
+    let customerSection = MyItemList(section: MySection.customer, myItems: [notice, version])
+    let policySection = MyItemList(section: MySection.policy, myItems: [service, privacy, location, openSource])
 
     return [myInfoSection, customerSection, policySection]
   }()
+
+  private let sectionTitle = ["내 정보", "고객지원", "약관 및 정책"]
 
   private let versionInfo = "0.1.1"
   
@@ -57,6 +59,7 @@ final class MyViewController: BaseViewController<MyView> {
       $0.dataSource = self
       $0.delegate = self
       $0.registCell(type: MyCell.self)
+      $0.register(MyTableViewHeader.self, forHeaderFooterViewReuseIdentifier: "MyTableViewHeader")
     }
   }
 }
@@ -74,7 +77,7 @@ extension MyViewController: UITableViewDataSource {
     _ tableView: UITableView,
     numberOfRowsInSection section: Int
   ) -> Int {
-    return self.menuData[section].count
+    return self.menuData[section].myItems.count
   }
 
   func numberOfSections(in tableView: UITableView) -> Int {
@@ -90,7 +93,7 @@ extension MyViewController: UITableViewDataSource {
       for: indexPath
     )
 
-    let menu = self.menuData[indexPath.section][indexPath.row]
+    let menu = self.menuData[indexPath.section].myItems[indexPath.row]
 
     cell.model = menu
 
@@ -101,6 +104,14 @@ extension MyViewController: UITableViewDataSource {
     }
 
     return cell
+  }
+
+  func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "MyTableViewHeader") as! MyTableViewHeader
+
+      headerView.bind(title: menuData[section].section.rawValue)
+
+      return headerView
   }
 }
 
