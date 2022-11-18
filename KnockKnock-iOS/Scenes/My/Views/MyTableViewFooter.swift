@@ -11,17 +11,19 @@ import SnapKit
 import Then
 import KKDSKit
 
-final class MyTableViewFooter: UITableViewHeaderFooterView {
+final class MyTableViewFooter: BaseTableViewHeaderFooterView<MyItemList> {
 
   // MARK: - Constants
 
   private enum Metric {
     static let separatorViewHeight = 10.f
     static let separatorViewBottomMargin = -20.f
+    static let separatorViewTopMargin = 20.f
 
     static let logoutButtonTopMargin = 30.f
     static let logoutButtonBottomMargin = -60.f
     static let logoutButtonWidth = 20.f
+    static let logoutButtonHeight = 40.f
   }
 
   // MARK: - UIs
@@ -32,21 +34,10 @@ final class MyTableViewFooter: UITableViewHeaderFooterView {
 
   let logoutButton = MiddleButton(title: "로그아웃")
 
-  // MARK: - Initailize
-
-  override init(reuseIdentifier: String?) {
-    super.init(reuseIdentifier: reuseIdentifier)
-    setupConstraints()
-  }
-
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
   // MARK: - Bind
 
-  func bind(section: MySection) {
-    let isLastSection = section == .policy
+  override func bind(_ model: MyItemList?) {
+    let isLastSection = model?.section == .policy
     
     self.logoutButton.isHidden = !isLastSection
     self.separatorView.isHidden = isLastSection
@@ -54,12 +45,12 @@ final class MyTableViewFooter: UITableViewHeaderFooterView {
 
   // MARK: - Constraints
   
-  private func setupConstraints() {
+  override func setupConstraints() {
     [self.separatorView, self.logoutButton].addSubViews(self)
 
     self.separatorView.snp.makeConstraints {
       $0.width.equalToSuperview()
-      $0.top.equalToSuperview().offset(20)
+      $0.top.equalToSuperview().offset(Metric.separatorViewTopMargin)
       $0.height.equalTo(Metric.separatorViewHeight)
       $0.bottom.equalToSuperview().offset(Metric.separatorViewBottomMargin)
     }
@@ -68,7 +59,7 @@ final class MyTableViewFooter: UITableViewHeaderFooterView {
       $0.centerX.equalToSuperview()
       $0.top.equalToSuperview().offset(Metric.logoutButtonTopMargin)
       $0.bottom.equalToSuperview().offset(Metric.logoutButtonBottomMargin)
-      $0.height.equalTo(40)
+      $0.height.equalTo(Metric.logoutButtonHeight)
       $0.width.equalToSuperview().inset(Metric.logoutButtonWidth)
     }
   }

@@ -121,7 +121,7 @@ extension MyViewController: UITableViewDataSource {
 
     let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "MyTableViewHeader") as! MyTableViewHeader
 
-    headerView.bind(title: self.menuData[section].section.rawValue)
+    headerView.bind(self.menuData[section])
 
       return headerView
   }
@@ -133,7 +133,7 @@ extension MyViewController: UITableViewDataSource {
 
     let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "MyTableViewFooter") as! MyTableViewFooter
 
-    footerView.bind(section: self.menuData[section].section)
+    footerView.bind(self.menuData[section])
 
       return footerView
   }

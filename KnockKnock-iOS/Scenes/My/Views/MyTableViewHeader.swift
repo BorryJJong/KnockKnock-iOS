@@ -11,12 +11,13 @@ import SnapKit
 import Then
 import KKDSKit
 
-final class MyTableViewHeader: UITableViewHeaderFooterView {
+final class MyTableViewHeader: BaseTableViewHeaderFooterView<MyItemList> {
 
   // MARK: - Constants
   private enum Metric {
     static let titleLabelLeadingMargin = 20.f
     static let titleLabelTopMargin = 15.f
+    static let titleLabelBottomMargin = -10.f
   }
 
   // MARK: - UIs
@@ -27,30 +28,22 @@ final class MyTableViewHeader: UITableViewHeaderFooterView {
     $0.textColor = KKDS.Color.gray70
   }
 
-  // MARK: - Initailize
-  
-  override init(reuseIdentifier: String?) {
-      super.init(reuseIdentifier: reuseIdentifier)
-    setupConstraints()
-  }
-
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
   // MARK: - Bind
-  func bind(title: String) {
-    self.titleLabel.text = title
+
+  override func bind(_ model: MyItemList?) {
+    super.bind(model)
+
+    self.titleLabel.text = model?.section.rawValue
   }
 
   // MARK: - Constraints
-  private func setupConstraints() {
+  override func setupConstraints() {
     [self.titleLabel].addSubViews(self)
 
     self.titleLabel.snp.makeConstraints {
       $0.leading.equalToSuperview().offset(Metric.titleLabelLeadingMargin)
       $0.top.equalToSuperview().offset(Metric.titleLabelTopMargin)
-      $0.bottom.equalToSuperview().offset(-10)
+      $0.bottom.equalToSuperview().offset(Metric.titleLabelBottomMargin)
     }
   }
 }

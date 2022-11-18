@@ -1,22 +1,20 @@
 //
-//  BaseTableViewCell.swift
+//  BaseTableViewHeaderFooterView.swift
 //  KnockKnock-iOS
 //
-//  Created by sangwon yoon on 2022/03/06.
+//  Created by Daye on 2022/11/18.
 //
 
 import UIKit
 
-class BaseTableViewCell<T>: UITableViewCell {
-  
-  // MARK: - Initialize
-  
-  override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-    super.init(style: style, reuseIdentifier: reuseIdentifier)
-    self.selectionStyle = .none
+class BaseTableViewHeaderFooterView<T>: UITableViewHeaderFooterView {
+
+  override init(reuseIdentifier: String?) {
+    super.init(reuseIdentifier: reuseIdentifier)
+
     self.setupConstraints()
   }
-  
+
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -32,4 +30,5 @@ class BaseTableViewCell<T>: UITableViewCell {
   func bind(_ model: T?) { /* override point */ }
 
   func setupConstraints() { /* override point */ }
+
 }
