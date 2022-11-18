@@ -10,13 +10,11 @@ import UIKit
 import Then
 
 protocol LoginViewProtocol: AnyObject {
-  func fetchLoginResult(loginResponse: LoginResponse, loginInfo: LoginInfo)
 }
 
 final class LoginViewController: BaseViewController<LoginView> {
 
   var interactor: LoginInteractorProtocol?
-  var router: LoginRouterProtocol?
 
   // MARK: - Life Cycles
 
@@ -45,7 +43,7 @@ final class LoginViewController: BaseViewController<LoginView> {
   // MARK: - Button Actions
 
   @objc func kakaoLoginButtonDidTap(_ sender: UIButton) {
-    self.interactor?.fetchLoginResult(socialType: SocialType.kakao)
+    self.interactor?.fetchLoginResult(source: self, socialType: SocialType.kakao)
   }
 
   // 테스트를 위한 임시 로그아웃 버튼
@@ -55,15 +53,5 @@ final class LoginViewController: BaseViewController<LoginView> {
 }
 
 extension LoginViewController: LoginViewProtocol {
-  func fetchLoginResult(
-    loginResponse: LoginResponse,
-    loginInfo: LoginInfo
-  ) {
-    if loginResponse.isExistUser {
-      self.interactor?.saveTokens(loginResponse: loginResponse)
-      self.router?.navigateToHome()
-    } else {
-      self.router?.navigateToProfileSettingView(source: self, loginInfo: loginInfo)
-    }
-  }
+
 }
