@@ -170,6 +170,7 @@
 		61B20B632926409800EBA596 /* MyTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B622926409800EBA596 /* MyTableViewHeader.swift */; };
 		61B20B652927323E00EBA596 /* MyTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B642927323E00EBA596 /* MyTableViewFooter.swift */; };
 		61B20B672927393000EBA596 /* BaseTableViewHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B662927393000EBA596 /* BaseTableViewHeaderFooterView.swift */; };
+		61B20B6929273CAF00EBA596 /* UITableHeaderFooterView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B6829273CAF00EBA596 /* UITableHeaderFooterView+Ext.swift */; };
 		61B6D97F2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D97E2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift */; };
 		61B6D984288A967A00E60F08 /* ChallengeDetailWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D983288A967A00E60F08 /* ChallengeDetailWorker.swift */; };
 		61B6D986288A968600E60F08 /* ChallengeDetailInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D985288A968600E60F08 /* ChallengeDetailInteractor.swift */; };
@@ -371,6 +372,7 @@
 		61B20B622926409800EBA596 /* MyTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTableViewHeader.swift; sourceTree = "<group>"; };
 		61B20B642927323E00EBA596 /* MyTableViewFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTableViewFooter.swift; sourceTree = "<group>"; };
 		61B20B662927393000EBA596 /* BaseTableViewHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewHeaderFooterView.swift; sourceTree = "<group>"; };
+		61B20B6829273CAF00EBA596 /* UITableHeaderFooterView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableHeaderFooterView+Ext.swift"; sourceTree = "<group>"; };
 		61B6D97E2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		61B6D983288A967A00E60F08 /* ChallengeDetailWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailWorker.swift; sourceTree = "<group>"; };
 		61B6D985288A968600E60F08 /* ChallengeDetailInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailInteractor.swift; sourceTree = "<group>"; };
@@ -485,6 +487,7 @@
 				61A8DC43287E8783000512EC /* UIDevice+Ext.swift */,
 				61C21D0728C6FAA1009B5F4E /* UIImageView+Ext.swift */,
 				6139004428E5605900CC9950 /* UINavigationBar+Ext.swift */,
+				61B20B6829273CAF00EBA596 /* UITableHeaderFooterView+Ext.swift */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -1345,6 +1348,7 @@
 				618FDAC927E836BA00C2823F /* PhotoCell.swift in Sources */,
 				61AB2E5428A3775300A1AE30 /* Double+Ext.swift in Sources */,
 				61B6D998288C40BF00E60F08 /* HomeSection.swift in Sources */,
+				61B20B6929273CAF00EBA596 /* UITableHeaderFooterView+Ext.swift in Sources */,
 				616EB0972892341F001BD18C /* ReactFooterReusableView.swift in Sources */,
 				61E3087C287334C1001394B6 /* ImageScaleType.swift in Sources */,
 				61B20B5D29261B9600EBA596 /* MyType.swift in Sources */,

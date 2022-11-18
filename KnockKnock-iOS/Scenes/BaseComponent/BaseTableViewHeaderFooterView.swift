@@ -9,6 +9,14 @@ import UIKit
 
 class BaseTableViewHeaderFooterView<T>: UITableViewHeaderFooterView {
 
+  var model: T? {
+    didSet {
+      if let model = model {
+        bind(model)
+      }
+    }
+  }
+
   override init(reuseIdentifier: String?) {
     super.init(reuseIdentifier: reuseIdentifier)
 
@@ -17,14 +25,6 @@ class BaseTableViewHeaderFooterView<T>: UITableViewHeaderFooterView {
 
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
-  }
-
-  var model: T? {
-    didSet {
-      if let model = model {
-        bind(model)
-      }
-    }
   }
 
   func bind(_ model: T?) { /* override point */ }
