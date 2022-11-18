@@ -11,7 +11,7 @@ import SnapKit
 import Then
 import KKDSKit
 
-final class MyTableViewFooter: BaseTableViewHeaderFooterView<MyItemList> {
+final class MyTableViewFooter: BaseTableViewHeaderFooterView<MySection> {
 
   // MARK: - Constants
 
@@ -36,8 +36,8 @@ final class MyTableViewFooter: BaseTableViewHeaderFooterView<MyItemList> {
 
   // MARK: - Bind
 
-  override func bind(_ model: MyItemList?) {
-    let isLastSection = model?.section == .policy
+  override func bind(_ model: MySection?) {
+    let isLastSection = model?.title == .policy
     
     self.logoutButton.isHidden = !isLastSection
     self.separatorView.isHidden = isLastSection

@@ -30,25 +30,21 @@ final class MyViewController: BaseViewController<MyView> {
     let location = MyItem(title: "위치기반 서비스 이용약관", type: .plain)
     let openSource = MyItem(title: "오픈소스 라이선스", type: .plain)
     
-    let myInfoSection = MyItemList(
-      section: MySection.myInfo,
+    let myInfoSection = MySection(
+      title: MySectionType.myInfo,
       myItems: [profile, signout, push]
     )
-    let customerSection = MyItemList(
-      section: MySection.customer,
+    let customerSection = MySection(
+      title: MySectionType.customer,
       myItems: [notice, version]
     )
-    let policySection = MyItemList(
-      section: MySection.policy,
+    let policySection = MySection(
+      title: MySectionType.policy,
       myItems: [service, privacy, location, openSource]
     )
     
     return [myInfoSection, customerSection, policySection]
   }()
-  
-  private let sectionTitle = ["내 정보", "고객지원", "약관 및 정책"]
-  
-  private let versionInfo = "0.1.1"
   
   // MARK: - Life Cycles
   
@@ -80,9 +76,12 @@ extension MyViewController: MyViewProtocol {
   
 }
 
-// MARK: - CollectionView DataSource
+// MARK: - TableView DataSource
 
 extension MyViewController: UITableViewDataSource {
+
+  // Cell
+
   func tableView(
     _ tableView: UITableView,
     numberOfRowsInSection section: Int
@@ -116,6 +115,8 @@ extension MyViewController: UITableViewDataSource {
     
     return cell
   }
+
+  // Header, Footer
   
   func tableView(
     _ tableView: UITableView,
@@ -146,7 +147,7 @@ extension MyViewController: UITableViewDataSource {
     heightForFooterInSection section: Int
   ) -> CGFloat {
     
-    if self.menuData[section].section == MySection.policy {
+    if self.menuData[section].title == MySectionType.policy {
       return 130
       
     } else {
@@ -156,6 +157,8 @@ extension MyViewController: UITableViewDataSource {
   }
 }
 
+// MARK: - TableView Delegate
+
 extension MyViewController: UITableViewDelegate {
   func tableView(
     _ tableView: UITableView,
@@ -164,7 +167,7 @@ extension MyViewController: UITableViewDelegate {
     
     let menu = self.menuData[indexPath.section]
     
-    switch menu.section {
+    switch menu.title {
     case .myInfo:
       print("profile")
       

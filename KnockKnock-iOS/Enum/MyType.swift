@@ -17,7 +17,7 @@ enum MyType {
   case alert
 }
 
-enum MySection: String {
+enum MySectionType: String {
   case myInfo = "내 정보"
   case customer = "고객지원"
   case policy = "약관 및 정책"

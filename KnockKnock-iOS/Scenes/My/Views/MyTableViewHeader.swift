@@ -11,7 +11,7 @@ import SnapKit
 import Then
 import KKDSKit
 
-final class MyTableViewHeader: BaseTableViewHeaderFooterView<MyItemList> {
+final class MyTableViewHeader: BaseTableViewHeaderFooterView<MySection> {
 
   // MARK: - Constants
   private enum Metric {
@@ -23,17 +23,16 @@ final class MyTableViewHeader: BaseTableViewHeaderFooterView<MyItemList> {
   // MARK: - UIs
 
   private let titleLabel = UILabel().then {
-    $0.text = "test"
     $0.font = .systemFont(ofSize: 13, weight: .medium)
     $0.textColor = KKDS.Color.gray70
   }
 
   // MARK: - Bind
 
-  override func bind(_ model: MyItemList?) {
+  override func bind(_ model: MySection?) {
     super.bind(model)
 
-    self.titleLabel.text = model?.section.rawValue
+    self.titleLabel.text = model?.title.rawValue
   }
 
   // MARK: - Constraints

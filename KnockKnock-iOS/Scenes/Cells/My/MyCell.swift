@@ -27,7 +27,6 @@ final class MyCell: BaseTableViewCell<MyItem> {
 
   private let titleLabel = UILabel().then {
     $0.font = .systemFont(ofSize: 15, weight: .bold)
-    $0.text = "프로필 수정"
     $0.textColor = .black
   }
 
