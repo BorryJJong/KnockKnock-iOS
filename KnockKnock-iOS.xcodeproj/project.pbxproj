@@ -168,6 +168,7 @@
 		61B20B5B29261B3B00EBA596 /* My.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B5A29261B3B00EBA596 /* My.swift */; };
 		61B20B5D29261B9600EBA596 /* MyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B5C29261B9600EBA596 /* MyType.swift */; };
 		61B20B632926409800EBA596 /* MyTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B622926409800EBA596 /* MyTableViewHeader.swift */; };
+		61B20B652927323E00EBA596 /* MyTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B642927323E00EBA596 /* MyTableViewFooter.swift */; };
 		61B6D97F2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D97E2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift */; };
 		61B6D984288A967A00E60F08 /* ChallengeDetailWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D983288A967A00E60F08 /* ChallengeDetailWorker.swift */; };
 		61B6D986288A968600E60F08 /* ChallengeDetailInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D985288A968600E60F08 /* ChallengeDetailInteractor.swift */; };
@@ -367,6 +368,7 @@
 		61B20B5A29261B3B00EBA596 /* My.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = My.swift; sourceTree = "<group>"; };
 		61B20B5C29261B9600EBA596 /* MyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyType.swift; sourceTree = "<group>"; };
 		61B20B622926409800EBA596 /* MyTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTableViewHeader.swift; sourceTree = "<group>"; };
+		61B20B642927323E00EBA596 /* MyTableViewFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTableViewFooter.swift; sourceTree = "<group>"; };
 		61B6D97E2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		61B6D983288A967A00E60F08 /* ChallengeDetailWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailWorker.swift; sourceTree = "<group>"; };
 		61B6D985288A968600E60F08 /* ChallengeDetailInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailInteractor.swift; sourceTree = "<group>"; };
@@ -854,6 +856,7 @@
 			children = (
 				61A730E128ED4ECD00C6BD98 /* MyView.swift */,
 				61B20B622926409800EBA596 /* MyTableViewHeader.swift */,
+				61B20B642927323E00EBA596 /* MyTableViewFooter.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1325,6 +1328,7 @@
 				616EB09928936F74001BD18C /* PostCommentCell.swift in Sources */,
 				61C21D0828C6FAA1009B5F4E /* UIImageView+Ext.swift in Sources */,
 				61A0284C290F5F7D00943A40 /* NoticeRouter.swift in Sources */,
+				61B20B652927323E00EBA596 /* MyTableViewFooter.swift in Sources */,
 				61A8DC4E287E90F6000512EC /* CommentPresenter.swift in Sources */,
 				616EB08D289120C7001BD18C /* PostFooterReusableView.swift in Sources */,
 				61C21D1728CA2244009B5F4E /* ProfileSettingView.swift in Sources */,

@@ -19,7 +19,7 @@ final class MyView: UIView {
     frame: .zero,
     style: .grouped
   ).then {
-    $0.isScrollEnabled = false
+    $0.isScrollEnabled = true
     $0.separatorColor = .clear
     $0.backgroundColor = .white
     $0.rowHeight = UITableView.automaticDimension

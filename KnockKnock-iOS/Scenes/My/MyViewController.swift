@@ -59,7 +59,14 @@ final class MyViewController: BaseViewController<MyView> {
       $0.dataSource = self
       $0.delegate = self
       $0.registCell(type: MyCell.self)
-      $0.register(MyTableViewHeader.self, forHeaderFooterViewReuseIdentifier: "MyTableViewHeader")
+      $0.register(
+        MyTableViewHeader.self,
+        forHeaderFooterViewReuseIdentifier: "MyTableViewHeader"
+      )
+      $0.register(
+        MyTableViewFooter.self,
+        forHeaderFooterViewReuseIdentifier: "MyTableViewFooter"
+      )
     }
   }
 }
@@ -88,6 +95,7 @@ extension MyViewController: UITableViewDataSource {
     _ tableView: UITableView,
     cellForRowAt indexPath: IndexPath
   ) -> UITableViewCell {
+
     let cell = tableView.dequeueCell(
       withType: MyCell.self,
       for: indexPath
@@ -106,12 +114,42 @@ extension MyViewController: UITableViewDataSource {
     return cell
   }
 
-  func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+  func tableView(
+    _ tableView: UITableView,
+    viewForHeaderInSection section: Int
+  ) -> UIView? {
+
     let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "MyTableViewHeader") as! MyTableViewHeader
 
-      headerView.bind(title: menuData[section].section.rawValue)
+    headerView.bind(title: self.menuData[section].section.rawValue)
 
       return headerView
+  }
+
+  func tableView(
+    _ tableView: UITableView,
+    viewForFooterInSection section: Int
+  ) -> UIView? {
+
+    let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "MyTableViewFooter") as! MyTableViewFooter
+
+    footerView.bind(section: self.menuData[section].section)
+
+      return footerView
+  }
+
+  func tableView(
+    _ tableView: UITableView,
+    heightForFooterInSection section: Int
+  ) -> CGFloat {
+
+    if self.menuData[section].section == MySection.policy {
+      return 130
+
+    } else {
+      return 50
+
+    }
   }
 }
 

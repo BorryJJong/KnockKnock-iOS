@@ -53,5 +53,4 @@ final class MyTableViewHeader: UITableViewHeaderFooterView {
       $0.bottom.equalToSuperview().offset(-10)
     }
   }
-
 }
