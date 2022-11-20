@@ -9,7 +9,6 @@ import Foundation
 
 typealias MyMenu = [MySection]
 
-
 /// Section별 item
 struct MySection {
   let title: MySectionType

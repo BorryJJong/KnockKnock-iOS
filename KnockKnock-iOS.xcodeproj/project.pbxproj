@@ -147,7 +147,6 @@
 		61A5EA2728B3BEDC00A0214D /* StoreListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A5EA2628B3BEDC00A0214D /* StoreListCell.swift */; };
 		61A730DF28ED4EBA00C6BD98 /* MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A730DE28ED4EBA00C6BD98 /* MyViewController.swift */; };
 		61A730E228ED4ECD00C6BD98 /* MyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A730E128ED4ECD00C6BD98 /* MyView.swift */; };
-		61A730E428ED53E700C6BD98 /* MyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A730E328ED53E700C6BD98 /* MyCell.swift */; };
 		61A8DC44287E8783000512EC /* UIDevice+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC43287E8783000512EC /* UIDevice+Ext.swift */; };
 		61A8DC47287E905B000512EC /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC46287E905B000512EC /* CommentView.swift */; };
 		61A8DC4A287E90BC000512EC /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC49287E90BC000512EC /* CommentViewController.swift */; };
@@ -349,7 +348,6 @@
 		61A5EA2628B3BEDC00A0214D /* StoreListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListCell.swift; sourceTree = "<group>"; };
 		61A730DE28ED4EBA00C6BD98 /* MyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyViewController.swift; sourceTree = "<group>"; };
 		61A730E128ED4ECD00C6BD98 /* MyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyView.swift; sourceTree = "<group>"; };
-		61A730E328ED53E700C6BD98 /* MyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCell.swift; sourceTree = "<group>"; };
 		61A8DC43287E8783000512EC /* UIDevice+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Ext.swift"; sourceTree = "<group>"; };
 		61A8DC46287E905B000512EC /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		61A8DC49287E90BC000512EC /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
@@ -790,7 +788,6 @@
 		61A0284F290F60C700943A40 /* My */ = {
 			isa = PBXGroup;
 			children = (
-				61A730E328ED53E700C6BD98 /* MyCell.swift */,
 				61A0284D290F60C100943A40 /* NoticeCell.swift */,
 			);
 			path = My;
@@ -802,18 +799,18 @@
 				61A028622912279500943A40 /* NoticeDetailViewController.swift */,
 				61A02849290F5F6B00943A40 /* NoticeViewController.swift */,
 				61A0284B290F5F7D00943A40 /* NoticeRouter.swift */,
-				61A02869291244AF00943A40 /* VIews */,
+				61A02869291244AF00943A40 /* Views */,
 			);
 			path = Notice;
 			sourceTree = "<group>";
 		};
-		61A02869291244AF00943A40 /* VIews */ = {
+		61A02869291244AF00943A40 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				61A02847290F5F5E00943A40 /* NoticeView.swift */,
 				61A028602912242100943A40 /* NoticeDetailView.swift */,
 			);
-			path = VIews;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		61A0287A2914DD8500943A40 /* Property */ = {
@@ -1263,7 +1260,6 @@
 				61A0286B2912456500943A40 /* MyRouter.swift in Sources */,
 				61215ADE28571E20003FDCAA /* FeedMainView.swift in Sources */,
 				2090811A27CA4F61005A1573 /* ChallengeViewController.swift in Sources */,
-				61A730E428ED53E700C6BD98 /* MyCell.swift in Sources */,
 				613856D82899015000BE347E /* HomeMainCell.swift in Sources */,
 				2010780427D3D62300280991 /* UITableView+Ext.swift in Sources */,
 				611BD4AE27E48F37007D5C79 /* UIColor+Ext.swift in Sources */,

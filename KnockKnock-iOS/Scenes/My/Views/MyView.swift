@@ -23,7 +23,6 @@ final class MyView: UIView {
     $0.separatorColor = .clear
     $0.backgroundColor = .white
     $0.rowHeight = UITableView.automaticDimension
-    $0.registCell(type: MyCell.self)
   }
   
   // MARK: - Initialize

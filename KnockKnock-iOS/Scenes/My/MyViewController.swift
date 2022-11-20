@@ -12,7 +12,14 @@ protocol MyViewProtocol {
 }
 
 final class MyViewController: BaseViewController<MyView> {
-  
+
+  // MARK: - Constants
+
+  private enum MY {
+    static let MyCellID = "MyTableCellID"
+    static let APP_VERSION = "V 0.0.1"
+  }
+
   // MARK: - Properties
   
   var router: MyRouterProtocol?
@@ -58,12 +65,12 @@ final class MyViewController: BaseViewController<MyView> {
   override func setupConfigure() {
     self.navigationController?.navigationBar.barTintColor = .white
     self.navigationController?.navigationBar.shadowImage = UIImage()
-    self.navigationItem.title = "마이"
+    self.navigationItem.title = "마이페이지"
     
     self.containerView.myTableView.do {
       $0.dataSource = self
       $0.delegate = self
-      $0.registCell(type: MyCell.self)
+      $0.registCell(type: UITableViewCell.self, identifier: MY.MyCellID)
       $0.register(type: MyTableViewHeader.self)
       $0.register(type: MyTableViewFooter.self)
     }
@@ -97,22 +104,27 @@ extension MyViewController: UITableViewDataSource {
     _ tableView: UITableView,
     cellForRowAt indexPath: IndexPath
   ) -> UITableViewCell {
-    
-    let cell = tableView.dequeueCell(
-      withType: MyCell.self,
-      for: indexPath
-    )
-    
+
+    let cell = UITableViewCell(style: .value1, reuseIdentifier: MY.MyCellID)
     let menu = self.menuData[indexPath.section].myItems[indexPath.row]
-    
-    cell.model = menu
-    
-    if menu.type == .alert {
+
+    cell.textLabel?.do {
+      $0.font = .systemFont(ofSize: 15, weight: .bold)
+      $0.textColor = .black
+      $0.text = menu.title
+    }
+
+    switch menu.type {
+    case .alert:
       cell.accessoryType = .none
-    } else {
+      cell.accessoryView = UISwitch()
+    case .plain:
+      cell.accessoryType = .disclosureIndicator
+    case .version:
+      cell.detailTextLabel?.text = MY.APP_VERSION
       cell.accessoryType = .disclosureIndicator
     }
-    
+
     return cell
   }
 
