@@ -34,7 +34,7 @@ final class CommentPresenter: CommentPresenterProtocol {
                   image: reply.image,
                   content: reply.content,
                   regDate: reply.regDate,
-                  isDeleted: 0,
+                  isDeleted: false,
                   replyCnt: 0,
                   reply: []
                 ),
