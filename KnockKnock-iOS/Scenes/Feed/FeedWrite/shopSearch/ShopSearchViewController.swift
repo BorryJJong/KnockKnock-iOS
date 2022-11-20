@@ -15,16 +15,19 @@ protocol ShopSearchViewProtocol: AnyObject {
   var router: ShopSearchRouterProtocol? { get set }
 
   func fetchShopAddress(address: AddressResult)
+  func fetchCountyList(county: [String])
+  func fetchCityList(cityList: [String])
+
+  func fetchSelectedCity(city: String)
+  func fetchSelectedCounty(county: String)
 }
 
 final class ShopSearchViewController: BaseViewController<ShopSearchView> {
 
   // MARK: - Properties
 
-  let addressDummy = ["스타벅스 오류동역점", "스타벅스 신도림점", "스타벅스 구로디지털타워점"]
-
-  let cityList = ["서울특별시", "부산광역시", "대구광역시", "인천광역시", "대전광역시", "울산광역시", "세종특별자치시",
-                  "경기도", "강원도", "전라북도", "전라남도", "경상북도", "경상남도"]
+  var cityList: [String] = []
+  var countyList: [String] = []
 
   var interactor: ShopSearchInteractorProtocol?
   var router: ShopSearchRouterProtocol?
@@ -73,6 +76,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    self.interactor?.fetchCityList()
   }
 
   // MARK: - Configure
@@ -86,7 +90,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
     self.containerView.addressSearchButton.do {
       $0.addTarget(
         self,
-        action: #selector(searchButtonDidTap(_:)),
+        action: #selector(self.searchButtonDidTap(_:)),
         for: .touchUpInside)
     }
 
@@ -94,17 +98,21 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
       $0.dataSource = self
       $0.delegate = self
     }
-
-    self.containerView.cityTextField.do {
-      $0.delegate = self
-    }
     
     self.containerView.cityButton.do {
-      $0.addTarget(self, action: #selector(cityButtonDidTap(_:)), for: .touchUpInside)
+      $0.addTarget(
+        self,
+        action: #selector(self.cityButtonDidTap(_:)),
+        for: .touchUpInside
+      )
     }
 
-    self.containerView.regionTextField.do {
-      $0.delegate = self
+    self.containerView.countyButton.do {
+      $0.addTarget(
+        self,
+        action: #selector(self.countyButtonDidTap(_:)),
+        for: .touchUpInside
+      )
     }
   }
 
@@ -113,8 +121,8 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   @objc private func searchButtonDidTap(_ sender: UIButton) {
     self.containerView.resultTableView.isHidden = false
 
-    let city = self.containerView.cityTextField.text ?? ""
-    let region = self.containerView.regionTextField.text ?? ""
+    let city = self.containerView.cityLabel.text ?? ""
+    let region = self.containerView.countyLabel.text ?? ""
     let address = self.containerView.addressTextField.text ?? ""
 
     self.searchKeyword = "\(city) \(region) \(address)"
@@ -126,15 +134,27 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   }
 
   @objc private func doneButtonDidTap(_ sender: UIBarButtonItem) {
-    self.router?.passToFeedWriteView(source: self, address: nil)
+    self.router?.passDataToFeedWriteView(source: self, address: nil)
   }
 
   @objc func tapBackBarButton(_ sender: UIBarButtonItem) {
-    self.navigationController?.popViewController(animated: true)
+    self.router?.navigateToFeedWriteView(source: self)
   }
 
   @objc func cityButtonDidTap(_ sender: UIButton) {
-    self.router?.presentBottomSheetView(source: self, content: self.cityList)
+    self.router?.presentBottomSheetView(
+      source: self,
+      content: self.cityList,
+      districtsType: .city
+    )
+  }
+
+  @objc func countyButtonDidTap(_ sender: UIButton) {
+    self.router?.presentBottomSheetView(
+      source: self,
+      content: self.countyList,
+      districtsType: .county
+    )
   }
 }
 
@@ -144,17 +164,24 @@ extension ShopSearchViewController: ShopSearchViewProtocol {
   func fetchShopAddress(address: AddressResult) {
     self.addressResult = address
   }
-}
 
-// MARK: - TextField Delegate
+  func fetchCountyList(county: [String]) {
+    self.countyList = county
+  }
 
-extension ShopSearchViewController: UITextFieldDelegate {
-  func textField(
-    _ textField: UITextField,
-    shouldChangeCharactersIn range: NSRange,
-    replacementString string: String
-  ) -> Bool {
-    return false
+  func fetchCityList(cityList: [String]) {
+    self.cityList = cityList
+  }
+
+  func fetchSelectedCity(city: String) {
+    self.containerView.cityLabel.text = city
+    self.containerView.setButtonStatus(isCitySelected: true)
+
+    self.interactor?.fetchCountyList(city: city)
+  }
+
+  func fetchSelectedCounty(county: String) {
+    self.containerView.countyLabel.text = county
   }
 }
 
@@ -207,6 +234,6 @@ extension ShopSearchViewController: UITableViewDataSource {
 
 extension ShopSearchViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    self.router?.passToFeedWriteView(source: self, address: self.addressList[indexPath.row])
+    self.router?.passDataToFeedWriteView(source: self, address: self.addressList[indexPath.row])
   }
 }

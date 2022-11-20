@@ -39,7 +39,6 @@ final class FeedMainWorker: FeedMainWorkerProtocol {
     pageSize: Int,
     challengeId: Int,
     completionHandler: @escaping (FeedMain) -> Void) {
-
     repository.requestFeedMain(
       currentPage: currentPage,
       totalCount: pageSize,

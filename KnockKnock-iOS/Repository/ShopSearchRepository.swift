@@ -13,6 +13,8 @@ protocol ShopSearchRepositoryProtocol {
     page: Int,
     completionHandler: @escaping (AddressResult) -> Void
   )
+
+  func fetchDistricts() -> DistrictsData?
 }
 
 final class ShopSearchRepository: ShopSearchRepositoryProtocol {
@@ -31,5 +33,19 @@ final class ShopSearchRepository: ShopSearchRepositoryProtocol {
         print(error)
       }
     )
+  }
+
+  func fetchDistricts() -> DistrictsData? {
+    do {
+      if let path = Bundle.main.path(forResource: "districts", ofType: "json") {
+        let url = URL(fileURLWithPath: path)
+        let data = try Data(contentsOf: url)
+        let jsonData = try JSONDecoder().decode(DistrictsData.self, from: data)
+        return jsonData
+      }
+    } catch {
+      print(error)
+    }
+    return nil
   }
 }

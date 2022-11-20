@@ -13,6 +13,7 @@ protocol ShopSearchWorkerProtocol {
     page: Int,
     completionHandler: @escaping (AddressResult) -> Void
   )
+  func fetchDistricts(completionHandler: @escaping (DistrictsData) -> Void)
 }
 
 final class ShopSearchWorker: ShopSearchWorkerProtocol {
@@ -28,11 +29,19 @@ final class ShopSearchWorker: ShopSearchWorkerProtocol {
     page: Int,
     completionHandler: @escaping (AddressResult) -> Void
   ) {
-    repository.requestShopAddress(
+    self.repository.requestShopAddress(
       keyword: keyword,
       page: page,
       completionHandler: { result in
         completionHandler(result)
       })
+  }
+
+  func fetchDistricts(
+    completionHandler: @escaping (DistrictsData) -> Void
+  ) {
+    if let districtsData = self.repository.fetchDistricts() {
+      completionHandler(districtsData)
+    }
   }
 }
