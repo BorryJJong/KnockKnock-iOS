@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import KKDSKit
 
-final class PropertyCell: BaseTableViewCell {
+final class PropertyCell: BaseTableViewCell<Void> {
   
   // MARK: - Properties
   
@@ -31,32 +32,22 @@ final class PropertyCell: BaseTableViewCell {
     $0.image = UIImage(named: "ic_checkbox_off")
   }
   
-  lazy var checkButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .clear
-    $0.addTarget(self, action: #selector(checkButtonDidTap(_:)), for: .touchUpInside)
-  }
-  
-  @objc func checkButtonDidTap(_ sender: UIButton) {
-    if self.propertyLabel.textColor == .black {
-      self.checkImageView.image = UIImage(named: "ic_checkbox_on")
-      self.propertyLabel.textColor = .green50
-    } else {
-      self.checkImageView.image = UIImage(named: "ic_checkbox_off")
-      self.propertyLabel.textColor = .black
-    }
-  }
-
   // MARK: - Bind
 
-  func bind(content: String) {
+  func bind(content: String, isSelected: Bool) {
     self.propertyLabel.text = content
+
+    let propertyLabelColor = isSelected ? UIColor.green50 : UIColor.black
+    let checkImage = isSelected ?  KKDS.Image.ic_checkbox_20_on : KKDS.Image.ic_checkbox_20_off
+
+    self.propertyLabel.textColor = propertyLabelColor
+    self.checkImageView.image = checkImage
   }
 
   // MARK: - Configure
   
   override func setupConstraints() {
-    [self.propertyLabel, self.checkImageView, self.checkButton].addSubViews(self.contentView)
+    [self.propertyLabel, self.checkImageView].addSubViews(self.contentView)
 
     NSLayoutConstraint.activate([
       self.propertyLabel.centerYAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.centerYAnchor),
@@ -65,12 +56,7 @@ final class PropertyCell: BaseTableViewCell {
       self.propertyLabel.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor, constant: Metric.propertyLabelLeadingMargin),
       
       self.checkImageView.centerYAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.centerYAnchor),
-      self.checkImageView.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor, constant: Metric.checkImageTrailingMargin),
-      
-      self.checkButton.topAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.topAnchor),
-      self.checkButton.bottomAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.bottomAnchor),
-      self.checkButton.leadingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.leadingAnchor),
-      self.checkButton.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor)
+      self.checkImageView.trailingAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.trailingAnchor, constant: Metric.checkImageTrailingMargin)
     ])
   }
 }

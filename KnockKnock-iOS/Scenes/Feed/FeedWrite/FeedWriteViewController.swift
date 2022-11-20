@@ -14,7 +14,10 @@ protocol FeedWriteViewProtocol: AnyObject {
   var interactor: FeedWriteInteractorProtocol? { get set }
   var router: FeedWriteRouterProtocol? { get set }
 
-  func getAddress(address: String)
+  func fetchProperty(propertyType: PropertyType, content: String)
+
+  func fetchSelectedPromotions(promotionList: [Promotion])
+  func fetchSelectedTags(tagList: [ChallengeTitle])
 }
 
 final class FeedWriteViewController: BaseViewController<FeedWriteView> {
@@ -23,6 +26,9 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   
   var interactor: FeedWriteInteractorProtocol?
   var router: FeedWriteRouterProtocol?
+
+  private var selectedPromotion: [Promotion] = []
+  private var selectedTag: [ChallengeTitle] = []
 
   var pickedPhotos: [UIImage] = []
 
@@ -73,11 +79,21 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   // MARK: - Button Actions
 
   @objc func tagSelectButtonDidTap(_ sender: UIButton) {
-    self.router?.navigateToProperty(source: self, propertyType: .tag)
+    self.router?.navigateToProperty(
+      source: self,
+      propertyType: .tag,
+      promotionList: nil,
+      tagList: self.selectedTag
+    )
   }
 
   @objc func promotionSelectButtonDidTap(_ sender: UIButton) {
-    self.router?.navigateToProperty(source: self, propertyType: .promotion)
+    self.router?.navigateToProperty(
+      source: self,
+      propertyType: .promotion,
+      promotionList: self.selectedPromotion,
+      tagList: nil
+    )
   }
 
   @objc func shopSearchButtonDidTap(_ sender: UIButton) {
@@ -127,9 +143,21 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   }
 }
 
+// MARK: - Feed Write View Protocol
+
 extension FeedWriteViewController: FeedWriteViewProtocol {
-  func getAddress(address: String) {
-    self.containerView.bind(propertyType: .address, content: address)
+  func fetchProperty(propertyType: PropertyType, content: String) {
+    self.containerView.bind(
+      propertyType: propertyType,
+      content: content
+    )
+  }
+  func fetchSelectedPromotions(promotionList: [Promotion]){
+    self.selectedPromotion = promotionList
+  }
+
+  func fetchSelectedTags(tagList: [ChallengeTitle]){
+    self.selectedTag = tagList
   }
 }
 

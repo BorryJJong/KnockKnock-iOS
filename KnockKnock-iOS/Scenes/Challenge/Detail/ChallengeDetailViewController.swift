@@ -88,8 +88,6 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
       $0.shadowColor = .clear
     }
 
-    self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-
     self.navigationController?.navigationBar.standardAppearance = scrollAppearance
     self.navigationController?.navigationBar.scrollEdgeAppearance = topAppearance
 
@@ -169,7 +167,4 @@ extension ChallengeDetailViewController: UICollectionViewDelegateFlowLayout {
       self.navigationController?.navigationBar.tintColor = .black
     }
   }
-}
-
-extension ChallengeDetailViewController: UIGestureRecognizerDelegate {
 }

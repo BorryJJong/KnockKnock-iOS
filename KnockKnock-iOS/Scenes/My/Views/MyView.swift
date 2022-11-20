@@ -1,5 +1,5 @@
 //
-//  SettingView.swift
+//  MyView.swift
 //  KnockKnock-iOS
 //
 //  Created by Daye on 2022/10/05.
@@ -11,35 +11,37 @@ import SnapKit
 import Then
 import KKDSKit
 
-final class SettingView: UIView {
-
+final class MyView: UIView {
+  
   // MARK: - UIs
-
-  let settingCollectionView = UICollectionView(
+  
+  let myTableView = UITableView(
     frame: .zero,
-    collectionViewLayout: UICollectionViewFlowLayout().then{
-      $0.scrollDirection = .vertical
-    }).then {
-      $0.backgroundColor = .clear
-    }
-
+    style: .grouped
+  ).then {
+    $0.isScrollEnabled = true
+    $0.separatorColor = .clear
+    $0.backgroundColor = .white
+    $0.rowHeight = UITableView.automaticDimension
+  }
+  
   // MARK: - Initialize
-
+  
   override init(frame: CGRect) {
     super.init(frame: .zero)
     self.setupConstraints()
   }
-
+  
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-
+  
   // MARK: - Constraints
-
+  
   private func setupConstraints() {
-    [self.settingCollectionView].addSubViews(self)
-
-    self.settingCollectionView.snp.makeConstraints {
+    [self.myTableView].addSubViews(self)
+    
+    self.myTableView.snp.makeConstraints {
       $0.edges.equalToSuperview()
     }
   }
