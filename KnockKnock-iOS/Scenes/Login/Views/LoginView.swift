@@ -16,11 +16,14 @@ final class LoginView: UIView {
   // MARK: - Constants
 
   private enum Metric {
-    static let dismissIndicatorViewWidth = 35.f
-    static let dismissIndicatorViewHeight = 5.f
-    static let dismissIndicatorViewTopMargin = 10.f
+    static let dismissButtonTopMargin = 20.f
 
-    static let kakaoLoginButonLeadingMargin = 20.f
+    static let kakaoLoginButtonLeadingMargin = 20.f
+    static let kakaoLoginButtonHeight = 45.f
+
+    static let subTitleLabelTopMargin = 10.f
+
+    static let titleLabelBottomMargin = -125.f
   }
 
   // MARK: - UIs
@@ -65,23 +68,23 @@ final class LoginView: UIView {
     [self.kakaoLoginButton, self.dismissButton, self.titleLabel, self.subTitleLabel].addSubViews(self)
 
     self.dismissButton.snp.makeConstraints {
-      $0.top.trailing.equalTo(self.safeAreaLayoutGuide).inset(20)
+      $0.top.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.dismissButtonTopMargin)
     }
 
     self.kakaoLoginButton.snp.makeConstraints {
-      $0.leading.trailing.equalToSuperview().inset(Metric.kakaoLoginButonLeadingMargin)
-      $0.height.equalTo(45)
+      $0.leading.trailing.equalToSuperview().inset(Metric.kakaoLoginButtonLeadingMargin)
+      $0.height.equalTo(Metric.kakaoLoginButtonHeight)
       $0.centerY.equalToSuperview()
     }
 
     self.titleLabel.snp.makeConstraints {
       $0.centerX.equalToSuperview()
-      $0.bottom.equalTo(self.kakaoLoginButton.snp.top).offset(-125)
+      $0.bottom.equalTo(self.kakaoLoginButton.snp.top).offset(Metric.titleLabelBottomMargin)
     }
 
     self.subTitleLabel.snp.makeConstraints {
       $0.centerX.equalToSuperview()
-      $0.top.equalTo(self.titleLabel.snp.bottom).offset(10)
+      $0.top.equalTo(self.titleLabel.snp.bottom).offset(Metric.subTitleLabelTopMargin)
     }
   }
 }

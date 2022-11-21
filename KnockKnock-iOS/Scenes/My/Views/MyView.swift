@@ -12,7 +12,14 @@ import Then
 import KKDSKit
 
 final class MyView: UIView {
-  
+
+  // MARK: - Constants
+
+  private enum Metric {
+    static let loginButtonLeadingMargin = 20.f
+    static let userNameLabelLeadingMargin = 20.f
+  }
+
   // MARK: - UIs
   
   let myTableView = UITableView(
@@ -78,13 +85,12 @@ final class MyView: UIView {
     }
 
     self.loginButton.snp.makeConstraints {
-      $0.leading.equalToSuperview().offset(20)
+      $0.leading.equalToSuperview().offset(Metric.loginButtonLeadingMargin)
       $0.centerY.equalToSuperview()
     }
 
     self.userNameLabel.snp.makeConstraints {
-      $0.leading.equalToSuperview().offset(20)
-      $0.trailing.equalToSuperview().offset(-20)
+      $0.leading.trailing.equalToSuperview().inset(Metric.userNameLabelLeadingMargin)
       $0.centerY.equalToSuperview()
     }
   }
