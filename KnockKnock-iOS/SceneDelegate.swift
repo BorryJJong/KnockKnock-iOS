@@ -23,14 +23,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     self.window?.windowScene = scene
 
     let main = MainTabBarController()
-    let login = LoginRouter.createLoginView()
 
-    if LocalDataManager().checkTokenIsExisted() {
-      self.window?.rootViewController = main
-    } else {
-      self.window?.rootViewController = UINavigationController(rootViewController: login)
-    }
-
+    self.window?.rootViewController = main
     self.window?.makeKeyAndVisible()
   }
 

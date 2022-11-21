@@ -23,6 +23,12 @@ final class MyViewController: BaseViewController<MyView> {
   // MARK: - Properties
   
   var router: MyRouterProtocol?
+
+  var isLoggedIn: Bool = LocalDataManager().checkTokenIsExisted() {
+    didSet {
+      // view reload
+    }
+  }
   
   private let menuData: MyMenu = {
     let profile = MyItem(title: "프로필 수정", type: .plain)
@@ -67,7 +73,7 @@ final class MyViewController: BaseViewController<MyView> {
     self.navigationController?.navigationBar.shadowImage = UIImage()
     self.navigationItem.title = "마이페이지"
 
-    self.containerView.bind(isLoggedin: false) // 로그인 상태에 따라 헤더 내용 바인딩
+    self.containerView.bind(isLoggedin: self.isLoggedIn) // 로그인 상태에 따라 헤더 내용 바인딩
     
     self.containerView.myTableView.do {
       $0.dataSource = self
@@ -172,8 +178,9 @@ extension MyViewController: UITableViewDataSource {
       action: #selector(self.logoutButtonDidTap(_:)),
       for: .touchUpInside
     )
-
+    
     footerView.model = self.menuData[section]
+    footerView.setLogoutButtonHiddenStatus(isLoggedIn: self.isLoggedIn)
     
     return footerView
   }
@@ -184,7 +191,11 @@ extension MyViewController: UITableViewDataSource {
   ) -> CGFloat {
     
     if self.menuData[section].title == MySectionType.policy {
-      return 130
+      if isLoggedIn {
+        return 130
+      } else {
+        return 50
+      }
       
     } else {
       return 50
