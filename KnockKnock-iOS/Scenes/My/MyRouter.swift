@@ -11,6 +11,7 @@ protocol MyRouterProtocol {
   static func createMy() -> UIViewController
 
   func navigateToNoticeView(source: MyViewProtocol)
+  func navigateToLoginView(source: MyViewProtocol)
 }
 
 final class MyRouter: MyRouterProtocol {
@@ -21,6 +22,14 @@ final class MyRouter: MyRouterProtocol {
     view.router = router
 
     return view
+  }
+
+  func navigateToLoginView(source: MyViewProtocol) {
+    let loginViewController = LoginRouter.createLoginView()
+
+    if let sourceView = source as? UIViewController {
+      sourceView.present(loginViewController, animated: true)
+    }
   }
 
   func navigateToNoticeView(source: MyViewProtocol) {

@@ -33,23 +33,12 @@ final class LoginViewController: BaseViewController<LoginView> {
       action: #selector(self.kakaoLoginButtonDidTap(_:)),
       for: .touchUpInside
     )
-
-    self.containerView.logoutButton.addTarget(
-      self,
-      action: #selector(self.logoutButtonDidTap(_:)),
-      for: .touchUpInside
-    )
   }
 
   // MARK: - Button Actions
 
   @objc func kakaoLoginButtonDidTap(_ sender: UIButton) {
     self.interactor?.fetchLoginResult(source: self, socialType: SocialType.kakao)
-  }
-
-  // 테스트를 위한 임시 로그아웃 버튼
-  @objc func logoutButtonDidTap(_ sender: UIButton) {
-    LocalDataManager().deleteToken()
   }
 }
 

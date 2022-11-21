@@ -16,6 +16,10 @@ final class LoginView: UIView {
   // MARK: - Constants
 
   private enum Metric {
+    static let dismissIndicatorViewWidth = 35.f
+    static let dismissIndicatorViewHeight = 5.f
+    static let dismissIndicatorViewTopMargin = 10.f
+
     static let kakaoLoginButonLeadingMargin = 20.f
   }
 
@@ -35,18 +39,16 @@ final class LoginView: UIView {
     $0.numberOfLines = 0
   }
 
+  private let dismissIndicatorView = UIView().then {
+    $0.backgroundColor = .systemGray2
+    $0.layer.cornerRadius = 3
+  }
+
   let kakaoLoginButton = UIButton().then {
     $0.setImage(KKDS.Image.ic_kakao_login, for: .normal)
     $0.contentMode = .scaleAspectFit
   }
-
-  // 테스트용 로그아웃 버튼
-  let logoutButton = UIButton().then {
-    $0.backgroundColor = .black
-    $0.setTitle("LOGOUT", for: .normal)
-    $0.contentMode = .scaleAspectFit
-  }
-
+  
   // MARK: - Initialize
 
   override init(frame: CGRect) {
@@ -61,7 +63,7 @@ final class LoginView: UIView {
   // MARK: - Configure
 
   private func setupConstraints() {
-    [self.kakaoLoginButton, self.logoutButton, self.titleLabel, self.subTitleLabel].addSubViews(self)
+    [self.kakaoLoginButton, self.dismissIndicatorView, self.titleLabel, self.subTitleLabel].addSubViews(self)
 
     self.kakaoLoginButton.snp.makeConstraints {
       $0.leading.trailing.equalToSuperview().inset(Metric.kakaoLoginButonLeadingMargin)
@@ -69,11 +71,18 @@ final class LoginView: UIView {
       $0.centerY.equalToSuperview()
     }
 
-    self.logoutButton.snp.makeConstraints {
-      $0.height.equalTo(45)
-      $0.leading.trailing.equalTo(self.kakaoLoginButton)
-      $0.top.equalTo(self.kakaoLoginButton.snp.bottom).offset(50)
+    self.dismissIndicatorView.snp.makeConstraints {
+      $0.width.equalTo(Metric.dismissIndicatorViewWidth)
+      $0.height.equalTo(Metric.dismissIndicatorViewHeight)
+      $0.top.equalToSuperview().offset(Metric.dismissIndicatorViewTopMargin)
+      $0.centerX.equalToSuperview()
     }
+
+//    self.logoutButton.snp.makeConstraints {
+//      $0.height.equalTo(45)
+//      $0.leading.trailing.equalTo(self.kakaoLoginButton)
+//      $0.top.equalTo(self.kakaoLoginButton.snp.bottom).offset(50)
+//    }
 
     self.titleLabel.snp.makeConstraints {
       $0.centerX.equalToSuperview()

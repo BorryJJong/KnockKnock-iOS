@@ -73,7 +73,23 @@ final class MyViewController: BaseViewController<MyView> {
       $0.registCell(type: UITableViewCell.self, identifier: MY.MyCellID)
       $0.register(type: MyTableViewHeader.self)
       $0.register(type: MyTableViewFooter.self)
+      $0.tableHeaderView = self.containerView.myTableHeaderView
     }
+    self.containerView.loginButton.do {
+      $0.addTarget(self, action: #selector(self.loginButtonDidTap), for: .touchUpInside)
+    }
+  }
+
+  // MARK: - Button Actions
+
+  @objc private func loginButtonDidTap(_ sender: UIButton) {
+    self.router?.navigateToLoginView(source: self)
+  }
+
+  // 테스트용 임시 로그아웃 기능 연결
+  @objc func logoutButtonDidTap(_ sender: UIButton) {
+    LocalDataManager().deleteToken()
+    print("토큰 삭제 됨")
   }
 }
 
@@ -148,7 +164,13 @@ extension MyViewController: UITableViewDataSource {
   ) -> UIView? {
     
     let footerView = tableView.dequeueHeaderFooterView(withType: MyTableViewFooter.self)
-    
+
+    footerView.logoutButton.addTarget(
+      self,
+      action: #selector(self.logoutButtonDidTap(_:)),
+      for: .touchUpInside
+    )
+
     footerView.model = self.menuData[section]
     
     return footerView
