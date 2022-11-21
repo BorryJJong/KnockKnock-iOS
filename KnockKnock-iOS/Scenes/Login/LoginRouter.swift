@@ -11,6 +11,7 @@ protocol LoginRouterProtocol {
   static func createLoginView() -> UIViewController
   func navigateToProfileSettingView(source: LoginViewProtocol, loginInfo: LoginInfo)
   func navigateToHome()
+  func dismissLoginView(source: LoginViewProtocol)
 }
 
 final class LoginRouter: LoginRouterProtocol {
@@ -50,7 +51,7 @@ final class LoginRouter: LoginRouterProtocol {
     }
   }
 
-  // login 성공 시 홈 화면으로 이동
+  // login 성공 시 홈 화면으로 rootView 변경
   func navigateToHome() {
     let main = MainTabBarController()
 
@@ -61,5 +62,12 @@ final class LoginRouter: LoginRouterProtocol {
       animated: true,
       completion: nil
     )
+  }
+
+  // 로그인 뷰 탈출
+  func dismissLoginView(source: LoginViewProtocol) {
+    if let sourceView = source as? UIViewController {
+      sourceView.dismiss(animated: true)
+    }
   }
 }

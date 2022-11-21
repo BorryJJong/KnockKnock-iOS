@@ -28,6 +28,7 @@ final class MyRouter: MyRouterProtocol {
     let loginViewController = LoginRouter.createLoginView()
 
     if let sourceView = source as? UIViewController {
+      loginViewController.modalPresentationStyle = UIModalPresentationStyle.fullScreen
       sourceView.present(loginViewController, animated: true)
     }
   }

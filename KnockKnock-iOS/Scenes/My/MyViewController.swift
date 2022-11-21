@@ -66,6 +66,8 @@ final class MyViewController: BaseViewController<MyView> {
     self.navigationController?.navigationBar.barTintColor = .white
     self.navigationController?.navigationBar.shadowImage = UIImage()
     self.navigationItem.title = "마이페이지"
+
+    self.containerView.bind(isLoggedin: false) // 로그인 상태에 따라 헤더 내용 바인딩
     
     self.containerView.myTableView.do {
       $0.dataSource = self

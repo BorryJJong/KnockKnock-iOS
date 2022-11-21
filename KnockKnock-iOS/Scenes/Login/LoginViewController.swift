@@ -33,12 +33,21 @@ final class LoginViewController: BaseViewController<LoginView> {
       action: #selector(self.kakaoLoginButtonDidTap(_:)),
       for: .touchUpInside
     )
+
+    self.containerView.dismissButton.addTarget(
+      self,
+      action: #selector(self.dismissButtonDidTap(_:)),
+      for: .touchUpInside
+    )
   }
 
   // MARK: - Button Actions
 
   @objc func kakaoLoginButtonDidTap(_ sender: UIButton) {
     self.interactor?.fetchLoginResult(source: self, socialType: SocialType.kakao)
+  }
+  @objc func dismissButtonDidTap(_ sender: UIButton) {
+    self.interactor?.dismissLoginView(source: self)
   }
 }
 

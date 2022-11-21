@@ -14,6 +14,7 @@ protocol LoginInteractorProtocol {
 
   func fetchLoginResult(source: LoginViewProtocol, socialType: SocialType)
   func saveTokens(loginResponse: LoginResponse)
+  func dismissLoginView(source: LoginViewProtocol)
 }
 
 final class LoginInteractor: LoginInteractorProtocol {
@@ -57,5 +58,9 @@ final class LoginInteractor: LoginInteractorProtocol {
 
   func navigateToHome() {
     self.router?.navigateToHome()
+  }
+
+  func dismissLoginView(source: LoginViewProtocol) {
+    self.router?.dismissLoginView(source: source)
   }
 }

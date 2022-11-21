@@ -42,6 +42,13 @@ final class MyView: UIView {
     $0.semanticContentAttribute = .forceRightToLeft
   }
 
+  private let userNameLabel = UILabel().then {
+    $0.text = "반가워요 Nickname님 🌿"
+    $0.font = .systemFont(ofSize: 16, weight: .bold)
+    $0.numberOfLines = 0
+    $0.textColor = KKDS.Color.green50
+  }
+
   // MARK: - Initialize
   
   override init(frame: CGRect) {
@@ -52,12 +59,19 @@ final class MyView: UIView {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+
+  // MARK: - Bind
+
+  func bind(isLoggedin: Bool) {
+    self.loginButton.isHidden = isLoggedin
+    self.userNameLabel.isHidden = !isLoggedin
+  }
   
   // MARK: - Constraints
   
   private func setupConstraints() {
     [self.myTableView].addSubViews(self)
-    [self.loginButton].addSubViews(self.myTableHeaderView)
+    [self.loginButton, self.userNameLabel].addSubViews(self.myTableHeaderView)
     
     self.myTableView.snp.makeConstraints {
       $0.edges.equalToSuperview()
@@ -65,6 +79,12 @@ final class MyView: UIView {
 
     self.loginButton.snp.makeConstraints {
       $0.leading.equalToSuperview().offset(20)
+      $0.centerY.equalToSuperview()
+    }
+
+    self.userNameLabel.snp.makeConstraints {
+      $0.leading.equalToSuperview().offset(20)
+      $0.trailing.equalToSuperview().offset(-20)
       $0.centerY.equalToSuperview()
     }
   }
