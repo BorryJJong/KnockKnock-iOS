@@ -27,7 +27,8 @@ final class ShopSearchInteractor: ShopSearchInteractorProtocol {
       page: page,
       completionHandler: { address in
         self.presenter?.presentShopAddress(address: address)
-      })
+      }
+    )
   }
 
   func fetchCityList() {

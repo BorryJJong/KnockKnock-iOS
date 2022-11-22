@@ -82,11 +82,13 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   // MARK: - Configure
 
   override func setupConfigure() {
+
     self.navigationItem.do {
       $0.title = "매장검색"
       $0.rightBarButtonItem = self.rightBarButton
       $0.leftBarButtonItem = self.backBarButtonItem
     }
+
     self.containerView.addressSearchButton.do {
       $0.addTarget(
         self,
@@ -114,6 +116,20 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
         for: .touchUpInside
       )
     }
+
+    self.hideKeyboardWhenTappedAround()
+  }
+
+  private func setSearchKeyword() -> String {
+    let address = self.containerView.addressTextField.text ?? ""
+
+    if let city = self.containerView.cityLabel.text, city != "시/도 전체" {
+      if let region = self.containerView.countyLabel.text, region != "시/군/구 전체" {
+        return "\(city) \(region) \(address)"
+      }
+      return "\(city) \(address)"
+    }
+    return address
   }
 
   // MARK: - Button Actions
@@ -121,15 +137,9 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   @objc private func searchButtonDidTap(_ sender: UIButton) {
     self.containerView.resultTableView.isHidden = false
 
-    let city = self.containerView.cityLabel.text ?? ""
-    let region = self.containerView.countyLabel.text ?? ""
-    let address = self.containerView.addressTextField.text ?? ""
-
-    self.searchKeyword = "\(city) \(region) \(address)"
-
     self.addressList = []
     self.page = 1
-    self.interactor?.fetchShopAddress(keyword: self.searchKeyword, page: self.page)
+    self.interactor?.fetchShopAddress(keyword: self.setSearchKeyword(), page: self.page)
     self.dismissKeyboard()
   }
 
@@ -219,9 +229,10 @@ extension ShopSearchViewController: UITableViewDataSource {
       if !isEnd {
         self.fetchMore = false
         self.page += 1
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
           self.interactor?.fetchShopAddress(
-            keyword: self.searchKeyword,
+            keyword: self.setSearchKeyword(),
             page: self.page
           )
         })
@@ -235,5 +246,18 @@ extension ShopSearchViewController: UITableViewDataSource {
 extension ShopSearchViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     self.router?.passDataToFeedWriteView(source: self, address: self.addressList[indexPath.row])
+  }
+}
+
+// MARK: - TextField Delegate
+
+extension ShopSearchViewController: UITextFieldDelegate {
+  func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    self.interactor?.fetchShopAddress(
+      keyword: self.setSearchKeyword(),
+      page: self.page
+    )
+
+    return true
   }
 }
