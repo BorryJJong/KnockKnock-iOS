@@ -28,6 +28,8 @@ final class PostCommentCell: BaseCollectionViewCell {
     static let writtenDateLabelTopMargin = 3.f
 
     static let replyWriteButtonLeadingMargin = 10.f
+
+    static let commentDeleteButtonLeadingMargin = 10.f
   }
 
   // MARK: - UIs
@@ -72,6 +74,14 @@ final class PostCommentCell: BaseCollectionViewCell {
     $0.setTitleColor(.gray70, for: .normal)
     $0.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
   }
+
+  let commentDeleteButton = UIButton().then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.setImage(KKDS.Image.etc_bar_8_gr, for: .normal)
+    $0.setTitle("   삭제", for: .normal)
+    $0.setTitleColor(.gray70, for: .normal)
+    $0.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
+  }
   
   // MARK: - Bind
 
@@ -112,7 +122,7 @@ final class PostCommentCell: BaseCollectionViewCell {
   }
 
   override func setupConstraints() {
-    [self.profileImageView, self.userIdLabel, self.commentLabel, self.writtenDateLabel, self.replyWriteButton, self.replyMoreButton].addSubViews(self)
+    [self.profileImageView, self.userIdLabel, self.commentLabel, self.writtenDateLabel, self.replyWriteButton, self.replyMoreButton, self.commentDeleteButton].addSubViews(self)
 
     NSLayoutConstraint.activate([
       self.profileImageView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
@@ -137,7 +147,10 @@ final class PostCommentCell: BaseCollectionViewCell {
 
       self.replyWriteButton.leadingAnchor.constraint(equalTo: self.writtenDateLabel.trailingAnchor, constant: Metric.replyWriteButtonLeadingMargin),
       self.replyWriteButton.topAnchor.constraint(equalTo: self.writtenDateLabel.topAnchor),
-      self.replyWriteButton.bottomAnchor.constraint(equalTo: self.writtenDateLabel.bottomAnchor)
+      self.replyWriteButton.bottomAnchor.constraint(equalTo: self.writtenDateLabel.bottomAnchor),
+
+      self.commentDeleteButton.topAnchor.constraint(equalTo: self.writtenDateLabel.topAnchor),
+      self.commentDeleteButton.leadingAnchor.constraint(equalTo: self.replyWriteButton.trailingAnchor, constant: Metric.commentDeleteButtonLeadingMargin)
     ])
   }
 }
