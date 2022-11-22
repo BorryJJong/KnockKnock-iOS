@@ -48,8 +48,6 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
     }
   }
 
-  private var page: Int = 1
-  private var searchKeyword = ""
   private var fetchMore = true
 
   // MARK: - UIs
@@ -87,6 +85,10 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
       $0.title = "매장검색"
       $0.rightBarButtonItem = self.rightBarButton
       $0.leftBarButtonItem = self.backBarButtonItem
+    }
+
+    self.containerView.addressTextField.do {
+      $0.delegate = self
     }
 
     self.containerView.addressSearchButton.do {
@@ -135,11 +137,13 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   // MARK: - Button Actions
 
   @objc private func searchButtonDidTap(_ sender: UIButton) {
-    self.containerView.resultTableView.isHidden = false
-
+    let searchKeyword = self.setSearchKeyword()
+    if searchKeyword != "" {
+      self.containerView.resultTableView.isHidden = false
+    }
     self.addressList = []
-    self.page = 1
-    self.interactor?.fetchShopAddress(keyword: self.setSearchKeyword(), page: self.page)
+
+    self.interactor?.fetchShopAddress(keyword: searchKeyword, isNew: true)
     self.dismissKeyboard()
   }
 
@@ -228,12 +232,11 @@ extension ShopSearchViewController: UITableViewDataSource {
     if let isEnd = self.addressResult?.meta.isEnd {
       if !isEnd {
         self.fetchMore = false
-        self.page += 1
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
           self.interactor?.fetchShopAddress(
             keyword: self.setSearchKeyword(),
-            page: self.page
+            isNew: false
           )
         })
       }
@@ -255,7 +258,7 @@ extension ShopSearchViewController: UITextFieldDelegate {
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {
     self.interactor?.fetchShopAddress(
       keyword: self.setSearchKeyword(),
-      page: self.page
+      isNew: true
     )
 
     return true
