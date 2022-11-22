@@ -81,7 +81,7 @@ final class MyView: UIView {
     [self.loginButton, self.userNameLabel].addSubViews(self.myTableHeaderView)
     
     self.myTableView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
+      $0.edges.equalTo(self.safeAreaLayoutGuide)
     }
 
     self.loginButton.snp.makeConstraints {

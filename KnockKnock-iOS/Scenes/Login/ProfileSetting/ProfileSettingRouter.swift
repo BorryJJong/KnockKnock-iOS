@@ -9,6 +9,8 @@ import UIKit
 
 protocol ProfileSettingRouterProtocol {
   static func createProfileSettingView(loginInfo: LoginInfo) -> UIViewController
+  
+  func navigateToMyView(source: ProfileSettingViewProtocol)
 }
 
 final class ProfileSettingRouter: ProfileSettingRouterProtocol {
@@ -30,5 +32,10 @@ final class ProfileSettingRouter: ProfileSettingRouterProtocol {
     presenter.view = view
 
     return view
+  }
+
+  func navigateToMyView(source: ProfileSettingViewProtocol) {
+    guard let sourceView = source as? UIViewController else { return }
+    sourceView.navigationController?.popToRootViewController(animated: true)
   }
 }

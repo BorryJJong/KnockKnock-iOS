@@ -73,9 +73,8 @@ final class MyViewController: BaseViewController<MyView> {
   // MARK: - Configure
   
   override func setupConfigure() {
-    self.navigationController?.navigationBar.barTintColor = .white
-    self.navigationController?.navigationBar.shadowImage = UIImage()
-    self.navigationItem.title = "마이페이지"
+    self.navigationController?.navigationBar.setDefaultAppearance()
+    self.navigationItem.title = "마이"
 
     self.containerView.bind(isLoggedin: self.isLoggedIn) // 로그인 상태에 따라 헤더 내용 바인딩
     

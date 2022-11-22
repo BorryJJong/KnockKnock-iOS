@@ -36,14 +36,14 @@ final class LoginInteractor: LoginInteractorProtocol {
         if loginResponse.isExistUser {
           self.saveTokens(loginResponse: loginResponse)
           self.navigateToHome()
-
         } else {
           self.navigateToProfileSettingView(
             source: source,
             loginInfo: loginInfo
           )
         }
-      })
+      }
+    )
   }
 
   // 로컬에 서버 토큰 저장

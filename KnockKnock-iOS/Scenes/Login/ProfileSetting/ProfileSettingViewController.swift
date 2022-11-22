@@ -90,7 +90,7 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
   }
 
   @objc private func alertConfirmButtonDidTap(_ sender: UIButton) {
-    self.navigationController?.popViewController(animated: true)
+    self.interactor?.router?.navigateToMyView(source: self)
   }
 }
 
