@@ -62,7 +62,7 @@ final class MyView: UIView {
     super.init(frame: .zero)
     self.setupConstraints()
   }
-  
+
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }

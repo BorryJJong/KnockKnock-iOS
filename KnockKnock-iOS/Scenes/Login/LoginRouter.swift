@@ -11,7 +11,9 @@ protocol LoginRouterProtocol {
   static func createLoginView() -> UIViewController
   func navigateToProfileSettingView(source: LoginViewProtocol, loginInfo: LoginInfo)
   func navigateToHome()
-  func dismissLoginView(source: LoginViewProtocol)
+  func popLoginView(source: LoginViewProtocol)
+
+  func navigateToSignUp(source: LoginViewProtocol, loginInfo: LoginInfo)
 }
 
 final class LoginRouter: LoginRouterProtocol {
@@ -65,9 +67,22 @@ final class LoginRouter: LoginRouterProtocol {
   }
 
   // 로그인 뷰 탈출
-  func dismissLoginView(source: LoginViewProtocol) {
+  func popLoginView(source: LoginViewProtocol) {
     if let sourceView = source as? UIViewController {
-      sourceView.dismiss(animated: true)
+      sourceView.navigationController?.popViewController(animated: true)
+    }
+  }
+
+  func navigateToSignUp(source: LoginViewProtocol, loginInfo: LoginInfo) {
+    let profileSettingViewController = ProfileSettingRouter.createProfileSettingView(
+      loginInfo: loginInfo
+    )
+
+    if let sourceView = source as? UIViewController {
+      sourceView.navigationController?.pushViewController(
+        profileSettingViewController,
+        animated: true
+      )
     }
   }
 }

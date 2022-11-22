@@ -14,7 +14,7 @@ protocol LoginInteractorProtocol {
 
   func fetchLoginResult(source: LoginViewProtocol, socialType: SocialType)
   func saveTokens(loginResponse: LoginResponse)
-  func dismissLoginView(source: LoginViewProtocol)
+  func popLoginView(source: LoginViewProtocol)
 }
 
 final class LoginInteractor: LoginInteractorProtocol {
@@ -38,7 +38,10 @@ final class LoginInteractor: LoginInteractorProtocol {
           self.navigateToHome()
 
         } else {
-          self.navigateToProfileSettingView(source: source, loginInfo: loginInfo)
+          self.navigateToProfileSettingView(
+            source: source,
+            loginInfo: loginInfo
+          )
         }
       })
   }
@@ -52,15 +55,21 @@ final class LoginInteractor: LoginInteractorProtocol {
 
   // MARK: - Routing logic
   
-  func navigateToProfileSettingView(source: LoginViewProtocol, loginInfo: LoginInfo) {
-    self.router?.navigateToProfileSettingView(source: source, loginInfo: loginInfo)
+  func navigateToProfileSettingView(
+    source: LoginViewProtocol,
+    loginInfo: LoginInfo
+  ) {
+    self.router?.navigateToProfileSettingView(
+      source: source,
+      loginInfo: loginInfo
+    )
   }
 
   func navigateToHome() {
     self.router?.navigateToHome()
   }
 
-  func dismissLoginView(source: LoginViewProtocol) {
-    self.router?.dismissLoginView(source: source)
+  func popLoginView(source: LoginViewProtocol) {
+    self.router?.popLoginView(source: source)
   }
 }

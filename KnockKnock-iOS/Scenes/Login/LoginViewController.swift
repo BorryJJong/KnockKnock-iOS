@@ -8,6 +8,7 @@
 import UIKit
 
 import Then
+import KKDSKit
 
 protocol LoginViewProtocol: AnyObject {
   var interactor: LoginInteractorProtocol? { get set }
@@ -28,15 +29,18 @@ final class LoginViewController: BaseViewController<LoginView> {
   override func setupConfigure() {
     self.navigationController?.navigationBar.setDefaultAppearance()
 
+    self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+      image: KKDS.Image.ic_close_24_bk,
+      style: .plain,
+      target: self,
+      action: #selector(tapCloseBarButtonDidTap(_:))
+    ).then {
+      $0.tintColor = .black
+    }
+
     self.containerView.kakaoLoginButton.addTarget(
       self,
       action: #selector(self.kakaoLoginButtonDidTap(_:)),
-      for: .touchUpInside
-    )
-
-    self.containerView.dismissButton.addTarget(
-      self,
-      action: #selector(self.dismissButtonDidTap(_:)),
       for: .touchUpInside
     )
   }
@@ -44,10 +48,14 @@ final class LoginViewController: BaseViewController<LoginView> {
   // MARK: - Button Actions
 
   @objc func kakaoLoginButtonDidTap(_ sender: UIButton) {
-    self.interactor?.fetchLoginResult(source: self, socialType: SocialType.kakao)
+    self.interactor?.fetchLoginResult(
+      source: self,
+      socialType: SocialType.kakao
+    )
   }
-  @objc func dismissButtonDidTap(_ sender: UIButton) {
-    self.interactor?.dismissLoginView(source: self)
+
+  @objc func tapCloseBarButtonDidTap(_ sender: UIButton) {
+    self.interactor?.popLoginView(source: self)
   }
 }
 

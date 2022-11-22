@@ -65,7 +65,11 @@ final class MyViewController: BaseViewController<MyView> {
     super.viewDidLoad()
     self.setupConfigure()
   }
-  
+
+  override func viewWillAppear(_ animated: Bool) {
+    self.tabBarController?.tabBar.isHidden = false
+  }
+
   // MARK: - Configure
   
   override func setupConfigure() {

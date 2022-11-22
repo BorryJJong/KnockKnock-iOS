@@ -16,8 +16,6 @@ final class LoginView: UIView {
   // MARK: - Constants
 
   private enum Metric {
-    static let dismissButtonTopMargin = 20.f
-
     static let kakaoLoginButtonLeadingMargin = 20.f
     static let kakaoLoginButtonHeight = 45.f
 
@@ -42,10 +40,6 @@ final class LoginView: UIView {
     $0.numberOfLines = 0
   }
 
-  let dismissButton = UIButton().then {
-    $0.setImage(KKDS.Image.ic_close_24_bk, for: .normal)
-  }
-
   let kakaoLoginButton = UIButton().then {
     $0.setImage(KKDS.Image.ic_kakao_login, for: .normal)
     $0.contentMode = .scaleAspectFit
@@ -65,11 +59,7 @@ final class LoginView: UIView {
   // MARK: - Configure
 
   private func setupConstraints() {
-    [self.kakaoLoginButton, self.dismissButton, self.titleLabel, self.subTitleLabel].addSubViews(self)
-
-    self.dismissButton.snp.makeConstraints {
-      $0.top.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.dismissButtonTopMargin)
-    }
+    [self.kakaoLoginButton, self.titleLabel, self.subTitleLabel].addSubViews(self)
 
     self.kakaoLoginButton.snp.makeConstraints {
       $0.leading.trailing.equalToSuperview().inset(Metric.kakaoLoginButtonLeadingMargin)
