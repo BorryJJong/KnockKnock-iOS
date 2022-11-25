@@ -35,7 +35,8 @@ final class LoginInteractor: LoginInteractorProtocol {
         // 회원 o -> 토큰 저장 후 홈 화면 진입 / 회원 x -> 프로필 설정화면(회원가입)
         if loginResponse.isExistUser {
           self.saveTokens(loginResponse: loginResponse)
-          self.navigateToHome()
+          self.popLoginView(source: source)
+          NotificationCenter.default.post(name: Notification.Name("loginCompleted"), object: nil)
         } else {
           self.navigateToProfileSettingView(
             source: source,

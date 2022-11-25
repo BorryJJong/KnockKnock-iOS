@@ -26,7 +26,8 @@ final class MyViewController: BaseViewController<MyView> {
 
   var isLoggedIn: Bool = LocalDataManager().checkTokenIsExisted() {
     didSet {
-      // view reload
+      self.containerView.myTableView.reloadData()
+      self.containerView.bind(isLoggedin: self.isLoggedIn)
     }
   }
   
@@ -86,8 +87,25 @@ final class MyViewController: BaseViewController<MyView> {
       $0.register(type: MyTableViewFooter.self)
       $0.tableHeaderView = self.containerView.myTableHeaderView
     }
+
     self.containerView.loginButton.do {
       $0.addTarget(self, action: #selector(self.loginButtonDidTap), for: .touchUpInside)
+    }
+
+    NotificationCenter.default.addObserver(
+      forName: Notification.Name("loginCompleted"),
+      object: nil,
+      queue: nil
+    ) { _ in
+      self.isLoggedIn = true
+    }
+
+    NotificationCenter.default.addObserver(
+      forName: Notification.Name("logoutCompleted"),
+      object: nil,
+      queue: nil
+    ) { _ in
+      self.isLoggedIn = false
     }
   }
 
@@ -100,7 +118,7 @@ final class MyViewController: BaseViewController<MyView> {
   // 테스트용 임시 로그아웃 기능 연결
   @objc func logoutButtonDidTap(_ sender: UIButton) {
     LocalDataManager().deleteToken()
-    print("토큰 삭제 됨")
+    NotificationCenter.default.post(name: Notification.Name("logoutCompleted"), object: nil)
   }
 }
 
