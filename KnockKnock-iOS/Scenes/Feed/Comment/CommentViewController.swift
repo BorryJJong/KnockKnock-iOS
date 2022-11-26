@@ -14,7 +14,7 @@ protocol CommentViewProtocol {
   var router: CommentRouterProtocol? { get set }
   var interactor: CommentInteractorProtocol? { get set }
 
-  func getComments(comments: [Comment])
+  func fetchVisibleComments(comments: [Comment])
 }
 
 final class CommentViewController: BaseViewController<CommentView> {
@@ -24,6 +24,12 @@ final class CommentViewController: BaseViewController<CommentView> {
   var router: CommentRouterProtocol?
   var interactor: CommentInteractorProtocol?
 
+  var visibleComments: [Comment] = [] {
+    didSet {
+      self.containerView.commentCollectionView.reloadData()
+    }
+  }
+
   var feedId: Int = 6
   var userId: Int = 1
   var commentId: Int?
@@ -32,12 +38,6 @@ final class CommentViewController: BaseViewController<CommentView> {
       self.containerView.commentCollectionView.reloadData()
     }
   }
-  var reply: [Int: [Reply]] = [ : ]
-
-  lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(
-    target: self,
-    action: #selector(longPressGestureDidDetect(_:))
-  )
 
   // MARK: - Life Cycles
 
@@ -45,23 +45,19 @@ final class CommentViewController: BaseViewController<CommentView> {
     super.viewDidLoad()
 
     LoadingIndicator.showLoading()
-    self.interactor?.getComments(feedId: feedId)
+    self.interactor?.fetchAllComments(feedId: self.feedId)
   }
 
   // MARK: - Configure
 
   override func setupConfigure() {
-    self.longPressGestureRecognizer.do {
-      $0.minimumPressDuration = 0.5
-      $0.delaysTouchesBegan = true
-    }
-
     self.containerView.commentCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
-      $0.registCell(type: ReplyCell.self)
+      $0.registCell(type: PostCommentCell.self)
       $0.collectionViewLayout = self.containerView.commentCollectionViewLayout()
-      $0.addGestureRecognizer(self.longPressGestureRecognizer)
+      $0.scrollsToTop = true
+      $0.layoutIfNeeded()
     }
 
     self.containerView.exitButton.do {
@@ -107,17 +103,22 @@ final class CommentViewController: BaseViewController<CommentView> {
   }
 
   @objc private func keyboardWillShow(_ notification: Notification) {
-    self.setCommentsTextViewConstant(notification: notification, isAppearing: true)
+    self.setContainerViewConstant(notification: notification, isAppearing: true)
+    self.setCommentsTextViewConstant(isAppearing: true)
   }
 
   @objc private func keyboardWillHide(_ notification: Notification) {
-    self.setCommentsTextViewConstant(notification: notification, isAppearing: false)
+    self.setContainerViewConstant(notification: notification, isAppearing: false)
+    self.setCommentsTextViewConstant(isAppearing: false)
   }
 
-  private func setCommentsTextViewConstant(
-    notification: Notification,
-    isAppearing: Bool
-  ) {
+  private func setCommentsTextViewConstant(isAppearing: Bool) {
+    let textViewHeightConstant = isAppearing ? 15.f : -19.f
+
+    self.containerView.commentTextView.bottomConstraint?.constant = textViewHeightConstant
+  }
+
+  private func setContainerViewConstant(notification: Notification, isAppearing: Bool) {
     let userInfo = notification.userInfo
 
     if let keyboardFrame = userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
@@ -129,9 +130,9 @@ final class CommentViewController: BaseViewController<CommentView> {
           .keyboardAnimationDurationUserInfoKey
       ] as? NSNumber else { return }
 
-      let heightConstant = isAppearing ? (-keyboardHeight + 15) : -19
+      let viewHeightConstant = isAppearing ? (-keyboardHeight) : 0
 
-      self.containerView.commentTextView.bottomConstraint?.constant = heightConstant
+      self.containerView.contentView.frame.origin.y = viewHeightConstant + 100
 
       UIView.animate(withDuration: animationDurationValue.doubleValue) {
         self.containerView.layoutIfNeeded()
@@ -151,16 +152,10 @@ final class CommentViewController: BaseViewController<CommentView> {
   }
 
   @objc private func replyMoreButtonDidTap(_ sender: UIButton) {
-    self.comments[sender.tag].isOpen.toggle()
+    self.visibleComments[sender.tag].isOpen.toggle()
 
-    if self.comments[sender.tag].isOpen {
-      self.reply[sender.tag] = self.comments[sender.tag].commentData.reply
-    } else {
-      self.reply[sender.tag] = []
-    }
-    UIView.performWithoutAnimation {
-      self.containerView.commentCollectionView.reloadSections([sender.tag])
-    }
+    self.interactor?.fetchVisibleComments(comments: self.visibleComments)
+    self.containerView.commentCollectionView.reloadData()
   }
 
   @objc private func longPressGestureDidDetect(_ sender: UILongPressGestureRecognizer) {
@@ -187,11 +182,8 @@ final class CommentViewController: BaseViewController<CommentView> {
 // MARK: - CommentViewProtocol
 
 extension CommentViewController: CommentViewProtocol {
-  func getComments(comments: [Comment]) {
-    self.comments = comments
-    for index in 0 ..< comments.count {
-      self.reply[index] = []
-    }
+  func fetchVisibleComments(comments: [Comment]) {
+    self.visibleComments = comments
   }
 }
 
@@ -202,13 +194,7 @@ extension CommentViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    guard let reply = self.reply[section] else { return 0 }
-
-    return reply.count
-  }
-
-  func numberOfSections(in collectionView: UICollectionView) -> Int {
-    return self.comments.count
+    return self.visibleComments.count
   }
 
   func collectionView(
@@ -216,46 +202,39 @@ extension CommentViewController: UICollectionViewDataSource {
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
     let cell = collectionView.dequeueCell(
-      withType: ReplyCell.self,
+      withType: PostCommentCell.self,
       for: indexPath
     )
-    if let reply = self.reply[indexPath.section] {
-      cell.bind(reply: reply[indexPath.item])
-    }
-    return cell
-  }
-
-  func collectionView(
-    _ collectionView: UICollectionView,
-    viewForSupplementaryElementOfKind kind: String,
-    at indexPath: IndexPath
-  ) -> UICollectionReusableView {
-
-    let header = collectionView.dequeueReusableSupplementaryHeaderView(
-      withType: CommentHeaderCollectionReusableView.self,
-      for: indexPath
-    )
-    header.bind(comment: self.comments[indexPath.section])
-
-    header.replyMoreButton.tag = indexPath.section
-    header.replyMoreButton.addTarget(
+    cell.replyMoreButton.tag = indexPath.item
+    cell.replyMoreButton.addTarget(
       self,
       action: #selector(replyMoreButtonDidTap(_:)),
       for: .touchUpInside
     )
 
-    header.replyWriteButton.tag = self.comments[indexPath.section].commentData.id
-    header.replyWriteButton.addTarget(
+    cell.replyWriteButton.tag = self.visibleComments[indexPath.item].commentData.id
+
+    cell.bind(comment: self.visibleComments[indexPath.item])
+    cell.replyWriteButton.addTarget(
       self,
-      action: #selector(replyWriteButtonDidTap(_:)),
+      action: #selector(self.replyWriteButtonDidTap(_:)),
       for: .touchUpInside
     )
 
-    return header
+    return cell
   }
 }
 
 extension CommentViewController: UICollectionViewDelegateFlowLayout {
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    if self.containerView.commentCollectionView.isDragging {
+      let offset = scrollView.contentOffset.y
+
+      if offset <= 0 {
+        self.dismissKeyboard()
+      }
+    }
+  }
 }
 
 // MARK: - TextField delegate

@@ -10,22 +10,28 @@ import Foundation
 protocol CommentInteractorProtocol {
   var worker: CommentWorkerProtocol? { get set }
   var presenter: CommentPresenterProtocol? { get set }
-  
-  func getComments(feedId: Int)
+
+  func fetchAllComments(feedId: Int)
+  func fetchVisibleComments(comments: [Comment])
   func requestAddComment(comment: AddCommentRequest)
+
 }
 
 final class CommentInteractor: CommentInteractorProtocol {
   var worker: CommentWorkerProtocol?
   var presenter: CommentPresenterProtocol?
-  
-  func getComments(feedId: Int) {
-    self.worker?.getComments(
+
+  func fetchAllComments(feedId: Int) {
+    self.worker?.getAllComments(
       feedId: feedId,
-      completionHandler: { [weak self] comment in
-        self?.presenter?.presentComments(comments: comment)
+      completionHandler: { [weak self] comments in
+        self?.fetchVisibleComments(comments: comments)
       }
     )
+  }
+
+  func fetchVisibleComments(comments: [Comment]) {
+    self.presenter?.presentVisibleComments(allComments: comments)
   }
 
   func requestAddComment(comment: AddCommentRequest) {
@@ -33,7 +39,7 @@ final class CommentInteractor: CommentInteractorProtocol {
       comment: comment,
       completionHandler: { response in
         if response == "success" {
-          self.getComments(feedId: comment.feedId)
+          self.fetchAllComments(feedId: comment.feedId)
         }
       }
     )
