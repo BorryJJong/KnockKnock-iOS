@@ -8,7 +8,8 @@
 import UIKit
 
 import Then
-import YPImagePicker
+
+import KKDSKit
 
 protocol FeedWriteViewProtocol: AnyObject {
   var interactor: FeedWriteInteractorProtocol? { get set }
@@ -112,29 +113,18 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   // MARK: - ImagePicker
 
   func callImagePicker() {
-    let config = YPImagePickerConfiguration().with {
-      $0.library.maxNumberOfItems = 5
-      $0.library.mediaType = .photo
-      $0.startOnScreen = .library
-      $0.showsPhotoFilters = false
-      $0.showsCrop = .rectangle(ratio: 1)
-    }
-    let picker = YPImagePicker(configuration: config)
-
     self.pickedPhotos = []
 
-    picker.didFinishPicking { [unowned picker] items, cancelled in
-      if cancelled {
-        picker.dismiss(animated: true, completion: nil)
-        return
-      }
+    let picker = ImagePickerManager.shared.setImagePicker()
+
+    picker.didFinishPicking { [unowned picker] items, _ in
       for item in items {
         switch item {
         case let .photo(photo):
           self.pickedPhotos.append(photo.image)
           self.containerView.photoCollectionView.reloadData()
         default:
-          return
+          print("error")
         }
       }
       picker.dismiss(animated: true, completion: nil)
@@ -146,7 +136,10 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 // MARK: - Feed Write View Protocol
 
 extension FeedWriteViewController: FeedWriteViewProtocol {
-  func fetchProperty(propertyType: PropertyType, content: String) {
+  func fetchProperty(
+    propertyType: PropertyType,
+    content: String
+  ) {
     self.containerView.bind(
       propertyType: propertyType,
       content: content
@@ -220,8 +213,10 @@ extension FeedWriteViewController: UICollectionViewDelegateFlowLayout {
     layout collectionViewLayout: UICollectionViewLayout,
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
-    return CGSize(width: self.containerView.photoAddButton.frame.width + 10,
-                  height: self.containerView.photoAddButton.frame.height + 10)
+    return CGSize(
+      width: self.containerView.photoAddButton.frame.width + 10,
+                  height: self.containerView.photoAddButton.frame.height + 10
+    )
   }
 
   func collectionView(
@@ -234,7 +229,4 @@ extension FeedWriteViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension FeedWriteViewController: UICollectionViewDelegate {
-}
-
-extension YPImagePickerConfiguration: Then {
 }
