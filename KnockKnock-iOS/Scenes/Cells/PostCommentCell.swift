@@ -28,6 +28,7 @@ final class PostCommentCell: BaseCollectionViewCell {
     static let commentLabelTopMargin = 3.f
 
     static let replyMoreButtonTopMargin = 15.f
+    static let replyMoreButtonBottomMargin = 20.f
 
     static let writtenDateLabelTopMargin = 3.f
 
@@ -125,7 +126,7 @@ final class PostCommentCell: BaseCollectionViewCell {
     if count == 0 {
       self.replyMoreButton.isHidden = true
       self.replyMoreButton.snp.updateConstraints {
-        $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(20)
+        $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(Metric.replyMoreButtonBottomMargin)
       }
     } else {
       self.replyMoreButton.snp.updateConstraints {
