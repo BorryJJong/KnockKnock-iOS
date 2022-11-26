@@ -93,10 +93,12 @@ final class PostCommentCell: BaseCollectionViewCell {
     self.commentLabel.text = comment.commentData.content
 
     if comment.isReply {
+      self.replyWriteButton.isHidden = true
       self.profileImageView.trailingConstraint?.constant = 66
       self.profileImageView.bottomConstraint?.constant = 24
       self.profileImageView.leadingConstraint?.constant = 42
     } else {
+      self.replyWriteButton.isHidden = false
       self.profileImageView.trailingConstraint?.constant = 32
       self.profileImageView.bottomConstraint?.constant = 32
       self.profileImageView.leadingConstraint?.constant = 0

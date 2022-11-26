@@ -8,10 +8,10 @@
 import UIKit
 
 protocol FeedDetailWorkerProtocol {
-  func getFeedDetail(feedId: Int, complitionHandler: @escaping (FeedDetail) -> Void)
-  func getAllComments(feedId: Int, complitionHandler: @escaping ([Comment]) -> Void)
+  func getFeedDetail(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void)
+  func getLike(completionHandler: @escaping ([Like]) -> Void)
+  func getAllComments(feedId: Int, completionHandler: @escaping ([Comment]) -> Void)
   func requestAddComment(comment: AddCommentRequest, completionHandler: @escaping (String) -> Void)
-  func getLike(complitionHandler: @escaping ([Like]) -> Void)
 }
 
 final class FeedDetailWorker: FeedDetailWorkerProtocol {
@@ -32,19 +32,19 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
 
   func getFeedDetail(
     feedId: Int,
-    complitionHandler: @escaping (FeedDetail) -> Void
+    completionHandler: @escaping (FeedDetail) -> Void
   ) {
     self.feedRepository.requestFeedDetail(
       feedId: feedId,
       completionHandler: { feed in
-        complitionHandler(feed)
+        completionHandler(feed)
       }
     )
   }
 
   func getAllComments(
     feedId: Int,
-    complitionHandler: @escaping ([Comment]) -> Void
+    completionHandler: @escaping ([Comment]) -> Void
   ) {
     var data: [Comment] = []
     self.commentRepository.requestComments(
@@ -53,14 +53,14 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
         let commentData = comment.map { Comment(commentData: $0) }
         data += commentData
 
-        complitionHandler(data)
+        completionHandler(data)
       }
     )
   }
 
-  func getLike(complitionHandler: @escaping ([Like]) -> Void) {
+  func getLike(completionHandler: @escaping ([Like]) -> Void) {
     self.likeRepository.getlike(completionHandler: { like in
-      complitionHandler(like)
+      completionHandler(like)
     })
   }
 

@@ -20,8 +20,10 @@ final class KKNetworkManager {
     router: KKRouter,
     success: @escaping Success<T>,
     failure: @escaping Failure) where T: Decodable {
-      AF.request(router)
-        .validate(statusCode: 200..<500)
+      AF.request(
+        router,
+        interceptor: KKRequestInterceptor()
+      ).validate(statusCode: 200..<500)
         .responseDecodable(of: object) { response in
           switch response.result {
           case .success:

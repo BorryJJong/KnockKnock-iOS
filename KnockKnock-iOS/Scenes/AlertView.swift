@@ -29,7 +29,7 @@ final class AlertView: UIView {
   // MARK: - UIs
 
   private let dimmedView = UIView().then {
-    $0.backgroundColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.2)
+    $0.backgroundColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.5)
   }
 
   private let alertView = UIView().then {
