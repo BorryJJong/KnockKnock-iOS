@@ -8,7 +8,7 @@
 import UIKit
 import KKDSKit
 
-final class PropertyCell: BaseTableViewCell {
+final class PropertyCell: BaseTableViewCell<Void> {
   
   // MARK: - Properties
   

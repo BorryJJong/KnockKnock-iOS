@@ -25,4 +25,17 @@ extension UITableView {
   func dequeueCell<Cell: UITableViewCell>(withType type: Cell.Type, for indexPath: IndexPath) -> Cell {
     return dequeueReusableCell(withIdentifier: type.identifier, for: indexPath) as! Cell
   }
+
+  // UITabelView Header, footer regist, dequeueReuse
+
+  func register(type: UITableViewHeaderFooterView.Type, reuseIdentifier: String? = nil) {
+    let viewID = reuseIdentifier ?? type.reuseIdentifier
+    register(type, forHeaderFooterViewReuseIdentifier: viewID)
+  }
+
+  func dequeueHeaderFooterView<View: UITableViewHeaderFooterView>(
+    withType type: View.Type
+  ) -> View {
+    return dequeueReusableHeaderFooterView(withIdentifier: type.reuseIdentifier) as! View
+  }
 }

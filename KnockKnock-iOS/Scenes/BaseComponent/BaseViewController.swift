@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BaseViewController<View: UIView>: UIViewController {
+class BaseViewController<View: UIView>: UIViewController, UIGestureRecognizerDelegate {
   
   // MARK: - Properties
   
@@ -50,6 +50,7 @@ class BaseViewController<View: UIView>: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     self.view.backgroundColor = .white
+    self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     self.setupConfigure()
   }
   
