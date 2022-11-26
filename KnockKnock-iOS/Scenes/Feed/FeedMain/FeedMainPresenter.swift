@@ -22,8 +22,8 @@ final class FeedMainPresenter: FeedMainPresenterProtocol {
   weak var view: FeedMainViewProtocol?
 
   func presentFeedMain(feed: FeedMain) {
-    LoadingIndicator.hideLoading()
     self.view?.fetchFeedMain(feed: feed)
+    LoadingIndicator.hideLoading()
   }
 
   func presentGetChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?) {

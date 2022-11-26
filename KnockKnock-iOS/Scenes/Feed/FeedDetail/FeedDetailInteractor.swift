@@ -12,8 +12,8 @@ protocol FeedDetailInteractorProtocol {
   var presenter: FeedDetailPresenterProtocol? { get set }
 
   func getFeedDeatil(feedId: Int)
-  func getAllComments(feedId: Int)
-  func setVisibleComments(comments: [Comment])
+  func fetchAllComments(feedId: Int)
+  func fetchVisibleComments(comments: [Comment])
   func requestAddComment(comment: AddCommentRequest)
   func getLike()
 }
@@ -25,28 +25,29 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   func getFeedDeatil(feedId: Int) {
     self.worker?.getFeedDetail(
       feedId: feedId,
-      complitionHandler: { [weak self] feedDetail in
+      completionHandler: { [weak self] feedDetail in
         self?.presenter?.presentFeedDetail(feedDetail: feedDetail)
       })
   }
 
   func getLike() {
-    self.worker?.getLike {[weak self] like in
+    self.worker?.getLike(
+      completionHandler: { [weak self] like in
       self?.presenter?.presentLike(like: like)
-    }
+    })
   }
 
-  func getAllComments(feedId: Int) {
+  func fetchAllComments(feedId: Int) {
     self.worker?.getAllComments(
       feedId: feedId,
-      complitionHandler: { [weak self] comments in
-        self?.presenter?.presentAllComments(allComments: comments)
+      completionHandler: { [weak self] comments in
+        self?.fetchVisibleComments(comments: comments)
       }
     )
   }
 
-  func setVisibleComments(comments: [Comment]) {
-    self.presenter?.setVisibleComments(allComments: comments)
+  func fetchVisibleComments(comments: [Comment]) {
+    self.presenter?.presentVisibleComments(allComments: comments)
   }
   
   func requestAddComment(
@@ -56,7 +57,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       comment: comment,
       completionHandler: { response in
         if response == "success" {
-          self.getAllComments(feedId: comment.feedId)
+          self.fetchAllComments(feedId: comment.feedId)
         }
       }
     )

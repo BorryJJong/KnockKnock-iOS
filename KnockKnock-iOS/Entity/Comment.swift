@@ -18,7 +18,7 @@ struct CommentData: Decodable {
   let image: String?
   let content: String
   let regDate: String
-  let isDeleted: Int
+  let isDeleted: Bool
   let replyCnt: Int
   let reply: [Reply]?
 }
@@ -30,7 +30,7 @@ struct Reply: Decodable {
   let image: String?
   let content: String
   let regDate: String
-  let isDeleted: Int?
+  let isDeleted: Bool
 }
 
 struct Comment: Decodable {
