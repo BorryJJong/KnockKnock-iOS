@@ -40,32 +40,27 @@ final class PostCommentCell: BaseCollectionViewCell {
   // MARK: - UIs
 
   private let profileImageView = UIImageView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.image = KKDS.Image.ic_person_24
   }
 
   private let userIdLabel = UILabel().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.text = "userID"
     $0.font = .systemFont(ofSize: 12, weight: .bold)
   }
 
   private let commentLabel = UILabel().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.text = "댓글 내용입니다."
     $0.numberOfLines = 0
     $0.font = .systemFont(ofSize: 13, weight: .medium)
   }
 
   private let writtenDateLabel = UILabel().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.text = "1시간전"
     $0.font = .systemFont(ofSize: 12, weight: .medium)
     $0.textColor = .gray70
   }
 
   let replyWriteButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setTitleColor(.gray70, for: .normal)
     $0.setImage(KKDS.Image.etc_bar_8_gr, for: .normal)
     $0.setTitle("   댓글달기", for: .normal)
@@ -74,14 +69,12 @@ final class PostCommentCell: BaseCollectionViewCell {
   }
 
   lazy var replyMoreButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setImage(KKDS.Image.etc_bar_30_gr, for: .normal)
     $0.setTitleColor(.gray70, for: .normal)
     $0.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
   }
 
   let commentDeleteButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setImage(KKDS.Image.etc_bar_8_gr, for: .normal)
     $0.setTitle("   삭제", for: .normal)
     $0.setTitleColor(.gray70, for: .normal)
