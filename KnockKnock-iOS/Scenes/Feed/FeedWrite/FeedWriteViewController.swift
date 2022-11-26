@@ -8,7 +8,7 @@
 import UIKit
 
 import Then
-//import YPImagePicker
+
 import KKDSKit
 
 protocol FeedWriteViewProtocol: AnyObject {
@@ -136,7 +136,10 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 // MARK: - Feed Write View Protocol
 
 extension FeedWriteViewController: FeedWriteViewProtocol {
-  func fetchProperty(propertyType: PropertyType, content: String) {
+  func fetchProperty(
+    propertyType: PropertyType,
+    content: String
+  ) {
     self.containerView.bind(
       propertyType: propertyType,
       content: content
@@ -210,8 +213,10 @@ extension FeedWriteViewController: UICollectionViewDelegateFlowLayout {
     layout collectionViewLayout: UICollectionViewLayout,
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
-    return CGSize(width: self.containerView.photoAddButton.frame.width + 10,
-                  height: self.containerView.photoAddButton.frame.height + 10)
+    return CGSize(
+      width: self.containerView.photoAddButton.frame.width + 10,
+                  height: self.containerView.photoAddButton.frame.height + 10
+    )
   }
 
   func collectionView(
