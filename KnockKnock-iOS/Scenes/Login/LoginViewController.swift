@@ -8,9 +8,15 @@
 import UIKit
 
 import Then
-import KakaoSDKUser
+import KKDSKit
+
+protocol LoginViewProtocol: AnyObject {
+  var interactor: LoginInteractorProtocol? { get set }
+}
 
 final class LoginViewController: BaseViewController<LoginView> {
+
+  var interactor: LoginInteractorProtocol?
 
   // MARK: - Life Cycles
 
@@ -23,6 +29,15 @@ final class LoginViewController: BaseViewController<LoginView> {
   override func setupConfigure() {
     self.navigationController?.navigationBar.setDefaultAppearance()
 
+    self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+      image: KKDS.Image.ic_close_24_bk,
+      style: .plain,
+      target: self,
+      action: #selector(tapCloseBarButtonDidTap(_:))
+    ).then {
+      $0.tintColor = .black
+    }
+
     self.containerView.kakaoLoginButton.addTarget(
       self,
       action: #selector(self.kakaoLoginButtonDidTap(_:)),
@@ -33,14 +48,17 @@ final class LoginViewController: BaseViewController<LoginView> {
   // MARK: - Button Actions
 
   @objc func kakaoLoginButtonDidTap(_ sender: UIButton) {
-    if (UserApi.isKakaoTalkLoginAvailable()) {
-      UserApi.shared.loginWithKakaoAccount(completion: { (oauthToken, error) in
-        if let error = error {
-          print(error)
-        } else {
-          print(oauthToken)
-        }
-      })
-    }
+    self.interactor?.fetchLoginResult(
+      source: self,
+      socialType: SocialType.kakao
+    )
   }
+
+  @objc func tapCloseBarButtonDidTap(_ sender: UIButton) {
+    self.interactor?.popLoginView(source: self)
+  }
+}
+
+extension LoginViewController: LoginViewProtocol {
+
 }

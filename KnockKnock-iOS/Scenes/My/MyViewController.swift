@@ -23,6 +23,13 @@ final class MyViewController: BaseViewController<MyView> {
   // MARK: - Properties
   
   var router: MyRouterProtocol?
+
+  var isLoggedIn: Bool = LocalDataManager().checkTokenIsExisted() {
+    didSet {
+      self.containerView.myTableView.reloadData()
+      self.containerView.bind(isLoggedin: self.isLoggedIn)
+    }
+  }
   
   private let menuData: MyMenu = {
     let profile = MyItem(title: "프로필 수정", type: .plain)
@@ -59,13 +66,18 @@ final class MyViewController: BaseViewController<MyView> {
     super.viewDidLoad()
     self.setupConfigure()
   }
-  
+
+  override func viewWillAppear(_ animated: Bool) {
+    self.tabBarController?.tabBar.isHidden = false
+  }
+
   // MARK: - Configure
   
   override func setupConfigure() {
-    self.navigationController?.navigationBar.barTintColor = .white
-    self.navigationController?.navigationBar.shadowImage = UIImage()
-    self.navigationItem.title = "마이페이지"
+    self.navigationController?.navigationBar.setDefaultAppearance()
+    self.navigationItem.title = "마이"
+
+    self.containerView.bind(isLoggedin: self.isLoggedIn) // 로그인 상태에 따라 헤더 내용 바인딩
     
     self.containerView.myTableView.do {
       $0.dataSource = self
@@ -73,7 +85,40 @@ final class MyViewController: BaseViewController<MyView> {
       $0.registCell(type: UITableViewCell.self, identifier: MY.MyCellID)
       $0.register(type: MyTableViewHeader.self)
       $0.register(type: MyTableViewFooter.self)
+      $0.tableHeaderView = self.containerView.myTableHeaderView
     }
+
+    self.containerView.loginButton.do {
+      $0.addTarget(self, action: #selector(self.loginButtonDidTap), for: .touchUpInside)
+    }
+
+    NotificationCenter.default.addObserver(
+      forName: Notification.Name("loginCompleted"),
+      object: nil,
+      queue: nil
+    ) { _ in
+      self.isLoggedIn = true
+    }
+
+    NotificationCenter.default.addObserver(
+      forName: Notification.Name("logoutCompleted"),
+      object: nil,
+      queue: nil
+    ) { _ in
+      self.isLoggedIn = false
+    }
+  }
+
+  // MARK: - Button Actions
+
+  @objc private func loginButtonDidTap(_ sender: UIButton) {
+    self.router?.navigateToLoginView(source: self)
+  }
+
+  // 테스트용 임시 로그아웃 기능 연결
+  @objc func logoutButtonDidTap(_ sender: UIButton) {
+    LocalDataManager().deleteToken()
+    NotificationCenter.default.post(name: Notification.Name("logoutCompleted"), object: nil)
   }
 }
 
@@ -148,8 +193,15 @@ extension MyViewController: UITableViewDataSource {
   ) -> UIView? {
     
     let footerView = tableView.dequeueHeaderFooterView(withType: MyTableViewFooter.self)
+
+    footerView.logoutButton.addTarget(
+      self,
+      action: #selector(self.logoutButtonDidTap(_:)),
+      for: .touchUpInside
+    )
     
     footerView.model = self.menuData[section]
+    footerView.setLogoutButtonHiddenStatus(isLoggedIn: self.isLoggedIn)
     
     return footerView
   }
@@ -160,7 +212,11 @@ extension MyViewController: UITableViewDataSource {
   ) -> CGFloat {
     
     if self.menuData[section].title == MySectionType.policy {
-      return 130
+      if isLoggedIn {
+        return 130
+      } else {
+        return 50
+      }
       
     } else {
       return 50

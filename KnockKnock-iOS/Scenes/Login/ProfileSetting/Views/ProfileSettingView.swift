@@ -56,6 +56,7 @@ final class ProfileSettingView: UIView {
     $0.clearButtonMode = .whileEditing
     $0.leftView = paddingView
     $0.leftViewMode = .always
+    $0.autocorrectionType = .no
   }
 
   private let noticeLabel = UILabel().then {
@@ -70,6 +71,12 @@ final class ProfileSettingView: UIView {
     $0.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
     $0.layer.cornerRadius = 3
     $0.backgroundColor = .gray40
+    $0.isEnabled = false
+  }
+
+  let alertView = AlertView().then {
+    $0.isHidden = true
+    $0.bind(content: "프로필 등록을 완료하였습니다.", isCancelActive: false)
   }
 
   // MARK: - Initialize
@@ -83,11 +90,25 @@ final class ProfileSettingView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  // MARK: - Bind
+
+  func setHiddenStatusAlertView(isHidden: Bool) {
+    self.alertView.isHidden = isHidden
+  }
+
+  func bind(isClicked: Bool) {
+    if isClicked {
+      self.nicknameTextField.layer.borderColor = KKDS.Color.green50.cgColor
+    } else {
+      self.nicknameTextField.layer.borderColor = KKDS.Color.gray40.cgColor
+    }
+  }
+
   // MARK: - Configure
 
   private func setupConstraints() {
 
-    [self.profileImageView, self.cameraImageView, self.profileButton, self.nicknameTextField, self.noticeLabel, self.confirmButton].addSubViews(self)
+    [self.profileImageView, self.cameraImageView, self.profileButton, self.nicknameTextField, self.noticeLabel, self.confirmButton, self.alertView].addSubViews(self)
 
     self.profileImageView.snp.makeConstraints {
       $0.centerX.equalTo(self.safeAreaLayoutGuide)
@@ -120,6 +141,10 @@ final class ProfileSettingView: UIView {
       $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.confirmButtonLeadingMargin)
       $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(Metric.confirmButtonBottomMargin)
       $0.height.equalTo(Metric.confirmButtonHeight)
+    }
+
+    self.alertView.snp.makeConstraints {
+      $0.edges.equalToSuperview()
     }
   }
 }

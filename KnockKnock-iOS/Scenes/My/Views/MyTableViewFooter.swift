@@ -43,6 +43,14 @@ final class MyTableViewFooter: BaseTableViewHeaderFooterView<MySection> {
     self.separatorView.isHidden = isLastSection
   }
 
+  // MARK: - Configure
+
+  func setLogoutButtonHiddenStatus(isLoggedIn: Bool) {
+    if !self.logoutButton.isHidden {
+        self.logoutButton.isHidden = !isLoggedIn
+    }
+  }
+
   // MARK: - Constraints
   
   override func setupConstraints() {
