@@ -30,6 +30,9 @@ final class PostCommentCell: BaseCollectionViewCell {
     static let replyMoreButtonTopMargin = 15.f
     static let replyMoreButtonBottomMargin = 20.f
 
+    static let replyWriteButtonContentPadding = 10.f
+    static let commentDeleteButtonContentPadding = 10.f
+
     static let writtenDateLabelTopMargin = 3.f
 
     static let replyWriteButtonLeadingMargin = 10.f
@@ -63,7 +66,19 @@ final class PostCommentCell: BaseCollectionViewCell {
   let replyWriteButton = UIButton().then {
     $0.setTitleColor(.gray70, for: .normal)
     $0.setImage(KKDS.Image.etc_bar_8_gr, for: .normal)
-    $0.setTitle("   댓글달기", for: .normal)
+    $0.setTitle("댓글달기", for: .normal)
+    $0.contentEdgeInsets = UIEdgeInsets(
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: Metric.replyWriteButtonContentPadding
+    )
+    $0.titleEdgeInsets = UIEdgeInsets(
+      top: 0,
+      left: Metric.replyWriteButtonContentPadding,
+      bottom: 0,
+      right: -(Metric.replyWriteButtonContentPadding)
+    )
     $0.semanticContentAttribute = .forceLeftToRight
     $0.titleLabel?.font = .systemFont(ofSize: 12, weight: .semibold)
   }
@@ -71,12 +86,36 @@ final class PostCommentCell: BaseCollectionViewCell {
   lazy var replyMoreButton = UIButton().then {
     $0.setImage(KKDS.Image.etc_bar_30_gr, for: .normal)
     $0.setTitleColor(.gray70, for: .normal)
+    $0.contentEdgeInsets = UIEdgeInsets(
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: Metric.commentDeleteButtonContentPadding
+    )
+    $0.titleEdgeInsets = UIEdgeInsets(
+      top: 0,
+      left: Metric.commentDeleteButtonContentPadding,
+      bottom: 0,
+      right: -(Metric.commentDeleteButtonContentPadding)
+    )
     $0.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
   }
 
   let commentDeleteButton = UIButton().then {
     $0.setImage(KKDS.Image.etc_bar_8_gr, for: .normal)
-    $0.setTitle("   삭제", for: .normal)
+    $0.setTitle("삭제", for: .normal)
+    $0.contentEdgeInsets = UIEdgeInsets(
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: Metric.commentDeleteButtonContentPadding
+    )
+    $0.titleEdgeInsets = UIEdgeInsets(
+      top: 0,
+      left: Metric.commentDeleteButtonContentPadding,
+      bottom: 0,
+      right: -(Metric.commentDeleteButtonContentPadding)
+    )
     $0.setTitleColor(.gray70, for: .normal)
     $0.titleLabel?.font = .systemFont(ofSize: 12, weight: .semibold)
   }
@@ -127,10 +166,10 @@ final class PostCommentCell: BaseCollectionViewCell {
       }
       if !isOpen {
         self.replyMoreButton.isHidden = false
-        self.replyMoreButton.setTitle("   답글 \(count)개 보기", for: .normal)
+        self.replyMoreButton.setTitle("답글 \(count)개 보기", for: .normal)
       } else {
         self.replyMoreButton.isHidden = false
-        self.replyMoreButton.setTitle("   답글 숨기기", for: .normal)
+        self.replyMoreButton.setTitle("답글 숨기기", for: .normal)
       }
     }
   }
