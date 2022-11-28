@@ -7,8 +7,10 @@
 
 import UIKit
 
-protocol MyViewProtocol {
+protocol MyViewProtocol: AnyObject {
   var interactor: MyInteractorProtocol? { get set }
+
+  func fetchMenuData(menuData: MyMenu)
 }
 
 final class MyViewController: BaseViewController<MyView> {
@@ -31,34 +33,11 @@ final class MyViewController: BaseViewController<MyView> {
     }
   }
   
-  private let menuData: MyMenu = {
-    let profile = MyItem(title: "프로필 수정", type: .plain)
-    let signout = MyItem(title: "탈퇴하기", type: .plain)
-    let push = MyItem(title: "앱 PUSH 알림", type: .alert)
-    
-    let notice = MyItem(title: "공지사항", type: .plain)
-    let version = MyItem(title: "버전정보", type: .version)
-    
-    let service = MyItem(title: "서비스 이용약관", type: .plain)
-    let privacy = MyItem(title: "개인정보 처리방침", type: .plain)
-    let location = MyItem(title: "위치기반 서비스 이용약관", type: .plain)
-    let openSource = MyItem(title: "오픈소스 라이선스", type: .plain)
-    
-    let myInfoSection = MySection(
-      title: MySectionType.myInfo,
-      myItems: [profile, signout, push]
-    )
-    let customerSection = MySection(
-      title: MySectionType.customer,
-      myItems: [notice, version]
-    )
-    let policySection = MySection(
-      title: MySectionType.policy,
-      myItems: [service, privacy, location, openSource]
-    )
-    
-    return [myInfoSection, customerSection, policySection]
-  }()
+  var menuData: MyMenu = [] {
+    didSet {
+      self.containerView.myTableView.reloadData()
+    }
+  }
   
   // MARK: - Life Cycles
   
@@ -78,7 +57,8 @@ final class MyViewController: BaseViewController<MyView> {
     self.navigationItem.title = "마이"
 
     self.containerView.bind(isLoggedin: self.isLoggedIn) // 로그인 상태에 따라 헤더 내용 바인딩
-    
+    self.interactor?.fetchMenuData()
+
     self.containerView.myTableView.do {
       $0.dataSource = self
       $0.delegate = self
@@ -125,7 +105,11 @@ final class MyViewController: BaseViewController<MyView> {
 // MARK: - My View Protocol
 
 extension MyViewController: MyViewProtocol {
-  
+
+  func fetchMenuData(menuData: MyMenu) {
+    self.menuData = menuData
+  }
+
 }
 
 // MARK: - TableView DataSource
@@ -184,7 +168,7 @@ extension MyViewController: UITableViewDataSource {
     let headerView = tableView.dequeueHeaderFooterView(withType: MyTableViewHeader.self)
     
     headerView.model = self.menuData[section]
-    
+
     return headerView
   }
   
@@ -211,17 +195,17 @@ extension MyViewController: UITableViewDataSource {
     _ tableView: UITableView,
     heightForFooterInSection section: Int
   ) -> CGFloat {
-    
+
     if self.menuData[section].title == MySectionType.policy {
       if isLoggedIn {
         return 130
       } else {
         return 50
       }
-      
+
     } else {
       return 50
-      
+
     }
   }
 }
@@ -235,21 +219,20 @@ extension MyViewController: UITableViewDelegate {
   ) {
     
     let menu = self.menuData[indexPath.section]
-    
+
     switch menu.title {
     case .myInfo:
       if menu.myItems[indexPath.item].title == "프로필 수정" {
         self.interactor?.navigateToProfileSettingView(source: self)
       }
-      
+
     case .customer:
       if menu.myItems[indexPath.item].title == "공지사항" {
         self.interactor?.navigateToNoticeView(source: self)
       }
-      
+
     case .policy:
       print("policy")
     }
-    
   }
 } 

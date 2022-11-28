@@ -19,10 +19,15 @@ final class MyRouter: MyRouterProtocol {
   static func createMy() -> UIViewController {
     let view = MyViewController()
     let interactor = MyInteractor()
+    let presenter = MyPresenter()
+    let worker = MyWorker()
     let router = MyRouter()
 
     view.interactor = interactor
     interactor.router = router
+    interactor.worker = worker
+    interactor.presenter = presenter
+    presenter.view = view
 
     return view
   }
