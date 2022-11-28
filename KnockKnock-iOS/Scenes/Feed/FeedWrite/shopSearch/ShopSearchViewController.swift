@@ -42,6 +42,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   var addressResult: AddressResult? {
     didSet {
       let isNoResult = addressResult?.meta.totalCount == 0
+
       self.containerView.bind(isNoResult: isNoResult)
 
       self.addressList += addressResult?.documents.map { $0.placeName } ?? []
@@ -122,28 +123,20 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
     self.hideKeyboardWhenTappedAround()
   }
 
-  private func setSearchKeyword() -> String {
-    let address = self.containerView.addressTextField.text ?? ""
-
-    if let city = self.containerView.cityLabel.text, city != "시/도 전체" {
-      if let region = self.containerView.countyLabel.text, region != "시/군/구 전체" {
-        return "\(city) \(region) \(address)"
-      }
-      return "\(city) \(address)"
-    }
-    return address
-  }
-
   // MARK: - Button Actions
 
   @objc private func searchButtonDidTap(_ sender: UIButton) {
-    let searchKeyword = self.setSearchKeyword()
-    if searchKeyword != "" {
-      self.containerView.resultTableView.isHidden = false
-    }
+    let address = self.containerView.addressTextField.text
+
     self.addressList = []
 
-    self.interactor?.fetchShopAddress(keyword: searchKeyword, isNew: true)
+    // 검색어가 비어있을 경우에 원래 상태로 복귀
+    if address != "" {
+      self.interactor?.fetchShopAddress(address: address, isNew: true)
+    } else {
+      self.containerView.setDefaultStatus()
+    }
+
     self.dismissKeyboard()
   }
 
@@ -235,7 +228,7 @@ extension ShopSearchViewController: UITableViewDataSource {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
           self.interactor?.fetchShopAddress(
-            keyword: self.setSearchKeyword(),
+            address: self.containerView.addressTextField.text,
             isNew: false
           )
         })
@@ -257,7 +250,7 @@ extension ShopSearchViewController: UITableViewDelegate {
 extension ShopSearchViewController: UITextFieldDelegate {
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {
     self.interactor?.fetchShopAddress(
-      keyword: self.setSearchKeyword(),
+      address: self.containerView.addressTextField.text,
       isNew: true
     )
 

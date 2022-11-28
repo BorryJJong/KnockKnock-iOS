@@ -102,6 +102,7 @@ public extension KKDS.Image {
 
 public extension KKDS.Image {
   static var ic_my_img_86: UIImage                { .load(name: "ic_my_img_86") }
+  static var ic_store_60: UIImage                 { .load(name: "ic_store_60")  }
 }
 
 // MARK: - background
