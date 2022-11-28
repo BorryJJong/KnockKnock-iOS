@@ -8,7 +8,7 @@
 import UIKit
 
 protocol MyViewProtocol {
-  
+  var interactor: MyInteractorProtocol? { get set }
 }
 
 final class MyViewController: BaseViewController<MyView> {
@@ -21,8 +21,8 @@ final class MyViewController: BaseViewController<MyView> {
   }
 
   // MARK: - Properties
-  
-  var router: MyRouterProtocol?
+
+  var interactor: MyInteractorProtocol?
 
   var isLoggedIn: Bool = LocalDataManager().checkTokenIsExisted() {
     didSet {
@@ -112,7 +112,7 @@ final class MyViewController: BaseViewController<MyView> {
   // MARK: - Button Actions
 
   @objc private func loginButtonDidTap(_ sender: UIButton) {
-    self.router?.navigateToLoginView(source: self)
+    self.interactor?.navigateToLoginView(source: self)
   }
 
   // 테스트용 임시 로그아웃 기능 연결
@@ -153,6 +153,7 @@ extension MyViewController: UITableViewDataSource {
     let cell = UITableViewCell(style: .value1, reuseIdentifier: MY.MyCellID)
     let menu = self.menuData[indexPath.section].myItems[indexPath.row]
 
+    cell.selectionStyle = .none
     cell.textLabel?.do {
       $0.font = .systemFont(ofSize: 15, weight: .bold)
       $0.textColor = .black
@@ -237,11 +238,13 @@ extension MyViewController: UITableViewDelegate {
     
     switch menu.title {
     case .myInfo:
-      print("profile")
+      if menu.myItems[indexPath.item].title == "프로필 수정" {
+        self.interactor?.navigateToProfileSettingView(source: self)
+      }
       
     case .customer:
       if menu.myItems[indexPath.item].title == "공지사항" {
-        self.router?.navigateToNoticeView(source: self)
+        self.interactor?.navigateToNoticeView(source: self)
       }
       
     case .policy:
