@@ -115,7 +115,6 @@ extension MyViewController: MyViewProtocol {
   func checkLoginStatus(isLoggedIn: Bool) {
     self.isLoggedIn = isLoggedIn
   }
-  
 }
 
 // MARK: - TableView DataSource
@@ -128,6 +127,11 @@ extension MyViewController: UITableViewDataSource {
     _ tableView: UITableView,
     numberOfRowsInSection section: Int
   ) -> Int {
+    if section == 0 {
+      if !self.isLoggedIn {
+        return 0
+      }
+    }
     return self.menuData[section].myItems.count
   }
   
@@ -177,7 +181,19 @@ extension MyViewController: UITableViewDataSource {
 
     return headerView
   }
-  
+
+  func tableView(
+    _ tableView: UITableView,
+    heightForHeaderInSection section: Int
+  ) -> CGFloat {
+    if self.menuData[section].title == MySectionType.myInfo {
+      if !isLoggedIn {
+        return 0
+      }
+    }
+    return 50
+  }
+
   func tableView(
     _ tableView: UITableView,
     viewForFooterInSection section: Int
@@ -201,18 +217,24 @@ extension MyViewController: UITableViewDataSource {
     _ tableView: UITableView,
     heightForFooterInSection section: Int
   ) -> CGFloat {
+    let title = self.menuData[section].title
 
-    if self.menuData[section].title == MySectionType.policy {
-      if isLoggedIn {
-        return 130
-      } else {
-        return 50
+    switch title {
+    case .myInfo:
+      if !self.isLoggedIn {
+        return 0
       }
 
-    } else {
+    case .policy:
+      if isLoggedIn {
+        return 130
+      }
+      
+    default:
       return 50
-
     }
+
+    return 50
   }
 }
 
