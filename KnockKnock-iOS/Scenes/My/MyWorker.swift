@@ -8,10 +8,17 @@
 import UIKit
 
 protocol MyWorkerProtocol {
-  func fetchMenuData(completionHandler: @escaping (MyMenu)-> Void)
+  func fetchMenuData(completionHandler: @escaping (MyMenu) -> Void)
+  func checkLoginStatus(completionHandler: @escaping(Bool) -> Void)
 }
 
 final class MyWorker: MyWorkerProtocol {
+
+  private let localDataManager: LocalDataManager?
+
+  init(localDataManager: LocalDataManager) {
+    self.localDataManager = localDataManager
+  }
 
   private let menuData: MyMenu = {
     let profile = MyItem(title: MyMenuType.profile.rawValue, type: .plain)
@@ -44,5 +51,11 @@ final class MyWorker: MyWorkerProtocol {
 
   func fetchMenuData(completionHandler: @escaping (MyMenu) -> Void) {
     completionHandler(self.menuData)
+  }
+
+  func checkLoginStatus(completionHandler: @escaping(Bool) -> Void) {
+    if let isLoggedIn = self.localDataManager?.checkTokenIsExisted() {
+      completionHandler(isLoggedIn)
+    }
   }
 }

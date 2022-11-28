@@ -11,6 +11,7 @@ protocol MyPresenterProtocol {
   var view: MyViewProtocol? { get set }
 
   func presentMenuData(myMenu: MyMenu)
+  func presentLoginStatus(isLoggedIn: Bool) 
 }
 
 final class MyPresenter: MyPresenterProtocol {
@@ -19,5 +20,9 @@ final class MyPresenter: MyPresenterProtocol {
 
   func presentMenuData(myMenu: MyMenu) {
     self.view?.fetchMenuData(menuData: myMenu)
+  }
+
+  func presentLoginStatus(isLoggedIn: Bool) {
+    self.view?.checkLoginStatus(isLoggedIn: isLoggedIn)
   }
 }

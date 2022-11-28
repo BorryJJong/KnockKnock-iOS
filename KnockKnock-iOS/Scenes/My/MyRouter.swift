@@ -20,7 +20,7 @@ final class MyRouter: MyRouterProtocol {
     let view = MyViewController()
     let interactor = MyInteractor()
     let presenter = MyPresenter()
-    let worker = MyWorker()
+    let worker = MyWorker(localDataManager: LocalDataManager())
     let router = MyRouter()
 
     view.interactor = interactor

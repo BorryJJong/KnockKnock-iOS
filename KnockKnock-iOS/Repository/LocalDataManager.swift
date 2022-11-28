@@ -9,6 +9,7 @@ import Foundation
 
 protocol LocalDataManagerProtocol {
   func saveToken(accessToken: String, refreshToken: String, nickname: String?)
+  func checkTokenIsExisted() -> Bool
 }
 
 final class LocalDataManager: LocalDataManagerProtocol {

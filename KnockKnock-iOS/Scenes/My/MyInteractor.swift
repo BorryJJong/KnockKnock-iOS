@@ -13,6 +13,7 @@ protocol MyInteractorProtocol {
   var presenter: MyPresenter? { get set }
 
   func fetchMenuData()
+  func checkLoginStatus()
 
   func navigateToLoginView(source: MyViewProtocol)
   func navigateToNoticeView(source: MyViewProtocol)
@@ -28,6 +29,13 @@ final class MyInteractor: MyInteractorProtocol {
   func fetchMenuData() {
     self.worker?.fetchMenuData(completionHandler: { menu in
       self.presenter?.presentMenuData(myMenu: menu)
+    })
+    self.checkLoginStatus()
+  }
+
+  func checkLoginStatus() {
+    self.worker?.checkLoginStatus(completionHandler: { loginStatus in
+      self.presenter?.presentLoginStatus(isLoggedIn: loginStatus)
     })
   }
 

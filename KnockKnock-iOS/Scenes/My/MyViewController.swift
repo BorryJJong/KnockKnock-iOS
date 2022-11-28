@@ -11,6 +11,7 @@ protocol MyViewProtocol: AnyObject {
   var interactor: MyInteractorProtocol? { get set }
 
   func fetchMenuData(menuData: MyMenu)
+  func checkLoginStatus(isLoggedIn: Bool)
 }
 
 final class MyViewController: BaseViewController<MyView> {
@@ -26,7 +27,7 @@ final class MyViewController: BaseViewController<MyView> {
 
   var interactor: MyInteractorProtocol?
 
-  var isLoggedIn: Bool = LocalDataManager().checkTokenIsExisted() {
+  var isLoggedIn: Bool = false {
     didSet {
       self.containerView.myTableView.reloadData()
       self.containerView.bind(isLoggedin: self.isLoggedIn)
@@ -47,6 +48,7 @@ final class MyViewController: BaseViewController<MyView> {
   }
 
   override func viewWillAppear(_ animated: Bool) {
+    self.interactor?.checkLoginStatus()
     self.tabBarController?.tabBar.isHidden = false
   }
 
@@ -110,6 +112,10 @@ extension MyViewController: MyViewProtocol {
     self.menuData = menuData
   }
 
+  func checkLoginStatus(isLoggedIn: Bool) {
+    self.isLoggedIn = isLoggedIn
+  }
+  
 }
 
 // MARK: - TableView DataSource
