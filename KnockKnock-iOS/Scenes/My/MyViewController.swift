@@ -101,7 +101,7 @@ final class MyViewController: BaseViewController<MyView> {
   // 테스트용 임시 로그아웃 기능 연결
   @objc func logoutButtonDidTap(_ sender: UIButton) {
     LocalDataManager().deleteToken()
-    NotificationCenter.default.post(name: Notification.Name("logoutCompleted"), object: nil)
+    NotificationCenter.default.post(name: .logoutCompleted, object: nil)
   }
 }
 

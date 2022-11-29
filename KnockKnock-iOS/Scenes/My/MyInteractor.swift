@@ -65,7 +65,7 @@ final class MyInteractor: MyInteractorProtocol {
 
   func setNotification() {
     NotificationCenter.default.addObserver(
-      forName: Notification.Name("loginCompleted"),
+      forName: .loginCompleted,
       object: nil,
       queue: nil
     ) { _ in
@@ -73,7 +73,7 @@ final class MyInteractor: MyInteractorProtocol {
     }
 
     NotificationCenter.default.addObserver(
-      forName: Notification.Name("logoutCompleted"),
+      forName: .logoutCompleted,
       object: nil,
       queue: nil
     ) { _ in
