@@ -33,6 +33,17 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
   var pickedPhotos: [UIImage] = []
 
+  // MARK: - UIs
+
+  private lazy var dismissBarButtonItem = UIBarButtonItem(
+    image: KKDS.Image.ic_close_24_bk,
+    style: .plain,
+    target: self,
+    action: #selector(self.dismissBarButtonDidTap(_:))
+  ).then {
+    $0.tintColor = .black
+  }
+
   // MARK: - Life cycle
 
   override func viewDidLoad() {
@@ -43,7 +54,11 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
   override func setupConfigure() {
     self.hideKeyboardWhenTappedAround()
-    self.navigationItem.title = "새 게시글"
+
+    self.navigationItem.do {
+      $0.title = "새 게시글"
+      $0.leftBarButtonItem = self.dismissBarButtonItem
+    }
     self.navigationController?.navigationBar.setDefaultAppearance()
 
     self.containerView.photoCollectionView.do {
@@ -95,6 +110,10 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
       promotionList: self.selectedPromotion,
       tagList: nil
     )
+  }
+
+  @objc func dismissBarButtonDidTap(_ sender: UIBarButtonItem) {
+    self.dismiss(animated: true)
   }
 
   @objc func shopSearchButtonDidTap(_ sender: UIButton) {

@@ -85,6 +85,7 @@ final class MainTabBarController: UITabBarController {
   
   private func attribute() {
     self.delegate = self
+
     self.tabBar.do {
       $0.backgroundColor = .white
       $0.tintColor = .green50
