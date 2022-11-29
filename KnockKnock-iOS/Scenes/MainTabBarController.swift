@@ -60,14 +60,9 @@ final class MainTabBarController: UITabBarController {
   let challenge = ChallengeRouter.createChallenge()
   let my = MyRouter.createMy()
 
-  lazy var middleButton = UIButton().then {
+  let postButton = UIButton().then {
     $0.frame.size = CGSize(width: 40, height: 40)
     $0.setImage(KKDS.Image.ic_bottom_more_40, for: .normal)
-    $0.addTarget(
-      self,
-      action: #selector(self.middleButtonDidTap),
-      for: .touchUpInside
-    )
   }
 
   // MARK: - Initialize
@@ -119,7 +114,7 @@ final class MainTabBarController: UITabBarController {
     ]
   }
 
-  @objc func middleButtonDidTap(_ sender: UIButton) {
+  @objc func postButtonDidTap(_ sender: UIButton) {
     let postNVC = UINavigationController(rootViewController: self.post)
     postNVC.modalPresentationStyle = .fullScreen
 
@@ -127,15 +122,15 @@ final class MainTabBarController: UITabBarController {
   }
 
   private func setMiddleButton() {
-    self.tabBar.addSubview(middleButton)
-    self.middleButton.snp.makeConstraints {
+    self.tabBar.addSubview(postButton)
+    self.postButton.snp.makeConstraints {
       $0.centerX.equalToSuperview()
       $0.centerY.equalToSuperview().offset(-15)
     }
 
-    self.middleButton.addTarget(
+    self.postButton.addTarget(
       self,
-      action: #selector(self.middleButtonDidTap(_:)),
+      action: #selector(self.postButtonDidTap(_:)),
       for: .touchUpInside
     )
   }
