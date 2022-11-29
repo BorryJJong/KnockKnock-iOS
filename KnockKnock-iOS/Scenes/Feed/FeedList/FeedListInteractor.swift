@@ -17,7 +17,9 @@ protocol FeedListInteractorProtocol {
     feedId: Int,
     challengeId: Int
   )
+
   func requestLike(feedId: Int)
+  func requestLikeCancel(feedId: Int)
 }
 
 final class FeedListInteractor: FeedListInteractorProtocol {
@@ -46,6 +48,13 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   func requestLike(feedId: Int) {
     self.worker?.requestLike(id: feedId, completionHandler: { result in
       self.presenter?.presentFeedLikeResult(isSuccess: result)
+    })
+  }
+
+  func requestLikeCancel(feedId: Int) {
+    self.worker?.requestLike(id: feedId, completionHandler: { result in
+      self.presenter?.presentFeedLikeResult(isSuccess: result)
+      print("isCanceled")
     })
   }
 }

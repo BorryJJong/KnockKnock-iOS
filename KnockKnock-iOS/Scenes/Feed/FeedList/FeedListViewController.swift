@@ -123,7 +123,8 @@ final class FeedListViewController: BaseViewController<FeedListView> {
       isSelected: sender.isSelected
     )
     sender.setTitle(title, for: .normal)
-    self.interactor?.requestLike(feedId: sender.tag)
+//    self.interactor?.requestLike(feedId: sender.tag)
+    self.interactor?.requestLikeCancel(feedId: sender.tag)
   }
 
   func setLikeButtonTitle(currentNum: String?, isSelected: Bool) -> String {
