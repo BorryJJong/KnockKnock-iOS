@@ -10,6 +10,7 @@ import UIKit
 protocol MyWorkerProtocol {
   func fetchMenuData(completionHandler: @escaping (MyMenu) -> Void)
   func checkLoginStatus(completionHandler: @escaping(Bool) -> Void)
+  func fetchNickname(completionHandler: @escaping(String) -> Void)
 }
 
 final class MyWorker: MyWorkerProtocol {
@@ -51,6 +52,12 @@ final class MyWorker: MyWorkerProtocol {
 
   func fetchMenuData(completionHandler: @escaping (MyMenu) -> Void) {
     completionHandler(self.menuData)
+  }
+
+  func fetchNickname(completionHandler: @escaping(String) -> Void) {
+    if let nickname = self.localDataManager?.roadNickname() {
+      completionHandler(nickname)
+    }
   }
 
   func checkLoginStatus(completionHandler: @escaping(Bool) -> Void) {

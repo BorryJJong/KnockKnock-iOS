@@ -25,4 +25,8 @@ final class MyPresenter: MyPresenterProtocol {
   func presentLoginStatus(isLoggedIn: Bool) {
     self.view?.checkLoginStatus(isLoggedIn: isLoggedIn)
   }
+
+  func presentNickname(nickname: String) {
+    self.view?.fetchNickname(nickname: nickname)
+  }
 }

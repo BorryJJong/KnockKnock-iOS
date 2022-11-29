@@ -12,6 +12,7 @@ protocol MyViewProtocol: AnyObject {
 
   func fetchMenuData(menuData: MyMenu)
   func checkLoginStatus(isLoggedIn: Bool)
+  func fetchNickname(nickname: String)
 }
 
 final class MyViewController: BaseViewController<MyView> {
@@ -29,8 +30,14 @@ final class MyViewController: BaseViewController<MyView> {
 
   var isLoggedIn: Bool = false {
     didSet {
+      self.containerView.setLoginStatus(isLoggedin: self.isLoggedIn)
       self.containerView.myTableView.reloadData()
-      self.containerView.bind(isLoggedin: self.isLoggedIn)
+    }
+  }
+
+  var nickname: String = "" {
+    didSet {
+      self.containerView.setNickname(nickname: self.nickname)
     }
   }
   
@@ -58,7 +65,9 @@ final class MyViewController: BaseViewController<MyView> {
     self.navigationController?.navigationBar.setDefaultAppearance()
     self.navigationItem.title = "마이"
 
-    self.containerView.bind(isLoggedin: self.isLoggedIn) // 로그인 상태에 따라 헤더 내용 바인딩
+    self.containerView.setLoginStatus(isLoggedin: self.isLoggedIn)      // 로그인 상태에 따라 헤더 내용 바인딩
+    self.containerView.setNickname(nickname: self.nickname)
+    
     self.interactor?.fetchMenuData()
 
     self.containerView.myTableView.do {
@@ -114,6 +123,10 @@ extension MyViewController: MyViewProtocol {
 
   func checkLoginStatus(isLoggedIn: Bool) {
     self.isLoggedIn = isLoggedIn
+  }
+
+  func fetchNickname(nickname: String) {
+    self.nickname = nickname
   }
 }
 
@@ -229,7 +242,7 @@ extension MyViewController: UITableViewDataSource {
       if isLoggedIn {
         return 130
       }
-      
+
     default:
       return 50
     }
