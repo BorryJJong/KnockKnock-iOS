@@ -55,7 +55,7 @@ final class MyWorker: MyWorkerProtocol {
   }
 
   func fetchNickname(completionHandler: @escaping(String) -> Void) {
-    if let nickname = self.localDataManager?.roadNickname() {
+    if let nickname = self.localDataManager?.fetchNickname() {
       completionHandler(nickname)
     }
   }
