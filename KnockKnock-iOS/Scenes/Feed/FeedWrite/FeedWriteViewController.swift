@@ -13,12 +13,8 @@ import KKDSKit
 
 protocol FeedWriteViewProtocol: AnyObject {
   var interactor: FeedWriteInteractorProtocol? { get set }
-  var router: FeedWriteRouterProtocol? { get set }
 
   func fetchProperty(propertyType: PropertyType, content: String)
-
-  func fetchSelectedPromotions(promotionList: [Promotion])
-  func fetchSelectedTags(tagList: [ChallengeTitle])
 }
 
 final class FeedWriteViewController: BaseViewController<FeedWriteView> {
@@ -26,10 +22,6 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   // MARK: - Properties
   
   var interactor: FeedWriteInteractorProtocol?
-  var router: FeedWriteRouterProtocol?
-
-  private var selectedPromotion: [Promotion] = []
-  private var selectedTag: [ChallengeTitle] = []
 
   var pickedPhotos: [UIImage] = []
 
@@ -95,29 +87,25 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   // MARK: - Button Actions
 
   @objc func tagSelectButtonDidTap(_ sender: UIButton) {
-    self.router?.navigateToProperty(
+    self.interactor?.navigateToProperty(
       source: self,
-      propertyType: .tag,
-      promotionList: nil,
-      tagList: self.selectedTag
+      propertyType: .tag
     )
   }
 
   @objc func promotionSelectButtonDidTap(_ sender: UIButton) {
-    self.router?.navigateToProperty(
+    self.interactor?.navigateToProperty(
       source: self,
-      propertyType: .promotion,
-      promotionList: self.selectedPromotion,
-      tagList: nil
+      propertyType: .promotion
     )
   }
 
   @objc func dismissBarButtonDidTap(_ sender: UIBarButtonItem) {
-    self.dismiss(animated: true)
+    self.interactor?.dismissFeedWriteView(source: self)
   }
 
   @objc func shopSearchButtonDidTap(_ sender: UIButton) {
-    self.router?.navigateToShopSearch(source: self)
+    self.interactor?.navigateToShopSearch(source: self)
   }
 
   @objc func photoAddButtonDidTap(_ sender: UIButton) {
@@ -164,16 +152,9 @@ extension FeedWriteViewController: FeedWriteViewProtocol {
       content: content
     )
   }
-  func fetchSelectedPromotions(promotionList: [Promotion]){
-    self.selectedPromotion = promotionList
-  }
-
-  func fetchSelectedTags(tagList: [ChallengeTitle]){
-    self.selectedTag = tagList
-  }
 }
 
-  // MARK: - TextView Delegate
+// MARK: - TextView Delegate
 
 extension FeedWriteViewController: UITextViewDelegate {
   func textViewDidBeginEditing(_ textView: UITextView) {
@@ -191,7 +172,7 @@ extension FeedWriteViewController: UITextViewDelegate {
   }
 }
 
-  // MARK: - CollectionView DataSource
+// MARK: - CollectionView DataSource
 
 extension FeedWriteViewController: UICollectionViewDataSource {
   func collectionView(
@@ -224,7 +205,7 @@ extension FeedWriteViewController: UICollectionViewDataSource {
   }
 }
 
-  // MARK: - CollectionView Delegate
+// MARK: - CollectionView Delegate
 
 extension FeedWriteViewController: UICollectionViewDelegateFlowLayout {
   func collectionView(
@@ -234,7 +215,7 @@ extension FeedWriteViewController: UICollectionViewDelegateFlowLayout {
   ) -> CGSize {
     return CGSize(
       width: self.containerView.photoAddButton.frame.width + 10,
-                  height: self.containerView.photoAddButton.frame.height + 10
+      height: self.containerView.photoAddButton.frame.height + 10
     )
   }
 

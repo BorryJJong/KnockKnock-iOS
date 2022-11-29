@@ -10,29 +10,49 @@ import Foundation
 protocol FeedWritePresenterProtocol: AnyObject {
   var view: FeedWriteViewProtocol? { get set }
 
-  func fetchProperty(propertyType: PropertyType, content: String)
-
   func presentSelectedPromotions(promotionList: [Promotion])
   func presentSelectedTags(tagList: [ChallengeTitle])
+  func presentShopAddress(address: String)
 }
 
 final class FeedWritePresenter: FeedWritePresenterProtocol {
   weak var view: FeedWriteViewProtocol?
 
-  func presentSelectedPromotions(promotionList: [Promotion]) {
-    self.view?.fetchSelectedPromotions(promotionList: promotionList)
-  }
-  
-  func presentSelectedTags(tagList: [ChallengeTitle]) {
-    self.view?.fetchSelectedTags(tagList: tagList)
+  func presentShopAddress(address: String) {
+    self.view?.fetchProperty(
+      propertyType: .address,
+      content: address
+    )
   }
 
-  func fetchProperty(
-    propertyType: PropertyType,
-    content: String
-  ) {
+  func presentSelectedPromotions(promotionList: [Promotion]) {
+    let selection = promotionList.filter { $0.isSelected == true }
+
+    var content = selection.map {
+      $0.promotionInfo.type
+    }.joined(separator: ", ")
+
+    if selection.isEmpty {
+      content = "프로모션"
+    }
     self.view?.fetchProperty(
-      propertyType: propertyType,
+      propertyType: .promotion,
+      content: content
+    )
+  }
+
+  func presentSelectedTags(tagList: [ChallengeTitle]) {
+    let selection = tagList.filter { $0.isSelected == true }
+
+    var content = selection.map {
+      $0.title
+    }.joined(separator: ", ")
+
+    if selection.isEmpty {
+      content = "#태그"
+    }
+    self.view?.fetchProperty(
+      propertyType: .tag,
       content: content
     )
   }
