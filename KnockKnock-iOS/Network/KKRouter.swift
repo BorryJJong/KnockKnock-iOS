@@ -31,7 +31,7 @@ enum KKRouter: URLRequestConvertible {
   case getChallengeTitles
   case getPromotions
   case getFeedMain(page: Int, take: Int, challengeId: Int)
-  case requestShopAddress(query: String)
+  case requestShopAddress(query: String, page: Int, size: Int)
   case getFeedBlogPost(page: Int, take: Int, feedId: Int, challengeId: Int)
   case getFeed(id: Int)
 
@@ -94,8 +94,12 @@ enum KKRouter: URLRequestConvertible {
 
       return nil
 
-    case let .requestShopAddress(query):
-      return ["query": query]
+    case let .requestShopAddress(query, page, size):
+      return [
+        "query": query,
+        "page": page,
+        "size": size
+      ]
 
     case let .getFeedMain(page, take, challengeId):
       return [

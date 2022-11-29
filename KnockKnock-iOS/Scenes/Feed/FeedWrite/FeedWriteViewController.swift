@@ -17,6 +17,7 @@ protocol FeedWriteViewProtocol: AnyObject {
   func fetchProperty(propertyType: PropertyType, content: String)
 }
 
+
 final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
   // MARK: - Properties
