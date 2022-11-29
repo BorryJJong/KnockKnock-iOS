@@ -20,8 +20,7 @@ final class LikeRepository: LikeRepositoryProtocol {
       .requstLike(
         object: Bool.self,
         router: KKRouter.postFeedLike(
-          id: id,
-          userId: userId
+          id: id
         ), success: { result in
           completionHandler(result)
         }, failure: { error in

@@ -29,7 +29,7 @@ enum KKRouter: URLRequestConvertible {
   case requestShopAddress(query: String)
   case getFeedBlogPost(page: Int, take: Int, feedId: Int, challengeId: Int)
   case getFeed(id: Int)
-  case postFeedLike(id: Int, userId: Int)
+  case postFeedLike(id: Int)
 
   var method: HTTPMethod {
     switch self {
@@ -62,7 +62,7 @@ enum KKRouter: URLRequestConvertible {
 
   var parameters: Parameters? {
     switch self {
-    case  .getChallengeDetail, .getChallengeResponse, .getChallengeTitles, .getFeed:
+    case  .getChallengeDetail, .getChallengeResponse, .getChallengeTitles, .getFeed, .postFeedLike:
       return nil
 
     case let .requestShopAddress(query):
@@ -83,8 +83,8 @@ enum KKRouter: URLRequestConvertible {
         "challengeId": challengeId
       ]
 
-    case let .postFeedLike(userId):
-      return [ "userId": userId ]
+//    case let .postFeedLike(userId):
+//      return [ "userId": userId ]
     }
   }
 

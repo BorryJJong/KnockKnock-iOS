@@ -124,12 +124,9 @@ class FeedListCell: BaseCollectionViewCell {
 
   func bind(feedList: FeedListPost) {
     if feedList.isLike {
-//      self.likeButton.setImage(KKDS.Image.ic_like_24_on, for: .normal)
       self.likeButton.isSelected = true
-      print(feedList.isLike)
       self.likeButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .bold)
     } else {
-//      self.likeButton.setImage(KKDS.Image.ic_like_24_off, for: .normal)
       self.likeButton.isSelected = false
       self.likeButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .medium)
     }
