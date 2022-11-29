@@ -53,7 +53,7 @@ enum KKRouter: URLRequestConvertible {
       return .get
 
     case .postFeedLike,
-          .socialLogin,
+         .socialLogin,
          .signUp,
          .postAddComment:
       return .post
@@ -145,10 +145,17 @@ enum KKRouter: URLRequestConvertible {
       }
 
     case .post, .patch, .delete:
-      request = try JSONEncoding.default.encode(request)
-      request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
-      request.setValue("application/json", forHTTPHeaderField: "Accept")
-      request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+      switch self {
+      case .postFeedLike:
+        request = try JSONEncoding.default.encode(request)
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+      default:
+        request = try JSONEncoding.default.encode(request)
+        request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+      }
 
     default:
       break
