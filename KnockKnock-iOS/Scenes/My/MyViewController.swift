@@ -65,38 +65,30 @@ final class MyViewController: BaseViewController<MyView> {
     self.navigationController?.navigationBar.setDefaultAppearance()
     self.navigationItem.title = "마이"
 
-    self.containerView.setLoginStatus(isLoggedin: self.isLoggedIn)      // 로그인 상태에 따라 헤더 내용 바인딩
+    self.containerView.setLoginStatus(isLoggedin: self.isLoggedIn) // 로그인 상태에 따라 헤더 내용 바인딩
     self.containerView.setNickname(nickname: self.nickname)
-    
+
     self.interactor?.fetchMenuData()
 
     self.containerView.myTableView.do {
       $0.dataSource = self
       $0.delegate = self
-      $0.registCell(type: UITableViewCell.self, identifier: MY.MyCellID)
+      $0.registCell(
+        type: UITableViewCell.self,
+        identifier: MY.MyCellID
+      )
       $0.register(type: MyTableViewHeader.self)
       $0.register(type: MyTableViewFooter.self)
+      
       $0.tableHeaderView = self.containerView.myTableHeaderView
     }
 
     self.containerView.loginButton.do {
-      $0.addTarget(self, action: #selector(self.loginButtonDidTap), for: .touchUpInside)
-    }
-
-    NotificationCenter.default.addObserver(
-      forName: Notification.Name("loginCompleted"),
-      object: nil,
-      queue: nil
-    ) { _ in
-      self.isLoggedIn = true
-    }
-
-    NotificationCenter.default.addObserver(
-      forName: Notification.Name("logoutCompleted"),
-      object: nil,
-      queue: nil
-    ) { _ in
-      self.isLoggedIn = false
+      $0.addTarget(
+        self,
+        action: #selector(self.loginButtonDidTap),
+        for: .touchUpInside
+      )
     }
   }
 
@@ -157,7 +149,10 @@ extension MyViewController: UITableViewDataSource {
     cellForRowAt indexPath: IndexPath
   ) -> UITableViewCell {
 
-    let cell = UITableViewCell(style: .value1, reuseIdentifier: MY.MyCellID)
+    let cell = UITableViewCell(
+      style: .value1,
+      reuseIdentifier: MY.MyCellID
+    )
     let menu = self.menuData[indexPath.section].myItems[indexPath.row]
 
     cell.selectionStyle = .none

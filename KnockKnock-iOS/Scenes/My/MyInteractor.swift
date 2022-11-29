@@ -26,11 +26,14 @@ final class MyInteractor: MyInteractorProtocol {
   var worker: MyWorkerProtocol?
   var presenter: MyPresenter?
 
+  // Busniess Logic
+
   func fetchMenuData() {
     self.worker?.fetchMenuData(completionHandler: { menu in
       self.presenter?.presentMenuData(myMenu: menu)
     })
     self.checkLoginStatus()
+    self.setNotification()
   }
 
   func checkLoginStatus() {
@@ -56,5 +59,25 @@ final class MyInteractor: MyInteractorProtocol {
 
   func navigateToProfileSettingView(source: MyViewProtocol) {
     self.router?.navigateToProfileSettingView(source: source)
+  }
+
+  // Notification Center
+
+  func setNotification() {
+    NotificationCenter.default.addObserver(
+      forName: Notification.Name("loginCompleted"),
+      object: nil,
+      queue: nil
+    ) { _ in
+      self.presenter?.presentLoginStatus(isLoggedIn: true)
+    }
+
+    NotificationCenter.default.addObserver(
+      forName: Notification.Name("logoutCompleted"),
+      object: nil,
+      queue: nil
+    ) { _ in
+      self.presenter?.presentLoginStatus(isLoggedIn: false)
+    }
   }
 }
