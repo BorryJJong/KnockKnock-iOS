@@ -1,8 +1,8 @@
 //
-//  File.swift
+//  MyTableViewFooter.swift
 //  KnockKnock-iOS
 //
-//  Created by Daye on 2022/10/08.
+//  Created by Daye on 2022/11/18.
 //
 
 import UIKit
@@ -11,51 +11,54 @@ import SnapKit
 import Then
 import KKDSKit
 
-final class SettingFooterCollectionReusableView: UICollectionReusableView {
+final class MyTableViewFooter: BaseTableViewHeaderFooterView<MySection> {
 
   // MARK: - Constants
 
   private enum Metric {
     static let separatorViewHeight = 10.f
     static let separatorViewBottomMargin = -20.f
+    static let separatorViewTopMargin = 20.f
 
     static let logoutButtonTopMargin = 30.f
     static let logoutButtonBottomMargin = -60.f
     static let logoutButtonWidth = 20.f
+    static let logoutButtonHeight = 40.f
   }
 
   // MARK: - UIs
+
   private let separatorView = UIView().then {
     $0.backgroundColor = KKDS.Color.gray10
   }
 
   let logoutButton = MiddleButton(title: "로그아웃")
 
-  // MARK: - Initailize
-
-  override init(frame: CGRect) {
-    super.init(frame: frame)
-    self.setupConstraints()
-  }
-
-  required init?(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder)
-  }
-
   // MARK: - Bind
 
-  func bind(isLast: Bool) {
-    self.logoutButton.isHidden = !isLast
-    self.separatorView.isHidden = isLast
+  override func bind(_ model: MySection?) {
+    let isLastSection = model?.title == .policy
+    
+    self.logoutButton.isHidden = !isLastSection
+    self.separatorView.isHidden = isLastSection
+  }
+
+  // MARK: - Configure
+
+  func setLogoutButtonHiddenStatus(isLoggedIn: Bool) {
+    if !self.logoutButton.isHidden {
+        self.logoutButton.isHidden = !isLoggedIn
+    }
   }
 
   // MARK: - Constraints
-
-  private func setupConstraints() {
+  
+  override func setupConstraints() {
     [self.separatorView, self.logoutButton].addSubViews(self)
 
     self.separatorView.snp.makeConstraints {
       $0.width.equalToSuperview()
+      $0.top.equalToSuperview().offset(Metric.separatorViewTopMargin)
       $0.height.equalTo(Metric.separatorViewHeight)
       $0.bottom.equalToSuperview().offset(Metric.separatorViewBottomMargin)
     }
@@ -64,8 +67,8 @@ final class SettingFooterCollectionReusableView: UICollectionReusableView {
       $0.centerX.equalToSuperview()
       $0.top.equalToSuperview().offset(Metric.logoutButtonTopMargin)
       $0.bottom.equalToSuperview().offset(Metric.logoutButtonBottomMargin)
+      $0.height.equalTo(Metric.logoutButtonHeight)
       $0.width.equalToSuperview().inset(Metric.logoutButtonWidth)
     }
   }
-
 }

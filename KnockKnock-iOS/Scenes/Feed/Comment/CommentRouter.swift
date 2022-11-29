@@ -8,14 +8,14 @@
 import UIKit
 
 protocol CommentRouterProtocol {
-  static func createCommentView() -> UIViewController
+  static func createCommentView(feedId: Int) -> UIViewController
   func dismissCommentView(view: CommentViewProtocol)
   func presentBottomSheetView(source: CommentViewProtocol)
 }
 
 final class CommentRouter: CommentRouterProtocol {
   
-  static func createCommentView() -> UIViewController {
+  static func createCommentView(feedId: Int) -> UIViewController {
     let view = CommentViewController()
     let interactor = CommentInteractor()
     let presenter = CommentPresenter()
@@ -24,6 +24,7 @@ final class CommentRouter: CommentRouterProtocol {
     
     view.router = router
     view.interactor = interactor
+    view.feedId = feedId
     interactor.presenter = presenter
     interactor.worker = worker
     presenter.view = view
@@ -43,7 +44,9 @@ final class CommentRouter: CommentRouterProtocol {
         contents: [
           BottomSheetOption.delete.rawValue,
           BottomSheetOption.edit.rawValue
-        ])
+        ],
+        bottomSheetType: .small
+      )
       $0.modalPresentationStyle = .overFullScreen
     }
     if let sourceView = source as? UIViewController {

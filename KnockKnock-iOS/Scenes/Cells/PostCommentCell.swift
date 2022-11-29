@@ -8,6 +8,7 @@
 import UIKit
 
 import KKDSKit
+import SnapKit
 import Then
 
 final class PostCommentCell: BaseCollectionViewCell {
@@ -15,79 +16,113 @@ final class PostCommentCell: BaseCollectionViewCell {
   // MARK: - Constants
 
   private enum Metric {
-    static let profileImageViewTrailingMargin = 32.f
-    static let profileImageViewBottomMargin = 32.f
+    static let profileImageViewWidth = 32.f
+    static let profileImageViewHeight = 32.f
+
+    static let profileImageViewLeadingForReply = 42.f
+    static let profileImageViewWidthForReply = 24.f
+    static let profileImageViewHeightForReply = 24.f
 
     static let userIdLabelLeadingMargin = 10.f
 
     static let commentLabelTopMargin = 3.f
-    static let commentLabelLeadingMargin = 10.f
 
     static let replyMoreButtonTopMargin = 15.f
+    static let replyMoreButtonBottomMargin = 20.f
+
+    static let replyWriteButtonContentPadding = 10.f
+    static let commentDeleteButtonContentPadding = 10.f
+    static let replyMoreButtonContentPadding = 10.f
 
     static let writtenDateLabelTopMargin = 3.f
 
     static let replyWriteButtonLeadingMargin = 10.f
+
+    static let commentDeleteButtonLeadingMargin = 10.f
   }
 
   // MARK: - UIs
 
   private let profileImageView = UIImageView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.image = KKDS.Image.ic_person_24
   }
 
   private let userIdLabel = UILabel().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.text = "userID"
     $0.font = .systemFont(ofSize: 12, weight: .bold)
   }
 
   private let commentLabel = UILabel().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.text = "댓글 내용입니다."
     $0.numberOfLines = 0
     $0.font = .systemFont(ofSize: 13, weight: .medium)
   }
 
   private let writtenDateLabel = UILabel().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.text = "1시간전"
     $0.font = .systemFont(ofSize: 12, weight: .medium)
     $0.textColor = .gray70
   }
 
-  private let replyWriteButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
+  let replyWriteButton = UIButton().then {
     $0.setTitleColor(.gray70, for: .normal)
     $0.setImage(KKDS.Image.etc_bar_8_gr, for: .normal)
-    $0.setTitle("   댓글달기", for: .normal)
+    $0.setTitle("댓글달기", for: .normal)
+    $0.contentEdgeInsets.right = Metric.replyWriteButtonContentPadding
+    $0.titleEdgeInsets.left = Metric.replyWriteButtonContentPadding
+    $0.titleEdgeInsets.right = -(Metric.replyWriteButtonContentPadding)
     $0.semanticContentAttribute = .forceLeftToRight
     $0.titleLabel?.font = .systemFont(ofSize: 12, weight: .semibold)
   }
 
   lazy var replyMoreButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setImage(KKDS.Image.etc_bar_30_gr, for: .normal)
     $0.setTitleColor(.gray70, for: .normal)
+    $0.contentEdgeInsets.right = Metric.replyMoreButtonContentPadding
+    $0.titleEdgeInsets.left = Metric.replyMoreButtonContentPadding
+    $0.titleEdgeInsets.right = -(Metric.replyMoreButtonContentPadding)
     $0.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
+  }
+
+  let commentDeleteButton = UIButton().then {
+    $0.setImage(KKDS.Image.etc_bar_8_gr, for: .normal)
+    $0.setTitle("삭제", for: .normal)
+    $0.contentEdgeInsets.right = Metric.commentDeleteButtonContentPadding
+    $0.titleEdgeInsets.left = Metric.commentDeleteButtonContentPadding
+    $0.titleEdgeInsets.right = -(Metric.commentDeleteButtonContentPadding)
+    $0.setTitleColor(.gray70, for: .normal)
+    $0.titleLabel?.font = .systemFont(ofSize: 12, weight: .semibold)
   }
   
   // MARK: - Bind
 
   func bind(comment: Comment) {
-    self.setReplyMoreButton(count: comment.replies.count, isOpen: comment.isOpen)
-    self.userIdLabel.text = comment.userID
-    self.commentLabel.text = comment.contents
+    let reply = comment.commentData.reply
+    self.setReplyMoreButton(count: reply?.count ?? 0, isOpen: comment.isOpen)
+
+    self.userIdLabel.text = comment.commentData.nickname
+    self.commentLabel.text = comment.commentData.content
 
     if comment.isReply {
-      self.profileImageView.trailingConstraint?.constant = 66
-      self.profileImageView.bottomConstraint?.constant = 24
-      self.profileImageView.leadingConstraint?.constant = 42
+      self.replyWriteButton.isHidden = true
+      self.commentDeleteButton.snp.updateConstraints {
+        $0.leading.equalTo(self.replyWriteButton.snp.trailing).inset(self.replyWriteButton.frame.width)
+      }
+      self.profileImageView.snp.updateConstraints {
+        $0.leading.equalTo(self.safeAreaLayoutGuide).offset(Metric.profileImageViewLeadingForReply)
+        $0.width.equalTo(Metric.profileImageViewWidthForReply)
+        $0.height.equalTo(Metric.profileImageViewHeightForReply)
+      }
     } else {
-      self.profileImageView.trailingConstraint?.constant = 32
-      self.profileImageView.bottomConstraint?.constant = 32
-      self.profileImageView.leadingConstraint?.constant = 0
+      self.replyWriteButton.isHidden = false
+      self.commentDeleteButton.snp.updateConstraints {
+        $0.leading.equalTo(self.replyWriteButton.snp.trailing).offset(Metric.commentDeleteButtonLeadingMargin)
+      }
+      self.profileImageView.snp.updateConstraints {
+        $0.leading.equalTo(self.safeAreaLayoutGuide)
+        $0.width.equalTo(Metric.profileImageViewWidth)
+        $0.height.equalTo(Metric.profileImageViewHeight)
+      }
     }
   }
 
@@ -96,46 +131,62 @@ final class PostCommentCell: BaseCollectionViewCell {
   private func setReplyMoreButton(count: Int, isOpen: Bool) {
     if count == 0 {
       self.replyMoreButton.isHidden = true
-      self.replyMoreButton.bottomConstraint?.constant = 20
+      self.replyMoreButton.snp.updateConstraints {
+        $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(Metric.replyMoreButtonBottomMargin)
+      }
     } else {
-      self.replyMoreButton.bottomConstraint?.constant = 0
+      self.replyMoreButton.snp.updateConstraints {
+        $0.bottom.equalTo(self.safeAreaLayoutGuide)
+      }
       if !isOpen {
         self.replyMoreButton.isHidden = false
-        self.replyMoreButton.setTitle("   답글 \(count)개 보기", for: .normal)
+        self.replyMoreButton.setTitle("답글 \(count)개 보기", for: .normal)
       } else {
         self.replyMoreButton.isHidden = false
-        self.replyMoreButton.setTitle("   답글 숨기기", for: .normal)
+        self.replyMoreButton.setTitle("답글 숨기기", for: .normal)
       }
     }
   }
 
   override func setupConstraints() {
-    [self.profileImageView, self.userIdLabel, self.commentLabel, self.writtenDateLabel, self.replyWriteButton, self.replyMoreButton].addSubViews(self)
+    [self.profileImageView, self.userIdLabel, self.commentLabel, self.writtenDateLabel, self.replyWriteButton, self.replyMoreButton, self.commentDeleteButton].addSubViews(self)
 
-    NSLayoutConstraint.activate([
-      self.profileImageView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-      self.profileImageView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-      self.profileImageView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.profileImageViewTrailingMargin),
-      self.profileImageView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.profileImageViewBottomMargin),
+    self.profileImageView.snp.makeConstraints {
+      $0.top.leading.equalTo(self.safeAreaLayoutGuide)
+      $0.width.equalTo(Metric.profileImageViewWidth)
+      $0.height.equalTo(Metric.profileImageViewHeight)
+    }
 
-      self.userIdLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-      self.userIdLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: Metric.userIdLabelLeadingMargin),
-      self.userIdLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
+    self.userIdLabel.snp.makeConstraints {
+      $0.top.trailing.equalTo(self.safeAreaLayoutGuide)
+      $0.leading.equalTo(self.profileImageView.snp.trailing).offset(Metric.userIdLabelLeadingMargin)
+    }
 
-      self.commentLabel.topAnchor.constraint(equalTo: self.userIdLabel.bottomAnchor, constant: Metric.commentLabelTopMargin),
-      self.commentLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: Metric.commentLabelLeadingMargin),
-      self.commentLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
+    self.commentLabel.snp.makeConstraints {
+      $0.top.equalTo(self.userIdLabel.snp.bottom).offset(Metric.commentLabelTopMargin)
+      $0.leading.equalTo(self.userIdLabel)
+      $0.trailing.equalTo(self.safeAreaLayoutGuide)
+    }
 
-      self.replyMoreButton.leadingAnchor.constraint(equalTo: self.commentLabel.leadingAnchor),
-      self.replyMoreButton.topAnchor.constraint(equalTo: self.writtenDateLabel.bottomAnchor, constant: Metric.replyMoreButtonTopMargin),
-      self.replyMoreButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
+    self.replyMoreButton.snp.makeConstraints {
+      $0.leading.equalTo(self.commentLabel)
+      $0.top.equalTo(self.writtenDateLabel.snp.bottom).offset(Metric.replyMoreButtonTopMargin)
+      $0.bottom.equalTo(self.safeAreaLayoutGuide)
+    }
 
-      self.writtenDateLabel.topAnchor.constraint(equalTo: self.commentLabel.bottomAnchor, constant: Metric.writtenDateLabelTopMargin),
-      self.writtenDateLabel.leadingAnchor.constraint(equalTo: self.commentLabel.leadingAnchor),
+    self.writtenDateLabel.snp.makeConstraints {
+      $0.top.equalTo(self.commentLabel.snp.bottom).offset(Metric.writtenDateLabelTopMargin)
+      $0.leading.equalTo(self.commentLabel)
+    }
 
-      self.replyWriteButton.leadingAnchor.constraint(equalTo: self.writtenDateLabel.trailingAnchor, constant: Metric.replyWriteButtonLeadingMargin),
-      self.replyWriteButton.topAnchor.constraint(equalTo: self.writtenDateLabel.topAnchor),
-      self.replyWriteButton.bottomAnchor.constraint(equalTo: self.writtenDateLabel.bottomAnchor)
-    ])
+    self.replyWriteButton.snp.makeConstraints {
+      $0.leading.equalTo(self.writtenDateLabel.snp.trailing).offset(Metric.replyWriteButtonLeadingMargin)
+      $0.top.bottom.equalTo(self.writtenDateLabel)
+    }
+
+    self.commentDeleteButton.snp.makeConstraints {
+      $0.top.equalTo(self.writtenDateLabel)
+      $0.leading.equalTo(self.replyWriteButton.snp.trailing).offset(Metric.commentDeleteButtonLeadingMargin)
+    }
   }
 }

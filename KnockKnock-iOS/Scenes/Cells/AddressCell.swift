@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class AdressCell: BaseTableViewCell {
+final class AdressCell: BaseTableViewCell<Void> {
 
   // MARK: - Constants
 

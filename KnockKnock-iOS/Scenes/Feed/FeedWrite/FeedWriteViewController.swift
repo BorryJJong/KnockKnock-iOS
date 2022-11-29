@@ -8,13 +8,17 @@
 import UIKit
 
 import Then
-import YPImagePicker
+
+import KKDSKit
 
 protocol FeedWriteViewProtocol: AnyObject {
   var interactor: FeedWriteInteractorProtocol? { get set }
   var router: FeedWriteRouterProtocol? { get set }
 
-  func getAddress(address: String)
+  func fetchProperty(propertyType: PropertyType, content: String)
+
+  func fetchSelectedPromotions(promotionList: [Promotion])
+  func fetchSelectedTags(tagList: [ChallengeTitle])
 }
 
 final class FeedWriteViewController: BaseViewController<FeedWriteView> {
@@ -23,6 +27,9 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   
   var interactor: FeedWriteInteractorProtocol?
   var router: FeedWriteRouterProtocol?
+
+  private var selectedPromotion: [Promotion] = []
+  private var selectedTag: [ChallengeTitle] = []
 
   var pickedPhotos: [UIImage] = []
 
@@ -73,11 +80,21 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   // MARK: - Button Actions
 
   @objc func tagSelectButtonDidTap(_ sender: UIButton) {
-    self.router?.navigateToProperty(source: self, propertyType: .tag)
+    self.router?.navigateToProperty(
+      source: self,
+      propertyType: .tag,
+      promotionList: nil,
+      tagList: self.selectedTag
+    )
   }
 
   @objc func promotionSelectButtonDidTap(_ sender: UIButton) {
-    self.router?.navigateToProperty(source: self, propertyType: .promotion)
+    self.router?.navigateToProperty(
+      source: self,
+      propertyType: .promotion,
+      promotionList: self.selectedPromotion,
+      tagList: nil
+    )
   }
 
   @objc func shopSearchButtonDidTap(_ sender: UIButton) {
@@ -96,29 +113,18 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   // MARK: - ImagePicker
 
   func callImagePicker() {
-    let config = YPImagePickerConfiguration().with {
-      $0.library.maxNumberOfItems = 5
-      $0.library.mediaType = .photo
-      $0.startOnScreen = .library
-      $0.showsPhotoFilters = false
-      $0.showsCrop = .rectangle(ratio: 1)
-    }
-    let picker = YPImagePicker(configuration: config)
-
     self.pickedPhotos = []
 
-    picker.didFinishPicking { [unowned picker] items, cancelled in
-      if cancelled {
-        picker.dismiss(animated: true, completion: nil)
-        return
-      }
+    let picker = ImagePickerManager.shared.setImagePicker()
+
+    picker.didFinishPicking { [unowned picker] items, _ in
       for item in items {
         switch item {
         case let .photo(photo):
           self.pickedPhotos.append(photo.image)
           self.containerView.photoCollectionView.reloadData()
         default:
-          return
+          print("error")
         }
       }
       picker.dismiss(animated: true, completion: nil)
@@ -127,9 +133,24 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   }
 }
 
+// MARK: - Feed Write View Protocol
+
 extension FeedWriteViewController: FeedWriteViewProtocol {
-  func getAddress(address: String) {
-    self.containerView.bind(propertyType: .address, content: address)
+  func fetchProperty(
+    propertyType: PropertyType,
+    content: String
+  ) {
+    self.containerView.bind(
+      propertyType: propertyType,
+      content: content
+    )
+  }
+  func fetchSelectedPromotions(promotionList: [Promotion]){
+    self.selectedPromotion = promotionList
+  }
+
+  func fetchSelectedTags(tagList: [ChallengeTitle]){
+    self.selectedTag = tagList
   }
 }
 
@@ -192,8 +213,10 @@ extension FeedWriteViewController: UICollectionViewDelegateFlowLayout {
     layout collectionViewLayout: UICollectionViewLayout,
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
-    return CGSize(width: self.containerView.photoAddButton.frame.width + 10,
-                  height: self.containerView.photoAddButton.frame.height + 10)
+    return CGSize(
+      width: self.containerView.photoAddButton.frame.width + 10,
+                  height: self.containerView.photoAddButton.frame.height + 10
+    )
   }
 
   func collectionView(
@@ -206,7 +229,4 @@ extension FeedWriteViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension FeedWriteViewController: UICollectionViewDelegate {
-}
-
-extension YPImagePickerConfiguration: Then {
 }

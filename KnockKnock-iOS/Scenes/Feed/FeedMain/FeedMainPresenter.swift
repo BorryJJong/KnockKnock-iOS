@@ -23,6 +23,7 @@ final class FeedMainPresenter: FeedMainPresenterProtocol {
 
   func presentFeedMain(feed: FeedMain) {
     self.view?.fetchFeedMain(feed: feed)
+    LoadingIndicator.hideLoading()
   }
 
   func presentGetChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?) {

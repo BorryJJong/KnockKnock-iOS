@@ -16,7 +16,7 @@ protocol FeedDetailViewProtocol: AnyObject {
 
   func getFeedDetail(feedDetail: FeedDetail)
   func getAllComments(allComments: [Comment])
-  func setVisibleComments(comments: [Comment])
+  func fetchVisibleComments(comments: [Comment])
   func getLike(like: [Like])
 }
 
@@ -30,28 +30,39 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   var feedDetail: FeedDetail? {
     didSet {
       self.containerView.postCollectionView.reloadData()
-
       if let feed = feedDetail?.data.feed {
         self.containerView.navigationView.bind(feed: feed)
       }
     }
   }
   var feedId: Int = 6
+  var userId: Int = 1
+  var commentId: Int?
   var like: [Like] = []
+
   var allComments: [Comment] = []
-  var visibleComments: [Comment] = []
+  var visibleComments: [Comment] = [] {
+    didSet {
+      UIView.performWithoutAnimation {
+        self.containerView.postCollectionView.reloadSections(
+          IndexSet(integer: FeedDetailSection.comment.rawValue)
+        )
+      }
+    }
+  }
 
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    LoadingIndicator.showLoading()
+
     self.setNavigationBar()
     self.setupConfigure()
 
     self.interactor?.getFeedDeatil(feedId: feedId)
     self.interactor?.getLike()
-    self.interactor?.getAllComments()
-    self.interactor?.setVisibleComments(comments: self.allComments)
+    self.interactor?.fetchAllComments(feedId: feedId)
   }
 
   // MARK: - Configure
@@ -73,9 +84,13 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       $0.registCell(type: DefaultCollectionViewCell.self)
 
       $0.collectionViewLayout = self.containerView.setPostCollectionViewLayout()
+      $0.scrollsToTop = true
     }
     self.containerView.commentTextView.do {
       $0.delegate = self
+    }
+    self.containerView.registButton.do {
+      $0.addTarget(self, action: #selector(self.registButtonDidTap(_:)), for: .touchUpInside)
     }
     self.addKeyboardNotification()
     self.hideKeyboardWhenTappedAround()
@@ -89,6 +104,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       target: self,
       action: #selector(backButtonDidTap(_:))
     )
+    
     let moreButton = UIBarButtonItem(
       image: KKDS.Image.ic_more_20_gr,
       style: .plain,
@@ -101,7 +117,24 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       UIBarButtonItem.init(customView: self.containerView.navigationView)
     ]
     self.navigationItem.rightBarButtonItem = moreButton
+    self.navigationController?.navigationBar.backgroundColor = .white
     self.navigationController?.navigationBar.tintColor = .black
+    self.changeStatusBarBgColor(bgColor: .white)
+  }
+
+  func changeStatusBarBgColor(bgColor: UIColor?) {
+    if #available(iOS 13.0, *) {
+      let window = UIApplication.shared.windows.first
+      let statusBarManager = window?.windowScene?.statusBarManager
+
+      let statusBarView = UIView(frame: statusBarManager?.statusBarFrame ?? .zero)
+      statusBarView.backgroundColor = bgColor
+
+      window?.addSubview(statusBarView)
+    } else {
+      let statusBarView = UIApplication.shared.value(forKey: "statusBar") as? UIView
+      statusBarView?.backgroundColor = bgColor
+    }
   }
 
   // MARK: - Button Actions
@@ -116,11 +149,32 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   @objc private func replyMoreButtonDidTap(_ sender: UIButton) {
     self.visibleComments[sender.tag].isOpen.toggle()
 
-    self.interactor?.setVisibleComments(comments: self.visibleComments)
+    self.interactor?.fetchVisibleComments(comments: self.visibleComments)
     
     UIView.performWithoutAnimation {
       self.containerView.postCollectionView.reloadSections([FeedDetailSection.comment.rawValue])
     }
+  }
+
+  @objc private func registButtonDidTap(_ sender: UIButton) {
+    if let content = self.containerView.commentTextView.text {
+      self.interactor?.requestAddComment(
+        comment: AddCommentRequest(
+          feedId: self.feedId,
+          userId: self.userId,
+          content: content,
+          commentId: self.commentId
+        )
+      )
+    }
+    self.containerView.commentTextView.text = ""
+    self.containerView.setPlaceholder()
+    self.commentId = nil
+  }
+
+  @objc private func replyWriteButtonDidTap(_ sender: UIButton) {
+    self.commentId = sender.tag
+    self.containerView.commentTextView.becomeFirstResponder()
   }
 
   // MARK: - Keyboard Show & Hide
@@ -142,20 +196,29 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   }
 
   @objc private func keyboardWillShow(_ notification: Notification) {
-    self.setCommentsTextViewConstant(notification: notification, isAppearing: true)
+    self.setCommentsTextViewConstant(isAppearing: true)
+    self.setContainerViewConstant(notification: notification, isAppearing: true)
     self.containerView.likeButton.isHidden = true
   }
 
   @objc private func keyboardWillHide(_ notification: Notification) {
-    self.setCommentsTextViewConstant(notification: notification, isAppearing: false)
-
+    self.setCommentsTextViewConstant(isAppearing: false)
+    self.setContainerViewConstant(notification: notification, isAppearing: false)
+    
     if self.containerView.commentTextView.text.isEmpty {
       self.containerView.likeButton.isHidden = false
       self.containerView.commentTextView.leadingConstraint?.constant = 0
     }
   }
 
-  private func setCommentsTextViewConstant(notification: Notification, isAppearing: Bool) {
+  private func setCommentsTextViewConstant(isAppearing: Bool) {
+    let textViewHeightConstant = isAppearing ? 15.f : -19.f
+
+    self.containerView.commentTextView.bottomConstraint?.constant = textViewHeightConstant
+    self.containerView.commentTextView.leadingConstraint?.constant = -20
+  }
+
+  private func setContainerViewConstant(notification: Notification, isAppearing: Bool) {
     let userInfo = notification.userInfo
 
     if let keyboardFrame = userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
@@ -167,16 +230,16 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
           .keyboardAnimationDurationUserInfoKey
       ] as? NSNumber else { return }
 
-      let heightConstant = isAppearing ? (-keyboardHeight + 15) : -19
+      let viewHeightConstant = isAppearing ? (-keyboardHeight) : 0
 
-      self.containerView.commentTextView.bottomConstraint?.constant = heightConstant
-      self.containerView.commentTextView.leadingConstraint?.constant = -20
+      self.containerView.frame.origin.y = viewHeightConstant
 
       UIView.animate(withDuration: animationDurationValue.doubleValue) {
         self.containerView.layoutIfNeeded()
       }
     }
   }
+
 }
 
 // MARK: - FeedDetailViewProtocol
@@ -190,7 +253,7 @@ extension FeedDetailViewController: FeedDetailViewProtocol {
     self.allComments = allComments
   }
 
-  func setVisibleComments(comments: [Comment]) {
+  func fetchVisibleComments(comments: [Comment]) {
     self.visibleComments = comments
   }
 
@@ -264,6 +327,13 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       cell.replyMoreButton.addTarget(
         self,
         action: #selector(replyMoreButtonDidTap(_:)),
+        for: .touchUpInside
+      )
+
+      cell.replyWriteButton.tag = self.visibleComments[indexPath.item].commentData.id
+      cell.replyWriteButton.addTarget(
+        self,
+        action: #selector(self.replyWriteButtonDidTap(_:)),
         for: .touchUpInside
       )
 
@@ -350,7 +420,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       var count = self.allComments.count
 
       self.allComments.forEach {
-        count += $0.replies.count
+        count += $0.commentData.replyCnt
       }
 
       header.bind(count: count, section: .comment)
@@ -372,7 +442,15 @@ extension FeedDetailViewController: UICollectionViewDataSource {
 }
 
 extension FeedDetailViewController: UICollectionViewDelegateFlowLayout {
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    if self.containerView.postCollectionView.isDragging {
+      let offset = scrollView.contentOffset.y
 
+      if offset <= 0 {
+        self.dismissKeyboard()
+      }
+    }
+  }
 }
 
 // MARK: - TextField delegate

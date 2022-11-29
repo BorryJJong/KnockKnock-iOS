@@ -10,13 +10,46 @@ import Foundation
 protocol CommentPresenterProtocol {
   var view: CommentViewProtocol? { get set }
 
-  func presentComments(comments: [Comment])
+  func presentVisibleComments(allComments: [Comment])
 }
 
 final class CommentPresenter: CommentPresenterProtocol {
   var view: CommentViewProtocol?
 
-  func presentComments(comments: [Comment]) {
-    self.view?.getComments(comments: comments)
+  func presentVisibleComments(allComments: [Comment]) {
+    var comments: [Comment] = []
+
+    for comment in allComments {
+      if comment.commentData.reply?.count != 0 && comment.isOpen {
+        comments.append(comment)
+
+        if let replyArray = comment.commentData.reply {
+          for reply in replyArray {
+            comments.append(
+              Comment(
+                commentData: CommentData(
+                  id: reply.id,
+                  userId: reply.userId,
+                  nickname: reply.nickname,
+                  image: reply.image,
+                  content: reply.content,
+                  regDate: reply.regDate,
+                  isDeleted: false,
+                  replyCnt: 0,
+                  reply: []
+                ),
+                isReply: true
+              )
+            )
+          }
+        }
+      } else {
+        if !comment.isReply {
+          comments.append(comment)
+        }
+      }
+    }
+    self.view?.fetchVisibleComments(comments: comments)
+    LoadingIndicator.hideLoading()
   }
 }

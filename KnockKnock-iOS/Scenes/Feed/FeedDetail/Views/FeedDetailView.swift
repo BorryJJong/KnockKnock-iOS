@@ -20,7 +20,7 @@ final class FeedDetailView: UIView {
 
   private enum Metric {
 
-    static let postCollectionViewBottomMargin = -80.f
+    static let postCollectionViewBottomMargin = 80.f
 
     static let imageNumberLabelTopMargin = 15.f
     static let imageNumberLabelTrailingMargin = -18.f
@@ -54,6 +54,12 @@ final class FeedDetailView: UIView {
     }).then {
       $0.translatesAutoresizingMaskIntoConstraints = false
       $0.backgroundColor = .clear
+      $0.contentInset = .init(
+        top: 0,
+        left: 0,
+        bottom: Metric.postCollectionViewBottomMargin,
+        right: 0
+      )
     }
 
   private let imagePageControl = UIPageControl().then {
@@ -91,7 +97,7 @@ final class FeedDetailView: UIView {
       $0.isHidden = true
     }
 
-  private let commentInputView = UIView().then {
+  let commentInputView = UIView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .white
     $0.layer.borderWidth = 1
@@ -159,7 +165,7 @@ final class FeedDetailView: UIView {
       self.postCollectionView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
       self.postCollectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
       self.postCollectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-      self.postCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.postCollectionViewBottomMargin)
+      self.postCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor)
     ])
 
     [self.commentInputView, self.likeButton, self.commentTextView, self.registButton].addSubViews(self)

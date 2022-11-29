@@ -35,6 +35,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
     challengeId: Int,
     completionHandler: @escaping (FeedList) -> Void
   ) {
+    LoadingIndicator.showLoading()
     repository.requestFeedList(
       currentPage: currentPage,
       pageSize: count,
@@ -42,7 +43,8 @@ final class FeedListWorker: FeedListWorkerProtocol {
       challengeId: challengeId,
       completionHandler: { result in
         completionHandler(result)
-      })
+      }
+    )
   }
 
   func requestLike(id: Int, userId: Int, completionHandler: @escaping (Bool) -> Void) {

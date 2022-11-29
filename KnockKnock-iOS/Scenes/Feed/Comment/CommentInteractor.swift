@@ -11,16 +11,37 @@ protocol CommentInteractorProtocol {
   var worker: CommentWorkerProtocol? { get set }
   var presenter: CommentPresenterProtocol? { get set }
 
-  func getComments()
+  func fetchAllComments(feedId: Int)
+  func fetchVisibleComments(comments: [Comment])
+  func requestAddComment(comment: AddCommentRequest)
+
 }
 
 final class CommentInteractor: CommentInteractorProtocol {
   var worker: CommentWorkerProtocol?
   var presenter: CommentPresenterProtocol?
 
-  func getComments() {
-    self.worker?.getComments { [weak self] comment in
-      self?.presenter?.presentComments(comments: comment)
-    }
+  func fetchAllComments(feedId: Int) {
+    self.worker?.getAllComments(
+      feedId: feedId,
+      completionHandler: { [weak self] comments in
+        self?.fetchVisibleComments(comments: comments)
+      }
+    )
+  }
+
+  func fetchVisibleComments(comments: [Comment]) {
+    self.presenter?.presentVisibleComments(allComments: comments)
+  }
+
+  func requestAddComment(comment: AddCommentRequest) {
+    self.worker?.requestAddComment(
+      comment: comment,
+      completionHandler: { response in
+        if response == "success" {
+          self.fetchAllComments(feedId: comment.feedId)
+        }
+      }
+    )
   }
 }

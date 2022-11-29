@@ -11,8 +11,7 @@ protocol FeedDetailPresenterProtocol {
   var view: FeedDetailViewProtocol? { get set }
 
   func presentFeedDetail(feedDetail: FeedDetail)
-  func presentAllComments(allComments: [Comment])
-  func setVisibleComments(visibleComments: [Comment])
+  func presentVisibleComments(allComments: [Comment])
   func presentLike(like: [Like])
 }
 
@@ -21,34 +20,38 @@ final class FeedDetailPresenter: FeedDetailPresenterProtocol {
 
   func presentFeedDetail(feedDetail: FeedDetail) {
     self.view?.getFeedDetail(feedDetail: feedDetail)
+    LoadingIndicator.hideLoading()
   }
 
   func presentLike(like: [Like]) {
     self.view?.getLike(like: like)
   }
 
-  func presentAllComments(allComments: [Comment]) {
-    self.view?.getAllComments(allComments: allComments)
-  }
-
-  func setVisibleComments(visibleComments: [Comment]) {
+  func presentVisibleComments(allComments: [Comment]) {
     var comments: [Comment] = []
 
-    for comment in visibleComments {
-      if comment.replies.count != 0 && comment.isOpen {
+    for comment in allComments {
+      if comment.commentData.reply?.count != 0 && comment.isOpen {
         comments.append(comment)
-
-        for reply in comment.replies {
-          comments.append(
-            Comment(
-              userID: reply.userID,
-              image: reply.image,
-              contents: reply.contents,
-              replies: [],
-              date: reply.date,
-              isReply: true
+        if let replyArray = comment.commentData.reply {
+          for reply in replyArray {
+            comments.append(
+              Comment(
+                commentData: CommentData(
+                  id: reply.id,
+                  userId: reply.userId,
+                  nickname: reply.nickname,
+                  image: reply.image,
+                  content: reply.content,
+                  regDate: reply.regDate,
+                  isDeleted: false,
+                  replyCnt: 0,
+                  reply: []
+                ),
+                isReply: true
+              )
             )
-          )
+          }
         }
       } else {
         if !comment.isReply {
@@ -56,6 +59,6 @@ final class FeedDetailPresenter: FeedDetailPresenterProtocol {
         }
       }
     }
-    self.view?.setVisibleComments(comments: comments)
+    self.view?.fetchVisibleComments(comments: comments)
   }
 }
