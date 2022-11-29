@@ -6,6 +6,8 @@
 //
 
 import UIKit
+
+import SnapKit
 import KKDSKit
 
 import Then
@@ -37,8 +39,8 @@ final class MainTabBarController: UITabBarController {
     ),
     .post: UITabBarItem(
       title: nil,
-      image: KKDS.Image.ic_bottom_more_40.withRenderingMode(.alwaysOriginal),
-      selectedImage: KKDS.Image.ic_bottom_more_40.withRenderingMode(.alwaysOriginal)
+      image: nil,
+      selectedImage: nil
     ),
     .challenge: UITabBarItem(
       title: "챌린지",
@@ -56,8 +58,17 @@ final class MainTabBarController: UITabBarController {
   let feed = FeedMainRouter.createFeed()
   let post = FeedWriteRouter.createFeedWrite()
   let challenge = ChallengeRouter.createChallenge()
-//  let my = LoginRouter.createLoginView()
   let my = MyRouter.createMy()
+
+  lazy var middleButton = UIButton().then {
+    $0.frame.size = CGSize(width: 40, height: 40)
+    $0.setImage(KKDS.Image.ic_bottom_more_40, for: .normal)
+    $0.addTarget(
+      self,
+      action: #selector(self.middleButtonDidTap),
+      for: .touchUpInside
+    )
+  }
 
   // MARK: - Initialize
   
@@ -74,6 +85,7 @@ final class MainTabBarController: UITabBarController {
   override func viewDidLoad() {
     super.viewDidLoad()
     self.attribute()
+    self.setMiddleButton()
   }
   
   private func attribute() {
@@ -90,26 +102,55 @@ final class MainTabBarController: UITabBarController {
     self.home.tabBarItem = self.tabBarItems[.home]
     self.feed.tabBarItem = self.tabBarItems[.feed]
     self.post.tabBarItem = self.tabBarItems[.post]
-    self.post.tabBarItem.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -8, right: 0)
     self.challenge.tabBarItem = self.tabBarItems[.challenge]
     self.my.tabBarItem = self.tabBarItems[.my]
     
     let homeNVC = UINavigationController(rootViewController: self.home)
     let feedNVC = UINavigationController(rootViewController: self.feed)
-    let postNVC = UINavigationController(rootViewController: self.post)
     let challengeNVC = UINavigationController(rootViewController: self.challenge)
     let myNVC = UINavigationController(rootViewController: self.my)
     
     self.viewControllers = [
       homeNVC,
       feedNVC,
-      postNVC,
+      UIViewController(),
       challengeNVC,
       myNVC
     ]
   }
+
+  @objc func middleButtonDidTap(_ sender: UIButton) {
+    let postNVC = UINavigationController(rootViewController: self.post)
+    postNVC.modalPresentationStyle = .fullScreen
+
+    self.present(postNVC, animated: true)
+  }
+
+  private func setMiddleButton() {
+    self.tabBar.addSubview(middleButton)
+    self.middleButton.snp.makeConstraints {
+      $0.centerX.equalToSuperview()
+      $0.centerY.equalToSuperview().offset(-15)
+    }
+
+    self.middleButton.addTarget(
+      self,
+      action: #selector(self.middleButtonDidTap(_:)),
+      for: .touchUpInside
+    )
+  }
 }
 
 extension MainTabBarController: UITabBarControllerDelegate {
-  
+  func tabBarController(
+    _ tabBarController: UITabBarController,
+    shouldSelect viewController: UIViewController
+  ) -> Bool {
+    if let selectedIndex = tabBarController.viewControllers?.firstIndex(of: viewController) {
+      if Tab(rawValue: selectedIndex) == .post {
+        return false
+      }
+    }
+    return true
+  }
 }
