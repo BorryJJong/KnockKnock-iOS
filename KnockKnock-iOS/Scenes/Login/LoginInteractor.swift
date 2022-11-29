@@ -36,7 +36,7 @@ final class LoginInteractor: LoginInteractorProtocol {
         if loginResponse.isExistUser {
           self.saveTokens(loginResponse: loginResponse)
           self.popLoginView(source: source)
-          NotificationCenter.default.post(name: Notification.Name("loginCompleted"), object: nil)
+          NotificationCenter.default.post(name: .loginCompleted, object: nil)
         } else {
           self.navigateToProfileSettingView(
             source: source,

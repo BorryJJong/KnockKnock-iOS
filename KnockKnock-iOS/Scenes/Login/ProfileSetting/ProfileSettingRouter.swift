@@ -8,13 +8,13 @@
 import UIKit
 
 protocol ProfileSettingRouterProtocol {
-  static func createProfileSettingView(loginInfo: LoginInfo) -> UIViewController
+  static func createProfileSettingView(loginInfo: LoginInfo?) -> UIViewController
   
   func navigateToMyView(source: ProfileSettingViewProtocol)
 }
 
 final class ProfileSettingRouter: ProfileSettingRouterProtocol {
-  static func createProfileSettingView(loginInfo: LoginInfo) -> UIViewController {
+  static func createProfileSettingView(loginInfo: LoginInfo?) -> UIViewController {
     let view = ProfileSettingViewController()
     let interactor = ProfileSettingInteractor()
     let presenter = ProfileSettingPresenter()
@@ -28,8 +28,11 @@ final class ProfileSettingRouter: ProfileSettingRouterProtocol {
     interactor.router = router
     interactor.presenter = presenter
     interactor.worker = worker
-    interactor.loginInfo = loginInfo
     presenter.view = view
+
+    if let loginInfo = loginInfo {
+      interactor.loginInfo = loginInfo
+    }
 
     return view
   }

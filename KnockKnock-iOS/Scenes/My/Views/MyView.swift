@@ -69,9 +69,13 @@ final class MyView: UIView {
 
   // MARK: - Bind
 
-  func bind(isLoggedin: Bool) {
+  func setLoginStatus(isLoggedin: Bool) {
     self.loginButton.isHidden = isLoggedin
     self.userNameLabel.isHidden = !isLoggedin
+  }
+
+  func setNickname(nickname: String) {
+    self.userNameLabel.text = "반가워요 \(nickname)님 🌿"
   }
   
   // MARK: - Constraints
