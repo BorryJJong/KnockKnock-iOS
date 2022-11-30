@@ -154,13 +154,18 @@ class FeedWriteView: UIView {
     $0.text = "내용을 입력해주세요. (글자수 1,000자 이내)"
   }
 
-  private let doneButton = UIButton().then {
+  let doneButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.setTitle("등록 완료", for: .normal)
+    $0.setTitle("등록", for: .normal)
     $0.layer.cornerRadius = Metric.buttonCornerRadius
-    $0.backgroundColor = .gray40
+    $0.backgroundColor = .green50
   }
 
+  let alertView = AlertView().then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.isHidden = true
+  }
+  
   // MARK: - Initialize
 
   init() {
@@ -175,7 +180,6 @@ class FeedWriteView: UIView {
   // MARK: - Bind
 
   func bind(propertyType: PropertyType, content: String) {
-
     switch propertyType {
     case .tag:
       self.tagLabel.text = content
@@ -186,6 +190,17 @@ class FeedWriteView: UIView {
     }
   }
 
+  func showAlertView(isDone: Bool) {
+    self.alertView.isHidden = false
+    
+    let content = isDone ? "게시글 등록을 완료 하시겠습니까?" : "사진, 태그, 프로모션, 내용은 필수 입력 항목입니다."
+
+    self.alertView.bind(
+      content: content,
+      isCancelActive: isDone
+    )
+  }
+
   // MARK: - Constraints
 
   private func setupConstraints() {
@@ -194,6 +209,7 @@ class FeedWriteView: UIView {
     [self.promotionLabel, self.promotionSelectImageView, self.promotionSelectButton, self.promotionSeperateLineView].addSubViews(self)
     [self.shopLabel, self.shopSearchImageView, self.shopSearchButton, self.shopSearchSeperateLineView].addSubViews(self)
     [self.contentTextView, self.doneButton].addSubViews(self)
+    [self.alertView].addSubViews(self)
 
     NSLayoutConstraint.activate([
       self.photoAddButton.heightAnchor.constraint(equalToConstant: Metric.photoAddButtonHeight),
@@ -265,7 +281,12 @@ class FeedWriteView: UIView {
       self.doneButton.heightAnchor.constraint(equalToConstant: Metric.doneButtonHeight),
       self.doneButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.doneButtonBottomMargin),
       self.doneButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.doneButtonleadingMargin),
-      self.doneButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.doneButtonTrailingMargin)
+      self.doneButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.doneButtonTrailingMargin),
+
+      self.alertView.topAnchor.constraint(equalTo: self.topAnchor),
+      self.alertView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+      self.alertView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+      self.alertView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
     ])
   }
 }

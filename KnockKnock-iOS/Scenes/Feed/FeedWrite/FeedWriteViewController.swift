@@ -17,7 +17,6 @@ protocol FeedWriteViewProtocol: AnyObject {
   func fetchProperty(propertyType: PropertyType, content: String)
 }
 
-
 final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
   // MARK: - Properties
@@ -66,23 +65,45 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
     self.containerView.tagSelectButton.addTarget(
       self,
-      action: #selector(tagSelectButtonDidTap(_:)),
-      for: .touchUpInside)
+      action: #selector(self.tagSelectButtonDidTap(_:)),
+      for: .touchUpInside
+    )
 
     self.containerView.promotionSelectButton.addTarget(
       self,
-      action: #selector(promotionSelectButtonDidTap(_:)),
-      for: .touchUpInside)
+      action: #selector(self.promotionSelectButtonDidTap(_:)),
+      for: .touchUpInside
+    )
 
     self.containerView.shopSearchButton.addTarget(
       self,
-      action: #selector(shopSearchButtonDidTap(_:)),
-      for: .touchUpInside)
+      action: #selector(self.shopSearchButtonDidTap(_:)),
+      for: .touchUpInside
+    )
 
     self.containerView.photoAddButton.addTarget(
       self,
-      action: #selector(photoAddButtonDidTap(_:)),
-      for: .touchUpInside)
+      action: #selector(self.photoAddButtonDidTap(_:)),
+      for: .touchUpInside
+    )
+
+    self.containerView.doneButton.addTarget(
+      self,
+      action: #selector(self.doneButtonDidTap(_:)),
+      for: .touchUpInside
+    )
+
+    self.containerView.alertView.cancelButton.addTarget(
+      self,
+      action: #selector(self.alertCancelButtonDidTap(_:)),
+      for: .touchUpInside
+    )
+
+    self.containerView.alertView.confirmButton.addTarget(
+      self,
+      action: #selector(self.alertConfirmButtonDidTap(_:)),
+      for: .touchUpInside
+    )
   }
 
   // MARK: - Button Actions
@@ -116,6 +137,19 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   @objc func photoDeleteButtonDidTap(_ sender: UIButton) {
     self.pickedPhotos.remove(at: sender.tag)
     self.containerView.photoCollectionView.reloadData()
+  }
+
+  @objc func doneButtonDidTap(_ sender: UIButton) {
+    self.containerView.showAlertView(isDone: true)
+  }
+
+  @objc private func alertCancelButtonDidTap(_ sender: UIButton) {
+    self.containerView.alertView.isHidden = true
+  }
+
+  @objc private func alertConfirmButtonDidTap(_ sender: UIButton) {
+    self.containerView.alertView.isHidden = true
+    self.interactor?.dismissFeedWriteView(source: self)
   }
 
   // MARK: - ImagePicker
