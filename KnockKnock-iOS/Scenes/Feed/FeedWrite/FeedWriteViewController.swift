@@ -15,15 +15,25 @@ protocol FeedWriteViewProtocol: AnyObject {
   var interactor: FeedWriteInteractorProtocol? { get set }
 
   func fetchProperty(propertyType: PropertyType, content: String)
+  func showAlertView(isDone: Bool)
 }
 
 final class FeedWriteViewController: BaseViewController<FeedWriteView> {
+
+  // MARK: - Enum
+
+  enum WriteStatus {
+    case done
+    case hasBlank
+  }
 
   // MARK: - Properties
   
   var interactor: FeedWriteInteractorProtocol?
 
   var pickedPhotos: [UIImage] = []
+  var contentTextViewFilled = false
+  var writeStatus: WriteStatus = .hasBlank
 
   // MARK: - UIs
 
@@ -140,7 +150,9 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   }
 
   @objc func doneButtonDidTap(_ sender: UIButton) {
-    self.containerView.showAlertView(isDone: true)
+    let photoAndContentFilled = self.pickedPhotos.count != 0 && self.contentTextViewFilled
+
+    self.interactor?.checkEssentialField(photoAndContentFilled: photoAndContentFilled)
   }
 
   @objc private func alertCancelButtonDidTap(_ sender: UIButton) {
@@ -149,7 +161,10 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
   @objc private func alertConfirmButtonDidTap(_ sender: UIButton) {
     self.containerView.alertView.isHidden = true
-    self.interactor?.dismissFeedWriteView(source: self)
+
+    if self.writeStatus == .done {
+      self.interactor?.dismissFeedWriteView(source: self)
+    }
   }
 
   // MARK: - ImagePicker
@@ -187,6 +202,11 @@ extension FeedWriteViewController: FeedWriteViewProtocol {
       content: content
     )
   }
+
+  func showAlertView(isDone: Bool) {
+    self.containerView.showAlertView(isDone: isDone)
+    self.writeStatus = isDone ? .done : .hasBlank
+  }
 }
 
 // MARK: - TextView Delegate
@@ -203,6 +223,9 @@ extension FeedWriteViewController: UITextViewDelegate {
     if textView.text.isEmpty {
       textView.text = "내용을 입력해주세요. (글자수 1,000자 이내)"
       textView.textColor = .gray40
+      self.contentTextViewFilled = false
+    } else {
+      self.contentTextViewFilled = true
     }
   }
 }

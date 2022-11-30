@@ -18,6 +18,7 @@ protocol FeedWriteInteractorProtocol: AnyObject {
     source: FeedWriteViewProtocol,
     propertyType: PropertyType
   )
+  func checkEssentialField(imageSelected: Bool)
 }
 
 final class FeedWriteInteractor: FeedWriteInteractorProtocol {
@@ -28,8 +29,8 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
   var worker: FeedWriteWorkerProtocol?
   var router: FeedWriteRouterProtocol?
 
-  private var selectedPromotionList: [Promotion]?
-  private var selectedTagList: [ChallengeTitle]?
+  private var selectedPromotionList: [Promotion] = []
+  private var selectedTagList: [ChallengeTitle] = []
 
   // Routing
 
@@ -51,6 +52,24 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
       promotionList: self.selectedPromotionList,
       tagList: self.selectedTagList
     )
+  }
+
+  func checkEssentialField(photoAndContentFilled: Bool) {
+    let isPromotionSelected = self.selectedPromotionList.filter {
+      $0.isSelected == true
+    }.count != 0
+
+    let isTagSelected = self.selectedTagList.filter{
+      $0.isSelected == true
+    }.count != 0
+
+    if photoAndContentFilled &&
+        isTagSelected &&
+        isPromotionSelected {
+      self.presenter?.presentAlertView(isDone: true)
+    } else {
+      self.presenter?.presentAlertView(isDone: false)
+    }
   }
 }
 
