@@ -146,6 +146,7 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
   @objc func photoDeleteButtonDidTap(_ sender: UIButton) {
     self.pickedPhotos.remove(at: sender.tag)
+    self.containerView.bindPhotoCount(count: self.pickedPhotos.count)
     self.containerView.photoCollectionView.reloadData()
   }
 
@@ -184,6 +185,7 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
           print("error")
         }
       }
+      self.containerView.bindPhotoCount(count: self.pickedPhotos.count)
       picker.dismiss(animated: true, completion: nil)
     }
     self.present(picker, animated: true, completion: nil)
@@ -197,7 +199,7 @@ extension FeedWriteViewController: FeedWriteViewProtocol {
     propertyType: PropertyType,
     content: String
   ) {
-    self.containerView.bind(
+    self.containerView.bindPropertyValue(
       propertyType: propertyType,
       content: content
     )
@@ -237,7 +239,7 @@ extension FeedWriteViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    return pickedPhotos.count
+    return self.pickedPhotos.count
   }
 
   func collectionView(
@@ -247,9 +249,10 @@ extension FeedWriteViewController: UICollectionViewDataSource {
 
     let photo = self.pickedPhotos[indexPath.row]
 
-    let cell = collectionView.dequeueReusableCell(
-      withReuseIdentifier: PhotoCell.reusableIdentifier,
-      for: indexPath) as! PhotoCell
+    let cell = collectionView.dequeueCell(
+      withType: PhotoCell.self,
+      for: indexPath
+    )
 
     cell.backgroundColor = .white
     cell.deleteButton.tag = indexPath.row

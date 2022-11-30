@@ -179,7 +179,11 @@ class FeedWriteView: UIView {
 
   // MARK: - Bind
 
-  func bind(propertyType: PropertyType, content: String) {
+  func bindPhotoCount(count: Int) {
+    self.photoAddButton.setTitle("\(count)/5", for: .normal)
+  }
+
+  func bindPropertyValue(propertyType: PropertyType, content: String) {
     switch propertyType {
     case .tag:
       self.tagLabel.text = content

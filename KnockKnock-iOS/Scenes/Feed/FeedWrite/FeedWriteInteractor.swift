@@ -18,7 +18,7 @@ protocol FeedWriteInteractorProtocol: AnyObject {
     source: FeedWriteViewProtocol,
     propertyType: PropertyType
   )
-  func checkEssentialField(imageSelected: Bool)
+  func checkEssentialField(photoAndContentFilled: Bool)
 }
 
 final class FeedWriteInteractor: FeedWriteInteractorProtocol {
