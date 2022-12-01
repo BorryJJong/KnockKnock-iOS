@@ -29,17 +29,17 @@ final class MyWorker: MyWorkerProtocol {
   }
 
   private let menuData: MyMenu = {
-    let profile = MyItem(title: MyMenuType.profile.rawValue, type: .plain)
-    let signout = MyItem(title: MyMenuType.signOut.rawValue, type: .plain)
-    let push = MyItem(title: MyMenuType.pushNotification.rawValue, type: .alert)
+    let profile = MyItem(title: MyMenuType.profile, type: .plain)
+    let signout = MyItem(title: MyMenuType.signOut, type: .plain)
+    let push = MyItem(title: MyMenuType.pushNotification, type: .alert)
 
-    let notice = MyItem(title: MyMenuType.notice.rawValue, type: .plain)
-    let version = MyItem(title: MyMenuType.versionInfo.rawValue, type: .version)
+    let notice = MyItem(title: MyMenuType.notice, type: .plain)
+    let version = MyItem(title: MyMenuType.versionInfo, type: .version)
 
-    let service = MyItem(title: MyMenuType.serviceTerms.rawValue, type: .plain)
-    let privacy = MyItem(title: MyMenuType.privacy.rawValue, type: .plain)
-    let location = MyItem(title: MyMenuType.locationService.rawValue, type: .plain)
-    let openSource = MyItem(title: MyMenuType.opensource.rawValue, type: .plain)
+    let service = MyItem(title: MyMenuType.serviceTerms, type: .plain)
+    let privacy = MyItem(title: MyMenuType.privacy, type: .plain)
+    let location = MyItem(title: MyMenuType.locationService, type: .plain)
+    let openSource = MyItem(title: MyMenuType.opensource, type: .plain)
 
     let myInfoSection = MySection(
       title: MySectionType.myInfo,

@@ -209,7 +209,7 @@
 		61CD47FC293473F900FEE2F7 /* MyInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CD47FB293473F900FEE2F7 /* MyInteractor.swift */; };
 		61CD47FE2934741D00FEE2F7 /* MyPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CD47FD2934741D00FEE2F7 /* MyPresenter.swift */; };
 		61CD4800293478B900FEE2F7 /* MyWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CD47FF293478B900FEE2F7 /* MyWorker.swift */; };
-		61CD48042935BC0D00FEE2F7 /* NotificationCenter+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CD48032935BC0D00FEE2F7 /* NotificationCenter+Ext.swift */; };
+		61CD48042935BC0D00FEE2F7 /* Notification+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CD48032935BC0D00FEE2F7 /* Notification+Ext.swift */; };
 		61E3087C287334C1001394B6 /* ImageScaleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E3087B287334C1001394B6 /* ImageScaleType.swift */; };
 		61E3088428768D71001394B6 /* UIStackView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E3088328768D71001394B6 /* UIStackView+Ext.swift */; };
 		61E87EB528D17CAF0005CAA6 /* NetworkErrorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E87EB428D17CAF0005CAA6 /* NetworkErrorType.swift */; };
@@ -421,7 +421,7 @@
 		61CD47FB293473F900FEE2F7 /* MyInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInteractor.swift; sourceTree = "<group>"; };
 		61CD47FD2934741D00FEE2F7 /* MyPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPresenter.swift; sourceTree = "<group>"; };
 		61CD47FF293478B900FEE2F7 /* MyWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWorker.swift; sourceTree = "<group>"; };
-		61CD48032935BC0D00FEE2F7 /* NotificationCenter+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationCenter+Ext.swift"; sourceTree = "<group>"; };
+		61CD48032935BC0D00FEE2F7 /* Notification+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Ext.swift"; sourceTree = "<group>"; };
 		61E3087B287334C1001394B6 /* ImageScaleType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageScaleType.swift; sourceTree = "<group>"; };
 		61E3088328768D71001394B6 /* UIStackView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Ext.swift"; sourceTree = "<group>"; };
 		61E87EB428D17CAF0005CAA6 /* NetworkErrorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkErrorType.swift; sourceTree = "<group>"; };
@@ -534,7 +534,7 @@
 				201077F727D3BF4B00280991 /* Array+Ext.swift */,
 				2010780727D48FDD00280991 /* Int+Ext.swift */,
 				61AB2E5328A3775300A1AE30 /* Double+Ext.swift */,
-				61CD48032935BC0D00FEE2F7 /* NotificationCenter+Ext.swift */,
+				61CD48032935BC0D00FEE2F7 /* Notification+Ext.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -1333,7 +1333,7 @@
 				61215ADE28571E20003FDCAA /* FeedMainView.swift in Sources */,
 				2090811A27CA4F61005A1573 /* ChallengeViewController.swift in Sources */,
 				613856D82899015000BE347E /* HomeMainCell.swift in Sources */,
-				61CD48042935BC0D00FEE2F7 /* NotificationCenter+Ext.swift in Sources */,
+				61CD48042935BC0D00FEE2F7 /* Notification+Ext.swift in Sources */,
 				2010780427D3D62300280991 /* UITableView+Ext.swift in Sources */,
 				61CD4800293478B900FEE2F7 /* MyWorker.swift in Sources */,
 				611BD4AE27E48F37007D5C79 /* UIColor+Ext.swift in Sources */,

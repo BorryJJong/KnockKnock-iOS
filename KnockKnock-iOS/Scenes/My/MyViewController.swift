@@ -256,16 +256,16 @@ extension MyViewController: UITableViewDelegate {
 
     switch menu.title {
     case .myInfo:
-      if menu.myItems[indexPath.item].title == "프로필 수정" {
+      if menu.myItems[indexPath.item].title == .profile {
         self.interactor?.navigateToProfileSettingView(source: self)
       }
 
-      if menu.myItems[indexPath.item].title == "탈퇴하기" {
+      if menu.myItems[indexPath.item].title == .signOut {
         self.interactor?.requestSignOut()
       }
 
     case .customer:
-      if menu.myItems[indexPath.item].title == "공지사항" {
+      if menu.myItems[indexPath.item].title == .notice {
         self.interactor?.navigateToNoticeView(source: self)
       }
 

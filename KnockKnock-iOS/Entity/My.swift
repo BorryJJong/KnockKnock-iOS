@@ -19,6 +19,6 @@ struct MySection {
 /// title: 제목
 /// type:  accessory type
 struct MyItem {
-  let title: String
+  let title: MyMenuType
   let type: MyType
 }
