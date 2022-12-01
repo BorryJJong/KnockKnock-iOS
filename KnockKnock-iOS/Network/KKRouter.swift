@@ -22,8 +22,10 @@ enum KKRouter: URLRequestConvertible {
     }
   }
 
-  case socialLogin(loginInfo: Parameters)
-  case signUp(userInfo: Parameters)
+  case postSocialLogin(loginInfo: Parameters)
+  case postSignUp(userInfo: Parameters)
+  case deleteSignOut
+  case postLogOut
 
   case getChallengeResponse
   case getChallengeDetail(id: Int)
@@ -51,18 +53,22 @@ enum KKRouter: URLRequestConvertible {
         .getComment:
       return .get
 
-    case .socialLogin,
-         .signUp,
+    case .postSocialLogin,
+         .postSignUp,
+         .postLogOut,
          .postAddComment:
       return .post
+
+    case .deleteSignOut:
+      return .delete
     }
   }
 
   var path: String {
     switch self {
 
-    case .socialLogin: return "users/social-login"
-    case .signUp: return "users/sign-up"
+    case .postSocialLogin: return "users/social-login"
+    case .postSignUp: return "users/sign-up"
     case .getChallengeResponse: return "challenges"
     case .getChallengeDetail(let id): return "challenges/\(id)"
     case .getFeedMain: return "feed/main"
@@ -73,16 +79,18 @@ enum KKRouter: URLRequestConvertible {
     case .getFeed(let id): return "feed/\(id)"
     case .getComment(let id): return "feed/\(id)/comment"
     case .postAddComment: return "feed/comment"
+    case .postLogOut: return "users/logout"
+    case .deleteSignOut: return "users"
     }
   }
 
   var parameters: Parameters? {
     switch self {
 
-    case let .socialLogin(loginInfo):
+    case let .postSocialLogin(loginInfo):
       return loginInfo
 
-    case let .signUp(userInfo):
+    case let .postSignUp(userInfo):
       return userInfo
 
     case  .getChallengeDetail,
@@ -90,6 +98,8 @@ enum KKRouter: URLRequestConvertible {
         .getChallengeTitles,
         .getFeed,
         .getPromotions,
+        .postLogOut,
+        .deleteSignOut,
         .getComment:
 
       return nil
@@ -140,10 +150,16 @@ enum KKRouter: URLRequestConvertible {
       }
 
     case .post, .patch, .delete:
-      request = try JSONEncoding.default.encode(request)
-      request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
-      request.setValue("application/json", forHTTPHeaderField: "Accept")
-      request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+      switch self {
+      case .deleteSignOut, .postLogOut:
+        request = try JSONEncoding.default.encode(request)
+
+      default:
+        request = try JSONEncoding.default.encode(request)
+        request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+      }
 
     default:
       break

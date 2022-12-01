@@ -14,6 +14,8 @@ protocol MyInteractorProtocol {
 
   func fetchMenuData()
   func checkLoginStatus()
+  func requestLogOut()
+  func requestSignOut()
 
   func navigateToLoginView(source: MyViewProtocol)
   func navigateToNoticeView(source: MyViewProtocol)
@@ -44,6 +46,18 @@ final class MyInteractor: MyInteractorProtocol {
         })
       }
       self.presenter?.presentLoginStatus(isLoggedIn: isLoggedIn)
+    })
+  }
+
+  func requestLogOut() {
+    self.worker?.requestLogOut(completionHandler: {
+      NotificationCenter.default.post(name: .logoutCompleted, object: nil)
+    })
+  }
+
+  func requestSignOut() {
+    self.worker?.requestSignOut(completionHandler: {
+      NotificationCenter.default.post(name: .logoutCompleted, object: nil)
     })
   }
 

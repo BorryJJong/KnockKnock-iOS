@@ -98,10 +98,8 @@ final class MyViewController: BaseViewController<MyView> {
     self.interactor?.navigateToLoginView(source: self)
   }
 
-  // 테스트용 임시 로그아웃 기능 연결
   @objc func logoutButtonDidTap(_ sender: UIButton) {
-    LocalDataManager().deleteToken()
-    NotificationCenter.default.post(name: .logoutCompleted, object: nil)
+    self.interactor?.requestLogOut()
   }
 }
 
@@ -260,6 +258,10 @@ extension MyViewController: UITableViewDelegate {
     case .myInfo:
       if menu.myItems[indexPath.item].title == "프로필 수정" {
         self.interactor?.navigateToProfileSettingView(source: self)
+      }
+
+      if menu.myItems[indexPath.item].title == "탈퇴하기" {
+        self.interactor?.requestSignOut()
       }
 
     case .customer:

@@ -11,14 +11,21 @@ protocol MyWorkerProtocol {
   func fetchMenuData(completionHandler: @escaping (MyMenu) -> Void)
   func checkLoginStatus(completionHandler: @escaping(Bool) -> Void)
   func fetchNickname(completionHandler: @escaping(String) -> Void)
+  func requestLogOut(completionHandler: @escaping() -> Void)
+  func requestSignOut(completionHandler: @escaping() -> Void)
 }
 
 final class MyWorker: MyWorkerProtocol {
 
-  private let localDataManager: LocalDataManager?
+  private let localDataManager: LocalDataManagerProtocol?
+  private let accountManager: AccountManagerProtocol?
 
-  init(localDataManager: LocalDataManager) {
+  init(
+    localDataManager: LocalDataManagerProtocol,
+    accountManager: AccountManagerProtocol
+  ) {
     self.localDataManager = localDataManager
+    self.accountManager = accountManager
   }
 
   private let menuData: MyMenu = {
@@ -64,5 +71,24 @@ final class MyWorker: MyWorkerProtocol {
     if let isLoggedIn = self.localDataManager?.checkTokenIsExisted() {
       completionHandler(isLoggedIn)
     }
+  }
+
+  func requestLogOut(completionHandler: @escaping() -> Void) {
+    self.accountManager?.logOut(completionHanlder: { success in
+      if success {
+        self.localDataManager?.deleteToken()
+        completionHandler()
+      }
+    })
+  }
+
+  func requestSignOut(completionHandler: @escaping() -> Void) {
+    self.accountManager?.signOut(completionHanlder: { success in
+      if success {
+        self.localDataManager?.deleteToken()
+        self.localDataManager?.deleteNickname()
+        completionHandler()
+      }
+    })
   }
 }

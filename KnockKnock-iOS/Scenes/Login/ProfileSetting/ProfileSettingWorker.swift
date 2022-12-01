@@ -17,11 +17,11 @@ protocol ProfileSettingWorkerProtocol {
 }
 
 final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
-  private let kakaoAccountManager: AccountManagerProtocol
+  private let kakaoAccountManager: SocialLoginManagerProtocol
   private let localDataManager: LocalDataManagerProtocol
 
   init(
-    kakaoAccountManager: AccountManagerProtocol,
+    kakaoAccountManager: SocialLoginManagerProtocol,
     localDataManager: LocalDataManagerProtocol
   ) {
     self.kakaoAccountManager = kakaoAccountManager
