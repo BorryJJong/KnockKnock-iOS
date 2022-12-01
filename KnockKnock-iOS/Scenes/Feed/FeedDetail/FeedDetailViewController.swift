@@ -270,7 +270,11 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       return self.feedDetail?.data.challenges.count ?? 0
 
     case .like:
-      return self.like.count + 1
+      if self.like.isEmpty {
+        return self.like.count
+      } else {
+        return self.like.count + 1
+      }
 
     case .comment:
       return self.visibleComments.count
