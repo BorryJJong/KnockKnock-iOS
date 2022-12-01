@@ -16,14 +16,17 @@ final class AlertView: UIView {
 
   private enum Metric {
     static let alertViewLeadingMargin = 20.f
-    static let alertViewHeight = 130.f
+    static let alertViewBottomMargin = 20.f
 
     static let contentLabelTopMargin = 30.f
     static let contentLabelTrailingMargin = 20.f
 
     static let confirmButtonTrailingMargin = -20.f
+    static let confirmButtonTopMargin = 40.f
+    static let confirmButtonHeight = 30.f
 
     static let cancelButtonTrailingMargin = -30.f
+    static let cancelButtonHeight = 30.f
   }
 
   // MARK: - UIs
@@ -33,13 +36,13 @@ final class AlertView: UIView {
   }
 
   private let alertView = UIView().then {
-    $0.backgroundColor = .white
+    $0.backgroundColor = .gray10
     $0.clipsToBounds = true
-    $0.layer.cornerRadius = 5
+    $0.layer.cornerRadius = 10
   }
 
   private let contentLabel = UILabel().then {
-    $0.text = "내용입니다."
+    $0.numberOfLines = 0
     $0.font = .systemFont(ofSize: 14, weight: .medium)
   }
 
@@ -71,8 +74,18 @@ final class AlertView: UIView {
   // MARK: - Bind
 
   func bind(content: String, isCancelActive: Bool) {
+    let attrString = NSMutableAttributedString(string: content)
+    let paragraphStyle = NSMutableParagraphStyle()
+
+    paragraphStyle.lineSpacing = 4
+    attrString.addAttribute(
+      NSAttributedString.Key.paragraphStyle,
+      value: paragraphStyle,
+      range: NSMakeRange(0, attrString.length)
+    )
+
+    self.contentLabel.attributedText = attrString
     self.cancelButton.isHidden = !isCancelActive
-    self.contentLabel.text = content
   }
 
   // MARK: - Configure
@@ -88,7 +101,7 @@ final class AlertView: UIView {
     self.alertView.snp.makeConstraints {
       $0.centerY.equalToSuperview()
       $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.alertViewLeadingMargin)
-      $0.height.equalTo(Metric.alertViewHeight)
+      $0.bottom.equalTo(self.cancelButton.snp.bottom).offset(Metric.alertViewBottomMargin)
     }
 
     self.contentLabel.snp.makeConstraints {
@@ -97,12 +110,15 @@ final class AlertView: UIView {
     }
 
     self.confirmButton.snp.makeConstraints {
-      $0.trailing.bottom.equalToSuperview().offset(Metric.confirmButtonTrailingMargin)
+      $0.top.equalTo(self.contentLabel.snp.bottom).offset(Metric.confirmButtonTopMargin)
+      $0.trailing.equalToSuperview().offset(Metric.confirmButtonTrailingMargin)
+      $0.height.equalTo(Metric.confirmButtonHeight)
     }
 
     self.cancelButton.snp.makeConstraints {
+      $0.top.equalTo(self.confirmButton)
       $0.trailing.equalTo(self.confirmButton.snp.leading).offset(Metric.cancelButtonTrailingMargin)
-      $0.bottom.equalTo(self.confirmButton)
+      $0.height.equalTo(Metric.cancelButtonHeight)
     }
   }
 }

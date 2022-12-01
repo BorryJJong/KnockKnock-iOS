@@ -28,6 +28,8 @@ final class MyViewController: BaseViewController<MyView> {
 
   var interactor: MyInteractorProtocol?
 
+  var selectedMenuItem: MyMenuType?
+
   var isLoggedIn: Bool = false {
     didSet {
       self.containerView.setLoginStatus(isLoggedin: self.isLoggedIn)
@@ -90,6 +92,22 @@ final class MyViewController: BaseViewController<MyView> {
         for: .touchUpInside
       )
     }
+
+    self.containerView.alertView.cancelButton.do {
+      $0.addTarget(
+        self,
+        action: #selector(self.alertCancelButtonDidTap(_:)),
+        for: .touchUpInside
+      )
+    }
+    
+    self.containerView.alertView.confirmButton.do {
+      $0.addTarget(
+        self,
+        action: #selector(self.alertConfirmButtonDidTap(_:)),
+        for: .touchUpInside
+      )
+    }
   }
 
   // MARK: - Button Actions
@@ -100,6 +118,17 @@ final class MyViewController: BaseViewController<MyView> {
 
   @objc func logoutButtonDidTap(_ sender: UIButton) {
     self.interactor?.requestLogOut()
+  }
+
+  @objc func alertConfirmButtonDidTap(_ sender: UIButton) {
+    if selectedMenuItem == .signOut {
+      self.interactor?.requestSignOut()
+    }
+    self.containerView.setAlertView(menuType: nil)
+  }
+
+  @objc func alertCancelButtonDidTap(_ sender: UIButton) {
+    self.containerView.setAlertView(menuType: nil)
   }
 }
 
@@ -157,7 +186,7 @@ extension MyViewController: UITableViewDataSource {
     cell.textLabel?.do {
       $0.font = .systemFont(ofSize: 15, weight: .bold)
       $0.textColor = .black
-      $0.text = menu.title
+      $0.text = menu.title.rawValue
     }
 
     switch menu.type {
@@ -252,25 +281,22 @@ extension MyViewController: UITableViewDelegate {
     didSelectRowAt indexPath: IndexPath
   ) {
     
-    let menu = self.menuData[indexPath.section]
+    let mySection = self.menuData[indexPath.section]
+    let menu = mySection.myItems[indexPath.item].title
 
-    switch menu.title {
-    case .myInfo:
-      if menu.myItems[indexPath.item].title == .profile {
-        self.interactor?.navigateToProfileSettingView(source: self)
-      }
+    switch menu {
+    case .profile:
+      self.interactor?.navigateToProfileSettingView(source: self)
 
-      if menu.myItems[indexPath.item].title == .signOut {
-        self.interactor?.requestSignOut()
-      }
+    case .signOut, .versionInfo:
+      self.selectedMenuItem = menu
+      self.containerView.setAlertView(menuType: menu)
 
-    case .customer:
-      if menu.myItems[indexPath.item].title == .notice {
-        self.interactor?.navigateToNoticeView(source: self)
-      }
+    case .notice:
+      self.interactor?.navigateToNoticeView(source: self)
 
-    case .policy:
-      print("policy")
+    default:
+      print("none")
     }
   }
 } 
