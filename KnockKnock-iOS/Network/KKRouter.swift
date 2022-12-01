@@ -38,6 +38,8 @@ enum KKRouter: URLRequestConvertible {
   case getComment(id: Int)
   case postAddComment(comment: Parameters)
 
+  case getLikeList(id: Int)
+
   var method: HTTPMethod {
     switch self {
     case .getChallengeResponse,
@@ -48,6 +50,7 @@ enum KKRouter: URLRequestConvertible {
         .getPromotions,
         .getChallengeDetail,
         .requestShopAddress,
+        .getLikeList,
         .getComment:
       return .get
 
@@ -73,6 +76,7 @@ enum KKRouter: URLRequestConvertible {
     case .getFeed(let id): return "feed/\(id)"
     case .getComment(let id): return "feed/\(id)/comment"
     case .postAddComment: return "feed/comment"
+    case .getLikeList(let id): return "like/feed/\(id)"
     }
   }
 
@@ -85,11 +89,12 @@ enum KKRouter: URLRequestConvertible {
     case let .signUp(userInfo):
       return userInfo
 
-    case  .getChallengeDetail,
+    case .getChallengeDetail,
         .getChallengeResponse,
         .getChallengeTitles,
         .getFeed,
         .getPromotions,
+        .getLikeList,
         .getComment:
 
       return nil
@@ -128,7 +133,7 @@ enum KKRouter: URLRequestConvertible {
     case .get:
       switch self {
 
-      case .getChallengeDetail, .getFeed, .getPromotions, .getComment:
+      case .getChallengeDetail, .getFeed, .getPromotions, .getComment, .getLikeList:
         break
 
       case .requestShopAddress:

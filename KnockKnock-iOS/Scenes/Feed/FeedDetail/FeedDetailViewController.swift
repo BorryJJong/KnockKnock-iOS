@@ -17,7 +17,7 @@ protocol FeedDetailViewProtocol: AnyObject {
   func getFeedDetail(feedDetail: FeedDetail)
   func getAllComments(allComments: [Comment])
   func fetchVisibleComments(comments: [Comment])
-  func getLike(like: [Like])
+  func getLike(like: [LikeInfo])
 }
 
 final class FeedDetailViewController: BaseViewController<FeedDetailView> {
@@ -38,7 +38,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   var feedId: Int = 6
   var userId: Int = 1
   var commentId: Int?
-  var like: [Like] = []
+  var like: [LikeInfo] = []
 
   var allComments: [Comment] = []
   var visibleComments: [Comment] = [] {
@@ -59,13 +59,16 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
 
     self.setNavigationBar()
     self.setupConfigure()
-
-    self.interactor?.getFeedDeatil(feedId: feedId)
-    self.interactor?.getLike()
-    self.interactor?.fetchAllComments(feedId: feedId)
+    self.fetchData()
   }
 
   // MARK: - Configure
+
+  private func fetchData() {
+    self.interactor?.getFeedDeatil(feedId: feedId)
+    self.interactor?.getLike(feedId: feedId)
+    self.interactor?.fetchAllComments(feedId: feedId)
+  }
 
   override func setupConfigure() {
     self.containerView.postCollectionView.do {
@@ -257,7 +260,7 @@ extension FeedDetailViewController: FeedDetailViewProtocol {
     self.visibleComments = comments
   }
 
-  func getLike(like: [Like]) {
+  func getLike(like: [LikeInfo]) {
     self.like = like
   }
 }

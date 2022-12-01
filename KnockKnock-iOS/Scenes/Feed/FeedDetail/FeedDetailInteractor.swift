@@ -15,7 +15,7 @@ protocol FeedDetailInteractorProtocol {
   func fetchAllComments(feedId: Int)
   func fetchVisibleComments(comments: [Comment])
   func requestAddComment(comment: AddCommentRequest)
-  func getLike()
+  func getLike(feedId: Int)
 }
 
 final class FeedDetailInteractor: FeedDetailInteractorProtocol {
@@ -30,8 +30,9 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       })
   }
 
-  func getLike() {
+  func getLike(feedId: Int) {
     self.worker?.getLike(
+      feedId: feedId,
       completionHandler: { [weak self] like in
       self?.presenter?.presentLike(like: like)
     })
