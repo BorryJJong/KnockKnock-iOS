@@ -7,8 +7,18 @@
 
 import Foundation
 
-struct Like: Decodable {
+struct LikeResponse: Decodable {
+  let data: LikeData
+}
+
+struct LikeData: Decodable {
+  let postId: String
+  let likes: [LikeInfo]
+}
+
+struct LikeInfo: Decodable {
+  let id: Int
   let userId: Int
-  let nickname: String
-  let image: String?
+  let userName: String
+  let userImage: String?
 }
