@@ -92,22 +92,6 @@ final class MyViewController: BaseViewController<MyView> {
         for: .touchUpInside
       )
     }
-
-    self.containerView.alertView.cancelButton.do {
-      $0.addTarget(
-        self,
-        action: #selector(self.alertCancelButtonDidTap(_:)),
-        for: .touchUpInside
-      )
-    }
-    
-    self.containerView.alertView.confirmButton.do {
-      $0.addTarget(
-        self,
-        action: #selector(self.alertConfirmButtonDidTap(_:)),
-        for: .touchUpInside
-      )
-    }
   }
 
   // MARK: - Button Actions
@@ -118,17 +102,6 @@ final class MyViewController: BaseViewController<MyView> {
 
   @objc func logoutButtonDidTap(_ sender: UIButton) {
     self.interactor?.requestLogOut()
-  }
-
-  @objc func alertConfirmButtonDidTap(_ sender: UIButton) {
-    if selectedMenuItem == .signOut {
-      self.interactor?.requestSignOut()
-    }
-    self.containerView.setAlertView(menuType: nil)
-  }
-
-  @objc func alertCancelButtonDidTap(_ sender: UIButton) {
-    self.containerView.setAlertView(menuType: nil)
   }
 }
 
@@ -290,7 +263,10 @@ extension MyViewController: UITableViewDelegate {
 
     case .signOut, .versionInfo:
       self.selectedMenuItem = menu
-      self.containerView.setAlertView(menuType: menu)
+//      self.containerView.setAlertView(menuType: menu)
+      let alertViewController = AlertViewController()
+      alertViewController.modalPresentationStyle = .fullScreen
+      self.navigationController?.present(alertViewController, animated: false)
 
     case .notice:
       self.interactor?.navigateToNoticeView(source: self)

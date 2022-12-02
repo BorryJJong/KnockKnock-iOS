@@ -65,6 +65,7 @@ final class AlertView: UIView {
   init() {
     super.init(frame: .zero)
     self.setupConstraints()
+    self.configure()
   }
 
   required init?(coder aDecoder: NSCoder) {
@@ -89,6 +90,10 @@ final class AlertView: UIView {
   }
 
   // MARK: - Configure
+
+  private func configure() {
+    self.backgroundColor = .clear
+  }
 
   private func setupConstraints() {
     [self.dimmedView, self.alertView].addSubViews(self)
