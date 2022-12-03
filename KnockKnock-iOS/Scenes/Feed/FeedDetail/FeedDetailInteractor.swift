@@ -26,7 +26,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   var presenter: FeedDetailPresenterProtocol?
   var router: FeedDetailRouterProtocol?
 
-  var likeList: [LikeInfo] = []
+  private var likeList: [LikeInfo] = []
 
   // Business logic
 
