@@ -11,8 +11,9 @@ protocol FeedDetailPresenterProtocol {
   var view: FeedDetailViewProtocol? { get set }
 
   func presentFeedDetail(feedDetail: FeedDetail)
+  func presentAllCommentsCount(allCommentsCount: Int)
   func presentVisibleComments(allComments: [Comment])
-  func presentLike(like: [Like])
+  func presentLike(like: [LikeInfo])
 }
 
 final class FeedDetailPresenter: FeedDetailPresenterProtocol {
@@ -23,7 +24,7 @@ final class FeedDetailPresenter: FeedDetailPresenterProtocol {
     LoadingIndicator.hideLoading()
   }
 
-  func presentLike(like: [Like]) {
+  func presentLike(like: [LikeInfo]) {
     self.view?.getLike(like: like)
   }
 
@@ -59,6 +60,11 @@ final class FeedDetailPresenter: FeedDetailPresenterProtocol {
         }
       }
     }
-    self.view?.fetchVisibleComments(comments: comments)
+    self.view?.fetchVisibleComments(visibleComments: comments)
+  }
+
+  func presentAllCommentsCount(allCommentsCount: Int) {
+    self.view?.getAllCommentsCount(allCommentsCount: allCommentsCount)
+    print(allCommentsCount)
   }
 }
