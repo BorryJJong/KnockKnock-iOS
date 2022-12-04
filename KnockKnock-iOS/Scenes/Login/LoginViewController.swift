@@ -62,4 +62,3 @@ final class LoginViewController: BaseViewController<LoginView> {
 extension LoginViewController: LoginViewProtocol {
 
 }
-

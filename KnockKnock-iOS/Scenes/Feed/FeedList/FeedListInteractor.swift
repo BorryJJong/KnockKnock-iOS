@@ -10,6 +10,7 @@ import Foundation
 protocol FeedListInteractorProtocol {
   var presenter: FeedListPresenterProtocol? { get set }
   var worker: FeedListWorkerProtocol? { get set }
+  var router: FeedListRouterProtocol? { get set }
   
   func fetchFeedList(
     currentPage: Int,
@@ -18,14 +19,22 @@ protocol FeedListInteractorProtocol {
     challengeId: Int
   )
   
-  func requestLike(feedId: Int)
-  func requestLikeCancel(feedId: Int)
+  func requestLike(source: FeedListViewProtocol, feedId: Int)
+  func requestLikeCancel(source: FeedListViewProtocol, feedId: Int)
+
+  func navigateToFeedMain(source: FeedListViewProtocol)
+  func navigateToFeedDetail(source: FeedListViewProtocol, feedId: Int)
+  func navigateToCommentView(feedId: Int, source: FeedListViewProtocol)
+  func presentBottomSheetView(source: FeedListViewProtocol)
 }
 
 final class FeedListInteractor: FeedListInteractorProtocol {
   var presenter: FeedListPresenterProtocol?
   var worker: FeedListWorkerProtocol?
-  
+  var router: FeedListRouterProtocol?
+
+  // Business Logic
+
   func fetchFeedList(
     currentPage: Int,
     pageSize: Int,
@@ -45,7 +54,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     )
   }
   
-  func requestLike(feedId: Int) {
+  func requestLike(source: FeedListViewProtocol, feedId: Int) {
     self.worker?.checkTokenExisted(completionHandler: { isExisted in
       if isExisted {
         self.worker?.requestLike(
@@ -55,12 +64,12 @@ final class FeedListInteractor: FeedListInteractorProtocol {
           }
         )
       } else {
-        print("login needed") // 추후 alert 처리
+        self.router?.navigateToLoginView(source: source)
       }
     })
   }
   
-  func requestLikeCancel(feedId: Int) {
+  func requestLikeCancel(source: FeedListViewProtocol, feedId: Int) {
     self.worker?.checkTokenExisted(completionHandler: { isExisted in
       if isExisted {
         
@@ -71,8 +80,38 @@ final class FeedListInteractor: FeedListInteractorProtocol {
           }
         )
       } else {
-        print("login needed") // 추후 alert 처리
+        self.router?.navigateToLoginView(source: source)
       }
     })
+  }
+
+  // Routing
+
+  func navigateToFeedDetail(
+    source: FeedListViewProtocol,
+    feedId: Int
+  ) {
+    self.router?.navigateToFeedDetail(
+      source: source,
+      feedId: feedId
+    )
+  }
+
+  func navigateToCommentView(
+    feedId: Int,
+    source: FeedListViewProtocol
+  ) {
+    self.router?.navigateToCommentView(
+      feedId: feedId,
+      source: source
+    )
+  }
+
+  func navigateToFeedMain(source: FeedListViewProtocol) {
+    self.router?.navigateToFeedMain(source: source)
+  }
+
+  func presentBottomSheetView(source: FeedListViewProtocol) {
+    self.router?.presentBottomSheetView(source: source)
   }
 }
