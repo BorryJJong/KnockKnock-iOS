@@ -44,7 +44,7 @@ enum KKRouter: URLRequestConvertible {
 
   // Like
   case postFeedLike(id: Int)
-  case postFeedLikeCancel(id: Int)
+  case deleteFeedLike(id: Int)
   case getLikeList(id: Int)
 
   // Comment
@@ -68,11 +68,13 @@ enum KKRouter: URLRequestConvertible {
       return .get
 
     case .postFeedLike,
-         .postFeedLikeCancel,
          .socialLogin,
          .signUp,
          .postAddComment:
       return .post
+
+    case .deleteFeedLike:
+      return .delete
     }
   }
 
@@ -101,7 +103,7 @@ enum KKRouter: URLRequestConvertible {
 
     // Like
     case .postFeedLike(let id): return "like/feed/\(id)"
-    case .postFeedLikeCancel(let id): return "like/feed\(id)"
+    case .deleteFeedLike(let id): return "like/feed/\(id)"
     case .getLikeList(let id): return "like/feed/\(id)"
 
     // Comment
@@ -120,16 +122,6 @@ enum KKRouter: URLRequestConvertible {
 
     case let .signUp(userInfo):
       return userInfo
-
-    case .getChallengeDetail,
-        .getChallengeResponse,
-        .getChallengeTitles,
-        .getFeed,
-        .getPromotions,
-        .getLikeList,
-        .getComment:
-
-      return nil
 
     case let .requestShopAddress(query, page, size):
       return [
@@ -162,7 +154,8 @@ enum KKRouter: URLRequestConvertible {
         .getFeed,
         .getPromotions,
         .postFeedLike,
-        .postFeedLikeCancel,
+        .deleteFeedLike,
+        .getLikeList,
         .getComment:
 
       return nil
@@ -193,7 +186,7 @@ enum KKRouter: URLRequestConvertible {
 
     case .post, .patch, .delete:
       switch self {
-      case .postFeedLike, .postFeedLikeCancel:
+      case .postFeedLike, .deleteFeedLike:
         request = try JSONEncoding.default.encode(request)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         

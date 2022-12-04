@@ -15,7 +15,6 @@ protocol FeedListViewProtocol: AnyObject {
   var router: FeedListRouterProtocol? { get set }
   
   func fetchFeedList(feedList: FeedList)
-  func fetchFeedLikeResult(isSuccess: Bool)
 }
 
 final class FeedListViewController: BaseViewController<FeedListView> {
@@ -123,8 +122,12 @@ final class FeedListViewController: BaseViewController<FeedListView> {
       isSelected: sender.isSelected
     )
     sender.setTitle(title, for: .normal)
-//    self.interactor?.requestLike(feedId: sender.tag)
-    self.interactor?.requestLikeCancel(feedId: sender.tag)
+
+    if sender.isSelected {
+      self.interactor?.requestLike(feedId: sender.tag)
+    } else {
+      self.interactor?.requestLikeCancel(feedId: sender.tag)
+    }
   }
 
   func setLikeButtonTitle(currentNum: String?, isSelected: Bool) -> String {
@@ -178,8 +181,7 @@ extension FeedListViewController: UICollectionViewDataSource {
       action: #selector(self.commentButtonDidTap(_:)),
       for: .touchUpInside
     )
-    cell.likeButton.tag = indexPath.section
-    cell.commentsButton.tag = indexPath.section
+    cell.likeButton.tag = self.feedListPost[indexPath.section].id
     cell.likeButton.addTarget(
       self,
       action: #selector(self.likeButtonDidTap(_:)),
@@ -281,9 +283,5 @@ extension FeedListViewController: FeedListViewProtocol {
     feedList.feeds.forEach {
       self.feedListPost.append($0)
     }
-  }
-
-  func fetchFeedLikeResult(isSuccess: Bool) {
-    print(isSuccess)
   }
 }

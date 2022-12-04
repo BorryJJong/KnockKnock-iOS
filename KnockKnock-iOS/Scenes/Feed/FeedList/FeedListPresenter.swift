@@ -10,7 +10,6 @@ import UIKit
 protocol FeedListPresenterProtocol {
   var view: FeedListViewController? { get set }
   func presentFetchFeedList(feedList: FeedList)
-  func presentFeedLikeResult(isSuccess: Bool)
 }
 
 final class FeedListPresenter: FeedListPresenterProtocol {
@@ -19,9 +18,5 @@ final class FeedListPresenter: FeedListPresenterProtocol {
   func presentFetchFeedList(feedList: FeedList) {
     self.view?.fetchFeedList(feedList: feedList)
     LoadingIndicator.hideLoading()
-  }
-
-  func presentFeedLikeResult(isSuccess: Bool) {
-    self.view?.fetchFeedLikeResult(isSuccess: isSuccess)
   }
 }

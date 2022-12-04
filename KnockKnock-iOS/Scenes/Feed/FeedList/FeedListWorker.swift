@@ -48,14 +48,22 @@ final class FeedListWorker: FeedListWorkerProtocol {
     )
   }
 
-  func requestLike(id: Int, completionHandler: @escaping (Bool) -> Void) {
-    self.likeRepository.requestLike(id: id, completionHandler: { result in
+  func requestLike(
+    id: Int,
+    completionHandler: @escaping (Bool) -> Void) {
+    self.likeRepository.requestLike(
+      id: id,
+      completionHandler: { result in
       completionHandler(result)
     })
   }
 
-  func requestLikeCancel(id: Int, completionHandler: @escaping (Bool) -> Void) {
-    self.likeRepository.requestLike(id: id, completionHandler: { result in
+  func requestLikeCancel(
+    id: Int,
+    completionHandler: @escaping (Bool) -> Void) {
+    self.likeRepository.requestLikeCancel(
+      id: id,
+      completionHandler: { result in
       completionHandler(result)
     })
   }

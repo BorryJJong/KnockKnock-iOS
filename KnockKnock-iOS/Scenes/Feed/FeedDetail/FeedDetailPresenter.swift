@@ -65,6 +65,5 @@ final class FeedDetailPresenter: FeedDetailPresenterProtocol {
 
   func presentAllCommentsCount(allCommentsCount: Int) {
     self.view?.getAllCommentsCount(allCommentsCount: allCommentsCount)
-    print(allCommentsCount)
   }
 }

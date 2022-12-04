@@ -37,7 +37,15 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   var feedId: Int = 6
   var userId: Int = 1
   var commentId: Int?
-  var like: [LikeInfo] = []
+  var like: [LikeInfo] = [] {
+    didSet {
+      UIView.performWithoutAnimation {
+        self.containerView.postCollectionView.reloadSections(
+          IndexSet(integer: FeedDetailSection.like.rawValue)
+        )
+      }
+    }
+  }
 
   var allCommentsCount: Int = 0
   var visibleComments: [Comment] = [] {

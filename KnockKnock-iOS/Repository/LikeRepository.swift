@@ -15,7 +15,10 @@ protocol LikeRepositoryProtocol {
 
 final class LikeRepository: LikeRepositoryProtocol {
 
-  func requestLike(id: Int, completionHandler: @escaping (Bool) -> Void) {
+  func requestLike(
+    id: Int,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
     KKNetworkManager
       .shared
       .request(
@@ -30,12 +33,15 @@ final class LikeRepository: LikeRepositoryProtocol {
       )
   }
 
-  func requestLikeCancel(id: Int, completionHandler: @escaping (Bool) -> Void) {
+  func requestLikeCancel(
+    id: Int,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
     KKNetworkManager
       .shared
       .request(
         object: Bool.self,
-        router: KKRouter.postFeedLikeCancel(
+        router: KKRouter.deleteFeedLike(
           id: id
         ), success: { result in
           completionHandler(result)
@@ -44,6 +50,7 @@ final class LikeRepository: LikeRepositoryProtocol {
         }
       )
   }
+
   func requestLikeList(feedId: Int, completionHandler: @escaping ([LikeInfo]) -> Void) {
     KKNetworkManager
       .shared

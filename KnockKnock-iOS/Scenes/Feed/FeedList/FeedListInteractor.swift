@@ -46,15 +46,20 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   }
 
   func requestLike(feedId: Int) {
-    self.worker?.requestLike(id: feedId, completionHandler: { result in
-      self.presenter?.presentFeedLikeResult(isSuccess: result)
-    })
+    self.worker?.requestLike(
+      id: feedId,
+      completionHandler: { result in
+        print(result) // 추후 error 처리
+      }
+    )
   }
 
   func requestLikeCancel(feedId: Int) {
-    self.worker?.requestLike(id: feedId, completionHandler: { result in
-      self.presenter?.presentFeedLikeResult(isSuccess: result)
-      print("isCanceled")
-    })
+    self.worker?.requestLikeCancel(
+      id: feedId,
+      completionHandler: { result in
+        print(result) // 추후 error 처리
+      }
+    )
   }
 }
