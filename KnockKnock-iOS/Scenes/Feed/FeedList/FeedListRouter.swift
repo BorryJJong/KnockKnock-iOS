@@ -66,6 +66,8 @@ final class FeedListRouter: FeedListRouterProtocol {
 
   func navigateToLoginView(source: FeedListViewProtocol) {
     let loginViewController = LoginRouter.createLoginView()
+    
+    loginViewController.hidesBottomBarWhenPushed = true
     if let sourceView = source as? UIViewController {
       sourceView.navigationController?.pushViewController(loginViewController, animated: true)
     }

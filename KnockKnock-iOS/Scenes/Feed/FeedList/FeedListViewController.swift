@@ -52,6 +52,12 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     )
     self.containerView.addGestureRecognizer(tapGesture)
   }
+
+  override func viewWillAppear(_ animated: Bool) {
+    self.tabBarController?.tabBar.isHidden = false
+  }
+
+  // MARK: - Configure
   
   override func setupConfigure() {
     let backButton = UIBarButtonItem(
