@@ -297,15 +297,18 @@ final class FeedDetailView: UIView {
       alignment: .bottom
     )
 
+    let likeEstimatedWidth: CGFloat = 1
+    let likeEstimatedHeigth: CGFloat = 1
+
     let likeItemSize = NSCollectionLayoutSize(
-      widthDimension: .absolute(45),
-      heightDimension: .absolute(45)
+      widthDimension: .estimated(likeEstimatedWidth),
+      heightDimension: .estimated(likeEstimatedHeigth)
     )
     let likeItem = NSCollectionLayoutItem(layoutSize: likeItemSize)
 
     let likeGroupSize = NSCollectionLayoutSize(
-      widthDimension: .estimated(estimatedWidth),
-      heightDimension: .estimated(estimatedHeigth)
+      widthDimension: .estimated(likeEstimatedWidth),
+      heightDimension: .estimated(likeEstimatedHeigth)
     )
     let likeGroup = NSCollectionLayoutGroup.horizontal(
       layoutSize: likeGroupSize,
@@ -317,9 +320,9 @@ final class FeedDetailView: UIView {
     likeSection.orthogonalScrollingBehavior = .continuous
     likeSection.interGroupSpacing = 12
     likeSection.contentInsets = NSDirectionalEdgeInsets(
-      top: 15,
+      top: 10,
       leading: 20,
-      bottom: 15,
+      bottom: 10,
       trailing: 0
     )
 
