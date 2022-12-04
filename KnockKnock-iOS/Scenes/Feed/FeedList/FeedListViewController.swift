@@ -115,7 +115,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   @objc func likeButtonDidTap(_ sender: UIButton) {
     sender.isSelected.toggle()
     
-    let title = self.setLikeButtonTitle(
+    let title = self.containerView.setLikeButtonTitle(
       currentNum: sender.titleLabel?.text,
       isSelected: sender.isSelected
     )
@@ -126,24 +126,6 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     } else {
       self.interactor?.requestLikeCancel(source: self, feedId: sender.tag)
     }
-  }
-
-  func setLikeButtonTitle(currentNum: String?, isSelected: Bool) -> String {
-    var number = 0
-    var newTitle = " "
-
-    let numberFormatter = NumberFormatter().then {
-      $0.numberStyle = .decimal
-    }
-
-    if let title = currentNum?.filter({ $0.isNumber }) {
-      if let titleToInt = Int(title) {
-        number = isSelected ? (titleToInt + 1) : (titleToInt - 1)
-        newTitle = numberFormatter.string(from: NSNumber(value: number)) ?? ""
-      }
-    }
-
-    return " \(newTitle)"
   }
 }
 

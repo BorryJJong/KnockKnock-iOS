@@ -34,6 +34,26 @@ class FeedListView: UIView {
     super.init(coder: aDecoder)
   }
 
+  // MARK: - Bind
+  
+  func setLikeButtonTitle(currentNum: String?, isSelected: Bool) -> String {
+    var number = 0
+    var newTitle = " "
+
+    let numberFormatter = NumberFormatter().then {
+      $0.numberStyle = .decimal
+    }
+
+    if let title = currentNum?.filter({ $0.isNumber }) {
+      if let titleToInt = Int(title) {
+        number = isSelected ? (titleToInt + 1) : (titleToInt - 1)
+        newTitle = numberFormatter.string(from: NSNumber(value: number)) ?? ""
+      }
+    }
+
+    return " \(newTitle)"
+  }
+
   // MARK: - Constraints
 
   func setupConstraints() {
