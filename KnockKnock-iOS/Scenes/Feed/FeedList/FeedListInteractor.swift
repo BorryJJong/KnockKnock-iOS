@@ -10,14 +10,14 @@ import Foundation
 protocol FeedListInteractorProtocol {
   var presenter: FeedListPresenterProtocol? { get set }
   var worker: FeedListWorkerProtocol? { get set }
-
+  
   func fetchFeedList(
     currentPage: Int,
     pageSize: Int,
     feedId: Int,
     challengeId: Int
   )
-
+  
   func requestLike(feedId: Int)
   func requestLikeCancel(feedId: Int)
 }
@@ -25,7 +25,7 @@ protocol FeedListInteractorProtocol {
 final class FeedListInteractor: FeedListInteractorProtocol {
   var presenter: FeedListPresenterProtocol?
   var worker: FeedListWorkerProtocol?
-
+  
   func fetchFeedList(
     currentPage: Int,
     pageSize: Int,
@@ -44,22 +44,35 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       }
     )
   }
-
+  
   func requestLike(feedId: Int) {
-    self.worker?.requestLike(
-      id: feedId,
-      completionHandler: { result in
-        print(result) // 추후 error 처리
+    self.worker?.checkTokenExisted(completionHandler: { isExisted in
+      if isExisted {
+        self.worker?.requestLike(
+          id: feedId,
+          completionHandler: { result in
+            print(result) // 추후 error 처리
+          }
+        )
+      } else {
+        print("login needed") // 추후 alert 처리
       }
-    )
+    })
   }
-
+  
   func requestLikeCancel(feedId: Int) {
-    self.worker?.requestLikeCancel(
-      id: feedId,
-      completionHandler: { result in
-        print(result) // 추후 error 처리
+    self.worker?.checkTokenExisted(completionHandler: { isExisted in
+      if isExisted {
+        
+        self.worker?.requestLikeCancel(
+          id: feedId,
+          completionHandler: { result in
+            print(result) // 추후 error 처리
+          }
+        )
+      } else {
+        print("login needed") // 추후 alert 처리
       }
-    )
+    })
   }
 }
