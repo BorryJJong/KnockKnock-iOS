@@ -32,13 +32,24 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   var interactor: ShopSearchInteractorProtocol?
   var router: ShopSearchRouterProtocol?
 
+  var addressList: [String] = [] {
+    didSet {
+      self.containerView.resultTableView.reloadData()
+      self.fetchMore = true
+    }
+  }
+
   var addressResult: AddressResult? {
     didSet {
       let isNoResult = addressResult?.meta.totalCount == 0
+
       self.containerView.bind(isNoResult: isNoResult)
-      self.containerView.resultTableView.reloadData()
+
+      self.addressList += addressResult?.documents.map { $0.placeName } ?? []
     }
   }
+
+  private var fetchMore = true
 
   // MARK: - UIs
 
@@ -70,11 +81,17 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   // MARK: - Configure
 
   override func setupConfigure() {
+
     self.navigationItem.do {
       $0.title = "매장검색"
       $0.rightBarButtonItem = self.rightBarButton
       $0.leftBarButtonItem = self.backBarButtonItem
     }
+
+    self.containerView.addressTextField.do {
+      $0.delegate = self
+    }
+
     self.containerView.addressSearchButton.do {
       $0.addTarget(
         self,
@@ -102,20 +119,25 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
         for: .touchUpInside
       )
     }
+
+    self.hideKeyboardWhenTappedAround()
   }
 
   // MARK: - Button Actions
 
   @objc private func searchButtonDidTap(_ sender: UIButton) {
-    self.containerView.resultTableView.isHidden = false
+    let address = self.containerView.addressTextField.text
 
-    let city = self.containerView.cityLabel.text ?? ""
-    let region = self.containerView.countyLabel.text ?? ""
-    let address = self.containerView.addressTextField.text ?? ""
+    self.addressList = []
 
-    let keyword = "\(city) \(region) \(address)"
+    // 검색어가 비어있을 경우에 원래 상태로 복귀
+    if address != "" {
+      self.interactor?.fetchShopAddress(address: address, isNew: true)
+    } else {
+      self.containerView.setDefaultStatus()
+    }
 
-    self.interactor?.fetchShopAddress(keyword: keyword)
+    self.dismissKeyboard()
   }
 
   @objc private func doneButtonDidTap(_ sender: UIBarButtonItem) {
@@ -174,7 +196,7 @@ extension ShopSearchViewController: ShopSearchViewProtocol {
 
 extension ShopSearchViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return self.addressResult?.documents.count ?? 0
+    return self.addressList.count
   }
 
   func tableView(
@@ -183,11 +205,35 @@ extension ShopSearchViewController: UITableViewDataSource {
   ) -> UITableViewCell {
     let cell = tableView.dequeueCell(withType: AdressCell.self, for: indexPath)
 
-    if let address = self.addressResult?.documents[indexPath.row].placeName {
-      cell.bind(address: address)
-    }
-    
+    cell.bind(address: self.addressList[indexPath.row])
+
     return cell
+  }
+
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    let height = scrollView.frame.height
+    let contentSizeHeight = scrollView.contentSize.height
+    let offset = scrollView.contentOffset.y
+    let reachedBottom = (offset > contentSizeHeight - height)
+
+    if reachedBottom && fetchMore {
+      scrollViewDidReachBottom(scrollView)
+    }
+  }
+
+  func scrollViewDidReachBottom(_ scrollView: UIScrollView) {
+    if let isEnd = self.addressResult?.meta.isEnd {
+      if !isEnd {
+        self.fetchMore = false
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+          self.interactor?.fetchShopAddress(
+            address: self.containerView.addressTextField.text,
+            isNew: false
+          )
+        })
+      }
+    }
   }
 }
 
@@ -195,8 +241,19 @@ extension ShopSearchViewController: UITableViewDataSource {
 
 extension ShopSearchViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    if let address = self.addressResult?.documents[indexPath.row].placeName {
-      self.router?.passDataToFeedWriteView(source: self, address: address)
-    }
+    self.router?.passDataToFeedWriteView(source: self, address: self.addressList[indexPath.row])
+  }
+}
+
+// MARK: - TextField Delegate
+
+extension ShopSearchViewController: UITextFieldDelegate {
+  func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    self.interactor?.fetchShopAddress(
+      address: self.containerView.addressTextField.text,
+      isNew: true
+    )
+
+    return true
   }
 }

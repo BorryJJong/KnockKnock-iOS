@@ -12,12 +12,11 @@ import KKDSKit
 
 protocol FeedDetailViewProtocol: AnyObject {
   var interactor: FeedDetailInteractorProtocol? { get set }
-  var router: FeedDetailRouterProtocol? { get set }
 
   func getFeedDetail(feedDetail: FeedDetail)
-  func getAllComments(allComments: [Comment])
-  func fetchVisibleComments(comments: [Comment])
-  func getLike(like: [Like])
+  func getAllCommentsCount(allCommentsCount: Int)
+  func fetchVisibleComments(visibleComments: [Comment])
+  func fetchLikeList(like: [LikeInfo])
 }
 
 final class FeedDetailViewController: BaseViewController<FeedDetailView> {
@@ -25,7 +24,6 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   // MARK: - Properties
 
   var interactor: FeedDetailInteractorProtocol?
-  var router: FeedDetailRouterProtocol?
 
   var feedDetail: FeedDetail? {
     didSet {
@@ -33,20 +31,19 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       if let feed = feedDetail?.data.feed {
         self.containerView.navigationView.bind(feed: feed)
       }
+      self.containerView.layoutIfNeeded()
     }
   }
   var feedId: Int = 6
   var userId: Int = 1
   var commentId: Int?
-  var like: [Like] = []
+  var like: [LikeInfo] = []
 
-  var allComments: [Comment] = []
+  var allCommentsCount: Int = 0
   var visibleComments: [Comment] = [] {
     didSet {
       UIView.performWithoutAnimation {
-        self.containerView.postCollectionView.reloadSections(
-          IndexSet(integer: FeedDetailSection.comment.rawValue)
-        )
+        self.containerView.postCollectionView.reloadData()
       }
     }
   }
@@ -59,13 +56,16 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
 
     self.setNavigationBar()
     self.setupConfigure()
-
-    self.interactor?.getFeedDeatil(feedId: feedId)
-    self.interactor?.getLike()
-    self.interactor?.fetchAllComments(feedId: feedId)
+    self.fetchData()
   }
 
   // MARK: - Configure
+
+  private func fetchData() {
+    self.interactor?.getFeedDeatil(feedId: feedId)
+    self.interactor?.fetchLikeList(feedId: feedId)
+    self.interactor?.fetchAllComments(feedId: feedId)
+  }
 
   override func setupConfigure() {
     self.containerView.postCollectionView.do {
@@ -150,10 +150,6 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     self.visibleComments[sender.tag].isOpen.toggle()
 
     self.interactor?.fetchVisibleComments(comments: self.visibleComments)
-    
-    UIView.performWithoutAnimation {
-      self.containerView.postCollectionView.reloadSections([FeedDetailSection.comment.rawValue])
-    }
   }
 
   @objc private func registButtonDidTap(_ sender: UIButton) {
@@ -249,15 +245,15 @@ extension FeedDetailViewController: FeedDetailViewProtocol {
     self.feedDetail = feedDetail
   }
 
-  func getAllComments(allComments: [Comment]) {
-    self.allComments = allComments
+  func getAllCommentsCount(allCommentsCount: Int) {
+    self.allCommentsCount = allCommentsCount
   }
 
-  func fetchVisibleComments(comments: [Comment]) {
-    self.visibleComments = comments
+  func fetchVisibleComments(visibleComments: [Comment]) {
+    self.visibleComments = visibleComments
   }
 
-  func getLike(like: [Like]) {
+  func fetchLikeList(like: [LikeInfo]) {
     self.like = like
   }
 }
@@ -274,7 +270,11 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       return self.feedDetail?.data.challenges.count ?? 0
 
     case .like:
-      return self.like.count + 1
+      if self.like.isEmpty {
+        return self.like.count
+      } else {
+        return self.like.count + 1
+      }
 
     case .comment:
       return self.visibleComments.count
@@ -338,6 +338,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       )
 
       cell.bind(comment: self.visibleComments[indexPath.item])
+      cell.layoutIfNeeded()
 
       return cell
 
@@ -417,13 +418,8 @@ extension FeedDetailViewController: UICollectionViewDataSource {
         withType: ReactHeaderReusableView.self,
         for: indexPath
       )
-      var count = self.allComments.count
 
-      self.allComments.forEach {
-        count += $0.commentData.replyCnt
-      }
-
-      header.bind(count: count, section: .comment)
+      header.bind(count: self.allCommentsCount, section: .comment)
 
       return header
       
@@ -435,7 +431,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     if indexPath.section == FeedDetailSection.like.rawValue {
       if indexPath.item == self.like.count {
-        self.router?.navigateToLikeDetail(source: self, like: self.like)
+        self.interactor?.navigateToLikeDetail(source: self)
       }
     }
   }

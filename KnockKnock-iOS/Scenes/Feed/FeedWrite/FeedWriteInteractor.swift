@@ -10,6 +10,14 @@ import Foundation
 protocol FeedWriteInteractorProtocol: AnyObject {
   var presenter: FeedWritePresenterProtocol? { get }
   var worker: FeedWriteWorkerProtocol? { get set }
+  var router: FeedWriteRouterProtocol? { get set }
+
+  func dismissFeedWriteView(source: FeedWriteViewProtocol)
+  func navigateToShopSearch(source: FeedWriteViewProtocol)
+  func navigateToProperty(
+    source: FeedWriteViewProtocol,
+    propertyType: PropertyType
+  )
 }
 
 final class FeedWriteInteractor: FeedWriteInteractorProtocol {
@@ -18,61 +26,54 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
 
   var presenter: FeedWritePresenterProtocol?
   var worker: FeedWriteWorkerProtocol?
+  var router: FeedWriteRouterProtocol?
 
-  func fetchPromotion(promotionList: [Promotion]) {
-    self.presenter?.presentSelectedPromotions(promotionList: promotionList)
+  private var selectedPromotionList: [Promotion]?
+  private var selectedTagList: [ChallengeTitle]?
+
+  // Routing
+
+  func dismissFeedWriteView(source: FeedWriteViewProtocol) {
+    self.router?.dismissFeedWriteView(source: source)
   }
 
-  func fetchTag(tagList: [ChallengeTitle]) {
-    self.presenter?.presentSelectedTags(tagList: tagList)
+  func navigateToShopSearch(source: FeedWriteViewProtocol) {
+    self.router?.navigateToShopSearch(source: source)
+  }
+
+  func navigateToProperty(
+    source: FeedWriteViewProtocol,
+    propertyType: PropertyType
+  ) {
+    self.router?.navigateToProperty(
+      source: source,
+      propertyType: propertyType,
+      promotionList: self.selectedPromotionList,
+      tagList: self.selectedTagList
+    )
   }
 }
+
+// MARK: - Shop Search Delegate
 
 extension FeedWriteInteractor: ShopSearchDelegate {
   func fetchShopData(shopData: String) {
-    self.presenter?.fetchProperty(
-      propertyType: .address,
-      content: shopData
-    )
+    self.presenter?.presentShopAddress(address: shopData)
   }
 }
 
+// MARK: - Property Delegate(태그, 프로모션)
+
 extension FeedWriteInteractor: PropertyDelegate {
   func fetchSelectedPromotion(promotionList: [Promotion]) {
-    self.fetchPromotion(promotionList: promotionList)
+    self.selectedPromotionList = promotionList
 
-    let selection = promotionList.filter { $0.isSelected == true }
-
-    var content = selection.map {
-      $0.promotionInfo.type
-    }.joined(separator: ", ")
-
-    if selection.isEmpty {
-      content = "프로모션"
-    }
-
-    self.presenter?.fetchProperty(
-      propertyType: PropertyType.promotion,
-      content: content
-    )
+    self.presenter?.presentSelectedPromotions(promotionList: promotionList)
   }
 
   func fetchSelectedTag(tagList: [ChallengeTitle]) {
-    self.fetchTag(tagList: tagList)
+    self.selectedTagList = tagList
 
-    let selection = tagList.filter { $0.isSelected == true }
-
-    var content = selection.map {
-      $0.title
-    }.joined(separator: ", ")
-
-    if selection.isEmpty {
-      content = "#태그"
-    }
-
-    self.presenter?.fetchProperty(
-      propertyType: PropertyType.tag,
-      content: content
-    )
+    self.presenter?.presentSelectedTags(tagList: tagList)
   }
 }

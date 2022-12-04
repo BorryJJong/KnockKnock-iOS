@@ -108,7 +108,7 @@ final class ShopSearchView: UIView {
 
   private let statusImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.image = UIImage(named: "ic_feed_shopSearch")
+    $0.image = KKDS.Image.ic_store_60
   }
 
   private let statusLabel = UILabel().then {
@@ -169,6 +169,12 @@ final class ShopSearchView: UIView {
     } else {
       self.resultTableView.isHidden = false
     }
+  }
+
+  func setDefaultStatus() {
+    self.resultTableView.isHidden = true
+    self.statusImageView.image = KKDS.Image.ic_store_60
+    self.statusLabel.text = "매장주소를 검색해보세요."
   }
 
   func setButtonStatus(isCitySelected: Bool) {

@@ -9,6 +9,7 @@ import Foundation
 
 protocol LocalDataManagerProtocol {
   func saveToken(accessToken: String, refreshToken: String, nickname: String?)
+  func checkTokenIsExisted() -> Bool
 }
 
 final class LocalDataManager: LocalDataManagerProtocol {
@@ -41,5 +42,12 @@ final class LocalDataManager: LocalDataManagerProtocol {
     } else {
       return false
     }
+  }
+
+  // nickname 불러오기
+  func fetchNickname() -> String? {
+    guard let nickname = UserDefaults.standard.object(forKey: "nickname") as? String else { return nil }
+
+    return nickname
   }
 }

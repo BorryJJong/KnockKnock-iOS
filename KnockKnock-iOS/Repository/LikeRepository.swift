@@ -10,7 +10,7 @@ import Foundation
 protocol LikeRepositoryProtocol {
   func requestLike(id: Int, completionHandler: @escaping (Bool) -> Void)
   func requestLikeCancel(id: Int, completionHandler: @escaping (Bool) -> Void)
-  func requestLikeList(completionHandler: @escaping ([Like]) -> Void)
+  func requestLikeList(feedId: Int, completionHandler: @escaping ([LikeInfo]) -> Void)
 }
 
 final class LikeRepository: LikeRepositoryProtocol {
@@ -44,18 +44,18 @@ final class LikeRepository: LikeRepositoryProtocol {
         }
       )
   }
-
-  func requestLikeList(completionHandler: @escaping ([Like]) -> Void) {
-    let like = [
-      Like(userId: 2, nickname: "ksungmin94", image: nil),
-      Like(userId: 2, nickname: "jerrychoi", image: nil),
-      Like(userId: 2, nickname: "jjong", image: nil),
-      Like(userId: 2, nickname: "borry", image: nil),
-      Like(userId: 2, nickname: "sangwon", image: nil),
-      Like(userId: 2, nickname: "honggyu", image: nil),
-      Like(userId: 2, nickname: "daye", image: nil),
-      Like(userId: 2, nickname: "username", image: nil)
-    ]
-    completionHandler(like)
+  func requestLikeList(feedId: Int, completionHandler: @escaping ([LikeInfo]) -> Void) {
+    KKNetworkManager
+      .shared
+      .request(
+        object: LikeResponse.self,
+        router: KKRouter.getLikeList(id: feedId),
+        success: { response in
+          completionHandler(response.data.likes)
+        },
+        failure: { error in
+          print(error)
+        }
+      )
   }
 }

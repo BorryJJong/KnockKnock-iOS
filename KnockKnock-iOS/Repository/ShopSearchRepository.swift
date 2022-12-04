@@ -8,18 +8,24 @@
 import Foundation
 
 protocol ShopSearchRepositoryProtocol {
-  func requestShopAddress(keyword: String, completionHandler: @escaping (AddressResult) -> Void)
+  func requestShopAddress(
+    keyword: String,
+    page: Int,
+    completionHandler: @escaping (AddressResult) -> Void
+  )
+
   func fetchDistricts() -> DistrictsData?
 }
 
 final class ShopSearchRepository: ShopSearchRepositoryProtocol {
   func requestShopAddress(
     keyword: String,
+    page: Int,
     completionHandler: @escaping (AddressResult) -> Void
   ) {
     KKNetworkManager.shared.request(
       object: AddressResult.self,
-      router: KKRouter.requestShopAddress(query: keyword),
+      router: KKRouter.requestShopAddress(query: keyword, page: page, size: 15),
       success: { response in
         completionHandler(response)
       },

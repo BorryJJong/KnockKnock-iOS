@@ -64,6 +64,8 @@ final class LikeCell: BaseCollectionViewCell {
     NSLayoutConstraint.activate([
       self.profileImageView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
       self.profileImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+      self.profileImageView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+      self.profileImageView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
       self.profileImageView.heightAnchor.constraint(equalToConstant: Metric.profileImageViewHeight),
       self.profileImageView.widthAnchor.constraint(equalToConstant: Metric.profileImageViewWidth),
       

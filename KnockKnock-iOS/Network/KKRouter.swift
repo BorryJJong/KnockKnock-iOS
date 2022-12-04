@@ -35,7 +35,7 @@ enum KKRouter: URLRequestConvertible {
   // Feed Write, Main
   case getChallengeTitles
   case getPromotions
-  case requestShopAddress(query: String)
+  case requestShopAddress(query: String, page: Int, size: Int)
   case getFeedMain(page: Int, take: Int, challengeId: Int)
 
   // Feed List, Detail
@@ -45,6 +45,7 @@ enum KKRouter: URLRequestConvertible {
   // Like
   case postFeedLike(id: Int)
   case postFeedLikeCancel(id: Int)
+  case getLikeList(id: Int)
 
   // Comment
   case getComment(id: Int)
@@ -62,6 +63,7 @@ enum KKRouter: URLRequestConvertible {
         .getPromotions,
         .getChallengeDetail,
         .requestShopAddress,
+        .getLikeList,
         .getComment:
       return .get
 
@@ -100,11 +102,11 @@ enum KKRouter: URLRequestConvertible {
     // Like
     case .postFeedLike(let id): return "like/feed/\(id)"
     case .postFeedLikeCancel(let id): return "like/feed\(id)"
+    case .getLikeList(let id): return "like/feed/\(id)"
 
     // Comment
     case .getComment(let id): return "feed/\(id)/comment"
     case .postAddComment: return "feed/comment"
-
     }
   }
 
@@ -119,8 +121,22 @@ enum KKRouter: URLRequestConvertible {
     case let .signUp(userInfo):
       return userInfo
 
-    case let .requestShopAddress(query):
-      return [ "query": query ]
+    case .getChallengeDetail,
+        .getChallengeResponse,
+        .getChallengeTitles,
+        .getFeed,
+        .getPromotions,
+        .getLikeList,
+        .getComment:
+
+      return nil
+
+    case let .requestShopAddress(query, page, size):
+      return [
+        "query": query,
+        "page": page,
+        "size": size
+      ]
 
     case let .getFeedMain(page, take, challengeId):
       return [
@@ -164,7 +180,7 @@ enum KKRouter: URLRequestConvertible {
     case .get:
       switch self {
 
-      case .getChallengeDetail, .getFeed, .getPromotions, .getComment:
+      case .getChallengeDetail, .getFeed, .getPromotions, .getComment, .getLikeList:
         break
 
       case .requestShopAddress:

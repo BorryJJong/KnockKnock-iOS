@@ -7,8 +7,12 @@
 
 import UIKit
 
-protocol MyViewProtocol {
-  
+protocol MyViewProtocol: AnyObject {
+  var interactor: MyInteractorProtocol? { get set }
+
+  func fetchMenuData(menuData: MyMenu)
+  func checkLoginStatus(isLoggedIn: Bool)
+  func fetchNickname(nickname: String)
 }
 
 final class MyViewController: BaseViewController<MyView> {
@@ -21,44 +25,27 @@ final class MyViewController: BaseViewController<MyView> {
   }
 
   // MARK: - Properties
-  
-  var router: MyRouterProtocol?
 
-  var isLoggedIn: Bool = LocalDataManager().checkTokenIsExisted() {
+  var interactor: MyInteractorProtocol?
+
+  var isLoggedIn: Bool = false {
     didSet {
+      self.containerView.setLoginStatus(isLoggedin: self.isLoggedIn)
       self.containerView.myTableView.reloadData()
-      self.containerView.bind(isLoggedin: self.isLoggedIn)
+    }
+  }
+
+  var nickname: String = "" {
+    didSet {
+      self.containerView.setNickname(nickname: self.nickname)
     }
   }
   
-  private let menuData: MyMenu = {
-    let profile = MyItem(title: "프로필 수정", type: .plain)
-    let signout = MyItem(title: "탈퇴하기", type: .plain)
-    let push = MyItem(title: "앱 PUSH 알림", type: .alert)
-    
-    let notice = MyItem(title: "공지사항", type: .plain)
-    let version = MyItem(title: "버전정보", type: .version)
-    
-    let service = MyItem(title: "서비스 이용약관", type: .plain)
-    let privacy = MyItem(title: "개인정보 처리방침", type: .plain)
-    let location = MyItem(title: "위치기반 서비스 이용약관", type: .plain)
-    let openSource = MyItem(title: "오픈소스 라이선스", type: .plain)
-    
-    let myInfoSection = MySection(
-      title: MySectionType.myInfo,
-      myItems: [profile, signout, push]
-    )
-    let customerSection = MySection(
-      title: MySectionType.customer,
-      myItems: [notice, version]
-    )
-    let policySection = MySection(
-      title: MySectionType.policy,
-      myItems: [service, privacy, location, openSource]
-    )
-    
-    return [myInfoSection, customerSection, policySection]
-  }()
+  var menuData: MyMenu = [] {
+    didSet {
+      self.containerView.myTableView.reloadData()
+    }
+  }
   
   // MARK: - Life Cycles
   
@@ -68,6 +55,7 @@ final class MyViewController: BaseViewController<MyView> {
   }
 
   override func viewWillAppear(_ animated: Bool) {
+    self.interactor?.checkLoginStatus()
     self.tabBarController?.tabBar.isHidden = false
   }
 
@@ -77,55 +65,61 @@ final class MyViewController: BaseViewController<MyView> {
     self.navigationController?.navigationBar.setDefaultAppearance()
     self.navigationItem.title = "마이"
 
-    self.containerView.bind(isLoggedin: self.isLoggedIn) // 로그인 상태에 따라 헤더 내용 바인딩
-    
+    self.containerView.setLoginStatus(isLoggedin: self.isLoggedIn) // 로그인 상태에 따라 헤더 내용 바인딩
+    self.containerView.setNickname(nickname: self.nickname)
+
+    self.interactor?.fetchMenuData()
+
     self.containerView.myTableView.do {
       $0.dataSource = self
       $0.delegate = self
-      $0.registCell(type: UITableViewCell.self, identifier: MY.MyCellID)
+      $0.registCell(
+        type: UITableViewCell.self,
+        identifier: MY.MyCellID
+      )
       $0.register(type: MyTableViewHeader.self)
       $0.register(type: MyTableViewFooter.self)
+      
       $0.tableHeaderView = self.containerView.myTableHeaderView
     }
 
     self.containerView.loginButton.do {
-      $0.addTarget(self, action: #selector(self.loginButtonDidTap), for: .touchUpInside)
-    }
-
-    NotificationCenter.default.addObserver(
-      forName: Notification.Name("loginCompleted"),
-      object: nil,
-      queue: nil
-    ) { _ in
-      self.isLoggedIn = true
-    }
-
-    NotificationCenter.default.addObserver(
-      forName: Notification.Name("logoutCompleted"),
-      object: nil,
-      queue: nil
-    ) { _ in
-      self.isLoggedIn = false
+      $0.addTarget(
+        self,
+        action: #selector(self.loginButtonDidTap),
+        for: .touchUpInside
+      )
     }
   }
 
   // MARK: - Button Actions
 
   @objc private func loginButtonDidTap(_ sender: UIButton) {
-    self.router?.navigateToLoginView(source: self)
+    self.interactor?.navigateToLoginView(source: self)
   }
 
   // 테스트용 임시 로그아웃 기능 연결
   @objc func logoutButtonDidTap(_ sender: UIButton) {
     LocalDataManager().deleteToken()
-    NotificationCenter.default.post(name: Notification.Name("logoutCompleted"), object: nil)
+    NotificationCenter.default.post(name: .logoutCompleted, object: nil)
   }
 }
 
 // MARK: - My View Protocol
 
 extension MyViewController: MyViewProtocol {
-  
+
+  func fetchMenuData(menuData: MyMenu) {
+    self.menuData = menuData
+  }
+
+  func checkLoginStatus(isLoggedIn: Bool) {
+    self.isLoggedIn = isLoggedIn
+  }
+
+  func fetchNickname(nickname: String) {
+    self.nickname = nickname
+  }
 }
 
 // MARK: - TableView DataSource
@@ -138,6 +132,11 @@ extension MyViewController: UITableViewDataSource {
     _ tableView: UITableView,
     numberOfRowsInSection section: Int
   ) -> Int {
+    if section == 0 {
+      if !self.isLoggedIn {
+        return 0
+      }
+    }
     return self.menuData[section].myItems.count
   }
   
@@ -150,9 +149,13 @@ extension MyViewController: UITableViewDataSource {
     cellForRowAt indexPath: IndexPath
   ) -> UITableViewCell {
 
-    let cell = UITableViewCell(style: .value1, reuseIdentifier: MY.MyCellID)
+    let cell = UITableViewCell(
+      style: .value1,
+      reuseIdentifier: MY.MyCellID
+    )
     let menu = self.menuData[indexPath.section].myItems[indexPath.row]
 
+    cell.selectionStyle = .none
     cell.textLabel?.do {
       $0.font = .systemFont(ofSize: 15, weight: .bold)
       $0.textColor = .black
@@ -183,10 +186,22 @@ extension MyViewController: UITableViewDataSource {
     let headerView = tableView.dequeueHeaderFooterView(withType: MyTableViewHeader.self)
     
     headerView.model = self.menuData[section]
-    
+
     return headerView
   }
-  
+
+  func tableView(
+    _ tableView: UITableView,
+    heightForHeaderInSection section: Int
+  ) -> CGFloat {
+    if self.menuData[section].title == MySectionType.myInfo {
+      if !isLoggedIn {
+        return 0
+      }
+    }
+    return 50
+  }
+
   func tableView(
     _ tableView: UITableView,
     viewForFooterInSection section: Int
@@ -210,18 +225,24 @@ extension MyViewController: UITableViewDataSource {
     _ tableView: UITableView,
     heightForFooterInSection section: Int
   ) -> CGFloat {
-    
-    if self.menuData[section].title == MySectionType.policy {
+    let title = self.menuData[section].title
+
+    switch title {
+    case .myInfo:
+      if !self.isLoggedIn {
+        return 0
+      }
+
+    case .policy:
       if isLoggedIn {
         return 130
-      } else {
-        return 50
       }
-      
-    } else {
+
+    default:
       return 50
-      
     }
+
+    return 50
   }
 }
 
@@ -234,19 +255,20 @@ extension MyViewController: UITableViewDelegate {
   ) {
     
     let menu = self.menuData[indexPath.section]
-    
+
     switch menu.title {
     case .myInfo:
-      print("profile")
-      
+      if menu.myItems[indexPath.item].title == "프로필 수정" {
+        self.interactor?.navigateToProfileSettingView(source: self)
+      }
+
     case .customer:
       if menu.myItems[indexPath.item].title == "공지사항" {
-        self.router?.navigateToNoticeView(source: self)
+        self.interactor?.navigateToNoticeView(source: self)
       }
-      
+
     case .policy:
       print("policy")
     }
-    
   }
 } 
