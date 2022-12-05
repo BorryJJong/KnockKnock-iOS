@@ -67,6 +67,7 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
         isTagSelected &&
         isPromotionSelected {
       self.presenter?.presentAlertView(isDone: true)
+
     } else {
       self.presenter?.presentAlertView(isDone: false)
     }

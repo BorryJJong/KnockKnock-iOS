@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 
 protocol FeedRepositoryProtocol {
   func requestFeedMain(
@@ -124,6 +125,16 @@ final class FeedRepository: FeedRepositoryProtocol {
         failure: { error in
           print(error)
         }
+      )
+  }
+
+  func requestFeedPost(
+    feedWriteForm: FeedWrite
+  ) {
+    KKNetworkManager
+      .shared
+      .upload(
+        router: KKRouter.postFeed(feedWriteForm: feedWriteForm)
       )
   }
 }

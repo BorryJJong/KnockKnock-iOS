@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct FeedPost: Decodable {
   let id: Int
@@ -24,7 +25,6 @@ struct Property: Equatable {
   let id: Int
   let title: String
 }
-
 
 struct FeedDetail: Decodable {
   let data: FeedDetailData

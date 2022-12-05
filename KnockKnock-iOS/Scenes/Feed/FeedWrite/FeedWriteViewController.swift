@@ -154,6 +154,7 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     let photoAndContentFilled = self.pickedPhotos.count != 0 && self.contentTextViewFilled
 
     self.interactor?.checkEssentialField(photoAndContentFilled: photoAndContentFilled)
+//    FeedRepository().requestFeedPost(feedWriteForm: FeedWrite(userId: 19, content: "test feed", storeAddress: "test", locationX: "127.102269186127", locationY: "37.3771012046504", scale: "1:1", promotions: "1,3", challenges: "2,3,4", images: self.pickedPhotos))
   }
 
   @objc private func alertCancelButtonDidTap(_ sender: UIButton) {
