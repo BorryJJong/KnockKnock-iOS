@@ -127,14 +127,4 @@ final class FeedRepository: FeedRepositoryProtocol {
         }
       )
   }
-
-  func requestFeedPost(
-    feedWriteForm: FeedWrite
-  ) {
-    KKNetworkManager
-      .shared
-      .upload(
-        router: KKRouter.postFeed(feedWriteForm: feedWriteForm)
-      )
-  }
 }

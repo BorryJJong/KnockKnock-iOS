@@ -32,7 +32,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   var interactor: ShopSearchInteractorProtocol?
   var router: ShopSearchRouterProtocol?
 
-  var addressList: [String] = [] {
+  var addressList: [AddressDocuments] = [] {
     didSet {
       self.containerView.resultTableView.reloadData()
       self.fetchMore = true
@@ -45,7 +45,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
 
       self.containerView.bind(isNoResult: isNoResult)
 
-      self.addressList += addressResult?.documents.map { $0.placeName } ?? []
+      self.addressList += addressResult?.documents ?? []
     }
   }
 
@@ -205,7 +205,7 @@ extension ShopSearchViewController: UITableViewDataSource {
   ) -> UITableViewCell {
     let cell = tableView.dequeueCell(withType: AdressCell.self, for: indexPath)
 
-    cell.bind(address: self.addressList[indexPath.row])
+    cell.bind(address: self.addressList[indexPath.row].addressName)
 
     return cell
   }

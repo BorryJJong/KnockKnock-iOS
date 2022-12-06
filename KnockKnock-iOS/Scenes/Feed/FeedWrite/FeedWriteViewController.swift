@@ -23,7 +23,7 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   // MARK: - Enum
 
   enum WriteStatus {
-    case done
+    case allFilled
     case hasBlank
   }
 
@@ -154,7 +154,6 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     let photoAndContentFilled = self.pickedPhotos.count != 0 && self.contentTextViewFilled
 
     self.interactor?.checkEssentialField(photoAndContentFilled: photoAndContentFilled)
-//    FeedRepository().requestFeedPost(feedWriteForm: FeedWrite(userId: 19, content: "test feed", storeAddress: "test", locationX: "127.102269186127", locationY: "37.3771012046504", scale: "1:1", promotions: "1,3", challenges: "2,3,4", images: self.pickedPhotos))
   }
 
   @objc private func alertCancelButtonDidTap(_ sender: UIButton) {
@@ -164,8 +163,13 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   @objc private func alertConfirmButtonDidTap(_ sender: UIButton) {
     self.containerView.alertView.isHidden = true
 
-    if self.writeStatus == .done {
-      self.interactor?.dismissFeedWriteView(source: self)
+    if self.writeStatus == .allFilled {
+      self.interactor?.requestUploadFeed(
+        source: self,
+        userId: 19, // api 수정 필요(헤더에 토큰 첨부하는 방식으로 변경 될듯?)
+        content: self.containerView.contentTextView.text,
+        images: self.pickedPhotos
+      )
     }
   }
 
@@ -208,7 +212,7 @@ extension FeedWriteViewController: FeedWriteViewProtocol {
 
   func showAlertView(isDone: Bool) {
     self.containerView.showAlertView(isDone: isDone)
-    self.writeStatus = isDone ? .done : .hasBlank
+    self.writeStatus = isDone ? .allFilled : .hasBlank
   }
 }
 

@@ -39,7 +39,8 @@ final class KKNetworkManager {
   }
 
   func upload(
-    router: KKRouter
+    router: KKRouter,
+    completionHandler: @escaping (() -> Void)
   ) {
     AF.upload(
       multipartFormData: router.multipart,
@@ -48,7 +49,7 @@ final class KKNetworkManager {
       .responseData { response in
         switch response.result {
         case .success:
-          print(response.value)
+          completionHandler()
 
         case .failure(let error):
           print(error)

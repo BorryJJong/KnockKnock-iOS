@@ -5,6 +5,7 @@
 //  Created by Daye on 2022/03/18.
 //
 
+import UIKit
 import Foundation
 
 protocol FeedWriteInteractorProtocol: AnyObject {
@@ -19,6 +20,7 @@ protocol FeedWriteInteractorProtocol: AnyObject {
     propertyType: PropertyType
   )
   func checkEssentialField(photoAndContentFilled: Bool)
+  func requestUploadFeed(source: FeedWriteViewProtocol, userId: Int, content: String, images: [UIImage])
 }
 
 final class FeedWriteInteractor: FeedWriteInteractorProtocol {
@@ -31,6 +33,7 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
 
   private var selectedPromotionList: [Promotion] = []
   private var selectedTagList: [ChallengeTitle] = []
+  private var selectedAddress: AddressDocuments?
 
   // Routing
 
@@ -72,13 +75,51 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
       self.presenter?.presentAlertView(isDone: false)
     }
   }
+
+  func requestUploadFeed(
+    source: FeedWriteViewProtocol,
+    userId: Int,
+    content: String,
+    images: [UIImage]
+  ) {
+    let promotions = self.selectedPromotionList.filter{
+      $0.isSelected == true
+    }.map {
+      String($0.promotionInfo.id)
+    }.joined(separator: ",")
+
+    let challenges = self.selectedTagList.filter{
+      $0.isSelected == true
+    }.map {
+      String($0.id)
+    }.joined(separator: ",")
+
+    self.worker?.uploadFeed(
+      postData: FeedWrite(
+        userId: userId,
+        content: content,
+        storeAddress: self.selectedAddress?.addressName ?? "",
+        locationX: self.selectedAddress?.longtitude ?? "",
+        locationY: self.selectedAddress?.latitude ?? "",
+        scale: "1:1",
+        promotions: promotions,
+        challenges: challenges,
+        images: images
+      ),
+      completionHandler: {
+        // 게시물 등록이 완료되었습니다
+        self.dismissFeedWriteView(source: source)
+      }
+    )
+  }
 }
 
 // MARK: - Shop Search Delegate
 
 extension FeedWriteInteractor: ShopSearchDelegate {
-  func fetchShopData(shopData: String) {
-    self.presenter?.presentShopAddress(address: shopData)
+  func fetchShopData(shopData: AddressDocuments) {
+    self.selectedAddress = shopData
+    self.presenter?.presentShopAddress(address: shopData.addressName)
   }
 }
 

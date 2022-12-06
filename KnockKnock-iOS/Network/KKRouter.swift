@@ -38,7 +38,7 @@ enum KKRouter: URLRequestConvertible {
   
   case getComment(id: Int)
   case postAddComment(comment: Parameters)
-  case postFeed(feedWriteForm: FeedWrite)
+  case postFeed(postData: FeedWrite)
   
   case getLikeList(id: Int)
   
@@ -172,6 +172,7 @@ enum KKRouter: URLRequestConvertible {
     
     switch method {
     case .get:
+
       switch self {
         
       case .getChallengeDetail, .getFeed, .getPromotions, .getComment, .getLikeList:
@@ -186,7 +187,9 @@ enum KKRouter: URLRequestConvertible {
       }
       
     case .post, .patch, .delete:
+
       switch self {
+
       case .postFeed:
         request.setValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
 
