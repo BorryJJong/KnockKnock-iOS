@@ -16,6 +16,7 @@ extension UIImageView {
 
     if let cachedImage = ImageCacheManager.shared.object(forKey: cacheKey) {
       self.image = cachedImage
+
       return
     }
 
@@ -24,13 +25,13 @@ extension UIImageView {
         URLSession.shared.dataTask(with: url) { (data, _, err) in
           if err != nil {
             DispatchQueue.main.async {
-              self.image = defaultImage
+              self.image = defaultImage.resize(newWidth: self.frame.width)
             }
             return
           }
           DispatchQueue.main.async {
             if let data = data, let image = UIImage(data: data) {
-              self.image = image
+              self.image = image.resize(newWidth: self.frame.width)
             }
           }
         }.resume()
