@@ -6,8 +6,9 @@
 //
 
 import UIKit
-import KKDSKit
 
+import KKDSKit
+import SnapKit
 import Then
 
 class FeedWriteView: UIView {
@@ -44,13 +45,13 @@ class FeedWriteView: UIView {
     static let selectImageTopMargin = 5.f
     static let selectImageTrailingMargin = -20.f
 
-    static let seperatorHeight = 1.f
-    static let seperatorWidthMargin = -40.f
+    static let separatorHeight = 1.f
+    static let separatorWidthMargin = -40.f
 
     static let contentTextViewTopMargin = 20.f
     static let contentTextViewLeadingMargin = 20.f
     static let contentTextViewTrailingMargin = -20.f
-    static let contentTextViewHeight = 300.f
+    static let contentTextViewBottomMargin = -20.f
 
     static let doneButtonHeight = 45.f
     static let doneButtonBottomMargin = -10.f
@@ -66,12 +67,10 @@ class FeedWriteView: UIView {
       $0.scrollDirection = .horizontal
     }
   ).then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .clear
   }
 
   let photoAddButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setImage(KKDS.Image.ic_post_camera_24_gr, for: .normal)
     $0.setTitle("0/5", for: .normal)
     $0.setTitleColor(.gray60, for: .normal)
@@ -85,46 +84,40 @@ class FeedWriteView: UIView {
   }
 
   private let tagLabel = UILabel().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.text = "#태그"
     $0.tintColor = .black
   }
 
   let tagSelectButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setImage(KKDS.Image.ic_left_10_gr, for: .normal)
     $0.contentHorizontalAlignment = .right
     $0.contentVerticalAlignment = .center
     $0.backgroundColor = .clear
   }
 
-  private lazy var tagSeperateLineView = UIView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
+  private lazy var tagSeparateLineView = UIView().then {
     $0.backgroundColor = .gray20
   }
 
   private let promotionLabel = UILabel().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.text = "프로모션"
     $0.tintColor = .black
   }
 
   let promotionSelectButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setImage(KKDS.Image.ic_left_10_gr, for: .normal)
     $0.contentHorizontalAlignment = .right
     $0.contentVerticalAlignment = .center
     $0.backgroundColor = .clear
   }
 
-  private let promotionSeperateLineView = UIView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
+  private let promotionSeparateLineView = UIView().then {
     $0.backgroundColor = .gray20
   }
 
-  private let shopAddressLabel = UILabel().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.text = "매장주소 (선택)"
+  private let shopNameLabel = UILabel().then {
+    $0.text = "매장명 (선택)"
+    $0.tintColor = KKDS.Color.black
 
     if let text = $0.text {
       let attributedText = NSMutableAttributedString(string: text)
@@ -136,32 +129,46 @@ class FeedWriteView: UIView {
       )
       $0.attributedText = attributedText
     }
-
-    $0.tintColor = .black
   }
 
   let shopSearchButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setImage(KKDS.Image.ic_left_10_gr, for: .normal)
     $0.contentHorizontalAlignment = .right
     $0.contentVerticalAlignment = .center
     $0.backgroundColor = .clear
   }
 
-  private let shopSearchSeperateLineView = UIView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
+  private let shopNameSeparateLineView = UIView().then {
+    $0.backgroundColor = .gray20
+  }
+
+  private let shopAddressLabel = UILabel().then {
+    $0.text = "매장주소 (선택)"
+    $0.tintColor = KKDS.Color.black
+
+    if let text = $0.text {
+      let attributedText = NSMutableAttributedString(string: text)
+
+      attributedText.addAttribute(
+        .foregroundColor,
+        value: KKDS.Color.gray40,
+        range: (text as NSString).range(of: "(선택)")
+      )
+      $0.attributedText = attributedText
+    }
+  }
+
+  private let shopAddressSeparateLineView = UIView().then {
     $0.backgroundColor = .gray20
   }
 
   let contentTextView = UITextView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.textColor = .gray40
     $0.font = .systemFont(ofSize: 14)
     $0.text = "내용을 입력해주세요. (글자수 1,000자 이내)"
   }
 
   private let doneButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setTitle("등록 완료", for: .normal)
     $0.layer.cornerRadius = Metric.buttonCornerRadius
     $0.backgroundColor = .gray40
@@ -192,6 +199,7 @@ class FeedWriteView: UIView {
       self.promotionLabel.text = content
 
     case .address:
+      self.shopNameLabel.text = content
       self.shopAddressLabel.text = content
 
     }
@@ -201,73 +209,106 @@ class FeedWriteView: UIView {
 
   private func setupConstraints() {
     [self.photoAddButton, self.photoCollectionView].addSubViews(self)
-    [self.tagLabel, self.tagSelectButton, self.tagSeperateLineView].addSubViews(self)
-    [self.promotionLabel, self.promotionSelectButton, self.promotionSeperateLineView].addSubViews(self)
-    [self.shopAddressLabel, self.shopSearchButton, self.shopSearchSeperateLineView].addSubViews(self)
+    [self.tagLabel, self.tagSelectButton, self.tagSeparateLineView].addSubViews(self)
+    [self.promotionLabel, self.promotionSelectButton, self.promotionSeparateLineView].addSubViews(self)
+    [self.shopAddressLabel, self.shopSearchButton, self.shopAddressSeparateLineView].addSubViews(self)
+    [self.shopNameLabel, self.shopNameSeparateLineView].addSubViews(self)
     [self.contentTextView, self.doneButton].addSubViews(self)
 
-    NSLayoutConstraint.activate([
-      self.photoAddButton.heightAnchor.constraint(equalToConstant: Metric.photoAddButtonHeight),
-      self.photoAddButton.widthAnchor.constraint(equalToConstant: Metric.photoAddButtonWidth),
-      self.photoAddButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: Metric.photoAddButtonTopMargin),
-      self.photoAddButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.photoAddButtonLeadingMargin),
+    self.photoAddButton.snp.makeConstraints {
+      $0.height.equalTo(Metric.photoAddButtonHeight)
+      $0.width.equalTo(Metric.photoAddButtonWidth)
+      $0.top.equalTo(self.safeAreaLayoutGuide).offset(Metric.photoAddButtonTopMargin)
+      $0.leading.equalTo(self.safeAreaLayoutGuide).offset(Metric.photoAddButtonLeadingMargin)
+    }
 
-      self.photoCollectionView.topAnchor.constraint(equalTo: self.photoAddButton.topAnchor, constant: Metric.photoCollectionViewTopMargin),
-      self.photoCollectionView.bottomAnchor.constraint(equalTo: self.photoAddButton.bottomAnchor),
-      self.photoCollectionView.leadingAnchor.constraint(equalTo: self.photoAddButton.trailingAnchor, constant: Metric.photoCollectionViewLeadingMargin),
-      self.photoCollectionView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
+    self.photoCollectionView.snp.makeConstraints {
+      $0.top.equalTo(self.photoAddButton).offset(Metric.photoCollectionViewTopMargin)
+      $0.bottom.equalTo(self.photoAddButton)
+      $0.leading.equalTo(self.photoAddButton).offset(Metric.photoCollectionViewLeadingMargin)
+      $0.trailing.equalTo(self.safeAreaLayoutGuide)
+    }
 
-      self.tagLabel.topAnchor.constraint(equalTo: self.photoAddButton.bottomAnchor, constant: Metric.tagTopMargin),
-      self.tagLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.tagLeadingMargin),
-      self.tagLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.tagTrailingMargin),
+    self.tagLabel.snp.makeConstraints {
+      $0.top.equalTo(self.photoAddButton.snp.bottom).offset(Metric.tagTopMargin)
+      $0.leading.equalTo(self.safeAreaLayoutGuide).inset(Metric.tagLeadingMargin)
+      $0.trailing.equalTo(self.safeAreaLayoutGuide).offset(Metric.tagTrailingMargin)
+    }
 
-      self.tagSelectButton.centerYAnchor.constraint(equalTo: self.tagLabel.centerYAnchor),
-      self.tagSelectButton.leadingAnchor.constraint(equalTo: self.tagLabel.leadingAnchor),
-      self.tagSelectButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.selectImageTrailingMargin),
-      self.tagSelectButton.heightAnchor.constraint(equalToConstant: Metric.selectButtonHeight),
+    self.tagSelectButton.snp.makeConstraints {
+      $0.centerY.equalTo(self.tagLabel)
+      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.tagLeadingMargin)
+      $0.height.equalTo(Metric.selectButtonHeight)
+    }
 
-      self.tagSeperateLineView.topAnchor.constraint(equalTo: self.tagSelectButton.bottomAnchor),
-      self.tagSeperateLineView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-      self.tagSeperateLineView.heightAnchor.constraint(equalToConstant: Metric.seperatorHeight),
-      self.tagSeperateLineView.widthAnchor.constraint(equalTo: self.safeAreaLayoutGuide.widthAnchor, constant: Metric.seperatorWidthMargin),
+    self.tagSeparateLineView.snp.makeConstraints {
+      $0.top.equalTo(self.tagSelectButton.snp.bottom)
+      $0.height.equalTo(Metric.separatorHeight)
+      $0.width.equalTo(self.safeAreaLayoutGuide).offset(Metric.separatorWidthMargin)
+      $0.centerX.equalToSuperview()
+    }
 
-      self.promotionLabel.topAnchor.constraint(equalTo: self.tagSeperateLineView.bottomAnchor, constant: Metric.promotionTopMargin),
-      self.promotionLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.promotionLeadingMargin),
-      self.promotionLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.promotionTrailingMargin),
+    self.promotionLabel.snp.makeConstraints {
+      $0.top.equalTo(self.tagSeparateLineView.snp.bottom).offset(Metric.promotionTopMargin)
+      $0.leading.equalTo(self.safeAreaLayoutGuide).inset(Metric.promotionLeadingMargin)
+      $0.trailing.equalTo(self.safeAreaLayoutGuide).offset(Metric.promotionTrailingMargin)
+    }
 
-      self.promotionSelectButton.centerYAnchor.constraint(equalTo: self.promotionLabel.centerYAnchor),
-      self.promotionSelectButton.leadingAnchor.constraint(equalTo: self.promotionLabel.leadingAnchor),
-      self.promotionSelectButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.selectImageTrailingMargin),
-      self.promotionSelectButton.heightAnchor.constraint(equalToConstant: Metric.selectButtonHeight),
+    self.promotionSelectButton.snp.makeConstraints {
+      $0.centerY.leading.equalTo(self.promotionLabel)
+      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.tagLeadingMargin)
+      $0.height.equalTo(Metric.selectButtonHeight)
+    }
 
-      self.promotionSeperateLineView.topAnchor.constraint(equalTo: self.promotionSelectButton.bottomAnchor),
-      self.promotionSeperateLineView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-      self.promotionSeperateLineView.heightAnchor.constraint(equalToConstant: Metric.seperatorHeight),
-      self.promotionSeperateLineView.widthAnchor.constraint(equalTo: self.safeAreaLayoutGuide.widthAnchor, constant: Metric.seperatorWidthMargin),
+    self.promotionSeparateLineView.snp.makeConstraints {
+      $0.top.equalTo(self.promotionSelectButton.snp.bottom)
+      $0.centerX.equalToSuperview()
+      $0.height.equalTo(Metric.separatorHeight)
+      $0.width.equalTo(self.safeAreaLayoutGuide).offset(Metric.separatorWidthMargin)
+    }
 
-      self.shopAddressLabel.topAnchor.constraint(equalTo: self.promotionSeperateLineView.bottomAnchor, constant: Metric.shopTopMargin),
-      self.shopAddressLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.shopLeadingMargin),
-      self.shopAddressLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.shopTrailingMargin),
-      
-      self.shopSearchButton.centerYAnchor.constraint(equalTo: self.shopAddressLabel.centerYAnchor),
-      self.shopSearchButton.leadingAnchor.constraint(equalTo: self.shopAddressLabel.leadingAnchor),
-      self.shopSearchButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.selectImageTrailingMargin),
-      self.shopSearchButton.heightAnchor.constraint(equalToConstant: Metric.selectButtonHeight),
+    self.shopNameLabel.snp.makeConstraints {
+      $0.top.equalTo(self.promotionSeparateLineView.snp.bottom).offset(Metric.shopTopMargin)
+      $0.leading.equalTo(self.safeAreaLayoutGuide).inset(Metric.shopLeadingMargin)
+      $0.trailing.equalTo(self.safeAreaLayoutGuide).offset(Metric.shopTrailingMargin)
+    }
 
-      self.shopSearchSeperateLineView.topAnchor.constraint(equalTo: self.shopSearchButton.bottomAnchor),
-      self.shopSearchSeperateLineView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-      self.shopSearchSeperateLineView.heightAnchor.constraint(equalToConstant: Metric.seperatorHeight),
-      self.shopSearchSeperateLineView.widthAnchor.constraint(equalTo: self.safeAreaLayoutGuide.widthAnchor, constant: Metric.seperatorWidthMargin),
+    self.shopSearchButton.snp.makeConstraints {
+      $0.centerY.leading.equalTo(self.shopNameLabel)
+      $0.trailing.equalTo(self.safeAreaLayoutGuide).offset(Metric.selectImageTrailingMargin)
+      $0.height.equalTo(Metric.selectButtonHeight)
+    }
 
-      self.contentTextView.topAnchor.constraint(equalTo: self.shopSearchSeperateLineView.bottomAnchor, constant: Metric.contentTextViewTopMargin),
-      self.contentTextView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.contentTextViewLeadingMargin),
-      self.contentTextView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.contentTextViewTrailingMargin),
-      self.contentTextView.heightAnchor.constraint(equalToConstant: Metric.contentTextViewHeight),
+    self.shopNameSeparateLineView.snp.makeConstraints {
+      $0.top.equalTo(self.shopSearchButton.snp.bottom)
+      $0.centerX.equalToSuperview()
+      $0.height.equalTo(Metric.separatorHeight)
+      $0.width.equalTo(self.safeAreaLayoutGuide).offset(Metric.separatorWidthMargin)
+    }
 
-      self.doneButton.heightAnchor.constraint(equalToConstant: Metric.doneButtonHeight),
-      self.doneButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.doneButtonBottomMargin),
-      self.doneButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.doneButtonleadingMargin),
-      self.doneButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.doneButtonTrailingMargin)
-    ])
+    self.shopAddressLabel.snp.makeConstraints {
+      $0.top.equalTo(self.shopNameSeparateLineView.snp.bottom).offset(Metric.shopTopMargin)
+      $0.leading.equalTo(self.safeAreaLayoutGuide).inset(Metric.shopLeadingMargin)
+      $0.trailing.equalTo(self.safeAreaLayoutGuide).offset(Metric.shopTrailingMargin)
+    }
+
+    self.shopAddressSeparateLineView.snp.makeConstraints {
+      $0.top.equalTo(self.shopAddressLabel.snp.centerY).offset(Metric.selectButtonHeight/2)
+      $0.centerX.equalToSuperview()
+      $0.height.equalTo(Metric.separatorHeight)
+      $0.width.equalTo(self.safeAreaLayoutGuide).offset(Metric.separatorWidthMargin)
+    }
+
+    self.contentTextView.snp.makeConstraints {
+      $0.top.equalTo(self.shopAddressSeparateLineView.snp.bottom).offset(Metric.contentTextViewTopMargin)
+      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.contentTextViewLeadingMargin)
+      $0.bottom.equalTo(self.doneButton.snp.top).offset(Metric.contentTextViewBottomMargin)
+    }
+
+    self.doneButton.snp.makeConstraints {
+      $0.height.equalTo(Metric.doneButtonHeight)
+      $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(Metric.doneButtonBottomMargin)
+      $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.doneButtonleadingMargin)
+    }
   }
 }
