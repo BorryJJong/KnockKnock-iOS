@@ -39,7 +39,7 @@ class FeedWriteView: UIView {
     static let shopLeadingMargin = 20.f
     static let shopTrailingMargin = -60.f
 
-    static let selectButtonHeight = 40.f
+    static let selectButtonHeight = 65.f
 
     static let selectImageTopMargin = 5.f
     static let selectImageTrailingMargin = -20.f
@@ -90,14 +90,12 @@ class FeedWriteView: UIView {
     $0.tintColor = .black
   }
 
-  lazy var tagSelectButton = UIButton().then {
+  let tagSelectButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.setImage(KKDS.Image.ic_left_10_gr, for: .normal)
+    $0.contentHorizontalAlignment = .right
+    $0.contentVerticalAlignment = .center
     $0.backgroundColor = .clear
-  }
-
-  private let tagSelectImageView = UIImageView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.image = UIImage(named: "ic_feed_left")
   }
 
   private lazy var tagSeperateLineView = UIView().then {
@@ -113,36 +111,44 @@ class FeedWriteView: UIView {
 
   let promotionSelectButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.tintColor = .clear
+    $0.setImage(KKDS.Image.ic_left_10_gr, for: .normal)
+    $0.contentHorizontalAlignment = .right
+    $0.contentVerticalAlignment = .center
+    $0.backgroundColor = .clear
   }
 
-  private let promotionSelectImageView = UIImageView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.image = UIImage(named: "ic_feed_left")
-  }
-
-  private lazy var promotionSeperateLineView = UIView().then {
+  private let promotionSeperateLineView = UIView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .gray20
   }
 
-  private let shopLabel = UILabel().then {
+  private let shopAddressLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.text = "매장주소(검색)"
+    $0.text = "매장주소 (선택)"
+
+    if let text = $0.text {
+      let attributedText = NSMutableAttributedString(string: text)
+
+      attributedText.addAttribute(
+        .foregroundColor,
+        value: KKDS.Color.gray40,
+        range: (text as NSString).range(of: "(선택)")
+      )
+      $0.attributedText = attributedText
+    }
+
     $0.tintColor = .black
   }
 
   let shopSearchButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.tintColor = .clear
+    $0.setImage(KKDS.Image.ic_left_10_gr, for: .normal)
+    $0.contentHorizontalAlignment = .right
+    $0.contentVerticalAlignment = .center
+    $0.backgroundColor = .clear
   }
 
-  private let shopSearchImageView = UIImageView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.image = UIImage(named: "ic_feed_left")
-  }
-
-  private lazy var shopSearchSeperateLineView = UIView().then {
+  private let shopSearchSeperateLineView = UIView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .gray20
   }
@@ -174,15 +180,20 @@ class FeedWriteView: UIView {
 
   // MARK: - Bind
 
-  func bind(propertyType: PropertyType, content: String) {
-
+  func bind(
+    propertyType: PropertyType,
+    content: String
+  ) {
     switch propertyType {
     case .tag:
       self.tagLabel.text = content
+
     case .promotion:
       self.promotionLabel.text = content
+
     case .address:
-      self.shopLabel.text = content
+      self.shopAddressLabel.text = content
+
     }
   }
 
@@ -190,9 +201,9 @@ class FeedWriteView: UIView {
 
   private func setupConstraints() {
     [self.photoAddButton, self.photoCollectionView].addSubViews(self)
-    [self.tagLabel, self.tagSelectImageView, self.tagSelectButton, self.tagSeperateLineView].addSubViews(self)
-    [self.promotionLabel, self.promotionSelectImageView, self.promotionSelectButton, self.promotionSeperateLineView].addSubViews(self)
-    [self.shopLabel, self.shopSearchImageView, self.shopSearchButton, self.shopSearchSeperateLineView].addSubViews(self)
+    [self.tagLabel, self.tagSelectButton, self.tagSeperateLineView].addSubViews(self)
+    [self.promotionLabel, self.promotionSelectButton, self.promotionSeperateLineView].addSubViews(self)
+    [self.shopAddressLabel, self.shopSearchButton, self.shopSearchSeperateLineView].addSubViews(self)
     [self.contentTextView, self.doneButton].addSubViews(self)
 
     NSLayoutConstraint.activate([
@@ -210,12 +221,9 @@ class FeedWriteView: UIView {
       self.tagLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.tagLeadingMargin),
       self.tagLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.tagTrailingMargin),
 
-      self.tagSelectImageView.topAnchor.constraint(equalTo: self.tagLabel.topAnchor, constant: Metric.selectImageTopMargin),
-      self.tagSelectImageView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.selectImageTrailingMargin),
-
-      self.tagSelectButton.topAnchor.constraint(equalTo: self.tagLabel.topAnchor),
+      self.tagSelectButton.centerYAnchor.constraint(equalTo: self.tagLabel.centerYAnchor),
       self.tagSelectButton.leadingAnchor.constraint(equalTo: self.tagLabel.leadingAnchor),
-      self.tagSelectButton.trailingAnchor.constraint(equalTo: self.tagSelectImageView.trailingAnchor),
+      self.tagSelectButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.selectImageTrailingMargin),
       self.tagSelectButton.heightAnchor.constraint(equalToConstant: Metric.selectButtonHeight),
 
       self.tagSeperateLineView.topAnchor.constraint(equalTo: self.tagSelectButton.bottomAnchor),
@@ -227,12 +235,9 @@ class FeedWriteView: UIView {
       self.promotionLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.promotionLeadingMargin),
       self.promotionLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.promotionTrailingMargin),
 
-      self.promotionSelectImageView.topAnchor.constraint(equalTo: self.promotionLabel.topAnchor, constant: Metric.selectImageTopMargin),
-      self.promotionSelectImageView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.selectImageTrailingMargin),
-
-      self.promotionSelectButton.topAnchor.constraint(equalTo: self.promotionLabel.topAnchor),
+      self.promotionSelectButton.centerYAnchor.constraint(equalTo: self.promotionLabel.centerYAnchor),
       self.promotionSelectButton.leadingAnchor.constraint(equalTo: self.promotionLabel.leadingAnchor),
-      self.promotionSelectButton.trailingAnchor.constraint(equalTo: self.promotionSelectImageView.trailingAnchor),
+      self.promotionSelectButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.selectImageTrailingMargin),
       self.promotionSelectButton.heightAnchor.constraint(equalToConstant: Metric.selectButtonHeight),
 
       self.promotionSeperateLineView.topAnchor.constraint(equalTo: self.promotionSelectButton.bottomAnchor),
@@ -240,16 +245,13 @@ class FeedWriteView: UIView {
       self.promotionSeperateLineView.heightAnchor.constraint(equalToConstant: Metric.seperatorHeight),
       self.promotionSeperateLineView.widthAnchor.constraint(equalTo: self.safeAreaLayoutGuide.widthAnchor, constant: Metric.seperatorWidthMargin),
 
-      self.shopLabel.topAnchor.constraint(equalTo: self.promotionSeperateLineView.bottomAnchor, constant: Metric.shopTopMargin),
-      self.shopLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.shopLeadingMargin),
-      self.shopLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.shopTrailingMargin),
-
-      self.shopSearchImageView.topAnchor.constraint(equalTo: self.shopLabel.topAnchor, constant: Metric.selectImageTopMargin),
-      self.shopSearchImageView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.selectImageTrailingMargin),
+      self.shopAddressLabel.topAnchor.constraint(equalTo: self.promotionSeperateLineView.bottomAnchor, constant: Metric.shopTopMargin),
+      self.shopAddressLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.shopLeadingMargin),
+      self.shopAddressLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.shopTrailingMargin),
       
-      self.shopSearchButton.topAnchor.constraint(equalTo: self.shopLabel.topAnchor),
-      self.shopSearchButton.leadingAnchor.constraint(equalTo: self.shopLabel.leadingAnchor),
-      self.shopSearchButton.trailingAnchor.constraint(equalTo: self.shopSearchImageView.trailingAnchor),
+      self.shopSearchButton.centerYAnchor.constraint(equalTo: self.shopAddressLabel.centerYAnchor),
+      self.shopSearchButton.leadingAnchor.constraint(equalTo: self.shopAddressLabel.leadingAnchor),
+      self.shopSearchButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.selectImageTrailingMargin),
       self.shopSearchButton.heightAnchor.constraint(equalToConstant: Metric.selectButtonHeight),
 
       self.shopSearchSeperateLineView.topAnchor.constraint(equalTo: self.shopSearchButton.bottomAnchor),
