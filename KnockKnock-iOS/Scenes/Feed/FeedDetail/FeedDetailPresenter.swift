@@ -25,7 +25,7 @@ final class FeedDetailPresenter: FeedDetailPresenterProtocol {
   }
 
   func presentLike(like: [LikeInfo]) {
-    self.view?.getLike(like: like)
+    self.view?.fetchLikeList(like: like)
   }
 
   func presentVisibleComments(allComments: [Comment]) {
@@ -65,6 +65,5 @@ final class FeedDetailPresenter: FeedDetailPresenterProtocol {
 
   func presentAllCommentsCount(allCommentsCount: Int) {
     self.view?.getAllCommentsCount(allCommentsCount: allCommentsCount)
-    print(allCommentsCount)
   }
 }

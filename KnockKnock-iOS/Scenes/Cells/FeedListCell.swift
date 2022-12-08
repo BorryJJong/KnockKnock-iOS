@@ -102,6 +102,7 @@ class FeedListCell: BaseCollectionViewCell {
   let likeButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setImage(KKDS.Image.ic_like_24_off, for: .normal)
+    $0.setImage(KKDS.Image.ic_like_24_on, for: .selected)
     $0.setTitle(" 0", for: .normal)
     $0.setTitleColor(.black, for: .normal)
     $0.titleLabel?.font = .systemFont(ofSize: 13, weight: .medium)
@@ -123,10 +124,10 @@ class FeedListCell: BaseCollectionViewCell {
 
   func bind(feedList: FeedListPost) {
     if feedList.isLike {
-      self.likeButton.setImage(KKDS.Image.ic_like_24_on, for: .normal)
+      self.likeButton.isSelected = true
       self.likeButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .bold)
     } else {
-      self.likeButton.setImage(KKDS.Image.ic_like_24_off, for: .normal)
+      self.likeButton.isSelected = false
       self.likeButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .medium)
     }
 

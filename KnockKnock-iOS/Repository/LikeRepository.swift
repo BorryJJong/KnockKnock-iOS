@@ -8,11 +8,50 @@
 import Foundation
 
 protocol LikeRepositoryProtocol {
-  func getLikeList(feedId: Int, completionHandler: @escaping ([LikeInfo]) -> Void)
+  func requestLike(id: Int, completionHandler: @escaping (Bool) -> Void)
+  func requestLikeCancel(id: Int, completionHandler: @escaping (Bool) -> Void)
+  func requestLikeList(feedId: Int, completionHandler: @escaping ([LikeInfo]) -> Void)
 }
 
 final class LikeRepository: LikeRepositoryProtocol {
-  func getLikeList(feedId: Int, completionHandler: @escaping ([LikeInfo]) -> Void) {
+
+  func requestLike(
+    id: Int,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
+    KKNetworkManager
+      .shared
+      .request(
+        object: Bool.self,
+        router: KKRouter.postFeedLike(
+          id: id
+        ), success: { result in
+          completionHandler(result)
+        }, failure: { error in
+          print(error)
+        }
+      )
+  }
+
+  func requestLikeCancel(
+    id: Int,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
+    KKNetworkManager
+      .shared
+      .request(
+        object: Bool.self,
+        router: KKRouter.deleteFeedLike(
+          id: id
+        ), success: { result in
+          completionHandler(result)
+        }, failure: { error in
+          print(error)
+        }
+      )
+  }
+
+  func requestLikeList(feedId: Int, completionHandler: @escaping ([LikeInfo]) -> Void) {
     KKNetworkManager
       .shared
       .request(
