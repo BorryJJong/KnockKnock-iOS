@@ -45,7 +45,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
 
       self.containerView.bind(isNoResult: isNoResult)
 
-      self.addressList += addressResult?.documents.map { $0.placeName } ?? []
+      self.addressList += addressResult?.documents.map { $0.roadAddressName } ?? []
     }
   }
 

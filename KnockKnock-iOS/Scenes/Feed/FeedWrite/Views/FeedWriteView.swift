@@ -187,22 +187,17 @@ class FeedWriteView: UIView {
 
   // MARK: - Bind
 
-  func bind(
-    propertyType: PropertyType,
-    content: String
-  ) {
-    switch propertyType {
-    case .tag:
-      self.tagLabel.text = content
+  func setTag(tag: String) {
+    self.tagLabel.text = tag
+  }
 
-    case .promotion:
-      self.promotionLabel.text = content
+  func setPromotion(promotion: String) {
+    self.promotionLabel.text = promotion
+  }
 
-    case .address:
-      self.shopNameLabel.text = content
-      self.shopAddressLabel.text = content
-
-    }
+  func setAddress(name: String, address: String) {
+    self.shopNameLabel.text = name
+    self.shopAddressLabel.text = address
   }
 
   // MARK: - Constraints
