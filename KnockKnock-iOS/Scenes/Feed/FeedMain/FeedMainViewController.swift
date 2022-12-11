@@ -149,6 +149,7 @@ extension FeedMainViewController: FeedMainViewProtocol {
 }
 
 // MARK: - SearchTextField Delegate
+
 extension FeedMainViewController: UISearchBarDelegate {
   func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
     if let keyword = searchBar.searchTextField.text {
