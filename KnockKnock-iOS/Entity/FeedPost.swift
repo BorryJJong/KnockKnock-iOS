@@ -25,7 +25,6 @@ struct Property: Equatable {
   let title: String
 }
 
-
 struct FeedDetail: Decodable {
   let data: FeedDetailData
 }
@@ -105,7 +104,7 @@ struct FeedList: Decodable {
 struct FeedListPost: Decodable {
   let id: Int
   let userName: String
-  let userImage: String
+  let userImage: String?
   let regDateToString: String
   let content: String?
   let imageScale: String = "1:1"
