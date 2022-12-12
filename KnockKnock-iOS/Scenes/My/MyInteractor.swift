@@ -14,6 +14,7 @@ protocol MyInteractorProtocol {
 
   func fetchMenuData()
   func checkLoginStatus()
+  func fetchNickname() 
   func requestLogOut()
   func requestSignOut()
 
@@ -40,12 +41,13 @@ final class MyInteractor: MyInteractorProtocol {
 
   func checkLoginStatus() {
     self.worker?.checkLoginStatus(completionHandler: { isLoggedIn in
-      if isLoggedIn { // 로그인 상태라면 nickname 불러오기
-        self.worker?.fetchNickname(completionHandler: { nickname in
-          self.presenter?.presentNickname(nickname: nickname)
-        })
-      }
       self.presenter?.presentLoginStatus(isLoggedIn: isLoggedIn)
+    })
+  }
+
+  func fetchNickname() {
+    self.worker?.fetchNickname(completionHandler: { nickname in
+      self.presenter?.presentNickname(nickname: nickname)
     })
   }
 

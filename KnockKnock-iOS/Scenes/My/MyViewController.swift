@@ -32,6 +32,9 @@ final class MyViewController: BaseViewController<MyView> {
 
   var isLoggedIn: Bool = false {
     didSet {
+      if isLoggedIn {
+        self.interactor?.fetchNickname()
+      }
       self.containerView.setLoginStatus(isLoggedin: self.isLoggedIn)
       self.containerView.myTableView.reloadData()
     }
