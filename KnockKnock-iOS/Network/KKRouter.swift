@@ -8,11 +8,12 @@
 import Foundation
 
 import Alamofire
+import UIKit
 
 enum KKRouter: URLRequestConvertible {
-
+  
   typealias Parameters = [String: Any]
-
+  
   var baseURL: URL {
     switch self {
     case .requestShopAddress:
@@ -22,7 +23,7 @@ enum KKRouter: URLRequestConvertible {
     }
   }
 
-  // MARK - APIs
+  // MARK: - APIs
 
   // Account
   case socialLogin(loginInfo: Parameters)
@@ -37,6 +38,7 @@ enum KKRouter: URLRequestConvertible {
   case getPromotions
   case requestShopAddress(query: String, page: Int, size: Int)
   case getFeedMain(page: Int, take: Int, challengeId: Int)
+  case postFeed(postData: FeedWrite)
 
   // Feed List, Detail
   case getFeedBlogPost(page: Int, take: Int, feedId: Int, challengeId: Int)
@@ -67,10 +69,11 @@ enum KKRouter: URLRequestConvertible {
         .getComment:
       return .get
 
-    case .postFeedLike,
-         .socialLogin,
-         .signUp,
-         .postAddComment:
+    case .socialLogin,
+        .signUp,
+        .postFeed,
+        .postAddComment,
+        .postFeedLike:
       return .post
 
     case .deleteFeedLike:
@@ -96,6 +99,7 @@ enum KKRouter: URLRequestConvertible {
     case .getChallengeTitles: return "challenges/titles"
     case .getPromotions: return "promotions"
     case .requestShopAddress: return "keyword.json"
+    case .postFeed: return "feed"
 
     // Feed List, Detail
     case .getFeedBlogPost: return "feed/blog-post"
@@ -109,6 +113,7 @@ enum KKRouter: URLRequestConvertible {
     // Comment
     case .getComment(let id): return "feed/\(id)/comment"
     case .postAddComment: return "feed/comment"
+
     }
   }
 
@@ -116,10 +121,10 @@ enum KKRouter: URLRequestConvertible {
 
   var parameters: Parameters? {
     switch self {
-
+      
     case let .socialLogin(loginInfo):
       return loginInfo
-
+      
     case let .signUp(userInfo):
       return userInfo
 
@@ -129,7 +134,7 @@ enum KKRouter: URLRequestConvertible {
         "page": page,
         "size": size
       ]
-
+      
     case let .getFeedMain(page, take, challengeId):
       return [
         "page": page,
@@ -156,9 +161,47 @@ enum KKRouter: URLRequestConvertible {
         .postFeedLike,
         .deleteFeedLike,
         .getLikeList,
+        .postFeed,
         .getComment:
 
       return nil
+    }
+  }
+  
+  var multipart: MultipartFormData {
+    
+    switch self {
+    case .postFeed(let feedWriteForm):
+      
+      let multipartFormData = MultipartFormData()
+
+      let userId = "\(feedWriteForm.userId)".data(using: .utf8) ?? Data()
+      let content = feedWriteForm.content.data(using: .utf8) ?? Data()
+      let storeAddress = feedWriteForm.storeAddress.data(using: .utf8) ?? Data()
+      let locationX = feedWriteForm.locationX.data(using: .utf8) ?? Data()
+      let locationY = feedWriteForm.locationY.data(using: .utf8) ?? Data()
+      let scale = feedWriteForm.scale.data(using: .utf8) ?? Data()
+      let promotions = feedWriteForm.promotions.data(using: .utf8) ?? Data()
+      let challenges = feedWriteForm.challenges.data(using: .utf8) ?? Data()
+      let images = feedWriteForm.images.map { $0.pngData() ?? Data() }
+      
+      multipartFormData.append(userId, withName: "userId")
+      multipartFormData.append(content, withName: "content")
+      multipartFormData.append(storeAddress, withName: "storeAddress")
+      multipartFormData.append(locationX, withName: "locationX")
+      multipartFormData.append(locationY, withName: "locationY")
+      multipartFormData.append(scale, withName: "scale")
+      multipartFormData.append(promotions, withName: "promotions")
+      multipartFormData.append(challenges, withName: "challenges")
+      
+      images.forEach {
+        multipartFormData.append($0, withName: "images", fileName: "\($0).png", mimeType: "image/png")
+      }
+      
+      return multipartFormData
+      
+    default:
+      return MultipartFormData()
     }
   }
 
@@ -168,27 +211,32 @@ enum KKRouter: URLRequestConvertible {
     let url = baseURL.appendingPathComponent(path)
     var request = URLRequest(url: url)
     request.method = method
-
+    
     switch method {
     case .get:
-      switch self {
 
+      switch self {
+        
       case .getChallengeDetail, .getFeed, .getPromotions, .getComment, .getLikeList:
         break
-
+        
       case .requestShopAddress:
         request = try URLEncoding.default.encode(request, with: parameters)
         request.setValue(API.KAKAO_REST_API_KEY, forHTTPHeaderField: "Authorization")
-
+        
       default:
         request = try URLEncoding.default.encode(request, with: parameters)
       }
-
+      
     case .post, .patch, .delete:
+
       switch self {
       case .postFeedLike, .deleteFeedLike:
         request = try JSONEncoding.default.encode(request)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
+
+      case .postFeed:
+        request.setValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
         
       default:
         request = try JSONEncoding.default.encode(request)
