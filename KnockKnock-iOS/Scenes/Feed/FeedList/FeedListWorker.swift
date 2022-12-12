@@ -15,14 +15,30 @@ protocol FeedListWorkerProtocol {
     challengeId: Int,
     completionHandler: @escaping (FeedList) -> Void
   )
+  func requestLike(id: Int, completionHandler: @escaping (Bool) -> Void)
+  func requestLikeCancel(id: Int, completionHandler: @escaping (Bool) -> Void)
+  func checkTokenExisted(completionHandler: @escaping (Bool)-> Void)
 }
 
 final class FeedListWorker: FeedListWorkerProtocol {
 
-  private let repository: FeedRepositoryProtocol
+  private let feedRepository: FeedRepositoryProtocol
+  private let likeRepository: LikeRepositoryProtocol
+  private let localDataManager: LocalDataManagerProtocol
 
-  init(repository: FeedRepositoryProtocol) {
-    self.repository = repository
+  init(
+    feedRepository: FeedRepositoryProtocol,
+    likeRepository: LikeRepositoryProtocol,
+    localDataManager: LocalDataManagerProtocol
+  ) {
+    self.feedRepository = feedRepository
+    self.likeRepository = likeRepository
+    self.localDataManager = localDataManager
+  }
+
+  func checkTokenExisted(completionHandler: @escaping (Bool)-> Void) {
+    let isExisted = self.localDataManager.checkTokenIsExisted()
+    completionHandler(isExisted)
   }
 
   func fetchFeedList(
@@ -33,7 +49,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
     completionHandler: @escaping (FeedList) -> Void
   ) {
     LoadingIndicator.showLoading()
-    repository.requestFeedList(
+    feedRepository.requestFeedList(
       currentPage: currentPage,
       pageSize: count,
       feedId: feedId,
@@ -42,5 +58,25 @@ final class FeedListWorker: FeedListWorkerProtocol {
         completionHandler(result)
       }
     )
+  }
+
+  func requestLike(
+    id: Int,
+    completionHandler: @escaping (Bool) -> Void) {
+    self.likeRepository.requestLike(
+      id: id,
+      completionHandler: { result in
+      completionHandler(result)
+    })
+  }
+
+  func requestLikeCancel(
+    id: Int,
+    completionHandler: @escaping (Bool) -> Void) {
+    self.likeRepository.requestLikeCancel(
+      id: id,
+      completionHandler: { result in
+      completionHandler(result)
+    })
   }
 }

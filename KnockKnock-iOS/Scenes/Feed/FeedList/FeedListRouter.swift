@@ -13,6 +13,7 @@ protocol FeedListRouterProtocol {
   func navigateToFeedMain(source: FeedListViewProtocol)
   func navigateToFeedDetail(source: FeedListViewProtocol, feedId: Int)
   func navigateToCommentView(feedId: Int, source: FeedListViewProtocol)
+  func navigateToLoginView(source: FeedListViewProtocol)
   func presentBottomSheetView(source: FeedListViewProtocol)
 }
 
@@ -22,11 +23,15 @@ final class FeedListRouter: FeedListRouterProtocol {
     let view = FeedListViewController()
     let interactor = FeedListInteractor()
     let presenter = FeedListPresenter()
-    let worker = FeedListWorker(repository: FeedRepository())
+    let worker = FeedListWorker(
+      feedRepository: FeedRepository(),
+      likeRepository: LikeRepository(),
+      localDataManager: LocalDataManager()
+    )
     let router = FeedListRouter()
 
     view.interactor = interactor
-    view.router = router
+    interactor.router = router
     interactor.presenter = presenter
     interactor.worker = worker
     presenter.view = view
@@ -56,6 +61,15 @@ final class FeedListRouter: FeedListRouterProtocol {
     if let sourceView = source as? UIViewController {
       commentViewController.modalPresentationStyle = .fullScreen
       sourceView.present(commentViewController, animated: true, completion: nil)
+    }
+  }
+
+  func navigateToLoginView(source: FeedListViewProtocol) {
+    let loginViewController = LoginRouter.createLoginView()
+    
+    loginViewController.hidesBottomBarWhenPushed = true
+    if let sourceView = source as? UIViewController {
+      sourceView.navigationController?.pushViewController(loginViewController, animated: true)
     }
   }
 

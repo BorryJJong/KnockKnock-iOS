@@ -12,6 +12,10 @@ import Then
 
 final class AlertView: UIView {
 
+  // MARK: - Properties
+
+  private var content: String?
+
   // MARK: - Constants
 
   private enum Metric {
@@ -27,10 +31,6 @@ final class AlertView: UIView {
   }
 
   // MARK: - UIs
-
-  private let dimmedView = UIView().then {
-    $0.backgroundColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.5)
-  }
 
   private let alertView = UIView().then {
     $0.backgroundColor = .white
@@ -75,15 +75,11 @@ final class AlertView: UIView {
     self.contentLabel.text = content
   }
 
-  // MARK: - Configure
+  // MARK: - Constraints
 
   private func setupConstraints() {
-    [self.dimmedView, self.alertView].addSubViews(self)
+    [self.alertView].addSubViews(self)
     [self.contentLabel, self.cancelButton, self.confirmButton].addSubViews(self.alertView)
-
-    self.dimmedView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
-    }
 
     self.alertView.snp.makeConstraints {
       $0.centerY.equalToSuperview()

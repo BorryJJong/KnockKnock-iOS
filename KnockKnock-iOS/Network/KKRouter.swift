@@ -22,26 +22,39 @@ enum KKRouter: URLRequestConvertible {
       return URL(string: API.BASE_URL)!
     }
   }
-  
+
+  // MARK: - APIs
+
+  // Account
   case socialLogin(loginInfo: Parameters)
   case signUp(userInfo: Parameters)
-  
+
+  // Challenge
   case getChallengeResponse
   case getChallengeDetail(id: Int)
-  
+
+  // Feed Write, Main
   case getChallengeTitles
   case getPromotions
-  case getFeedMain(page: Int, take: Int, challengeId: Int)
   case requestShopAddress(query: String, page: Int, size: Int)
+  case getFeedMain(page: Int, take: Int, challengeId: Int)
+  case postFeed(postData: FeedWrite)
+
+  // Feed List, Detail
   case getFeedBlogPost(page: Int, take: Int, feedId: Int, challengeId: Int)
   case getFeed(id: Int)
-  
+
+  // Like
+  case postFeedLike(id: Int)
+  case deleteFeedLike(id: Int)
+  case getLikeList(id: Int)
+
+  // Comment
   case getComment(id: Int)
   case postAddComment(comment: Parameters)
-  case postFeed(postData: FeedWrite)
-  
-  case getLikeList(id: Int)
-  
+
+  // MARK: - HTTP Method
+
   var method: HTTPMethod {
     switch self {
     case .getChallengeResponse,
@@ -55,34 +68,57 @@ enum KKRouter: URLRequestConvertible {
         .getLikeList,
         .getComment:
       return .get
-      
+
     case .socialLogin,
         .signUp,
         .postFeed,
-        .postAddComment:
+        .postAddComment,
+        .postFeedLike:
       return .post
+
+    case .deleteFeedLike:
+      return .delete
     }
   }
-  
+
+  // MARK: - Path
+
   var path: String {
     switch self {
+
+    // Account
     case .socialLogin: return "users/social-login"
     case .signUp: return "users/sign-up"
+
+    // Challenge
     case .getChallengeResponse: return "challenges"
     case .getChallengeDetail(let id): return "challenges/\(id)"
+
+    // Feed Write, Main
     case .getFeedMain: return "feed/main"
     case .getChallengeTitles: return "challenges/titles"
     case .getPromotions: return "promotions"
     case .requestShopAddress: return "keyword.json"
+    case .postFeed: return "feed"
+
+    // Feed List, Detail
     case .getFeedBlogPost: return "feed/blog-post"
     case .getFeed(let id): return "feed/\(id)"
+
+    // Like
+    case .postFeedLike(let id): return "like/feed/\(id)"
+    case .deleteFeedLike(let id): return "like/feed/\(id)"
+    case .getLikeList(let id): return "like/feed/\(id)"
+
+    // Comment
     case .getComment(let id): return "feed/\(id)/comment"
     case .postAddComment: return "feed/comment"
-    case .getLikeList(let id): return "like/feed/\(id)"
-    case .postFeed: return "feed"
+
     }
   }
-  
+
+  // MARK: - Parameters
+
   var parameters: Parameters? {
     switch self {
       
@@ -91,18 +127,7 @@ enum KKRouter: URLRequestConvertible {
       
     case let .signUp(userInfo):
       return userInfo
-      
-    case .getChallengeDetail,
-        .getChallengeResponse,
-        .getChallengeTitles,
-        .getFeed,
-        .getPromotions,
-        .getLikeList,
-        .postFeed,
-        .getComment:
-      
-      return nil
-      
+
     case let .requestShopAddress(query, page, size):
       return [
         "query": query,
@@ -116,6 +141,7 @@ enum KKRouter: URLRequestConvertible {
         "take": take,
         "challengeId": challengeId
       ]
+
     case let .getFeedBlogPost(page, take, feedId, challengeId):
       return [
         "page": page,
@@ -123,8 +149,22 @@ enum KKRouter: URLRequestConvertible {
         "feedId": feedId,
         "challengeId": challengeId
       ]
+
     case let .postAddComment(comment):
       return comment
+
+    case  .getChallengeDetail,
+        .getChallengeResponse,
+        .getChallengeTitles,
+        .getFeed,
+        .getPromotions,
+        .postFeedLike,
+        .deleteFeedLike,
+        .getLikeList,
+        .postFeed,
+        .getComment:
+
+      return nil
     }
   }
   
@@ -164,7 +204,9 @@ enum KKRouter: URLRequestConvertible {
       return MultipartFormData()
     }
   }
-  
+
+  // MARK: - URL Request
+
   func asURLRequest() throws -> URLRequest {
     let url = baseURL.appendingPathComponent(path)
     var request = URLRequest(url: url)
@@ -189,16 +231,20 @@ enum KKRouter: URLRequestConvertible {
     case .post, .patch, .delete:
 
       switch self {
+      case .postFeedLike, .deleteFeedLike:
+        request = try JSONEncoding.default.encode(request)
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
 
       case .postFeed:
         request.setValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
-
+        
       default:
         request = try JSONEncoding.default.encode(request)
         request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
       }
+
     default:
       break
     }

@@ -16,7 +16,7 @@ protocol FeedDetailViewProtocol: AnyObject {
   func getFeedDetail(feedDetail: FeedDetail)
   func getAllCommentsCount(allCommentsCount: Int)
   func fetchVisibleComments(visibleComments: [Comment])
-  func getLike(like: [LikeInfo])
+  func fetchLikeList(like: [LikeInfo])
 }
 
 final class FeedDetailViewController: BaseViewController<FeedDetailView> {
@@ -37,7 +37,15 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   var feedId: Int = 6
   var userId: Int = 1
   var commentId: Int?
-  var like: [LikeInfo] = []
+  var like: [LikeInfo] = [] {
+    didSet {
+      UIView.performWithoutAnimation {
+        self.containerView.postCollectionView.reloadSections(
+          IndexSet(integer: FeedDetailSection.like.rawValue)
+        )
+      }
+    }
+  }
 
   var allCommentsCount: Int = 0
   var visibleComments: [Comment] = [] {
@@ -63,7 +71,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
 
   private func fetchData() {
     self.interactor?.getFeedDeatil(feedId: feedId)
-    self.interactor?.getLike(feedId: feedId)
+    self.interactor?.fetchLikeList(feedId: feedId)
     self.interactor?.fetchAllComments(feedId: feedId)
   }
 
@@ -253,7 +261,7 @@ extension FeedDetailViewController: FeedDetailViewProtocol {
     self.visibleComments = visibleComments
   }
 
-  func getLike(like: [LikeInfo]) {
+  func fetchLikeList(like: [LikeInfo]) {
     self.like = like
   }
 }

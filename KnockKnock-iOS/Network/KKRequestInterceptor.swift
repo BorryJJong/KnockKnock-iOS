@@ -22,7 +22,7 @@ final class KKRequestInterceptor: RequestInterceptor {
       completion(.success(urlRequest))
       return
     }
-    print(accessToken)
+
     request.setValue("Bearer " + accessToken, forHTTPHeaderField: "Authorization")
     completion(.success(request))
   }
