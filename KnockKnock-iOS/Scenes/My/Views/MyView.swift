@@ -56,10 +56,6 @@ final class MyView: UIView {
     $0.textColor = KKDS.Color.green50
   }
 
-  let alertView = AlertView().then {
-    $0.isHidden = true
-  }
-
   // MARK: - Initialize
   
   override init(frame: CGRect) {
@@ -82,33 +78,11 @@ final class MyView: UIView {
     self.userNameLabel.text = "반가워요 \(nickname)님 🌿"
   }
 
-  /// menuType에 따라 alertView content, isHidden 처리
-  /// menuType == nil 일 때 alertView hidden
-  func setAlertView(menuType: MyMenuType?) {
-    var content = ""
-
-    guard let menuType = menuType else {
-      self.alertView.isHidden = true
-      return
-    }
-
-    if menuType == .signOut {
-      content = Alert.signOut.message
-      self.alertView.bind(content: content, isCancelActive: true)
-
-    } else if menuType == .versionInfo {
-      content = Alert.versionInfo.message
-      self.alertView.bind(content: content, isCancelActive: false)
-    }
-    self.alertView.isHidden = false
-  }
-  
   // MARK: - Constraints
   
   private func setupConstraints() {
     [self.myTableView].addSubViews(self)
     [self.loginButton, self.userNameLabel].addSubViews(self.myTableHeaderView)
-    [self.alertView].addSubViews(self)
     
     self.myTableView.snp.makeConstraints {
       $0.edges.equalTo(self.safeAreaLayoutGuide)
@@ -122,10 +96,6 @@ final class MyView: UIView {
     self.userNameLabel.snp.makeConstraints {
       $0.leading.trailing.equalToSuperview().inset(Metric.userNameLabelLeadingMargin)
       $0.centerY.equalToSuperview()
-    }
-
-    self.alertView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
     }
   }
 }

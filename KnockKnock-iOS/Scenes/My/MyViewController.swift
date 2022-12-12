@@ -92,22 +92,6 @@ final class MyViewController: BaseViewController<MyView> {
         for: .touchUpInside
       )
     }
-    
-    self.containerView.alertView.cancelButton.do {
-      $0.addTarget(
-        self,
-        action: #selector(self.alertCancelButtonDidTap(_:)),
-        for: .touchUpInside
-      )
-    }
-
-    self.containerView.alertView.confirmButton.do {
-      $0.addTarget(
-        self,
-        action: #selector(self.alertConfirmButtonDidTap(_:)),
-        for: .touchUpInside
-      )
-    }
   }
 
   // MARK: - Button Actions
@@ -118,17 +102,6 @@ final class MyViewController: BaseViewController<MyView> {
 
   @objc func logoutButtonDidTap(_ sender: UIButton) {
     self.interactor?.requestLogOut()
-  }
-
-  @objc func alertConfirmButtonDidTap(_ sender: UIButton) {
-    self.containerView.setAlertView(menuType: nil)
-    if selectedMenuItem == .signOut {
-      self.interactor?.requestSignOut()
-    }
-  }
-
-  @objc func alertCancelButtonDidTap(_ sender: UIButton) {
-    self.containerView.setAlertView(menuType: nil)
   }
 }
 
@@ -288,9 +261,21 @@ extension MyViewController: UITableViewDelegate {
     case .profile:
       self.interactor?.navigateToProfileSettingView(source: self)
 
-    case .signOut, .versionInfo:
-      self.selectedMenuItem = menu
-      self.containerView.setAlertView(menuType: menu)
+    case .signOut:
+      self.showAlert(
+        content: Alert.signOut.message,
+        confirmActionCompletion: {
+          self.interactor?.requestSignOut()
+        }
+      )
+
+    case .versionInfo:
+      self.showAlert(
+        content: Alert.versionInfo.message,
+        confirmActionCompletion: {
+          self.dismiss(animated: false)
+        }
+      )
 
     case .notice:
       self.interactor?.navigateToNoticeView(source: self)
