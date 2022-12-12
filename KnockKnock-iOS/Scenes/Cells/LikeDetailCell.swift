@@ -51,13 +51,13 @@ final class LikeDetailCell: BaseCollectionViewCell {
 
   // MARK: - Bind
 
-  func bind(like: Like) {
-    if let image = like.image {
+  func bind(like: LikeInfo) {
+    if let image = like.userImage {
       self.profileImageView.image = UIImage(named: image)
     } else {
       self.profileImageView.image = KKDS.Image.ic_person_24
     }
-      self.userNameLabel.text = like.nickname
+      self.userNameLabel.text = like.userName
   }
 
   // MARK: - Constraints

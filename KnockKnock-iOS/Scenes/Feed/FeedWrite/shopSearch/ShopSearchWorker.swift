@@ -34,7 +34,8 @@ final class ShopSearchWorker: ShopSearchWorkerProtocol {
       page: page,
       completionHandler: { result in
         completionHandler(result)
-      })
+      }
+    )
   }
 
   func fetchDistricts(

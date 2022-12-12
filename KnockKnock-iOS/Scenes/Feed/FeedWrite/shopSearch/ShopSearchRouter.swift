@@ -11,12 +11,12 @@ protocol ShopSearchRouterProtocol: AnyObject {
   static func createShopSearch(delegate: ShopSearchDelegate) -> UIViewController
 
   func presentBottomSheetView(source: ShopSearchViewProtocol, content: [String], districtsType: DistrictsType)
-  func passDataToFeedWriteView(source: ShopSearchViewProtocol, address: String?)
+  func passDataToFeedWriteView(source: ShopSearchViewProtocol, address: AddressDocuments?)
   func navigateToFeedWriteView(source: ShopSearchViewProtocol)
 }
 
 protocol ShopSearchDelegate: AnyObject {
-  func fetchShopData(shopData: String)
+  func fetchShopData(shopData: AddressDocuments)
 }
 
 protocol DistrictSelectDelegate: AnyObject {
@@ -49,7 +49,7 @@ final class ShopSearchRouter: ShopSearchRouterProtocol {
 
   func passDataToFeedWriteView(
     source: ShopSearchViewProtocol,
-    address: String?
+    address: AddressDocuments?
   ) {
     if let address = address {
       self.delegate?.fetchShopData(shopData: address)

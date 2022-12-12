@@ -10,18 +10,30 @@ import Foundation
 protocol FeedListInteractorProtocol {
   var presenter: FeedListPresenterProtocol? { get set }
   var worker: FeedListWorkerProtocol? { get set }
-
+  var router: FeedListRouterProtocol? { get set }
+  
   func fetchFeedList(
     currentPage: Int,
     pageSize: Int,
     feedId: Int,
     challengeId: Int
   )
+  
+  func requestLike(source: FeedListViewProtocol, feedId: Int)
+  func requestLikeCancel(source: FeedListViewProtocol, feedId: Int)
+
+  func navigateToFeedMain(source: FeedListViewProtocol)
+  func navigateToFeedDetail(source: FeedListViewProtocol, feedId: Int)
+  func navigateToCommentView(feedId: Int, source: FeedListViewProtocol)
+  func presentBottomSheetView(source: FeedListViewProtocol)
 }
 
 final class FeedListInteractor: FeedListInteractorProtocol {
   var presenter: FeedListPresenterProtocol?
   var worker: FeedListWorkerProtocol?
+  var router: FeedListRouterProtocol?
+
+  // Business Logic
 
   func fetchFeedList(
     currentPage: Int,
@@ -40,5 +52,66 @@ final class FeedListInteractor: FeedListInteractorProtocol {
         self?.presenter?.presentFetchFeedList(feedList: feedList)
       }
     )
+  }
+  
+  func requestLike(source: FeedListViewProtocol, feedId: Int) {
+    self.worker?.checkTokenExisted(completionHandler: { isExisted in
+      if isExisted {
+        self.worker?.requestLike(
+          id: feedId,
+          completionHandler: { result in
+            print(result) // 추후 error 처리
+          }
+        )
+      } else {
+        self.router?.navigateToLoginView(source: source)
+      }
+    })
+  }
+  
+  func requestLikeCancel(source: FeedListViewProtocol, feedId: Int) {
+    self.worker?.checkTokenExisted(completionHandler: { isExisted in
+      if isExisted {
+        
+        self.worker?.requestLikeCancel(
+          id: feedId,
+          completionHandler: { result in
+            print(result) // 추후 error 처리
+          }
+        )
+      } else {
+        self.router?.navigateToLoginView(source: source)
+      }
+    })
+  }
+
+  // Routing
+
+  func navigateToFeedDetail(
+    source: FeedListViewProtocol,
+    feedId: Int
+  ) {
+    self.router?.navigateToFeedDetail(
+      source: source,
+      feedId: feedId
+    )
+  }
+
+  func navigateToCommentView(
+    feedId: Int,
+    source: FeedListViewProtocol
+  ) {
+    self.router?.navigateToCommentView(
+      feedId: feedId,
+      source: source
+    )
+  }
+
+  func navigateToFeedMain(source: FeedListViewProtocol) {
+    self.router?.navigateToFeedMain(source: source)
+  }
+
+  func presentBottomSheetView(source: FeedListViewProtocol) {
+    self.router?.presentBottomSheetView(source: source)
   }
 }
