@@ -193,6 +193,7 @@ final class ShopSearchView: UIView {
       self.countyButton.backgroundColor = KKDS.Color.gray10
       self.countyLabel.textColor = KKDS.Color.gray30
       self.countyDownIconView.image = KKDS.Image.ic_down_10_gr
+      self.countyLabel.text = "시/군/구 전체"
     }
   }
 

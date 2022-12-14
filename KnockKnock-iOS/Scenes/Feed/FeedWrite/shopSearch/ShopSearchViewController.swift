@@ -149,6 +149,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   }
 
   @objc func cityButtonDidTap(_ sender: UIButton) {
+    self.containerView.setButtonStatus(isCitySelected: false)
     self.router?.presentBottomSheetView(
       source: self,
       content: self.cityList,
