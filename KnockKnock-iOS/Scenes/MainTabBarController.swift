@@ -56,9 +56,9 @@ final class MainTabBarController: UITabBarController {
   
   let home = HomeRouter.createHome()
   let feed = FeedMainRouter.createFeed()
-  let post = FeedWriteRouter.createFeedWrite()
   let challenge = ChallengeRouter.createChallenge()
   let my = MyRouter.createMy()
+  let blankView = UIViewController()
 
   let postButton = UIButton().then {
     $0.frame.size = CGSize(width: 40, height: 40)
@@ -97,7 +97,7 @@ final class MainTabBarController: UITabBarController {
     
     self.home.tabBarItem = self.tabBarItems[.home]
     self.feed.tabBarItem = self.tabBarItems[.feed]
-    self.post.tabBarItem = self.tabBarItems[.post]
+    self.blankView.tabBarItem = self.tabBarItems[.post]
     self.challenge.tabBarItem = self.tabBarItems[.challenge]
     self.my.tabBarItem = self.tabBarItems[.my]
     
@@ -109,14 +109,15 @@ final class MainTabBarController: UITabBarController {
     self.viewControllers = [
       homeNVC,
       feedNVC,
-      UIViewController(),
+      blankView,
       challengeNVC,
       myNVC
     ]
   }
 
   @objc func postButtonDidTap(_ sender: UIButton) {
-    let postNVC = UINavigationController(rootViewController: self.post)
+    let post = FeedWriteRouter.createFeedWrite()
+    let postNVC = UINavigationController(rootViewController: post)
     postNVC.modalPresentationStyle = .fullScreen
 
     self.present(postNVC, animated: true)

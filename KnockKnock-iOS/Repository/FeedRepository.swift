@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 
 protocol FeedRepositoryProtocol {
   func requestFeedMain(
@@ -14,8 +15,7 @@ protocol FeedRepositoryProtocol {
     challengeId: Int,
     completionHandler: @escaping (FeedMain) -> Void
   )
-  func requestChallengeTitles(completionHandler: @escaping (([ChallengeTitle])) -> Void)
-  func requestPromotionList(completionHandler: @escaping ([PromotionInfo]) -> Void)
+  func requestChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void)
   func requestFeedDetail(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void)
   func requestFeedList(
     currentPage: Int,
@@ -30,7 +30,7 @@ final class FeedRepository: FeedRepositoryProtocol {
 
   // MARK: - Feed main APIs
 
-  func requestChallengeTitles(completionHandler: @escaping (([ChallengeTitle])) -> Void) {
+  func requestChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void) {
     KKNetworkManager.shared
       .request(
         object: [ChallengeTitle].self,
@@ -39,7 +39,8 @@ final class FeedRepository: FeedRepositoryProtocol {
           completionHandler(response)
         }, failure: { error in
           print(error)
-        })
+        }
+      )
   }
 
   func requestFeedMain(
@@ -62,7 +63,8 @@ final class FeedRepository: FeedRepositoryProtocol {
         },
         failure: { response in
           print(response)
-        })
+        }
+      )
   }
 
   // MARK: - Feed list APIs
@@ -106,23 +108,6 @@ final class FeedRepository: FeedRepositoryProtocol {
         },
         failure: { response in
           print(response)
-        }
-      )
-  }
-
-  // MARK: - Feed Write APIs
-
-  func requestPromotionList(completionHandler: @escaping ([PromotionInfo]) -> Void) {
-    KKNetworkManager
-      .shared
-      .request(
-        object: [PromotionInfo].self,
-        router: KKRouter.getPromotions,
-        success: { response in
-          completionHandler(response)
-        },
-        failure: { error in
-          print(error)
         }
       )
   }

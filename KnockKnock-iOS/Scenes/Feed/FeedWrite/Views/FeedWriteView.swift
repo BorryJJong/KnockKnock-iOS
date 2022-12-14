@@ -168,12 +168,18 @@ class FeedWriteView: UIView {
     $0.text = "내용을 입력해주세요. (글자수 1,000자 이내)"
   }
 
-  private let doneButton = UIButton().then {
-    $0.setTitle("등록 완료", for: .normal)
+  let doneButton = UIButton().then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.setTitle("등록", for: .normal)
     $0.layer.cornerRadius = Metric.buttonCornerRadius
-    $0.backgroundColor = .gray40
+    $0.backgroundColor = .green50
   }
 
+  let alertView = AlertView().then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.isHidden = true
+  }
+  
   // MARK: - Initialize
 
   init() {
@@ -200,6 +206,21 @@ class FeedWriteView: UIView {
     self.shopAddressLabel.text = address
   }
 
+  func bindPhotoCount(count: Int) {
+    self.photoAddButton.setTitle("\(count)/5", for: .normal)
+  }
+
+  func showAlertView(isDone: Bool) {
+    self.alertView.isHidden = false
+    
+    let content = isDone ? "게시글 등록을 완료 하시겠습니까?" : "사진, 태그, 프로모션, 내용은 필수 입력 항목입니다."
+
+    self.alertView.bind(
+      content: content,
+      isCancelActive: isDone
+    )
+  }
+
   // MARK: - Constraints
 
   private func setupConstraints() {
@@ -209,6 +230,7 @@ class FeedWriteView: UIView {
     [self.shopAddressLabel, self.shopSearchButton, self.shopAddressSeparateLineView].addSubViews(self)
     [self.shopNameLabel, self.shopNameSeparateLineView].addSubViews(self)
     [self.contentTextView, self.doneButton].addSubViews(self)
+    [self.alertView].addSubViews(self)
 
     self.photoAddButton.snp.makeConstraints {
       $0.height.equalTo(Metric.photoAddButtonHeight)
@@ -220,7 +242,7 @@ class FeedWriteView: UIView {
     self.photoCollectionView.snp.makeConstraints {
       $0.top.equalTo(self.photoAddButton).offset(Metric.photoCollectionViewTopMargin)
       $0.bottom.equalTo(self.photoAddButton)
-      $0.leading.equalTo(self.photoAddButton).offset(Metric.photoCollectionViewLeadingMargin)
+      $0.leading.equalTo(self.photoAddButton.snp.trailing).offset(Metric.photoCollectionViewLeadingMargin)
       $0.trailing.equalTo(self.safeAreaLayoutGuide)
     }
 

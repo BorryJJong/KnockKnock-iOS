@@ -29,7 +29,7 @@ final class FeedWriteRouter: FeedWriteRouterProtocol {
     let view = FeedWriteViewController()
     let interactor = FeedWriteInteractor()
     let presenter = FeedWritePresenter()
-    let worker = FeedWriteWorker()
+    let worker = FeedWriteWorker(feedWriteRepository: FeedWriteRepository())
     let router = FeedWriteRouter()
 
     view.interactor = interactor

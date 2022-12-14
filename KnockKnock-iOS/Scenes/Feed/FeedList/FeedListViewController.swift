@@ -12,7 +12,6 @@ import KKDSKit
 
 protocol FeedListViewProtocol: AnyObject {
   var interactor: FeedListInteractorProtocol? { get set }
-  var router: FeedListRouterProtocol? { get set }
   
   func fetchFeedList(feedList: FeedList)
 }
@@ -22,7 +21,6 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   // MARK: - Properties
   
   var interactor: FeedListInteractorProtocol?
-  var router: FeedListRouterProtocol?
   
   var feedList: FeedList?
   var feedListPost: [FeedListPost] = [] {
@@ -54,6 +52,12 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     )
     self.containerView.addGestureRecognizer(tapGesture)
   }
+
+  override func viewWillAppear(_ animated: Bool) {
+    self.tabBarController?.tabBar.isHidden = false
+  }
+
+  // MARK: - Configure
   
   override func setupConfigure() {
     let backButton = UIBarButtonItem(
@@ -88,7 +92,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     if let indexPath = indexPath {
       if let cell = collectionView.cellForItem(at: indexPath) {
         if !cell.isSelected {
-          self.router?.navigateToFeedDetail(
+          self.interactor?.navigateToFeedDetail(
             source: self,
             feedId: self.feedListPost[indexPath.section].id
           )
@@ -100,18 +104,34 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   // MARK: - Button Actions
 
   @objc private func backButtonDidTap(_ sender: UIButton) {
-    self.router?.navigateToFeedMain(source: self)
+    self.interactor?.navigateToFeedMain(source: self)
   }
 
   @objc func configureButtonDidTap(_ sender: UIButton) {
-    self.router?.presentBottomSheetView(source: self)
+    self.interactor?.presentBottomSheetView(source: self)
   }
 
   @objc func commentButtonDidTap(_ sender: UIButton) {
-    self.router?.navigateToCommentView(
+    self.interactor?.navigateToCommentView(
       feedId: sender.tag,
       source: self
     )
+  }
+
+  @objc func likeButtonDidTap(_ sender: UIButton) {
+    sender.isSelected.toggle()
+    
+    let title = self.containerView.setLikeButtonTitle(
+      currentNum: sender.titleLabel?.text,
+      isSelected: sender.isSelected
+    )
+    sender.setTitle(title, for: .normal)
+
+    if sender.isSelected {
+      self.interactor?.requestLike(source: self, feedId: sender.tag)
+    } else {
+      self.interactor?.requestLikeCancel(source: self, feedId: sender.tag)
+    }
   }
 }
 
@@ -144,7 +164,13 @@ extension FeedListViewController: UICollectionViewDataSource {
     cell.commentsButton.tag = self.feedListPost[indexPath.section].id
     cell.commentsButton.addTarget(
       self,
-      action: #selector(commentButtonDidTap(_:)),
+      action: #selector(self.commentButtonDidTap(_:)),
+      for: .touchUpInside
+    )
+    cell.likeButton.tag = self.feedListPost[indexPath.section].id
+    cell.likeButton.addTarget(
+      self,
+      action: #selector(self.likeButtonDidTap(_:)),
       for: .touchUpInside
     )
 

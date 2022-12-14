@@ -8,6 +8,11 @@
 import UIKit
 
 extension UIImageView {
+
+  private enum ImageError: Error {
+    case loadError
+  }
+
   func setImageFromStringUrl(
     url: String,
     defaultImage: UIImage
@@ -16,25 +21,33 @@ extension UIImageView {
 
     if let cachedImage = ImageCacheManager.shared.object(forKey: cacheKey) {
       self.image = cachedImage
+
       return
     }
+    guard let url = URL(string: url) else { return }
 
-    DispatchQueue.global(qos: .background).async {
-      if let url = URL(string: url) {
-        URLSession.shared.dataTask(with: url) { (data, _, err) in
-          if err != nil {
-            DispatchQueue.main.async {
-              self.image = defaultImage
-            }
-            return
-          }
-          DispatchQueue.main.async {
-            if let data = data, let image = UIImage(data: data) {
-              self.image = image
-            }
-          }
-        }.resume()
+    Task {
+      do {
+        self.image = try await self.fetchPhoto(url: url).resize(newWidth: self.frame.width)
+      } catch {
+        self.image = defaultImage.resize(newWidth: self.frame.width)
       }
     }
   }
+
+  func fetchPhoto(url: URL) async throws -> UIImage {
+    let (data, response) = try await URLSession.shared.data(from: url)
+
+    guard let httpResponse = response as? HTTPURLResponse,
+          200..<300 ~= httpResponse.statusCode else {
+      throw ImageError.loadError
+    }
+
+    guard let image = UIImage(data: data) else {
+      throw ImageError.loadError
+    }
+
+    return image
+  }
+
 }

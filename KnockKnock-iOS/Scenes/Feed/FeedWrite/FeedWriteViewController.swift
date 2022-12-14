@@ -15,15 +15,25 @@ protocol FeedWriteViewProtocol: AnyObject {
   var interactor: FeedWriteInteractorProtocol? { get set }
 
   func fetchProperty(propertyType: PropertyType, content: String)
+  func showAlertView(isDone: Bool)
 }
 
 final class FeedWriteViewController: BaseViewController<FeedWriteView> {
+
+  // MARK: - Enum
+
+  enum WriteStatus {
+    case allFilled
+    case hasBlank
+  }
 
   // MARK: - Properties
   
   var interactor: FeedWriteInteractorProtocol?
 
   var pickedPhotos: [UIImage] = []
+  var contentTextViewFilled = false
+  var writeStatus: WriteStatus = .hasBlank
 
   // MARK: - UIs
 
@@ -65,23 +75,45 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
     self.containerView.tagSelectButton.addTarget(
       self,
-      action: #selector(tagSelectButtonDidTap(_:)),
-      for: .touchUpInside)
+      action: #selector(self.tagSelectButtonDidTap(_:)),
+      for: .touchUpInside
+    )
 
     self.containerView.promotionSelectButton.addTarget(
       self,
-      action: #selector(promotionSelectButtonDidTap(_:)),
-      for: .touchUpInside)
+      action: #selector(self.promotionSelectButtonDidTap(_:)),
+      for: .touchUpInside
+    )
 
     self.containerView.shopSearchButton.addTarget(
       self,
-      action: #selector(shopSearchButtonDidTap(_:)),
-      for: .touchUpInside)
+      action: #selector(self.shopSearchButtonDidTap(_:)),
+      for: .touchUpInside
+    )
 
     self.containerView.photoAddButton.addTarget(
       self,
-      action: #selector(photoAddButtonDidTap(_:)),
-      for: .touchUpInside)
+      action: #selector(self.photoAddButtonDidTap(_:)),
+      for: .touchUpInside
+    )
+
+    self.containerView.doneButton.addTarget(
+      self,
+      action: #selector(self.doneButtonDidTap(_:)),
+      for: .touchUpInside
+    )
+
+    self.containerView.alertView.cancelButton.addTarget(
+      self,
+      action: #selector(self.alertCancelButtonDidTap(_:)),
+      for: .touchUpInside
+    )
+
+    self.containerView.alertView.confirmButton.addTarget(
+      self,
+      action: #selector(self.alertConfirmButtonDidTap(_:)),
+      for: .touchUpInside
+    )
   }
 
   // MARK: - Button Actions
@@ -114,7 +146,31 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
   @objc func photoDeleteButtonDidTap(_ sender: UIButton) {
     self.pickedPhotos.remove(at: sender.tag)
+    self.containerView.bindPhotoCount(count: self.pickedPhotos.count)
     self.containerView.photoCollectionView.reloadData()
+  }
+
+  @objc func doneButtonDidTap(_ sender: UIButton) {
+    let photoAndContentFilled = self.pickedPhotos.count != 0 && self.contentTextViewFilled
+
+    self.interactor?.checkEssentialField(photoAndContentFilled: photoAndContentFilled)
+  }
+
+  @objc private func alertCancelButtonDidTap(_ sender: UIButton) {
+    self.containerView.alertView.isHidden = true
+  }
+
+  @objc private func alertConfirmButtonDidTap(_ sender: UIButton) {
+    self.containerView.alertView.isHidden = true
+
+    if self.writeStatus == .allFilled {
+      self.interactor?.requestUploadFeed(
+        source: self,
+        userId: 19, // api 수정 필요(헤더에 토큰 첨부하는 방식으로 변경 될듯?)
+        content: self.containerView.contentTextView.text,
+        images: self.pickedPhotos
+      )
+    }
   }
 
   // MARK: - ImagePicker
@@ -134,6 +190,7 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
           print("error")
         }
       }
+      self.containerView.bindPhotoCount(count: self.pickedPhotos.count)
       picker.dismiss(animated: true, completion: nil)
     }
     self.present(picker, animated: true, completion: nil)
@@ -156,6 +213,11 @@ extension FeedWriteViewController: FeedWriteViewProtocol {
       self.containerView.setAddress(name: content, address: content)
     }
   }
+
+  func showAlertView(isDone: Bool) {
+    self.containerView.showAlertView(isDone: isDone)
+    self.writeStatus = isDone ? .allFilled : .hasBlank
+  }
 }
 
 // MARK: - TextView Delegate
@@ -172,6 +234,9 @@ extension FeedWriteViewController: UITextViewDelegate {
     if textView.text.isEmpty {
       textView.text = "내용을 입력해주세요. (글자수 1,000자 이내)"
       textView.textColor = .gray40
+      self.contentTextViewFilled = false
+    } else {
+      self.contentTextViewFilled = true
     }
   }
 }
@@ -183,7 +248,7 @@ extension FeedWriteViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    return pickedPhotos.count
+    return self.pickedPhotos.count
   }
 
   func collectionView(
@@ -193,9 +258,10 @@ extension FeedWriteViewController: UICollectionViewDataSource {
 
     let photo = self.pickedPhotos[indexPath.row]
 
-    let cell = collectionView.dequeueReusableCell(
-      withReuseIdentifier: PhotoCell.reusableIdentifier,
-      for: indexPath) as! PhotoCell
+    let cell = collectionView.dequeueCell(
+      withType: PhotoCell.self,
+      for: indexPath
+    )
 
     cell.backgroundColor = .white
     cell.deleteButton.tag = indexPath.row

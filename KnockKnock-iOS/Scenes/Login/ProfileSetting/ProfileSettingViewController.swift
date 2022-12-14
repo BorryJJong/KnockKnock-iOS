@@ -54,13 +54,7 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
         for: .touchUpInside
       )
     }
-    self.containerView.alertView.confirmButton.do {
-      $0.addTarget(
-        self,
-        action: #selector(self.alertConfirmButtonDidTap(_:)),
-        for: .touchUpInside
-      )
-    }
+
     self.hideKeyboardWhenTappedAround()
   }
 
@@ -84,23 +78,22 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
       image: ""
     )
 
-    self.containerView.do {
-      $0.setHiddenStatusAlertView(isHidden: false)
-    }
-  }
-
-  @objc private func alertConfirmButtonDidTap(_ sender: UIButton) {
-    self.interactor?.router?.navigateToMyView(source: self)
+    self.showAlert(
+      content: "프로필 등록을 완료하였습니다.",
+      confirmActionCompletion: {
+        self.interactor?.router?.navigateToMyView(source: self)
+      }
+    )
   }
 }
 
-  // MARK: - Profile Setting View Protocol
+// MARK: - Profile Setting View Protocol
 
 extension ProfileSettingViewController: ProfileSettingViewProtocol {
   
 }
 
-  // MARK: - TextField delegate
+// MARK: - TextField delegate
 
 extension ProfileSettingViewController: UITextFieldDelegate {
   func textFieldDidEndEditing(_ textField: UITextField) {

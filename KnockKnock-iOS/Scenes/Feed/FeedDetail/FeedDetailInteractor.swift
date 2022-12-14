@@ -16,7 +16,7 @@ protocol FeedDetailInteractorProtocol {
   func fetchAllComments(feedId: Int)
   func fetchVisibleComments(comments: [Comment])
   func requestAddComment(comment: AddCommentRequest)
-  func getLike(feedId: Int)
+  func fetchLikeList(feedId: Int)
 
   func navigateToLikeDetail(source: FeedDetailViewProtocol)
 }
@@ -35,16 +35,18 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       feedId: feedId,
       completionHandler: { [weak self] feedDetail in
         self?.presenter?.presentFeedDetail(feedDetail: feedDetail)
-      })
+      }
+    )
   }
 
-  func getLike(feedId: Int) {
-    self.worker?.getLike(
+  func fetchLikeList(feedId: Int) {
+    self.worker?.fetchLikeList(
       feedId: feedId,
       completionHandler: { [weak self] likeList in
         self?.likeList = likeList
         self?.presenter?.presentLike(like: likeList)
-      })
+      }
+    )
   }
 
   /// 전체 댓글 data fetch

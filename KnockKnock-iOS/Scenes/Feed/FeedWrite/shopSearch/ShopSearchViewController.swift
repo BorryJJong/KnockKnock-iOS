@@ -32,7 +32,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   var interactor: ShopSearchInteractorProtocol?
   var router: ShopSearchRouterProtocol?
 
-  var addressList: [String] = [] {
+  var addressList: [AddressDocuments] = [] {
     didSet {
       self.containerView.resultTableView.reloadData()
       self.fetchMore = true
@@ -45,7 +45,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
 
       self.containerView.bind(isNoResult: isNoResult)
 
-      self.addressList += addressResult?.documents.map { $0.roadAddressName } ?? []
+      self.addressList += addressResult?.documents ?? []
     }
   }
 
@@ -195,7 +195,10 @@ extension ShopSearchViewController: ShopSearchViewProtocol {
 // MARK: - TableView DataSource
 
 extension ShopSearchViewController: UITableViewDataSource {
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  func tableView(
+    _ tableView: UITableView,
+    numberOfRowsInSection section: Int
+  ) -> Int {
     return self.addressList.count
   }
 
@@ -205,7 +208,7 @@ extension ShopSearchViewController: UITableViewDataSource {
   ) -> UITableViewCell {
     let cell = tableView.dequeueCell(withType: AdressCell.self, for: indexPath)
 
-    cell.bind(address: self.addressList[indexPath.row])
+    cell.bind(address: self.addressList[indexPath.row].addressName)
 
     return cell
   }
@@ -240,8 +243,14 @@ extension ShopSearchViewController: UITableViewDataSource {
 // MARK: - TableView Delegate
 
 extension ShopSearchViewController: UITableViewDelegate {
-  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    self.router?.passDataToFeedWriteView(source: self, address: self.addressList[indexPath.row])
+  func tableView(
+    _ tableView: UITableView,
+    didSelectRowAt indexPath: IndexPath
+  ) {
+    self.router?.passDataToFeedWriteView(
+      source: self,
+      address: self.addressList[indexPath.row]
+    )
   }
 }
 
