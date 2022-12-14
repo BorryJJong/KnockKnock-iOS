@@ -32,7 +32,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   var interactor: ShopSearchInteractorProtocol?
   var router: ShopSearchRouterProtocol?
 
-  var addressList: [AddressDocuments] = [] {
+  var addressList: [AddressResult.Documents] = [] {
     didSet {
       self.containerView.resultTableView.reloadData()
       self.fetchMore = true
