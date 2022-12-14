@@ -134,9 +134,10 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   }
 
   @objc func doneButtonDidTap(_ sender: UIButton) {
-    let photoAndContentFilled = self.pickedPhotos.count != 0 && self.contentTextViewFilled
-
-    self.interactor?.checkEssentialField(photoAndContentFilled: photoAndContentFilled)
+    self.interactor?.checkEssentialField(
+      imageCount: self.pickedPhotos.count,
+      isContentFilled: self.contentTextViewFilled
+    )
   }
 
   // MARK: - ImagePicker

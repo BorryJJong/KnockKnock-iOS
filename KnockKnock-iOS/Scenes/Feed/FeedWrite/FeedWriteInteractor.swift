@@ -19,7 +19,7 @@ protocol FeedWriteInteractorProtocol: AnyObject {
     source: FeedWriteViewProtocol,
     propertyType: PropertyType
   )
-  func checkEssentialField(photoAndContentFilled: Bool)
+  func checkEssentialField(imageCount: Int, isContentFilled: Bool)
   func requestUploadFeed(source: FeedWriteViewProtocol, userId: Int, content: String, images: [UIImage])
 }
 
@@ -57,23 +57,19 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
     )
   }
 
-  func checkEssentialField(photoAndContentFilled: Bool) {
-    let isPromotionSelected = self.selectedPromotionList.filter {
-      $0.isSelected == true
-    }.count != 0
-
-    let isTagSelected = self.selectedTagList.filter{
-      $0.isSelected == true
-    }.count != 0
-
-    if photoAndContentFilled &&
-        isTagSelected &&
-        isPromotionSelected {
-      self.presenter?.presentAlertView(isDone: true)
-
-    } else {
-      self.presenter?.presentAlertView(isDone: false)
-    }
+  func checkEssentialField(
+    imageCount: Int,
+    isContentFilled: Bool
+  ) {
+    self.worker?.checkEssentialField(
+      imageCount: imageCount,
+      tag: self.selectedTagList,
+      promotion: self.selectedPromotionList,
+      content: content,
+      completionHandler: { [weak self] isDone in
+        self.presenter?.presentAlertView(isDone: isDone)
+      }
+    )
   }
 
   func requestUploadFeed(
