@@ -74,19 +74,19 @@ final class MyWorker: MyWorkerProtocol {
   }
 
   func requestLogOut(completionHandler: @escaping() -> Void) {
-    self.accountManager?.logOut(completionHanlder: { success in
+    self.accountManager?.logOut(completionHanlder: { [weak self] success in
       if success {
-        self.localDataManager?.deleteToken()
+        self?.localDataManager?.deleteToken()
         completionHandler()
       }
     })
   }
 
   func requestSignOut(completionHandler: @escaping() -> Void) {
-    self.accountManager?.signOut(completionHanlder: { success in
+    self.accountManager?.signOut(completionHanlder: { [weak self] success in
       if success {
-        self.localDataManager?.deleteToken()
-        self.localDataManager?.deleteNickname()
+        self?.localDataManager?.deleteToken()
+        self?.localDataManager?.deleteNickname()
         completionHandler()
       }
     })
