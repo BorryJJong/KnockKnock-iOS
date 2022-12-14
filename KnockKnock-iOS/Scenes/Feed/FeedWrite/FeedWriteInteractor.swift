@@ -65,9 +65,9 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
       imageCount: imageCount,
       tag: self.selectedTagList,
       promotion: self.selectedPromotionList,
-      content: content,
+      isContentFilled: isContentFilled,
       completionHandler: { [weak self] isDone in
-        self.presenter?.presentAlertView(isDone: isDone)
+        self?.presenter?.presentAlertView(isDone: isDone)
       }
     )
   }

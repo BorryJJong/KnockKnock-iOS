@@ -27,7 +27,7 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   
   var interactor: FeedWriteInteractorProtocol?
 
-  var pickedPhotos: [UIImage] = []
+  var selectedImages: [UIImage] = []
   var contentTextViewFilled = false
 
   // MARK: - UIs
@@ -128,14 +128,14 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   }
 
   @objc func photoDeleteButtonDidTap(_ sender: UIButton) {
-    self.pickedPhotos.remove(at: sender.tag)
-    self.containerView.bindPhotoCount(count: self.pickedPhotos.count)
+    self.selectedImages.remove(at: sender.tag)
+    self.containerView.bindPhotoCount(count: self.selectedImages.count)
     self.containerView.photoCollectionView.reloadData()
   }
 
   @objc func doneButtonDidTap(_ sender: UIButton) {
     self.interactor?.checkEssentialField(
-      imageCount: self.pickedPhotos.count,
+      imageCount: self.selectedImages.count,
       isContentFilled: self.contentTextViewFilled
     )
   }
@@ -143,7 +143,7 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   // MARK: - ImagePicker
 
   func callImagePicker() {
-    self.pickedPhotos = []
+    self.selectedImages = []
 
     let picker = ImagePickerManager.shared.setImagePicker()
 
@@ -151,13 +151,13 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
       for item in items {
         switch item {
         case let .photo(photo):
-          self.pickedPhotos.append(photo.image)
+          self.selectedImages.append(photo.image)
           self.containerView.photoCollectionView.reloadData()
         default:
           print("error")
         }
       }
-      self.containerView.bindPhotoCount(count: self.pickedPhotos.count)
+      self.containerView.bindPhotoCount(count: self.selectedImages.count)
       picker.dismiss(animated: true, completion: nil)
     }
     self.present(picker, animated: true, completion: nil)
@@ -190,7 +190,7 @@ extension FeedWriteViewController: FeedWriteViewProtocol {
           source: self,
           userId: 19, // api 수정 필요
           content: self.containerView.contentTextView.text,
-          images: self.pickedPhotos
+          images: self.selectedImages
         )
       })
     } else {
@@ -227,7 +227,7 @@ extension FeedWriteViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    return self.pickedPhotos.count
+    return self.selectedImages.count
   }
 
   func collectionView(
@@ -235,7 +235,7 @@ extension FeedWriteViewController: UICollectionViewDataSource {
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
 
-    let photo = self.pickedPhotos[indexPath.row]
+    let photo = self.selectedImages[indexPath.row]
 
     let cell = collectionView.dequeueCell(
       withType: PhotoCell.self,
