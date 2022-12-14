@@ -119,7 +119,7 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
 extension FeedWriteInteractor: ShopSearchDelegate {
   func fetchShopData(shopData: AddressResult.Documents) {
     self.selectedAddress = shopData
-    self.presenter?.presentShopAddress(address: shopData.addressName)
+    self.presenter?.presentShopAddress(address: shopData)
   }
 }
 

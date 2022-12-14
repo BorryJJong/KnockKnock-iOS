@@ -14,7 +14,10 @@ import KKDSKit
 protocol FeedWriteViewProtocol: AnyObject {
   var interactor: FeedWriteInteractorProtocol? { get set }
 
-  func fetchProperty(propertyType: PropertyType, content: String)
+  func fetchTag(tag: String)
+  func fetchPromotion(promotion: String)
+  func fetchAddress(address: AddressResult.Documents)
+
   func showAlertView(isDone: Bool)
 }
 
@@ -200,18 +203,20 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 // MARK: - Feed Write View Protocol
 
 extension FeedWriteViewController: FeedWriteViewProtocol {
-  func fetchProperty(
-    propertyType: PropertyType,
-    content: String
-  ) {
-    switch propertyType {
-    case .tag:
-      self.containerView.setTag(tag: content)
-    case .promotion:
-      self.containerView.setPromotion(promotion: content)
-    case .address:
-      self.containerView.setAddress(name: content, address: content)
-    }
+
+  func fetchTag(tag: String) {
+    self.containerView.setTag(tag: tag)
+  }
+
+  func fetchPromotion(promotion: String) {
+    self.containerView.setPromotion(promotion: promotion)
+  }
+
+  func fetchAddress(address: AddressResult.Documents) {
+    self.containerView.setAddress(
+      name: address.placeName,
+      address: address.addressName
+    )
   }
 
   func showAlertView(isDone: Bool) {

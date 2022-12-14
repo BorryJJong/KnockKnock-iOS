@@ -12,18 +12,15 @@ protocol FeedWritePresenterProtocol: AnyObject {
 
   func presentSelectedPromotions(promotionList: [Promotion])
   func presentSelectedTags(tagList: [ChallengeTitle])
-  func presentShopAddress(address: String)
+  func presentShopAddress(address: AddressResult.Documents)
   func presentAlertView(isDone: Bool)
 }
 
 final class FeedWritePresenter: FeedWritePresenterProtocol {
   weak var view: FeedWriteViewProtocol?
 
-  func presentShopAddress(address: String) {
-    self.view?.fetchProperty(
-      propertyType: .address,
-      content: address
-    )
+  func presentShopAddress(address: AddressResult.Documents) {
+    self.view?.fetchAddress(address: address)
   }
 
   func presentSelectedPromotions(promotionList: [Promotion]) {
@@ -36,10 +33,7 @@ final class FeedWritePresenter: FeedWritePresenterProtocol {
     if selection.isEmpty {
       content = "프로모션"
     }
-    self.view?.fetchProperty(
-      propertyType: .promotion,
-      content: content
-    )
+    self.view?.fetchPromotion(promotion: content)
   }
 
   func presentSelectedTags(tagList: [ChallengeTitle]) {
@@ -52,10 +46,7 @@ final class FeedWritePresenter: FeedWritePresenterProtocol {
     if selection.isEmpty {
       content = "#태그"
     }
-    self.view?.fetchProperty(
-      propertyType: .tag,
-      content: content
-    )
+    self.view?.fetchTag(tag: content)
   }
 
   func presentAlertView(isDone: Bool) {

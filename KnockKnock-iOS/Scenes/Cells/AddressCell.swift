@@ -28,17 +28,18 @@ final class AdressCell: BaseTableViewCell<Void> {
   }
 
   let shopNameLabel = UILabel().then {
-    $0.text = "매장명"
     $0.font = .systemFont(ofSize: 14, weight: .semibold)
   }
 
   let addressLabel = UILabel().then {
+    $0.textColor = KKDS.Color.gray80
     $0.font = .systemFont(ofSize: 14, weight: .medium)
   }
 
   // MARK: - Bind
 
-  func bind(address: String) {
+  func bind(name: String, address: String) {
+    self.shopNameLabel.text = name
     self.addressLabel.text = address
   }
 

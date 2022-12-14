@@ -206,9 +206,16 @@ extension ShopSearchViewController: UITableViewDataSource {
     _ tableView: UITableView,
     cellForRowAt indexPath: IndexPath
   ) -> UITableViewCell {
-    let cell = tableView.dequeueCell(withType: AdressCell.self, for: indexPath)
+    let cell = tableView.dequeueCell(
+      withType: AdressCell.self,
+      for: indexPath
+    )
+    let selectedAddress = self.addressList[indexPath.row]
 
-    cell.bind(address: self.addressList[indexPath.row].addressName)
+    cell.bind(
+      name: selectedAddress.placeName,
+      address: selectedAddress.addressName
+    )
 
     return cell
   }
