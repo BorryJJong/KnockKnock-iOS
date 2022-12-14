@@ -175,11 +175,6 @@ class FeedWriteView: UIView {
     $0.backgroundColor = .green50
   }
 
-  let alertView = AlertView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.isHidden = true
-  }
-  
   // MARK: - Initialize
 
   init() {
@@ -210,17 +205,6 @@ class FeedWriteView: UIView {
     self.photoAddButton.setTitle("\(count)/5", for: .normal)
   }
 
-  func showAlertView(isDone: Bool) {
-    self.alertView.isHidden = false
-    
-    let content = isDone ? "게시글 등록을 완료 하시겠습니까?" : "사진, 태그, 프로모션, 내용은 필수 입력 항목입니다."
-
-    self.alertView.bind(
-      content: content,
-      isCancelActive: isDone
-    )
-  }
-
   // MARK: - Constraints
 
   private func setupConstraints() {
@@ -230,7 +214,6 @@ class FeedWriteView: UIView {
     [self.shopAddressLabel, self.shopSearchButton, self.shopAddressSeparateLineView].addSubViews(self)
     [self.shopNameLabel, self.shopNameSeparateLineView].addSubViews(self)
     [self.contentTextView, self.doneButton].addSubViews(self)
-    [self.alertView].addSubViews(self)
 
     self.photoAddButton.snp.makeConstraints {
       $0.height.equalTo(Metric.photoAddButtonHeight)

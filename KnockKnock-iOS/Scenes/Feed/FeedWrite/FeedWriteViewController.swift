@@ -23,20 +23,12 @@ protocol FeedWriteViewProtocol: AnyObject {
 
 final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
-  // MARK: - Enum
-
-  enum WriteStatus {
-    case allFilled
-    case hasBlank
-  }
-
   // MARK: - Properties
   
   var interactor: FeedWriteInteractorProtocol?
 
   var pickedPhotos: [UIImage] = []
   var contentTextViewFilled = false
-  var writeStatus: WriteStatus = .hasBlank
 
   // MARK: - UIs
 
@@ -105,18 +97,6 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
       action: #selector(self.doneButtonDidTap(_:)),
       for: .touchUpInside
     )
-
-    self.containerView.alertView.cancelButton.addTarget(
-      self,
-      action: #selector(self.alertCancelButtonDidTap(_:)),
-      for: .touchUpInside
-    )
-
-    self.containerView.alertView.confirmButton.addTarget(
-      self,
-      action: #selector(self.alertConfirmButtonDidTap(_:)),
-      for: .touchUpInside
-    )
   }
 
   // MARK: - Button Actions
@@ -157,23 +137,6 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     let photoAndContentFilled = self.pickedPhotos.count != 0 && self.contentTextViewFilled
 
     self.interactor?.checkEssentialField(photoAndContentFilled: photoAndContentFilled)
-  }
-
-  @objc private func alertCancelButtonDidTap(_ sender: UIButton) {
-    self.containerView.alertView.isHidden = true
-  }
-
-  @objc private func alertConfirmButtonDidTap(_ sender: UIButton) {
-    self.containerView.alertView.isHidden = true
-
-    if self.writeStatus == .allFilled {
-      self.interactor?.requestUploadFeed(
-        source: self,
-        userId: 19, // api 수정 필요(헤더에 토큰 첨부하는 방식으로 변경 될듯?)
-        content: self.containerView.contentTextView.text,
-        images: self.pickedPhotos
-      )
-    }
   }
 
   // MARK: - ImagePicker
@@ -220,8 +183,18 @@ extension FeedWriteViewController: FeedWriteViewProtocol {
   }
 
   func showAlertView(isDone: Bool) {
-    self.containerView.showAlertView(isDone: isDone)
-    self.writeStatus = isDone ? .allFilled : .hasBlank
+    if isDone {
+      self.showAlert(content: "게시글 등록을 완료 하시겠습니까?", confirmActionCompletion: {
+        self.interactor?.requestUploadFeed(
+          source: self,
+          userId: 19, // api 수정 필요
+          content: self.containerView.contentTextView.text,
+          images: self.pickedPhotos
+        )
+      })
+    } else {
+      self.showAlert(content: "사진, 태그, 프로모션, 내용은 필수 입력 항목입니다.")
+    }
   }
 }
 
