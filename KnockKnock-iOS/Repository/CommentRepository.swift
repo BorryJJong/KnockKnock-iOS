@@ -8,14 +8,15 @@
 import Foundation
 
 protocol CommentRepositoryProtocol {
-  func requestComments(feedId: Int, completionHandler: @escaping ([CommentData]) -> Void)
+  func requestComments(feedId: Int, completionHandler: @escaping ([CommentResponse.Data]) -> Void)
   func requestAddComment(comment: AddCommentRequest, completionHandler: @escaping (AddCommentResponse) -> Void)
+  func requestDeleteComment(commentId: Int, completionHandler: @escaping (DeleteCommentResponse) -> Void)
 }
 
 final class CommentRepository: CommentRepositoryProtocol {
   func requestComments(
     feedId: Int,
-    completionHandler: @escaping ([CommentData]) -> Void
+    completionHandler: @escaping ([CommentResponse.Data]) -> Void
   ) {
     KKNetworkManager
       .shared
@@ -53,6 +54,27 @@ final class CommentRepository: CommentRepositoryProtocol {
           completionHandler(response)
         },
         failure: { error in
+          print(error)
+        }
+      )
+  }
+
+  func requestDeleteComment(
+    commentId: Int,
+    completionHandler: @escaping (DeleteCommentResponse) -> Void
+  ) {
+    let parameters = [
+      "id": commentId
+    ] as [String: Any]
+
+    KKNetworkManager
+      .shared
+      .request(
+        object: DeleteCommentResponse.self,
+        router: KKRouter.deleteComment(id: parameters),
+        success: { response in
+          completionHandler(response)
+        }, failure: { error in
           print(error)
         }
       )

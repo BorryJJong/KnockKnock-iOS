@@ -33,7 +33,7 @@ final class CommentWorker: CommentWorkerProtocol {
     self.repository.requestComments(
       feedId: feedId,
       completionHandler: { comment in
-        let commentData = comment.map { Comment(commentData: $0) }
+        let commentData = comment.map { Comment(data: $0) }
         data += commentData
 
         completionHandler(data)

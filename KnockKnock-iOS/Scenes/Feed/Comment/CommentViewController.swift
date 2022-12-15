@@ -212,7 +212,7 @@ extension CommentViewController: UICollectionViewDataSource {
       for: .touchUpInside
     )
 
-    cell.replyWriteButton.tag = self.visibleComments[indexPath.item].commentData.id
+    cell.replyWriteButton.tag = self.visibleComments[indexPath.item].data.id
 
     cell.bind(comment: self.visibleComments[indexPath.item])
     cell.replyWriteButton.addTarget(

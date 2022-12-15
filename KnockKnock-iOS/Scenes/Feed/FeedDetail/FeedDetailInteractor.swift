@@ -65,7 +65,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     var count = comments.count
 
     comments.forEach {
-      count += $0.commentData.reply?.count ?? 0
+      count += $0.data.reply?.count ?? 0
     }
     self.presenter?.presentAllCommentsCount(allCommentsCount: count)
   }

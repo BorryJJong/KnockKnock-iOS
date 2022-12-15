@@ -20,14 +20,14 @@ final class CommentPresenter: CommentPresenterProtocol {
     var comments: [Comment] = []
 
     for comment in allComments {
-      if comment.commentData.reply?.count != 0 && comment.isOpen {
+      if comment.data.reply?.count != 0 && comment.isOpen {
         comments.append(comment)
 
-        if let replyArray = comment.commentData.reply {
+        if let replyArray = comment.data.reply {
           for reply in replyArray {
             comments.append(
               Comment(
-                commentData: CommentData(
+                data: CommentResponse.Data(
                   id: reply.id,
                   userId: reply.userId,
                   nickname: reply.nickname,

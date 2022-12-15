@@ -338,7 +338,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
         for: .touchUpInside
       )
 
-      cell.replyWriteButton.tag = self.visibleComments[indexPath.item].commentData.id
+      cell.replyWriteButton.tag = self.visibleComments[indexPath.item].data.id
       cell.replyWriteButton.addTarget(
         self,
         action: #selector(self.replyWriteButtonDidTap(_:)),
