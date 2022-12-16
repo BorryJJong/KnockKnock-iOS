@@ -18,7 +18,7 @@ final class CommentPresenter: CommentPresenterProtocol {
   var view: CommentViewProtocol?
 
   func presentDeleteComment(commentId: Int) {
-    self.view
+    self.view?.deleteComment(commentId: commentId)
   }
 
   func presentVisibleComments(allComments: [Comment]) {

@@ -44,11 +44,13 @@ final class CommentInteractor: CommentInteractorProtocol {
       }
     )
   }
+
   func requestDeleteComment(commentId: Int) {
     self.worker?.requestDeleteComment(
       commentId: commentId,
       completionHandler: {
         self.presenter?.presentDeleteComment(commentId: commentId)
-    })
+      }
+    )
   }
 }

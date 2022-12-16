@@ -15,6 +15,7 @@ protocol CommentViewProtocol {
   var interactor: CommentInteractorProtocol? { get set }
 
   func fetchVisibleComments(comments: [Comment])
+  func deleteComment(commentId: Int)
 }
 
 final class CommentViewController: BaseViewController<CommentView> {
@@ -158,12 +159,11 @@ final class CommentViewController: BaseViewController<CommentView> {
     self.containerView.commentCollectionView.reloadData()
   }
 
-  private func commentDeleteButtonDidTap(indexPath: IndexPath) {
+  private func commentDeleteButtonDidTap(commentId: Int) {
     self.showAlert(
       content: "댓글을 삭제하시겠습니까?",
       confirmActionCompletion: {
-        self.containerView.commentCollectionView.deleteItems(at: [indexPath])
-        self.visibleComments.remove(at: indexPath.item)
+        self.interactor?.requestDeleteComment(commentId: commentId)
       }
     )
   }
@@ -193,6 +193,11 @@ extension CommentViewController: CommentViewProtocol {
   }
 
   func deleteComment(commentId: Int) {
+    if let indexPath = self.visibleComments.firstIndex(where: {
+      $0.data.id == commentId
+    }) {
+      self.visibleComments.remove(at: indexPath)
+    }
   }
 }
 
@@ -214,6 +219,8 @@ extension CommentViewController: UICollectionViewDataSource {
       withType: PostCommentCell.self,
       for: indexPath
     )
+    let commentId = self.visibleComments[indexPath.item].data.id
+
     cell.bind(comment: self.visibleComments[indexPath.item])
 
     cell.replyMoreButton.do {
@@ -226,14 +233,17 @@ extension CommentViewController: UICollectionViewDataSource {
     }
 
     cell.commentDeleteButton.do {
-      $0.tag = self.visibleComments[indexPath.item].data.id
-      $0.addAction(for: .touchUpInside, closure: { _ in
-        self.commentDeleteButtonDidTap(indexPath: indexPath)
-      })
+      $0.tag = commentId
+      $0.addAction(
+        for: .touchUpInside,
+        closure: { _ in
+          self.commentDeleteButtonDidTap(commentId: commentId)
+        }
+      )
     }
 
     cell.replyWriteButton.do {
-      $0.tag = self.visibleComments[indexPath.item].data.id
+      $0.tag = commentId
       $0.addTarget(
         self,
         action: #selector(self.replyWriteButtonDidTap(_:)),
