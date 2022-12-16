@@ -13,7 +13,7 @@ protocol FeedDetailPresenterProtocol {
   func presentFeedDetail(feedDetail: FeedDetail)
   func presentAllCommentsCount(allCommentsCount: Int)
   func presentVisibleComments(allComments: [Comment])
-  func presentDeleteComment(commentId: Int)
+  func presentDeleteComment()
   func presentLike(like: [LikeInfo])
 }
 
@@ -29,8 +29,8 @@ final class FeedDetailPresenter: FeedDetailPresenterProtocol {
     self.view?.fetchLikeList(like: like)
   }
 
-  func presentDeleteComment(commentId: Int) {
-    self.view?.deleteComment(commentId: commentId)
+  func presentDeleteComment() {
+    self.view?.deleteComment()
   }
 
   func presentVisibleComments(allComments: [Comment]) {

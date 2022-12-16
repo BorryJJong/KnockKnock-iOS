@@ -17,7 +17,7 @@ protocol FeedDetailViewProtocol: AnyObject {
   func getAllCommentsCount(allCommentsCount: Int)
   func fetchVisibleComments(visibleComments: [Comment])
   func fetchLikeList(like: [LikeInfo])
-  func deleteComment(commentId: Int)
+  func deleteComment()
 }
 
 final class FeedDetailViewController: BaseViewController<FeedDetailView> {
@@ -271,10 +271,8 @@ extension FeedDetailViewController: FeedDetailViewProtocol {
     self.visibleComments = visibleComments
   }
 
-  func deleteComment(commentId: Int) {
-    if let indexPath = self.visibleComments.firstIndex(where: { $0.data.id == commentId}) {
-      self.visibleComments.remove(at: indexPath)
-    }
+  func deleteComment() {
+    self.interactor?.fetchAllComments(feedId: self.feedId)
   }
 
   func fetchLikeList(like: [LikeInfo]) {

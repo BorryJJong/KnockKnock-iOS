@@ -49,7 +49,7 @@ final class CommentInteractor: CommentInteractorProtocol {
     self.worker?.requestDeleteComment(
       commentId: commentId,
       completionHandler: {
-        self.presenter?.presentDeleteComment(commentId: commentId)
+        self.presenter?.presentDeleteComment()
       }
     )
   }

@@ -94,7 +94,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.worker?.requestDeleteComment(
       commentId: commentId,
       completionHandler: {
-        self.presenter?.presentDeleteComment(commentId: commentId)
+        self.presenter?.presentDeleteComment()
       }
     )
   }
