@@ -22,43 +22,39 @@ final class CommentPresenter: CommentPresenterProtocol {
   }
 
   func presentVisibleComments(allComments: [Comment]) {
-    var comments: [Comment] = []
+    var visibleComments: [Comment] = []
 
-    for comment in allComments {
-      if !comment.data.isDeleted {
-        if comment.data.reply?.count != 0 && comment.isOpen {
-          comments.append(comment)
+    for comment in allComments.filter({ !$0.data.isDeleted }) {
+      if comment.isOpen {
+        visibleComments.append(comment)
 
-          if let replyArray = comment.data.reply {
-            for reply in replyArray {
-              if !reply.isDeleted {
-                comments.append(
-                  Comment(
-                    data: CommentResponse.Data(
-                      id: reply.id,
-                      userId: reply.userId,
-                      nickname: reply.nickname,
-                      image: reply.image,
-                      content: reply.content,
-                      regDate: reply.regDate,
-                      isDeleted: reply.isDeleted,
-                      replyCnt: 0,
-                      reply: []
-                    ),
-                    isReply: true
-                  )
-                )
-              }
-            }
-          }
-        } else {
-          if !comment.isReply {
-            comments.append(comment)
-          }
+        let reply = comment.data.reply.map {
+          $0.filter { !$0.isDeleted }
+        } ?? []
+
+        visibleComments += reply.map {
+          Comment(
+            data: CommentResponse.Data(
+              id: $0.id,
+              userId: $0.userId,
+              nickname: $0.nickname,
+              image: $0.image,
+              content: $0.content,
+              regDate: $0.regDate,
+              isDeleted: $0.isDeleted,
+              replyCnt: 0,
+              reply: []
+            ),
+            isReply: true
+          )
+        }
+      } else {
+        if !comment.isReply {
+          visibleComments.append(comment)
         }
       }
     }
-    self.view?.fetchVisibleComments(comments: comments)
+    self.view?.fetchVisibleComments(comments: visibleComments)
     LoadingIndicator.hideLoading()
   }
 }
