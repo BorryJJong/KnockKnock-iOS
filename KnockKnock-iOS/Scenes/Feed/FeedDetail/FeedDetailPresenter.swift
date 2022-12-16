@@ -13,6 +13,7 @@ protocol FeedDetailPresenterProtocol {
   func presentFeedDetail(feedDetail: FeedDetail)
   func presentAllCommentsCount(allCommentsCount: Int)
   func presentVisibleComments(allComments: [Comment])
+  func presentDeleteComment(commentId: Int)
   func presentLike(like: [LikeInfo])
 }
 
@@ -28,39 +29,43 @@ final class FeedDetailPresenter: FeedDetailPresenterProtocol {
     self.view?.fetchLikeList(like: like)
   }
 
-  func presentVisibleComments(allComments: [Comment]) {
-    var comments: [Comment] = []
+  func presentDeleteComment(commentId: Int) {
+    self.view?.deleteComment(commentId: commentId)
+  }
 
-    for comment in allComments {
-      if comment.data.reply?.count != 0 && comment.isOpen {
-        comments.append(comment)
-        if let replyArray = comment.data.reply {
-          for reply in replyArray {
-            comments.append(
-              Comment(
-                data: CommentResponse.Data(
-                  id: reply.id,
-                  userId: reply.userId,
-                  nickname: reply.nickname,
-                  image: reply.image,
-                  content: reply.content,
-                  regDate: reply.regDate,
-                  isDeleted: false,
-                  replyCnt: 0,
-                  reply: []
-                ),
-                isReply: true
-              )
-            )
-          }
+  func presentVisibleComments(allComments: [Comment]) {
+    var visibleComments: [Comment] = []
+
+    allComments.filter({ !$0.data.isDeleted }).forEach { comment in
+      if comment.isOpen {
+        visibleComments.append(comment)
+
+        let reply = comment.data.reply.map {
+          $0.filter { !$0.isDeleted }
+        } ?? []
+
+        visibleComments += reply.map {
+          Comment(
+            data: CommentResponse.Data(
+              id: $0.id,
+              userId: $0.userId,
+              nickname: $0.nickname,
+              image: $0.image,
+              content: $0.content,
+              regDate: $0.regDate,
+              isDeleted: $0.isDeleted,
+              replyCnt: 0,
+              reply: []
+            ), isReply: true
+          )
         }
       } else {
         if !comment.isReply {
-          comments.append(comment)
+          visibleComments.append(comment)
         }
       }
     }
-    self.view?.fetchVisibleComments(visibleComments: comments)
+    self.view?.fetchVisibleComments(visibleComments: visibleComments)
   }
 
   func presentAllCommentsCount(allCommentsCount: Int) {

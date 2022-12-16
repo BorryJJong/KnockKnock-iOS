@@ -17,6 +17,7 @@ protocol FeedDetailViewProtocol: AnyObject {
   func getAllCommentsCount(allCommentsCount: Int)
   func fetchVisibleComments(visibleComments: [Comment])
   func fetchLikeList(like: [LikeInfo])
+  func deleteComment(commentId: Int)
 }
 
 final class FeedDetailViewController: BaseViewController<FeedDetailView> {
@@ -181,6 +182,15 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     self.containerView.commentTextView.becomeFirstResponder()
   }
 
+  private func commentDeleteButtonDidTap(commentId: Int) {
+    self.showAlert(
+      content: "댓글을 삭제하시겠습니까?",
+      confirmActionCompletion: {
+        self.interactor?.requestDeleteComment(commentId: commentId)
+      }
+    )
+  }
+
   // MARK: - Keyboard Show & Hide
 
   private func addKeyboardNotification() {
@@ -261,6 +271,12 @@ extension FeedDetailViewController: FeedDetailViewProtocol {
     self.visibleComments = visibleComments
   }
 
+  func deleteComment(commentId: Int) {
+    if let indexPath = self.visibleComments.firstIndex(where: { $0.data.id == commentId}) {
+      self.visibleComments.remove(at: indexPath)
+    }
+  }
+
   func fetchLikeList(like: [LikeInfo]) {
     self.like = like
   }
@@ -331,22 +347,37 @@ extension FeedDetailViewController: UICollectionViewDataSource {
         withType: PostCommentCell.self,
         for: indexPath
       )
-      cell.replyMoreButton.tag = indexPath.item
-      cell.replyMoreButton.addTarget(
-        self,
-        action: #selector(replyMoreButtonDidTap(_:)),
-        for: .touchUpInside
-      )
-
-      cell.replyWriteButton.tag = self.visibleComments[indexPath.item].data.id
-      cell.replyWriteButton.addTarget(
-        self,
-        action: #selector(self.replyWriteButtonDidTap(_:)),
-        for: .touchUpInside
-      )
+      let commentId = self.visibleComments[indexPath.item].data.id
 
       cell.bind(comment: self.visibleComments[indexPath.item])
-      cell.layoutIfNeeded()
+
+      cell.replyMoreButton.do {
+        $0.tag = indexPath.item
+        $0.addTarget(
+          self,
+          action: #selector(self.replyMoreButtonDidTap(_:)),
+          for: .touchUpInside
+        )
+      }
+
+      cell.commentDeleteButton.do {
+        $0.tag = commentId
+        $0.addAction(
+          for: .touchUpInside,
+          closure: { _ in
+            self.commentDeleteButtonDidTap(commentId: commentId)
+          }
+        )
+      }
+
+      cell.replyWriteButton.do {
+        $0.tag = commentId
+        $0.addTarget(
+          self,
+          action: #selector(self.replyWriteButtonDidTap(_:)),
+          for: .touchUpInside
+        )
+      }
 
       return cell
 

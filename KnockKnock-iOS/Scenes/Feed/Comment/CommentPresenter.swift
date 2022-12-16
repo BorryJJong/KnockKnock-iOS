@@ -9,29 +9,29 @@ import Foundation
 
 protocol CommentPresenterProtocol {
   var view: CommentViewProtocol? { get set }
-
+  
   func presentVisibleComments(allComments: [Comment])
   func presentDeleteComment(commentId: Int)
 }
 
 final class CommentPresenter: CommentPresenterProtocol {
   var view: CommentViewProtocol?
-
+  
   func presentDeleteComment(commentId: Int) {
     self.view?.deleteComment(commentId: commentId)
   }
-
+  
   func presentVisibleComments(allComments: [Comment]) {
     var visibleComments: [Comment] = []
 
-    for comment in allComments.filter({ !$0.data.isDeleted }) {
+    allComments.filter({ !$0.data.isDeleted }).forEach { comment in
       if comment.isOpen {
         visibleComments.append(comment)
-
+        
         let reply = comment.data.reply.map {
           $0.filter { !$0.isDeleted }
         } ?? []
-
+        
         visibleComments += reply.map {
           Comment(
             data: CommentResponse.Data(
@@ -44,8 +44,7 @@ final class CommentPresenter: CommentPresenterProtocol {
               isDeleted: $0.isDeleted,
               replyCnt: 0,
               reply: []
-            ),
-            isReply: true
+            ), isReply: true
           )
         }
       } else {

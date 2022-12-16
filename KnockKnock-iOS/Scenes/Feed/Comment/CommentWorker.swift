@@ -8,18 +8,9 @@
 import Foundation
 
 protocol CommentWorkerProtocol {
-  func getAllComments(
-    feedId: Int,
-    completionHandler: @escaping ([Comment]) -> Void
-  )
-  func requestAddComment(
-    comment: AddCommentRequest,
-    completionHandler: @escaping (String) -> Void
-  )
-  func requestDeleteComment(
-    commentId: Int,
-    completionHandler: @escaping () -> Void
-  )
+  func getAllComments(feedId: Int, completionHandler: @escaping ([Comment]) -> Void)
+  func requestAddComment(comment: AddCommentRequest, completionHandler: @escaping (String) -> Void)
+  func requestDeleteComment(commentId: Int, completionHandler: @escaping () -> Void)
 }
 
 final class CommentWorker: CommentWorkerProtocol {
@@ -63,7 +54,7 @@ final class CommentWorker: CommentWorkerProtocol {
   ) {
     self.repository.requestDeleteComment(
       commentId: commentId,
-      completionHandler: { result in
+      completionHandler: { _ in
         completionHandler()
       }
     )
