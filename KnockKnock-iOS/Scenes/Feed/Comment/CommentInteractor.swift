@@ -14,7 +14,7 @@ protocol CommentInteractorProtocol {
   func fetchAllComments(feedId: Int)
   func fetchVisibleComments(comments: [Comment])
   func requestAddComment(comment: AddCommentRequest)
-
+  func requestDeleteComment(commentId: Int)
 }
 
 final class CommentInteractor: CommentInteractorProtocol {
@@ -43,5 +43,12 @@ final class CommentInteractor: CommentInteractorProtocol {
         }
       }
     )
+  }
+  func requestDeleteComment(commentId: Int) {
+    self.worker?.requestDeleteComment(
+      commentId: commentId,
+      completionHandler: {
+        self.presenter?.presentDeleteComment(commentId: commentId)
+    })
   }
 }

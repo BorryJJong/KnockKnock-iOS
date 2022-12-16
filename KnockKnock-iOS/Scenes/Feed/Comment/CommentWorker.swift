@@ -16,6 +16,10 @@ protocol CommentWorkerProtocol {
     comment: AddCommentRequest,
     completionHandler: @escaping (String) -> Void
   )
+  func requestDeleteComment(
+    commentId: Int,
+    completionHandler: @escaping () -> Void
+  )
 }
 
 final class CommentWorker: CommentWorkerProtocol {
@@ -49,6 +53,18 @@ final class CommentWorker: CommentWorkerProtocol {
       comment: comment,
       completionHandler: { response in
         completionHandler(response.message)
+      }
+    )
+  }
+
+  func requestDeleteComment(
+    commentId: Int,
+    completionHandler: @escaping () -> Void
+  ) {
+    self.repository.requestDeleteComment(
+      commentId: commentId,
+      completionHandler: { result in
+        completionHandler()
       }
     )
   }

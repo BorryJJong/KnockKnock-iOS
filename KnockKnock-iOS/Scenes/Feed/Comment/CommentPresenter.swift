@@ -11,10 +11,15 @@ protocol CommentPresenterProtocol {
   var view: CommentViewProtocol? { get set }
 
   func presentVisibleComments(allComments: [Comment])
+  func presentDeleteComment(commentId: Int)
 }
 
 final class CommentPresenter: CommentPresenterProtocol {
   var view: CommentViewProtocol?
+
+  func presentDeleteComment(commentId: Int) {
+    self.view
+  }
 
   func presentVisibleComments(allComments: [Comment]) {
     var comments: [Comment] = []
