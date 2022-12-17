@@ -68,8 +68,8 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
     let bottomSheetViewController = BottomSheetViewController()
     bottomSheetViewController.setBottomSheetContents(
       contents: [
-        BottomSheetOption.edit.rawValue,
-        BottomSheetOption.delete.rawValue
+        BottomSheetOption.postEdit.rawValue,
+        BottomSheetOption.postDelete.rawValue
       ],
       bottomSheetType: .small
     )

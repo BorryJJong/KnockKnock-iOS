@@ -30,7 +30,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   }
 
   private var currentPage: Int = 1
-  private var pageSize: Int = 1
+  private var pageSize: Int = 5
   var challengeId: Int = 0
   var feedId: Int = 2
 
@@ -108,7 +108,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   }
 
   @objc func configureButtonDidTap(_ sender: UIButton) {
-    self.interactor?.presentBottomSheetView(source: self)
+    self.interactor?.presentBottomSheetView(source: self, isMyPost: true)
   }
 
   @objc func commentButtonDidTap(_ sender: UIButton) {

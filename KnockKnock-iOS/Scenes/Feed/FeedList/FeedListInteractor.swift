@@ -25,7 +25,7 @@ protocol FeedListInteractorProtocol {
   func navigateToFeedMain(source: FeedListViewProtocol)
   func navigateToFeedDetail(source: FeedListViewProtocol, feedId: Int)
   func navigateToCommentView(feedId: Int, source: FeedListViewProtocol)
-  func presentBottomSheetView(source: FeedListViewProtocol)
+  func presentBottomSheetView(source: FeedListViewProtocol, isMyPost: Bool)
 }
 
 final class FeedListInteractor: FeedListInteractorProtocol {
@@ -111,7 +111,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     self.router?.navigateToFeedMain(source: source)
   }
 
-  func presentBottomSheetView(source: FeedListViewProtocol) {
-    self.router?.presentBottomSheetView(source: source)
+  func presentBottomSheetView(source: FeedListViewProtocol, isMyPost: Bool) {
+    self.router?.presentBottomSheetView(source: source, isMyPost: isMyPost)
   }
 }
