@@ -28,8 +28,13 @@ final class MyViewController: BaseViewController<MyView> {
 
   var interactor: MyInteractorProtocol?
 
+  var selectedMenuItem: MyMenuType?
+
   var isLoggedIn: Bool = false {
     didSet {
+      if isLoggedIn {
+        self.interactor?.fetchNickname()
+      }
       self.containerView.setLoginStatus(isLoggedin: self.isLoggedIn)
       self.containerView.myTableView.reloadData()
     }
@@ -98,10 +103,8 @@ final class MyViewController: BaseViewController<MyView> {
     self.interactor?.navigateToLoginView(source: self)
   }
 
-  // 테스트용 임시 로그아웃 기능 연결
   @objc func logoutButtonDidTap(_ sender: UIButton) {
-    LocalDataManager().deleteToken()
-    NotificationCenter.default.post(name: .logoutCompleted, object: nil)
+    self.interactor?.requestLogOut()
   }
 }
 
@@ -159,7 +162,7 @@ extension MyViewController: UITableViewDataSource {
     cell.textLabel?.do {
       $0.font = .systemFont(ofSize: 15, weight: .bold)
       $0.textColor = .black
-      $0.text = menu.title
+      $0.text = menu.title.rawValue
     }
 
     switch menu.type {
@@ -254,21 +257,34 @@ extension MyViewController: UITableViewDelegate {
     didSelectRowAt indexPath: IndexPath
   ) {
     
-    let menu = self.menuData[indexPath.section]
+    let mySection = self.menuData[indexPath.section]
+    let menu = mySection.myItems[indexPath.item].title
 
-    switch menu.title {
-    case .myInfo:
-      if menu.myItems[indexPath.item].title == "프로필 수정" {
-        self.interactor?.navigateToProfileSettingView(source: self)
-      }
+    switch menu {
+    case .profile:
+      self.interactor?.navigateToProfileSettingView(source: self)
 
-    case .customer:
-      if menu.myItems[indexPath.item].title == "공지사항" {
-        self.interactor?.navigateToNoticeView(source: self)
-      }
+    case .signOut:
+      self.showAlert(
+        content: Alert.signOut.message,
+        confirmActionCompletion: {
+          self.interactor?.requestSignOut()
+        }
+      )
 
-    case .policy:
-      print("policy")
+    case .versionInfo:
+      self.showAlert(
+        content: Alert.versionInfo.message,
+        confirmActionCompletion: {
+          self.dismiss(animated: false)
+        }
+      )
+
+    case .notice:
+      self.interactor?.navigateToNoticeView(source: self)
+
+    default:
+      print("none")
     }
   }
 } 

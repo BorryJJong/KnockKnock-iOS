@@ -9,7 +9,10 @@ import Foundation
 
 protocol LocalDataManagerProtocol {
   func saveToken(accessToken: String, refreshToken: String, nickname: String?)
+  func deleteToken()
+  func deleteNickname()
   func checkTokenIsExisted() -> Bool
+  func fetchNickname() -> String?
 }
 
 final class LocalDataManager: LocalDataManagerProtocol {
@@ -28,11 +31,14 @@ final class LocalDataManager: LocalDataManagerProtocol {
     }
   }
 
-  /// 로그아웃/회원탈퇴 시 로컬에 있는 토큰 삭제
-  /// (현재는 테스트 용 임시 기능)
+  /// 로그아웃/회원탈퇴 시 로컬에 있는 토큰 & 닉네임 삭제
   func deleteToken() {
     UserDefaults.standard.removeObject(forKey: "accessToken")
     UserDefaults.standard.removeObject(forKey: "refreshToken")
+  }
+
+  func deleteNickname() {
+    UserDefaults.standard.removeObject(forKey: "nickname")
   }
 
   /// 로컬에 토큰 존재 여부 판별

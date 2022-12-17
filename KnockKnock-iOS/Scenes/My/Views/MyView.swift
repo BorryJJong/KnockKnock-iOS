@@ -77,7 +77,7 @@ final class MyView: UIView {
   func setNickname(nickname: String) {
     self.userNameLabel.text = "반가워요 \(nickname)님 🌿"
   }
-  
+
   // MARK: - Constraints
   
   private func setupConstraints() {
