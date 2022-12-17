@@ -79,7 +79,7 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
     )
 
     self.showAlert(
-      content: "프로필 등록을 완료하였습니다.",
+      content: Alert.profileSetting.message,
       confirmActionCompletion: {
         self.interactor?.router?.navigateToMyView(source: self)
       }
