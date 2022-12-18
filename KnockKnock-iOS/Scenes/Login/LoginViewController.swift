@@ -80,16 +80,21 @@ final class LoginViewController: BaseViewController<LoginView> {
 
 extension LoginViewController: LoginViewProtocol, ASAuthorizationControllerDelegate {
   func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-    if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
-      let user = credential.user
-      print("👨‍🍳 \(user)")
-      if let email = credential.email {
-        print("✉️ \(email)")
+    if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+      if  let authorizationCode = appleIDCredential.authorizationCode,
+          let identityToken = appleIDCredential.identityToken,
+          let authString = String(data: authorizationCode, encoding: .utf8),
+          let tokenString = String(data: identityToken, encoding: .utf8) {
+        print("authorizationCode: \(authorizationCode)")
+        print("identityToken: \(identityToken)")
+        print("authString: \(authString)")
+        print("tokenString: \(tokenString)")
       }
+
     }
   }
   
   func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-      print("error \(error)")
+    print("error \(error)")
   }
 }
