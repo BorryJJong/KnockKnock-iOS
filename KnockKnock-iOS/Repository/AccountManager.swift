@@ -9,7 +9,7 @@ import Foundation
 
 import KakaoSDKUser
 
-protocol AccountManagerProtocol {
+protocol SocialLoginManagerProtocol {
   func requestToken(
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
   )
@@ -19,11 +19,17 @@ protocol AccountManagerProtocol {
     image: String,
     completionHandler: @escaping (SignUpResponse) -> Void
   )
+
 }
 
-final class KakaoAccountManager: AccountManagerProtocol {
+protocol AccountManagerProtocol {
+  func logOut(completionHanlder: @escaping (Bool) -> Void)
+  func signOut(completionHanlder: @escaping (Bool) -> Void)
+}
 
-  // signUp
+final class KakaoAccountManager: SocialLoginManagerProtocol {
+
+  // 회원가입
 
   func signUp(
     loginInfo: LoginInfo,
@@ -43,7 +49,7 @@ final class KakaoAccountManager: AccountManagerProtocol {
       .shared
       .request(
         object: SignUpResponse.self,
-        router: KKRouter.signUp(userInfo: parameters),
+        router: KKRouter.postSignUp(userInfo: parameters),
         success: { success in
           completionHandler(success)
         }, failure: { error in
@@ -52,7 +58,7 @@ final class KakaoAccountManager: AccountManagerProtocol {
       )
   }
 
-  // login
+  // 로그인
 
   func requestToken(
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
@@ -73,7 +79,7 @@ final class KakaoAccountManager: AccountManagerProtocol {
           .shared
           .request(
             object: LoginResponse.self,
-            router: KKRouter.socialLogin(loginInfo: parameters),
+            router: KKRouter.postSocialLogin(loginInfo: parameters),
             success: { response in
               completionHandler(response, loginInfo)
             },
@@ -106,5 +112,40 @@ final class KakaoAccountManager: AccountManagerProtocol {
         }
       })
     }
+  }
+}
+
+final class AccountManager: AccountManagerProtocol {
+
+  // 로그아웃
+
+  func logOut(completionHanlder: @escaping (Bool) -> Void) {
+    KKNetworkManager
+      .shared
+      .request(
+        object: Bool.self,
+        router: KKRouter.postLogOut,
+        success: { response in
+          completionHanlder(response)
+        }, failure: { error in
+          print(error)
+        }
+      )
+  }
+
+  // 회원탈퇴
+
+  func signOut(completionHanlder: @escaping (Bool) -> Void) {
+    KKNetworkManager
+      .shared
+      .request(
+        object: Bool.self,
+        router: KKRouter.deleteSignOut,
+        success: { response in
+          completionHanlder(response)
+        }, failure: { error in
+          print(error)
+        }
+      )
   }
 }
