@@ -40,12 +40,7 @@ final class CommentRepository: CommentRepositoryProtocol {
   ) {
 
     do {
-      let parameters = try AddCommentRequest(
-        postId: comment.postId,
-        userId: comment.userId,
-        content: comment.content,
-        commentId: comment.commentId
-      ).encode()
+      let parameters = try comment.encode()
 
       KKNetworkManager
         .shared
