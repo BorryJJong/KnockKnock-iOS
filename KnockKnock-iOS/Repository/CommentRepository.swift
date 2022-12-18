@@ -39,21 +39,19 @@ final class CommentRepository: CommentRepositoryProtocol {
     completionHandler: @escaping (AddCommentResponse) -> Void
   ) {
 
-    let parameters = AddCommentRequest.init(
-      postId: comment.postId,
-      userId: comment.userId,
-      content: comment.content,
-      commentId: comment.commentId
-    )
-
     do {
-      let body = try parameters.encode()
+      let parameters = try AddCommentRequest(
+        postId: comment.postId,
+        userId: comment.userId,
+        content: comment.content,
+        commentId: comment.commentId
+      ).encode()
 
       KKNetworkManager
         .shared
         .request(
           object: AddCommentResponse.self,
-          router: KKRouter.postAddComment(comment: body),
+          router: KKRouter.postAddComment(comment: parameters),
           success: { response in
             completionHandler(response)
           },
