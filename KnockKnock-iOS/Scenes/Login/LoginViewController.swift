@@ -43,6 +43,12 @@ final class LoginViewController: BaseViewController<LoginView> {
       action: #selector(self.kakaoLoginButtonDidTap(_:)),
       for: .touchUpInside
     )
+
+    self.containerView.appleLoginButton.addTarget(
+      self,
+      action: #selector(self.appleLoginButtonDidTap(_:)),
+      for: .touchUpInside
+    )
   }
 
   // MARK: - Button Actions
@@ -52,6 +58,10 @@ final class LoginViewController: BaseViewController<LoginView> {
       source: self,
       socialType: SocialType.kakao
     )
+  }
+
+  @objc func appleLoginButtonDidTap(_ sender: UIButton) {
+
   }
 
   @objc func tapCloseBarButtonDidTap(_ sender: UIButton) {

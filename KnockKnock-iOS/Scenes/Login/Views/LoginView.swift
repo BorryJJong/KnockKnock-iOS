@@ -44,6 +44,11 @@ final class LoginView: UIView {
     $0.setImage(KKDS.Image.ic_kakao_login, for: .normal)
     $0.contentMode = .scaleAspectFit
   }
+
+  let appleLoginButton = UIButton().then {
+    $0.setImage(KKDS.Image.ic_apple_login, for: .normal)
+    $0.contentMode = .scaleAspectFit
+  }
   
   // MARK: - Initialize
 
@@ -59,12 +64,18 @@ final class LoginView: UIView {
   // MARK: - Configure
 
   private func setupConstraints() {
-    [self.kakaoLoginButton, self.titleLabel, self.subTitleLabel].addSubViews(self)
+    [self.kakaoLoginButton, self.appleLoginButton, self.titleLabel, self.subTitleLabel].addSubViews(self)
 
     self.kakaoLoginButton.snp.makeConstraints {
       $0.leading.trailing.equalToSuperview().inset(Metric.kakaoLoginButtonLeadingMargin)
       $0.height.equalTo(Metric.kakaoLoginButtonHeight)
       $0.centerY.equalToSuperview()
+    }
+
+    self.appleLoginButton.snp.makeConstraints {
+      $0.leading.trailing.equalToSuperview().inset(Metric.kakaoLoginButtonLeadingMargin)
+      $0.height.equalTo(Metric.kakaoLoginButtonHeight)
+      $0.top.equalTo(self.kakaoLoginButton.snp.bottom).offset(30)
     }
 
     self.titleLabel.snp.makeConstraints {
