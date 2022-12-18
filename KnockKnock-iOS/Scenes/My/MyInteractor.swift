@@ -14,6 +14,9 @@ protocol MyInteractorProtocol {
 
   func fetchMenuData()
   func checkLoginStatus()
+  func fetchNickname() 
+  func requestLogOut()
+  func requestSignOut()
 
   func navigateToLoginView(source: MyViewProtocol)
   func navigateToNoticeView(source: MyViewProtocol)
@@ -29,21 +32,34 @@ final class MyInteractor: MyInteractorProtocol {
   // Busniess Logic
 
   func fetchMenuData() {
-    self.worker?.fetchMenuData(completionHandler: { menu in
-      self.presenter?.presentMenuData(myMenu: menu)
+    self.worker?.fetchMenuData(completionHandler: { [weak self] menu in
+      self?.presenter?.presentMenuData(myMenu: menu)
     })
     self.checkLoginStatus()
     self.setNotification()
   }
 
   func checkLoginStatus() {
-    self.worker?.checkLoginStatus(completionHandler: { isLoggedIn in
-      if isLoggedIn { // 로그인 상태라면 nickname 불러오기
-        self.worker?.fetchNickname(completionHandler: { nickname in
-          self.presenter?.presentNickname(nickname: nickname)
-        })
-      }
-      self.presenter?.presentLoginStatus(isLoggedIn: isLoggedIn)
+    self.worker?.checkLoginStatus(completionHandler: { [weak self] isLoggedIn in
+      self?.presenter?.presentLoginStatus(isLoggedIn: isLoggedIn)
+    })
+  }
+
+  func fetchNickname() {
+    self.worker?.fetchNickname(completionHandler: { [weak self] nickname in
+      self?.presenter?.presentNickname(nickname: nickname)
+    })
+  }
+
+  func requestLogOut() {
+    self.worker?.requestLogOut(completionHandler: {
+      NotificationCenter.default.post(name: .logoutCompleted, object: nil)
+    })
+  }
+
+  func requestSignOut() {
+    self.worker?.requestSignOut(completionHandler: {
+      NotificationCenter.default.post(name: .logoutCompleted, object: nil)
     })
   }
 
