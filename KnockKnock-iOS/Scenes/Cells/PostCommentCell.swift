@@ -97,11 +97,11 @@ final class PostCommentCell: BaseCollectionViewCell {
   // MARK: - Bind
 
   func bind(comment: Comment) {
-    let reply = comment.commentData.reply
+    let reply = comment.data.reply
     self.setReplyMoreButton(count: reply?.count ?? 0, isOpen: comment.isOpen)
 
-    self.userIdLabel.text = comment.commentData.nickname
-    self.commentLabel.text = comment.commentData.content
+    self.userIdLabel.text = comment.data.nickname
+    self.commentLabel.text = comment.data.content
 
     if comment.isReply {
       self.replyWriteButton.isHidden = true

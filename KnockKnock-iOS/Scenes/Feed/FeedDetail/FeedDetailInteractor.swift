@@ -16,6 +16,7 @@ protocol FeedDetailInteractorProtocol {
   func fetchAllComments(feedId: Int)
   func fetchVisibleComments(comments: [Comment])
   func requestAddComment(comment: AddCommentRequest)
+  func requestDeleteComment(commentId: Int)
   func fetchLikeList(feedId: Int)
 
   func navigateToLikeDetail(source: FeedDetailViewProtocol)
@@ -65,7 +66,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     var count = comments.count
 
     comments.forEach {
-      count += $0.commentData.reply?.count ?? 0
+      count += $0.data.reply?.count ?? 0
     }
     self.presenter?.presentAllCommentsCount(allCommentsCount: count)
   }
@@ -83,8 +84,17 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       comment: comment,
       completionHandler: { response in
         if response == "success" {
-          self.fetchAllComments(feedId: comment.feedId)
+          self.fetchAllComments(feedId: comment.postId)
         }
+      }
+    )
+  }
+
+  func requestDeleteComment(commentId: Int) {
+    self.worker?.requestDeleteComment(
+      commentId: commentId,
+      completionHandler: {
+        self.presenter?.presentDeleteComment()
       }
     )
   }

@@ -54,6 +54,7 @@ enum KKRouter: URLRequestConvertible {
   // Comment
   case getComment(id: Int)
   case postAddComment(comment: Parameters)
+  case deleteComment(id: Parameters)
 
   // MARK: - HTTP Method
 
@@ -80,7 +81,8 @@ enum KKRouter: URLRequestConvertible {
       return .post
 
     case .deleteSignOut,
-         .deleteFeedLike:
+         .deleteFeedLike,
+         .deleteComment:
       return .delete
     }
   }
@@ -119,6 +121,7 @@ enum KKRouter: URLRequestConvertible {
     // Comment
     case .getComment(let id): return "feed/\(id)/comment"
     case .postAddComment: return "feed/comment"
+    case .deleteComment: return "feed/comment"
 
     }
   }
@@ -158,6 +161,9 @@ enum KKRouter: URLRequestConvertible {
 
     case let .postAddComment(comment):
       return comment
+
+    case let .deleteComment(id):
+      return id
 
     case .getChallengeDetail,
          .getChallengeResponse,
