@@ -19,7 +19,9 @@ protocol FeedWriteInteractorProtocol: AnyObject {
     source: FeedWriteViewProtocol,
     propertyType: PropertyType
   )
-  func checkEssentialField(imageCount: Int, isContentFilled: Bool)
+
+  func setCurrentText(text: String) 
+  func checkEssentialField(imageCount: Int)
   func requestUploadFeed(source: FeedWriteViewProtocol, userId: Int, content: String, images: [UIImage])
 }
 
@@ -34,6 +36,7 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
   private var selectedPromotionList: [Promotion] = []
   private var selectedTagList: [ChallengeTitle] = []
   private var selectedAddress: AddressResult.Documents?
+  private var postContent: String = ""
 
   // Routing
 
@@ -57,15 +60,18 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
     )
   }
 
-  func checkEssentialField(
-    imageCount: Int,
-    isContentFilled: Bool
-  ) {
+  // Buisness Logic
+
+  func setCurrentText(text: String) {
+    self.postContent = text
+  }
+
+  func checkEssentialField(imageCount: Int) {
     guard let isDone = self.worker?.checkEssentialField(
       imageCount: imageCount,
       tag: self.selectedTagList,
       promotion: self.selectedPromotionList,
-      isContentFilled: isContentFilled
+      content: self.postContent
     ) else { return }
     self.presenter?.presentAlertView(isDone: isDone)
   }

@@ -28,7 +28,6 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   var interactor: FeedWriteInteractorProtocol?
 
   var selectedImages: [UIImage] = []
-  var contentTextViewFilled = false
 
   // MARK: - UIs
 
@@ -134,10 +133,7 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   }
 
   @objc func doneButtonDidTap(_ sender: UIButton) {
-    self.interactor?.checkEssentialField(
-      imageCount: self.selectedImages.count,
-      isContentFilled: self.contentTextViewFilled
-    )
+    self.interactor?.checkEssentialField(imageCount: self.selectedImages.count)
   }
 
   // MARK: - ImagePicker
@@ -213,9 +209,9 @@ extension FeedWriteViewController: UITextViewDelegate {
     if textView.text.isEmpty {
       textView.text = "내용을 입력해주세요. (글자수 1,000자 이내)"
       textView.textColor = .gray40
-      self.contentTextViewFilled = false
+      self.interactor?.setCurrentText(text: "")
     } else {
-      self.contentTextViewFilled = true
+      self.interactor?.setCurrentText(text: textView.text)
     }
   }
 }
