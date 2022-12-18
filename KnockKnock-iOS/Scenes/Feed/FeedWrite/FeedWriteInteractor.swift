@@ -61,15 +61,13 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
     imageCount: Int,
     isContentFilled: Bool
   ) {
-    self.worker?.checkEssentialField(
+    guard let isDone = self.worker?.checkEssentialField(
       imageCount: imageCount,
       tag: self.selectedTagList,
       promotion: self.selectedPromotionList,
-      isContentFilled: isContentFilled,
-      completionHandler: { [weak self] isDone in
-        self?.presenter?.presentAlertView(isDone: isDone)
-      }
-    )
+      isContentFilled: isContentFilled
+    ) else { return }
+    self.presenter?.presentAlertView(isDone: isDone)
   }
 
   func requestUploadFeed(

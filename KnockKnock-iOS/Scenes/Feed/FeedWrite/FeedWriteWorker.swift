@@ -9,7 +9,7 @@ import Foundation
 
 protocol FeedWriteWorkerProtocol: AnyObject {
   func uploadFeed(postData: FeedWrite, completionHandler: @escaping () -> Void)
-  func checkEssentialField(imageCount: Int, tag: [ChallengeTitle], promotion: [Promotion], isContentFilled: Bool, completionHandler: @escaping (Bool) -> Void)
+  func checkEssentialField(imageCount: Int, tag: [ChallengeTitle], promotion: [Promotion], isContentFilled: Bool) -> Bool
 }
 
 final class FeedWriteWorker: FeedWriteWorkerProtocol {
@@ -35,9 +35,8 @@ final class FeedWriteWorker: FeedWriteWorkerProtocol {
     imageCount: Int,
     tag: [ChallengeTitle],
     promotion: [Promotion],
-    isContentFilled: Bool,
-    completionHandler: @escaping (Bool) -> Void
-  ) {
+    isContentFilled: Bool
+  ) -> Bool {
     let isPromotionSelected = promotion.filter {
       $0.isSelected == true
     }.count != 0
@@ -50,6 +49,6 @@ final class FeedWriteWorker: FeedWriteWorkerProtocol {
 
     let result = isPromotionSelected && isTagSelected && isImageSelected && isContentFilled
 
-    completionHandler(result)
+    return result
    }
 }
