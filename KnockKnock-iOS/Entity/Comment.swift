@@ -41,8 +41,8 @@ struct Comment: Decodable {
   var isReply: Bool = false
 }
 
-struct AddCommentRequest {
-  let feedId: Int
+struct AddCommentRequest: Encodable {
+  let postId: Int
   let userId: Int
   let content: String
   let commentId: Int?

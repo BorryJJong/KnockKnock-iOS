@@ -165,7 +165,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     if let content = self.containerView.commentTextView.text {
       self.interactor?.requestAddComment(
         comment: AddCommentRequest(
-          feedId: self.feedId,
+          postId: self.feedId,
           userId: self.userId,
           content: content,
           commentId: self.commentId

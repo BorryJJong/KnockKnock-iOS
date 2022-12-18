@@ -84,7 +84,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       comment: comment,
       completionHandler: { response in
         if response == "success" {
-          self.fetchAllComments(feedId: comment.feedId)
+          self.fetchAllComments(feedId: comment.postId)
         }
       }
     )

@@ -39,7 +39,7 @@ final class CommentInteractor: CommentInteractorProtocol {
       comment: comment,
       completionHandler: { response in
         if response == "success" {
-          self.fetchAllComments(feedId: comment.feedId)
+          self.fetchAllComments(feedId: comment.postId)
         }
       }
     )
