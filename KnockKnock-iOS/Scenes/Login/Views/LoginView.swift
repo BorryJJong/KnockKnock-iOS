@@ -11,6 +11,8 @@ import SnapKit
 import Then
 import KKDSKit
 
+import AuthenticationServices
+
 final class LoginView: UIView {
 
   // MARK: - Constants
@@ -45,10 +47,12 @@ final class LoginView: UIView {
     $0.contentMode = .scaleAspectFit
   }
 
-  let appleLoginButton = UIButton().then {
-    $0.setImage(KKDS.Image.ic_apple_login, for: .normal)
-    $0.contentMode = .scaleAspectFit
-  }
+  let appleLoginButton = ASAuthorizationAppleIDButton()
+
+//  let appleLoginButton = UIButton().then {
+//    $0.setImage(KKDS.Image.ic_apple_login, for: .normal)
+//    $0.contentMode = .scaleAspectFit
+//  }
   
   // MARK: - Initialize
 

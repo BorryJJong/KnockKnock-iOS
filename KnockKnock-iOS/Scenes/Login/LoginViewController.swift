@@ -10,6 +10,8 @@ import UIKit
 import Then
 import KKDSKit
 
+import AuthenticationServices
+
 protocol LoginViewProtocol: AnyObject {
   var interactor: LoginInteractorProtocol? { get set }
 }
@@ -61,7 +63,14 @@ final class LoginViewController: BaseViewController<LoginView> {
   }
 
   @objc func appleLoginButtonDidTap(_ sender: UIButton) {
+    let appleIDProvider = ASAuthorizationAppleIDProvider()
+    let request = appleIDProvider.createRequest()
+    request.requestedScopes = [.fullName, .email]
 
+    let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+    authorizationController.delegate = self
+    authorizationController.presentationContextProvider = self as? ASAuthorizationControllerPresentationContextProviding
+    authorizationController.performRequests()
   }
 
   @objc func tapCloseBarButtonDidTap(_ sender: UIButton) {
@@ -69,6 +78,18 @@ final class LoginViewController: BaseViewController<LoginView> {
   }
 }
 
-extension LoginViewController: LoginViewProtocol {
-
+extension LoginViewController: LoginViewProtocol, ASAuthorizationControllerDelegate {
+  func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+    if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
+      let user = credential.user
+      print("👨‍🍳 \(user)")
+      if let email = credential.email {
+        print("✉️ \(email)")
+      }
+    }
+  }
+  
+  func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+      print("error \(error)")
+  }
 }

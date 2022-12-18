@@ -209,16 +209,12 @@
 		61CD47FC293473F900FEE2F7 /* MyInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CD47FB293473F900FEE2F7 /* MyInteractor.swift */; };
 		61CD47FE2934741D00FEE2F7 /* MyPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CD47FD2934741D00FEE2F7 /* MyPresenter.swift */; };
 		61CD4800293478B900FEE2F7 /* MyWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CD47FF293478B900FEE2F7 /* MyWorker.swift */; };
-
 		61CD48042935BC0D00FEE2F7 /* Notification+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CD48032935BC0D00FEE2F7 /* Notification+Ext.swift */; };
-		61DEFE86294059BF00ABC13E /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DEFE85294059BF00ABC13E /* Alert.swift */; };
-
 		61CD480E293DC27900FEE2F7 /* FeedWrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CD480D293DC27900FEE2F7 /* FeedWrite.swift */; };
 		61CD4810293DC5A000FEE2F7 /* FeedWriteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CD480F293DC5A000FEE2F7 /* FeedWriteRepository.swift */; };
 		61DEFE8429402DEE00ABC13E /* UIImage+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DEFE8329402DEE00ABC13E /* UIImage+Ext.swift */; };
-
+		61DEFE86294059BF00ABC13E /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DEFE85294059BF00ABC13E /* Alert.swift */; };
 		61DEFE8E2941AF9000ABC13E /* AlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DEFE8D2941AF9000ABC13E /* AlertViewController.swift */; };
-
 		61E3087C287334C1001394B6 /* ImageScaleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E3087B287334C1001394B6 /* ImageScaleType.swift */; };
 		61E3088428768D71001394B6 /* UIStackView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E3088328768D71001394B6 /* UIStackView+Ext.swift */; };
 		61E87EB528D17CAF0005CAA6 /* NetworkErrorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E87EB428D17CAF0005CAA6 /* NetworkErrorType.swift */; };
@@ -351,6 +347,7 @@
 		618FDAC627E82A6F00C2823F /* AddressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressCell.swift; sourceTree = "<group>"; };
 		618FDAC827E836BA00C2823F /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		618FDACE27E9642400C2823F /* UIButton+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Ext.swift"; sourceTree = "<group>"; };
+		6190E964294EE7AC00A48512 /* KnockKnock-iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "KnockKnock-iOS.entitlements"; sourceTree = "<group>"; };
 		619DEE9B28868E7E00C80095 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		619DEE9D2887B41B00C80095 /* CommentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRepository.swift; sourceTree = "<group>"; };
 		61A028362908D10100943A40 /* districts.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = districts.json; sourceTree = "<group>"; };
@@ -430,16 +427,12 @@
 		61CD47FB293473F900FEE2F7 /* MyInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInteractor.swift; sourceTree = "<group>"; };
 		61CD47FD2934741D00FEE2F7 /* MyPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPresenter.swift; sourceTree = "<group>"; };
 		61CD47FF293478B900FEE2F7 /* MyWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWorker.swift; sourceTree = "<group>"; };
-
 		61CD48032935BC0D00FEE2F7 /* Notification+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Ext.swift"; sourceTree = "<group>"; };
-		61DEFE85294059BF00ABC13E /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
-
 		61CD480D293DC27900FEE2F7 /* FeedWrite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWrite.swift; sourceTree = "<group>"; };
 		61CD480F293DC5A000FEE2F7 /* FeedWriteRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWriteRepository.swift; sourceTree = "<group>"; };
 		61DEFE8329402DEE00ABC13E /* UIImage+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ext.swift"; sourceTree = "<group>"; };
-
+		61DEFE85294059BF00ABC13E /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		61DEFE8D2941AF9000ABC13E /* AlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertViewController.swift; sourceTree = "<group>"; };
-
 		61E3087B287334C1001394B6 /* ImageScaleType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageScaleType.swift; sourceTree = "<group>"; };
 		61E3088328768D71001394B6 /* UIStackView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Ext.swift"; sourceTree = "<group>"; };
 		61E87EB428D17CAF0005CAA6 /* NetworkErrorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkErrorType.swift; sourceTree = "<group>"; };
@@ -600,7 +593,6 @@
 				61C21CFB28C463CD009B5F4E /* Default */,
 				61FC60EC27B9244E00A51DBC /* MainTabBarController.swift */,
 				201077F027D3A94800280991 /* BaseComponent */,
-				61CD48092939BF7800FEE2F7 /* Alert */,
 				201077FA27D3D24600280991 /* Cells */,
 				61C21D1028C764F7009B5F4E /* Login */,
 				2090811327CA4F1B005A1573 /* Home */,
@@ -1088,7 +1080,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-
 		61DEFE8B2941AF6F00ABC13E /* Alert */ = {
 			isa = PBXGroup;
 			children = (
@@ -1098,7 +1089,6 @@
 			path = Alert;
 			sourceTree = "<group>";
 		};
-
 		61DEFE8C2941AF7A00ABC13E /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -1148,6 +1138,7 @@
 		61FC60E727B9244D00A51DBC /* KnockKnock-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				6190E964294EE7AC00A48512 /* KnockKnock-iOS.entitlements */,
 				61A02844290E358100943A40 /* Utils */,
 				61C21D0528C4C971009B5F4E /* GoogleService-Info.plist */,
 				61E3087A2873349B001394B6 /* Enum */,
@@ -1672,6 +1663,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "KnockKnock-iOS/KnockKnock-iOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7YWVGV44MR;
@@ -1704,6 +1696,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "KnockKnock-iOS/KnockKnock-iOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7YWVGV44MR;
