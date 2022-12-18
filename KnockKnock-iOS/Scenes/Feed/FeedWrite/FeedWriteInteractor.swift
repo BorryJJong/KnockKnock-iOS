@@ -19,7 +19,9 @@ protocol FeedWriteInteractorProtocol: AnyObject {
     source: FeedWriteViewProtocol,
     propertyType: PropertyType
   )
-  func checkEssentialField(photoAndContentFilled: Bool)
+
+  func setCurrentText(text: String) 
+  func checkEssentialField(imageCount: Int)
   func requestUploadFeed(source: FeedWriteViewProtocol, userId: Int, content: String, images: [UIImage])
 }
 
@@ -33,7 +35,8 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
 
   private var selectedPromotionList: [Promotion] = []
   private var selectedTagList: [ChallengeTitle] = []
-  private var selectedAddress: AddressDocuments?
+  private var selectedAddress: AddressResult.Documents?
+  private var postContent: String = ""
 
   // Routing
 
@@ -57,23 +60,20 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
     )
   }
 
-  func checkEssentialField(photoAndContentFilled: Bool) {
-    let isPromotionSelected = self.selectedPromotionList.filter {
-      $0.isSelected == true
-    }.count != 0
+  // Buisness Logic
 
-    let isTagSelected = self.selectedTagList.filter{
-      $0.isSelected == true
-    }.count != 0
+  func setCurrentText(text: String) {
+    self.postContent = text
+  }
 
-    if photoAndContentFilled &&
-        isTagSelected &&
-        isPromotionSelected {
-      self.presenter?.presentAlertView(isDone: true)
-
-    } else {
-      self.presenter?.presentAlertView(isDone: false)
-    }
+  func checkEssentialField(imageCount: Int) {
+    guard let isDone = self.worker?.checkEssentialField(
+      imageCount: imageCount,
+      tag: self.selectedTagList,
+      promotion: self.selectedPromotionList,
+      content: self.postContent
+    ) else { return }
+    self.presenter?.presentAlertView(isDone: isDone)
   }
 
   func requestUploadFeed(
@@ -117,9 +117,9 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
 // MARK: - Shop Search Delegate
 
 extension FeedWriteInteractor: ShopSearchDelegate {
-  func fetchShopData(shopData: AddressDocuments) {
+  func fetchShopData(shopData: AddressResult.Documents) {
     self.selectedAddress = shopData
-    self.presenter?.presentShopAddress(address: shopData.addressName)
+    self.presenter?.presentShopAddress(address: shopData)
   }
 }
 

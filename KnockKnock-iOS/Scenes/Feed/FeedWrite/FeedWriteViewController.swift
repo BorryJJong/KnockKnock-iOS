@@ -14,26 +14,20 @@ import KKDSKit
 protocol FeedWriteViewProtocol: AnyObject {
   var interactor: FeedWriteInteractorProtocol? { get set }
 
-  func fetchProperty(propertyType: PropertyType, content: String)
+  func fetchTag(tag: String)
+  func fetchPromotion(promotion: String)
+  func fetchAddress(address: AddressResult.Documents)
+
   func showAlertView(isDone: Bool)
 }
 
 final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
-  // MARK: - Enum
-
-  enum WriteStatus {
-    case allFilled
-    case hasBlank
-  }
-
   // MARK: - Properties
   
   var interactor: FeedWriteInteractorProtocol?
 
-  var pickedPhotos: [UIImage] = []
-  var contentTextViewFilled = false
-  var writeStatus: WriteStatus = .hasBlank
+  var selectedImages: [UIImage] = []
 
   // MARK: - UIs
 
@@ -102,18 +96,6 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
       action: #selector(self.doneButtonDidTap(_:)),
       for: .touchUpInside
     )
-
-    self.containerView.alertView.cancelButton.addTarget(
-      self,
-      action: #selector(self.alertCancelButtonDidTap(_:)),
-      for: .touchUpInside
-    )
-
-    self.containerView.alertView.confirmButton.addTarget(
-      self,
-      action: #selector(self.alertConfirmButtonDidTap(_:)),
-      for: .touchUpInside
-    )
   }
 
   // MARK: - Button Actions
@@ -145,38 +127,19 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   }
 
   @objc func photoDeleteButtonDidTap(_ sender: UIButton) {
-    self.pickedPhotos.remove(at: sender.tag)
-    self.containerView.bindPhotoCount(count: self.pickedPhotos.count)
+    self.selectedImages.remove(at: sender.tag)
+    self.containerView.bindPhotoCount(count: self.selectedImages.count)
     self.containerView.photoCollectionView.reloadData()
   }
 
   @objc func doneButtonDidTap(_ sender: UIButton) {
-    let photoAndContentFilled = self.pickedPhotos.count != 0 && self.contentTextViewFilled
-
-    self.interactor?.checkEssentialField(photoAndContentFilled: photoAndContentFilled)
-  }
-
-  @objc private func alertCancelButtonDidTap(_ sender: UIButton) {
-    self.containerView.alertView.isHidden = true
-  }
-
-  @objc private func alertConfirmButtonDidTap(_ sender: UIButton) {
-    self.containerView.alertView.isHidden = true
-
-    if self.writeStatus == .allFilled {
-      self.interactor?.requestUploadFeed(
-        source: self,
-        userId: 19, // api 수정 필요(헤더에 토큰 첨부하는 방식으로 변경 될듯?)
-        content: self.containerView.contentTextView.text,
-        images: self.pickedPhotos
-      )
-    }
+    self.interactor?.checkEssentialField(imageCount: self.selectedImages.count)
   }
 
   // MARK: - ImagePicker
 
   func callImagePicker() {
-    self.pickedPhotos = []
+    self.selectedImages = []
 
     let picker = ImagePickerManager.shared.setImagePicker()
 
@@ -184,13 +147,13 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
       for item in items {
         switch item {
         case let .photo(photo):
-          self.pickedPhotos.append(photo.image)
+          self.selectedImages.append(photo.image)
           self.containerView.photoCollectionView.reloadData()
         default:
           print("error")
         }
       }
-      self.containerView.bindPhotoCount(count: self.pickedPhotos.count)
+      self.containerView.bindPhotoCount(count: self.selectedImages.count)
       picker.dismiss(animated: true, completion: nil)
     }
     self.present(picker, animated: true, completion: nil)
@@ -200,19 +163,35 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 // MARK: - Feed Write View Protocol
 
 extension FeedWriteViewController: FeedWriteViewProtocol {
-  func fetchProperty(
-    propertyType: PropertyType,
-    content: String
-  ) {
-    self.containerView.bindPropertyValue(
-      propertyType: propertyType,
-      content: content
+
+  func fetchTag(tag: String) {
+    self.containerView.setTag(tag: tag)
+  }
+
+  func fetchPromotion(promotion: String) {
+    self.containerView.setPromotion(promotion: promotion)
+  }
+
+  func fetchAddress(address: AddressResult.Documents) {
+    self.containerView.setAddress(
+      name: address.placeName,
+      address: address.addressName
     )
   }
 
   func showAlertView(isDone: Bool) {
-    self.containerView.showAlertView(isDone: isDone)
-    self.writeStatus = isDone ? .allFilled : .hasBlank
+    if isDone {
+      self.showAlert(content: "게시글 등록을 완료 하시겠습니까?", confirmActionCompletion: {
+        self.interactor?.requestUploadFeed(
+          source: self,
+          userId: 19, // api 수정 필요
+          content: self.containerView.contentTextView.text,
+          images: self.selectedImages
+        )
+      })
+    } else {
+      self.showAlert(content: "사진, 태그, 프로모션, 내용은 필수 입력 항목입니다.")
+    }
   }
 }
 
@@ -230,9 +209,9 @@ extension FeedWriteViewController: UITextViewDelegate {
     if textView.text.isEmpty {
       textView.text = "내용을 입력해주세요. (글자수 1,000자 이내)"
       textView.textColor = .gray40
-      self.contentTextViewFilled = false
+      self.interactor?.setCurrentText(text: "")
     } else {
-      self.contentTextViewFilled = true
+      self.interactor?.setCurrentText(text: textView.text)
     }
   }
 }
@@ -244,7 +223,7 @@ extension FeedWriteViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    return self.pickedPhotos.count
+    return self.selectedImages.count
   }
 
   func collectionView(
@@ -252,7 +231,7 @@ extension FeedWriteViewController: UICollectionViewDataSource {
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
 
-    let photo = self.pickedPhotos[indexPath.row]
+    let photo = self.selectedImages[indexPath.row]
 
     let cell = collectionView.dequeueCell(
       withType: PhotoCell.self,

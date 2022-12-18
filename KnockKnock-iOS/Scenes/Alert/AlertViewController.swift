@@ -43,7 +43,11 @@ final class AlertViewController: BaseViewController<AlertView> {
 
   func addActionToConfirmButton(completion: (() -> Void)? = nil) {
     self.containerView.confirmButton.addAction(for: .touchUpInside) { _ in
-      completion?()
+      if let completion = completion {
+        completion()
+      } else {
+        self.dismiss(animated: false)
+      }
     }
   }
 }
