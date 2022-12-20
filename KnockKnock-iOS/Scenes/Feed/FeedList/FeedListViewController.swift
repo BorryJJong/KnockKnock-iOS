@@ -23,7 +23,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   var interactor: FeedListInteractorProtocol?
   
   var feedList: FeedList?
-  var feedListPost: [FeedListPost] = [] {
+  var feedListPost: [FeedList.Post] = [] {
     didSet {
       self.containerView.feedListCollectionView.reloadData()
     }

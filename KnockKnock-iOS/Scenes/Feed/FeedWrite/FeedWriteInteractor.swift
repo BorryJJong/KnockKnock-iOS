@@ -33,7 +33,7 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
 
   private var selectedPromotionList: [Promotion] = []
   private var selectedTagList: [ChallengeTitle] = []
-  private var selectedAddress: AddressDocuments?
+  private var selectedAddress: AddressResponse.Documents?
 
   // Routing
 
@@ -117,7 +117,7 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
 // MARK: - Shop Search Delegate
 
 extension FeedWriteInteractor: ShopSearchDelegate {
-  func fetchShopData(shopData: AddressDocuments) {
+  func fetchShopData(shopData: AddressResponse.Documents) {
     self.selectedAddress = shopData
     self.presenter?.presentShopAddress(address: shopData.addressName)
   }

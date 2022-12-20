@@ -14,7 +14,7 @@ protocol ShopSearchViewProtocol: AnyObject {
   var interactor: ShopSearchInteractorProtocol? { get set }
   var router: ShopSearchRouterProtocol? { get set }
 
-  func fetchShopAddress(address: AddressResult)
+  func fetchShopAddress(address: AddressResponse)
   func fetchCountyList(county: [String])
   func fetchCityList(cityList: [String])
 
@@ -32,14 +32,14 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   var interactor: ShopSearchInteractorProtocol?
   var router: ShopSearchRouterProtocol?
 
-  var addressList: [AddressDocuments] = [] {
+  var addressList: [AddressResponse.Documents] = [] {
     didSet {
       self.containerView.resultTableView.reloadData()
       self.fetchMore = true
     }
   }
 
-  var addressResult: AddressResult? {
+  var addressResult: AddressResponse? {
     didSet {
       let isNoResult = addressResult?.meta.totalCount == 0
 
@@ -168,7 +168,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
 // MARK: - ShopSearchView Protocol
 
 extension ShopSearchViewController: ShopSearchViewProtocol {
-  func fetchShopAddress(address: AddressResult) {
+  func fetchShopAddress(address: AddressResponse) {
     self.addressResult = address
   }
 
