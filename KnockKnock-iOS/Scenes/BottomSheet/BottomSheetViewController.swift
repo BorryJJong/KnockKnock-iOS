@@ -20,6 +20,7 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
   var districtsType: DistrictsType?
   
   var router: BottomSheetRouterProtocol?
+  var deleteAction: (() -> Void)?
   
   // MARK: - Life Cycle
   
@@ -43,19 +44,6 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
       $0.delegate = self
     }
     self.containerView.dimmedBackView.alpha = 0.0
-    
-    self.containerView.alertView.do {
-      $0.confirmButton.addTarget(
-        self,
-        action: #selector(self.alertConfirmButtonDidTap(_:)),
-        for: .touchUpInside
-      )
-      $0.cancelButton.addTarget(
-        self,
-        action: #selector(self.alertCancelButtonDidTap(_:)),
-        for: .touchUpInside
-      )
-    }
   }
   
   // MARK: - Bind
@@ -127,20 +115,6 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
 
     }
   }
-  
-  // MARK: - Alert View Button Actions
-  
-  @objc private func alertCancelButtonDidTap(_ sender: UIButton) {
-    self.containerView.do {
-      $0.bottomSheetView.isHidden = false
-      $0.setHiddenStatusAlertView(isHidden: true)
-      $0.tableView.reloadData()
-    }
-  }
-  
-  @objc private func alertConfirmButtonDidTap(_ sender: UIButton) {
-    self.containerView.hideBottomSheet(view: self)
-  }
 }
 
 // MARK: - Bottom Sheet View Protocol
@@ -199,8 +173,7 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
         self.showAlert(
           content: "게시글을 삭제하시겠습니까?",
           confirmActionCompletion: {
-            print("delete")
-            self.dismiss(animated: true)
+            self.dismiss(animated: true, completion: self.deleteAction)
           }
         )
         

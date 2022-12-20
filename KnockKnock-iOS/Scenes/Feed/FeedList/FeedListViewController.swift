@@ -108,7 +108,13 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   }
 
   @objc func configureButtonDidTap(_ sender: UIButton) {
-    self.interactor?.presentBottomSheetView(source: self, isMyPost: true)
+    self.interactor?.presentBottomSheetView(
+      source: self,
+      isMyPost: true,
+      deleteAction: {
+        self.interactor?.requestDelete(feedId: self.feedId)
+      }
+    )
   }
 
   @objc func commentButtonDidTap(_ sender: UIButton) {

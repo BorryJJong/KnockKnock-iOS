@@ -14,7 +14,7 @@ protocol FeedListRouterProtocol {
   func navigateToFeedDetail(source: FeedListViewProtocol, feedId: Int)
   func navigateToCommentView(feedId: Int, source: FeedListViewProtocol)
   func navigateToLoginView(source: FeedListViewProtocol)
-  func presentBottomSheetView(source: FeedListViewProtocol, isMyPost: Bool)
+  func presentBottomSheetView(source: FeedListViewProtocol, isMyPost: Bool, deleteAction: (() -> Void)?)
 }
 
 final class FeedListRouter: FeedListRouterProtocol {
@@ -73,7 +73,7 @@ final class FeedListRouter: FeedListRouterProtocol {
     }
   }
 
-  func presentBottomSheetView(source: FeedListViewProtocol, isMyPost: Bool) {
+  func presentBottomSheetView(source: FeedListViewProtocol, isMyPost: Bool, deleteAction: (() -> Void)?) {
     let bottomSheetViewController = BottomSheetViewController().then {
       if isMyPost {
         $0.setBottomSheetContents(
@@ -95,6 +95,7 @@ final class FeedListRouter: FeedListRouterProtocol {
         )
       }
       $0.modalPresentationStyle = .overFullScreen
+      $0.deleteAction = deleteAction
     }
     if let sourceView = source as? UIViewController {
       sourceView.present(
