@@ -84,3 +84,13 @@ struct FeedDetail: Decodable {
     let title: String
   }
 }
+
+struct DefaultResponse: Decodable {
+  let code: Int
+  let message: String
+  let data: Data
+
+  struct Data: Decodable {
+    let status: Bool
+  }
+}
