@@ -11,6 +11,7 @@ import KakaoSDKUser
 
 protocol SocialLoginManagerProtocol {
   func requestToken(
+    accessToken: String?,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
   )
   func signUp(
@@ -60,37 +61,33 @@ final class AppleAccountManager: SocialLoginManagerProtocol {
   // 로그인
 
   func requestToken(
+    accessToken: String? = nil,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
   ) {
-    self.loginWithApple(completionHandler: { accessToken in
+    guard let accessToken = accessToken else { return }
+    
+    let loginInfo = LoginInfo(
+      socialUuid: accessToken,
+      socialType: SocialType.apple.rawValue
+    )
 
-      let loginInfo = LoginInfo(
-        socialUuid: accessToken,
-        socialType: SocialType.apple.rawValue
+    let parameters = [
+      "socialUuid": accessToken,
+      "socialType": SocialType.apple.rawValue
+    ]
+
+    KKNetworkManager
+      .shared
+      .request(
+        object: LoginResponse.self,
+        router: KKRouter.postSocialLogin(loginInfo: parameters),
+        success: { response in
+          completionHandler(response, loginInfo)
+        },
+        failure: { error in
+          print(error)
+        }
       )
-
-      let parameters = [
-        "socialUuid": accessToken,
-        "socialType": SocialType.apple.rawValue
-      ]
-
-      KKNetworkManager
-        .shared
-        .request(
-          object: LoginResponse.self,
-          router: KKRouter.postSocialLogin(loginInfo: parameters),
-          success: { response in
-            completionHandler(response, loginInfo)
-          },
-          failure: { error in
-            print(error)
-          }
-        )
-    })
-  }
-
-  func loginWithApple(completionHandler: @escaping (String) -> Void) {
-    // login with apple
   }
 
 }
@@ -129,6 +126,7 @@ final class KakaoAccountManager: SocialLoginManagerProtocol {
   // 로그인
 
   func requestToken(
+    accessToken: String? = nil,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
   ) {
     self.loginWithKakao(completionHandler: { accessToken in

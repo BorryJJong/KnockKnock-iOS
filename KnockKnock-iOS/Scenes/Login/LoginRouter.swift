@@ -24,6 +24,7 @@ final class LoginRouter: LoginRouterProtocol {
     let presenter = LoginPresenter()
     let worker = LoginWorker(
       kakaoAccountManager: KakaoAccountManager(),
+      appleAccountManager: AppleAccountManager(),
       localDataManager: LocalDataManager()
     )
     let router = LoginRouter()
