@@ -56,7 +56,12 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   }
 
   func requestDelete(feedId: Int) {
-    print(feedId)
+    self.worker?.requestDeleteFeed(
+      feedId: feedId,
+      completionHandler: {
+        self.presenter?.presentDeleteFeed(feedId: feedId)
+      }
+    )
   }
 
   func requestLike(source: FeedListViewProtocol, feedId: Int) {
@@ -116,7 +121,15 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     self.router?.navigateToFeedMain(source: source)
   }
 
-  func presentBottomSheetView(source: FeedListViewProtocol, isMyPost: Bool, deleteAction: (() -> Void)?) {
-    self.router?.presentBottomSheetView(source: source, isMyPost: isMyPost, deleteAction: deleteAction)
+  func presentBottomSheetView(
+    source: FeedListViewProtocol,
+    isMyPost: Bool,
+    deleteAction: (() -> Void)?
+  ) {
+    self.router?.presentBottomSheetView(
+      source: source,
+      isMyPost: isMyPost,
+      deleteAction: deleteAction
+    )
   }
 }

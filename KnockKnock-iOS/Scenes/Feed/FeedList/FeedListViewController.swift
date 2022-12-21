@@ -14,6 +14,7 @@ protocol FeedListViewProtocol: AnyObject {
   var interactor: FeedListInteractorProtocol? { get set }
   
   func fetchFeedList(feedList: FeedList)
+  func deleteFeedPost(feedId: Int)
 }
 
 final class FeedListViewController: BaseViewController<FeedListView> {
@@ -274,6 +275,14 @@ extension FeedListViewController: FeedListViewProtocol {
     self.feedList = feedList
     feedList.feeds.forEach {
       self.feedListPost.append($0)
+    }
+  }
+  
+  func deleteFeedPost(feedId: Int) {
+    if let feedIndex = self.feedListPost.firstIndex(where: {
+      $0.id == feedId
+    }) {
+      self.feedListPost.remove(at: feedIndex)
     }
   }
 }
