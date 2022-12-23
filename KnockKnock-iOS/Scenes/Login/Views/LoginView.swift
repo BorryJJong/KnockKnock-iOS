@@ -49,11 +49,6 @@ final class LoginView: UIView {
 
   let appleLoginButton = ASAuthorizationAppleIDButton()
 
-//  let appleLoginButton = UIButton().then {
-//    $0.setImage(KKDS.Image.ic_apple_login, for: .normal)
-//    $0.contentMode = .scaleAspectFit
-//  }
-  
   // MARK: - Initialize
 
   override init(frame: CGRect) {

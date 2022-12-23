@@ -7,10 +7,8 @@
 
 import Foundation
 
-import KakaoSDKUser
-
-protocol SocialLoginManagerProtocol {
-  func requestToken(
+protocol AccountManagerProtocol {
+  func logIn(
     accessToken: String?,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
   )
@@ -20,15 +18,11 @@ protocol SocialLoginManagerProtocol {
     image: String,
     completionHandler: @escaping (SignUpResponse) -> Void
   )
-
-}
-
-protocol AccountManagerProtocol {
   func logOut(completionHanlder: @escaping (Bool) -> Void)
   func signOut(completionHanlder: @escaping (Bool) -> Void)
 }
 
-final class AppleAccountManager: SocialLoginManagerProtocol {
+final class AppleAccountManager: AppleLoginManagerProtocol {
 
   // 회원가입
 
@@ -60,7 +54,7 @@ final class AppleAccountManager: SocialLoginManagerProtocol {
 
   // 로그인
 
-  func requestToken(
+  func logIn(
     accessToken: String? = nil,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
   ) {
@@ -89,10 +83,9 @@ final class AppleAccountManager: SocialLoginManagerProtocol {
         }
       )
   }
-
 }
 
-final class KakaoAccountManager: SocialLoginManagerProtocol {
+final class AccountManager: AccountManagerProtocol {
 
   // 회원가입
 
@@ -156,32 +149,6 @@ final class KakaoAccountManager: SocialLoginManagerProtocol {
     })
   }
 
-  func loginWithKakao(completionHandler: @escaping (String) -> Void) {
-    if UserApi.isKakaoTalkLoginAvailable() {
-      UserApi.shared.loginWithKakaoTalk(completion: { (oauthToken, error) in
-        if let error = error {
-          print(error)
-        } else {
-          if let oauthToken = oauthToken {
-            completionHandler(oauthToken.accessToken)
-          }
-        }
-      })
-    } else {
-      UserApi.shared.loginWithKakaoAccount(completion: { (oauthToken, error) in
-        if let error = error {
-          print(error)
-        } else {
-          if let oauthToken = oauthToken {
-            completionHandler(oauthToken.accessToken)
-          }
-        }
-      })
-    }
-  }
-}
-
-final class AccountManager: AccountManagerProtocol {
 
   // 로그아웃
 
