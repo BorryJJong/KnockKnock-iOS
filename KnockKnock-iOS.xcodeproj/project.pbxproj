@@ -19,6 +19,9 @@
 		204320C928367AD300E6FD06 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 204320C828367AD300E6FD06 /* .swiftlint.yml */; };
 		2090811827CA4F56005A1573 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090811727CA4F56005A1573 /* HomeViewController.swift */; };
 		2090811A27CA4F61005A1573 /* ChallengeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090811927CA4F61005A1573 /* ChallengeViewController.swift */; };
+		209B80E12955E897003E591C /* AppleAccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209B80E02955E897003E591C /* AppleAccountManager.swift */; };
+		209B80E32955E8D0003E591C /* KakaoAccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209B80E22955E8D0003E591C /* KakaoAccountManager.swift */; };
+		209B80E52955EDC7003E591C /* SNSLoginAccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209B80E42955EDC7003E591C /* SNSLoginAccountManager.swift */; };
 		20A72D1E280BC4EE006689FC /* BaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A72D1D280BC4EE006689FC /* BaseCollectionViewCell.swift */; };
 		20AF1007285F2C74005C73EC /* KKDSKit in Frameworks */ = {isa = PBXBuildFile; productRef = 20AF1006285F2C74005C73EC /* KKDSKit */; };
 		20D28F8027CFC5E800A809DB /* ChallengeInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D28F7F27CFC5E800A809DB /* ChallengeInteractor.swift */; };
@@ -244,6 +247,9 @@
 		204320C828367AD300E6FD06 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		2090811727CA4F56005A1573 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		2090811927CA4F61005A1573 /* ChallengeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeViewController.swift; sourceTree = "<group>"; };
+		209B80E02955E897003E591C /* AppleAccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleAccountManager.swift; sourceTree = "<group>"; };
+		209B80E22955E8D0003E591C /* KakaoAccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoAccountManager.swift; sourceTree = "<group>"; };
+		209B80E42955EDC7003E591C /* SNSLoginAccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNSLoginAccountManager.swift; sourceTree = "<group>"; };
 		20A72D1D280BC4EE006689FC /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
 		20AF1005285F2BFF005C73EC /* KKDSKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = KKDSKit; sourceTree = "<group>"; };
 		20D28F7F27CFC5E800A809DB /* ChallengeInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeInteractor.swift; sourceTree = "<group>"; };
@@ -495,6 +501,7 @@
 		201077ED27D39AB400280991 /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				209B80DF2955E883003E591C /* SNS */,
 				61A028362908D10100943A40 /* districts.json */,
 				20EAE2962814054F009242A1 /* ChellengeRepository.swift */,
 				6143296928644458008BDCC9 /* FeedRepository.swift */,
@@ -657,6 +664,16 @@
 				61A02868291244A400943A40 /* Notice */,
 			);
 			path = My;
+			sourceTree = "<group>";
+		};
+		209B80DF2955E883003E591C /* SNS */ = {
+			isa = PBXGroup;
+			children = (
+				209B80E02955E897003E591C /* AppleAccountManager.swift */,
+				209B80E22955E8D0003E591C /* KakaoAccountManager.swift */,
+				209B80E42955EDC7003E591C /* SNSLoginAccountManager.swift */,
+			);
+			path = SNS;
 			sourceTree = "<group>";
 		};
 		321DA5FE23695503A22B86C2 /* Pods */ = {
@@ -1395,6 +1412,7 @@
 				61A8DC4C287E90E9000512EC /* CommentInteractor.swift in Sources */,
 				614329622862F6E3008BDCC9 /* FeedMainWorker.swift in Sources */,
 				6105079A28B4EEDF00C1B5CF /* HomePresenter.swift in Sources */,
+				209B80E12955E897003E591C /* AppleAccountManager.swift in Sources */,
 				61A0287F2914DDF500943A40 /* PropertySelectPresenter.swift in Sources */,
 				613856D12898CB1300BE347E /* FeedDetailNavigtaionBarView.swift in Sources */,
 				61AB2E4E28A36E3E00A1AE30 /* LikeDetailViewController.swift in Sources */,
@@ -1428,6 +1446,7 @@
 				20D28F8427CFC60900A809DB /* ChallengeRouter.swift in Sources */,
 				61A8DC4A287E90BC000512EC /* CommentViewController.swift in Sources */,
 				6105079828B4EEA800C1B5CF /* HomeInteractor.swift in Sources */,
+				209B80E32955E8D0003E591C /* KakaoAccountManager.swift in Sources */,
 				61A0285D2910E66E00943A40 /* SocialType.swift in Sources */,
 				616EB0882890E42F001BD18C /* PostCell.swift in Sources */,
 				61FC60E927B9244D00A51DBC /* AppDelegate.swift in Sources */,
@@ -1435,6 +1454,7 @@
 				611BD4BC27E70393007D5C79 /* PropertySelectViewController.swift in Sources */,
 				617F9D65282A5AED00C2BC9A /* ChallengeDetailView.swift in Sources */,
 				61A02840290A4FD000943A40 /* DistrictsType.swift in Sources */,
+				209B80E52955EDC7003E591C /* SNSLoginAccountManager.swift in Sources */,
 				61C21D1528C7653B009B5F4E /* LoginView.swift in Sources */,
 				619DEE9C28868E7E00C80095 /* Comment.swift in Sources */,
 				61A028752913A33200943A40 /* ProfileSettingWorker.swift in Sources */,

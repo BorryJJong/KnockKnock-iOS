@@ -64,14 +64,11 @@ final class LoginViewController: BaseViewController<LoginView> {
   }
 
   @objc func appleLoginButtonDidTap(_ sender: UIButton) {
-      let appleIDProvider = ASAuthorizationAppleIDProvider()
-      let request = appleIDProvider.createRequest()
-      request.requestedScopes = [.fullName, .email]
-
-      let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-      authorizationController.delegate = self
-      authorizationController.presentationContextProvider = self as? ASAuthorizationControllerPresentationContextProviding
-      authorizationController.performRequests()
+    self.interactor?.fetchLoginResult(
+      accessToken: nil,
+      source: self,
+      socialType: SocialType.apple
+    )
   }
 
   @objc func tapCloseBarButtonDidTap(_ sender: UIButton) {

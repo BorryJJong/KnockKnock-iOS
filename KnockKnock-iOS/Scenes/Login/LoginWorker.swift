@@ -16,18 +16,35 @@ protocol LoginWorkerProtocol {
   func saveToken(authInfo: AuthInfo)
 }
 
+protocol AppleLoginDelegate: AnyObject {
+  func success(token: String)
+}
+
+extension LoginWorker: AppleLoginDelegate {
+  
+  func success(token: String) {
+    self.snsLoginAccountManager.requestToken(accessToken: token) { response, loginInfo in
+      print("성공여부 : \(response.isExistUser)")
+      }
+  }
+}
+
 final class LoginWorker: LoginWorkerProtocol {
+  
   private let kakaoAccountManager: SocialLoginManagerProtocol
-  private let appleAccountManager: SocialLoginManagerProtocol
+  private let appleAccountManager: AppleLoginRepository
+  private let snsLoginAccountManager: SNSLoginAccountManager
   private let localDataManager: LocalDataManagerProtocol
 
   init(
     kakaoAccountManager: SocialLoginManagerProtocol,
-    appleAccountManager: SocialLoginManagerProtocol,
+    appleAccountManager: AppleLoginRepository,
+    snsLoginAccountManager: SNSLoginAccountManager,
     localDataManager: LocalDataManagerProtocol
   ) {
     self.kakaoAccountManager = kakaoAccountManager
     self.appleAccountManager = appleAccountManager
+    self.snsLoginAccountManager = snsLoginAccountManager
     self.localDataManager = localDataManager
   }
 
@@ -38,15 +55,14 @@ final class LoginWorker: LoginWorkerProtocol {
   ) {
     switch socialType {
     case .kakao:
-      self.kakaoAccountManager.requestToken(accessToken: nil,
+      self.kakaoAccountManager.requestToken(
+        accessToken: nil,
         completionHandler: { loginResponse, loginInfo in
           completionHandler(loginResponse, loginInfo)
         }
       )
     case .apple:
-      self.appleAccountManager.requestToken(accessToken: accessToken, completionHandler: { loginResponse, loginInfo in
-        completionHandler(loginResponse, loginInfo)
-      })
+      self.appleAccountManager.login(delegate: self)
     }
   }
 
