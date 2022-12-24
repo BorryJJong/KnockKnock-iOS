@@ -8,15 +8,18 @@
 import UIKit
 
 protocol LoginRouterProtocol {
+  var view: LoginViewProtocol? { get set }
   static func createLoginView() -> UIViewController
-  func navigateToProfileSettingView(source: LoginViewProtocol, loginInfo: LoginInfo)
+  func navigateToProfileSettingView(loginInfo: LoginInfo)
   func navigateToHome()
-  func popLoginView(source: LoginViewProtocol)
+  func popLoginView()
 
-  func navigateToSignUp(source: LoginViewProtocol, loginInfo: LoginInfo)
+  func navigateToSignUp(loginInfo: LoginInfo)
 }
 
 final class LoginRouter: LoginRouterProtocol {
+
+  weak var view: LoginViewProtocol?
 
   static func createLoginView() -> UIViewController {
     let view = LoginViewController()
@@ -35,19 +38,19 @@ final class LoginRouter: LoginRouterProtocol {
     interactor.presenter = presenter
     interactor.worker = worker
     presenter.view = view
+    router.view = view
 
     return view
   }
 
   func navigateToProfileSettingView(
-    source: LoginViewProtocol,
     loginInfo: LoginInfo
   ) {
     let profileSettingViewController = ProfileSettingRouter.createProfileSettingView(
       loginInfo: loginInfo
     )
 
-    if let sourceView = source as? UIViewController {
+    if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.pushViewController(
         profileSettingViewController,
         animated: true
@@ -69,19 +72,19 @@ final class LoginRouter: LoginRouterProtocol {
   }
 
   // 로그인 뷰 탈출
-  func popLoginView(source: LoginViewProtocol) {
-    if let sourceView = source as? UIViewController {
+  func popLoginView() {
+    if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.popViewController(animated: true)
     }
     NotificationCenter.default.post(name: .loginCompleted, object: nil)
   }
 
-  func navigateToSignUp(source: LoginViewProtocol, loginInfo: LoginInfo) {
+  func navigateToSignUp(loginInfo: LoginInfo) {
     let profileSettingViewController = ProfileSettingRouter.createProfileSettingView(
       loginInfo: loginInfo
     )
 
-    if let sourceView = source as? UIViewController {
+    if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.pushViewController(
         profileSettingViewController,
         animated: true

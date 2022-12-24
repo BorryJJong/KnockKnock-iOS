@@ -22,23 +22,26 @@ protocol AppleLoginDelegate: AnyObject {
 extension LoginWorker: AppleLoginDelegate {
   
   func success(token: String) {
-    self.snsLoginAccountManager.requestToken(accessToken: token) { response, loginInfo in
+    self.snsLoginAccountManager.requestToken(
+      accessToken: token,
+      socialType: SocialType.apple
+    ) { response, loginInfo in
       print("성공여부 : \(response.isExistUser)")
-      }
+    }
   }
 }
 
 final class LoginWorker: LoginWorkerProtocol {
   
-  private let kakaoAccountManager: SocialLoginManagerProtocol
-  private let appleAccountManager: AppleLoginRepository
-  private let snsLoginAccountManager: SNSLoginAccountManager
+  private let kakaoAccountManager: KakaoAccountManagerProtocol
+  private let appleAccountManager: AppleLoginManagerProtocol
+  private let snsLoginAccountManager: SNSLoginAccountManagerProtocol
   private let localDataManager: LocalDataManagerProtocol
 
   init(
-    kakaoAccountManager: SocialLoginManagerProtocol,
-    appleAccountManager: AppleLoginRepository,
-    snsLoginAccountManager: SNSLoginAccountManager,
+    kakaoAccountManager: KakaoAccountManagerProtocol,
+    appleAccountManager: AppleLoginManagerProtocol,
+    snsLoginAccountManager: SNSLoginAccountManagerProtocol,
     localDataManager: LocalDataManagerProtocol
   ) {
     self.kakaoAccountManager = kakaoAccountManager
@@ -53,12 +56,17 @@ final class LoginWorker: LoginWorkerProtocol {
   ) {
     switch socialType {
     case .kakao:
-      self.kakaoAccountManager.requestToken(
-        accessToken: nil,
-        completionHandler: { loginResponse, loginInfo in
-          completionHandler(loginResponse, loginInfo)
-        }
-      )
+      self.kakaoAccountManager.loginWithKakao(completionHandler: { accessToken in
+
+        self.snsLoginAccountManager.requestToken(
+          accessToken: accessToken,
+          socialType: socialType,
+          completionHandler: { loginResponse, loginInfo in
+            completionHandler(loginResponse, loginInfo)
+          }
+        )
+      })
+
     case .apple:
       self.appleAccountManager.login(delegate: self)
     }

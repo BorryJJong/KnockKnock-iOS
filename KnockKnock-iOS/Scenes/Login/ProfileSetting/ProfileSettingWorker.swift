@@ -17,14 +17,14 @@ protocol ProfileSettingWorkerProtocol {
 }
 
 final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
-  private let kakaoAccountManager: SocialLoginManagerProtocol
+  private let snsLoginAccountManager: SNSLoginAccountManagerProtocol
   private let localDataManager: LocalDataManagerProtocol
 
   init(
-    kakaoAccountManager: SocialLoginManagerProtocol,
+    snsLoginAccountManager: SNSLoginAccountManagerProtocol,
     localDataManager: LocalDataManagerProtocol
   ) {
-    self.kakaoAccountManager = kakaoAccountManager
+    self.snsLoginAccountManager = snsLoginAccountManager
     self.localDataManager = localDataManager
   }
 
@@ -34,7 +34,7 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
     image: String,
     completionHandler: @escaping (SignUpResponse) -> Void
   ) {
-    self.kakaoAccountManager.signUp(
+    self.snsLoginAccountManager.signUp(
       loginInfo: loginInfo,
       nickname: nickname,
       image: image,

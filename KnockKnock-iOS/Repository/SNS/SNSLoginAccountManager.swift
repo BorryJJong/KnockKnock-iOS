@@ -7,7 +7,21 @@
 
 import Foundation
 
-final class SNSLoginAccountManager: SocialLoginManagerProtocol {
+protocol SNSLoginAccountManagerProtocol {
+  func requestToken(
+    accessToken: String?,
+    socialType: SocialType,
+    completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
+  )
+  func signUp(
+    loginInfo: LoginInfo,
+    nickname: String,
+    image: String,
+    completionHandler: @escaping (SignUpResponse) -> Void
+  )
+}
+
+final class SNSLoginAccountManager: SNSLoginAccountManagerProtocol {
   
   /// 회원가입
   func signUp(
@@ -40,31 +54,33 @@ final class SNSLoginAccountManager: SocialLoginManagerProtocol {
   
   func requestToken(
     accessToken: String? = nil,
+    socialType: SocialType,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
   ) {
-    guard let accessToken = accessToken else { return }
-    
-    let loginInfo = LoginInfo(
-      socialUuid: accessToken,
-      socialType: SocialType.apple.rawValue
-    )
-    
-    let parameters = [
-      "socialUuid": accessToken,
-      "socialType": SocialType.apple.rawValue
-    ]
-    
-    KKNetworkManager
-      .shared
-      .request(
-        object: LoginResponse.self,
-        router: KKRouter.postSocialLogin(loginInfo: parameters),
-        success: { response in
-          completionHandler(response, loginInfo)
-        },
-        failure: { error in
-          print(error)
-        }
+
+      guard let accessToken = accessToken else { return }
+
+      let loginInfo = LoginInfo(
+        socialUuid: accessToken,
+        socialType: socialType.rawValue
       )
+
+      let parameters = [
+        "socialUuid": accessToken,
+        "socialType": socialType.rawValue
+      ]
+
+      KKNetworkManager
+        .shared
+        .request(
+          object: LoginResponse.self,
+          router: KKRouter.postSocialLogin(loginInfo: parameters),
+          success: { response in
+            completionHandler(response, loginInfo)
+          },
+          failure: { error in
+            print(error)
+          }
+        )
   }
 }

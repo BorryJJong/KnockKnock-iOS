@@ -12,9 +12,9 @@ protocol LoginInteractorProtocol {
   var worker: LoginWorkerProtocol? { get set }
   var router: LoginRouterProtocol? { get set }
 
-  func fetchLoginResult(source: LoginViewProtocol, socialType: SocialType)
+  func fetchLoginResult(socialType: SocialType)
   func saveTokens(loginResponse: LoginResponse)
-  func popLoginView(source: LoginViewProtocol)
+  func popLoginView()
 }
 
 final class LoginInteractor: LoginInteractorProtocol {
@@ -23,10 +23,8 @@ final class LoginInteractor: LoginInteractorProtocol {
   var worker: LoginWorkerProtocol?
   var router: LoginRouterProtocol?
 
-  func fetchLoginResult(
-    source: LoginViewProtocol,
-    socialType: SocialType
-  ) {
+  func fetchLoginResult(socialType: SocialType) {
+
     self.worker?.fetchLoginResult(
       socialType: socialType,
       completionHandler: { loginResponse, loginInfo in
@@ -35,13 +33,10 @@ final class LoginInteractor: LoginInteractorProtocol {
         // 회원 o -> 토큰 저장 후 홈 화면 진입 / 회원 x -> 프로필 설정화면(회원가입)
         if loginResponse.isExistUser {
           self.saveTokens(loginResponse: loginResponse)
-          self.popLoginView(source: source)
+          self.popLoginView()
           NotificationCenter.default.post(name: .loginCompleted, object: nil)
         } else {
-          self.navigateToProfileSettingView(
-            source: source,
-            loginInfo: loginInfo
-          )
+          self.navigateToProfileSettingView(loginInfo: loginInfo)
         }
       }
     )
@@ -57,11 +52,9 @@ final class LoginInteractor: LoginInteractorProtocol {
   // MARK: - Routing logic
   
   func navigateToProfileSettingView(
-    source: LoginViewProtocol,
     loginInfo: LoginInfo
   ) {
     self.router?.navigateToProfileSettingView(
-      source: source,
       loginInfo: loginInfo
     )
   }
@@ -70,7 +63,7 @@ final class LoginInteractor: LoginInteractorProtocol {
     self.router?.navigateToHome()
   }
 
-  func popLoginView(source: LoginViewProtocol) {
-    self.router?.popLoginView(source: source)
+  func popLoginView() {
+    self.router?.popLoginView()
   }
 }

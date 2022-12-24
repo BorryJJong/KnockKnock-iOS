@@ -7,20 +7,6 @@
 
 import Foundation
 
-protocol SocialLoginManagerProtocol {
-  func requestToken(
-    accessToken: String?,
-    completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
-  )
-  func signUp(
-    loginInfo: LoginInfo,
-    nickname: String,
-    image: String,
-    completionHandler: @escaping (SignUpResponse) -> Void
-  )
-
-}
-
 protocol AccountManagerProtocol {
   func logOut(completionHanlder: @escaping (Bool) -> Void)
   func signOut(completionHanlder: @escaping (Bool) -> Void)

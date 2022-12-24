@@ -8,11 +8,11 @@
 import Foundation
 import AuthenticationServices
 
-protocol AppleLoginRepository {
+protocol AppleLoginManagerProtocol {
   func login(delegate: AppleLoginDelegate)
 }
  
-final class AppleAccountManager: NSObject, AppleLoginRepository {
+final class AppleAccountManager: NSObject, AppleLoginManagerProtocol {
 
   // MARK: - Properties
   
