@@ -12,7 +12,7 @@ protocol LoginInteractorProtocol {
   var worker: LoginWorkerProtocol? { get set }
   var router: LoginRouterProtocol? { get set }
 
-  func fetchLoginResult(accessToken: String?, source: LoginViewProtocol, socialType: SocialType)
+  func fetchLoginResult(source: LoginViewProtocol, socialType: SocialType)
   func saveTokens(loginResponse: LoginResponse)
   func popLoginView(source: LoginViewProtocol)
 }
@@ -24,12 +24,10 @@ final class LoginInteractor: LoginInteractorProtocol {
   var router: LoginRouterProtocol?
 
   func fetchLoginResult(
-    accessToken: String? = nil,
     source: LoginViewProtocol,
     socialType: SocialType
   ) {
     self.worker?.fetchLoginResult(
-      accessToken: accessToken,
       socialType: socialType,
       completionHandler: { loginResponse, loginInfo in
 

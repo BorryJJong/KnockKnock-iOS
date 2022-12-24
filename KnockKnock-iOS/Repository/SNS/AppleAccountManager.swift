@@ -28,6 +28,7 @@ final class AppleAccountManager: NSObject, AppleLoginRepository {
   
   func login(delegate: AppleLoginDelegate) {
     self.delegate = delegate
+
     let appleIDProvider = ASAuthorizationAppleIDProvider()
     let request = appleIDProvider.createRequest()
     request.requestedScopes = [.fullName, .email]
@@ -49,9 +50,7 @@ extension AppleAccountManager: ASAuthorizationControllerDelegate {
   ) {
     
     if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-      if let authorizationCode = appleIDCredential.authorizationCode,
-         let identityToken = appleIDCredential.identityToken,
-         let authString = String(data: authorizationCode, encoding: .utf8),
+      if let identityToken = appleIDCredential.identityToken,
          let tokenString = String(data: identityToken, encoding: .utf8) {
         
         self.token = tokenString

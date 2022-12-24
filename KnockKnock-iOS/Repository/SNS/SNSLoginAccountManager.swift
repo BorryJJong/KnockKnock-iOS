@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 final class SNSLoginAccountManager: SocialLoginManagerProtocol {
   
   /// 회원가입

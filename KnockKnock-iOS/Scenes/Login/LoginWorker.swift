@@ -9,7 +9,6 @@ import UIKit
 
 protocol LoginWorkerProtocol {
   func fetchLoginResult(
-    accessToken: String?,
     socialType: SocialType,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
   )
@@ -49,7 +48,6 @@ final class LoginWorker: LoginWorkerProtocol {
   }
 
   func fetchLoginResult(
-    accessToken: String? = nil,
     socialType: SocialType,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
   ) {
