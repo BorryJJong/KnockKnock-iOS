@@ -8,7 +8,7 @@
 import Foundation
 
 protocol LocalDataManagerProtocol {
-  func saveToken(accessToken: String, refreshToken: String, nickname: String?)
+  func saveToken(accessToken: String, refreshToken: String, nickname: String?, profileImage: String?)
   func deleteToken()
   func deleteNickname()
   func checkTokenIsExisted() -> Bool
@@ -17,17 +17,21 @@ protocol LocalDataManagerProtocol {
 
 final class LocalDataManager: LocalDataManagerProtocol {
 
-  /// 회원가입/로그인 시 토큰 저장
+  /// 회원가입/로그인 시 토큰, 닉네임, 프로필 사진 저장
   func saveToken(
     accessToken: String,
     refreshToken: String,
-    nickname: String?
+    nickname: String?,
+    profileImage: String?
   ) {
     UserDefaults.standard.set(accessToken, forKey: "accessToken")
     UserDefaults.standard.set(refreshToken, forKey: "refreshToken")
 
     if let nickname = nickname {
       UserDefaults.standard.set(nickname, forKey: "nickname")
+    }
+    if let profileImage = profileImage {
+      UserDefaults.standard.set(profileImage, forKey: "profileImage")
     }
   }
 

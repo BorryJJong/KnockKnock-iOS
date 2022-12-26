@@ -43,12 +43,8 @@ final class LoginRouter: LoginRouterProtocol {
     return view
   }
 
-  func navigateToProfileSettingView(
-    loginInfo: LoginInfo
-  ) {
-    let profileSettingViewController = ProfileSettingRouter.createProfileSettingView(
-      loginInfo: loginInfo
-    )
+  func navigateToProfileSettingView(loginInfo: LoginInfo) {
+    let profileSettingViewController = ProfileSettingRouter.createProfileSettingView(loginInfo: loginInfo)
 
     if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.pushViewController(
@@ -58,7 +54,7 @@ final class LoginRouter: LoginRouterProtocol {
     }
   }
 
-  // login 성공 시 홈 화면으로 rootView 변경
+  /// login 성공 시 홈 화면으로 rootView 변경
   func navigateToHome() {
     let main = MainTabBarController()
 
@@ -71,7 +67,7 @@ final class LoginRouter: LoginRouterProtocol {
     )
   }
 
-  // 로그인 뷰 탈출
+  /// 로그인 뷰 탈출
   func popLoginView() {
     if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.popViewController(animated: true)

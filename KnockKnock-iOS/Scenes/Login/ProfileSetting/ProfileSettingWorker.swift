@@ -34,18 +34,21 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
     image: String,
     completionHandler: @escaping (SignUpResponse) -> Void
   ) {
+    
     self.accountManager.signUp(
       loginInfo: loginInfo,
       nickname: nickname,
       image: image,
       completionHandler: { signUpResponse in
-        if let authInfo = signUpResponse.authInfo {
-          self.localDataManager.saveToken(
-            accessToken: authInfo.accessToken,
-            refreshToken: authInfo.refreshToken,
-            nickname: nickname
-          )
-        }
-    })
+        guard let authInfo = signUpResponse.authInfo else { return }
+
+        self.localDataManager.saveToken(
+          accessToken: authInfo.accessToken,
+          refreshToken: authInfo.refreshToken,
+          nickname: nickname,
+          profileImage: image
+        )
+      }
+    )
   }
 }

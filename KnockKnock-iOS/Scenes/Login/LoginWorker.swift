@@ -13,27 +13,15 @@ protocol LoginWorkerProtocol {
     socialType: SocialType,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
   )
-  func saveToken(authInfo: AuthInfo)
+  
+  func saveUserInfo(
+    userInfo: LoginResponse.UserInfo,
+    authInfo: AuthInfo
+  )
 }
 
 protocol AppleLoginDelegate: AnyObject {
   func success(token: String)
-}
-
-extension LoginWorker: AppleLoginDelegate {
-  
-  func success(token: String) {
-    self.accountManager.logIn(
-      accessToken: token,
-      socialType: SocialType.apple
-    ) { response, loginInfo in
-
-      self.appleLoginResultDelegate?.getLoginResult(
-        loginResponse: response,
-        loginInfo: loginInfo
-      )
-    }
-  }
 }
 
 final class LoginWorker: LoginWorkerProtocol {
@@ -81,11 +69,34 @@ final class LoginWorker: LoginWorkerProtocol {
     }
   }
 
-  func saveToken(authInfo: AuthInfo) {
+  func saveUserInfo(
+    userInfo: LoginResponse.UserInfo,
+    authInfo: AuthInfo
+  ) {
+
     self.localDataManager.saveToken(
       accessToken: authInfo.accessToken,
       refreshToken: authInfo.refreshToken,
-      nickname: nil
+      nickname: userInfo.nickname,
+      profileImage: userInfo.image
     )
+  }
+}
+
+// MARK: - Apple login delegate
+
+extension LoginWorker: AppleLoginDelegate {
+
+  func success(token: String) {
+    self.accountManager.logIn(
+      accessToken: token,
+      socialType: SocialType.apple
+    ) { response, loginInfo in
+
+      self.appleLoginResultDelegate?.getLoginResult(
+        loginResponse: response,
+        loginInfo: loginInfo
+      )
+    }
   }
 }

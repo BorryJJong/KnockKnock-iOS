@@ -21,12 +21,6 @@ protocol AppleLoginResultDelegate: AnyObject {
   func getLoginResult(loginResponse: LoginResponse, loginInfo: LoginInfo)
 }
 
-extension LoginInteractor: AppleLoginResultDelegate {
-  func getLoginResult(loginResponse: LoginResponse, loginInfo: LoginInfo) {
-    self.isExistUser(loginResponse: loginResponse, loginInfo: loginInfo)
-  }
-}
-
 final class LoginInteractor: LoginInteractorProtocol {
 
   var presenter: LoginPresenterProtocol?
@@ -39,7 +33,11 @@ final class LoginInteractor: LoginInteractorProtocol {
       appleLoginResultDelegate: self,
       socialType: socialType,
       completionHandler: { loginResponse, loginInfo in
-        self.isExistUser(loginResponse: loginResponse, loginInfo: loginInfo)
+
+        self.isExistUser(
+          loginResponse: loginResponse,
+          loginInfo: loginInfo
+        )
       }
     )
   }
@@ -53,28 +51,32 @@ final class LoginInteractor: LoginInteractorProtocol {
       self.saveTokens(loginResponse: loginResponse)
       self.popLoginView()
 
-      NotificationCenter.default.post(name: .loginCompleted, object: nil)
+      NotificationCenter.default.post(
+        name: .loginCompleted,
+        object: nil
+      )
 
     } else {
       self.navigateToProfileSettingView(loginInfo: loginInfo)
     }
   }
 
-  // 로컬에 서버 토큰 저장
+  // 로컬(UserDefaults)에 서버 토큰 저장
   func saveTokens(loginResponse: LoginResponse) {
-    if let authInfo = loginResponse.authInfo{
-      self.worker?.saveToken(authInfo: authInfo)
-    }
+
+    guard let userInfo = loginResponse.userInfo,
+          let authInfo = loginResponse.authInfo else { return }
+
+    self.worker?.saveUserInfo(
+      userInfo: userInfo,
+      authInfo: authInfo
+    )
   }
 
   // MARK: - Routing logic
   
-  func navigateToProfileSettingView(
-    loginInfo: LoginInfo
-  ) {
-    self.router?.navigateToProfileSettingView(
-      loginInfo: loginInfo
-    )
+  func navigateToProfileSettingView(loginInfo: LoginInfo) {
+    self.router?.navigateToProfileSettingView(loginInfo: loginInfo)
   }
 
   func navigateToHome() {
@@ -83,5 +85,16 @@ final class LoginInteractor: LoginInteractorProtocol {
 
   func popLoginView() {
     self.router?.popLoginView()
+  }
+}
+
+// MARK: - Apple login result delegate
+
+extension LoginInteractor: AppleLoginResultDelegate {
+  /// Worker -> Interactor로 로그인 결과 전달
+  /// loginReseponse: 서버로 부터 받은 로그인 결과 데이터
+  /// loginInfo: 비회원인 경우 회원가입 요청 시 사용할 request body
+  func getLoginResult(loginResponse: LoginResponse, loginInfo: LoginInfo) {
+    self.isExistUser(loginResponse: loginResponse, loginInfo: loginInfo)
   }
 }
