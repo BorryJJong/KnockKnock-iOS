@@ -24,7 +24,7 @@ final class ProfileSettingRouter: ProfileSettingRouterProtocol {
     let interactor = ProfileSettingInteractor()
     let presenter = ProfileSettingPresenter()
     let worker = ProfileSettingWorker(
-      snsLoginAccountManager: SNSLoginAccountManager(),
+      accountManager: AccountManager(),
       localDataManager: LocalDataManager()
     )
     let router = ProfileSettingRouter()

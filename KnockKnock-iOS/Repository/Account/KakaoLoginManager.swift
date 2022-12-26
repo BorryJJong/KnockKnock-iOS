@@ -9,11 +9,11 @@ import Foundation
 
 import KakaoSDKUser
 
-protocol KakaoAccountManagerProtocol {
+protocol KakaoLoginManagerProtocol {
   func loginWithKakao(completionHandler: @escaping (String) -> Void)
 }
 
-final class KakaoAccountManager: KakaoAccountManagerProtocol {
+final class KakaoLoginManager: KakaoLoginManagerProtocol {
 
   func loginWithKakao(completionHandler: @escaping (String) -> Void) {
     if UserApi.isKakaoTalkLoginAvailable() {

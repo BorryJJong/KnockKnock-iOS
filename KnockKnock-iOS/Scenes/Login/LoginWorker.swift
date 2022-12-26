@@ -23,7 +23,7 @@ protocol AppleLoginDelegate: AnyObject {
 extension LoginWorker: AppleLoginDelegate {
   
   func success(token: String) {
-    self.snsLoginAccountManager.requestToken(
+    self.accountManager.logIn(
       accessToken: token,
       socialType: SocialType.apple
     ) { response, loginInfo in
@@ -40,20 +40,20 @@ final class LoginWorker: LoginWorkerProtocol {
 
   weak var appleLoginResultDelegate: AppleLoginResultDelegate?
 
-  private let kakaoAccountManager: KakaoAccountManagerProtocol
-  private let appleAccountManager: AppleLoginManagerProtocol
-  private let snsLoginAccountManager: SNSLoginAccountManagerProtocol
+  private let kakaoLoginManager: KakaoLoginManagerProtocol
+  private let appleLoginManager: AppleLoginManagerProtocol
+  private let accountManager: AccountManagerProtocol
   private let localDataManager: LocalDataManagerProtocol
 
   init(
-    kakaoAccountManager: KakaoAccountManagerProtocol,
-    appleAccountManager: AppleLoginManagerProtocol,
-    snsLoginAccountManager: SNSLoginAccountManagerProtocol,
+    kakaoLoginManager: KakaoLoginManagerProtocol,
+    appleLoginManager: AppleLoginManagerProtocol,
+    accountManager: AccountManagerProtocol,
     localDataManager: LocalDataManagerProtocol
   ) {
-    self.kakaoAccountManager = kakaoAccountManager
-    self.appleAccountManager = appleAccountManager
-    self.snsLoginAccountManager = snsLoginAccountManager
+    self.kakaoLoginManager = kakaoLoginManager
+    self.appleLoginManager = appleLoginManager
+    self.accountManager = accountManager
     self.localDataManager = localDataManager
   }
 
@@ -64,9 +64,9 @@ final class LoginWorker: LoginWorkerProtocol {
   ) {
     switch socialType {
     case .kakao:
-      self.kakaoAccountManager.loginWithKakao(completionHandler: { accessToken in
+      self.kakaoLoginManager.loginWithKakao(completionHandler: { accessToken in
 
-        self.snsLoginAccountManager.requestToken(
+        self.accountManager.logIn(
           accessToken: accessToken,
           socialType: socialType,
           completionHandler: { loginResponse, loginInfo in
@@ -77,7 +77,7 @@ final class LoginWorker: LoginWorkerProtocol {
 
     case .apple:
       self.appleLoginResultDelegate = appleLoginResultDelegate
-      self.appleAccountManager.login(delegate: self)
+      self.appleLoginManager.requestAppleLogin(delegate: self)
     }
   }
 

@@ -1,14 +1,14 @@
 //
-//  SNSLoginAccountManager.swift
+//  AccountManager.swift
 //  KnockKnock-iOS
 //
-//  Created by sangwon yoon on 2022/12/23.
+//  Created by Daye on 2022/11/01.
 //
 
 import Foundation
 
-protocol SNSLoginAccountManagerProtocol {
-  func requestToken(
+protocol AccountManagerProtocol {
+  func logIn(
     accessToken: String?,
     socialType: SocialType,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
@@ -19,10 +19,12 @@ protocol SNSLoginAccountManagerProtocol {
     image: String,
     completionHandler: @escaping (SignUpResponse) -> Void
   )
+  func logOut(completionHanlder: @escaping (Bool) -> Void)
+  func signOut(completionHanlder: @escaping (Bool) -> Void)
 }
 
-final class SNSLoginAccountManager: SNSLoginAccountManagerProtocol {
-  
+final class AccountManager: AccountManagerProtocol {
+
   /// 회원가입
   func signUp(
     loginInfo: LoginInfo,
@@ -36,7 +38,7 @@ final class SNSLoginAccountManager: SNSLoginAccountManagerProtocol {
       "nickname": nickname,
       "image": image
     ]
-    
+
     KKNetworkManager
       .shared
       .request(
@@ -49,10 +51,9 @@ final class SNSLoginAccountManager: SNSLoginAccountManagerProtocol {
         }
       )
   }
-  
-  // 로그인
-  
-  func requestToken(
+
+  /// 로그인
+  func logIn(
     accessToken: String? = nil,
     socialType: SocialType,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
@@ -82,5 +83,36 @@ final class SNSLoginAccountManager: SNSLoginAccountManagerProtocol {
             print(error)
           }
         )
+  }
+
+
+  /// 로그아웃
+  func logOut(completionHanlder: @escaping (Bool) -> Void) {
+    KKNetworkManager
+      .shared
+      .request(
+        object: Bool.self,
+        router: KKRouter.postLogOut,
+        success: { response in
+          completionHanlder(response)
+        }, failure: { error in
+          print(error)
+        }
+      )
+  }
+
+  /// 회원탈퇴
+  func signOut(completionHanlder: @escaping (Bool) -> Void) {
+    KKNetworkManager
+      .shared
+      .request(
+        object: Bool.self,
+        router: KKRouter.deleteSignOut,
+        success: { response in
+          completionHanlder(response)
+        }, failure: { error in
+          print(error)
+        }
+      )
   }
 }

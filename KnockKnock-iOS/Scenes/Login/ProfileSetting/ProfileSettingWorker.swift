@@ -17,14 +17,14 @@ protocol ProfileSettingWorkerProtocol {
 }
 
 final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
-  private let snsLoginAccountManager: SNSLoginAccountManagerProtocol
+  private let accountManager: AccountManagerProtocol
   private let localDataManager: LocalDataManagerProtocol
 
   init(
-    snsLoginAccountManager: SNSLoginAccountManagerProtocol,
+    accountManager: AccountManagerProtocol,
     localDataManager: LocalDataManagerProtocol
   ) {
-    self.snsLoginAccountManager = snsLoginAccountManager
+    self.accountManager = accountManager
     self.localDataManager = localDataManager
   }
 
@@ -34,7 +34,7 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
     image: String,
     completionHandler: @escaping (SignUpResponse) -> Void
   ) {
-    self.snsLoginAccountManager.signUp(
+    self.accountManager.signUp(
       loginInfo: loginInfo,
       nickname: nickname,
       image: image,
