@@ -15,6 +15,8 @@ protocol ProfileSettingInteractorProtocol {
   var loginInfo: LoginInfo? { get set }
 
   func requestSignUp(nickname: String, image: String)
+
+  func navigateToMyView()
 }
 
 final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
@@ -26,6 +28,10 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
   var router: ProfileSettingRouterProtocol?
 
   var loginInfo: LoginInfo?
+
+  func navigateToMyView() {
+    self.router?.navigateToMyView()
+  }
 
   func requestSignUp(
     nickname: String,

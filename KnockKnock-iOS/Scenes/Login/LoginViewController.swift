@@ -10,8 +10,6 @@ import UIKit
 import Then
 import KKDSKit
 
-import AuthenticationServices
-
 protocol LoginViewProtocol: AnyObject {
   var interactor: LoginInteractorProtocol? { get set }
 }
@@ -56,48 +54,18 @@ final class LoginViewController: BaseViewController<LoginView> {
   // MARK: - Button Actions
 
   @objc func kakaoLoginButtonDidTap(_ sender: UIButton) {
-    self.interactor?.fetchLoginResult(
-      accessToken: nil,
-      source: self,
-      socialType: SocialType.kakao
-    )
+    self.interactor?.fetchLoginResult(socialType: SocialType.kakao)
   }
 
   @objc func appleLoginButtonDidTap(_ sender: UIButton) {
-      let appleIDProvider = ASAuthorizationAppleIDProvider()
-      let request = appleIDProvider.createRequest()
-      request.requestedScopes = [.fullName, .email]
-
-      let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-      authorizationController.delegate = self
-      authorizationController.presentationContextProvider = self as? ASAuthorizationControllerPresentationContextProviding
-      authorizationController.performRequests()
+    self.interactor?.fetchLoginResult(socialType: SocialType.apple)
   }
 
   @objc func tapCloseBarButtonDidTap(_ sender: UIButton) {
-    self.interactor?.popLoginView(source: self)
+    self.interactor?.popLoginView()
   }
 }
 
 extension LoginViewController: LoginViewProtocol {
 
-}
-
-extension LoginViewController: ASAuthorizationControllerDelegate {
-  func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-    if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-      if  let authorizationCode = appleIDCredential.authorizationCode,
-          let identityToken = appleIDCredential.identityToken,
-          let authString = String(data: authorizationCode, encoding: .utf8),
-          let tokenString = String(data: identityToken, encoding: .utf8) {
-
-        self.interactor?.fetchLoginResult(accessToken: tokenString, source: self, socialType: .apple)
-      }
-
-    }
-  }
-
-  func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-    print("error \(error)")
-  }
 }

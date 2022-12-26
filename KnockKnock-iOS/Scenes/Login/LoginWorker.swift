@@ -9,44 +9,75 @@ import UIKit
 
 protocol LoginWorkerProtocol {
   func fetchLoginResult(
-    accessToken: String?,
+    appleLoginResultDelegate: AppleLoginResultDelegate,
     socialType: SocialType,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
   )
   func saveToken(authInfo: AuthInfo)
 }
 
+protocol AppleLoginDelegate: AnyObject {
+  func success(token: String)
+}
+
+extension LoginWorker: AppleLoginDelegate {
+  
+  func success(token: String) {
+    self.accountManager.logIn(
+      accessToken: token,
+      socialType: SocialType.apple
+    ) { response, loginInfo in
+
+      self.appleLoginResultDelegate?.getLoginResult(
+        loginResponse: response,
+        loginInfo: loginInfo
+      )
+    }
+  }
+}
+
 final class LoginWorker: LoginWorkerProtocol {
-  private let kakaoAccountManager: SocialLoginManagerProtocol
-  private let appleAccountManager: SocialLoginManagerProtocol
+
+  weak var appleLoginResultDelegate: AppleLoginResultDelegate?
+
+  private let kakaoLoginManager: KakaoLoginManagerProtocol
+  private let appleLoginManager: AppleLoginManagerProtocol
+  private let accountManager: AccountManagerProtocol
   private let localDataManager: LocalDataManagerProtocol
 
   init(
-    kakaoAccountManager: SocialLoginManagerProtocol,
-    appleAccountManager: SocialLoginManagerProtocol,
+    kakaoLoginManager: KakaoLoginManagerProtocol,
+    appleLoginManager: AppleLoginManagerProtocol,
+    accountManager: AccountManagerProtocol,
     localDataManager: LocalDataManagerProtocol
   ) {
-    self.kakaoAccountManager = kakaoAccountManager
-    self.appleAccountManager = appleAccountManager
+    self.kakaoLoginManager = kakaoLoginManager
+    self.appleLoginManager = appleLoginManager
+    self.accountManager = accountManager
     self.localDataManager = localDataManager
   }
 
   func fetchLoginResult(
-    accessToken: String? = nil,
+    appleLoginResultDelegate: AppleLoginResultDelegate,
     socialType: SocialType,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
   ) {
     switch socialType {
     case .kakao:
-      self.kakaoAccountManager.requestToken(accessToken: nil,
-        completionHandler: { loginResponse, loginInfo in
-          completionHandler(loginResponse, loginInfo)
-        }
-      )
-    case .apple:
-      self.appleAccountManager.requestToken(accessToken: accessToken, completionHandler: { loginResponse, loginInfo in
-        completionHandler(loginResponse, loginInfo)
+      self.kakaoLoginManager.loginWithKakao(completionHandler: { accessToken in
+
+        self.accountManager.logIn(
+          accessToken: accessToken,
+          socialType: socialType,
+          completionHandler: { loginResponse, loginInfo in
+            completionHandler(loginResponse, loginInfo)
+          }
+        )
       })
+
+    case .apple:
+      self.appleLoginResultDelegate = appleLoginResultDelegate
+      self.appleLoginManager.requestAppleLogin(delegate: self)
     }
   }
 
