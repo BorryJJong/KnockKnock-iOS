@@ -13,14 +13,8 @@ struct LoginInfo {
   let socialType: String
 }
 
-/// 회원가입 응답 값
-struct SignUpResponse: Decodable {
-  let isExistUser: Bool
-  let authInfo: AuthInfo?
-}
-
-/// 로그인 응답 값
-struct LoginResponse: Decodable {
+/// 로그인/회원가입 응답 값
+struct AccountResponse: Decodable {
   let isExistUser: Bool
   let userInfo: UserInfo?
   let authInfo: AuthInfo?
@@ -30,10 +24,10 @@ struct LoginResponse: Decodable {
     let soicalType: String?
     let image: String?
   }
+
+  struct AuthInfo: Decodable {
+    let accessToken: String
+    let refreshToken: String
+  }
 }
 
-/// 토큰
-struct AuthInfo: Decodable {
-  let accessToken: String
-  let refreshToken: String
-}

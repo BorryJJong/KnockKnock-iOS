@@ -11,13 +11,13 @@ protocol AccountManagerProtocol {
   func logIn(
     accessToken: String?,
     socialType: SocialType,
-    completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
+    completionHandler: @escaping (AccountResponse, LoginInfo) -> Void
   )
   func signUp(
     loginInfo: LoginInfo,
     nickname: String,
     image: String,
-    completionHandler: @escaping (SignUpResponse) -> Void
+    completionHandler: @escaping (AccountResponse) -> Void
   )
   func logOut(completionHanlder: @escaping (Bool) -> Void)
   func signOut(completionHanlder: @escaping (Bool) -> Void)
@@ -30,7 +30,7 @@ final class AccountManager: AccountManagerProtocol {
     loginInfo: LoginInfo,
     nickname: String,
     image: String,
-    completionHandler: @escaping (SignUpResponse) -> Void
+    completionHandler: @escaping (AccountResponse) -> Void
   ) {
     let parameters = [
       "socialUuid": loginInfo.socialUuid,
@@ -42,7 +42,7 @@ final class AccountManager: AccountManagerProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: SignUpResponse.self,
+        object: AccountResponse.self,
         router: KKRouter.postSignUp(userInfo: parameters),
         success: { success in
           completionHandler(success)
@@ -56,7 +56,7 @@ final class AccountManager: AccountManagerProtocol {
   func logIn(
     accessToken: String? = nil,
     socialType: SocialType,
-    completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
+    completionHandler: @escaping (AccountResponse, LoginInfo) -> Void
   ) {
 
       guard let accessToken = accessToken else { return }
@@ -74,7 +74,7 @@ final class AccountManager: AccountManagerProtocol {
       KKNetworkManager
         .shared
         .request(
-          object: LoginResponse.self,
+          object: AccountResponse.self,
           router: KKRouter.postSocialLogin(loginInfo: parameters),
           success: { response in
             completionHandler(response, loginInfo)
@@ -84,7 +84,6 @@ final class AccountManager: AccountManagerProtocol {
           }
         )
   }
-
 
   /// 로그아웃
   func logOut(completionHanlder: @escaping (Bool) -> Void) {

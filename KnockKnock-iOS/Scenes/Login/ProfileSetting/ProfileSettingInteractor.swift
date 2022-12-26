@@ -43,10 +43,20 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
         nickname: nickname,
         image: image,
         completionHandler: { response in
-          // userdefaults token 저장하기
-          print(response)
+          self.saveUserInfo(response: response)
         }
       )
     }
+  }
+
+  func saveUserInfo(response: AccountResponse) {
+
+    guard let userInfo = response.userInfo,
+          let authInfo = response.authInfo else { return }
+
+    self.worker?.saveUserInfo(
+      userInfo: userInfo,
+      authInfo: authInfo
+    )
   }
 }

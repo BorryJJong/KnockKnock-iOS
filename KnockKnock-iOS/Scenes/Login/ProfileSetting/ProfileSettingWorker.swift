@@ -12,8 +12,9 @@ protocol ProfileSettingWorkerProtocol {
     loginInfo: LoginInfo,
     nickname: String,
     image: String,
-    completionHandler: @escaping (SignUpResponse) -> Void
+    completionHandler: @escaping (AccountResponse) -> Void
   )
+  func saveUserInfo(userInfo: AccountResponse.UserInfo, authInfo: AccountResponse.AuthInfo)
 }
 
 final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
@@ -32,15 +33,15 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
     loginInfo: LoginInfo,
     nickname: String,
     image: String,
-    completionHandler: @escaping (SignUpResponse) -> Void
+    completionHandler: @escaping (AccountResponse) -> Void
   ) {
     
     self.accountManager.signUp(
       loginInfo: loginInfo,
       nickname: nickname,
       image: image,
-      completionHandler: { signUpResponse in
-        guard let authInfo = signUpResponse.authInfo else { return }
+      completionHandler: { response in
+        guard let authInfo = response.authInfo else { return }
 
         self.localDataManager.saveToken(
           accessToken: authInfo.accessToken,
@@ -49,6 +50,19 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
           profileImage: image
         )
       }
+    )
+  }
+
+  func saveUserInfo(
+    userInfo: AccountResponse.UserInfo,
+    authInfo: AccountResponse.AuthInfo
+  ) {
+
+    self.localDataManager.saveToken(
+      accessToken: authInfo.accessToken,
+      refreshToken: authInfo.refreshToken,
+      nickname: userInfo.nickname,
+      profileImage: userInfo.image
     )
   }
 }

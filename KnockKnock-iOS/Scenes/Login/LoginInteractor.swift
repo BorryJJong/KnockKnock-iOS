@@ -13,12 +13,12 @@ protocol LoginInteractorProtocol {
   var router: LoginRouterProtocol? { get set }
 
   func fetchLoginResult(socialType: SocialType)
-  func saveTokens(loginResponse: LoginResponse)
+  func saveTokens(response: AccountResponse)
   func popLoginView()
 }
 
 protocol AppleLoginResultDelegate: AnyObject {
-  func getLoginResult(loginResponse: LoginResponse, loginInfo: LoginInfo)
+  func getLoginResult(response: AccountResponse, loginInfo: LoginInfo)
 }
 
 final class LoginInteractor: LoginInteractorProtocol {
@@ -32,10 +32,10 @@ final class LoginInteractor: LoginInteractorProtocol {
     self.worker?.fetchLoginResult(
       appleLoginResultDelegate: self,
       socialType: socialType,
-      completionHandler: { loginResponse, loginInfo in
+      completionHandler: { response, loginInfo in
 
         self.isExistUser(
-          loginResponse: loginResponse,
+          response: response,
           loginInfo: loginInfo
         )
       }
@@ -45,10 +45,10 @@ final class LoginInteractor: LoginInteractorProtocol {
   /// 회원 판별
   /// isExisted: 기존 회원 여부
   /// 회원 o -> 토큰 저장 후 홈 화면 진입 / 회원 x -> 프로필 설정화면(회원가입)
-  func isExistUser(loginResponse: LoginResponse, loginInfo: LoginInfo) {
+  func isExistUser(response: AccountResponse, loginInfo: LoginInfo) {
 
-    if loginResponse.isExistUser {
-      self.saveTokens(loginResponse: loginResponse)
+    if response.isExistUser {
+      self.saveTokens(response: response)
       self.popLoginView()
 
       NotificationCenter.default.post(
@@ -62,10 +62,10 @@ final class LoginInteractor: LoginInteractorProtocol {
   }
 
   // 로컬(UserDefaults)에 서버 토큰 저장
-  func saveTokens(loginResponse: LoginResponse) {
+  func saveTokens(response: AccountResponse) {
 
-    guard let userInfo = loginResponse.userInfo,
-          let authInfo = loginResponse.authInfo else { return }
+    guard let userInfo = response.userInfo,
+          let authInfo = response.authInfo else { return }
 
     self.worker?.saveUserInfo(
       userInfo: userInfo,
@@ -94,7 +94,7 @@ extension LoginInteractor: AppleLoginResultDelegate {
   /// Worker -> Interactor로 로그인 결과 전달
   /// loginReseponse: 서버로 부터 받은 로그인 결과 데이터
   /// loginInfo: 비회원인 경우 회원가입 요청 시 사용할 request body
-  func getLoginResult(loginResponse: LoginResponse, loginInfo: LoginInfo) {
-    self.isExistUser(loginResponse: loginResponse, loginInfo: loginInfo)
+  func getLoginResult(response: AccountResponse, loginInfo: LoginInfo) {
+    self.isExistUser(response: response, loginInfo: loginInfo)
   }
 }
