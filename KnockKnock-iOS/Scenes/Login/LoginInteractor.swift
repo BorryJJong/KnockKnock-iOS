@@ -17,6 +17,16 @@ protocol LoginInteractorProtocol {
   func popLoginView()
 }
 
+protocol AppleLoginResultDelegate: AnyObject {
+  func getLoginResult(loginResponse: LoginResponse, loginInfo: LoginInfo)
+}
+
+extension LoginInteractor: AppleLoginResultDelegate {
+  func getLoginResult(loginResponse: LoginResponse, loginInfo: LoginInfo) {
+    self.isExistUser(loginResponse: loginResponse, loginInfo: loginInfo)
+  }
+}
+
 final class LoginInteractor: LoginInteractorProtocol {
 
   var presenter: LoginPresenterProtocol?
@@ -26,20 +36,28 @@ final class LoginInteractor: LoginInteractorProtocol {
   func fetchLoginResult(socialType: SocialType) {
 
     self.worker?.fetchLoginResult(
+      appleLoginResultDelegate: self,
       socialType: socialType,
       completionHandler: { loginResponse, loginInfo in
-
-        // 회원 판별
-        // 회원 o -> 토큰 저장 후 홈 화면 진입 / 회원 x -> 프로필 설정화면(회원가입)
-        if loginResponse.isExistUser {
-          self.saveTokens(loginResponse: loginResponse)
-          self.popLoginView()
-          NotificationCenter.default.post(name: .loginCompleted, object: nil)
-        } else {
-          self.navigateToProfileSettingView(loginInfo: loginInfo)
-        }
+        self.isExistUser(loginResponse: loginResponse, loginInfo: loginInfo)
       }
     )
+  }
+  
+  /// 회원 판별
+  /// isExisted: 기존 회원 여부
+  /// 회원 o -> 토큰 저장 후 홈 화면 진입 / 회원 x -> 프로필 설정화면(회원가입)
+  func isExistUser(loginResponse: LoginResponse, loginInfo: LoginInfo) {
+
+    if loginResponse.isExistUser {
+      self.saveTokens(loginResponse: loginResponse)
+      self.popLoginView()
+
+      NotificationCenter.default.post(name: .loginCompleted, object: nil)
+
+    } else {
+      self.navigateToProfileSettingView(loginInfo: loginInfo)
+    }
   }
 
   // 로컬에 서버 토큰 저장

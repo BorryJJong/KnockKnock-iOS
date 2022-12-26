@@ -9,6 +9,7 @@ import UIKit
 
 protocol LoginWorkerProtocol {
   func fetchLoginResult(
+    appleLoginResultDelegate: AppleLoginResultDelegate,
     socialType: SocialType,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
   )
@@ -26,13 +27,19 @@ extension LoginWorker: AppleLoginDelegate {
       accessToken: token,
       socialType: SocialType.apple
     ) { response, loginInfo in
-      print("성공여부 : \(response.isExistUser)")
+
+      self.appleLoginResultDelegate?.getLoginResult(
+        loginResponse: response,
+        loginInfo: loginInfo
+      )
     }
   }
 }
 
 final class LoginWorker: LoginWorkerProtocol {
-  
+
+  weak var appleLoginResultDelegate: AppleLoginResultDelegate?
+
   private let kakaoAccountManager: KakaoAccountManagerProtocol
   private let appleAccountManager: AppleLoginManagerProtocol
   private let snsLoginAccountManager: SNSLoginAccountManagerProtocol
@@ -51,6 +58,7 @@ final class LoginWorker: LoginWorkerProtocol {
   }
 
   func fetchLoginResult(
+    appleLoginResultDelegate: AppleLoginResultDelegate,
     socialType: SocialType,
     completionHandler: @escaping (LoginResponse, LoginInfo) -> Void
   ) {
@@ -68,6 +76,7 @@ final class LoginWorker: LoginWorkerProtocol {
       })
 
     case .apple:
+      self.appleLoginResultDelegate = appleLoginResultDelegate
       self.appleAccountManager.login(delegate: self)
     }
   }
