@@ -11,8 +11,6 @@ import SnapKit
 import Then
 import KKDSKit
 
-import AuthenticationServices
-
 final class LoginView: UIView {
 
   // MARK: - Constants
@@ -20,6 +18,8 @@ final class LoginView: UIView {
   private enum Metric {
     static let kakaoLoginButtonLeadingMargin = 20.f
     static let kakaoLoginButtonHeight = 45.f
+
+    static let appleLoginButtonTopMargin = 5.f
 
     static let subTitleLabelTopMargin = 10.f
 
@@ -47,7 +47,10 @@ final class LoginView: UIView {
     $0.contentMode = .scaleAspectFit
   }
 
-  let appleLoginButton = ASAuthorizationAppleIDButton()
+  let appleLoginButton = UIButton().then {
+    $0.setImage(KKDS.Image.ic_apple_login, for: .normal)
+    $0.contentMode = .scaleAspectFit
+  }
 
   // MARK: - Initialize
 
@@ -74,7 +77,7 @@ final class LoginView: UIView {
     self.appleLoginButton.snp.makeConstraints {
       $0.leading.trailing.equalToSuperview().inset(Metric.kakaoLoginButtonLeadingMargin)
       $0.height.equalTo(Metric.kakaoLoginButtonHeight)
-      $0.top.equalTo(self.kakaoLoginButton.snp.bottom).offset(30)
+      $0.top.equalTo(self.kakaoLoginButton.snp.bottom).offset(Metric.appleLoginButtonTopMargin)
     }
 
     self.titleLabel.snp.makeConstraints {
