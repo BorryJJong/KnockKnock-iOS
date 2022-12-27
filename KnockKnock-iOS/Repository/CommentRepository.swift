@@ -8,14 +8,15 @@
 import Foundation
 
 protocol CommentRepositoryProtocol {
-  func requestComments(feedId: Int, completionHandler: @escaping ([CommentData]) -> Void)
+  func requestComments(feedId: Int, completionHandler: @escaping ([CommentResponse.Data]) -> Void)
   func requestAddComment(comment: AddCommentRequest, completionHandler: @escaping (AddCommentResponse) -> Void)
+  func requestDeleteComment(commentId: Int, completionHandler: @escaping (DeleteCommentResponse) -> Void)
 }
 
 final class CommentRepository: CommentRepositoryProtocol {
   func requestComments(
     feedId: Int,
-    completionHandler: @escaping ([CommentData]) -> Void
+    completionHandler: @escaping ([CommentResponse.Data]) -> Void
   ) {
     KKNetworkManager
       .shared
@@ -37,22 +38,44 @@ final class CommentRepository: CommentRepositoryProtocol {
     comment: AddCommentRequest,
     completionHandler: @escaping (AddCommentResponse) -> Void
   ) {
+
+    do {
+      let parameters = try comment.encode()
+
+      KKNetworkManager
+        .shared
+        .request(
+          object: AddCommentResponse.self,
+          router: KKRouter.postAddComment(comment: parameters),
+          success: { response in
+            completionHandler(response)
+          },
+          failure: { error in
+            print(error)
+          }
+        )
+
+    } catch {
+      print(error)
+    }
+  }
+
+  func requestDeleteComment(
+    commentId: Int,
+    completionHandler: @escaping (DeleteCommentResponse) -> Void
+  ) {
     let parameters = [
-      "postId": comment.feedId,
-      "userId": comment.userId,
-      "content": comment.content,
-      "commentId": comment.commentId
+      "id": commentId
     ] as [String: Any]
 
     KKNetworkManager
       .shared
       .request(
-        object: AddCommentResponse.self,
-        router: KKRouter.postAddComment(comment: parameters),
+        object: DeleteCommentResponse.self,
+        router: KKRouter.deleteComment(id: parameters),
         success: { response in
           completionHandler(response)
-        },
-        failure: { error in
+        }, failure: { error in
           print(error)
         }
       )

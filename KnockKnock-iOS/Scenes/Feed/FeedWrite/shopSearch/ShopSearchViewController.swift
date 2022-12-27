@@ -32,7 +32,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   var interactor: ShopSearchInteractorProtocol?
   var router: ShopSearchRouterProtocol?
 
-  var addressList: [AddressDocuments] = [] {
+  var addressList: [AddressResult.Documents] = [] {
     didSet {
       self.containerView.resultTableView.reloadData()
       self.fetchMore = true
@@ -149,6 +149,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   }
 
   @objc func cityButtonDidTap(_ sender: UIButton) {
+    self.containerView.setButtonStatus(isCitySelected: false)
     self.router?.presentBottomSheetView(
       source: self,
       content: self.cityList,
@@ -195,7 +196,10 @@ extension ShopSearchViewController: ShopSearchViewProtocol {
 // MARK: - TableView DataSource
 
 extension ShopSearchViewController: UITableViewDataSource {
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  func tableView(
+    _ tableView: UITableView,
+    numberOfRowsInSection section: Int
+  ) -> Int {
     return self.addressList.count
   }
 
@@ -203,9 +207,16 @@ extension ShopSearchViewController: UITableViewDataSource {
     _ tableView: UITableView,
     cellForRowAt indexPath: IndexPath
   ) -> UITableViewCell {
-    let cell = tableView.dequeueCell(withType: AdressCell.self, for: indexPath)
+    let cell = tableView.dequeueCell(
+      withType: AdressCell.self,
+      for: indexPath
+    )
+    let selectedAddress = self.addressList[indexPath.row]
 
-    cell.bind(address: self.addressList[indexPath.row].addressName)
+    cell.bind(
+      name: selectedAddress.placeName,
+      address: selectedAddress.addressName
+    )
 
     return cell
   }
@@ -240,8 +251,14 @@ extension ShopSearchViewController: UITableViewDataSource {
 // MARK: - TableView Delegate
 
 extension ShopSearchViewController: UITableViewDelegate {
-  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    self.router?.passDataToFeedWriteView(source: self, address: self.addressList[indexPath.row])
+  func tableView(
+    _ tableView: UITableView,
+    didSelectRowAt indexPath: IndexPath
+  ) {
+    self.router?.passDataToFeedWriteView(
+      source: self,
+      address: self.addressList[indexPath.row]
+    )
   }
 }
 

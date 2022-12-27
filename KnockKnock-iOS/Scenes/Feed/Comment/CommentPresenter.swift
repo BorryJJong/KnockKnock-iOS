@@ -9,47 +9,51 @@ import Foundation
 
 protocol CommentPresenterProtocol {
   var view: CommentViewProtocol? { get set }
-
+  
   func presentVisibleComments(allComments: [Comment])
+  func presentDeleteComment()
 }
 
 final class CommentPresenter: CommentPresenterProtocol {
   var view: CommentViewProtocol?
-
+  
+  func presentDeleteComment() {
+    self.view?.deleteComment()
+  }
+  
   func presentVisibleComments(allComments: [Comment]) {
-    var comments: [Comment] = []
+    var visibleComments: [Comment] = []
 
-    for comment in allComments {
-      if comment.commentData.reply?.count != 0 && comment.isOpen {
-        comments.append(comment)
-
-        if let replyArray = comment.commentData.reply {
-          for reply in replyArray {
-            comments.append(
-              Comment(
-                commentData: CommentData(
-                  id: reply.id,
-                  userId: reply.userId,
-                  nickname: reply.nickname,
-                  image: reply.image,
-                  content: reply.content,
-                  regDate: reply.regDate,
-                  isDeleted: false,
-                  replyCnt: 0,
-                  reply: []
-                ),
-                isReply: true
-              )
-            )
-          }
+    allComments.filter({ !$0.data.isDeleted }).forEach { comment in
+      if comment.isOpen {
+        visibleComments.append(comment)
+        
+        let reply = comment.data.reply.map {
+          $0.filter { !$0.isDeleted }
+        } ?? []
+        
+        visibleComments += reply.map {
+          Comment(
+            data: CommentResponse.Data(
+              id: $0.id,
+              userId: $0.userId,
+              nickname: $0.nickname,
+              image: $0.image,
+              content: $0.content,
+              regDate: $0.regDate,
+              isDeleted: $0.isDeleted,
+              replyCnt: 0,
+              reply: []
+            ), isReply: true
+          )
         }
       } else {
         if !comment.isReply {
-          comments.append(comment)
+          visibleComments.append(comment)
         }
       }
     }
-    self.view?.fetchVisibleComments(comments: comments)
+    self.view?.fetchVisibleComments(comments: visibleComments)
     LoadingIndicator.hideLoading()
   }
 }

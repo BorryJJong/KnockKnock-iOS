@@ -13,6 +13,7 @@ protocol FeedDetailWorkerProtocol {
   func fetchLikeList(feedId: Int, completionHandler: @escaping ([LikeInfo]) -> Void)
   func getAllComments(feedId: Int, completionHandler: @escaping ([Comment]) -> Void)
   func requestAddComment(comment: AddCommentRequest, completionHandler: @escaping (String) -> Void)
+  func requestDeleteComment(commentId: Int, completionHandler: @escaping () -> Void)
 }
 
 final class FeedDetailWorker: FeedDetailWorkerProtocol {
@@ -51,7 +52,7 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
     self.commentRepository.requestComments(
       feedId: feedId,
       completionHandler: { comment in
-        let commentData = comment.map { Comment(commentData: $0) }
+        let commentData = comment.map { Comment(data: $0) }
         data += commentData
 
         completionHandler(data)
@@ -79,6 +80,18 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
       comment: comment,
       completionHandler: { response in
         completionHandler(response.message)
+      }
+    )
+  }
+
+  func requestDeleteComment(
+    commentId: Int,
+    completionHandler: @escaping () -> Void
+  ) {
+    self.commentRepository.requestDeleteComment(
+      commentId: commentId,
+      completionHandler: { result in
+        completionHandler()
       }
     )
   }
