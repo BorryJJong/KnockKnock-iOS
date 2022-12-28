@@ -15,7 +15,7 @@ protocol FeedListWorkerProtocol {
     challengeId: Int,
     completionHandler: @escaping (FeedList) -> Void
   )
-  func requestDeleteFeed(feedId: Int, completionHandler: @escaping () -> Void)
+  func requestDeleteFeed(feedId: Int, completionHandler: @escaping (Bool) -> Void)
   func requestLike(id: Int, completionHandler: @escaping (Bool) -> Void)
   func requestLikeCancel(id: Int, completionHandler: @escaping (Bool) -> Void)
   func checkTokenExisted(completionHandler: @escaping (Bool) -> Void)
@@ -37,11 +37,14 @@ final class FeedListWorker: FeedListWorkerProtocol {
     self.localDataManager = localDataManager
   }
 
-  func requestDeleteFeed(feedId: Int, completionHandler: @escaping () -> Void) {
+  func requestDeleteFeed(
+    feedId: Int,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
     self.feedRepository.requestDeleteFeed(
       feedId: feedId,
-      completionHandler: {
-        completionHandler()
+      completionHandler: { isSuccess in
+        completionHandler(isSuccess)
       }
     )
   }
@@ -88,6 +91,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
         id: id,
         completionHandler: { result in
           completionHandler(result)
-        })
+        }
+      )
     }
 }

@@ -99,7 +99,7 @@ final class FeedRepository: FeedRepositoryProtocol {
 
   func requestDeleteFeed(
     feedId: Int,
-    completionHandler: @escaping () -> Void
+    completionHandler: @escaping (Bool) -> Void
   ) {
     KKNetworkManager
       .shared
@@ -107,7 +107,7 @@ final class FeedRepository: FeedRepositoryProtocol {
         object: DefaultResponse.self,
         router: KKRouter.deleteFeed(id: feedId),
         success: { response in
-          completionHandler()
+          completionHandler(response.success)
         }, failure: { error in
           print(error)
         }

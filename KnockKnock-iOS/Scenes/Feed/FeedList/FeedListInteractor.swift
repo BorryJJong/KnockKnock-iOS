@@ -58,8 +58,12 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   func requestDelete(feedId: Int) {
     self.worker?.requestDeleteFeed(
       feedId: feedId,
-      completionHandler: {
-        self.presenter?.presentDeleteFeed(feedId: feedId)
+      completionHandler: { isSuccess in
+        if isSuccess {
+          self.presenter?.presentDeleteFeed(feedId: feedId)
+        } else {
+          print(isSuccess)
+        }
       }
     )
   }

@@ -87,4 +87,5 @@ struct FeedDetail: Decodable {
 
 struct DefaultResponse: Decodable {
   let success: Bool
+  let message: String
 }

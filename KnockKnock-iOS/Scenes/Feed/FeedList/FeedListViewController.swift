@@ -113,7 +113,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
       source: self,
       isMyPost: true,
       deleteAction: {
-        self.interactor?.requestDelete(feedId: self.feedId)
+        self.interactor?.requestDelete(feedId: sender.tag)
       }
     )
   }
@@ -135,9 +135,17 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     sender.setTitle(title, for: .normal)
 
     if sender.isSelected {
-      self.interactor?.requestLike(source: self, feedId: sender.tag)
+
+      self.interactor?.requestLike(
+        source: self,
+        feedId: sender.tag
+      )
     } else {
-      self.interactor?.requestLikeCancel(source: self, feedId: sender.tag)
+
+      self.interactor?.requestLikeCancel(
+        source: self,
+        feedId: sender.tag
+      )
     }
   }
 }
@@ -193,8 +201,10 @@ extension FeedListViewController: UICollectionViewDataSource {
       withType: FeedListHeaderReusableView.self,
       for: indexPath
     )
+    let post = self.feedListPost[indexPath.section]
 
-    header.bind(feed: self.feedListPost[indexPath.section])
+    header.bind(feed: post)
+    header.configureButton.tag = post.id
     header.configureButton.addTarget(
       self,
       action: #selector(self.configureButtonDidTap(_:)),
@@ -273,6 +283,7 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
 extension FeedListViewController: FeedListViewProtocol {
   func fetchFeedList(feedList: FeedList) {
     self.feedList = feedList
+
     feedList.feeds.forEach {
       self.feedListPost.append($0)
     }
