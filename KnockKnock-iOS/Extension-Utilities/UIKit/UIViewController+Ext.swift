@@ -30,7 +30,7 @@ extension UIViewController {
   func showAlert(
     content: String,
     isCancelActive: Bool = true,
-    confirmActionCompletion: (() -> Void)?
+    confirmActionCompletion: (() -> Void)? = nil
   ) {
     let alertViewController = AlertViewController(
       content: content,

@@ -11,28 +11,35 @@ protocol MyWorkerProtocol {
   func fetchMenuData(completionHandler: @escaping (MyMenu) -> Void)
   func checkLoginStatus(completionHandler: @escaping(Bool) -> Void)
   func fetchNickname(completionHandler: @escaping(String) -> Void)
+  func requestLogOut(completionHandler: @escaping() -> Void)
+  func requestSignOut(completionHandler: @escaping() -> Void)
 }
 
 final class MyWorker: MyWorkerProtocol {
 
-  private let localDataManager: LocalDataManager?
+  private let localDataManager: LocalDataManagerProtocol?
+  private let accountManager: AccountManagerProtocol?
 
-  init(localDataManager: LocalDataManager) {
+  init(
+    localDataManager: LocalDataManagerProtocol,
+    accountManager: AccountManagerProtocol
+  ) {
     self.localDataManager = localDataManager
+    self.accountManager = accountManager
   }
 
   private let menuData: MyMenu = {
-    let profile = MyItem(title: MyMenuType.profile.rawValue, type: .plain)
-    let signout = MyItem(title: MyMenuType.signOut.rawValue, type: .plain)
-    let push = MyItem(title: MyMenuType.pushNotification.rawValue, type: .alert)
+    let profile = MyItem(title: MyMenuType.profile, type: .plain)
+    let signout = MyItem(title: MyMenuType.signOut, type: .plain)
+    let push = MyItem(title: MyMenuType.pushNotification, type: .alert)
 
-    let notice = MyItem(title: MyMenuType.notice.rawValue, type: .plain)
-    let version = MyItem(title: MyMenuType.versionInfo.rawValue, type: .version)
+    let notice = MyItem(title: MyMenuType.notice, type: .plain)
+    let version = MyItem(title: MyMenuType.versionInfo, type: .version)
 
-    let service = MyItem(title: MyMenuType.serviceTerms.rawValue, type: .plain)
-    let privacy = MyItem(title: MyMenuType.privacy.rawValue, type: .plain)
-    let location = MyItem(title: MyMenuType.locationService.rawValue, type: .plain)
-    let openSource = MyItem(title: MyMenuType.opensource.rawValue, type: .plain)
+    let service = MyItem(title: MyMenuType.serviceTerms, type: .plain)
+    let privacy = MyItem(title: MyMenuType.privacy, type: .plain)
+    let location = MyItem(title: MyMenuType.locationService, type: .plain)
+    let openSource = MyItem(title: MyMenuType.opensource, type: .plain)
 
     let myInfoSection = MySection(
       title: MySectionType.myInfo,
@@ -64,5 +71,24 @@ final class MyWorker: MyWorkerProtocol {
     if let isLoggedIn = self.localDataManager?.checkTokenIsExisted() {
       completionHandler(isLoggedIn)
     }
+  }
+
+  func requestLogOut(completionHandler: @escaping() -> Void) {
+    self.accountManager?.logOut(completionHanlder: { [weak self] success in
+      if success {
+        self?.localDataManager?.deleteToken()
+        completionHandler()
+      }
+    })
+  }
+
+  func requestSignOut(completionHandler: @escaping() -> Void) {
+    self.accountManager?.signOut(completionHanlder: { [weak self] success in
+      if success {
+        self?.localDataManager?.deleteToken()
+        self?.localDataManager?.deleteNickname()
+        completionHandler()
+      }
+    })
   }
 }
