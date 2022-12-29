@@ -157,8 +157,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   }
 
   @objc private func replyMoreButtonDidTap(_ sender: UIButton) {
-    self.visibleComments[sender.tag].isOpen.toggle()
-    self.interactor?.fetchVisibleComments(comments: self.visibleComments)
+    self.interactor?.toggleVisibleStatus(commentId: sender.tag)
   }
 
   @objc private func registButtonDidTap(_ sender: UIButton) {
@@ -350,7 +349,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       cell.bind(comment: self.visibleComments[indexPath.item])
 
       cell.replyMoreButton.do {
-        $0.tag = indexPath.item
+        $0.tag = commentId
         $0.addTarget(
           self,
           action: #selector(self.replyMoreButtonDidTap(_:)),
