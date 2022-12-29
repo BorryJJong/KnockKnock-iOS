@@ -103,25 +103,27 @@ final class PostCommentCell: BaseCollectionViewCell {
     self.userIdLabel.text = comment.data.nickname
     self.commentLabel.text = comment.data.content
 
-    if comment.isReply {
-      self.replyWriteButton.isHidden = true
-      self.commentDeleteButton.snp.updateConstraints {
-        $0.leading.equalTo(self.replyWriteButton.snp.trailing).inset(self.replyWriteButton.frame.width)
-      }
-      self.profileImageView.snp.updateConstraints {
-        $0.leading.equalTo(self.safeAreaLayoutGuide).offset(Metric.profileImageViewLeadingForReply)
-        $0.width.equalTo(Metric.profileImageViewWidthForReply)
-        $0.height.equalTo(Metric.profileImageViewHeightForReply)
-      }
-    } else {
-      self.replyWriteButton.isHidden = false
-      self.commentDeleteButton.snp.updateConstraints {
-        $0.leading.equalTo(self.replyWriteButton.snp.trailing).offset(Metric.commentDeleteButtonLeadingMargin)
-      }
-      self.profileImageView.snp.updateConstraints {
-        $0.leading.equalTo(self.safeAreaLayoutGuide)
-        $0.width.equalTo(Metric.profileImageViewWidth)
-        $0.height.equalTo(Metric.profileImageViewHeight)
+    DispatchQueue.main.async {
+      if comment.isReply {
+        self.replyWriteButton.isHidden = true
+        self.commentDeleteButton.snp.updateConstraints {
+          $0.leading.equalTo(self.replyWriteButton.snp.trailing).inset(self.replyWriteButton.frame.width)
+        }
+        self.profileImageView.snp.updateConstraints {
+          $0.leading.equalTo(self.safeAreaLayoutGuide).offset(Metric.profileImageViewLeadingForReply)
+          $0.width.equalTo(Metric.profileImageViewWidthForReply)
+          $0.height.equalTo(Metric.profileImageViewHeightForReply)
+        }
+      } else {
+        self.replyWriteButton.isHidden = false
+        self.commentDeleteButton.snp.updateConstraints {
+          $0.leading.equalTo(self.replyWriteButton.snp.trailing).offset(Metric.commentDeleteButtonLeadingMargin)
+        }
+        self.profileImageView.snp.updateConstraints {
+          $0.leading.equalTo(self.safeAreaLayoutGuide)
+          $0.width.equalTo(Metric.profileImageViewWidth)
+          $0.height.equalTo(Metric.profileImageViewHeight)
+        }
       }
     }
   }
