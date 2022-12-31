@@ -17,9 +17,9 @@ struct CommentResponse: Decodable {
     let image: String?
     let content: String
     let regDate: String
-    let isDeleted: Bool
+    var isDeleted: Bool
     let replyCnt: Int
-    let reply: [Reply]?
+    var reply: [Reply]?
   }
 
   struct Reply: Decodable {
@@ -29,13 +29,13 @@ struct CommentResponse: Decodable {
     let image: String?
     let content: String
     let regDate: String
-    let isDeleted: Bool
+    var isDeleted: Bool
   }
 }
 
 /// View에서 사용하는 comment model
 struct Comment: Decodable {
-  let data: CommentResponse.Data
+  var data: CommentResponse.Data
   
   var isOpen: Bool = false
   var isReply: Bool = false

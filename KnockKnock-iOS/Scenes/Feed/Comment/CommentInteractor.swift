@@ -56,6 +56,11 @@ final class CommentInteractor: CommentInteractorProtocol {
       !$0.data.isDeleted
     }).forEach { comment in
 
+      //      let isReplyEmpty = comment.data.reply?.filter({ $0.isDeleted }).count
+      //      == comment.data.reply?.count ?? 0
+      //
+      //      if comment.isOpen && !isReplyEmpty {
+
       if comment.isOpen {
         self.visibleComments.append(comment)
 
@@ -104,7 +109,29 @@ final class CommentInteractor: CommentInteractorProtocol {
     self.worker?.requestDeleteComment(
       commentId: commentId,
       completionHandler: {
-        self.presenter?.presentDeleteComment()
+
+        if let index = self.comments.firstIndex(where: { $0.data.id == commentId }) {
+          self.comments[index].data.isDeleted = true
+        }
+
+        for index in 0..<self.comments.count {
+          if let index = self.comments[index].data.reply?.firstIndex(where: {
+            $0.id == commentId
+          }) {
+            self.comments[index].data.reply?[index].isDeleted = true
+          }
+        }
+
+        //        guard let index = self.visibleComments.firstIndex(where: { $0.data.id == commentId }) else {return}
+        //
+        //
+        //        self.visibleComments[index].data.isDeleted = true
+        //
+        //        self.comments.remove(at: self.comments.)
+//                self.presenter?.presentVisibleComments(allComments: self.visibleComments)
+
+                self.fetchVisibleComments()
+        //        self.presenter?.presentDeleteComment()
       }
     )
   }

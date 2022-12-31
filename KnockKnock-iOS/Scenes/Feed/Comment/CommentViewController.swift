@@ -187,7 +187,7 @@ extension CommentViewController: CommentViewProtocol {
   }
   
   func deleteComment() {
-    self.interactor?.fetchAllComments(feedId: self.feedId)
+//    self.interactor?.fetchAllComments(feedId: self.feedId)
   }
 }
 
@@ -214,7 +214,6 @@ extension CommentViewController: UICollectionViewDataSource {
     cell.bind(comment: self.visibleComments[indexPath.item])
     
     cell.replyMoreButton.do {
-//      $0.tag = indexPath.item
       $0.tag = commentId
       $0.addTarget(
         self,
