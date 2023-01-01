@@ -38,8 +38,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   /// view에서 보여지는 댓글 array(open 상태 댓글만)
   var visibleComments: [Comment] = []
 
-
-  // Business logic
+  // MARK: - Business logic
 
   func getFeedDeatil(feedId: Int) {
     self.worker?.getFeedDetail(
@@ -76,6 +75,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     guard let index = self.comments.firstIndex(where: {
       $0.data.id == commentId
     }) else { return }
+    
     self.comments[index].isOpen.toggle()
     self.fetchVisibleComments()
   }
@@ -129,6 +129,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.presenter?.presentAllCommentsCount(allCommentsCount: count)
   }
 
+  /// 댓글 등록
   func requestAddComment(
     comment: AddCommentRequest
   ) {
@@ -142,16 +143,29 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     )
   }
 
+  /// 댓글 삭제
   func requestDeleteComment(commentId: Int) {
     self.worker?.requestDeleteComment(
       commentId: commentId,
       completionHandler: {
-        self.presenter?.presentDeleteComment()
+
+        if let index = self.comments.firstIndex(where: { $0.data.id == commentId }) {
+          self.comments[index].data.isDeleted = true
+        }
+
+        for commentIndex in 0..<self.comments.count {
+          if let replyIndex = self.comments[commentIndex].data.reply?.firstIndex(where: {
+            $0.id == commentId
+          }) {
+            self.comments[commentIndex].data.reply?[replyIndex].isDeleted = true
+          }
+        }
+
+        self.fetchVisibleComments()
       }
     )
   }
-
-  // Routing
+  // MARK: - Routing
 
   func navigateToLikeDetail(source: FeedDetailViewProtocol) {
     self.router?.navigateToLikeDetail(source: source, like: self.likeList)
