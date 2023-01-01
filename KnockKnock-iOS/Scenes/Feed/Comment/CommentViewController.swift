@@ -15,7 +15,6 @@ protocol CommentViewProtocol {
   var interactor: CommentInteractorProtocol? { get set }
   
   func fetchVisibleComments(comments: [Comment])
-  func deleteComment()
 }
 
 final class CommentViewController: BaseViewController<CommentView> {
@@ -184,10 +183,6 @@ final class CommentViewController: BaseViewController<CommentView> {
 extension CommentViewController: CommentViewProtocol {
   func fetchVisibleComments(comments: [Comment]) {
     self.visibleComments = comments
-  }
-  
-  func deleteComment() {
-//    self.interactor?.fetchAllComments(feedId: self.feedId)
   }
 }
 

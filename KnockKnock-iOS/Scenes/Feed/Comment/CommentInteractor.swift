@@ -56,11 +56,6 @@ final class CommentInteractor: CommentInteractorProtocol {
       !$0.data.isDeleted
     }).forEach { comment in
 
-      //      let isReplyEmpty = comment.data.reply?.filter({ $0.isDeleted }).count
-      //      == comment.data.reply?.count ?? 0
-      //
-      //      if comment.isOpen && !isReplyEmpty {
-
       if comment.isOpen {
         self.visibleComments.append(comment)
 
@@ -89,7 +84,7 @@ final class CommentInteractor: CommentInteractorProtocol {
         }
       }
     }
-    self.presenter?.presentVisibleComments(allComments: self.visibleComments)
+    self.presenter?.presentVisibleComments(comments: self.visibleComments)
   }
 
   /// 댓글 등록
@@ -114,24 +109,15 @@ final class CommentInteractor: CommentInteractorProtocol {
           self.comments[index].data.isDeleted = true
         }
 
-        for index in 0..<self.comments.count {
-          if let index = self.comments[index].data.reply?.firstIndex(where: {
+        for commentIndex in 0..<self.comments.count {
+          if let replyIndex = self.comments[commentIndex].data.reply?.firstIndex(where: {
             $0.id == commentId
           }) {
-            self.comments[index].data.reply?[index].isDeleted = true
+            self.comments[commentIndex].data.reply?[replyIndex].isDeleted = true
           }
         }
 
-        //        guard let index = self.visibleComments.firstIndex(where: { $0.data.id == commentId }) else {return}
-        //
-        //
-        //        self.visibleComments[index].data.isDeleted = true
-        //
-        //        self.comments.remove(at: self.comments.)
-//                self.presenter?.presentVisibleComments(allComments: self.visibleComments)
-
-                self.fetchVisibleComments()
-        //        self.presenter?.presentDeleteComment()
+        self.fetchVisibleComments()
       }
     )
   }
