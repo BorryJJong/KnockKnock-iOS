@@ -42,6 +42,7 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
   
   var currentPage = 1
   let pageSize = 9 // pageSize 논의 필요
+
   var challengeId = 0
 
   // MARK: - UIs

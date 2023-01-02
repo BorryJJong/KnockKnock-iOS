@@ -11,7 +11,6 @@ import UIKit
 
 /// 피드 등록 entity
 struct FeedWrite {
-  let userId: Int
   let content: String
   let storeAddress: String
   let locationX: String

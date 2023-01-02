@@ -193,7 +193,6 @@ enum KKRouter: URLRequestConvertible {
 
       let multipartFormData = MultipartFormData()
 
-      let userId = "\(feedWriteForm.userId)".data(using: .utf8) ?? Data()
       let content = feedWriteForm.content.data(using: .utf8) ?? Data()
       let storeAddress = feedWriteForm.storeAddress.data(using: .utf8) ?? Data()
       let locationX = feedWriteForm.locationX.data(using: .utf8) ?? Data()
@@ -203,7 +202,6 @@ enum KKRouter: URLRequestConvertible {
       let challenges = feedWriteForm.challenges.data(using: .utf8) ?? Data()
       let images = feedWriteForm.images.map { $0.pngData() ?? Data() }
 
-      multipartFormData.append(userId, withName: "userId")
       multipartFormData.append(content, withName: "content")
       multipartFormData.append(storeAddress, withName: "storeAddress")
       multipartFormData.append(locationX, withName: "locationX")

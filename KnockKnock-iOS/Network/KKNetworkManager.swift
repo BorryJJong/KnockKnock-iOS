@@ -44,7 +44,8 @@ final class KKNetworkManager {
   ) {
     AF.upload(
       multipartFormData: router.multipart,
-      with: router
+      with: router,
+      interceptor: self.interceptor
     ).validate(statusCode: 200..<500)
       .responseData { response in
         switch response.result {
