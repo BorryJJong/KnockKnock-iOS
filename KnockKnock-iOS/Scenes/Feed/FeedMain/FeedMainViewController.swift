@@ -41,7 +41,7 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
   var popularPost: [String] = []
   
   var currentPage = 1
-  let pageSize = 1 // pageSize 논의 필요, 페이지네이션 작동 테스트를 위해 1로 임시 설정
+  let pageSize = 9 // pageSize 논의 필요, 페이지네이션 작동 테스트를 위해 1로 임시 설정
   var challengeId = 0
 
   // MARK: - UIs

@@ -22,7 +22,7 @@ protocol FeedWriteInteractorProtocol: AnyObject {
 
   func setCurrentText(text: String) 
   func checkEssentialField(imageCount: Int)
-  func requestUploadFeed(source: FeedWriteViewProtocol, userId: Int, content: String, images: [UIImage])
+  func requestUploadFeed(source: FeedWriteViewProtocol, content: String, images: [UIImage])
 }
 
 final class FeedWriteInteractor: FeedWriteInteractorProtocol {
@@ -78,7 +78,6 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
 
   func requestUploadFeed(
     source: FeedWriteViewProtocol,
-    userId: Int,
     content: String,
     images: [UIImage]
   ) {
@@ -96,7 +95,6 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
 
     self.worker?.uploadFeed(
       postData: FeedWrite(
-        userId: userId,
         content: content,
         storeAddress: self.selectedAddress?.addressName ?? "",
         locationX: self.selectedAddress?.longtitude ?? "",
