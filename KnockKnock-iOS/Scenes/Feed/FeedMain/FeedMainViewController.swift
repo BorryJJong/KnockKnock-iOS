@@ -33,7 +33,9 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
 
   var feedMainPost: [FeedMain.Post] = [] {
     didSet {
-      self.containerView.feedCollectionView.reloadData()
+      DispatchQueue.main.async {
+        self.containerView.feedCollectionView.reloadData()
+      }
     }
   }
   var challengeTitles: [ChallengeTitle] = []

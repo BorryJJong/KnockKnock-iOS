@@ -104,10 +104,10 @@ final class FeedRepository: FeedRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: DefaultResponse.self,
+        object: Bool.self,
         router: KKRouter.deleteFeed(id: feedId),
         success: { response in
-          completionHandler(response.success)
+          completionHandler(response)
         }, failure: { error in
           print(error)
         }
