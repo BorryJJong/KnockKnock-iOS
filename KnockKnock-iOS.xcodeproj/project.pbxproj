@@ -478,7 +478,6 @@
 		201077EC27D39A8B00280991 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
-				61299F06290128270006F579 /* LodingIndicator.swift */,
 				201077EE27D39FFB00280991 /* Challenge.swift */,
 				6143296728644187008BDCC9 /* FeedPost.swift */,
 				619DEE9B28868E7E00C80095 /* Comment.swift */,
@@ -838,6 +837,7 @@
 		61A02844290E358100943A40 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				61299F06290128270006F579 /* LodingIndicator.swift */,
 				61A02845290E358F00943A40 /* zero_waste_loading.json */,
 				61B20B6A2928EF4400EBA596 /* ImagePickerManager.swift */,
 			);

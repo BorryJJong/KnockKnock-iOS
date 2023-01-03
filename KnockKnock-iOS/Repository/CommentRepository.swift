@@ -64,15 +64,12 @@ final class CommentRepository: CommentRepositoryProtocol {
     commentId: Int,
     completionHandler: @escaping (DeleteCommentResponse) -> Void
   ) {
-    let parameters = [
-      "id": commentId
-    ] as [String: Any]
 
     KKNetworkManager
       .shared
       .request(
         object: DeleteCommentResponse.self,
-        router: KKRouter.deleteComment(id: parameters),
+        router: KKRouter.deleteComment(id: commentId),
         success: { response in
           completionHandler(response)
         }, failure: { error in

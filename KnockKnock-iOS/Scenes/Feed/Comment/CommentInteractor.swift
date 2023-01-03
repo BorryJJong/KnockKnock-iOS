@@ -44,6 +44,7 @@ final class CommentInteractor: CommentInteractorProtocol {
     guard let index = self.comments.firstIndex(where: {
       $0.data.id == commentId
     }) else { return }
+    
     self.comments[index].isOpen.toggle()
     self.fetchVisibleComments()
   }

@@ -116,7 +116,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
         }
       }
     }
-    self.presenter?.presentVisibleComments(allComments: self.visibleComments)
+    self.presenter?.presentVisibleComments(comments: self.visibleComments)
   }
 
   /// 답글을 포함한 모든 댓글의 수 (헤더에 표기)
