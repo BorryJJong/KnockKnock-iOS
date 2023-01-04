@@ -42,9 +42,11 @@ final class LoginInteractor: LoginInteractorProtocol {
     )
   }
   
-  /// 회원 판별
-  /// isExisted: 기존 회원 여부
-  /// 회원 o -> 토큰 저장 후 홈 화면 진입 / 회원 x -> 프로필 설정화면(회원가입)
+  /// - 회원 판별 메소드
+  ///   - 회원 O: 토큰 저장 후 홈 화면 진입
+  ///   - 회원 X: 발급 된 토큰과 함께 프로필 설정 화면 진입(회원가입)
+  /// - Parameters:
+  ///   - isExisted: 기존 회원 여부
   func checkExistUser(response: AccountResponse, signInInfo: SignInInfo) {
 
     if response.isExistUser {
@@ -61,7 +63,7 @@ final class LoginInteractor: LoginInteractorProtocol {
     }
   }
 
-  // 로컬(UserDefaults)에 서버 토큰 저장
+  /// 로컬(UserDefaults)에 서버 토큰 저장
   func saveTokens(response: AccountResponse) {
 
     guard let userInfo = response.userInfo,
@@ -92,8 +94,9 @@ final class LoginInteractor: LoginInteractorProtocol {
 
 extension LoginInteractor: AppleLoginResultDelegate {
   /// Worker -> Interactor로 로그인 결과 전달
-  /// loginReseponse: 서버로 부터 받은 로그인 결과 데이터
-  /// loginInfo: 비회원인 경우 회원가입 요청 시 사용할 request body
+  /// - Parameters:
+  ///   - loginReseponse: 서버로 부터 받은 로그인 결과 데이터
+  ///   - loginInfo: 비회원인 경우 회원가입 요청 시 사용할 request body
   func getSignInResult(response: AccountResponse, signInInfo: SignInInfo) {
     self.checkExistUser(response: response, signInInfo: signInInfo)
   }

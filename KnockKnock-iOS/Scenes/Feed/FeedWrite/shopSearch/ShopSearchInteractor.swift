@@ -26,7 +26,9 @@ final class ShopSearchInteractor: ShopSearchInteractorProtocol {
 
   private var page = 1
 
-  /// isNew: 새 검색어에 대한 검색결과 호출인 경우 true, 기존 검색 결과의 페이징을 위한 호출인 경우 false
+  /// - Parameters:
+  ///  - address: 주소 data
+  ///  - isNew: 새 검색어에 대한 검색결과 호출인 경우 true, 기존 검색 결과의 페이징을 위한 호출인 경우 false
   func fetchShopAddress(address: String?, isNew: Bool) {
     var keyword = ""
 
