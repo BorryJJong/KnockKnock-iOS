@@ -14,7 +14,7 @@ protocol ProfileSettingWorkerProtocol {
     image: String,
     completionHandler: @escaping (AccountResponse) -> Void
   )
-  func saveUserInfo(userInfo: AccountResponse.UserInfo, authInfo: AccountResponse.AuthInfo)
+  func saveUserInfo(accountInfo: AccountResponse)
 }
 
 final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
@@ -53,10 +53,10 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
     )
   }
 
-  func saveUserInfo(
-    userInfo: AccountResponse.UserInfo,
-    authInfo: AccountResponse.AuthInfo
-  ) {
+  func saveUserInfo(accountInfo: AccountResponse) {
+
+    guard let userInfo = accountInfo.userInfo,
+          let authInfo = accountInfo.authInfo else { return }
 
     self.localDataManager.saveToken(
       accessToken: authInfo.accessToken,

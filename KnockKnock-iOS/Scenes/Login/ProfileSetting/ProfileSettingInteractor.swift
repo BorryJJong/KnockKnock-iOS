@@ -50,13 +50,6 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
   }
 
   func saveUserInfo(response: AccountResponse) {
-
-    guard let userInfo = response.userInfo,
-          let authInfo = response.authInfo else { return }
-
-    self.worker?.saveUserInfo(
-      userInfo: userInfo,
-      authInfo: authInfo
-    )
+    self.worker?.saveUserInfo(accountInfo: response)
   }
 }
