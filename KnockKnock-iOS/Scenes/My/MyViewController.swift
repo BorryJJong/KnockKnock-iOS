@@ -100,7 +100,7 @@ final class MyViewController: BaseViewController<MyView> {
   // MARK: - Button Actions
 
   @objc private func loginButtonDidTap(_ sender: UIButton) {
-    self.interactor?.navigateToLoginView(source: self)
+    self.interactor?.navigateToLoginView()
   }
 
   @objc func signOutButtonDidTap(_ sender: UIButton) {
@@ -262,7 +262,7 @@ extension MyViewController: UITableViewDelegate {
 
     switch menu {
     case .profile:
-      self.interactor?.navigateToProfileSettingView(source: self)
+      self.interactor?.navigateToProfileSettingView()
 
     case .withdraw:
       self.showAlert(
@@ -281,7 +281,7 @@ extension MyViewController: UITableViewDelegate {
       )
 
     case .notice:
-      self.interactor?.navigateToNoticeView(source: self)
+      self.interactor?.navigateToNoticeView()
 
     default:
       print("none")

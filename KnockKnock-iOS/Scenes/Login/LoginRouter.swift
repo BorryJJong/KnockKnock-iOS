@@ -42,6 +42,8 @@ final class LoginRouter: LoginRouterProtocol {
   }
 
   /// 회원가입을 위해 프로필 설정 뷰로 이동
+  /// - Parameters:
+  ///  - signInInfo: 로그인 시 입력받은 소셜로그인 정보(socialtype, token)
   func navigateToProfileSettingView(signInInfo: SignInInfo) {
     let profileSettingViewController = ProfileSettingRouter.createProfileSettingView(signInInfo: signInInfo)
 

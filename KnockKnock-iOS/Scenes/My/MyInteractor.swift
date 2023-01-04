@@ -18,9 +18,9 @@ protocol MyInteractorProtocol {
   func requestSignOut()
   func requestWithdraw()
 
-  func navigateToLoginView(source: MyViewProtocol)
-  func navigateToNoticeView(source: MyViewProtocol)
-  func navigateToProfileSettingView(source: MyViewProtocol)
+  func navigateToLoginView()
+  func navigateToNoticeView()
+  func navigateToProfileSettingView()
 }
 
 final class MyInteractor: MyInteractorProtocol {
@@ -65,16 +65,16 @@ final class MyInteractor: MyInteractorProtocol {
 
   // Routing
 
-  func navigateToLoginView(source: MyViewProtocol) {
-    self.router?.navigateToLoginView(source: source)
+  func navigateToLoginView() {
+    self.router?.navigateToLoginView()
   }
 
-  func navigateToNoticeView(source: MyViewProtocol) {
-    self.router?.navigateToNoticeView(source: source)
+  func navigateToNoticeView() {
+    self.router?.navigateToNoticeView()
   }
 
-  func navigateToProfileSettingView(source: MyViewProtocol) {
-    self.router?.navigateToProfileSettingView(source: source)
+  func navigateToProfileSettingView() {
+    self.router?.navigateToProfileSettingView()
   }
 
   // Notification Center
