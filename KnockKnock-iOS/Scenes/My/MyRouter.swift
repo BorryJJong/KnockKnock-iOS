@@ -56,7 +56,7 @@ final class MyRouter: MyRouterProtocol {
   }
 
   func navigateToProfileSettingView(source: MyViewProtocol) {
-    let profileViewController = ProfileSettingRouter.createProfileSettingView(loginInfo: nil)
+    let profileViewController = ProfileSettingRouter.createProfileSettingView(signInInfo: nil)
 
     if let sourceView = source as? UIViewController {
       sourceView.navigationController?.pushViewController(

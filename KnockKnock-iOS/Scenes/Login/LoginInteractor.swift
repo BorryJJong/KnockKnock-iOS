@@ -18,7 +18,7 @@ protocol LoginInteractorProtocol {
 }
 
 protocol AppleLoginResultDelegate: AnyObject {
-  func getLoginResult(response: AccountResponse, loginInfo: LoginInfo)
+  func getSignInResult(response: AccountResponse, signInInfo: SignInInfo)
 }
 
 final class LoginInteractor: LoginInteractorProtocol {
@@ -29,14 +29,14 @@ final class LoginInteractor: LoginInteractorProtocol {
 
   func fetchLoginResult(socialType: SocialType) {
 
-    self.worker?.fetchLoginResult(
+    self.worker?.fetchSignInResult(
       appleLoginResultDelegate: self,
       socialType: socialType,
-      completionHandler: { response, loginInfo in
+      completionHandler: { response, signInInfo in
 
-        self.isExistUser(
+        self.checkExistUser(
           response: response,
-          loginInfo: loginInfo
+          signInInfo: signInInfo
         )
       }
     )
@@ -45,19 +45,19 @@ final class LoginInteractor: LoginInteractorProtocol {
   /// 회원 판별
   /// isExisted: 기존 회원 여부
   /// 회원 o -> 토큰 저장 후 홈 화면 진입 / 회원 x -> 프로필 설정화면(회원가입)
-  func isExistUser(response: AccountResponse, loginInfo: LoginInfo) {
+  func checkExistUser(response: AccountResponse, signInInfo: SignInInfo) {
 
     if response.isExistUser {
       self.saveTokens(response: response)
       self.popLoginView()
 
       NotificationCenter.default.post(
-        name: .loginCompleted,
+        name: .SignInCompleted,
         object: nil
       )
 
     } else {
-      self.navigateToProfileSettingView(loginInfo: loginInfo)
+      self.navigateToProfileSettingView(signInInfo: signInInfo)
     }
   }
 
@@ -75,8 +75,8 @@ final class LoginInteractor: LoginInteractorProtocol {
 
   // MARK: - Routing logic
   
-  func navigateToProfileSettingView(loginInfo: LoginInfo) {
-    self.router?.navigateToProfileSettingView(loginInfo: loginInfo)
+  func navigateToProfileSettingView(signInInfo: SignInInfo) {
+    self.router?.navigateToProfileSettingView(signInInfo: signInInfo)
   }
 
   func navigateToHome() {
@@ -94,7 +94,7 @@ extension LoginInteractor: AppleLoginResultDelegate {
   /// Worker -> Interactor로 로그인 결과 전달
   /// loginReseponse: 서버로 부터 받은 로그인 결과 데이터
   /// loginInfo: 비회원인 경우 회원가입 요청 시 사용할 request body
-  func getLoginResult(response: AccountResponse, loginInfo: LoginInfo) {
-    self.isExistUser(response: response, loginInfo: loginInfo)
+  func getSignInResult(response: AccountResponse, signInInfo: SignInInfo) {
+    self.checkExistUser(response: response, signInInfo: signInInfo)
   }
 }

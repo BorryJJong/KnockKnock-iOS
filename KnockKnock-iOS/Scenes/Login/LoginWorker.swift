@@ -8,10 +8,10 @@
 import UIKit
 
 protocol LoginWorkerProtocol {
-  func fetchLoginResult(
+  func fetchSignInResult(
     appleLoginResultDelegate: AppleLoginResultDelegate,
     socialType: SocialType,
-    completionHandler: @escaping (AccountResponse, LoginInfo) -> Void
+    completionHandler: @escaping (AccountResponse, SignInInfo) -> Void
   )
   
   func saveUserInfo(
@@ -45,16 +45,16 @@ final class LoginWorker: LoginWorkerProtocol {
     self.localDataManager = localDataManager
   }
 
-  func fetchLoginResult(
+  func fetchSignInResult(
     appleLoginResultDelegate: AppleLoginResultDelegate,
     socialType: SocialType,
-    completionHandler: @escaping (AccountResponse, LoginInfo) -> Void
+    completionHandler: @escaping (AccountResponse, SignInInfo) -> Void
   ) {
     switch socialType {
     case .kakao:
-      self.kakaoLoginManager.loginWithKakao(completionHandler: { accessToken in
+      self.kakaoLoginManager.excute(completionHandler: { accessToken in
 
-        self.accountManager.logIn(
+        self.accountManager.signIn(
           accessToken: accessToken,
           socialType: socialType,
           completionHandler: { response, loginInfo in
@@ -65,7 +65,7 @@ final class LoginWorker: LoginWorkerProtocol {
 
     case .apple:
       self.appleLoginResultDelegate = appleLoginResultDelegate
-      self.appleLoginManager.requestAppleLogin(delegate: self)
+      self.appleLoginManager.excute(delegate: self)
     }
   }
 
@@ -88,14 +88,14 @@ final class LoginWorker: LoginWorkerProtocol {
 extension LoginWorker: AppleLoginDelegate {
 
   func success(token: String) {
-    self.accountManager.logIn(
+    self.accountManager.signIn(
       accessToken: token,
       socialType: SocialType.apple
-    ) { response, loginInfo in
+    ) { response, signInInfo in
 
-      self.appleLoginResultDelegate?.getLoginResult(
+      self.appleLoginResultDelegate?.getSignInResult(
         response: response,
-        loginInfo: loginInfo
+        signInInfo: signInInfo
       )
     }
   }

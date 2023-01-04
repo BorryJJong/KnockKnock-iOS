@@ -7,8 +7,8 @@
 
 import Foundation
 
-/// login 요청시 request body에 사용
-struct LoginInfo {
+/// 로그인 요청시 request body에 사용
+struct SignInInfo {
   let socialUuid: String
   let socialType: String
 }

@@ -10,12 +10,12 @@ import Foundation
 import KakaoSDKUser
 
 protocol KakaoLoginManagerProtocol {
-  func loginWithKakao(completionHandler: @escaping (String) -> Void)
+  func excute(completionHandler: @escaping (String) -> Void)
 }
 
 final class KakaoLoginManager: KakaoLoginManagerProtocol {
 
-  func loginWithKakao(completionHandler: @escaping (String) -> Void) {
+  func excute(completionHandler: @escaping (String) -> Void) {
     if UserApi.isKakaoTalkLoginAvailable() {
       UserApi.shared.loginWithKakaoTalk(completion: { (oauthToken, error) in
         if let error = error {

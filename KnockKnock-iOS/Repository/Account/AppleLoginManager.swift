@@ -9,7 +9,7 @@ import Foundation
 import AuthenticationServices
 
 protocol AppleLoginManagerProtocol {
-  func requestAppleLogin(delegate: AppleLoginDelegate)
+  func excute(delegate: AppleLoginDelegate)
 }
  
 final class AppleLoginManager: NSObject, AppleLoginManagerProtocol {
@@ -26,7 +26,7 @@ final class AppleLoginManager: NSObject, AppleLoginManagerProtocol {
   
   // MARK: - Login
   
-  func requestAppleLogin(delegate: AppleLoginDelegate) {
+  func excute(delegate: AppleLoginDelegate) {
     self.delegate = delegate
 
     let appleIDProvider = ASAuthorizationAppleIDProvider()

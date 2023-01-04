@@ -13,10 +13,10 @@ protocol MyInteractorProtocol {
   var presenter: MyPresenter? { get set }
 
   func fetchMenuData()
-  func checkLoginStatus()
+  func checkSignInStatus()
   func fetchNickname() 
-  func requestLogOut()
   func requestSignOut()
+  func requestWithdraw()
 
   func navigateToLoginView(source: MyViewProtocol)
   func navigateToNoticeView(source: MyViewProtocol)
@@ -35,13 +35,13 @@ final class MyInteractor: MyInteractorProtocol {
     self.worker?.fetchMenuData(completionHandler: { [weak self] menu in
       self?.presenter?.presentMenuData(myMenu: menu)
     })
-    self.checkLoginStatus()
+    self.checkSignInStatus()
     self.setNotification()
   }
 
-  func checkLoginStatus() {
-    self.worker?.checkLoginStatus(completionHandler: { [weak self] isLoggedIn in
-      self?.presenter?.presentLoginStatus(isLoggedIn: isLoggedIn)
+  func checkSignInStatus() {
+    self.worker?.checkSignInStatus(completionHandler: { [weak self] isSignedIn in
+      self?.presenter?.presentLoginStatus(isSignedIn: isSignedIn)
     })
   }
 
@@ -51,15 +51,15 @@ final class MyInteractor: MyInteractorProtocol {
     })
   }
 
-  func requestLogOut() {
-    self.worker?.requestLogOut(completionHandler: {
-      NotificationCenter.default.post(name: .logoutCompleted, object: nil)
+  func requestSignOut() {
+    self.worker?.requestSignOut(completionHandler: {
+      NotificationCenter.default.post(name: .signOutCompleted, object: nil)
     })
   }
 
-  func requestSignOut() {
-    self.worker?.requestSignOut(completionHandler: {
-      NotificationCenter.default.post(name: .logoutCompleted, object: nil)
+  func requestWithdraw() {
+    self.worker?.requestWithdraw(completionHandler: {
+      NotificationCenter.default.post(name: .signOutCompleted, object: nil)
     })
   }
 
@@ -81,19 +81,19 @@ final class MyInteractor: MyInteractorProtocol {
 
   func setNotification() {
     NotificationCenter.default.addObserver(
-      forName: .loginCompleted,
+      forName: .SignInCompleted,
       object: nil,
       queue: nil
     ) { _ in
-      self.presenter?.presentLoginStatus(isLoggedIn: true)
+      self.presenter?.presentLoginStatus(isSignedIn: true)
     }
 
     NotificationCenter.default.addObserver(
-      forName: .logoutCompleted,
+      forName: .signOutCompleted,
       object: nil,
       queue: nil
     ) { _ in
-      self.presenter?.presentLoginStatus(isLoggedIn: false)
+      self.presenter?.presentLoginStatus(isSignedIn: false)
     }
   }
 }

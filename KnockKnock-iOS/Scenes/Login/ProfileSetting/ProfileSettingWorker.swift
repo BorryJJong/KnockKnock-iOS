@@ -8,8 +8,8 @@
 import UIKit
 
 protocol ProfileSettingWorkerProtocol {
-  func requestSignUp(
-    loginInfo: LoginInfo,
+  func requestRegister(
+    signInInfo: SignInInfo,
     nickname: String,
     image: String,
     completionHandler: @escaping (AccountResponse) -> Void
@@ -29,15 +29,15 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
     self.localDataManager = localDataManager
   }
 
-  func requestSignUp(
-    loginInfo: LoginInfo,
+  func requestRegister(
+    signInInfo: SignInInfo,
     nickname: String,
     image: String,
     completionHandler: @escaping (AccountResponse) -> Void
   ) {
     
-    self.accountManager.signUp(
-      loginInfo: loginInfo,
+    self.accountManager.register(
+      signInInfo: signInInfo,
       nickname: nickname,
       image: image,
       completionHandler: { response in

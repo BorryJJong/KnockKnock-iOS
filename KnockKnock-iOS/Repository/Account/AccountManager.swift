@@ -8,33 +8,33 @@
 import Foundation
 
 protocol AccountManagerProtocol {
-  func logIn(
+  func signIn(
     accessToken: String?,
     socialType: SocialType,
-    completionHandler: @escaping (AccountResponse, LoginInfo) -> Void
+    completionHandler: @escaping (AccountResponse, SignInInfo) -> Void
   )
-  func signUp(
-    loginInfo: LoginInfo,
+  func register(
+    signInInfo: SignInInfo,
     nickname: String,
     image: String,
     completionHandler: @escaping (AccountResponse) -> Void
   )
-  func logOut(completionHanlder: @escaping (Bool) -> Void)
   func signOut(completionHanlder: @escaping (Bool) -> Void)
+  func withdraw(completionHanlder: @escaping (Bool) -> Void)
 }
 
 final class AccountManager: AccountManagerProtocol {
 
   /// 회원가입
-  func signUp(
-    loginInfo: LoginInfo,
+  func register(
+    signInInfo: SignInInfo,
     nickname: String,
     image: String,
     completionHandler: @escaping (AccountResponse) -> Void
   ) {
     let parameters = [
-      "socialUuid": loginInfo.socialUuid,
-      "socialType": loginInfo.socialType,
+      "socialUuid": signInInfo.socialUuid,
+      "socialType": signInInfo.socialType,
       "nickname": nickname,
       "image": image
     ]
@@ -53,15 +53,15 @@ final class AccountManager: AccountManagerProtocol {
   }
 
   /// 로그인
-  func logIn(
+  func signIn(
     accessToken: String? = nil,
     socialType: SocialType,
-    completionHandler: @escaping (AccountResponse, LoginInfo) -> Void
+    completionHandler: @escaping (AccountResponse, SignInInfo) -> Void
   ) {
 
       guard let accessToken = accessToken else { return }
 
-      let loginInfo = LoginInfo(
+      let signInInfo = SignInInfo(
         socialUuid: accessToken,
         socialType: socialType.rawValue
       )
@@ -75,9 +75,9 @@ final class AccountManager: AccountManagerProtocol {
         .shared
         .request(
           object: AccountResponse.self,
-          router: KKRouter.postSocialLogin(loginInfo: parameters),
+          router: KKRouter.postSocialLogin(signInInfo: parameters),
           success: { response in
-            completionHandler(response, loginInfo)
+            completionHandler(response, signInInfo)
           },
           failure: { error in
             print(error)
@@ -86,7 +86,7 @@ final class AccountManager: AccountManagerProtocol {
   }
 
   /// 로그아웃
-  func logOut(completionHanlder: @escaping (Bool) -> Void) {
+  func signOut(completionHanlder: @escaping (Bool) -> Void) {
     KKNetworkManager
       .shared
       .request(
@@ -101,12 +101,12 @@ final class AccountManager: AccountManagerProtocol {
   }
 
   /// 회원탈퇴
-  func signOut(completionHanlder: @escaping (Bool) -> Void) {
+  func withdraw(completionHanlder: @escaping (Bool) -> Void) {
     KKNetworkManager
       .shared
       .request(
         object: Bool.self,
-        router: KKRouter.deleteSignOut,
+        router: KKRouter.deleteWithdraw,
         success: { response in
           completionHanlder(response)
         }, failure: { error in

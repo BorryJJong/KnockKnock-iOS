@@ -10,11 +10,9 @@ import UIKit
 protocol LoginRouterProtocol {
   var view: LoginViewProtocol? { get set }
   static func createLoginView() -> UIViewController
-  func navigateToProfileSettingView(loginInfo: LoginInfo)
+  func navigateToProfileSettingView(signInInfo: SignInInfo)
   func navigateToHome()
   func popLoginView()
-
-  func navigateToSignUp(loginInfo: LoginInfo)
 }
 
 final class LoginRouter: LoginRouterProtocol {
@@ -43,8 +41,9 @@ final class LoginRouter: LoginRouterProtocol {
     return view
   }
 
-  func navigateToProfileSettingView(loginInfo: LoginInfo) {
-    let profileSettingViewController = ProfileSettingRouter.createProfileSettingView(loginInfo: loginInfo)
+  /// 회원가입을 위해 프로필 설정 뷰로 이동
+  func navigateToProfileSettingView(signInInfo: SignInInfo) {
+    let profileSettingViewController = ProfileSettingRouter.createProfileSettingView(signInInfo: signInInfo)
 
     if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.pushViewController(
@@ -72,19 +71,6 @@ final class LoginRouter: LoginRouterProtocol {
     if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.popViewController(animated: true)
     }
-    NotificationCenter.default.post(name: .loginCompleted, object: nil)
-  }
-
-  func navigateToSignUp(loginInfo: LoginInfo) {
-    let profileSettingViewController = ProfileSettingRouter.createProfileSettingView(
-      loginInfo: loginInfo
-    )
-
-    if let sourceView = self.view as? UIViewController {
-      sourceView.navigationController?.pushViewController(
-        profileSettingViewController,
-        animated: true
-      )
-    }
+    NotificationCenter.default.post(name: .SignInCompleted, object: nil)
   }
 }

@@ -20,10 +20,10 @@ final class MyTableViewFooter: BaseTableViewHeaderFooterView<MySection> {
     static let separatorViewBottomMargin = -20.f
     static let separatorViewTopMargin = 20.f
 
-    static let logoutButtonTopMargin = 30.f
-    static let logoutButtonBottomMargin = -60.f
-    static let logoutButtonWidth = 20.f
-    static let logoutButtonHeight = 40.f
+    static let signOutButtonTopMargin = 30.f
+    static let signOutButtonBottomMargin = -60.f
+    static let signOutButtonWidth = 20.f
+    static let signOutButtonHeight = 40.f
   }
 
   // MARK: - UIs
@@ -32,29 +32,29 @@ final class MyTableViewFooter: BaseTableViewHeaderFooterView<MySection> {
     $0.backgroundColor = KKDS.Color.gray10
   }
 
-  let logoutButton = MiddleButton(title: "로그아웃")
+  let signOutButton = MiddleButton(title: "로그아웃")
 
   // MARK: - Bind
 
   override func bind(_ model: MySection?) {
     let isLastSection = model?.title == .policy
     
-    self.logoutButton.isHidden = !isLastSection
+    self.signOutButton.isHidden = !isLastSection
     self.separatorView.isHidden = isLastSection
   }
 
   // MARK: - Configure
 
-  func setLogoutButtonHiddenStatus(isLoggedIn: Bool) {
-    if !self.logoutButton.isHidden {
-        self.logoutButton.isHidden = !isLoggedIn
+  func setSignOutButtonHiddenStatus(isSignedIn: Bool) {
+    if !self.signOutButton.isHidden {
+        self.signOutButton.isHidden = !isSignedIn
     }
   }
 
   // MARK: - Constraints
   
   override func setupConstraints() {
-    [self.separatorView, self.logoutButton].addSubViews(self)
+    [self.separatorView, self.signOutButton].addSubViews(self)
 
     self.separatorView.snp.makeConstraints {
       $0.width.equalToSuperview()
@@ -63,12 +63,12 @@ final class MyTableViewFooter: BaseTableViewHeaderFooterView<MySection> {
       $0.bottom.equalToSuperview().offset(Metric.separatorViewBottomMargin)
     }
 
-    self.logoutButton.snp.makeConstraints {
+    self.signOutButton.snp.makeConstraints {
       $0.centerX.equalToSuperview()
-      $0.top.equalToSuperview().offset(Metric.logoutButtonTopMargin)
-      $0.bottom.equalToSuperview().offset(Metric.logoutButtonBottomMargin)
-      $0.height.equalTo(Metric.logoutButtonHeight)
-      $0.width.equalToSuperview().inset(Metric.logoutButtonWidth)
+      $0.top.equalToSuperview().offset(Metric.signOutButtonTopMargin)
+      $0.bottom.equalToSuperview().offset(Metric.signOutButtonBottomMargin)
+      $0.height.equalTo(Metric.signOutButtonHeight)
+      $0.width.equalToSuperview().inset(Metric.signOutButtonWidth)
     }
   }
 }
