@@ -14,10 +14,7 @@ protocol LoginWorkerProtocol {
     completionHandler: @escaping (AccountResponse, SignInInfo) -> Void
   )
   
-  func saveUserInfo(
-    userInfo: AccountResponse.UserInfo,
-    authInfo: AccountResponse.AuthInfo
-  )
+  func saveUserInfo(response: AccountResponse)
 }
 
 protocol AppleLoginDelegate: AnyObject {
@@ -45,6 +42,7 @@ final class LoginWorker: LoginWorkerProtocol {
     self.localDataManager = localDataManager
   }
 
+  /// 로그인 api response 받아오기
   func fetchSignInResult(
     appleLoginResultDelegate: AppleLoginResultDelegate,
     socialType: SocialType,
@@ -69,17 +67,19 @@ final class LoginWorker: LoginWorkerProtocol {
     }
   }
 
-  func saveUserInfo(
-    userInfo: AccountResponse.UserInfo,
-    authInfo: AccountResponse.AuthInfo
-  ) {
+  /// - Parameters:
+  ///   - response: 회원가입/로그인 api response(userinfo)
+  func saveUserInfo(response: AccountResponse) {
 
-    self.localDataManager.saveToken(
-      accessToken: authInfo.accessToken,
-      refreshToken: authInfo.refreshToken,
-      nickname: userInfo.nickname,
-      profileImage: userInfo.image
-    )
+    guard let authInfo = response.authInfo else { return }
+
+    if let userInfo = response.userInfo {
+      self.localDataManager.userDefaultsService.set(value: userInfo.image, forkey: .profileImage)
+      self.localDataManager.userDefaultsService.set(value: userInfo.nickname, forkey: .nickname)
+    }
+
+    self.localDataManager.userDefaultsService.set(value: authInfo.accessToken, forkey: .accessToken)
+    self.localDataManager.userDefaultsService.set(value: authInfo.refreshToken, forkey: .refreshToken)
   }
 }
 

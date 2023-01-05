@@ -52,6 +52,7 @@ final class MyInteractor: MyInteractorProtocol {
   }
 
   func requestSignOut() {
+    
     self.worker?.requestSignOut(completionHandler: {
       NotificationCenter.default.post(name: .signOutCompleted, object: nil)
     })

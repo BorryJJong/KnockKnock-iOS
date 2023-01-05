@@ -8,56 +8,29 @@
 import Foundation
 
 protocol LocalDataManagerProtocol {
-  func saveToken(accessToken: String, refreshToken: String, nickname: String?, profileImage: String?)
-  func deleteToken()
-  func deleteNickname()
+  var userDefaultsService: UserDefaultsServiceType { get }
+
   func checkTokenIsExisted() -> Bool
-  func fetchNickname() -> String?
+  func removeAllUserInfo()
 }
 
 final class LocalDataManager: LocalDataManagerProtocol {
 
-  /// 회원가입/로그인 시 토큰, 닉네임, 프로필 사진 저장
-  func saveToken(
-    accessToken: String,
-    refreshToken: String,
-    nickname: String?,
-    profileImage: String?
-  ) {
-    UserDefaults.standard.set(accessToken, forKey: "accessToken")
-    UserDefaults.standard.set(refreshToken, forKey: "refreshToken")
-
-    if let nickname = nickname {
-      UserDefaults.standard.set(nickname, forKey: "nickname")
-    }
-    if let profileImage = profileImage {
-      UserDefaults.standard.set(profileImage, forKey: "profileImage")
-    }
-  }
-
-  /// 로그아웃/회원탈퇴 시 로컬에 있는 토큰 & 닉네임 삭제
-  func deleteToken() {
-    UserDefaults.standard.removeObject(forKey: "accessToken")
-    UserDefaults.standard.removeObject(forKey: "refreshToken")
-  }
-
-  func deleteNickname() {
-    UserDefaults.standard.removeObject(forKey: "nickname")
-  }
+  var userDefaultsService: UserDefaultsServiceType = UserDefaultsService()
 
   /// 로컬에 토큰 존재 여부 판별
   func checkTokenIsExisted() -> Bool {
-    if UserDefaults.standard.object(forKey: "accessToken") as? String != nil {
+    if userDefaultsService.value(forkey: .accessToken) != nil {
       return true
     } else {
       return false
     }
   }
 
-  // nickname 불러오기
-  func fetchNickname() -> String? {
-    guard let nickname = UserDefaults.standard.object(forKey: "nickname") as? String else { return nil }
-
-    return nickname
+  func removeAllUserInfo() {
+    self.userDefaultsService.remove(forkey: .accessToken)
+    self.userDefaultsService.remove(forkey: .refreshToken)
+    self.userDefaultsService.remove(forkey: .nickname)
+    self.userDefaultsService.remove(forkey: .profileImage)
   }
 }

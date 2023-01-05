@@ -14,7 +14,7 @@ protocol ProfileSettingWorkerProtocol {
     image: String,
     completionHandler: @escaping (AccountResponse) -> Void
   )
-  func saveUserInfo(accountInfo: AccountResponse)
+  func saveUserInfo(response: AccountResponse)
 }
 
 final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
@@ -41,28 +41,26 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
       nickname: nickname,
       image: image,
       completionHandler: { response in
+
         guard let authInfo = response.authInfo else { return }
 
-        self.localDataManager.saveToken(
-          accessToken: authInfo.accessToken,
-          refreshToken: authInfo.refreshToken,
-          nickname: nickname,
-          profileImage: image
-        )
+        self.localDataManager.userDefaultsService.set(value: authInfo.accessToken, forkey: .accessToken)
+        self.localDataManager.userDefaultsService.set(value: authInfo.refreshToken, forkey: .refreshToken)
       }
     )
   }
 
-  func saveUserInfo(accountInfo: AccountResponse) {
+  func saveUserInfo(response: AccountResponse) {
 
-    guard let userInfo = accountInfo.userInfo,
-          let authInfo = accountInfo.authInfo else { return }
+    guard let authInfo = response.authInfo else { return }
 
-    self.localDataManager.saveToken(
-      accessToken: authInfo.accessToken,
-      refreshToken: authInfo.refreshToken,
-      nickname: userInfo.nickname,
-      profileImage: userInfo.image
-    )
+    if let userInfo = response.userInfo {
+      self.localDataManager.userDefaultsService.set(value: userInfo.image, forkey: .profileImage)
+      self.localDataManager.userDefaultsService.set(value: userInfo.nickname, forkey: .nickname)
+    }
+
+    self.localDataManager.userDefaultsService.set(value: authInfo.accessToken, forkey: .accessToken)
+    self.localDataManager.userDefaultsService.set(value: authInfo.refreshToken, forkey: .refreshToken)
+
   }
 }

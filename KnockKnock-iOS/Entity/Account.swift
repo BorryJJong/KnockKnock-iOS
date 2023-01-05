@@ -30,4 +30,3 @@ struct AccountResponse: Decodable {
     let refreshToken: String
   }
 }
-

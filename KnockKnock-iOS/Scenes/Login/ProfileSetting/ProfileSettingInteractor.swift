@@ -50,6 +50,6 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
   }
 
   func saveUserInfo(response: AccountResponse) {
-    self.worker?.saveUserInfo(accountInfo: response)
+    self.worker?.saveUserInfo(response: response)
   }
 }

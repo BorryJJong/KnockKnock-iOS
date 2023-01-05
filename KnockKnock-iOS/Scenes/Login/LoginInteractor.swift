@@ -64,15 +64,10 @@ final class LoginInteractor: LoginInteractorProtocol {
   }
 
   /// 로컬(UserDefaults)에 서버 토큰 저장
+  /// - Parameters:
+  ///   - response: 회원가입/로그인 api response(userinfo)
   func saveTokens(response: AccountResponse) {
-
-    guard let userInfo = response.userInfo,
-          let authInfo = response.authInfo else { return }
-
-    self.worker?.saveUserInfo(
-      userInfo: userInfo,
-      authInfo: authInfo
-    )
+    self.worker?.saveUserInfo(response: response)
   }
 
   // MARK: - Routing logic

@@ -93,6 +93,7 @@ final class AccountManager: AccountManagerProtocol {
         object: Bool.self,
         router: KKRouter.postLogOut,
         success: { response in
+          print(response)
           completionHanlder(response)
         }, failure: { error in
           print(error)

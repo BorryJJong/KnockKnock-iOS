@@ -60,5 +60,4 @@ final class PhotoCell: BaseCollectionViewCell {
       self.deleteButton.heightAnchor.constraint(equalToConstant: Metric.deleteButtonWidth)
     ])
   }
-
 }

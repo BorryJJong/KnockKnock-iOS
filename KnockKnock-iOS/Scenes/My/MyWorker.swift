@@ -62,9 +62,10 @@ final class MyWorker: MyWorkerProtocol {
   }
 
   func fetchNickname(completionHandler: @escaping(String) -> Void) {
-    if let nickname = self.localDataManager?.fetchNickname() {
-      completionHandler(nickname)
+    guard let nickname = self.localDataManager?.userDefaultsService.value(forkey: .nickname) else {
+      return
     }
+      completionHandler(nickname)
   }
 
   func checkSignInStatus(completionHandler: @escaping(Bool) -> Void) {
@@ -76,7 +77,7 @@ final class MyWorker: MyWorkerProtocol {
   func requestSignOut(completionHandler: @escaping() -> Void) {
     self.accountManager?.signOut(completionHanlder: { [weak self] success in
       if success {
-        self?.localDataManager?.deleteToken()
+        self?.localDataManager?.removeAllUserInfo()
         completionHandler()
       }
     })
@@ -85,8 +86,7 @@ final class MyWorker: MyWorkerProtocol {
   func requestWithdraw(completionHandler: @escaping() -> Void) {
     self.accountManager?.withdraw(completionHanlder: { [weak self] success in
       if success {
-        self?.localDataManager?.deleteToken()
-        self?.localDataManager?.deleteNickname()
+        self?.localDataManager?.removeAllUserInfo()
         completionHandler()
       }
     })
