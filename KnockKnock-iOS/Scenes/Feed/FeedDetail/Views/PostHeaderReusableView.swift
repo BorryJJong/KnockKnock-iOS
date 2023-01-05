@@ -21,6 +21,23 @@ final class PostHeaderReusableView: UICollectionReusableView {
 
     static let imagePageControlBottomMargin = -10.f
 
+    static let promotionIconImageViewTopMargin = 20.f
+    static let promotionIconImageViewLeadingMargin = 20.f
+    static let promotionIconImageViewWidth = 24.f
+    static let promotionIconImageViewHeight = 24.f
+
+    static let promotionSeparatorViewLeadingMargin = 10.f
+    static let promotionSeparatorViewWidth = 1.f
+    static let promotionSeparatorViewHeight = 8.f
+
+    static let promotionLabelLeadingMargin = 10.f
+    static let promotionLabelTrailingMargin = -20.f
+
+    static let contentSeparatorViewTopMargin = 20.f
+    static let contentSeparatorViewLeadingMargin = 20.f
+    static let contentSeparatorViewTrailingMargin = -20.f
+    static let contentSeparatorViewHeight = 1.f
+
     static let commentInputViewTopMargin = -20.f
 
     static let likeButtonLeadingMargin = 20.f
@@ -85,6 +102,32 @@ final class PostHeaderReusableView: UICollectionReusableView {
       $0.isHidden = true
     }
 
+  private let promotionIconImageView = UIImageView().then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.image = KKDS.Image.ic_benefits_24_on
+  }
+
+  private let promotionSeparatorView = UIView().then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.backgroundColor = KKDS.Color.gray30
+  }
+
+  private let promotionLabel = UILabel().then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.numberOfLines = 0
+    $0.textColor = KKDS.Color.black
+    $0.setLineHeight(
+      content: "사은품 증정, 텀블러 할인, 쿠폰 증정, 사은품 증정, 텀블러 할인, 쿠폰 증정",
+      font: .systemFont(ofSize: 13, weight: .semibold)
+    )
+    $0.lineBreakStrategy = .hangulWordPriority
+  }
+
+  private let contentSeparatorView = UIView().then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.backgroundColor = KKDS.Color.gray30
+  }
+
   private let contentLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.numberOfLines = 0
@@ -107,8 +150,8 @@ final class PostHeaderReusableView: UICollectionReusableView {
 
   func bind(feedData: FeedDetailData) {
     self.contentLabel.setLineHeight(
-      fontSize: 14,
-      content: feedData.feed?.content ?? ""
+      content: feedData.feed?.content ?? "",
+      font: .systemFont(ofSize: 14, weight: .regular)
     )
 
     self.imageScrollView.subviews.forEach{
@@ -159,7 +202,9 @@ final class PostHeaderReusableView: UICollectionReusableView {
   }
 
   private func setupConstraints() {
-    [self.imageScrollView, self.imageNumberLabel, self.imagePageControl, self.contentLabel].addSubViews(self)
+    [self.imageScrollView, self.imageNumberLabel, self.imagePageControl].addSubViews(self)
+    [self.promotionIconImageView, self.promotionSeparatorView, self.promotionLabel].addSubViews(self)
+    [self.contentSeparatorView, self.contentLabel].addSubViews(self)
 
     NSLayoutConstraint.activate([
       self.imageScrollView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
@@ -174,7 +219,26 @@ final class PostHeaderReusableView: UICollectionReusableView {
       self.imagePageControl.bottomAnchor.constraint(equalTo: self.imageScrollView.bottomAnchor, constant: Metric.imagePageControlBottomMargin),
       self.imagePageControl.centerXAnchor.constraint(equalTo: self.centerXAnchor),
 
-      self.contentLabel.topAnchor.constraint(equalTo: self.imageScrollView.bottomAnchor, constant: Metric.contentLabelTopMargin),
+      self.promotionIconImageView.topAnchor.constraint(equalTo: self.imageScrollView.bottomAnchor, constant: Metric.promotionIconImageViewTopMargin),
+      self.promotionIconImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Metric.promotionIconImageViewLeadingMargin),
+      self.promotionIconImageView.widthAnchor.constraint(equalToConstant: Metric.promotionIconImageViewWidth),
+      self.promotionIconImageView.heightAnchor.constraint(equalToConstant: Metric.promotionIconImageViewHeight),
+
+      self.promotionSeparatorView.centerYAnchor.constraint(equalTo: self.promotionIconImageView.centerYAnchor),
+      self.promotionSeparatorView.leadingAnchor.constraint(equalTo: self.promotionIconImageView.trailingAnchor, constant: Metric.promotionSeparatorViewLeadingMargin),
+      self.promotionSeparatorView.widthAnchor.constraint(equalToConstant: Metric.promotionSeparatorViewWidth),
+      self.promotionSeparatorView.heightAnchor.constraint(equalToConstant: Metric.promotionSeparatorViewHeight),
+
+      self.promotionLabel.leadingAnchor.constraint(equalTo: self.promotionSeparatorView.trailingAnchor, constant: Metric.promotionLabelLeadingMargin),
+      self.promotionLabel.topAnchor.constraint(equalTo: self.promotionIconImageView.topAnchor),
+      self.promotionLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.promotionLabelTrailingMargin),
+
+      self.contentSeparatorView.topAnchor.constraint(equalTo: self.promotionLabel.bottomAnchor, constant: Metric.contentSeparatorViewTopMargin),
+      self.contentSeparatorView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.contentSeparatorViewLeadingMargin),
+      self.contentSeparatorView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.contentSeparatorViewTrailingMargin),
+      self.contentSeparatorView.heightAnchor.constraint(equalToConstant: Metric.contentSeparatorViewHeight),
+
+      self.contentLabel.topAnchor.constraint(equalTo: self.contentSeparatorView.bottomAnchor, constant: Metric.contentLabelTopMargin),
       self.contentLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Metric.contentLabelLeadingMargin),
       self.contentLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: Metric.contentLabelTrailingMargin),
       self.contentLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: Metric.contentLabelBottomMargin)

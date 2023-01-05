@@ -79,7 +79,7 @@ final class PostFooterReusableView: UICollectionReusableView {
   // MARK: - Bind
 
   func bind(shopAddress: String) {
-//    self.shopNameLabel.text = shopName // shopName data 없음
+//    self.shopNameLabel.text = shopName
     self.shopAddressLabel.text = shopAddress
   }
 

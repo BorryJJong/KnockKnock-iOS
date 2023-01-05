@@ -77,6 +77,7 @@ public extension KKDS.Image {
   static var ic_search_24_wh: UIImage             { .load(name: "ic_search_24_wh") }
   static var ic_set_24_bk: UIImage                { .load(name: "ic_set_24_bk") }
   static var ic_next_24_bk: UIImage               { .load(name: "ic_next_24_bk") }
+  static var ic_benefits_24_on: UIImage           { .load(name: "ic_benefits_24_on") }
 }
 
 // MARK: - Icon Size 40
