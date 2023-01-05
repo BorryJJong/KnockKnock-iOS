@@ -15,7 +15,20 @@ final class KKNetworkManager {
 
   static let shared = KKNetworkManager()
 
+  var session: Session
+
   let interceptor = KKRequestInterceptor()
+  let apiLogger = APIEventLogger()
+
+  /// SessionTaskError 메세지
+  var sessionTaskErrorMessage = "서버와의 연결이 불안정합니다."
+
+  private init() {
+    session = Session(
+      interceptor: interceptor,
+      eventMonitors: [apiLogger]
+    )
+  }
 
   func request<T>(
     object: T.Type,
@@ -23,10 +36,8 @@ final class KKNetworkManager {
     success: @escaping Success<T>,
     failure: @escaping Failure
   ) where T: Decodable {
-    AF.request(
-      router,
-      interceptor: self.interceptor
-    ).validate(statusCode: 200..<500)
+    session.request(router)
+      .validate(statusCode: 200..<500)
       .responseDecodable(of: object) { response in
         switch response.result {
         case .success:
@@ -38,21 +49,25 @@ final class KKNetworkManager {
       }
   }
 
-  func upload(
+  func upload<T>(
+    object: T.Type,
     router: KKRouter,
-    completionHandler: @escaping (() -> Void)
-  ) {
-    AF.upload(
+    success: @escaping Success<T>,
+    failure: @escaping Failure
+  ) where T: Decodable {
+
+    session.upload(
       multipartFormData: router.multipart,
       with: router
     ).validate(statusCode: 200..<500)
-      .responseData { response in
+      .responseDecodable(of: object) { response in
         switch response.result {
         case .success:
-          completionHandler()
+          guard let decodedData = response.value else { return }
+          success(decodedData)
 
-        case .failure(let error):
-          print(error)
+        case .failure(let err):
+          failure(err)
         }
       }
   }
