@@ -122,7 +122,7 @@ class FeedListCell: BaseCollectionViewCell {
 
   // MARK: - Bind
 
-  func bind(feedList: FeedListPost) {
+  func bind(feedList: FeedList.Post) {
     if feedList.isLike {
       self.likeButton.isSelected = true
       self.likeButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .bold)
@@ -172,7 +172,7 @@ class FeedListCell: BaseCollectionViewCell {
   }
 
   private func setImageView(
-    images: [FeedImage],
+    images: [FeedList.Image],
     scale: String
   ) {
     for index in 0..<images.count {

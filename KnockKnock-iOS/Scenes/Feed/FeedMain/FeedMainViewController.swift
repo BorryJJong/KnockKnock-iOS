@@ -31,7 +31,7 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
   
   var feedMain: FeedMain?
 
-  var feedMainPost: [FeedMainPost] = [] {
+  var feedMainPost: [FeedMain.Post] = [] {
     didSet {
       self.containerView.feedCollectionView.reloadData()
     }

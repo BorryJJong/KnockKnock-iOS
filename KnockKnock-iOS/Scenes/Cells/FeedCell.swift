@@ -34,7 +34,7 @@ class FeedCell: BaseCollectionViewCell {
 
   // MARK: - Bind
 
-  func bind(post: FeedMainPost) {
+  func bind(post: FeedMain.Post) {
     self.severalSymbolImageView.isHidden = !post.isImageMore
     self.thumbnailImageView.setImageFromStringUrl(
       url: post.thumbnailUrl,

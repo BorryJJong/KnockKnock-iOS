@@ -148,7 +148,7 @@ final class PostHeaderReusableView: UICollectionReusableView {
 
   // MARK: - Bind
 
-  func bind(feedData: FeedDetailData) {
+  func bind(feedData: FeedDetail.Data) {
     self.contentLabel.setLineHeight(
       content: feedData.feed?.content ?? "",
       font: .systemFont(ofSize: 14, weight: .regular)
