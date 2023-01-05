@@ -212,9 +212,32 @@ final class FeedDetailView: UIView {
     return defaultSection
   }
 
+
   func setPostCollectionViewLayout() -> UICollectionViewCompositionalLayout {
 
-    // section 1: Contents(images, context, tag, shopAddress)
+    let layout = UICollectionViewCompositionalLayout {(section: Int, _: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+
+      let section = FeedDetailSection(rawValue: section)
+
+      switch section {
+      case .content:
+        return self.setContentsSectionLayout()
+
+      case .like:
+        return self.setLikeSectionLayout()
+
+      case .comment:
+        return self.setCommentSectionLayout()
+
+      default:
+        return self.createDefaultSection()
+      }
+    }
+    return layout
+  }
+
+  /// Contents section(images, context, tag, shopAddress)
+  func setContentsSectionLayout() -> NSCollectionLayoutSection {
 
     let estimatedWidth: CGFloat = 100
     let estimatedHeigth: CGFloat = 100
@@ -268,13 +291,20 @@ final class FeedDetailView: UIView {
       trailing: 20
     )
     tagGroup.interItemSpacing = .fixed(5)
-    
+
     let postContentsSection = NSCollectionLayoutSection(group: tagGroup)
 
     postContentsSection.boundarySupplementaryItems = [contentsHeader, contentsFooter]
 
-    // Section 2: Like
-    
+    return postContentsSection
+
+  }
+
+  /// Like Section
+  func setLikeSectionLayout() -> NSCollectionLayoutSection {
+
+    let estimatedHeigth: CGFloat = 100
+
     let reactHeaderSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1),
       heightDimension: .estimated(estimatedHeigth)
@@ -326,7 +356,24 @@ final class FeedDetailView: UIView {
       trailing: 0
     )
 
-    // Section 3: Comments
+    return likeSection
+  }
+
+  /// Comments Section
+  func setCommentSectionLayout() -> NSCollectionLayoutSection {
+
+    let estimatedHeigth: CGFloat = 100
+
+    let reactHeaderSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1),
+      heightDimension: .estimated(estimatedHeigth)
+    )
+
+    let reactHeader = NSCollectionLayoutBoundarySupplementaryItem(
+      layoutSize: reactHeaderSize,
+      elementKind: UICollectionView.elementKindSectionHeader,
+      alignment: .top
+    )
 
     let commentItemSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1),
@@ -352,25 +399,7 @@ final class FeedDetailView: UIView {
       bottom: 15,
       trailing: 20
     )
-    
-    let layout = UICollectionViewCompositionalLayout {(section: Int, _: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
 
-      let section = FeedDetailSection(rawValue: section)
-
-      switch section {
-      case .content:
-        return postContentsSection
-
-      case .like:
-        return likeSection
-
-      case .comment:
-        return commentSection
-
-      default:
-        return self.createDefaultSection()
-      }
-    }
-    return layout
+    return commentSection
   }
 }
