@@ -49,9 +49,13 @@ final class FeedWriteRepository: FeedWriteRepositoryProtocol {
     KKNetworkManager
       .shared
       .upload(
+        object: FeedWriteDTO.self,
         router: KKRouter.postFeed(postData: postData),
-        completionHandler: {
+        success: { _ in
           completionHandler()
+        },
+        failure: { error in
+          print(error)
         }
       )
   }
