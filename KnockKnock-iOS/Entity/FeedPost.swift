@@ -36,6 +36,7 @@ struct FeedList: Decodable {
     let isLike: Bool
     let blogCommentCount: String
     let blogImages: [Image]
+    let isWriter: Bool
   }
 
   struct Image: Decodable {

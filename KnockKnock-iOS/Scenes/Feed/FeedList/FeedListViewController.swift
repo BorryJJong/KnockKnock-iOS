@@ -22,8 +22,8 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   // MARK: - Properties
   
   var interactor: FeedListInteractorProtocol?
-  
-  var feedList: FeedList?
+
+  var isNext: Bool = true
   var feedListPost: [FeedList.Post] = [] {
     didSet {
       self.containerView.feedListCollectionView.reloadData()
@@ -32,6 +32,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
 
   private var currentPage: Int = 1
   private var pageSize: Int = 5
+
   var challengeId: Int = 0
   var feedId: Int = 2
 
@@ -109,11 +110,14 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   }
 
   @objc func configureButtonDidTap(_ sender: UIButton) {
+    let isMyPost = self.feedListPost[sender.tag].isWriter
+    let feedId = self.feedListPost[sender.tag].id
+
     self.interactor?.presentBottomSheetView(
       source: self,
-      isMyPost: true,
+      isMyPost: isMyPost,
       deleteAction: {
-        self.interactor?.requestDelete(feedId: sender.tag)
+        self.interactor?.requestDelete(feedId: feedId)
       }
     )
   }
@@ -204,7 +208,7 @@ extension FeedListViewController: UICollectionViewDataSource {
     let post = self.feedListPost[indexPath.section]
 
     header.bind(feed: post)
-    header.configureButton.tag = post.id
+    header.configureButton.tag = indexPath.section
     header.configureButton.addTarget(
       self,
       action: #selector(self.configureButtonDidTap(_:)),
@@ -226,16 +230,14 @@ extension FeedListViewController: UICollectionViewDataSource {
   }
 
   func scrollViewDidReachBottom(_ scrollView: UIScrollView) {
-    if let isNext = self.feedList?.isNext {
-      if isNext {
-        self.currentPage += 1
-        self.interactor?.fetchFeedList(
-          currentPage: self.currentPage,
-          pageSize: self.pageSize,
-          feedId: self.feedId,
-          challengeId: self.challengeId
-        )
-      }
+    if self.isNext {
+      self.currentPage += 1
+      self.interactor?.fetchFeedList(
+        currentPage: self.currentPage,
+        pageSize: self.pageSize,
+        feedId: self.feedId,
+        challengeId: self.challengeId
+      )
     }
   }
 }
@@ -282,11 +284,8 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
 
 extension FeedListViewController: FeedListViewProtocol {
   func fetchFeedList(feedList: FeedList) {
-    self.feedList = feedList
-
-    feedList.feeds.forEach {
-      self.feedListPost.append($0)
-    }
+    self.isNext = feedList.isNext
+    self.feedListPost += feedList.feeds
   }
   
   func deleteFeedPost(feedId: Int) {
