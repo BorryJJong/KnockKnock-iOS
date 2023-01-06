@@ -21,7 +21,7 @@ final class PostHeaderReusableView: UICollectionReusableView {
 
     static let imagePageControlBottomMargin = -10.f
 
-    static let promotionIconImageViewTopMargin = 20.f
+    static let promotionIconImageViewTopMargin = 10.f
     static let promotionIconImageViewLeadingMargin = 20.f
     static let promotionIconImageViewWidth = 24.f
     static let promotionIconImageViewHeight = 24.f
@@ -33,7 +33,7 @@ final class PostHeaderReusableView: UICollectionReusableView {
     static let promotionLabelLeadingMargin = 10.f
     static let promotionLabelTrailingMargin = -20.f
 
-    static let contentSeparatorViewTopMargin = 20.f
+    static let contentSeparatorViewTopMargin = 15.f
     static let contentSeparatorViewLeadingMargin = 20.f
     static let contentSeparatorViewTrailingMargin = -20.f
     static let contentSeparatorViewHeight = 1.f
@@ -178,7 +178,7 @@ final class PostHeaderReusableView: UICollectionReusableView {
 
       let imageView = UIImageView()
       imageView.setImageFromStringUrl(
-        url: images[index],
+        stringUrl: images[index],
         defaultImage: KKDS.Image.ic_no_data_60
       )
       imageView.contentMode = .scaleAspectFill

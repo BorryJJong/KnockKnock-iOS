@@ -1080,8 +1080,8 @@
 		61C21D1028C764F7009B5F4E /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				61A0286C29139C7B00943A40 /* ProfileSetting */,
 				61C21D1328C7652B009B5F4E /* Views */,
+				61A0286C29139C7B00943A40 /* ProfileSetting */,
 				61C21D1128C76524009B5F4E /* LoginViewController.swift */,
 				61A028502910D3A700943A40 /* LoginInteractor.swift */,
 				61A028522910D3B400943A40 /* LoginPresenter.swift */,

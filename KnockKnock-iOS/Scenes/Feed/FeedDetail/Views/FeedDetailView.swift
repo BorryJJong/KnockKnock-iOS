@@ -239,7 +239,7 @@ final class FeedDetailView: UIView {
   func setContentsSectionLayout() -> NSCollectionLayoutSection {
 
     let estimatedWidth: CGFloat = 100
-    let estimatedHeigth: CGFloat = 150
+    let estimatedHeigth: CGFloat = 15
 
     let contentsHeaderSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1),
@@ -265,7 +265,7 @@ final class FeedDetailView: UIView {
 
     let tagItemSize = NSCollectionLayoutSize(
       widthDimension: .estimated(estimatedWidth),
-      heightDimension: .estimated(25)
+      heightDimension: .estimated(estimatedHeigth)
     )
     let tagItem = NSCollectionLayoutItem(layoutSize: tagItemSize)
     tagItem.contentInsets = NSDirectionalEdgeInsets(

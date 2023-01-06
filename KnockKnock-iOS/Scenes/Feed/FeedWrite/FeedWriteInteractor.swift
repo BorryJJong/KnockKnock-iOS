@@ -97,6 +97,7 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
       postData: FeedWrite(
         content: content,
         storeAddress: self.selectedAddress?.addressName ?? "",
+        storeName: self.selectedAddress?.placeName,
         locationX: self.selectedAddress?.longtitude ?? "",
         locationY: self.selectedAddress?.latitude ?? "",
         scale: "1:1",

@@ -13,6 +13,7 @@ import UIKit
 struct FeedWrite {
   let content: String
   let storeAddress: String
+  let storeName: String?
   let locationX: String
   let locationY: String
   let scale: String

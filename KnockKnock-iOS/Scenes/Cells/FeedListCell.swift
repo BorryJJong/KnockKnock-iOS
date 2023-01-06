@@ -179,7 +179,7 @@ class FeedListCell: BaseCollectionViewCell {
 
       let imageView = UIImageView()
       imageView.setImageFromStringUrl(
-        url: images[index].fileUrl,
+        stringUrl: images[index].fileUrl,
         defaultImage: KKDS.Image.ic_no_data_60
       )
       imageView.contentMode = .scaleAspectFill
