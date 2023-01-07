@@ -158,7 +158,7 @@ class FeedMainView: UIView {
     // footer
     let footerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(50.0))
     let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
-    footer.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 100, trailing: 0)
+    footer.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 200, trailing: 0)
 
     section.boundarySupplementaryItems = [footer]
 
