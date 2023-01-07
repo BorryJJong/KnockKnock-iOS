@@ -21,6 +21,12 @@ struct FeedWrite {
   let images: [UIImage]
 }
 
+/// 피드 등록 api response
+struct FeedWriteDTO: Decodable {
+  let code: Int
+  let message: String
+}
+
 // MARK: - 매장검색
 
 /// Kakao local api
