@@ -30,6 +30,7 @@ final class PostFooterReusableView: UICollectionReusableView {
     static let shopAddressLabelBottomMargin = -15.f
 
     static let separateLineViewHeight = 10.f
+    static let separateLineViewTopMargin = 30.f
   }
 
   // MARK: - UIs
@@ -126,7 +127,7 @@ final class PostFooterReusableView: UICollectionReusableView {
     [self.separateLineView].addSubViews(self)
 
     self.separateLineView.snp.makeConstraints {
-      $0.top.equalTo(self).offset(30)
+      $0.top.equalTo(self).offset(Metric.separateLineViewTopMargin)
       $0.height.equalTo(Metric.separateLineViewHeight)
       $0.leading.trailing.bottom.equalTo(self)
     }
