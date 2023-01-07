@@ -47,14 +47,12 @@ class FeedListHeaderReusableView: UICollectionReusableView {
   private let userIdLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.font = .systemFont(ofSize: 13, weight: .bold)
-    $0.text = "sungmin_kim94"
   }
 
   private let postDateLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.textColor = .gray70
     $0.font = .systemFont(ofSize: 12, weight: .light)
-    $0.text = "1시간전"
   }
 
   let configureButton = UIButton().then {

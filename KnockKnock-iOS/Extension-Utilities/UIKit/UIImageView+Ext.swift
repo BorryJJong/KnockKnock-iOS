@@ -17,8 +17,6 @@ extension UIImageView {
     stringUrl: String?,
     defaultImage: UIImage
   ) {
-    guard let stringUrl = stringUrl else { return }
-
     Task {
       do {
         let image = try await self.loadImage(stringUrl: stringUrl)
@@ -38,9 +36,10 @@ extension UIImageView {
   }
 
   /// String -> URL로 변환
-  private func convertStringToUrl(stringUrl: String) async throws -> URL {
+  private func convertStringToUrl(stringUrl: String?) async throws -> URL {
 
-    guard let url = URL(string: stringUrl) else {
+    guard let stringUrl = stringUrl,
+      let url = URL(string: stringUrl) else {
       throw ImageError.loadError
     }
     
@@ -59,7 +58,8 @@ extension UIImageView {
     return data
   }
 
-  private func loadImage(stringUrl: String) async throws -> UIImage {
+  /// 이미지 로드
+  private func loadImage(stringUrl: String?) async throws -> UIImage {
 
     guard let chacedImage = await self.setCachedImage(stringUrl: stringUrl) else {
 
@@ -78,10 +78,12 @@ extension UIImageView {
     return chacedImage
   }
 
-  private func setCachedImage(stringUrl: String) async -> UIImage? {
+  /// 캐시 이미지 처리
+  private func setCachedImage(stringUrl: String?) async -> UIImage? {
+
+    guard let stringUrl = stringUrl else { return nil }
 
     let cacheKey = NSString(string: stringUrl)
-
     let cachedImage = ImageCacheManager.shared.object(forKey: cacheKey)
 
     return cachedImage
