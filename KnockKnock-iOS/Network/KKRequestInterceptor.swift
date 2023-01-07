@@ -10,18 +10,23 @@ import Foundation
 import Alamofire
 
 final class KKRequestInterceptor: RequestInterceptor {
-  
+
+  var userDefaultsService: UserDefaultsServiceType
+
+  init(userDefaultsService: UserDefaultsServiceType) {
+    self.userDefaultsService = userDefaultsService
+  }
+
   func adapt(
     _ urlRequest: URLRequest,
     for session: Session,
     completion: @escaping (Result<URLRequest, Error>) -> Void
   ) {
-    let userDefaultsService = UserDefaultsService()
 
     var request = urlRequest
 
     guard urlRequest.url?.absoluteString.hasPrefix(API.BASE_URL) == true,
-          let accessToken = userDefaultsService.value(forkey: .accessToken) else {
+          let accessToken = self.userDefaultsService.value(forkey: .accessToken) else {
       completion(.success(urlRequest))
       return
     }

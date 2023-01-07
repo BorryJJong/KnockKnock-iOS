@@ -9,11 +9,6 @@ import Foundation
 
 import Then
 
-struct UserDefaultsKey<T> {
-  typealias Key<T> = UserDefaultsKey<T>
-  let key: String
-}
-
 extension UserDefaultsKey: ExpressibleByStringLiteral {
   public init(unicodeScalarLiteral value: StringLiteralType) {
     self.init(key: value)

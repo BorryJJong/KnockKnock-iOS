@@ -17,7 +17,7 @@ final class KKNetworkManager {
 
   var session: Session
 
-  let interceptor = KKRequestInterceptor()
+  let interceptor = KKRequestInterceptor(userDefaultsService: UserDefaultsService())
   let apiLogger = APIEventLogger()
 
   /// SessionTaskError 메세지
@@ -36,6 +36,7 @@ final class KKNetworkManager {
     success: @escaping Success<T>,
     failure: @escaping Failure
   ) where T: Decodable {
+
     session.request(router)
       .validate(statusCode: 200..<500)
       .responseDecodable(of: object) { response in
@@ -60,7 +61,7 @@ final class KKNetworkManager {
       multipartFormData: router.multipart,
       with: router
     ).validate(statusCode: 200..<500)
-      .responseDecodable(of: object) { response in
+     .responseDecodable(of: object) { response in
         switch response.result {
         case .success:
           guard let decodedData = response.value else { return }
