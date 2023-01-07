@@ -39,7 +39,6 @@ final class PostFooterReusableView: UICollectionReusableView {
     $0.layer.borderColor = UIColor.gray20?.cgColor
     $0.clipsToBounds = true
     $0.layer.cornerRadius = 3
-    $0.isHidden = true
   }
 
   private let markImageView = UIImageView().then {
@@ -77,26 +76,20 @@ final class PostFooterReusableView: UICollectionReusableView {
     name: String?,
     address: String?
   ) {
-//    guard let name = name else {  // , let address = address
-//      self.shopInfoView.isHidden = true
-//
-//      return
-//    }
+    guard let name = name,
+          let address = address else { return }
     
-    self.reset()
+    self.setShopInfoViewConstraints()
 
-    self.shopNameLabel.text = name ?? "test"
-    self.shopAddressLabel.text = "test"
-
-    self.shopInfoView.isHidden = false
+    self.shopNameLabel.text = name
+    self.shopAddressLabel.text = address
 
     self.layoutIfNeeded()
-
   }
 
   // MARK: - Constraints
 
-  private func reset() {
+  private func setShopInfoViewConstraints() {
     [self.shopInfoView].addSubViews(self)
     [self.markImageView, self.shopNameLabel, self.shopAddressLabel].addSubViews(self.shopInfoView)
 
@@ -131,36 +124,11 @@ final class PostFooterReusableView: UICollectionReusableView {
 
   private func setupConstraints() {
     [self.separateLineView].addSubViews(self)
-    //    [self.shopInfoView].addSubViews(self)
-    //    [self.markImageView, self.shopNameLabel, self.shopAddressLabel].addSubViews(self.shopInfoView)
 
     self.separateLineView.snp.makeConstraints {
       $0.top.equalTo(self).offset(30)
       $0.height.equalTo(Metric.separateLineViewHeight)
       $0.leading.trailing.bottom.equalTo(self)
     }
-    //
-    //    self.shopInfoView.snp.makeConstraints {
-    //      $0.top.equalTo(self).offset(Metric.shopInfoViewTopMargin)
-    //      $0.leading.equalTo(self).offset(Metric.shopInfoViewLeadingMargin)
-    //      $0.trailing.equalTo(self).offset(Metric.shopInfoViewTrailingMargin)
-    //      $0.bottom.equalTo(self.separateLineView.snp.top).offset(Metric.shopInfoViewBottomMargin)
-    //    }
-    //
-    //    self.markImageView.snp.makeConstraints {
-    //      $0.top.equalTo(self.shopInfoView).offset(Metric.markImageViewTopMargin)
-    //      $0.leading.equalTo(self.shopInfoView).offset(Metric.markImageViewLeadingMarin)
-    //    }
-    //
-    //    self.shopNameLabel.snp.makeConstraints {
-    //      $0.leading.equalTo(self.markImageView.snp.trailing).offset(Metric.shopNameLabelLeadingMargin)
-    //      $0.centerY.equalTo(self.markImageView)
-    //    }
-    //
-    //    self.shopAddressLabel.snp.makeConstraints {
-    //      $0.leading.equalTo(self.shopInfoView).offset(Metric.shopAddressLabelLeadingMargin)
-    //      $0.top.equalTo(self.markImageView.snp.bottom).offset(Metric.shopAddressLabelTopMargin)
-    //      $0.bottom.equalTo(self.shopInfoView).offset(Metric.shopAddressLabelBottomMargin)
-    //    }
   }
 }
