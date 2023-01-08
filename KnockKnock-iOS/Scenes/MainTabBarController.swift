@@ -116,8 +116,7 @@ final class MainTabBarController: UITabBarController {
   }
 
   @objc func postButtonDidTap(_ sender: UIButton) {
-//    let post = FeedWriteRouter.createFeedWrite()
-    let post = FeedEditRouter.createFeedEdit()
+    let post = FeedWriteRouter.createFeedWrite()
     let postNVC = UINavigationController(rootViewController: post)
     postNVC.modalPresentationStyle = .fullScreen
 
