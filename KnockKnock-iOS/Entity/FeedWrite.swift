@@ -30,7 +30,7 @@ struct FeedWriteDTO: Decodable {
 // MARK: - 매장검색
 
 /// Kakao local api
-struct AddressResult: Codable {
+struct AddressResponse: Codable {
   let meta: Meta
   let documents: [Documents]
 

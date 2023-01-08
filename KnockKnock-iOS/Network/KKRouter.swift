@@ -45,6 +45,7 @@ enum KKRouter: URLRequestConvertible {
   // Feed List, Detail
   case getFeedBlogPost(page: Int, take: Int, feedId: Int, challengeId: Int)
   case getFeed(id: Int)
+  case deleteFeed(id: Int)
 
   // Like
   case postFeedLike(id: Int)
@@ -80,7 +81,8 @@ enum KKRouter: URLRequestConvertible {
          .postFeedLike:
       return .post
 
-    case .deleteWithdraw,
+    case .deleteFeed,
+         .deleteWithdraw,
          .deleteFeedLike,
          .deleteComment:
       return .delete
@@ -112,6 +114,7 @@ enum KKRouter: URLRequestConvertible {
     // Feed List, Detail
     case .getFeedBlogPost: return "feed/blog-post"
     case .getFeed(let id): return "feed/\(id)"
+    case .deleteFeed(let id): return "feed/\(id)"
 
     // Like
     case .postFeedLike(let id): return "like/feed/\(id)"
@@ -175,6 +178,7 @@ enum KKRouter: URLRequestConvertible {
          .getLikeList,
          .postFeed,
          .postLogOut,
+         .deleteFeed,
          .deleteWithdraw,
          .getComment:
 
@@ -243,10 +247,11 @@ enum KKRouter: URLRequestConvertible {
     case .post, .patch, .delete:
 
       switch self {
+
       case .deleteWithdraw, .postLogOut:
         request = try JSONEncoding.default.encode(request)
-
-      case .postFeedLike, .deleteFeedLike:
+        
+      case .postFeedLike, .deleteFeedLike, .deleteFeed:
         request = try JSONEncoding.default.encode(request)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 

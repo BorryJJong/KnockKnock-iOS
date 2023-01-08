@@ -42,8 +42,8 @@ final class CommentRouter: CommentRouterProtocol {
     let bottomSheetViewController = BottomSheetViewController().then {
       $0.setBottomSheetContents(
         contents: [
-          BottomSheetOption.delete.rawValue,
-          BottomSheetOption.edit.rawValue
+          BottomSheetOption.postDelete.rawValue,
+          BottomSheetOption.postEdit.rawValue
         ],
         bottomSheetType: .small
       )
