@@ -140,6 +140,7 @@ public extension KKDS.Image {
 // MARK: - Login
 public extension KKDS.Image {
   static var ic_kakao_login: UIImage              { .load(name: "ic_kakao_login") }
+  static var ic_apple_login: UIImage              { .load(name: "ic_apple_login") }
 }
 
 extension UIImage {

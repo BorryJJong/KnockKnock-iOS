@@ -25,7 +25,7 @@ enum MySectionType: String {
 
 enum MyMenuType: String {
   case profile = "프로필 수정"
-  case signOut = "탈퇴하기"
+  case withdraw = "탈퇴하기"
   case pushNotification = "앱 PUSH 알림"
 
   case notice = "공지사항"

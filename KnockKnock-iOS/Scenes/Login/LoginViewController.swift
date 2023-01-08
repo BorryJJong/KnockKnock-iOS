@@ -43,19 +43,26 @@ final class LoginViewController: BaseViewController<LoginView> {
       action: #selector(self.kakaoLoginButtonDidTap(_:)),
       for: .touchUpInside
     )
+
+    self.containerView.appleLoginButton.addTarget(
+      self,
+      action: #selector(self.appleLoginButtonDidTap(_:)),
+      for: .touchUpInside
+    )
   }
 
   // MARK: - Button Actions
 
   @objc func kakaoLoginButtonDidTap(_ sender: UIButton) {
-    self.interactor?.fetchLoginResult(
-      source: self,
-      socialType: SocialType.kakao
-    )
+    self.interactor?.fetchLoginResult(socialType: SocialType.kakao)
+  }
+
+  @objc func appleLoginButtonDidTap(_ sender: UIButton) {
+    self.interactor?.fetchLoginResult(socialType: SocialType.apple)
   }
 
   @objc func tapCloseBarButtonDidTap(_ sender: UIButton) {
-    self.interactor?.popLoginView(source: self)
+    self.interactor?.popLoginView()
   }
 }
 

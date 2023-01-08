@@ -29,6 +29,7 @@ final class PhotoCell: BaseCollectionViewCell {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.clipsToBounds = true
     $0.layer.cornerRadius = Metric.thumbnailImageViewCornerRadius
+    $0.contentMode = .scaleAspectFill
   }
   
   let deleteButton = UIButton().then {
@@ -59,5 +60,4 @@ final class PhotoCell: BaseCollectionViewCell {
       self.deleteButton.heightAnchor.constraint(equalToConstant: Metric.deleteButtonWidth)
     ])
   }
-
 }

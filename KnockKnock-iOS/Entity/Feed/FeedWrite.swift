@@ -21,3 +21,9 @@ struct FeedWrite {
   let challenges: String
   let images: [UIImage]
 }
+
+/// 피드 등록 api response
+struct FeedWriteDTO: Decodable {
+  let code: Int
+  let message: String
+}
