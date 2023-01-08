@@ -16,7 +16,7 @@ protocol FeedWriteViewProtocol: AnyObject {
 
   func fetchTag(tag: String)
   func fetchPromotion(promotion: String)
-  func fetchAddress(address: AddressResult.Documents)
+  func fetchAddress(address: AddressResponse.Documents)
 
   func showAlertView(isDone: Bool)
 }
@@ -172,7 +172,7 @@ extension FeedWriteViewController: FeedWriteViewProtocol {
     self.containerView.setPromotion(promotion: promotion)
   }
 
-  func fetchAddress(address: AddressResult.Documents) {
+  func fetchAddress(address: AddressResponse.Documents) {
     self.containerView.setAddress(
       name: address.placeName,
       address: address.addressName

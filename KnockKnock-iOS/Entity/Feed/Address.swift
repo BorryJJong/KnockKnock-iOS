@@ -8,7 +8,7 @@
 import Foundation
 
 /// Kakao local api
-struct AddressResult: Codable {
+struct AddressResponse: Codable {
   let meta: Meta
   let documents: [Documents]
 

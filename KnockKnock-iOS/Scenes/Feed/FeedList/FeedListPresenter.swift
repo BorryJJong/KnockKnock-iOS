@@ -9,7 +9,9 @@ import UIKit
 
 protocol FeedListPresenterProtocol {
   var view: FeedListViewController? { get set }
+
   func presentFetchFeedList(feedList: FeedList)
+  func presentDeleteFeed(feedId: Int)
 }
 
 final class FeedListPresenter: FeedListPresenterProtocol {
@@ -18,5 +20,9 @@ final class FeedListPresenter: FeedListPresenterProtocol {
   func presentFetchFeedList(feedList: FeedList) {
     self.view?.fetchFeedList(feedList: feedList)
     LoadingIndicator.hideLoading()
+  }
+
+  func presentDeleteFeed(feedId: Int) {
+    self.view?.deleteFeedPost(feedId: feedId)
   }
 }

@@ -8,7 +8,7 @@
 import UIKit
 
 protocol BottomSheetRouterProtocol: AnyObject {
-  static func createBottomSheet(delegate: DistrictSelectDelegate, districtsType: DistrictsType?) -> UIViewController
+  static func createBottomSheet(districtSelectDelegate: DistrictSelectDelegate?, districtsType: DistrictsType?) -> UIViewController
 
   func passCityDataToShopSearch(source: BottomSheetViewProtocol, city: String)
   func passCountyDataToShopSearch(source: BottomSheetViewProtocol, county: String)
@@ -18,10 +18,10 @@ protocol BottomSheetRouterProtocol: AnyObject {
 
 final class BottomSheetRouter: BottomSheetRouterProtocol {
 
-  weak var delegate: DistrictSelectDelegate?
+  weak var districtSelectDelegate: DistrictSelectDelegate?
 
   static func createBottomSheet(
-    delegate: DistrictSelectDelegate,
+    districtSelectDelegate: DistrictSelectDelegate? = nil,
     districtsType: DistrictsType? = nil
   ) -> UIViewController {
     let view = BottomSheetViewController()
@@ -29,18 +29,18 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
 
     view.router = router
     view.districtsType = districtsType
-    router.delegate = delegate
+    router.districtSelectDelegate = districtSelectDelegate
 
     return view
   }
 
   func passCityDataToShopSearch(source: BottomSheetViewProtocol, city: String) {
-    self.delegate?.fetchSelectedCity(city: city)
+    self.districtSelectDelegate?.fetchSelectedCity(city: city)
     self.navigateToShopSearch(source: source)
   }
 
   func passCountyDataToShopSearch(source: BottomSheetViewProtocol, county: String) {
-    self.delegate?.fetchSelectedCounty(county: county)
+    self.districtSelectDelegate?.fetchSelectedCounty(county: county)
     self.navigateToShopSearch(source: source)
   }
 
