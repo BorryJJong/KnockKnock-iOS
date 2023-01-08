@@ -8,7 +8,7 @@
 import Foundation
 
 enum Alert {
-  case signOut
+  case withdraw
   case versionInfo
   case profileSetting
   case feedWriteDone
@@ -16,7 +16,7 @@ enum Alert {
 
   var message: String {
     switch self {
-    case .signOut:
+    case .withdraw:
       return "계정을 삭제하면 게시글, 좋아요, 댓글 등 모든 활동 정보가 삭제됩니다. 그래도 탈퇴 하시겠습니까?"
 
     case .versionInfo:

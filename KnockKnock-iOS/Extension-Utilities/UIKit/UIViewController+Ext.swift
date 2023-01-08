@@ -24,9 +24,10 @@ extension UIViewController {
   }
 
   /// Alert View 생성 및 present
-  /// content: alert message
-  /// isCancelActive: 취소 버튼 활성화 유무
-  /// confirmActionCompletion: 확인 버튼 클릭 이벤트
+  /// - Parameters:
+  ///   - content: alert message
+  ///   - isCancelActive: 취소 버튼 활성화 유무
+  ///   - confirmActionCompletion: 확인 버튼 클릭 이벤트
   func showAlert(
     content: String,
     isCancelActive: Bool = true,

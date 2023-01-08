@@ -12,9 +12,11 @@ protocol ProfileSettingInteractorProtocol {
   var presenter: ProfileSettingPresenterProtocol? { get set }
   var router: ProfileSettingRouterProtocol? { get set }
 
-  var loginInfo: LoginInfo? { get set }
+  var signInInfo: SignInInfo? { get set }
 
   func requestSignUp(nickname: String, image: String)
+
+  func navigateToMyView()
 }
 
 final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
@@ -25,22 +27,29 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
   var presenter: ProfileSettingPresenterProtocol?
   var router: ProfileSettingRouterProtocol?
 
-  var loginInfo: LoginInfo?
+  var signInInfo: SignInInfo?
+
+  func navigateToMyView() {
+    self.router?.navigateToMyView()
+  }
 
   func requestSignUp(
     nickname: String,
     image: String
   ) {
-    if let loginInfo = loginInfo {
-      self.worker?.requestSignUp(
-        loginInfo: loginInfo,
+    if let signInInfo = signInInfo {
+      self.worker?.requestRegister(
+        signInInfo: signInInfo,
         nickname: nickname,
         image: image,
         completionHandler: { response in
-          // userdefaults token 저장하기
-          print(response)
+          self.saveUserInfo(response: response)
         }
       )
     }
+  }
+
+  func saveUserInfo(response: AccountResponse) {
+    self.worker?.saveUserInfo(response: response)
   }
 }

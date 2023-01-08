@@ -8,14 +8,18 @@
 import UIKit
 
 protocol MyRouterProtocol {
+  var view: MyViewProtocol? { get set }
+
   static func createMy() -> UIViewController
 
-  func navigateToNoticeView(source: MyViewProtocol)
-  func navigateToLoginView(source: MyViewProtocol)
-  func navigateToProfileSettingView(source: MyViewProtocol)
+  func navigateToNoticeView()
+  func navigateToLoginView()
+  func navigateToProfileSettingView()
 }
 
 final class MyRouter: MyRouterProtocol {
+  weak var view: MyViewProtocol?
+
   static func createMy() -> UIViewController {
     let view = MyViewController()
     let interactor = MyInteractor()
@@ -31,23 +35,28 @@ final class MyRouter: MyRouterProtocol {
     interactor.worker = worker
     interactor.presenter = presenter
     presenter.view = view
+    router.view = view
 
     return view
   }
 
-  func navigateToLoginView(source: MyViewProtocol) {
+  func navigateToLoginView() {
     let loginViewController = LoginRouter.createLoginView()
 
-    if let sourceView = source as? UIViewController {
+    if let sourceView = self.view as? UIViewController {
       loginViewController.hidesBottomBarWhenPushed = true
-      sourceView.navigationController?.pushViewController(loginViewController, animated: true)
+
+      sourceView.navigationController?.pushViewController(
+        loginViewController,
+        animated: true
+      )
     }
   }
 
-  func navigateToNoticeView(source: MyViewProtocol) {
+  func navigateToNoticeView() {
     let noticeViewController = NoticeRouter.createNoticeView()
 
-    if let sourceView = source as? UIViewController {
+    if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.pushViewController(
         noticeViewController,
         animated: true
@@ -55,10 +64,12 @@ final class MyRouter: MyRouterProtocol {
     }
   }
 
-  func navigateToProfileSettingView(source: MyViewProtocol) {
-    let profileViewController = ProfileSettingRouter.createProfileSettingView(loginInfo: nil)
+  func navigateToProfileSettingView() {
+    let profileViewController = ProfileSettingRouter.createProfileSettingView(signInInfo: nil)
 
-    if let sourceView = source as? UIViewController {
+    if let sourceView = self.view as? UIViewController {
+      profileViewController.hidesBottomBarWhenPushed = true
+
       sourceView.navigationController?.pushViewController(
         profileViewController,
         animated: true

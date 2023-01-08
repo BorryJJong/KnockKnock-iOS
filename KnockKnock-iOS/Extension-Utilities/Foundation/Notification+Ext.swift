@@ -8,6 +8,6 @@
 import Foundation
 
 extension Notification.Name {
-  static let loginCompleted = Notification.Name("loginCompleted")
-  static let logoutCompleted = Notification.Name("logoutCompleted")
+  static let SignInCompleted = Notification.Name("SignInCompleted")
+  static let signOutCompleted = Notification.Name("signOutCompleted")
 }

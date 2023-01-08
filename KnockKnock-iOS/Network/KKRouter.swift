@@ -26,9 +26,9 @@ enum KKRouter: URLRequestConvertible {
   // MARK: - APIs
 
   // Account
-  case postSocialLogin(loginInfo: Parameters)
+  case postSocialLogin(signInInfo: Parameters)
   case postSignUp(userInfo: Parameters)
-  case deleteSignOut
+  case deleteWithdraw
   case postLogOut
 
   // Challenge
@@ -82,7 +82,7 @@ enum KKRouter: URLRequestConvertible {
       return .post
 
     case .deleteFeed,
-         .deleteSignOut,
+         .deleteWithdraw,
          .deleteFeedLike,
          .deleteComment:
       return .delete
@@ -98,7 +98,7 @@ enum KKRouter: URLRequestConvertible {
     case .postSocialLogin: return "users/social-login"
     case .postSignUp: return "users/sign-up"
     case .postLogOut: return "users/logout"
-    case .deleteSignOut: return "users"
+    case .deleteWithdraw: return "users"
 
     // Challenge
     case .getChallengeResponse: return "challenges"
@@ -134,8 +134,8 @@ enum KKRouter: URLRequestConvertible {
   var parameters: Parameters? {
     switch self {
 
-    case let .postSocialLogin(loginInfo):
-      return loginInfo
+    case let .postSocialLogin(signInInfo):
+      return signInInfo
 
     case let .postSignUp(userInfo):
       return userInfo
@@ -178,8 +178,8 @@ enum KKRouter: URLRequestConvertible {
          .getLikeList,
          .postFeed,
          .postLogOut,
-         .deleteSignOut,
          .deleteFeed,
+         .deleteWithdraw,
          .getComment:
 
       return nil
@@ -248,7 +248,7 @@ enum KKRouter: URLRequestConvertible {
 
       switch self {
 
-      case .deleteSignOut, .postLogOut:
+      case .deleteWithdraw, .postLogOut:
         request = try JSONEncoding.default.encode(request)
         
       case .postFeedLike, .deleteFeedLike, .deleteFeed:
