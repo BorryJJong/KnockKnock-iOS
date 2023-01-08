@@ -11,5 +11,5 @@ then
     echo "Uploading Firebase Debug Build"
     unzip firebase-tools-macos.zip
     chmod +x ./firebase-tools-macos
-    ./firebase-tools-macos appdistribution:distribute $CI_AD_HOC_SIGNED_APP_PATH/KnockKnock-iOS.ipa --app 1:736464449250:ios:6301f64e56d289a66438bb --token $FIREBASE_TOKEN
+    ./firebase-tools-macos appdistribution:distribute $CI_AD_HOC_SIGNED_APP_PATH/KnockKnock-iOS.ipa --app 1:736464449250:ios:6301f64e56d289a66438bb --token $FIREBASE_TOKEN --group $TESET_GROUP
 fi
