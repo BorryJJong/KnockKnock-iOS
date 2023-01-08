@@ -66,7 +66,7 @@ final class FeedDetailNavigationBarView: UIView {
     self.postDateLabel.text = feed.regDate
     if let userImage = feed.userImage {
       self.profileImageView.setImageFromStringUrl(
-        url: userImage,
+        stringUrl: userImage,
         defaultImage: KKDS.Image.ic_person_24
       )
     }

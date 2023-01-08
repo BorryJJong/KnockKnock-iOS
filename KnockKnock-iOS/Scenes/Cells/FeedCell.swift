@@ -37,7 +37,7 @@ class FeedCell: BaseCollectionViewCell {
   func bind(post: FeedMain.Post) {
     self.severalSymbolImageView.isHidden = !post.isImageMore
     self.thumbnailImageView.setImageFromStringUrl(
-      url: post.thumbnailUrl,
+      stringUrl: post.thumbnailUrl,
       defaultImage: KKDS.Image.ic_no_data_60
     )
   }

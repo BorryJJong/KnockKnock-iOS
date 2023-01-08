@@ -9,45 +9,45 @@ import UIKit
 
 extension UIImageView {
 
-  private enum ImageError: Error {
+  enum ImageError: Error {
     case loadError
   }
 
   func setImageFromStringUrl(
-    url: String,
+    stringUrl: String?,
     defaultImage: UIImage
   ) {
-
     Task {
       do {
-        let cacheKey = NSString(string: url)
-
-        guard let cachedImage = ImageCacheManager.shared.object(forKey: cacheKey) else { return }
+        let image = try await self.loadImage(stringUrl: stringUrl)
 
         await MainActor.run {
-          self.image = cachedImage
+          self.image = image
         }
-      }
-    }
 
-    Task {
-      do {
-        guard let url = URL(string: url) else { return }
-
-        let photo = try await self.fetchPhoto(url: url).resize(newWidth: self.frame.width)
-
-        await MainActor.run {
-          self.image = photo
-        }
       } catch {
+        let image = await defaultImage.resize(newWidth: self.frame.width)
+
         await MainActor.run {
-          self.image = defaultImage.resize(newWidth: self.frame.width)
+          self.image = image
         }
       }
     }
   }
 
-  func fetchPhoto(url: URL) async throws -> UIImage {
+  /// String -> URL로 변환
+  private func convertStringToUrl(stringUrl: String?) async throws -> URL {
+
+    guard let stringUrl = stringUrl,
+      let url = URL(string: stringUrl) else {
+      throw ImageError.loadError
+    }
+    
+    return url
+  }
+
+  /// URL -> Data로 변환
+  private func fetchData(url: URL) async throws -> Data {
     let (data, response) = try await URLSession.shared.data(from: url)
 
     guard let httpResponse = response as? HTTPURLResponse,
@@ -55,11 +55,37 @@ extension UIImageView {
       throw ImageError.loadError
     }
 
-    guard let image = UIImage(data: data) else {
-      throw ImageError.loadError
-    }
-
-    return image
+    return data
   }
 
+  /// 이미지 로드
+  private func loadImage(stringUrl: String?) async throws -> UIImage {
+
+    guard let chacedImage = await self.setCachedImage(stringUrl: stringUrl) else {
+
+      let url = try await self.convertStringToUrl(stringUrl: stringUrl)
+      let data = try await self.fetchData(url: url)
+
+      guard let image = UIImage(data: data) else {
+        throw ImageError.loadError
+      }
+
+      let resizeImage = await image.resize(newWidth: self.frame.width)
+
+      return resizeImage
+    }
+
+    return chacedImage
+  }
+
+  /// 캐시 이미지 처리
+  private func setCachedImage(stringUrl: String?) async -> UIImage? {
+
+    guard let stringUrl = stringUrl else { return nil }
+
+    let cacheKey = NSString(string: stringUrl)
+    let cachedImage = ImageCacheManager.shared.object(forKey: cacheKey)
+
+    return cachedImage
+  }
 }
