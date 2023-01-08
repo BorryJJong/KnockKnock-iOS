@@ -26,9 +26,9 @@ enum KKRouter: URLRequestConvertible {
   // MARK: - APIs
 
   // Account
-  case postSocialLogin(loginInfo: Parameters)
+  case postSocialLogin(signInInfo: Parameters)
   case postSignUp(userInfo: Parameters)
-  case deleteSignOut
+  case deleteWithdraw
   case postLogOut
 
   // Challenge
@@ -45,6 +45,7 @@ enum KKRouter: URLRequestConvertible {
   // Feed List, Detail
   case getFeedBlogPost(page: Int, take: Int, feedId: Int, challengeId: Int)
   case getFeed(id: Int)
+  case deleteFeed(id: Int)
 
   // Like
   case postFeedLike(id: Int)
@@ -80,7 +81,8 @@ enum KKRouter: URLRequestConvertible {
          .postFeedLike:
       return .post
 
-    case .deleteSignOut,
+    case .deleteFeed,
+         .deleteWithdraw,
          .deleteFeedLike,
          .deleteComment:
       return .delete
@@ -96,7 +98,7 @@ enum KKRouter: URLRequestConvertible {
     case .postSocialLogin: return "users/social-login"
     case .postSignUp: return "users/sign-up"
     case .postLogOut: return "users/logout"
-    case .deleteSignOut: return "users"
+    case .deleteWithdraw: return "users"
 
     // Challenge
     case .getChallengeResponse: return "challenges"
@@ -112,6 +114,7 @@ enum KKRouter: URLRequestConvertible {
     // Feed List, Detail
     case .getFeedBlogPost: return "feed/blog-post"
     case .getFeed(let id): return "feed/\(id)"
+    case .deleteFeed(let id): return "feed/\(id)"
 
     // Like
     case .postFeedLike(let id): return "like/feed/\(id)"
@@ -131,8 +134,8 @@ enum KKRouter: URLRequestConvertible {
   var parameters: Parameters? {
     switch self {
 
-    case let .postSocialLogin(loginInfo):
-      return loginInfo
+    case let .postSocialLogin(signInInfo):
+      return signInInfo
 
     case let .postSignUp(userInfo):
       return userInfo
@@ -175,7 +178,8 @@ enum KKRouter: URLRequestConvertible {
          .getLikeList,
          .postFeed,
          .postLogOut,
-         .deleteSignOut,
+         .deleteFeed,
+         .deleteWithdraw,
          .getComment:
 
       return nil
@@ -189,7 +193,6 @@ enum KKRouter: URLRequestConvertible {
 
       let multipartFormData = MultipartFormData()
 
-      let userId = "\(feedWriteForm.userId)".data(using: .utf8) ?? Data()
       let content = feedWriteForm.content.data(using: .utf8) ?? Data()
       let storeAddress = feedWriteForm.storeAddress.data(using: .utf8) ?? Data()
       let locationX = feedWriteForm.locationX.data(using: .utf8) ?? Data()
@@ -199,7 +202,6 @@ enum KKRouter: URLRequestConvertible {
       let challenges = feedWriteForm.challenges.data(using: .utf8) ?? Data()
       let images = feedWriteForm.images.map { $0.pngData() ?? Data() }
 
-      multipartFormData.append(userId, withName: "userId")
       multipartFormData.append(content, withName: "content")
       multipartFormData.append(storeAddress, withName: "storeAddress")
       multipartFormData.append(locationX, withName: "locationX")
@@ -245,10 +247,11 @@ enum KKRouter: URLRequestConvertible {
     case .post, .patch, .delete:
 
       switch self {
-      case .deleteSignOut, .postLogOut:
-        request = try JSONEncoding.default.encode(request)
 
-      case .postFeedLike, .deleteFeedLike:
+      case .deleteWithdraw, .postLogOut:
+        request = try JSONEncoding.default.encode(request)
+        
+      case .postFeedLike, .deleteFeedLike, .deleteFeed:
         request = try JSONEncoding.default.encode(request)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 

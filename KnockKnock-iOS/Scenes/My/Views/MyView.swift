@@ -69,9 +69,9 @@ final class MyView: UIView {
 
   // MARK: - Bind
 
-  func setLoginStatus(isLoggedin: Bool) {
-    self.loginButton.isHidden = isLoggedin
-    self.userNameLabel.isHidden = !isLoggedin
+  func setSigninStatus(isSignedIn: Bool) {
+    self.loginButton.isHidden = isSignedIn
+    self.userNameLabel.isHidden = !isSignedIn
   }
 
   func setNickname(nickname: String) {

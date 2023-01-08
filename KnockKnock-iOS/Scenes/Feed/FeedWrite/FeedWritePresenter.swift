@@ -12,14 +12,14 @@ protocol FeedWritePresenterProtocol: AnyObject {
 
   func presentSelectedPromotions(promotionList: [Promotion])
   func presentSelectedTags(tagList: [ChallengeTitle])
-  func presentShopAddress(address: AddressResult.Documents)
+  func presentShopAddress(address: AddressResponse.Documents)
   func presentAlertView(isDone: Bool)
 }
 
 final class FeedWritePresenter: FeedWritePresenterProtocol {
   weak var view: FeedWriteViewProtocol?
 
-  func presentShopAddress(address: AddressResult.Documents) {
+  func presentShopAddress(address: AddressResponse.Documents) {
     self.view?.fetchAddress(address: address)
   }
 

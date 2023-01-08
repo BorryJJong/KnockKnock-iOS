@@ -18,14 +18,15 @@ protocol FeedListInteractorProtocol {
     feedId: Int,
     challengeId: Int
   )
-  
+  func requestDelete(feedId: Int)
+
   func requestLike(source: FeedListViewProtocol, feedId: Int)
   func requestLikeCancel(source: FeedListViewProtocol, feedId: Int)
 
   func navigateToFeedMain(source: FeedListViewProtocol)
   func navigateToFeedDetail(source: FeedListViewProtocol, feedId: Int)
   func navigateToCommentView(feedId: Int, source: FeedListViewProtocol)
-  func presentBottomSheetView(source: FeedListViewProtocol)
+  func presentBottomSheetView(source: FeedListViewProtocol, isMyPost: Bool, deleteAction: (() -> Void)?)
 }
 
 final class FeedListInteractor: FeedListInteractorProtocol {
@@ -53,7 +54,20 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       }
     )
   }
-  
+
+  func requestDelete(feedId: Int) {
+    self.worker?.requestDeleteFeed(
+      feedId: feedId,
+      completionHandler: { isSuccess in
+        if isSuccess {
+          self.presenter?.presentDeleteFeed(feedId: feedId)
+        } else {
+          print(isSuccess)
+        }
+      }
+    )
+  }
+
   func requestLike(source: FeedListViewProtocol, feedId: Int) {
     self.worker?.checkTokenExisted(completionHandler: { isExisted in
       if isExisted {
@@ -111,7 +125,15 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     self.router?.navigateToFeedMain(source: source)
   }
 
-  func presentBottomSheetView(source: FeedListViewProtocol) {
-    self.router?.presentBottomSheetView(source: source)
+  func presentBottomSheetView(
+    source: FeedListViewProtocol,
+    isMyPost: Bool,
+    deleteAction: (() -> Void)?
+  ) {
+    self.router?.presentBottomSheetView(
+      source: source,
+      isMyPost: isMyPost,
+      deleteAction: deleteAction
+    )
   }
 }

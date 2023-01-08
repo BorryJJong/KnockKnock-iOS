@@ -11,7 +11,7 @@ protocol MyViewProtocol: AnyObject {
   var interactor: MyInteractorProtocol? { get set }
 
   func fetchMenuData(menuData: MyMenu)
-  func checkLoginStatus(isLoggedIn: Bool)
+  func checkLoginStatus(isSignedIn: Bool)
   func fetchNickname(nickname: String)
 }
 
@@ -30,12 +30,12 @@ final class MyViewController: BaseViewController<MyView> {
 
   var selectedMenuItem: MyMenuType?
 
-  var isLoggedIn: Bool = false {
+  var isSignedIn: Bool = false {
     didSet {
-      if isLoggedIn {
+      if isSignedIn {
         self.interactor?.fetchNickname()
       }
-      self.containerView.setLoginStatus(isLoggedin: self.isLoggedIn)
+      self.containerView.setSigninStatus(isSignedIn: self.isSignedIn)
       self.containerView.myTableView.reloadData()
     }
   }
@@ -60,7 +60,7 @@ final class MyViewController: BaseViewController<MyView> {
   }
 
   override func viewWillAppear(_ animated: Bool) {
-    self.interactor?.checkLoginStatus()
+    self.interactor?.checkSignInStatus()
     self.tabBarController?.tabBar.isHidden = false
   }
 
@@ -70,7 +70,7 @@ final class MyViewController: BaseViewController<MyView> {
     self.navigationController?.navigationBar.setDefaultAppearance()
     self.navigationItem.title = "마이"
 
-    self.containerView.setLoginStatus(isLoggedin: self.isLoggedIn) // 로그인 상태에 따라 헤더 내용 바인딩
+    self.containerView.setSigninStatus(isSignedIn: self.isSignedIn) // 로그인 상태에 따라 헤더 내용 바인딩
     self.containerView.setNickname(nickname: self.nickname)
 
     self.interactor?.fetchMenuData()
@@ -100,11 +100,11 @@ final class MyViewController: BaseViewController<MyView> {
   // MARK: - Button Actions
 
   @objc private func loginButtonDidTap(_ sender: UIButton) {
-    self.interactor?.navigateToLoginView(source: self)
+    self.interactor?.navigateToLoginView()
   }
 
-  @objc func logoutButtonDidTap(_ sender: UIButton) {
-    self.interactor?.requestLogOut()
+  @objc func signOutButtonDidTap(_ sender: UIButton) {
+    self.interactor?.requestSignOut()
   }
 }
 
@@ -116,8 +116,8 @@ extension MyViewController: MyViewProtocol {
     self.menuData = menuData
   }
 
-  func checkLoginStatus(isLoggedIn: Bool) {
-    self.isLoggedIn = isLoggedIn
+  func checkLoginStatus(isSignedIn: Bool) {
+    self.isSignedIn = isSignedIn
   }
 
   func fetchNickname(nickname: String) {
@@ -136,7 +136,7 @@ extension MyViewController: UITableViewDataSource {
     numberOfRowsInSection section: Int
   ) -> Int {
     if section == 0 {
-      if !self.isLoggedIn {
+      if !self.isSignedIn {
         return 0
       }
     }
@@ -198,7 +198,7 @@ extension MyViewController: UITableViewDataSource {
     heightForHeaderInSection section: Int
   ) -> CGFloat {
     if self.menuData[section].title == MySectionType.myInfo {
-      if !isLoggedIn {
+      if !isSignedIn {
         return 0
       }
     }
@@ -212,14 +212,14 @@ extension MyViewController: UITableViewDataSource {
     
     let footerView = tableView.dequeueHeaderFooterView(withType: MyTableViewFooter.self)
 
-    footerView.logoutButton.addTarget(
+    footerView.signOutButton.addTarget(
       self,
-      action: #selector(self.logoutButtonDidTap(_:)),
+      action: #selector(self.signOutButtonDidTap(_:)),
       for: .touchUpInside
     )
     
     footerView.model = self.menuData[section]
-    footerView.setLogoutButtonHiddenStatus(isLoggedIn: self.isLoggedIn)
+    footerView.setSignOutButtonHiddenStatus(isSignedIn: self.isSignedIn)
     
     return footerView
   }
@@ -232,12 +232,12 @@ extension MyViewController: UITableViewDataSource {
 
     switch title {
     case .myInfo:
-      if !self.isLoggedIn {
+      if !self.isSignedIn {
         return 0
       }
 
     case .policy:
-      if isLoggedIn {
+      if isSignedIn {
         return 130
       }
 
@@ -262,13 +262,13 @@ extension MyViewController: UITableViewDelegate {
 
     switch menu {
     case .profile:
-      self.interactor?.navigateToProfileSettingView(source: self)
+      self.interactor?.navigateToProfileSettingView()
 
-    case .signOut:
+    case .withdraw:
       self.showAlert(
-        content: Alert.signOut.message,
+        content: Alert.withdraw.message,
         confirmActionCompletion: {
-          self.interactor?.requestSignOut()
+          self.interactor?.requestWithdraw()
         }
       )
 
@@ -281,7 +281,7 @@ extension MyViewController: UITableViewDelegate {
       )
 
     case .notice:
-      self.interactor?.navigateToNoticeView(source: self)
+      self.interactor?.navigateToNoticeView()
 
     default:
       print("none")

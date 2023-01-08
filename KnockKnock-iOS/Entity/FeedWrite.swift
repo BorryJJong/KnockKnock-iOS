@@ -11,7 +11,6 @@ import UIKit
 
 /// 피드 등록 entity
 struct FeedWrite {
-  let userId: Int
   let content: String
   let storeAddress: String
   let locationX: String
@@ -22,10 +21,16 @@ struct FeedWrite {
   let images: [UIImage]
 }
 
+/// 피드 등록 api response
+struct FeedWriteDTO: Decodable {
+  let code: Int
+  let message: String
+}
+
 // MARK: - 매장검색
 
 /// Kakao local api
-struct AddressResult: Codable {
+struct AddressResponse: Codable {
   let meta: Meta
   let documents: [Documents]
 

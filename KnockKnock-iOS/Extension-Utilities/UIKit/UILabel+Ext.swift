@@ -19,7 +19,8 @@ extension UILabel {
         NSTextTab(
           textAlignment: .left,
           location: 15
-        )]
+        )
+      ]
     }
     let stringAttributes = [
       NSAttributedString.Key.font: font,

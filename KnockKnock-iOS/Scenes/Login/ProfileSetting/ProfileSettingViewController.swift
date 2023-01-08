@@ -81,7 +81,7 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
     self.showAlert(
       content: Alert.profileSetting.message,
       confirmActionCompletion: {
-        self.interactor?.router?.navigateToMyView(source: self)
+        self.interactor?.navigateToMyView()
       }
     )
   }

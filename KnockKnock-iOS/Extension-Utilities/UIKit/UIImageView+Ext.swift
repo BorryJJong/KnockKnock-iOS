@@ -17,20 +17,32 @@ extension UIImageView {
     url: String,
     defaultImage: UIImage
   ) {
-    let cacheKey = NSString(string: url)
-
-    if let cachedImage = ImageCacheManager.shared.object(forKey: cacheKey) {
-      self.image = cachedImage
-
-      return
-    }
-    guard let url = URL(string: url) else { return }
 
     Task {
       do {
-        self.image = try await self.fetchPhoto(url: url).resize(newWidth: self.frame.width)
+        let cacheKey = NSString(string: url)
+
+        guard let cachedImage = ImageCacheManager.shared.object(forKey: cacheKey) else { return }
+
+        await MainActor.run {
+          self.image = cachedImage
+        }
+      }
+    }
+
+    Task {
+      do {
+        guard let url = URL(string: url) else { return }
+
+        let photo = try await self.fetchPhoto(url: url).resize(newWidth: self.frame.width)
+
+        await MainActor.run {
+          self.image = photo
+        }
       } catch {
-        self.image = defaultImage.resize(newWidth: self.frame.width)
+        await MainActor.run {
+          self.image = defaultImage.resize(newWidth: self.frame.width)
+        }
       }
     }
   }

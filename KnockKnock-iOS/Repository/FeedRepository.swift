@@ -15,6 +15,7 @@ protocol FeedRepositoryProtocol {
     challengeId: Int,
     completionHandler: @escaping (FeedMain) -> Void
   )
+  func requestDeleteFeed(feedId: Int, completionHandler: @escaping (Bool) -> Void)
   func requestChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void)
   func requestFeedDetail(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void)
   func requestFeedList(
@@ -31,7 +32,8 @@ final class FeedRepository: FeedRepositoryProtocol {
   // MARK: - Feed main APIs
 
   func requestChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void) {
-    KKNetworkManager.shared
+    KKNetworkManager
+      .shared
       .request(
         object: [ChallengeTitle].self,
         router: KKRouter.getChallengeTitles,
@@ -50,7 +52,8 @@ final class FeedRepository: FeedRepositoryProtocol {
     completionHandler: @escaping (FeedMain) -> Void
   ) {
 
-    KKNetworkManager.shared
+    KKNetworkManager
+      .shared
       .request(
         object: FeedMain.self,
         router: KKRouter.getFeedMain(
@@ -75,7 +78,8 @@ final class FeedRepository: FeedRepositoryProtocol {
     feedId: Int,
     challengeId: Int,
     completionHandler: @escaping (FeedList) -> Void) {
-      KKNetworkManager.shared
+      KKNetworkManager
+        .shared
         .request(
           object: FeedList.self,
           router: KKRouter.getFeedBlogPost(
@@ -93,13 +97,31 @@ final class FeedRepository: FeedRepositoryProtocol {
         )
     }
 
+  func requestDeleteFeed(
+    feedId: Int,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
+    KKNetworkManager
+      .shared
+      .request(
+        object: Bool.self,
+        router: KKRouter.deleteFeed(id: feedId),
+        success: { response in
+          completionHandler(response)
+        }, failure: { error in
+          print(error)
+        }
+      )
+  }
+
   // MARK: - Feed detail APIs
 
   func requestFeedDetail(
     feedId: Int,
     completionHandler: @escaping (FeedDetail) -> Void
   ) {
-    KKNetworkManager.shared
+    KKNetworkManager
+      .shared
       .request(
         object: FeedDetail.self,
         router: KKRouter.getFeed(id: feedId),
