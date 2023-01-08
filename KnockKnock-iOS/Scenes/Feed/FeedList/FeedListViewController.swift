@@ -23,20 +23,19 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   
   var interactor: FeedListInteractorProtocol?
 
-  var isNext: Bool = true
-  var feedListPost: [FeedList.Post] = [] {
+  private var isNext: Bool = true
+  private var feedListPost: [FeedList.Post] = [] {
     didSet {
       self.containerView.feedListCollectionView.reloadData()
     }
   }
-
   private var currentPage: Int = 1
   private var pageSize: Int = 5
-
+  
   var challengeId: Int = 0
   var feedId: Int = 2
 
-  lazy var tapGesture = UITapGestureRecognizer(
+  private lazy var tapGesture = UITapGestureRecognizer(
     target: self,
     action: #selector(tapScrollViewSection(_:))
   )
