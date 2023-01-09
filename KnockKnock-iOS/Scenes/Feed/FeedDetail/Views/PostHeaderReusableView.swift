@@ -138,7 +138,7 @@ final class PostHeaderReusableView: UICollectionReusableView {
   
   // MARK: - Bind
   
-  func bind(feedData: FeedDetail.Data) {
+  func bind(feedData: FeedDetail) {
 
     if !feedData.promotions.isEmpty {
       let promotions = feedData.promotions.map { $0.title }.joined(separator: ", ")

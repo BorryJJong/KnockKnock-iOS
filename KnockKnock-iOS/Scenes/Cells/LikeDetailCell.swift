@@ -51,7 +51,7 @@ final class LikeDetailCell: BaseCollectionViewCell {
 
   // MARK: - Bind
 
-  func bind(like: LikeInfo) {
+  func bind(like: Like.Info) {
     if let image = like.userImage {
       self.profileImageView.image = UIImage(named: image)
     } else {

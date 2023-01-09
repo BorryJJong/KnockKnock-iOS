@@ -14,7 +14,7 @@ final class LikeDetailViewContoller: BaseViewController<LikeDetailView> {
 
   // MARK: - Properties
 
-  var like: [LikeInfo] = []
+  var like: [Like.Info] = []
 
   // MARK: - Life cycle
 
