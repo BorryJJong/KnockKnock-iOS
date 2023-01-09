@@ -59,7 +59,7 @@ final class ChallengeDetailCell: BaseCollectionViewCell {
 
   // MARK: - Bind
 
-  func bind(challengeContent: ChallengeSubContents, isLast: Bool) {
+  func bind(challengeContent: ChallengeDetail.SubContents, isLast: Bool) {
     self.titleLabel.text = challengeContent.title
 
     self.exampleImageView.image = challengeContent.image

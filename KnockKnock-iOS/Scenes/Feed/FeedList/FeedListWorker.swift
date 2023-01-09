@@ -25,12 +25,12 @@ final class FeedListWorker: FeedListWorkerProtocol {
 
   private let feedRepository: FeedRepositoryProtocol
   private let likeRepository: LikeRepositoryProtocol
-  private let localDataManager: LocalDataManagerProtocol
+  private let localDataManager: UserDataManagerProtocol
 
   init(
     feedRepository: FeedRepositoryProtocol,
     likeRepository: LikeRepositoryProtocol,
-    localDataManager: LocalDataManagerProtocol
+    localDataManager: UserDataManagerProtocol
   ) {
     self.feedRepository = feedRepository
     self.likeRepository = likeRepository

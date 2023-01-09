@@ -35,14 +35,14 @@ final class FeedRepository: FeedRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<[ChallengeTitle]>.self,
+        object: ApiResponseDTO<[ChallengeTitleDTO]>.self,
         router: KKRouter.getChallengeTitles,
         success: { response in
           guard let data = response.data else {
             // no data error
             return
           }
-          completionHandler(data)
+          completionHandler(data.map{$0.toDomain()})
         }, failure: { error in
           print(error)
         }

@@ -7,14 +7,14 @@
 
 import Foundation
 
-protocol LocalDataManagerProtocol {
+protocol UserDataManagerProtocol {
   var userDefaultsService: UserDefaultsServiceType { get }
 
   func checkTokenIsExisted() -> Bool
   func removeAllUserInfo()
 }
 
-final class LocalDataManager: LocalDataManagerProtocol {
+final class UserDataManager: UserDataManagerProtocol {
 
   var userDefaultsService: UserDefaultsServiceType = UserDefaultsService()
 

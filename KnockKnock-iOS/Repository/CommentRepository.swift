@@ -9,8 +9,8 @@ import Foundation
 
 protocol CommentRepositoryProtocol {
   func requestComments(feedId: Int, completionHandler: @escaping ([CommentResponse]) -> Void)
-  func requestAddComment(comment: AddCommentRequest, completionHandler: @escaping (AddCommentResponse) -> Void)
-  func requestDeleteComment(commentId: Int, completionHandler: @escaping (DeleteCommentResponse) -> Void)
+  func requestAddComment(comment: AddCommentRequest, completionHandler: @escaping (Bool) -> Void)
+  func requestDeleteComment(commentId: Int, completionHandler: @escaping (Bool) -> Void)
 }
 
 final class CommentRepository: CommentRepositoryProtocol {
@@ -24,9 +24,11 @@ final class CommentRepository: CommentRepositoryProtocol {
         object: ApiResponseDTO<[CommentResponse]>.self,
         router: KKRouter.getComment(id: feedId),
         success: { response in
-          if let data = response.data {
-            completionHandler(data)
+          guard let data = response.data else {
+            // no data error
+            return
           }
+          completionHandler(data)
         },
         failure: { error in
           print(error)
@@ -36,7 +38,7 @@ final class CommentRepository: CommentRepositoryProtocol {
 
   func requestAddComment(
     comment: AddCommentRequest,
-    completionHandler: @escaping (AddCommentResponse) -> Void
+    completionHandler: @escaping (Bool) -> Void
   ) {
 
     do {
@@ -45,10 +47,14 @@ final class CommentRepository: CommentRepositoryProtocol {
       KKNetworkManager
         .shared
         .request(
-          object: AddCommentResponse.self,
+          object: ApiResponseDTO<Bool>.self,
           router: KKRouter.postAddComment(comment: parameters),
           success: { response in
-            completionHandler(response)
+            guard let data = response.data else {
+              // no data error
+              return
+            }
+            completionHandler(data)
           },
           failure: { error in
             print(error)
@@ -62,7 +68,7 @@ final class CommentRepository: CommentRepositoryProtocol {
 
   func requestDeleteComment(
     commentId: Int,
-    completionHandler: @escaping (DeleteCommentResponse) -> Void
+    completionHandler: @escaping (Bool) -> Void
   ) {
     let parameters = [
       "id": commentId
@@ -71,10 +77,14 @@ final class CommentRepository: CommentRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: DeleteCommentResponse.self,
+        object: ApiResponseDTO<Bool>.self,
         router: KKRouter.deleteComment(id: parameters),
         success: { response in
-          completionHandler(response)
+          guard let data = response.data else {
+            // no data error
+            return
+          }
+          completionHandler(data)
         }, failure: { error in
           print(error)
         }

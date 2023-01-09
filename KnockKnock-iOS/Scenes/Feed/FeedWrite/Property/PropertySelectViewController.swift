@@ -126,10 +126,9 @@ extension PropertySelectViewController: PropertySelectViewProtocol {
     self.promotionList = promotionList
     self.promotionList.insert(
       Promotion(
-        promotionInfo: PromotionInfo(
-          id: 0,
-          type: "없음"
-        ), isSelected: false
+        id: 0,
+        type: "없음",
+        isSelected: false
       ), at: 0
     )
     self.containerView.propertyTableView.reloadData()
@@ -165,7 +164,7 @@ extension PropertySelectViewController: UITableViewDataSource {
     case .promotion:
       let promotion = promotionList[indexPath.row]
 
-      cell.bind(content: promotion.promotionInfo.type, isSelected: promotion.isSelected)
+      cell.bind(content: promotion.type, isSelected: promotion.isSelected)
 
     case .tag:
       let tag = tagList[indexPath.row]

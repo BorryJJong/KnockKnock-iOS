@@ -82,8 +82,8 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   ) {
     self.worker?.requestAddComment(
       comment: comment,
-      completionHandler: { response in
-        if response == "success" {
+      completionHandler: { success in
+        if success {
           self.fetchAllComments(feedId: comment.postId)
         }
       }

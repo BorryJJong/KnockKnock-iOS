@@ -10,16 +10,16 @@ import Foundation
 import Alamofire
 
 protocol ChallengeRepositoryProtocol {
-  func fetchChellenge(completionHandler: @escaping ([Challenges]) -> Void)
+  func fetchChellenge(completionHandler: @escaping ([Challenge]) -> Void)
   func requestChallengeDetail(challengeId: Int, completionHandler: @escaping (ChallengeDetail) -> Void)
 }
 
 final class ChallengeRepository: ChallengeRepositoryProtocol {
-  func fetchChellenge(completionHandler: @escaping ([Challenges]) -> Void) {
+  func fetchChellenge(completionHandler: @escaping ([Challenge]) -> Void) {
 
     KKNetworkManager.shared
       .request(
-        object: ApiResponseDTO<[Challenges]>.self,
+        object: ApiResponseDTO<[Challenge]>.self,
         router: KKRouter.getChallengeResponse,
         success: { response in
           

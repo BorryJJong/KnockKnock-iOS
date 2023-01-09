@@ -17,11 +17,11 @@ protocol MyWorkerProtocol {
 
 final class MyWorker: MyWorkerProtocol {
 
-  private let localDataManager: LocalDataManagerProtocol?
+  private let localDataManager: UserDataManagerProtocol?
   private let accountManager: AccountManagerProtocol?
 
   init(
-    localDataManager: LocalDataManagerProtocol,
+    localDataManager: UserDataManagerProtocol,
     accountManager: AccountManagerProtocol
   ) {
     self.localDataManager = localDataManager
@@ -75,7 +75,7 @@ final class MyWorker: MyWorkerProtocol {
   }
 
   func requestSignOut(completionHandler: @escaping() -> Void) {
-    self.accountManager?.signOut(completionHanlder: { [weak self] success in
+    self.accountManager?.signOut(completionHandler: { [weak self] success in
       if success {
         self?.localDataManager?.removeAllUserInfo()
         completionHandler()
@@ -84,7 +84,7 @@ final class MyWorker: MyWorkerProtocol {
   }
 
   func requestWithdraw(completionHandler: @escaping() -> Void) {
-    self.accountManager?.withdraw(completionHanlder: { [weak self] success in
+    self.accountManager?.withdraw(completionHandler: { [weak self] success in
       if success {
         self?.localDataManager?.removeAllUserInfo()
         completionHandler()
