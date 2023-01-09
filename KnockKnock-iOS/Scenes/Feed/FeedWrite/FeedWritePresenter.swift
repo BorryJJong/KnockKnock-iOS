@@ -27,7 +27,7 @@ final class FeedWritePresenter: FeedWritePresenterProtocol {
     let selection = promotionList.filter { $0.isSelected == true }
 
     var content = selection.map {
-      $0.promotionInfo.type
+      $0.type
     }.joined(separator: ", ")
 
     if selection.isEmpty {

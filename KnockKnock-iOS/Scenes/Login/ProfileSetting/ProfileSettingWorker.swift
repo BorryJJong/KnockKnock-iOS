@@ -19,11 +19,11 @@ protocol ProfileSettingWorkerProtocol {
 
 final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
   private let accountManager: AccountManagerProtocol
-  private let localDataManager: LocalDataManagerProtocol
+  private let localDataManager: UserDataManagerProtocol
 
   init(
     accountManager: AccountManagerProtocol,
-    localDataManager: LocalDataManagerProtocol
+    localDataManager: UserDataManagerProtocol
   ) {
     self.accountManager = accountManager
     self.localDataManager = localDataManager

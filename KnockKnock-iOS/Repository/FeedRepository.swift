@@ -35,10 +35,14 @@ final class FeedRepository: FeedRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: [ChallengeTitle].self,
+        object: ApiResponseDTO<[ChallengeTitleDTO]>.self,
         router: KKRouter.getChallengeTitles,
         success: { response in
-          completionHandler(response)
+          guard let data = response.data else {
+            // no data error
+            return
+          }
+          completionHandler(data.map{$0.toDomain()})
         }, failure: { error in
           print(error)
         }
@@ -55,14 +59,18 @@ final class FeedRepository: FeedRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: FeedMain.self,
+        object: ApiResponseDTO<FeedMain>.self,
         router: KKRouter.getFeedMain(
           page: currentPage,
           take: totalCount,
           challengeId: challengeId
         ),
         success: { response in
-          completionHandler(response)
+          guard let data = response.data else {
+            // no data error
+            return
+          }
+          completionHandler(data)
         },
         failure: { response in
           print(response)
@@ -81,7 +89,7 @@ final class FeedRepository: FeedRepositoryProtocol {
       KKNetworkManager
         .shared
         .request(
-          object: FeedList.self,
+          object: ApiResponseDTO<FeedList>.self,
           router: KKRouter.getFeedBlogPost(
             page: currentPage,
             take: pageSize,
@@ -89,7 +97,11 @@ final class FeedRepository: FeedRepositoryProtocol {
             challengeId: challengeId
           ),
           success: { response in
-            completionHandler(response)
+            guard let data = response.data else {
+              // no data error
+              return
+            }
+            completionHandler(data)
           },
           failure: { response in
             print(response)
@@ -104,10 +116,14 @@ final class FeedRepository: FeedRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: Bool.self,
+        object: ApiResponseDTO<Bool>.self,
         router: KKRouter.deleteFeed(id: feedId),
         success: { response in
-          completionHandler(response)
+          guard let data = response.data else {
+            // no data error
+            return
+          }
+          completionHandler(data)
         }, failure: { error in
           print(error)
         }
@@ -123,10 +139,14 @@ final class FeedRepository: FeedRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: FeedDetail.self,
+        object: ApiResponseDTO<FeedDetail>.self,
         router: KKRouter.getFeed(id: feedId),
         success: { response in
-          completionHandler(response)
+          guard let data = response.data else {
+            // no data error
+            return
+          }
+          completionHandler(data)
         },
         failure: { response in
           print(response)

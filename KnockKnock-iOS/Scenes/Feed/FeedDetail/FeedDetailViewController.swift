@@ -16,7 +16,7 @@ protocol FeedDetailViewProtocol: AnyObject {
   func getFeedDetail(feedDetail: FeedDetail)
   func getAllCommentsCount(allCommentsCount: Int)
   func fetchVisibleComments(visibleComments: [Comment])
-  func fetchLikeList(like: [LikeInfo])
+  func fetchLikeList(like: [Like.Info])
   func deleteComment()
 }
 
@@ -29,7 +29,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   var feedDetail: FeedDetail? {
     didSet {
       self.containerView.postCollectionView.reloadData()
-      if let feed = feedDetail?.data.feed {
+      if let feed = feedDetail?.feed {
         self.containerView.navigationView.bind(feed: feed)
       }
       self.containerView.layoutIfNeeded()
@@ -38,7 +38,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   var feedId: Int = 6
   var userId: Int = 1
   var commentId: Int?
-  var like: [LikeInfo] = [] {
+  var like: [Like.Info] = [] {
     didSet {
       UIView.performWithoutAnimation {
         self.containerView.postCollectionView.reloadSections(
@@ -275,7 +275,7 @@ extension FeedDetailViewController: FeedDetailViewProtocol {
     self.interactor?.fetchAllComments(feedId: self.feedId)
   }
   
-  func fetchLikeList(like: [LikeInfo]) {
+  func fetchLikeList(like: [Like.Info]) {
     self.like = like
   }
 }
@@ -289,7 +289,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
   ) -> Int {
     switch FeedDetailSection(rawValue: section) {
     case .content:
-      return self.feedDetail?.data.challenges.count ?? 0
+      return self.feedDetail?.challenges.count ?? 0
       
     case .like:
       if self.like.isEmpty {
@@ -323,7 +323,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
         for: indexPath
       )
       if let feedDetail = self.feedDetail {
-        cell.bind(text: feedDetail.data.challenges[indexPath.item].title)
+        cell.bind(text: feedDetail.challenges[indexPath.item].title)
       }
       return cell
       
@@ -406,7 +406,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
           for: indexPath
         )
         if let feedDetail = self.feedDetail {
-          header.bind(feedData: feedDetail.data)
+          header.bind(feedData: feedDetail)
         }
         
         return header
@@ -419,8 +419,8 @@ extension FeedDetailViewController: UICollectionViewDataSource {
         
         if let feedDetail = self.feedDetail {
           footer.bind(
-            name: feedDetail.data.feed?.storeName,
-            address: feedDetail.data.feed?.storeAddress
+            name: feedDetail.feed?.storeName,
+            address: feedDetail.feed?.storeAddress
           )
         }
         

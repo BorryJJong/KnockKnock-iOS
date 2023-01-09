@@ -10,34 +10,50 @@ import Foundation
 import Alamofire
 
 protocol ChallengeRepositoryProtocol {
-  func fetchChellenge(completionHandler: @escaping ([Challenges]) -> Void)
+  func fetchChellenge(completionHandler: @escaping ([Challenge]) -> Void)
   func requestChallengeDetail(challengeId: Int, completionHandler: @escaping (ChallengeDetail) -> Void)
 }
 
 final class ChallengeRepository: ChallengeRepositoryProtocol {
-  func fetchChellenge(completionHandler: @escaping ([Challenges]) -> Void) {
+  func fetchChellenge(completionHandler: @escaping ([Challenge]) -> Void) {
+
     KKNetworkManager.shared
       .request(
-        object: [Challenges].self,
+        object: ApiResponseDTO<[Challenge]>.self,
         router: KKRouter.getChallengeResponse,
         success: { response in
-          completionHandler(response)
+          
+          guard let data = response.data else {
+            // no data error
+            return
+          }
+          completionHandler(data)
         },
         failure: { response in
           print(response)
-        })
+        }
+      )
   }
 
-  func requestChallengeDetail(challengeId: Int, completionHandler: @escaping (ChallengeDetail) -> Void) {
-    KKNetworkManager.shared
-      .request(
-        object: ChallengeDetail.self,
-        router: KKRouter.getChallengeDetail(id: challengeId),
-        success: { response in
-          completionHandler(response)
-        },
-        failure: { response in
-          print(response)
-        })
-  }
+  func requestChallengeDetail(
+    challengeId: Int,
+    completionHandler: @escaping (ChallengeDetail) -> Void) {
+
+      KKNetworkManager.shared
+        .request(
+          object: ApiResponseDTO<ChallengeDetail>.self,
+          router: KKRouter.getChallengeDetail(id: challengeId),
+          success: { response in
+
+            guard let data = response.data else {
+              // no data error
+              return
+            }
+            completionHandler(data)
+          },
+          failure: { response in
+            print(response)
+          }
+        )
+    }
 }

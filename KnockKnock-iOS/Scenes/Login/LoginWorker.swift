@@ -28,13 +28,13 @@ final class LoginWorker: LoginWorkerProtocol {
   private let kakaoLoginManager: KakaoLoginManagerProtocol
   private let appleLoginManager: AppleLoginManagerProtocol
   private let accountManager: AccountManagerProtocol
-  private let localDataManager: LocalDataManagerProtocol
+  private let localDataManager: UserDataManagerProtocol
 
   init(
     kakaoLoginManager: KakaoLoginManagerProtocol,
     appleLoginManager: AppleLoginManagerProtocol,
     accountManager: AccountManagerProtocol,
-    localDataManager: LocalDataManagerProtocol
+    localDataManager: UserDataManagerProtocol
   ) {
     self.kakaoLoginManager = kakaoLoginManager
     self.appleLoginManager = appleLoginManager

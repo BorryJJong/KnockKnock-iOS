@@ -27,7 +27,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   var presenter: FeedDetailPresenterProtocol?
   var router: FeedDetailRouterProtocol?
 
-  private var likeList: [LikeInfo] = []
+  private var likeList: [Like.Info] = []
 
   // Business logic
 
@@ -82,8 +82,8 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   ) {
     self.worker?.requestAddComment(
       comment: comment,
-      completionHandler: { response in
-        if response == "success" {
+      completionHandler: { success in
+        if success {
           self.fetchAllComments(feedId: comment.postId)
         }
       }

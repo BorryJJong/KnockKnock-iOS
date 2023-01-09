@@ -8,15 +8,12 @@
 import Foundation
 
 struct FeedDetail: Decodable {
-  let data: Data
-
-  struct Data: Decodable {
-    let feed: Post?
-    let promotions: [Promotion]
-    let challenges: [Challenge]
-    let images: [Image]
-  }
-
+  
+  let feed: Post?
+  let promotions: [Promotion]
+  let challenges: [Challenge]
+  let images: [Image]
+  
   struct Post: Decodable {
     let id: Int
     let userId: Int
@@ -30,19 +27,19 @@ struct FeedDetail: Decodable {
     let userImage: String?
     let scale: String = "1:1"
   }
-
+  
   struct Promotion: Decodable {
     let id: Int
     let promotionId: Int
     let title: String
   }
-
+  
   struct Challenge: Decodable {
     let id: Int
     let challengeId: Int
     let title: String
   }
-
+  
   struct Image: Decodable {
     let id: Int
     let fileUrl: String
