@@ -101,6 +101,9 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     self.containerView.registButton.do {
       $0.addTarget(self, action: #selector(self.registButtonDidTap(_:)), for: .touchUpInside)
     }
+    self.containerView.likeButton.do {
+      $0.addTarget(self, action: #selector(self.likeButtonDidTap(_:)), for: .touchUpInside)
+    }
     self.addKeyboardNotification()
     self.hideKeyboardWhenTappedAround()
   }
@@ -181,7 +184,25 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     self.commentId = sender.tag
     self.containerView.commentTextView.becomeFirstResponder()
   }
-  
+
+  @objc func likeButtonDidTap(_ sender: UIButton) {
+    sender.isSelected.toggle()
+//
+//    if sender.isSelected {
+//
+//      self.interactor?.requestLike(
+//        source: self,
+//        feedId: sender.tag
+//      )
+//    } else {
+//
+//      self.interactor?.requestLikeCancel(
+//        source: self,
+//        feedId: sender.tag
+//      )
+//    }
+  }
+
   private func commentDeleteButtonDidTap(commentId: Int) {
     self.showAlert(
       content: "댓글을 삭제하시겠습니까?",
