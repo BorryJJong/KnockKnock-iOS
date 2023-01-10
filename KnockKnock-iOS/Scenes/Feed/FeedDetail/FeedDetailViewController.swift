@@ -25,7 +25,8 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   // MARK: - Properties
   
   var interactor: FeedDetailInteractorProtocol?
-  
+
+  var feedId: Int = 6
   var feedDetail: FeedDetail? {
     didSet {
       if let feed = feedDetail?.feed {
@@ -37,24 +38,23 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       self.containerView.layoutIfNeeded()
     }
   }
-  var feedId: Int = 6
-  var userId: Int = 1
+
   var commentId: Int?
+  var allCommentsCount: Int = 0
+  var visibleComments: [Comment] = [] {
+    didSet {
+      UIView.performWithoutAnimation {
+        self.containerView.postCollectionView.reloadData()
+      }
+    }
+  }
+
   var like: [Like.Info] = [] {
     didSet {
       UIView.performWithoutAnimation {
         self.containerView.postCollectionView.reloadSections(
           IndexSet(integer: FeedDetailSection.like.rawValue)
         )
-      }
-    }
-  }
-  
-  var allCommentsCount: Int = 0
-  var visibleComments: [Comment] = [] {
-    didSet {
-      UIView.performWithoutAnimation {
-        self.containerView.postCollectionView.reloadData()
       }
     }
   }
@@ -169,9 +169,8 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   @objc private func registButtonDidTap(_ sender: UIButton) {
     if let content = self.containerView.commentTextView.text {
       self.interactor?.requestAddComment(
-        comment: AddCommentRequest(
+        comment: AddCommentDTO(
           postId: self.feedId,
-          userId: self.userId,
           content: content,
           commentId: self.commentId
         )

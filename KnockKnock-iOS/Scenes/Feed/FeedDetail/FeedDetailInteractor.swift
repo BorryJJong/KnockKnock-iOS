@@ -15,7 +15,7 @@ protocol FeedDetailInteractorProtocol {
   func getFeedDeatil(feedId: Int)
   func fetchAllComments(feedId: Int)
   func fetchVisibleComments(comments: [Comment])
-  func requestAddComment(comment: AddCommentRequest)
+  func requestAddComment(comment: AddCommentDTO)
   func requestDeleteComment(commentId: Int)
 
   func requestLike(feedId: Int)
@@ -112,7 +112,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   }
   
   func requestAddComment(
-    comment: AddCommentRequest
+    comment: AddCommentDTO
   ) {
     self.worker?.requestAddComment(
       comment: comment,

@@ -9,7 +9,7 @@ import Foundation
 
 protocol CommentRepositoryProtocol {
   func requestComments(feedId: Int, completionHandler: @escaping ([CommentResponse]) -> Void)
-  func requestAddComment(comment: AddCommentRequest, completionHandler: @escaping (Bool) -> Void)
+  func requestAddComment(comment: AddCommentDTO, completionHandler: @escaping (Bool) -> Void)
   func requestDeleteComment(commentId: Int, completionHandler: @escaping (Bool) -> Void)
 }
 
@@ -37,7 +37,7 @@ final class CommentRepository: CommentRepositoryProtocol {
   }
 
   func requestAddComment(
-    comment: AddCommentRequest,
+    comment: AddCommentDTO,
     completionHandler: @escaping (Bool) -> Void
   ) {
 
