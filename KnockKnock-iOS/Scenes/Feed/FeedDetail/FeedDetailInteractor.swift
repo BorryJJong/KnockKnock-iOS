@@ -17,9 +17,12 @@ protocol FeedDetailInteractorProtocol {
   func fetchVisibleComments(comments: [Comment])
   func requestAddComment(comment: AddCommentRequest)
   func requestDeleteComment(commentId: Int)
+
+  func requestLike(feedId: Int)
+  func requestLikeCancel(feedId: Int)
   func fetchLikeList(feedId: Int)
 
-  func navigateToLikeDetail(source: FeedDetailViewProtocol)
+  func navigateToLikeDetail()
 }
 
 final class FeedDetailInteractor: FeedDetailInteractorProtocol {
@@ -38,6 +41,37 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
         self?.presenter?.presentFeedDetail(feedDetail: feedDetail)
       }
     )
+  }
+
+  func requestLike(feedId: Int) {
+    self.worker?.checkTokenExisted(completionHandler: { isExisted in
+      if isExisted {
+        self.worker?.requestLike(
+          id: feedId,
+          completionHandler: { result in
+            print(result) // 추후 error 처리
+          }
+        )
+      } else {
+        self.router?.navigateToLoginView()
+      }
+    })
+  }
+
+  func requestLikeCancel(feedId: Int) {
+    self.worker?.checkTokenExisted(completionHandler: { isExisted in
+      if isExisted {
+
+        self.worker?.requestLikeCancel(
+          id: feedId,
+          completionHandler: { result in
+            print(result) // 추후 error 처리
+          }
+        )
+      } else {
+        self.router?.navigateToLoginView()
+      }
+    })
   }
 
   func fetchLikeList(feedId: Int) {
@@ -101,7 +135,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
 
   // Routing
 
-  func navigateToLikeDetail(source: FeedDetailViewProtocol) {
-    self.router?.navigateToLikeDetail(source: source, like: self.likeList)
+  func navigateToLikeDetail() {
+    self.router?.navigateToLikeDetail(like: self.likeList)
   }
 }

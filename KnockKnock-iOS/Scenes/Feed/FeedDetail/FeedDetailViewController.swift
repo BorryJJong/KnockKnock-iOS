@@ -187,20 +187,18 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
 
   @objc func likeButtonDidTap(_ sender: UIButton) {
     sender.isSelected.toggle()
-//
-//    if sender.isSelected {
-//
-//      self.interactor?.requestLike(
-//        source: self,
-//        feedId: sender.tag
-//      )
-//    } else {
-//
-//      self.interactor?.requestLikeCancel(
-//        source: self,
-//        feedId: sender.tag
-//      )
-//    }
+
+    if sender.isSelected {
+
+      self.interactor?.requestLike(
+        feedId: self.feedId
+      )
+    } else {
+
+      self.interactor?.requestLikeCancel(
+        feedId: self.feedId
+      )
+    }
   }
 
   private func commentDeleteButtonDidTap(commentId: Int) {
@@ -492,7 +490,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     if indexPath.section == FeedDetailSection.like.rawValue {
       if indexPath.item == self.like.count {
-        self.interactor?.navigateToLikeDetail(source: self)
+        self.interactor?.navigateToLikeDetail()
       }
     }
   }

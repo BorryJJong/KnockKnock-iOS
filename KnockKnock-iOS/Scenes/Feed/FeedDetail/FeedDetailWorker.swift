@@ -10,6 +10,10 @@ import UIKit
 protocol FeedDetailWorkerProtocol {
   func getFeedDetail(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void)
 
+  func checkTokenExisted(completionHandler: @escaping (Bool) -> Void)
+  
+  func requestLike(id: Int, completionHandler: @escaping (Bool) -> Void)
+  func requestLikeCancel(id: Int, completionHandler: @escaping (Bool) -> Void)
   func fetchLikeList(feedId: Int, completionHandler: @escaping ([Like.Info]) -> Void)
   func getAllComments(feedId: Int, completionHandler: @escaping ([Comment]) -> Void)
   func requestAddComment(comment: AddCommentRequest, completionHandler: @escaping (Bool) -> Void)
@@ -21,15 +25,18 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
   private let feedRepository: FeedRepositoryProtocol
   private let commentRepository: CommentRepositoryProtocol
   private let likeRepository: LikeRepositoryProtocol
+  private let userDataManager: UserDataManagerProtocol
 
   init(
     feedRepository: FeedRepositoryProtocol,
     commentRepository: CommentRepositoryProtocol,
-    likeRepository: LikeRepositoryProtocol
+    likeRepository: LikeRepositoryProtocol,
+    userDataManager: UserDataManagerProtocol
   ) {
     self.feedRepository = feedRepository
     self.commentRepository = commentRepository
     self.likeRepository = likeRepository
+    self.userDataManager = userDataManager
   }
 
   func getFeedDetail(
@@ -59,6 +66,36 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
       }
     )
   }
+
+  func checkTokenExisted(completionHandler: @escaping (Bool) -> Void) {
+    let isExisted = self.userDataManager.checkTokenIsExisted()
+    completionHandler(isExisted)
+  }
+
+  func requestLike(
+    id: Int,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
+    self.likeRepository.requestLike(
+      id: id,
+      completionHandler: { result in
+        completionHandler(result)
+      }
+    )
+  }
+
+  func requestLikeCancel(
+    id: Int,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
+      self.likeRepository.requestLikeCancel(
+        id: id,
+        completionHandler: { result in
+          completionHandler(result)
+        }
+      )
+    }
+
 
   func fetchLikeList(
     feedId: Int,
