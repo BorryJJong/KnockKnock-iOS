@@ -94,9 +94,10 @@ final class PostCommentCell: BaseCollectionViewCell {
   // MARK: - Bind
 
   func bind(comment: Comment) {
-    let reply = comment.data.reply
-
-    self.setReplyMoreButton(count: reply?.count ?? 0, isOpen: comment.isOpen)
+    let reply = comment.data.reply.map {
+      $0.filter { !$0.isDeleted }
+    } ?? []
+    self.setReplyMoreButton(count: reply.count, isOpen: comment.isOpen)
 
     self.userIdLabel.text = comment.data.nickname
     self.commentLabel.text = comment.data.content
