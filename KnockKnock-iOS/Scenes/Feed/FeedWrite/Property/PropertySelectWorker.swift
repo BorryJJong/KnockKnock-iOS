@@ -8,42 +8,27 @@
 import UIKit
 
 protocol PropertySelectWorkerProtocol {
-  func requestPromotionList(completionHandler: @escaping ([PromotionInfo]) -> Void)
+  func requestPromotionList(completionHandler: @escaping ([Promotion]) -> Void)
   func requestTagList(completionHandler: @escaping ([ChallengeTitle]) -> Void)
 }
 
 final class PropertySelectWorker: PropertySelectWorkerProtocol {
-  private let repository: FeedRepositoryProtocol?
+  private let repository: FeedWriteRepositoryProtocol?
 
-  init(repository: FeedRepositoryProtocol) {
+  init(repository: FeedWriteRepositoryProtocol) {
     self.repository = repository
   }
 
-  func requestPromotionList(completionHandler: @escaping ([PromotionInfo]) -> Void) {
-    KKNetworkManager
-      .shared
-      .request(
-        object: [PromotionInfo].self,
-        router: KKRouter.getPromotions,
-        success: { response in
-          completionHandler(response)
-        }, failure: { error in
-          print(error)
-        }
-      )
+  func requestPromotionList(completionHandler: @escaping ([Promotion]) -> Void) {
+    self.repository?.requestPromotionList(completionHandler: { response in
+      completionHandler(response)
+    })
   }
 
   func requestTagList(completionHandler: @escaping ([ChallengeTitle]) -> Void) {
-    KKNetworkManager
-      .shared
-      .request(
-        object: [ChallengeTitle].self,
-        router: KKRouter.getChallengeTitles,
-        success: { response in
-          completionHandler(response)
-        }, failure: { error in
-          print(error)
-        }
-      )
+    self.repository?.requestChallengeTitles(completionHandler: { response in
+      completionHandler(response)
+    }
+    )
   }
 }

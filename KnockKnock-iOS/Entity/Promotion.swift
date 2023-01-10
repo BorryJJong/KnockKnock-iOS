@@ -7,12 +7,22 @@
 
 import Foundation
 
-struct PromotionInfo: Decodable {
+struct PromotionDTO: Decodable {
   let id: Int
   let type: String
 }
 
+extension PromotionDTO {
+  func toDomain() -> Promotion {
+    return .init(id: self.id,
+                 type: self.type,
+                 isSelected: false)
+  }
+}
+
 struct Promotion {
-  let promotionInfo: PromotionInfo
+  let id: Int
+  let type: String
+
   var isSelected: Bool
 }

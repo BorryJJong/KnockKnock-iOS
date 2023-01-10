@@ -9,19 +9,19 @@ import UIKit
 
 protocol MyWorkerProtocol {
   func fetchMenuData(completionHandler: @escaping (MyMenu) -> Void)
-  func checkLoginStatus(completionHandler: @escaping(Bool) -> Void)
+  func checkSignInStatus(completionHandler: @escaping(Bool) -> Void)
   func fetchNickname(completionHandler: @escaping(String) -> Void)
-  func requestLogOut(completionHandler: @escaping() -> Void)
   func requestSignOut(completionHandler: @escaping() -> Void)
+  func requestWithdraw(completionHandler: @escaping() -> Void)
 }
 
 final class MyWorker: MyWorkerProtocol {
 
-  private let localDataManager: LocalDataManagerProtocol?
+  private let localDataManager: UserDataManagerProtocol?
   private let accountManager: AccountManagerProtocol?
 
   init(
-    localDataManager: LocalDataManagerProtocol,
+    localDataManager: UserDataManagerProtocol,
     accountManager: AccountManagerProtocol
   ) {
     self.localDataManager = localDataManager
@@ -30,7 +30,7 @@ final class MyWorker: MyWorkerProtocol {
 
   private let menuData: MyMenu = {
     let profile = MyItem(title: MyMenuType.profile, type: .plain)
-    let signout = MyItem(title: MyMenuType.signOut, type: .plain)
+    let withdraw = MyItem(title: MyMenuType.withdraw, type: .plain)
     let push = MyItem(title: MyMenuType.pushNotification, type: .alert)
 
     let notice = MyItem(title: MyMenuType.notice, type: .plain)
@@ -43,7 +43,7 @@ final class MyWorker: MyWorkerProtocol {
 
     let myInfoSection = MySection(
       title: MySectionType.myInfo,
-      myItems: [profile, signout, push]
+      myItems: [profile, withdraw, push]
     )
     let customerSection = MySection(
       title: MySectionType.customer,
@@ -62,31 +62,31 @@ final class MyWorker: MyWorkerProtocol {
   }
 
   func fetchNickname(completionHandler: @escaping(String) -> Void) {
-    if let nickname = self.localDataManager?.fetchNickname() {
+    guard let nickname = self.localDataManager?.userDefaultsService.value(forkey: .nickname) else {
+      return
+    }
       completionHandler(nickname)
+  }
+
+  func checkSignInStatus(completionHandler: @escaping(Bool) -> Void) {
+    if let isSignedIn = self.localDataManager?.checkTokenIsExisted() {
+      completionHandler(isSignedIn)
     }
   }
 
-  func checkLoginStatus(completionHandler: @escaping(Bool) -> Void) {
-    if let isLoggedIn = self.localDataManager?.checkTokenIsExisted() {
-      completionHandler(isLoggedIn)
-    }
-  }
-
-  func requestLogOut(completionHandler: @escaping() -> Void) {
-    self.accountManager?.logOut(completionHanlder: { [weak self] success in
+  func requestSignOut(completionHandler: @escaping() -> Void) {
+    self.accountManager?.signOut(completionHandler: { [weak self] success in
       if success {
-        self?.localDataManager?.deleteToken()
+        self?.localDataManager?.removeAllUserInfo()
         completionHandler()
       }
     })
   }
 
-  func requestSignOut(completionHandler: @escaping() -> Void) {
-    self.accountManager?.signOut(completionHanlder: { [weak self] success in
+  func requestWithdraw(completionHandler: @escaping() -> Void) {
+    self.accountManager?.withdraw(completionHandler: { [weak self] success in
       if success {
-        self?.localDataManager?.deleteToken()
-        self?.localDataManager?.deleteNickname()
+        self?.localDataManager?.removeAllUserInfo()
         completionHandler()
       }
     })

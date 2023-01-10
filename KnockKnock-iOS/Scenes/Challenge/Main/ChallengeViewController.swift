@@ -13,7 +13,7 @@ protocol ChallengeViewProtocol: AnyObject {
   var interactor: ChallengeInteractorProtocol? { get set }
   var router: ChallengeRouterProtocol? { get set }
 
-  func fetchChallenges(challenges: [Challenges])
+  func fetchChallenges(challenges: [Challenge])
 }
 
 final class ChallengeViewController: BaseViewController<ChallengeView> {
@@ -23,7 +23,7 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
   var interactor: ChallengeInteractorProtocol?
   var router: ChallengeRouterProtocol?
 
-  var challenges: [Challenges] = []
+  var challenges: [Challenge] = []
   
   // MARK: - Life cycle
   
@@ -68,8 +68,8 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
     let bottomSheetViewController = BottomSheetViewController()
     bottomSheetViewController.setBottomSheetContents(
       contents: [
-        BottomSheetOption.edit.rawValue,
-        BottomSheetOption.delete.rawValue
+        BottomSheetOption.postEdit.rawValue,
+        BottomSheetOption.postDelete.rawValue
       ],
       bottomSheetType: .small
     )
@@ -79,7 +79,7 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
 }
 
 extension ChallengeViewController: ChallengeViewProtocol {
-  func fetchChallenges(challenges: [Challenges]) {
+  func fetchChallenges(challenges: [Challenge]) {
     self.challenges = challenges
     self.containerView.challengeCollectionView.reloadData()
   }

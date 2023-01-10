@@ -15,6 +15,7 @@ protocol FeedRepositoryProtocol {
     challengeId: Int,
     completionHandler: @escaping (FeedMain) -> Void
   )
+  func requestDeleteFeed(feedId: Int, completionHandler: @escaping (Bool) -> Void)
   func requestChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void)
   func requestFeedDetail(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void)
   func requestFeedList(
@@ -31,12 +32,17 @@ final class FeedRepository: FeedRepositoryProtocol {
   // MARK: - Feed main APIs
 
   func requestChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void) {
-    KKNetworkManager.shared
+    KKNetworkManager
+      .shared
       .request(
-        object: [ChallengeTitle].self,
+        object: ApiResponseDTO<[ChallengeTitleDTO]>.self,
         router: KKRouter.getChallengeTitles,
         success: { response in
-          completionHandler(response)
+          guard let data = response.data else {
+            // no data error
+            return
+          }
+          completionHandler(data.map{$0.toDomain()})
         }, failure: { error in
           print(error)
         }
@@ -50,16 +56,21 @@ final class FeedRepository: FeedRepositoryProtocol {
     completionHandler: @escaping (FeedMain) -> Void
   ) {
 
-    KKNetworkManager.shared
+    KKNetworkManager
+      .shared
       .request(
-        object: FeedMain.self,
+        object: ApiResponseDTO<FeedMain>.self,
         router: KKRouter.getFeedMain(
           page: currentPage,
           take: totalCount,
           challengeId: challengeId
         ),
         success: { response in
-          completionHandler(response)
+          guard let data = response.data else {
+            // no data error
+            return
+          }
+          completionHandler(data)
         },
         failure: { response in
           print(response)
@@ -75,9 +86,10 @@ final class FeedRepository: FeedRepositoryProtocol {
     feedId: Int,
     challengeId: Int,
     completionHandler: @escaping (FeedList) -> Void) {
-      KKNetworkManager.shared
+      KKNetworkManager
+        .shared
         .request(
-          object: FeedList.self,
+          object: ApiResponseDTO<FeedList>.self,
           router: KKRouter.getFeedBlogPost(
             page: currentPage,
             take: pageSize,
@@ -85,7 +97,11 @@ final class FeedRepository: FeedRepositoryProtocol {
             challengeId: challengeId
           ),
           success: { response in
-            completionHandler(response)
+            guard let data = response.data else {
+              // no data error
+              return
+            }
+            completionHandler(data)
           },
           failure: { response in
             print(response)
@@ -93,18 +109,44 @@ final class FeedRepository: FeedRepositoryProtocol {
         )
     }
 
+  func requestDeleteFeed(
+    feedId: Int,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
+    KKNetworkManager
+      .shared
+      .request(
+        object: ApiResponseDTO<Bool>.self,
+        router: KKRouter.deleteFeed(id: feedId),
+        success: { response in
+          guard let data = response.data else {
+            // no data error
+            return
+          }
+          completionHandler(data)
+        }, failure: { error in
+          print(error)
+        }
+      )
+  }
+
   // MARK: - Feed detail APIs
 
   func requestFeedDetail(
     feedId: Int,
     completionHandler: @escaping (FeedDetail) -> Void
   ) {
-    KKNetworkManager.shared
+    KKNetworkManager
+      .shared
       .request(
-        object: FeedDetail.self,
+        object: ApiResponseDTO<FeedDetail>.self,
         router: KKRouter.getFeed(id: feedId),
         success: { response in
-          completionHandler(response)
+          guard let data = response.data else {
+            // no data error
+            return
+          }
+          completionHandler(data)
         },
         failure: { response in
           print(response)

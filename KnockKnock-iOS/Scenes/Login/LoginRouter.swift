@@ -8,23 +8,26 @@
 import UIKit
 
 protocol LoginRouterProtocol {
+  var view: LoginViewProtocol? { get set }
   static func createLoginView() -> UIViewController
-  func navigateToProfileSettingView(source: LoginViewProtocol, loginInfo: LoginInfo)
+  func navigateToProfileSettingView(signInInfo: SignInInfo)
   func navigateToHome()
-  func popLoginView(source: LoginViewProtocol)
-
-  func navigateToSignUp(source: LoginViewProtocol, loginInfo: LoginInfo)
+  func popLoginView()
 }
 
 final class LoginRouter: LoginRouterProtocol {
+
+  weak var view: LoginViewProtocol?
 
   static func createLoginView() -> UIViewController {
     let view = LoginViewController()
     let interactor = LoginInteractor()
     let presenter = LoginPresenter()
     let worker = LoginWorker(
-      kakaoAccountManager: KakaoAccountManager(),
-      localDataManager: LocalDataManager()
+      kakaoLoginManager: KakaoLoginManager(),
+      appleLoginManager: AppleLoginManager(),
+      accountManager: AccountManager(),
+      localDataManager: UserDataManager()
     )
     let router = LoginRouter()
 
@@ -33,19 +36,18 @@ final class LoginRouter: LoginRouterProtocol {
     interactor.presenter = presenter
     interactor.worker = worker
     presenter.view = view
+    router.view = view
 
     return view
   }
 
-  func navigateToProfileSettingView(
-    source: LoginViewProtocol,
-    loginInfo: LoginInfo
-  ) {
-    let profileSettingViewController = ProfileSettingRouter.createProfileSettingView(
-      loginInfo: loginInfo
-    )
+  /// 회원가입을 위해 프로필 설정 뷰로 이동
+  /// - Parameters:
+  ///  - signInInfo: 로그인 시 입력받은 소셜로그인 정보(socialtype, token)
+  func navigateToProfileSettingView(signInInfo: SignInInfo) {
+    let profileSettingViewController = ProfileSettingRouter.createProfileSettingView(signInInfo: signInInfo)
 
-    if let sourceView = source as? UIViewController {
+    if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.pushViewController(
         profileSettingViewController,
         animated: true
@@ -53,7 +55,7 @@ final class LoginRouter: LoginRouterProtocol {
     }
   }
 
-  // login 성공 시 홈 화면으로 rootView 변경
+  /// login 성공 시 홈 화면으로 rootView 변경
   func navigateToHome() {
     let main = MainTabBarController()
 
@@ -66,24 +68,11 @@ final class LoginRouter: LoginRouterProtocol {
     )
   }
 
-  // 로그인 뷰 탈출
-  func popLoginView(source: LoginViewProtocol) {
-    if let sourceView = source as? UIViewController {
+  /// 로그인 뷰 탈출
+  func popLoginView() {
+    if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.popViewController(animated: true)
     }
-    NotificationCenter.default.post(name: .loginCompleted, object: nil)
-  }
-
-  func navigateToSignUp(source: LoginViewProtocol, loginInfo: LoginInfo) {
-    let profileSettingViewController = ProfileSettingRouter.createProfileSettingView(
-      loginInfo: loginInfo
-    )
-
-    if let sourceView = source as? UIViewController {
-      sourceView.navigationController?.pushViewController(
-        profileSettingViewController,
-        animated: true
-      )
-    }
+    NotificationCenter.default.post(name: .SignInCompleted, object: nil)
   }
 }

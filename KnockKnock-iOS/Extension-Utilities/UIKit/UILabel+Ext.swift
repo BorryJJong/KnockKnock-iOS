@@ -19,7 +19,8 @@ extension UILabel {
         NSTextTab(
           textAlignment: .left,
           location: 15
-        )]
+        )
+      ]
     }
     let stringAttributes = [
       NSAttributedString.Key.font: font,
@@ -37,9 +38,9 @@ extension UILabel {
 
   // MARK: Line height 설정
 
-  func setLineHeight(fontSize: CGFloat, content: String) {
+  func setLineHeight(content: String, font: UIFont) {
     let style = NSMutableParagraphStyle()
-    let lineHeight = fontSize * 1.6
+    let lineHeight = font.pointSize * 1.6
     style.minimumLineHeight = lineHeight
     style.maximumLineHeight = lineHeight
 
@@ -47,7 +48,7 @@ extension UILabel {
       string: content,
       attributes: [
         .paragraphStyle: style,
-        .font: UIFont.systemFont(ofSize: fontSize, weight: .regular)
+        .font: font
       ])
   }
 

@@ -8,15 +8,15 @@
 import UIKit
 
 enum BottomSheetOption: String {
-  case delete = "삭제"
-  case edit = "수정"
-  case report = "신고하기"
-  case share = "공유하기"
-  case hide = "숨기기"
+  case postDelete = "삭제"
+  case postEdit = "수정"
+  case postReport = "신고하기"
+  case postShare = "공유하기"
+  case postHide = "숨기기"
 }
 
 enum BottomSheetType: CGFloat {
-  case small = 0.9
+  case small = 0.85
   case medium = 0.8
   case large = 0.3
 }

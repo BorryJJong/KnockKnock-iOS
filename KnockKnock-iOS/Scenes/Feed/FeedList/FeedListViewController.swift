@@ -14,6 +14,7 @@ protocol FeedListViewProtocol: AnyObject {
   var interactor: FeedListInteractorProtocol? { get set }
   
   func fetchFeedList(feedList: FeedList)
+  func deleteFeedPost(feedId: Int)
 }
 
 final class FeedListViewController: BaseViewController<FeedListView> {
@@ -21,20 +22,20 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   // MARK: - Properties
   
   var interactor: FeedListInteractorProtocol?
-  
-  var feedList: FeedList?
-  var feedListPost: [FeedListPost] = [] {
+
+  private var isNext: Bool = true
+  private var feedListPost: [FeedList.Post] = [] {
     didSet {
       self.containerView.feedListCollectionView.reloadData()
     }
   }
-
   private var currentPage: Int = 1
   private var pageSize: Int = 5
+  
   var challengeId: Int = 0
   var feedId: Int = 2
 
-  lazy var tapGesture = UITapGestureRecognizer(
+  private lazy var tapGesture = UITapGestureRecognizer(
     target: self,
     action: #selector(tapScrollViewSection(_:))
   )
@@ -108,7 +109,16 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   }
 
   @objc func configureButtonDidTap(_ sender: UIButton) {
-    self.interactor?.presentBottomSheetView(source: self)
+    let isMyPost = self.feedListPost[sender.tag].isWriter
+    let feedId = self.feedListPost[sender.tag].id
+
+    self.interactor?.presentBottomSheetView(
+      source: self,
+      isMyPost: isMyPost,
+      deleteAction: {
+        self.interactor?.requestDelete(feedId: feedId)
+      }
+    )
   }
 
   @objc func commentButtonDidTap(_ sender: UIButton) {
@@ -128,9 +138,17 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     sender.setTitle(title, for: .normal)
 
     if sender.isSelected {
-      self.interactor?.requestLike(source: self, feedId: sender.tag)
+
+      self.interactor?.requestLike(
+        source: self,
+        feedId: sender.tag
+      )
     } else {
-      self.interactor?.requestLikeCancel(source: self, feedId: sender.tag)
+
+      self.interactor?.requestLikeCancel(
+        source: self,
+        feedId: sender.tag
+      )
     }
   }
 }
@@ -186,8 +204,10 @@ extension FeedListViewController: UICollectionViewDataSource {
       withType: FeedListHeaderReusableView.self,
       for: indexPath
     )
+    let post = self.feedListPost[indexPath.section]
 
-    header.bind(feed: self.feedListPost[indexPath.section])
+    header.bind(feed: post)
+    header.configureButton.tag = indexPath.section
     header.configureButton.addTarget(
       self,
       action: #selector(self.configureButtonDidTap(_:)),
@@ -209,16 +229,14 @@ extension FeedListViewController: UICollectionViewDataSource {
   }
 
   func scrollViewDidReachBottom(_ scrollView: UIScrollView) {
-    if let isNext = self.feedList?.isNext {
-      if isNext {
-        self.currentPage += 1
-        self.interactor?.fetchFeedList(
-          currentPage: self.currentPage,
-          pageSize: self.pageSize,
-          feedId: self.feedId,
-          challengeId: self.challengeId
-        )
-      }
+    if self.isNext {
+      self.currentPage += 1
+      self.interactor?.fetchFeedList(
+        currentPage: self.currentPage,
+        pageSize: self.pageSize,
+        feedId: self.feedId,
+        challengeId: self.challengeId
+      )
     }
   }
 }
@@ -265,9 +283,15 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
 
 extension FeedListViewController: FeedListViewProtocol {
   func fetchFeedList(feedList: FeedList) {
-    self.feedList = feedList
-    feedList.feeds.forEach {
-      self.feedListPost.append($0)
+    self.isNext = feedList.isNext
+    self.feedListPost += feedList.feeds
+  }
+  
+  func deleteFeedPost(feedId: Int) {
+    if let feedIndex = self.feedListPost.firstIndex(where: {
+      $0.id == feedId
+    }) {
+      self.feedListPost.remove(at: feedIndex)
     }
   }
 }

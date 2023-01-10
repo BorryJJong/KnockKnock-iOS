@@ -2,12 +2,12 @@
 //  Challenge.swift
 //  KnockKnock-iOS
 //
-//  Created by sangwon yoon on 2022/03/05.
+//  Created by Daye on 2023/01/10.
 //
 
 import Foundation
 
-struct Challenges: Decodable {
+struct Challenge: Decodable {
   let id: Int
   let title: String
   let subTitle: String
@@ -17,49 +17,40 @@ struct Challenges: Decodable {
   let postCnt: String // 최신순?
   let rnk: String // 인기순위?
   let participants: [Participant]
-}
 
-struct Participant: Decodable {
-  let id: Int
-  let nickname: String
-  let image: String?
-}
-
-struct ChallengeTitle: Decodable {
-  let id: Int
-  let title: String
-  var isSelected: Bool
-
-  private enum CodingKeys: String, CodingKey { case id, title }
-
-  init(from decoder: Decoder) throws {
-    let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.id = try container.decode(Int.self, forKey: .id)
-    self.title = try container.decode(String.self, forKey: .title)
-    self.isSelected = false
+  struct Participant: Decodable {
+    let id: Int
+    let nickname: String
+    let image: String?
   }
 }
 
 struct ChallengeDetail: Decodable {
-  let challenge: ChallengeHeader
+  let challenge: Header
   let participants: [Participant]
-  let content: ChallengeContent
-}
+  let content: Content
 
-struct ChallengeHeader: Decodable {
-  let id: Int
-  let title: String
-  let subTitle: String
-}
+  struct Participant: Decodable {
+    let id: Int
+    let nickname: String
+    let image: String?
+  }
 
-struct ChallengeContent: Decodable {
-  let image: String?
-  let rule: [String]
-  let subContents: [ChallengeSubContents]
-}
+  struct Header: Decodable {
+    let id: Int
+    let title: String
+    let subTitle: String
+  }
 
-struct ChallengeSubContents: Decodable {
-  let title: String
-  let image: String?
-  let content: String
+  struct Content: Decodable {
+    let image: String?
+    let rule: [String]
+    let subContents: [SubContents]
+  }
+
+  struct SubContents: Decodable {
+    let title: String
+    let image: String?
+    let content: String
+  }
 }

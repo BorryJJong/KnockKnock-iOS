@@ -8,19 +8,24 @@
 import UIKit
 
 protocol ProfileSettingRouterProtocol {
-  static func createProfileSettingView(loginInfo: LoginInfo?) -> UIViewController
+  var view: ProfileSettingViewProtocol? { get set }
+
+  static func createProfileSettingView(signInInfo: SignInInfo?) -> UIViewController
   
-  func navigateToMyView(source: ProfileSettingViewProtocol)
+  func navigateToMyView()
 }
 
 final class ProfileSettingRouter: ProfileSettingRouterProtocol {
-  static func createProfileSettingView(loginInfo: LoginInfo?) -> UIViewController {
+
+  weak var view: ProfileSettingViewProtocol?
+
+  static func createProfileSettingView(signInInfo: SignInInfo?) -> UIViewController {
     let view = ProfileSettingViewController()
     let interactor = ProfileSettingInteractor()
     let presenter = ProfileSettingPresenter()
     let worker = ProfileSettingWorker(
-      kakaoAccountManager: KakaoAccountManager(),
-      localDataManager: LocalDataManager()
+      accountManager: AccountManager(),
+      localDataManager: UserDataManager()
     )
     let router = ProfileSettingRouter()
 
@@ -29,16 +34,17 @@ final class ProfileSettingRouter: ProfileSettingRouterProtocol {
     interactor.presenter = presenter
     interactor.worker = worker
     presenter.view = view
+    router.view = view
 
-    if let loginInfo = loginInfo {
-      interactor.loginInfo = loginInfo
+    if let signInInfo = signInInfo {
+      interactor.signInInfo = signInInfo
     }
 
     return view
   }
 
-  func navigateToMyView(source: ProfileSettingViewProtocol) {
-    guard let sourceView = source as? UIViewController else { return }
+  func navigateToMyView() {
+    guard let sourceView = self.view as? UIViewController else { return }
     sourceView.navigationController?.popToRootViewController(animated: true)
   }
 }

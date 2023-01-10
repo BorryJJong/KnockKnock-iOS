@@ -155,8 +155,11 @@ final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableVie
       .flatMap { try? Data(contentsOf: $0) }
       .flatMap { UIImage(data: $0) }
     ?? UIImage(named: "challenge")
-
-    self.summaryLabel.setLineHeight(fontSize: 14, content: challengeDetail.challenge.subTitle)
+    
+    self.summaryLabel.setLineHeight(
+      content: challengeDetail.challenge.subTitle,
+      font: .systemFont(ofSize: 14, weight: .regular)
+    )
     self.setParticipantsImageStackView(participants: challengeDetail.participants)
     self.titleLabel.text = challengeDetail.challenge.title
     self.setWayStackView(ways: challengeDetail.content.rule)
@@ -164,7 +167,7 @@ final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableVie
 
   // MARK: - Configure
 
-  private func setParticipantsImageStackView(participants: [Participant]) {
+  private func setParticipantsImageStackView(participants: [ChallengeDetail.Participant]) {
     var images: [String?] = []
 
     participants.forEach {

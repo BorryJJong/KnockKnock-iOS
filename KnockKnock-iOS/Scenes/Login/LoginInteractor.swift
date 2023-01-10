@@ -12,9 +12,13 @@ protocol LoginInteractorProtocol {
   var worker: LoginWorkerProtocol? { get set }
   var router: LoginRouterProtocol? { get set }
 
-  func fetchLoginResult(source: LoginViewProtocol, socialType: SocialType)
-  func saveTokens(loginResponse: LoginResponse)
-  func popLoginView(source: LoginViewProtocol)
+  func fetchLoginResult(socialType: SocialType)
+  func saveTokens(response: AccountResponse)
+  func popLoginView()
+}
+
+protocol AppleLoginResultDelegate: AnyObject {
+  func getSignInResult(response: AccountResponse, signInInfo: SignInInfo)
 }
 
 final class LoginInteractor: LoginInteractorProtocol {
@@ -23,54 +27,72 @@ final class LoginInteractor: LoginInteractorProtocol {
   var worker: LoginWorkerProtocol?
   var router: LoginRouterProtocol?
 
-  func fetchLoginResult(
-    source: LoginViewProtocol,
-    socialType: SocialType
-  ) {
-    self.worker?.fetchLoginResult(
-      socialType: socialType,
-      completionHandler: { loginResponse, loginInfo in
+  func fetchLoginResult(socialType: SocialType) {
 
-        // 회원 판별
-        // 회원 o -> 토큰 저장 후 홈 화면 진입 / 회원 x -> 프로필 설정화면(회원가입)
-        if loginResponse.isExistUser {
-          self.saveTokens(loginResponse: loginResponse)
-          self.popLoginView(source: source)
-          NotificationCenter.default.post(name: .loginCompleted, object: nil)
-        } else {
-          self.navigateToProfileSettingView(
-            source: source,
-            loginInfo: loginInfo
-          )
-        }
+    self.worker?.fetchSignInResult(
+      appleLoginResultDelegate: self,
+      socialType: socialType,
+      completionHandler: { response, signInInfo in
+
+        self.checkExistUser(
+          response: response,
+          signInInfo: signInInfo
+        )
       }
     )
   }
+  
+  /// - 회원 판별 메소드
+  ///   - 회원 O: 토큰 저장 후 홈 화면 진입
+  ///   - 회원 X: 발급 된 토큰과 함께 프로필 설정 화면 진입(회원가입)
+  /// - Parameters:
+  ///   - isExisted: 기존 회원 여부
+  func checkExistUser(response: AccountResponse, signInInfo: SignInInfo) {
 
-  // 로컬에 서버 토큰 저장
-  func saveTokens(loginResponse: LoginResponse) {
-    if let authInfo = loginResponse.authInfo{
-      self.worker?.saveToken(authInfo: authInfo)
+    if response.isExistUser {
+      self.saveTokens(response: response)
+      self.popLoginView()
+
+      NotificationCenter.default.post(
+        name: .SignInCompleted,
+        object: nil
+      )
+
+    } else {
+      self.navigateToProfileSettingView(signInInfo: signInInfo)
     }
+  }
+
+  /// 로컬(UserDefaults)에 서버 토큰 저장
+  /// - Parameters:
+  ///   - response: 회원가입/로그인 api response(userinfo)
+  func saveTokens(response: AccountResponse) {
+    self.worker?.saveUserInfo(response: response)
   }
 
   // MARK: - Routing logic
   
-  func navigateToProfileSettingView(
-    source: LoginViewProtocol,
-    loginInfo: LoginInfo
-  ) {
-    self.router?.navigateToProfileSettingView(
-      source: source,
-      loginInfo: loginInfo
-    )
+  func navigateToProfileSettingView(signInInfo: SignInInfo) {
+    self.router?.navigateToProfileSettingView(signInInfo: signInInfo)
   }
 
   func navigateToHome() {
     self.router?.navigateToHome()
   }
 
-  func popLoginView(source: LoginViewProtocol) {
-    self.router?.popLoginView(source: source)
+  func popLoginView() {
+    self.router?.popLoginView()
+  }
+}
+
+// MARK: - Apple login result delegate
+
+extension LoginInteractor: AppleLoginResultDelegate {
+  /// Worker -> Interactor로 로그인 결과 전달
+  /// - Parameters:
+  ///   - loginReseponse: 서버로 부터 받은 로그인 결과 데이터
+  ///   - loginInfo: 비회원인 경우 회원가입 요청 시 사용할 request body
+  func getSignInResult(response: AccountResponse, signInInfo: SignInInfo) {
+    self.checkExistUser(response: response, signInInfo: signInInfo)
   }
 }

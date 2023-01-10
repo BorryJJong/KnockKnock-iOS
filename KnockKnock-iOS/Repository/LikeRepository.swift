@@ -10,7 +10,7 @@ import Foundation
 protocol LikeRepositoryProtocol {
   func requestLike(id: Int, completionHandler: @escaping (Bool) -> Void)
   func requestLikeCancel(id: Int, completionHandler: @escaping (Bool) -> Void)
-  func requestLikeList(feedId: Int, completionHandler: @escaping ([LikeInfo]) -> Void)
+  func requestLikeList(feedId: Int, completionHandler: @escaping ([Like.Info]) -> Void)
 }
 
 final class LikeRepository: LikeRepositoryProtocol {
@@ -22,11 +22,15 @@ final class LikeRepository: LikeRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: Bool.self,
+        object: ApiResponseDTO<Bool>.self,
         router: KKRouter.postFeedLike(
           id: id
-        ), success: { result in
-          completionHandler(result)
+        ), success: { response in
+          guard let data = response.data else {
+            // no data error
+            return
+          }
+          completionHandler(data)
         }, failure: { error in
           print(error)
         }
@@ -40,25 +44,36 @@ final class LikeRepository: LikeRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: Bool.self,
+        object: ApiResponseDTO<Bool>.self,
         router: KKRouter.deleteFeedLike(
           id: id
-        ), success: { result in
-          completionHandler(result)
+        ), success: { response in
+          guard let data = response.data else {
+            // no data error
+            return
+          }
+          completionHandler(data)
         }, failure: { error in
           print(error)
         }
       )
   }
 
-  func requestLikeList(feedId: Int, completionHandler: @escaping ([LikeInfo]) -> Void) {
+  func requestLikeList(
+    feedId: Int,
+    completionHandler: @escaping ([Like.Info]) -> Void
+  ) {
     KKNetworkManager
       .shared
       .request(
-        object: LikeResponse.self,
+        object: ApiResponseDTO<Like>.self,
         router: KKRouter.getLikeList(id: feedId),
         success: { response in
-          completionHandler(response.data.likes)
+          guard let data = response.data else {
+            // no data error
+            return
+          }
+          completionHandler(data.likes)
         },
         failure: { error in
           print(error)

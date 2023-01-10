@@ -8,19 +8,15 @@
 import Foundation
 
 struct CommentResponse: Decodable {
-  let data: [Data]?
-
-  struct Data: Decodable {
-    let id: Int
-    let userId: Int
-    let nickname: String
-    let image: String?
-    let content: String
-    let regDate: String
-    var isDeleted: Bool
-    let replyCnt: Int
-    var reply: [Reply]?
-  }
+  let id: Int
+  let userId: Int
+  let nickname: String
+  let image: String?
+  let content: String
+  let regDate: String
+  var isDeleted: Bool
+  let replyCnt: Int
+  var reply: [Reply]?
 
   struct Reply: Decodable {
     let id: Int
@@ -35,7 +31,7 @@ struct CommentResponse: Decodable {
 
 /// View에서 사용하는 comment model
 struct Comment: Decodable {
-  var data: CommentResponse.Data
+  var data: CommentResponse
   
   var isOpen: Bool = false
   var isReply: Bool = false

@@ -59,7 +59,7 @@ final class ChallengeDetailCell: BaseCollectionViewCell {
 
   // MARK: - Bind
 
-  func bind(challengeContent: ChallengeSubContents, isLast: Bool) {
+  func bind(challengeContent: ChallengeDetail.SubContents, isLast: Bool) {
     self.titleLabel.text = challengeContent.title
 
     self.exampleImageView.image = challengeContent.image
@@ -68,7 +68,10 @@ final class ChallengeDetailCell: BaseCollectionViewCell {
       .flatMap { UIImage(data: $0) }
     ?? UIImage(named: "challenge")
 
-    self.contentsLabel.setLineHeight(fontSize: 14, content: challengeContent.content)
+    self.contentsLabel.setLineHeight(
+      content: challengeContent.content,
+      font: .systemFont(ofSize: 14, weight: .regular)
+    )
     if isLast {
       self.contentsLabel.snp.updateConstraints {
         $0.bottom.equalToSuperview().offset(-70)

@@ -122,7 +122,7 @@ class FeedListCell: BaseCollectionViewCell {
 
   // MARK: - Bind
 
-  func bind(feedList: FeedListPost) {
+  func bind(feedList: FeedList.Post) {
     if feedList.isLike {
       self.likeButton.isSelected = true
       self.likeButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .bold)
@@ -139,10 +139,13 @@ class FeedListCell: BaseCollectionViewCell {
     }
 
     self.contentLabel.text = feedList.content
-    self.setImageView(
-      images: feedList.blogImages,
-      scale: feedList.imageScale
-    )
+
+    DispatchQueue.main.async {
+      self.setImageView(
+        images: feedList.blogImages,
+        scale: feedList.imageScale
+      )
+    }
 
     if feedList.blogImages.count > 1 {
       self.imageNumberLabel.isHidden = false
@@ -172,14 +175,14 @@ class FeedListCell: BaseCollectionViewCell {
   }
 
   private func setImageView(
-    images: [FeedImage],
+    images: [FeedList.Image],
     scale: String
   ) {
     for index in 0..<images.count {
 
       let imageView = UIImageView()
       imageView.setImageFromStringUrl(
-        url: images[index].fileUrl,
+        stringUrl: images[index].fileUrl,
         defaultImage: KKDS.Image.ic_no_data_60
       )
       imageView.contentMode = .scaleAspectFill

@@ -61,12 +61,12 @@ final class FeedDetailNavigationBarView: UIView {
   
   // MARK: - Bind
   
-  func bind(feed: FeedPost) {
+  func bind(feed: FeedDetail.Post) {
     self.userIdLabel.text = feed.userName
     self.postDateLabel.text = feed.regDate
     if let userImage = feed.userImage {
       self.profileImageView.setImageFromStringUrl(
-        url: userImage,
+        stringUrl: userImage,
         defaultImage: KKDS.Image.ic_person_24
       )
     }

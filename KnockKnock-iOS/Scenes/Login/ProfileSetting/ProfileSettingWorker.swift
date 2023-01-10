@@ -8,44 +8,59 @@
 import UIKit
 
 protocol ProfileSettingWorkerProtocol {
-  func requestSignUp(
-    loginInfo: LoginInfo,
+  func requestRegister(
+    signInInfo: SignInInfo,
     nickname: String,
     image: String,
-    completionHandler: @escaping (SignUpResponse) -> Void
+    completionHandler: @escaping (AccountResponse) -> Void
   )
+  func saveUserInfo(response: AccountResponse)
 }
 
 final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
-  private let kakaoAccountManager: SocialLoginManagerProtocol
-  private let localDataManager: LocalDataManagerProtocol
+  private let accountManager: AccountManagerProtocol
+  private let localDataManager: UserDataManagerProtocol
 
   init(
-    kakaoAccountManager: SocialLoginManagerProtocol,
-    localDataManager: LocalDataManagerProtocol
+    accountManager: AccountManagerProtocol,
+    localDataManager: UserDataManagerProtocol
   ) {
-    self.kakaoAccountManager = kakaoAccountManager
+    self.accountManager = accountManager
     self.localDataManager = localDataManager
   }
 
-  func requestSignUp(
-    loginInfo: LoginInfo,
+  func requestRegister(
+    signInInfo: SignInInfo,
     nickname: String,
     image: String,
-    completionHandler: @escaping (SignUpResponse) -> Void
+    completionHandler: @escaping (AccountResponse) -> Void
   ) {
-    self.kakaoAccountManager.signUp(
-      loginInfo: loginInfo,
+    
+    self.accountManager.register(
+      signInInfo: signInInfo,
       nickname: nickname,
       image: image,
-      completionHandler: { signUpResponse in
-        if let authInfo = signUpResponse.authInfo {
-          self.localDataManager.saveToken(
-            accessToken: authInfo.accessToken,
-            refreshToken: authInfo.refreshToken,
-            nickname: nickname
-          )
-        }
-    })
+      completionHandler: { response in
+
+        guard let authInfo = response.authInfo else { return }
+
+        self.localDataManager.userDefaultsService.set(value: authInfo.accessToken, forkey: .accessToken)
+        self.localDataManager.userDefaultsService.set(value: authInfo.refreshToken, forkey: .refreshToken)
+      }
+    )
+  }
+
+  func saveUserInfo(response: AccountResponse) {
+
+    guard let authInfo = response.authInfo else { return }
+
+    if let userInfo = response.userInfo {
+      self.localDataManager.userDefaultsService.set(value: userInfo.image, forkey: .profileImage)
+      self.localDataManager.userDefaultsService.set(value: userInfo.nickname, forkey: .nickname)
+    }
+
+    self.localDataManager.userDefaultsService.set(value: authInfo.accessToken, forkey: .accessToken)
+    self.localDataManager.userDefaultsService.set(value: authInfo.refreshToken, forkey: .refreshToken)
+
   }
 }

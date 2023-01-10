@@ -15,28 +15,41 @@ protocol FeedListWorkerProtocol {
     challengeId: Int,
     completionHandler: @escaping (FeedList) -> Void
   )
+  func requestDeleteFeed(feedId: Int, completionHandler: @escaping (Bool) -> Void)
   func requestLike(id: Int, completionHandler: @escaping (Bool) -> Void)
   func requestLikeCancel(id: Int, completionHandler: @escaping (Bool) -> Void)
-  func checkTokenExisted(completionHandler: @escaping (Bool)-> Void)
+  func checkTokenExisted(completionHandler: @escaping (Bool) -> Void)
 }
 
 final class FeedListWorker: FeedListWorkerProtocol {
 
   private let feedRepository: FeedRepositoryProtocol
   private let likeRepository: LikeRepositoryProtocol
-  private let localDataManager: LocalDataManagerProtocol
+  private let localDataManager: UserDataManagerProtocol
 
   init(
     feedRepository: FeedRepositoryProtocol,
     likeRepository: LikeRepositoryProtocol,
-    localDataManager: LocalDataManagerProtocol
+    localDataManager: UserDataManagerProtocol
   ) {
     self.feedRepository = feedRepository
     self.likeRepository = likeRepository
     self.localDataManager = localDataManager
   }
 
-  func checkTokenExisted(completionHandler: @escaping (Bool)-> Void) {
+  func requestDeleteFeed(
+    feedId: Int,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
+    self.feedRepository.requestDeleteFeed(
+      feedId: feedId,
+      completionHandler: { isSuccess in
+        completionHandler(isSuccess)
+      }
+    )
+  }
+
+  func checkTokenExisted(completionHandler: @escaping (Bool) -> Void) {
     let isExisted = self.localDataManager.checkTokenIsExisted()
     completionHandler(isExisted)
   }
@@ -63,20 +76,22 @@ final class FeedListWorker: FeedListWorkerProtocol {
   func requestLike(
     id: Int,
     completionHandler: @escaping (Bool) -> Void) {
-    self.likeRepository.requestLike(
-      id: id,
-      completionHandler: { result in
-      completionHandler(result)
-    })
-  }
+      self.likeRepository.requestLike(
+        id: id,
+        completionHandler: { result in
+          completionHandler(result)
+        }
+      )
+    }
 
   func requestLikeCancel(
     id: Int,
     completionHandler: @escaping (Bool) -> Void) {
-    self.likeRepository.requestLikeCancel(
-      id: id,
-      completionHandler: { result in
-      completionHandler(result)
-    })
-  }
+      self.likeRepository.requestLikeCancel(
+        id: id,
+        completionHandler: { result in
+          completionHandler(result)
+        }
+      )
+    }
 }

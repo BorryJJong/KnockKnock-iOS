@@ -10,7 +10,7 @@ import UIKit
 protocol ShopSearchPresenterProtocol {
   var view: ShopSearchViewProtocol? { get set }
 
-  func presentShopAddress(address: AddressResult)
+  func presentShopAddress(address: AddressResponse)
   func presentCounty(county: [String])
   func presentCityList(cityList: [String])
 
@@ -21,7 +21,7 @@ protocol ShopSearchPresenterProtocol {
 final class ShopSearchPresenter: ShopSearchPresenterProtocol {
   weak var view: ShopSearchViewProtocol?
 
-  func presentShopAddress(address: AddressResult) {
+  func presentShopAddress(address: AddressResponse) {
     self.view?.fetchShopAddress(address: address)
   }
 

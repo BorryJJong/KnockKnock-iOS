@@ -11,7 +11,7 @@ protocol ShopSearchWorkerProtocol {
   func fetchShopAddress(
     keyword: String,
     page: Int,
-    completionHandler: @escaping (AddressResult) -> Void
+    completionHandler: @escaping (AddressResponse) -> Void
   )
   func fetchDistricts(completionHandler: @escaping (DistrictsData) -> Void)
 }
@@ -27,7 +27,7 @@ final class ShopSearchWorker: ShopSearchWorkerProtocol {
   func fetchShopAddress(
     keyword: String,
     page: Int,
-    completionHandler: @escaping (AddressResult) -> Void
+    completionHandler: @escaping (AddressResponse) -> Void
   ) {
     self.repository.requestShopAddress(
       keyword: keyword,

@@ -16,7 +16,7 @@ protocol FeedWriteViewProtocol: AnyObject {
 
   func fetchTag(tag: String)
   func fetchPromotion(promotion: String)
-  func fetchAddress(address: AddressResult.Documents)
+  func fetchAddress(address: AddressResponse.Documents)
 
   func showAlertView(isDone: Bool)
 }
@@ -172,7 +172,7 @@ extension FeedWriteViewController: FeedWriteViewProtocol {
     self.containerView.setPromotion(promotion: promotion)
   }
 
-  func fetchAddress(address: AddressResult.Documents) {
+  func fetchAddress(address: AddressResponse.Documents) {
     self.containerView.setAddress(
       name: address.placeName,
       address: address.addressName
@@ -184,7 +184,6 @@ extension FeedWriteViewController: FeedWriteViewProtocol {
       self.showAlert(content: "게시글 등록을 완료 하시겠습니까?", confirmActionCompletion: {
         self.interactor?.requestUploadFeed(
           source: self,
-          userId: 19, // api 수정 필요
           content: self.containerView.contentTextView.text,
           images: self.selectedImages
         )

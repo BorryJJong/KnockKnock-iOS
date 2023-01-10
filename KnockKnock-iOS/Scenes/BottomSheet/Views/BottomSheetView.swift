@@ -61,11 +61,6 @@ final class BottomSheetView: UIView {
     $0.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 20, right: -20)
   }
 
-  let alertView = AlertView().then {
-    $0.isHidden = true
-    $0.bind(content: "댓글을 삭제하시겠습니까?", isCancelActive: true)
-  }
-
   // MARK: - Initialize
 
   init() {
@@ -75,12 +70,6 @@ final class BottomSheetView: UIView {
 
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
-  }
-
-  // MARK: - Alert view 노출/숨김 처리
-
-  func setHiddenStatusAlertView(isHidden: Bool) {
-    self.alertView.isHidden = isHidden
   }
 
   // MARK: - Bottom Sheet Animation
@@ -137,11 +126,6 @@ final class BottomSheetView: UIView {
   private func setupConstraints() {
     [self.dimmedBackView, self.bottomSheetView].addSubViews(self)
     [self.dismissIndicatorView, self.tableView].addSubViews(self.bottomSheetView)
-    [self.alertView].addSubViews(self)
-
-    self.alertView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
-    }
 
     self.dimmedBackView.snp.makeConstraints {
       $0.edges.equalToSuperview()

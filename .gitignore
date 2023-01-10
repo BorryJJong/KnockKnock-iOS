@@ -75,7 +75,7 @@ DerivedData/
 *.dSYM
 
 ## plist
-GoogleService-Info.plist
+# GoogleService-Info.plist
 
 ## Playgrounds
 timeline.xctimeline

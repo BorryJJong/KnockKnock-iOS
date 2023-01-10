@@ -77,6 +77,7 @@ public extension KKDS.Image {
   static var ic_search_24_wh: UIImage             { .load(name: "ic_search_24_wh") }
   static var ic_set_24_bk: UIImage                { .load(name: "ic_set_24_bk") }
   static var ic_next_24_bk: UIImage               { .load(name: "ic_next_24_bk") }
+  static var ic_benefits_24_on: UIImage           { .load(name: "ic_benefits_24_on") }
 }
 
 // MARK: - Icon Size 40
@@ -139,6 +140,7 @@ public extension KKDS.Image {
 // MARK: - Login
 public extension KKDS.Image {
   static var ic_kakao_login: UIImage              { .load(name: "ic_kakao_login") }
+  static var ic_apple_login: UIImage              { .load(name: "ic_apple_login") }
 }
 
 extension UIImage {

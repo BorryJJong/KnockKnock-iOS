@@ -30,7 +30,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   var presenter: FeedDetailPresenterProtocol?
   var router: FeedDetailRouterProtocol?
 
-  private var likeList: [LikeInfo] = []
+  private var likeList: [Like.Info] = []
 
   /// 서버에서 받아온 전체 댓글 array
   var comments: [Comment] = []
@@ -97,7 +97,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
 
         self.visibleComments += reply.map {
           Comment(
-            data: CommentResponse.Data(
+            data: CommentResponse(
               id: $0.id,
               userId: $0.userId,
               nickname: $0.nickname,
@@ -135,8 +135,8 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   ) {
     self.worker?.requestAddComment(
       comment: comment,
-      completionHandler: { response in
-        if response == "success" {
+      completionHandler: { success in
+        if success {
           self.fetchAllComments(feedId: comment.postId)
         }
       }

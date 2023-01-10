@@ -8,7 +8,6 @@
 import Foundation
 
 struct SearchKeyword {
-//  let regDate: Date
   let category: String
   let keyword: String
 }

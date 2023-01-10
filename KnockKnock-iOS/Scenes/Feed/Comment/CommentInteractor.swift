@@ -66,7 +66,7 @@ final class CommentInteractor: CommentInteractorProtocol {
 
         self.visibleComments += reply.map {
           Comment(
-            data: CommentResponse.Data(
+            data: CommentResponse(
               id: $0.id,
               userId: $0.userId,
               nickname: $0.nickname,
@@ -92,8 +92,8 @@ final class CommentInteractor: CommentInteractorProtocol {
   func requestAddComment(comment: AddCommentRequest) {
     self.worker?.requestAddComment(
       comment: comment,
-      completionHandler: { response in
-        if response == "success" {
+      completionHandler: { success in
+        if success {
           self.fetchAllComments(feedId: comment.postId)
         }
       }
