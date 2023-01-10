@@ -17,6 +17,7 @@ protocol FeedDetailViewProtocol: AnyObject {
   func getAllCommentsCount(allCommentsCount: Int)
   func fetchVisibleComments(visibleComments: [Comment])
   func fetchLikeList(like: [Like.Info])
+  func fetchLikeStatus(isToggle: Bool)
   func deleteComment()
 }
 
@@ -187,18 +188,10 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   }
 
   @objc func likeButtonDidTap(_ sender: UIButton) {
-    sender.isSelected.toggle()
-
     if sender.isSelected {
-
-      self.interactor?.requestLike(
-        feedId: self.feedId
-      )
+      self.interactor?.requestLikeCancel(feedId: self.feedId)
     } else {
-
-      self.interactor?.requestLikeCancel(
-        feedId: self.feedId
-      )
+      self.interactor?.requestLike(feedId: self.feedId)
     }
   }
 
@@ -297,6 +290,12 @@ extension FeedDetailViewController: FeedDetailViewProtocol {
   
   func fetchLikeList(like: [Like.Info]) {
     self.like = like
+  }
+
+  func fetchLikeStatus(isToggle: Bool) {
+    if isToggle {
+      self.containerView.likeButton.isSelected.toggle()
+    }
   }
 }
 

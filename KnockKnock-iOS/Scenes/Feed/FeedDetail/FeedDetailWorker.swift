@@ -96,7 +96,6 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
       )
     }
 
-
   func fetchLikeList(
     feedId: Int,
     completionHandler: @escaping ([Like.Info]) -> Void

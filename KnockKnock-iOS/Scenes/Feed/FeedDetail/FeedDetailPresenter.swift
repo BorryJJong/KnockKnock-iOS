@@ -14,7 +14,8 @@ protocol FeedDetailPresenterProtocol {
   func presentAllCommentsCount(allCommentsCount: Int)
   func presentVisibleComments(allComments: [Comment])
   func presentDeleteComment()
-  func presentLike(like: [Like.Info])
+  func presentLikeList(like: [Like.Info])
+  func presentLikeStatus(isToggle: Bool)
 }
 
 final class FeedDetailPresenter: FeedDetailPresenterProtocol {
@@ -25,8 +26,12 @@ final class FeedDetailPresenter: FeedDetailPresenterProtocol {
     LoadingIndicator.hideLoading()
   }
 
-  func presentLike(like: [Like.Info]) {
+  func presentLikeList(like: [Like.Info]) {
     self.view?.fetchLikeList(like: like)
+  }
+
+  func presentLikeStatus(isToggle: Bool) {
+    self.view?.fetchLikeStatus(isToggle: isToggle)
   }
 
   func presentDeleteComment() {

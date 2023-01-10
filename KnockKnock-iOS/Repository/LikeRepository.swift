@@ -26,11 +26,7 @@ final class LikeRepository: LikeRepositoryProtocol {
         router: KKRouter.postFeedLike(
           id: id
         ), success: { response in
-          guard let data = response.data else {
-            // no data error
-            return
-          }
-          completionHandler(data)
+          completionHandler(response.code == 200)
         }, failure: { error in
           print(error)
         }
@@ -48,11 +44,7 @@ final class LikeRepository: LikeRepositoryProtocol {
         router: KKRouter.deleteFeedLike(
           id: id
         ), success: { response in
-          guard let data = response.data else {
-            // no data error
-            return
-          }
-          completionHandler(data)
+          completionHandler(response.code == 200)
         }, failure: { error in
           print(error)
         }
