@@ -146,10 +146,9 @@ final class FeedDetailView: UIView {
 
   // MARK: - Bind
 
-//  func bind(isLike: Bool) {
-//    self.likeButton.
-//
-//  }
+  func bind(isLike: Bool) {
+    self.likeButton.isSelected = isLike
+  }
 
   // MARK: - Configure
 
