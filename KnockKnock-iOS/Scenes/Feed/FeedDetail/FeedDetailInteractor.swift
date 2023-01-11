@@ -15,7 +15,6 @@ protocol FeedDetailInteractorProtocol {
   func getFeedDeatil(feedId: Int)
 
   func fetchAllComments(feedId: Int)
-  func fetchVisibleComments()
   func toggleVisibleStatus(commentId: Int)
 
   func requestAddComment(comment: AddCommentRequest)
@@ -65,7 +64,8 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       feedId: feedId,
       completionHandler: { [weak self] comments in
         self?.comments = comments
-        self?.fetchVisibleComments()
+        self?.visibleComments = self?.worker?.fetchVisibleComments(comments: self?.comments) ?? []
+        self?.presenter?.presentVisibleComments(comments: self?.visibleComments ?? [])
       }
     )
   }
@@ -77,45 +77,8 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     }) else { return }
     
     self.comments[index].isOpen.toggle()
-    self.fetchVisibleComments()
-  }
 
-  /// 전체 댓글에서 삭제된 댓글, 숨김(접힘) 상태 댓글을 제외하고 보여질 댓글만 필터링
-  func fetchVisibleComments() {
-    self.visibleComments = []
-
-    self.comments.filter({
-      !$0.data.isDeleted
-    }).forEach { comment in
-
-      if comment.isOpen {
-        self.visibleComments.append(comment)
-
-        let reply = comment.data.reply.map {
-          $0.filter { !$0.isDeleted }
-        } ?? []
-
-        self.visibleComments += reply.map {
-          Comment(
-            data: CommentResponse(
-              id: $0.id,
-              userId: $0.userId,
-              nickname: $0.nickname,
-              image: $0.image,
-              content: $0.content,
-              regDate: $0.regDate,
-              isDeleted: $0.isDeleted,
-              replyCnt: 0,
-              reply: []
-            ), isReply: true
-          )
-        }
-      } else {
-        if !comment.isReply {
-          visibleComments.append(comment)
-        }
-      }
-    }
+    self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
     self.presenter?.presentVisibleComments(comments: self.visibleComments)
   }
 
@@ -161,7 +124,8 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
           }
         }
 
-        self.fetchVisibleComments()
+        self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
+        self.presenter?.presentVisibleComments(comments: self.visibleComments)
       }
     )
   }
