@@ -54,7 +54,7 @@ final class LoginInteractor: LoginInteractorProtocol {
       self.popLoginView()
 
       NotificationCenter.default.post(
-        name: .SignInCompleted,
+        name: .signInCompleted,
         object: nil
       )
 

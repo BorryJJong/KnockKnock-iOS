@@ -82,7 +82,7 @@ final class MyInteractor: MyInteractorProtocol {
 
   func setNotification() {
     NotificationCenter.default.addObserver(
-      forName: .SignInCompleted,
+      forName: .signInCompleted,
       object: nil,
       queue: nil
     ) { _ in

@@ -73,6 +73,6 @@ final class LoginRouter: LoginRouterProtocol {
     if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.popViewController(animated: true)
     }
-    NotificationCenter.default.post(name: .SignInCompleted, object: nil)
+    NotificationCenter.default.post(name: .signInCompleted, object: nil)
   }
 }
