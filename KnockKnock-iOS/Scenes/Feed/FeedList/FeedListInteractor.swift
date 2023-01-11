@@ -72,7 +72,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     self.worker?.checkTokenExisted(completionHandler: { isExisted in
       if isExisted {
         self.worker?.requestLike(
-          id: feedId,
+          feedId: feedId,
           completionHandler: { _ in
             self.presenter?.presentLikeStatus(isToggle: isExisted, indexPath: indexPath)
 
@@ -90,7 +90,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       if isExisted {
         
         self.worker?.requestLikeCancel(
-          id: feedId,
+          feedId: feedId,
           completionHandler: { _ in
             self.presenter?.presentLikeStatus(isToggle: isExisted, indexPath: indexPath)
           }
