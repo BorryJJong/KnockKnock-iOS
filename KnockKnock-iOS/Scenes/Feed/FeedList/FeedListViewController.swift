@@ -123,6 +123,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   }
 
   private func likeButtonDidTap(sender: UIButton, indexPath: IndexPath) {
+    sender.isEnabled = false
     if sender.isSelected {
       self.interactor?.requestLikeCancel(feedId: self.feedId, indexPath: indexPath)
     } else {
@@ -279,7 +280,6 @@ extension FeedListViewController: FeedListViewProtocol {
   }
 
   func fetchLikeStatus(isToggle: Bool, indexPath: IndexPath) {
-    
     if isToggle {
 
       guard let cell = self.containerView.feedListCollectionView.cellForItem(
@@ -294,6 +294,7 @@ extension FeedListViewController: FeedListViewProtocol {
       )
 
       cell.likeButton.setTitle(title, for: .normal)
+      cell.likeButton.isEnabled = true
     }
   }
 }
