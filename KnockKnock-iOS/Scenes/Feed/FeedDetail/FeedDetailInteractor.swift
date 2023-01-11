@@ -49,7 +49,11 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
         self.worker?.requestLike(
           id: feedId,
           completionHandler: { result in
-            self.presenter?.presentLikeStatus(isToggle: true)
+            if result {
+              self.presenter?.presentLikeStatus(isToggle: true)
+            } else {
+              // error
+            }
           }
         )
       } else {
@@ -63,7 +67,11 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.worker?.requestLikeCancel(
       id: feedId,
       completionHandler: { result in
-        self.presenter?.presentLikeStatus(isToggle: true)
+        if result {
+          self.presenter?.presentLikeStatus(isToggle: true)
+        } else {
+          // error
+        }
       }
     )
   }

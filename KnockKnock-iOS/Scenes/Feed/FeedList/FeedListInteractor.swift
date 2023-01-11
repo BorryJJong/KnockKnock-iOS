@@ -73,9 +73,12 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       if isExisted {
         self.worker?.requestLike(
           feedId: feedId,
-          completionHandler: { _ in
-            self.presenter?.presentLikeStatus(isToggle: isExisted, indexPath: indexPath)
-
+          completionHandler: { result in
+            if result {
+              self.presenter?.presentLikeStatus(isToggle: isExisted, indexPath: indexPath)
+            } else {
+              // error
+            }
           }
         )
       } else {
@@ -91,8 +94,12 @@ final class FeedListInteractor: FeedListInteractorProtocol {
         
         self.worker?.requestLikeCancel(
           feedId: feedId,
-          completionHandler: { _ in
-            self.presenter?.presentLikeStatus(isToggle: isExisted, indexPath: indexPath)
+          completionHandler: {  result in
+            if result {
+              self.presenter?.presentLikeStatus(isToggle: isExisted, indexPath: indexPath)
+            } else {
+              // error
+            }
           }
         )
       } else {
