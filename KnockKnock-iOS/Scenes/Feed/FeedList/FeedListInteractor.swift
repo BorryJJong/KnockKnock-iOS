@@ -20,13 +20,13 @@ protocol FeedListInteractorProtocol {
   )
   func requestDelete(feedId: Int)
 
-  func requestLike(source: FeedListViewProtocol, feedId: Int)
-  func requestLikeCancel(source: FeedListViewProtocol, feedId: Int)
+  func requestLike(feedId: Int, indexPath: IndexPath)
+  func requestLikeCancel(feedId: Int, indexPath: IndexPath)
 
-  func navigateToFeedMain(source: FeedListViewProtocol)
-  func navigateToFeedDetail(source: FeedListViewProtocol, feedId: Int)
-  func navigateToCommentView(feedId: Int, source: FeedListViewProtocol)
-  func presentBottomSheetView(source: FeedListViewProtocol, isMyPost: Bool, deleteAction: (() -> Void)?)
+  func navigateToFeedMain()
+  func navigateToFeedDetail(feedId: Int)
+  func navigateToCommentView(feedId: Int)
+  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?)
 }
 
 final class FeedListInteractor: FeedListInteractorProtocol {
@@ -68,70 +68,59 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     )
   }
 
-  func requestLike(source: FeedListViewProtocol, feedId: Int) {
+  func requestLike(feedId: Int, indexPath: IndexPath) {
     self.worker?.checkTokenExisted(completionHandler: { isExisted in
       if isExisted {
         self.worker?.requestLike(
           id: feedId,
-          completionHandler: { result in
-            print(result) // 추후 error 처리
+          completionHandler: { _ in
+            self.presenter?.presentLikeStatus(isToggle: isExisted, indexPath: indexPath)
+
           }
         )
       } else {
-        self.router?.navigateToLoginView(source: source)
+        self.router?.navigateToLoginView()
+        self.presenter?.presentLikeStatus(isToggle: isExisted, indexPath: indexPath)
       }
     })
   }
   
-  func requestLikeCancel(source: FeedListViewProtocol, feedId: Int) {
+  func requestLikeCancel(feedId: Int, indexPath: IndexPath) {
     self.worker?.checkTokenExisted(completionHandler: { isExisted in
       if isExisted {
         
         self.worker?.requestLikeCancel(
           id: feedId,
-          completionHandler: { result in
-            print(result) // 추후 error 처리
+          completionHandler: { _ in
+            self.presenter?.presentLikeStatus(isToggle: isExisted, indexPath: indexPath)
           }
         )
       } else {
-        self.router?.navigateToLoginView(source: source)
+        self.router?.navigateToLoginView()
+        self.presenter?.presentLikeStatus(isToggle: isExisted, indexPath: indexPath)
       }
     })
   }
 
   // Routing
 
-  func navigateToFeedDetail(
-    source: FeedListViewProtocol,
-    feedId: Int
-  ) {
-    self.router?.navigateToFeedDetail(
-      source: source,
-      feedId: feedId
-    )
+  func navigateToFeedDetail(feedId: Int) {
+    self.router?.navigateToFeedDetail(feedId: feedId)
   }
 
-  func navigateToCommentView(
-    feedId: Int,
-    source: FeedListViewProtocol
-  ) {
-    self.router?.navigateToCommentView(
-      feedId: feedId,
-      source: source
-    )
+  func navigateToCommentView(feedId: Int) {
+    self.router?.navigateToCommentView(feedId: feedId)
   }
 
-  func navigateToFeedMain(source: FeedListViewProtocol) {
-    self.router?.navigateToFeedMain(source: source)
+  func navigateToFeedMain() {
+    self.router?.navigateToFeedMain()
   }
 
   func presentBottomSheetView(
-    source: FeedListViewProtocol,
     isMyPost: Bool,
     deleteAction: (() -> Void)?
   ) {
     self.router?.presentBottomSheetView(
-      source: source,
       isMyPost: isMyPost,
       deleteAction: deleteAction
     )

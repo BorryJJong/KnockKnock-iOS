@@ -8,16 +8,19 @@
 import UIKit
 
 protocol FeedListRouterProtocol {
+  var view: FeedListViewProtocol? { get set }
   static func createFeedList(feedId: Int, challengeId: Int) -> UIViewController
 
-  func navigateToFeedMain(source: FeedListViewProtocol)
-  func navigateToFeedDetail(source: FeedListViewProtocol, feedId: Int)
-  func navigateToCommentView(feedId: Int, source: FeedListViewProtocol)
-  func navigateToLoginView(source: FeedListViewProtocol)
-  func presentBottomSheetView(source: FeedListViewProtocol, isMyPost: Bool, deleteAction: (() -> Void)?)
+  func navigateToFeedMain()
+  func navigateToFeedDetail(feedId: Int)
+  func navigateToCommentView(feedId: Int)
+  func navigateToLoginView()
+  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?)
 }
 
 final class FeedListRouter: FeedListRouterProtocol {
+  weak var view: FeedListViewProtocol?
+
   static func createFeedList(feedId: Int, challengeId: Int) -> UIViewController {
 
     let view = FeedListViewController()
@@ -35,6 +38,7 @@ final class FeedListRouter: FeedListRouterProtocol {
     interactor.presenter = presenter
     interactor.worker = worker
     presenter.view = view
+    router.view = view
 
     view.feedId = feedId
     view.challengeId = challengeId
@@ -42,38 +46,38 @@ final class FeedListRouter: FeedListRouterProtocol {
     return view
   }
 
-  func navigateToFeedMain(source: FeedListViewProtocol) {
-    if let sourceView = source as? UIViewController {
+  func navigateToFeedMain() {
+    if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.popViewController(animated: true)
     }
   }
 
-  func navigateToFeedDetail(source: FeedListViewProtocol, feedId: Int) {
+  func navigateToFeedDetail(feedId: Int) {
     let feedDetailViewController = FeedDetailRouter.createFeedDetail(feedId: feedId)
-    if let sourceView = source as? UIViewController {
+    if let sourceView = self.view as? UIViewController {
       feedDetailViewController.hidesBottomBarWhenPushed = true
       sourceView.navigationController?.pushViewController(feedDetailViewController, animated: true)
     }
   }
 
-  func navigateToCommentView(feedId: Int, source: FeedListViewProtocol) {
+  func navigateToCommentView(feedId: Int) {
     let commentViewController = CommentRouter.createCommentView(feedId: feedId)
-    if let sourceView = source as? UIViewController {
+    if let sourceView = self.view as? UIViewController {
       commentViewController.modalPresentationStyle = .fullScreen
       sourceView.present(commentViewController, animated: true, completion: nil)
     }
   }
 
-  func navigateToLoginView(source: FeedListViewProtocol) {
+  func navigateToLoginView() {
     let loginViewController = LoginRouter.createLoginView()
     
     loginViewController.hidesBottomBarWhenPushed = true
-    if let sourceView = source as? UIViewController {
+    if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.pushViewController(loginViewController, animated: true)
     }
   }
 
-  func presentBottomSheetView(source: FeedListViewProtocol, isMyPost: Bool, deleteAction: (() -> Void)?) {
+  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?) {
     let bottomSheetViewController = BottomSheetViewController().then {
       if isMyPost {
         $0.setBottomSheetContents(
@@ -97,7 +101,7 @@ final class FeedListRouter: FeedListRouterProtocol {
       $0.modalPresentationStyle = .overFullScreen
       $0.deleteAction = deleteAction
     }
-    if let sourceView = source as? UIViewController {
+    if let sourceView = self.view as? UIViewController {
       sourceView.present(
         bottomSheetViewController,
         animated: false,

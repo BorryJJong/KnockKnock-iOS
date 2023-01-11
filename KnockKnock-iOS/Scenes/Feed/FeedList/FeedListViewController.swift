@@ -14,6 +14,7 @@ protocol FeedListViewProtocol: AnyObject {
   var interactor: FeedListInteractorProtocol? { get set }
   
   func fetchFeedList(feedList: FeedList)
+  func fetchLikeStatus(isToggle: Bool, indexPath: IndexPath)
   func deleteFeedPost(feedId: Int)
 }
 
@@ -93,10 +94,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     if let indexPath = indexPath {
       if let cell = collectionView.cellForItem(at: indexPath) {
         if !cell.isSelected {
-          self.interactor?.navigateToFeedDetail(
-            source: self,
-            feedId: self.feedListPost[indexPath.section].id
-          )
+          self.interactor?.navigateToFeedDetail(feedId: self.feedListPost[indexPath.section].id)
         }
       }
     }
@@ -105,7 +103,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   // MARK: - Button Actions
 
   @objc private func backButtonDidTap(_ sender: UIButton) {
-    self.interactor?.navigateToFeedMain(source: self)
+    self.interactor?.navigateToFeedMain()
   }
 
   @objc func configureButtonDidTap(_ sender: UIButton) {
@@ -113,7 +111,6 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     let feedId = self.feedListPost[sender.tag].id
 
     self.interactor?.presentBottomSheetView(
-      source: self,
       isMyPost: isMyPost,
       deleteAction: {
         self.interactor?.requestDelete(feedId: feedId)
@@ -122,33 +119,14 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   }
 
   @objc func commentButtonDidTap(_ sender: UIButton) {
-    self.interactor?.navigateToCommentView(
-      feedId: sender.tag,
-      source: self
-    )
+    self.interactor?.navigateToCommentView(feedId: sender.tag)
   }
 
-  @objc func likeButtonDidTap(_ sender: UIButton) {
-    sender.isSelected.toggle()
-    
-    let title = self.containerView.setLikeButtonTitle(
-      currentNum: sender.titleLabel?.text,
-      isSelected: sender.isSelected
-    )
-    sender.setTitle(title, for: .normal)
-
+  private func likeButtonDidTap(sender: UIButton, indexPath: IndexPath) {
     if sender.isSelected {
-
-      self.interactor?.requestLike(
-        source: self,
-        feedId: sender.tag
-      )
+      self.interactor?.requestLikeCancel(feedId: self.feedId, indexPath: indexPath)
     } else {
-
-      self.interactor?.requestLikeCancel(
-        source: self,
-        feedId: sender.tag
-      )
+      self.interactor?.requestLike(feedId: self.feedId, indexPath: indexPath)
     }
   }
 }
@@ -186,10 +164,15 @@ extension FeedListViewController: UICollectionViewDataSource {
       for: .touchUpInside
     )
     cell.likeButton.tag = self.feedListPost[indexPath.section].id
-    cell.likeButton.addTarget(
-      self,
-      action: #selector(self.likeButtonDidTap(_:)),
-      for: .touchUpInside
+
+    cell.likeButton.addAction(
+      for: .touchUpInside,
+      closure: {
+        self.likeButtonDidTap(
+          sender: $0,
+          indexPath: indexPath
+        )
+      }
     )
 
     return cell
@@ -292,6 +275,25 @@ extension FeedListViewController: FeedListViewProtocol {
       $0.id == feedId
     }) {
       self.feedListPost.remove(at: feedIndex)
+    }
+  }
+
+  func fetchLikeStatus(isToggle: Bool, indexPath: IndexPath) {
+    
+    if isToggle {
+
+      guard let cell = self.containerView.feedListCollectionView.cellForItem(
+        at: indexPath
+      ) as? FeedListCell else { return }
+
+      cell.likeButton.isSelected.toggle()
+
+      let title = self.containerView.setLikeButtonTitle(
+        currentNum: cell.likeButton.titleLabel?.text,
+        isSelected: cell.likeButton.isSelected
+      )
+
+      cell.likeButton.setTitle(title, for: .normal)
     }
   }
 }

@@ -1,5 +1,5 @@
 //
-//  FeedDetailPresenter.swift
+//  FeedDetailPresengitter.swift
 //  KnockKnock-iOS
 //
 //  Created by Daye on 2022/07/30.

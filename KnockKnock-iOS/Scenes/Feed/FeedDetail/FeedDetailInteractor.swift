@@ -60,7 +60,6 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   }
   
   func requestLikeCancel(feedId: Int) {
-    
     self.worker?.requestLikeCancel(
       id: feedId,
       completionHandler: { result in
