@@ -48,18 +48,15 @@ final class PostCommentCell: BaseCollectionViewCell {
   }
 
   private let userIdLabel = UILabel().then {
-    $0.text = "userID"
     $0.font = .systemFont(ofSize: 12, weight: .bold)
   }
 
   private let commentLabel = UILabel().then {
-    $0.text = "댓글 내용입니다."
     $0.numberOfLines = 0
     $0.font = .systemFont(ofSize: 13, weight: .medium)
   }
 
   private let writtenDateLabel = UILabel().then {
-    $0.text = "1시간전"
     $0.font = .systemFont(ofSize: 12, weight: .medium)
     $0.textColor = .gray70
   }
@@ -97,28 +94,34 @@ final class PostCommentCell: BaseCollectionViewCell {
   // MARK: - Bind
 
   func bind(comment: Comment) {
-    let reply = comment.data.reply
-    self.setReplyMoreButton(count: reply?.count ?? 0, isOpen: comment.isOpen)
+    let reply = comment.data.reply.map {
+      $0.filter { !$0.isDeleted }
+    } ?? []
+    self.setReplyMoreButton(count: reply.count, isOpen: comment.isOpen)
 
     self.userIdLabel.text = comment.data.nickname
     self.commentLabel.text = comment.data.content
+    self.writtenDateLabel.text = comment.data.regDate
 
     if comment.isReply {
       self.replyWriteButton.isHidden = true
-      self.commentDeleteButton.snp.updateConstraints {
-        $0.leading.equalTo(self.replyWriteButton.snp.trailing).inset(self.replyWriteButton.frame.width)
+      self.commentDeleteButton.snp.remakeConstraints {
+        $0.top.equalTo(self.writtenDateLabel)
+        $0.leading.equalTo(self.writtenDateLabel.snp.trailing).offset(Metric.commentDeleteButtonLeadingMargin)
       }
-      self.profileImageView.snp.updateConstraints {
+      self.profileImageView.snp.remakeConstraints {
         $0.leading.equalTo(self.safeAreaLayoutGuide).offset(Metric.profileImageViewLeadingForReply)
         $0.width.equalTo(Metric.profileImageViewWidthForReply)
         $0.height.equalTo(Metric.profileImageViewHeightForReply)
       }
+      
     } else {
       self.replyWriteButton.isHidden = false
-      self.commentDeleteButton.snp.updateConstraints {
+      self.commentDeleteButton.snp.remakeConstraints {
+        $0.top.equalTo(self.writtenDateLabel)
         $0.leading.equalTo(self.replyWriteButton.snp.trailing).offset(Metric.commentDeleteButtonLeadingMargin)
       }
-      self.profileImageView.snp.updateConstraints {
+      self.profileImageView.snp.remakeConstraints {
         $0.leading.equalTo(self.safeAreaLayoutGuide)
         $0.width.equalTo(Metric.profileImageViewWidth)
         $0.height.equalTo(Metric.profileImageViewHeight)
@@ -135,14 +138,13 @@ final class PostCommentCell: BaseCollectionViewCell {
         $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(Metric.replyMoreButtonBottomMargin)
       }
     } else {
+      self.replyMoreButton.isHidden = false
       self.replyMoreButton.snp.updateConstraints {
         $0.bottom.equalTo(self.safeAreaLayoutGuide)
       }
       if !isOpen {
-        self.replyMoreButton.isHidden = false
         self.replyMoreButton.setTitle("답글 \(count)개 보기", for: .normal)
       } else {
-        self.replyMoreButton.isHidden = false
         self.replyMoreButton.setTitle("답글 숨기기", for: .normal)
       }
     }

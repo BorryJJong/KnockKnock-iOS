@@ -70,15 +70,12 @@ final class CommentRepository: CommentRepositoryProtocol {
     commentId: Int,
     completionHandler: @escaping (Bool) -> Void
   ) {
-    let parameters = [
-      "id": commentId
-    ] as [String: Any]
 
     KKNetworkManager
       .shared
       .request(
         object: ApiResponseDTO<Bool>.self,
-        router: KKRouter.deleteComment(id: parameters),
+        router: KKRouter.deleteComment(id: commentId),
         success: { response in
           guard let data = response.data else {
             // no data error
