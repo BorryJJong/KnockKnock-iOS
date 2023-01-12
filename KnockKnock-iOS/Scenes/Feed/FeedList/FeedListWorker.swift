@@ -25,16 +25,16 @@ final class FeedListWorker: FeedListWorkerProtocol {
   
   private let feedRepository: FeedRepositoryProtocol
   private let likeRepository: LikeRepositoryProtocol
-  private let localDataManager: UserDataManagerProtocol
+  private let userDataManager: UserDataManagerProtocol
   
   init(
     feedRepository: FeedRepositoryProtocol,
     likeRepository: LikeRepositoryProtocol,
-    localDataManager: UserDataManagerProtocol
+    userDataManager: UserDataManagerProtocol
   ) {
     self.feedRepository = feedRepository
     self.likeRepository = likeRepository
-    self.localDataManager = localDataManager
+    self.userDataManager =       userDataManager
   }
   
   func requestDeleteFeed(
@@ -50,7 +50,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
   }
   
   func checkTokenExisted(completionHandler: @escaping (Bool) -> Void) {
-    let isExisted = self.localDataManager.checkTokenIsExisted()
+    let isExisted = self.userDataManager.checkTokenIsExisted()
     completionHandler(isExisted)
   }
   

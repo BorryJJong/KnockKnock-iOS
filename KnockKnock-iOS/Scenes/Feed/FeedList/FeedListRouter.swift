@@ -29,7 +29,7 @@ final class FeedListRouter: FeedListRouterProtocol {
     let worker = FeedListWorker(
       feedRepository: FeedRepository(),
       likeRepository: LikeRepository(),
-      localDataManager: UserDataManager()
+      userDataManager: UserDataManager()
     )
     let router = FeedListRouter()
 

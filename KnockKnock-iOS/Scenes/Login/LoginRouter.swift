@@ -27,7 +27,7 @@ final class LoginRouter: LoginRouterProtocol {
       kakaoLoginManager: KakaoLoginManager(),
       appleLoginManager: AppleLoginManager(),
       accountManager: AccountManager(),
-      localDataManager: UserDataManager()
+      userDataManager: UserDataManager()
     )
     let router = LoginRouter()
 
@@ -73,6 +73,5 @@ final class LoginRouter: LoginRouterProtocol {
     if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.popViewController(animated: true)
     }
-    NotificationCenter.default.post(name: .signInCompleted, object: nil)
   }
 }

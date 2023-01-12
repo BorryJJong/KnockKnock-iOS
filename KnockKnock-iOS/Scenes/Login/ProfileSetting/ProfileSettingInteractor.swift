@@ -35,11 +35,6 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
   }
 
   func popProfileView() {
-    NotificationCenter.default.post(
-      name: .feedRefreshAfterSigned,
-      object: nil
-    )
-
     self.router?.popProfileView()
   }
 

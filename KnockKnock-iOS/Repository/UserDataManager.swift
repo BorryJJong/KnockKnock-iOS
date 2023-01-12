@@ -11,7 +11,9 @@ protocol UserDataManagerProtocol {
   var userDefaultsService: UserDefaultsServiceType { get }
 
   func checkTokenIsExisted() -> Bool
+  
   func removeAllUserInfo()
+  func saveUserInfo(response: AccountResponse)
 }
 
 final class UserDataManager: UserDataManagerProtocol {
@@ -27,10 +29,31 @@ final class UserDataManager: UserDataManagerProtocol {
     }
   }
 
+  /// 회원 가입 및 로그인 시 유저 데이터 저장
+  func saveUserInfo(response: AccountResponse) {
+
+    guard let authInfo = response.authInfo else { return }
+
+    if let userInfo = response.userInfo {
+      self.userDefaultsService.set(value: userInfo.image, forkey: .profileImage)
+      self.userDefaultsService.set(value: userInfo.nickname, forkey: .nickname)
+    }
+
+    self.userDefaultsService.set(value: authInfo.accessToken, forkey: .accessToken)
+    self.userDefaultsService.set(value: authInfo.refreshToken, forkey: .refreshToken)
+
+    NotificationCenter.default.post(name: .signInCompleted, object: nil)
+    NotificationCenter.default.post(name: .feedRefreshAfterSigned, object: nil)
+  }
+
+  /// 회원 탈퇴 및 로그아웃 시 유저 데이터 삭제
   func removeAllUserInfo() {
     self.userDefaultsService.remove(forkey: .accessToken)
     self.userDefaultsService.remove(forkey: .refreshToken)
     self.userDefaultsService.remove(forkey: .nickname)
     self.userDefaultsService.remove(forkey: .profileImage)
+
+    NotificationCenter.default.post(name: .signOutCompleted, object: nil)
+    NotificationCenter.default.post(name: .feedRefreshAfterUnsigned, object: nil)
   }
 }
