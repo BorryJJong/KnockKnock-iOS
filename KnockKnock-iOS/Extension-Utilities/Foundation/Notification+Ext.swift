@@ -15,4 +15,6 @@ extension Notification.Name {
   // Feed
   static let feedRefreshAfterSigned = Notification.Name("feedRefreshAfterSigned")
   static let feedRefreshAfterUnsigned = Notification.Name("feedRefreshAfterUnsigned")
+  static let postLike = Notification.Name("postLike")
+  static let postLikeCancel = Notification.Name("postLikeCancel")
 }

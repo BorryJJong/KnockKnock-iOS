@@ -51,6 +51,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
           completionHandler: { result in
             if result {
               self.presenter?.presentLikeStatus(isToggle: true)
+              NotificationCenter.default.post(name: .postLike, object: feedId)
             } else {
               // error
             }
@@ -69,6 +70,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       completionHandler: { result in
         if result {
           self.presenter?.presentLikeStatus(isToggle: true)
+          NotificationCenter.default.post(name: .postLikeCancel, object: feedId)
         } else {
           // error
         }

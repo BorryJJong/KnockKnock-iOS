@@ -17,6 +17,7 @@ protocol FeedListViewProtocol: AnyObject {
   func reloadFeedList()
   func fetchLikeStatus(isToggle: Bool, indexPath: IndexPath)
   func deleteFeedPost(feedId: Int)
+  func toggleLikeButton(feedId: Int)
 }
 
 final class FeedListViewController: BaseViewController<FeedListView> {
@@ -299,7 +300,9 @@ extension FeedListViewController: FeedListViewProtocol {
 
   func fetchLikeStatus(isToggle: Bool, indexPath: IndexPath) {
 
-    guard let cell = self.containerView.feedListCollectionView.cellForItem(
+    let collectionView = self.containerView.feedListCollectionView
+
+    guard let cell = collectionView.cellForItem(
       at: indexPath
     ) as? FeedListCell else { return }
 
@@ -315,5 +318,23 @@ extension FeedListViewController: FeedListViewProtocol {
     }
     
     cell.likeButton.isEnabled = true
+  }
+
+  func toggleLikeButton(feedId: Int) {
+    let post = self.feedListPost.enumerated().filter {
+      $0.1.id == feedId
+    }.map { $0.0 }
+
+    post.forEach {
+      self.feedListPost[$0].isLike.toggle()
+
+      let likeCount = self.containerView.setLikeButtonTitle(
+        currentNum: self.feedListPost[$0].blogLikeCount,
+        isSelected: self.feedListPost[$0].isLike
+      )
+
+      self.feedListPost[$0].blogLikeCount = likeCount
+      
+    }
   }
 }

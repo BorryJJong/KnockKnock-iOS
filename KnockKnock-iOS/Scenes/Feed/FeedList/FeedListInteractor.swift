@@ -153,5 +153,24 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     ) { _ in
       self.presenter?.reloadFeedList()
     }
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(self.getFeedId(_:)),
+      name: .postLike,
+      object: nil
+    )
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(self.getFeedId(_:)),
+      name: .postLikeCancel,
+      object: nil
+    )
+  }
+
+  @objc private func getFeedId(_ notification: Notification) {
+    guard let feedId = notification.object as? Int else { return }
+    self.presenter?.toggleLikeButton(feedId: feedId)
   }
 }
