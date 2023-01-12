@@ -129,9 +129,9 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     sender.isEnabled = false
 
     if sender.isSelected {
-      self.interactor?.requestLikeCancel(feedId: self.feedId, indexPath: indexPath)
+      self.interactor?.requestLikeCancel(feedId: sender.tag, indexPath: indexPath)
     } else {
-      self.interactor?.requestLike(feedId: self.feedId, indexPath: indexPath)
+      self.interactor?.requestLike(feedId: sender.tag, indexPath: indexPath)
     }
   }
 }
