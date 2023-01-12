@@ -17,6 +17,7 @@ protocol ProfileSettingInteractorProtocol {
   func requestSignUp(nickname: String, image: String)
 
   func navigateToMyView()
+  func popProfileView()
 }
 
 final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
@@ -31,6 +32,15 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
 
   func navigateToMyView() {
     self.router?.navigateToMyView()
+  }
+
+  func popProfileView() {
+    NotificationCenter.default.post(
+      name: .feedRefreshAfterSigned,
+      object: nil
+    )
+
+    self.router?.popProfileView()
   }
 
   func requestSignUp(

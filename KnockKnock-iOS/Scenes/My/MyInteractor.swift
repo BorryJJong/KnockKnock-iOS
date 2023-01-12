@@ -52,15 +52,16 @@ final class MyInteractor: MyInteractorProtocol {
   }
 
   func requestSignOut() {
-    
     self.worker?.requestSignOut(completionHandler: {
       NotificationCenter.default.post(name: .signOutCompleted, object: nil)
+      NotificationCenter.default.post(name: .feedRefreshAfterUnsigned, object: nil)
     })
   }
 
   func requestWithdraw() {
     self.worker?.requestWithdraw(completionHandler: {
       NotificationCenter.default.post(name: .signOutCompleted, object: nil)
+      NotificationCenter.default.post(name: .feedRefreshAfterUnsigned, object: nil)
     })
   }
 

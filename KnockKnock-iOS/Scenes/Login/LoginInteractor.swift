@@ -57,6 +57,10 @@ final class LoginInteractor: LoginInteractorProtocol {
         name: .signInCompleted,
         object: nil
       )
+      NotificationCenter.default.post(
+        name: .feedRefreshAfterSigned,
+        object: nil
+      )
 
     } else {
       self.navigateToProfileSettingView(signInInfo: signInInfo)

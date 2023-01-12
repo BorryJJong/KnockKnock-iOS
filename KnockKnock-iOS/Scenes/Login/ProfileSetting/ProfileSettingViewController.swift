@@ -67,21 +67,20 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
   // MARK: - Button Actions
 
   @objc private func backButtonDidTap(_ sender: UIButton) {
-    self.navigationController?.popViewController(animated: true)
+    self.interactor?.popProfileView()
   }
 
   @objc private func confirmButtonDidTap(_ sender: UIButton) {
     let nickname = self.containerView.nicknameTextField.text ?? ""
 
-    self.interactor?.requestSignUp(
-      nickname: nickname,
-      image: ""
-    )
-
     self.showAlert(
       content: Alert.profileSetting.message,
       confirmActionCompletion: {
-        self.interactor?.navigateToMyView()
+        self.interactor?.requestSignUp(
+          nickname: nickname,
+          image: ""
+        )
+        self.interactor?.popProfileView()
       }
     )
   }

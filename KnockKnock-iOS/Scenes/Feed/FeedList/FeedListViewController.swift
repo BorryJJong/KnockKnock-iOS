@@ -14,6 +14,7 @@ protocol FeedListViewProtocol: AnyObject {
   var interactor: FeedListInteractorProtocol? { get set }
   
   func fetchFeedList(feedList: FeedList)
+  func reloadFeedList()
   func fetchLikeStatus(isToggle: Bool, indexPath: IndexPath)
   func deleteFeedPost(feedId: Int)
 }
@@ -45,6 +46,8 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+
+    self.interactor?.setNotification()
     
     self.interactor?.fetchFeedList(
       currentPage: self.currentPage,
@@ -124,6 +127,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
 
   private func likeButtonDidTap(sender: UIButton, indexPath: IndexPath) {
     sender.isEnabled = false
+
     if sender.isSelected {
       self.interactor?.requestLikeCancel(feedId: self.feedId, indexPath: indexPath)
     } else {
@@ -132,7 +136,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   }
 }
 
-// MARK: - Extensions
+// MARK: - UICollectionView DataSource
 
 extension FeedListViewController: UICollectionViewDataSource {
   func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -225,6 +229,8 @@ extension FeedListViewController: UICollectionViewDataSource {
   }
 }
 
+// MARK: - UICollectionView Delegate
+
 extension FeedListViewController: UICollectionViewDelegateFlowLayout {
   func collectionView(
     _ collectionView: UICollectionView,
@@ -265,12 +271,24 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
   }
 }
 
+// MARK: - Feed List View Protocol
+
 extension FeedListViewController: FeedListViewProtocol {
   func fetchFeedList(feedList: FeedList) {
     self.isNext = feedList.isNext
     self.feedListPost += feedList.feeds
   }
-  
+
+  func reloadFeedList() {
+    self.feedListPost = []
+    self.interactor?.fetchFeedList(
+      currentPage: self.currentPage,
+      pageSize: self.pageSize,
+      feedId: self.feedId,
+      challengeId: self.challengeId
+    )
+  }
+
   func deleteFeedPost(feedId: Int) {
     if let feedIndex = self.feedListPost.firstIndex(where: {
       $0.id == feedId
@@ -280,12 +298,12 @@ extension FeedListViewController: FeedListViewProtocol {
   }
 
   func fetchLikeStatus(isToggle: Bool, indexPath: IndexPath) {
+
+    guard let cell = self.containerView.feedListCollectionView.cellForItem(
+      at: indexPath
+    ) as? FeedListCell else { return }
+
     if isToggle {
-
-      guard let cell = self.containerView.feedListCollectionView.cellForItem(
-        at: indexPath
-      ) as? FeedListCell else { return }
-
       cell.likeButton.isSelected.toggle()
 
       let title = self.containerView.setLikeButtonTitle(
@@ -294,7 +312,8 @@ extension FeedListViewController: FeedListViewProtocol {
       )
 
       cell.likeButton.setTitle(title, for: .normal)
-      cell.likeButton.isEnabled = true
     }
+    
+    cell.likeButton.isEnabled = true
   }
 }

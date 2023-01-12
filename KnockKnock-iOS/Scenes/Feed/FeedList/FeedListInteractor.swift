@@ -27,6 +27,8 @@ protocol FeedListInteractorProtocol {
   func navigateToFeedDetail(feedId: Int)
   func navigateToCommentView(feedId: Int)
   func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?)
+
+  func setNotification()
 }
 
 final class FeedListInteractor: FeedListInteractorProtocol {
@@ -43,7 +45,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     challengeId: Int
   ) {
     LoadingIndicator.showLoading()
-    
+
     self.worker?.fetchFeedList(
       currentPage: currentPage,
       count: pageSize,
@@ -131,5 +133,25 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       isMyPost: isMyPost,
       deleteAction: deleteAction
     )
+  }
+
+  // Notification Center
+
+  func setNotification() {
+    NotificationCenter.default.addObserver(
+      forName: .feedRefreshAfterSigned,
+      object: nil,
+      queue: nil
+    ) { _ in
+      self.presenter?.reloadFeedList()
+    }
+
+    NotificationCenter.default.addObserver(
+      forName: .feedRefreshAfterUnsigned,
+      object: nil,
+      queue: nil
+    ) { _ in
+      self.presenter?.reloadFeedList()
+    }
   }
 }
