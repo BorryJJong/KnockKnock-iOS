@@ -12,7 +12,7 @@ import UIKit
 /// 피드 등록 entity
 struct FeedWrite {
   let content: String
-  let storeAddress: String
+  let storeAddress: String?
   let storeName: String?
   let locationX: String
   let locationY: String
