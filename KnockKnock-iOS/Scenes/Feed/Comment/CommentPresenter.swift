@@ -34,7 +34,7 @@ final class CommentPresenter: CommentPresenterProtocol {
         
         visibleComments += reply.map {
           Comment(
-            data: CommentResponse.Data(
+            data: CommentResponse(
               id: $0.id,
               userId: $0.userId,
               nickname: $0.nickname,

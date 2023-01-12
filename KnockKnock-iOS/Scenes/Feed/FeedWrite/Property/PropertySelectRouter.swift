@@ -46,7 +46,7 @@ final class PropertySelectRouter: PropertySelectRouterProtocol {
     let view = PropertySelectViewController()
     let interactor = PropertySelectInteractor()
     let presenter = PropertySelectPresenter()
-    let worker = PropertySelectWorker(repository: FeedRepository())
+    let worker = PropertySelectWorker(repository: FeedWriteRepository())
     let router = PropertySelectRouter()
 
     view.router = router

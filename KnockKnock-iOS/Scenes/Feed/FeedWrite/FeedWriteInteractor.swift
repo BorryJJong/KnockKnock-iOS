@@ -84,7 +84,7 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
     let promotions = self.selectedPromotionList.filter{
       $0.isSelected == true
     }.map {
-      String($0.promotionInfo.id)
+      String($0.id)
     }.joined(separator: ",")
 
     let challenges = self.selectedTagList.filter{

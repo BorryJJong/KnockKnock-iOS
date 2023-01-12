@@ -25,7 +25,7 @@ final class ProfileSettingRouter: ProfileSettingRouterProtocol {
     let presenter = ProfileSettingPresenter()
     let worker = ProfileSettingWorker(
       accountManager: AccountManager(),
-      localDataManager: LocalDataManager()
+      localDataManager: UserDataManager()
     )
     let router = ProfileSettingRouter()
 

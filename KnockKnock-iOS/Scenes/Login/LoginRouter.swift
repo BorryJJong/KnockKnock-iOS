@@ -27,7 +27,7 @@ final class LoginRouter: LoginRouterProtocol {
       kakaoLoginManager: KakaoLoginManager(),
       appleLoginManager: AppleLoginManager(),
       accountManager: AccountManager(),
-      localDataManager: LocalDataManager()
+      localDataManager: UserDataManager()
     )
     let router = LoginRouter()
 

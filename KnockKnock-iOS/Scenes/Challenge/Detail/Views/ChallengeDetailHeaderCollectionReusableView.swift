@@ -167,7 +167,7 @@ final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableVie
 
   // MARK: - Configure
 
-  private func setParticipantsImageStackView(participants: [Participant]) {
+  private func setParticipantsImageStackView(participants: [ChallengeDetail.Participant]) {
     var images: [String?] = []
 
     participants.forEach {

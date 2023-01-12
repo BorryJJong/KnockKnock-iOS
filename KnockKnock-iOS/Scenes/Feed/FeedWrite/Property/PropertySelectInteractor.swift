@@ -23,7 +23,8 @@ final class PropertySelectInteractor: PropertySelectInteractorProtocol {
     self.worker?.requestPromotionList(completionHandler: { promotions in
       let promotionList = promotions.map {
         Promotion(
-          promotionInfo: $0,
+          id: $0.id,
+          type: $0.type,
           isSelected: false
         )
       }

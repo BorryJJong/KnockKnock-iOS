@@ -19,8 +19,8 @@ protocol AccountManagerProtocol {
     image: String,
     completionHandler: @escaping (AccountResponse) -> Void
   )
-  func signOut(completionHanlder: @escaping (Bool) -> Void)
-  func withdraw(completionHanlder: @escaping (Bool) -> Void)
+  func signOut(completionHandler: @escaping (Bool) -> Void)
+  func withdraw(completionHandler: @escaping (Bool) -> Void)
 }
 
 final class AccountManager: AccountManagerProtocol {
@@ -42,10 +42,14 @@ final class AccountManager: AccountManagerProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: AccountResponse.self,
+        object: ApiResponseDTO<AccountResponse>.self,
         router: KKRouter.postSignUp(userInfo: parameters),
-        success: { success in
-          completionHandler(success)
+        success: { response in
+          guard let data = response.data else {
+            // no data error
+            return
+          }
+          completionHandler(data)
         }, failure: { error in
           print(error)
         }
@@ -59,42 +63,49 @@ final class AccountManager: AccountManagerProtocol {
     completionHandler: @escaping (AccountResponse, SignInInfo) -> Void
   ) {
 
-      guard let accessToken = accessToken else { return }
+    guard let accessToken = accessToken else { return }
 
-      let signInInfo = SignInInfo(
-        socialUuid: accessToken,
-        socialType: socialType.rawValue
-      )
+    let signInInfo = SignInInfo(
+      socialUuid: accessToken,
+      socialType: socialType.rawValue
+    )
 
-      let parameters = [
-        "socialUuid": accessToken,
-        "socialType": socialType.rawValue
-      ]
+    let parameters = [
+      "socialUuid": accessToken,
+      "socialType": socialType.rawValue
+    ]
 
-      KKNetworkManager
-        .shared
-        .request(
-          object: AccountResponse.self,
-          router: KKRouter.postSocialLogin(signInInfo: parameters),
-          success: { response in
-            completionHandler(response, signInInfo)
-          },
-          failure: { error in
-            print(error)
-          }
-        )
-  }
-
-  /// 로그아웃
-  func signOut(completionHanlder: @escaping (Bool) -> Void) {
     KKNetworkManager
       .shared
       .request(
-        object: Bool.self,
+        object: ApiResponseDTO<AccountResponse>.self,
+        router: KKRouter.postSocialLogin(signInInfo: parameters),
+        success: { response in
+          guard let data = response.data else {
+            // no data error
+            return
+          }
+          completionHandler(data, signInInfo)
+        },
+        failure: { error in
+          print(error)
+        }
+      )
+  }
+
+  /// 로그아웃
+  func signOut(completionHandler: @escaping (Bool) -> Void) {
+    KKNetworkManager
+      .shared
+      .request(
+        object: ApiResponseDTO<Bool>.self,
         router: KKRouter.postLogOut,
         success: { response in
-          print(response)
-          completionHanlder(response)
+          guard let data = response.data else {
+            // no data error
+            return
+          }
+          completionHandler(data)
         }, failure: { error in
           print(error)
         }
@@ -102,14 +113,18 @@ final class AccountManager: AccountManagerProtocol {
   }
 
   /// 회원탈퇴
-  func withdraw(completionHanlder: @escaping (Bool) -> Void) {
+  func withdraw(completionHandler: @escaping (Bool) -> Void) {
     KKNetworkManager
       .shared
       .request(
-        object: Bool.self,
+        object: ApiResponseDTO<Bool>.self,
         router: KKRouter.deleteWithdraw,
         success: { response in
-          completionHanlder(response)
+          guard let data = response.data else {
+            // no data error
+            return
+          }
+          completionHandler(data)
         }, failure: { error in
           print(error)
         }
