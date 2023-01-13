@@ -12,8 +12,8 @@ protocol CommentInteractorProtocol {
   var presenter: CommentPresenterProtocol? { get set }
 
   func fetchAllComments(feedId: Int)
+  func requestAddComment(comment: AddCommentDTO)
   func toggleVisibleStatus(commentId: Int)
-  func requestAddComment(comment: AddCommentRequest)
   func requestDeleteComment(commentId: Int)
 }
 
@@ -51,7 +51,7 @@ final class CommentInteractor: CommentInteractorProtocol {
   }
 
   /// 댓글 등록
-  func requestAddComment(comment: AddCommentRequest) {
+  func requestAddComment(comment: AddCommentDTO) {
     self.worker?.requestAddComment(
       comment: comment,
       completionHandler: { success in

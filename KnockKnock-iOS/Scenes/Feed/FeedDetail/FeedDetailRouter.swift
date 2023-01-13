@@ -8,12 +8,18 @@
 import UIKit
 
 protocol FeedDetailRouterProtocol {
+  var view: FeedDetailViewProtocol? { get set }
+
   static func createFeedDetail(feedId: Int) -> UIViewController
 
-  func navigateToLikeDetail(source: FeedDetailViewProtocol, like: [Like.Info])
+  func navigateToLikeDetail(like: [Like.Info])
+  func navigateToLoginView()
 }
 
 final class FeedDetailRouter: FeedDetailRouterProtocol {
+
+  weak var view: FeedDetailViewProtocol?
+
   static func createFeedDetail(feedId: Int) -> UIViewController {
     let view = FeedDetailViewController()
     let interactor = FeedDetailInteractor()
@@ -21,7 +27,8 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
     let worker = FeedDetailWorker(
       feedRepository: FeedRepository(),
       commentRepository: CommentRepository(),
-      likeRepository: LikeRepository()
+      likeRepository: LikeRepository(),
+      userDataManager: UserDataManager()
     )
     let router = FeedDetailRouter()
 
@@ -31,15 +38,25 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
     interactor.presenter = presenter
     interactor.worker = worker
     presenter.view = view
+    router.view = view
 
     return view
   }
 
-  func navigateToLikeDetail(source: FeedDetailViewProtocol, like: [Like.Info]) {
+  func navigateToLikeDetail(like: [Like.Info]) {
     let likeDetailViewController = LikeDetailViewContoller()
-    if let sourceView = source as? UIViewController {
+    if let sourceView = self.view as? UIViewController {
       likeDetailViewController.like = like
       sourceView.navigationController?.pushViewController(likeDetailViewController, animated: true)
+    }
+  }
+
+  func navigateToLoginView() {
+    let loginViewController = LoginRouter.createLoginView()
+
+    loginViewController.hidesBottomBarWhenPushed = true
+    if let sourceView = self.view as? UIViewController {
+      sourceView.navigationController?.pushViewController(loginViewController, animated: true)
     }
   }
 }

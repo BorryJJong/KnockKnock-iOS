@@ -33,7 +33,6 @@ final class CommentViewController: BaseViewController<CommentView> {
   }
   
   var feedId: Int = 6
-  var userId: Int = 1
   var commentId: Int?
   
   // MARK: - Life Cycles
@@ -164,9 +163,8 @@ final class CommentViewController: BaseViewController<CommentView> {
   @objc private func regitstButtonDidTap(_ sender: UIButton) {
     if let content = self.containerView.commentTextView.text {
       self.interactor?.requestAddComment(
-        comment: AddCommentRequest(
+        comment: AddCommentDTO(
           postId: self.feedId,
-          userId: self.userId,
           content: content,
           commentId: self.commentId
         )

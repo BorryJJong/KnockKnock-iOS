@@ -37,19 +37,8 @@ struct Comment: Decodable {
   var isReply: Bool = false
 }
 
-struct AddCommentRequest: Encodable {
+struct AddCommentDTO: Encodable {
   let postId: Int
-  let userId: Int
   let content: String
   let commentId: Int?
-}
-
-struct AddCommentResponse: Decodable {
-  let code: Int
-  let message: String
-}
-
-struct DeleteCommentResponse: Decodable {
-  let code: Int
-  let message: String
 }

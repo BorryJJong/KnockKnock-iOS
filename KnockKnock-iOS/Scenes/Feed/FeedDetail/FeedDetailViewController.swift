@@ -25,34 +25,37 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   // MARK: - Properties
   
   var interactor: FeedDetailInteractorProtocol?
-  
+
+  var feedId: Int = 6
   var feedDetail: FeedDetail? {
     didSet {
-      self.containerView.postCollectionView.reloadData()
       if let feed = feedDetail?.feed {
         self.containerView.navigationView.bind(feed: feed)
+        self.feedId = feed.id
+        self.containerView.bind(isLike: feed.isLike)
       }
+      self.containerView.postCollectionView.reloadData()
+      self.containerView.layoutIfNeeded()
     }
   }
-  var feedId: Int = 6
-  var userId: Int = 1
+
   var commentId: Int?
-  var like: [Like.Info] = [] {
-    didSet {
-      UIView.performWithoutAnimation {
-        self.containerView.postCollectionView.reloadSections(
-          IndexSet(integer: FeedDetailSection.like.rawValue)
-        )
-      }
-    }
-  }
-  
   var allCommentsCount: Int = 0
   var visibleComments: [Comment] = [] {
     didSet {
       UIView.performWithoutAnimation {
         self.containerView.postCollectionView.reloadSections(
           IndexSet(integer: FeedDetailSection.comment.rawValue)
+        )
+      }
+    }
+  }
+
+  var like: [Like.Info] = [] {
+    didSet {
+      UIView.performWithoutAnimation {
+        self.containerView.postCollectionView.reloadSections(
+          IndexSet(integer: FeedDetailSection.like.rawValue)
         )
       }
     }
@@ -101,6 +104,9 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     }
     self.containerView.registButton.do {
       $0.addTarget(self, action: #selector(self.registButtonDidTap(_:)), for: .touchUpInside)
+    }
+    self.containerView.likeButton.do {
+      $0.addTarget(self, action: #selector(self.likeButtonDidTap(_:)), for: .touchUpInside)
     }
     self.addKeyboardNotification()
     self.hideKeyboardWhenTappedAround()
@@ -163,9 +169,8 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   @objc private func registButtonDidTap(_ sender: UIButton) {
     if let content = self.containerView.commentTextView.text {
       self.interactor?.requestAddComment(
-        comment: AddCommentRequest(
+        comment: AddCommentDTO(
           postId: self.feedId,
-          userId: self.userId,
           content: content,
           commentId: self.commentId
         )
@@ -180,7 +185,23 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     self.commentId = sender.tag
     self.containerView.commentTextView.becomeFirstResponder()
   }
-  
+
+  @objc func likeButtonDidTap(_ sender: UIButton) {
+    sender.isSelected.toggle()
+
+    if sender.isSelected {
+
+      self.interactor?.requestLike(
+        feedId: self.feedId
+      )
+    } else {
+
+      self.interactor?.requestLikeCancel(
+        feedId: self.feedId
+      )
+    }
+  }
+
   private func commentDeleteButtonDidTap(commentId: Int) {
     self.showAlert(
       content: "댓글을 삭제하시겠습니까?",
@@ -470,7 +491,7 @@ extension FeedDetailViewController: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     if indexPath.section == FeedDetailSection.like.rawValue {
       if indexPath.item == self.like.count {
-        self.interactor?.navigateToLikeDetail(source: self)
+        self.interactor?.navigateToLikeDetail()
       }
     }
   }
