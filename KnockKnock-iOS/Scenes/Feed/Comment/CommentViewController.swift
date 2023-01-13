@@ -15,7 +15,6 @@ protocol CommentViewProtocol {
   var interactor: CommentInteractorProtocol? { get set }
   
   func fetchVisibleComments(comments: [Comment])
-  func deleteComment()
 }
 
 final class CommentViewController: BaseViewController<CommentView> {
@@ -27,8 +26,9 @@ final class CommentViewController: BaseViewController<CommentView> {
   
   var visibleComments: [Comment] = [] {
     didSet {
-      self.containerView.commentCollectionView.reloadData()
-      self.containerView.layoutIfNeeded()
+      UIView.performWithoutAnimation {
+        self.containerView.commentCollectionView.reloadData()
+      }
     }
   }
   
@@ -148,10 +148,7 @@ final class CommentViewController: BaseViewController<CommentView> {
   }
   
   @objc private func replyMoreButtonDidTap(_ sender: UIButton) {
-    self.visibleComments[sender.tag].isOpen.toggle()
-    
-    self.interactor?.fetchVisibleComments(comments: self.visibleComments)
-    self.containerView.commentCollectionView.reloadData()
+    self.interactor?.toggleVisibleStatus(commentId: sender.tag)
   }
   
   private func commentDeleteButtonDidTap(commentId: Int) {
@@ -185,10 +182,6 @@ extension CommentViewController: CommentViewProtocol {
   func fetchVisibleComments(comments: [Comment]) {
     self.visibleComments = comments
   }
-  
-  func deleteComment() {
-    self.interactor?.fetchAllComments(feedId: self.feedId)
-  }
 }
 
 // MARK: - CollectionView Delegate, DataSource
@@ -214,7 +207,7 @@ extension CommentViewController: UICollectionViewDataSource {
     cell.bind(comment: self.visibleComments[indexPath.item])
     
     cell.replyMoreButton.do {
-      $0.tag = indexPath.item
+      $0.tag = commentId
       $0.addTarget(
         self,
         action: #selector(self.replyMoreButtonDidTap(_:)),

@@ -1,8 +1,8 @@
 //
-//  Feed.swift
+//  FeedList.swift
 //  KnockKnock-iOS
 //
-//  Created by Daye on 2022/06/23.
+//  Created by Daye on 2023/01/10.
 //
 
 import Foundation
