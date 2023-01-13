@@ -13,9 +13,10 @@ protocol FeedDetailInteractorProtocol {
   var router: FeedDetailRouterProtocol? { get set }
 
   func getFeedDeatil(feedId: Int)
+
   func fetchAllComments(feedId: Int)
-  func fetchVisibleComments(comments: [Comment])
   func requestAddComment(comment: AddCommentDTO)
+  func toggleVisibleStatus(commentId: Int)
   func requestDeleteComment(commentId: Int)
 
   func requestLike(feedId: Int)
@@ -32,7 +33,13 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
 
   private var likeList: [Like.Info] = []
 
-  // Business logic
+  /// 서버에서 받아온 전체 댓글 array
+  var comments: [Comment] = []
+
+  /// view에서 보여지는 댓글 array(open 상태 댓글만)
+  var visibleComments: [Comment] = []
+
+  // MARK: - Business logic
 
   func getFeedDeatil(feedId: Int) {
     self.worker?.getFeedDetail(
@@ -84,15 +91,28 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     )
   }
 
-  /// 전체 댓글 data fetch
+  /// 댓글 목록 조회 api로부터 받은 전체 댓글 fetch
   func fetchAllComments(feedId: Int) {
     self.worker?.getAllComments(
       feedId: feedId,
       completionHandler: { [weak self] comments in
-        self?.fetchAllCommentsCount(comments: comments)
-        self?.fetchVisibleComments(comments: comments)
+        self?.comments = comments
+        self?.visibleComments = self?.worker?.fetchVisibleComments(comments: self?.comments) ?? []
+        self?.presenter?.presentVisibleComments(comments: self?.visibleComments ?? [])
       }
     )
+  }
+
+  /// 답글 펼침/숨김 상태 toggle
+  func toggleVisibleStatus(commentId: Int) {
+    guard let index = self.comments.firstIndex(where: {
+      $0.data.id == commentId
+    }) else { return }
+    
+    self.comments[index].isOpen.toggle()
+
+    self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
+    self.presenter?.presentVisibleComments(comments: self.visibleComments)
   }
 
   /// 답글을 포함한 모든 댓글의 수 (헤더에 표기)
@@ -105,12 +125,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.presenter?.presentAllCommentsCount(allCommentsCount: count)
   }
 
-  /// 비숨김 처리 댓글 fetch
-  /// 매번 모든 댓글을 받아오지 않도록 별도 정의
-  func fetchVisibleComments(comments: [Comment]) {
-    self.presenter?.presentVisibleComments(allComments: comments)
-  }
-  
+  /// 댓글 등록
   func requestAddComment(
     comment: AddCommentDTO
   ) {
@@ -124,16 +139,30 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     )
   }
 
+  /// 댓글 삭제
   func requestDeleteComment(commentId: Int) {
     self.worker?.requestDeleteComment(
       commentId: commentId,
       completionHandler: {
-        self.presenter?.presentDeleteComment()
+
+        if let index = self.comments.firstIndex(where: { $0.data.id == commentId }) {
+          self.comments[index].data.isDeleted = true
+        }
+
+        for commentIndex in 0..<self.comments.count {
+          if let replyIndex = self.comments[commentIndex].data.reply?.firstIndex(where: {
+            $0.id == commentId
+          }) {
+            self.comments[commentIndex].data.reply?[replyIndex].isDeleted = true
+          }
+        }
+
+        self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
+        self.presenter?.presentVisibleComments(comments: self.visibleComments)
       }
     )
   }
-
-  // Routing
+  // MARK: - Routing
 
   func navigateToLikeDetail() {
     self.router?.navigateToLikeDetail(like: self.likeList)
