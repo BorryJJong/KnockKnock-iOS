@@ -67,7 +67,7 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
   // MARK: - Button Actions
 
   @objc private func backButtonDidTap(_ sender: UIButton) {
-    self.navigationController?.popViewController(animated: true)
+    self.interactor?.navigateToMyView()
   }
 
   @objc private func confirmButtonDidTap(_ sender: UIButton) {
