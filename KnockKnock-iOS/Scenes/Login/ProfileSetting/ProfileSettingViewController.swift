@@ -96,7 +96,7 @@ extension ProfileSettingViewController: ProfileSettingViewProtocol {
 // MARK: - TextField delegate
 
 extension ProfileSettingViewController: UITextFieldDelegate {
-  func textFieldDidEndEditing(_ textField: UITextField) {
+  func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
     if textField.hasText {
       textField.layer.borderColor = UIColor.green50?.cgColor
       self.containerView.confirmButton.backgroundColor = .green50
@@ -106,5 +106,6 @@ extension ProfileSettingViewController: UITextFieldDelegate {
       self.containerView.confirmButton.backgroundColor = .gray40
       self.containerView.confirmButton.isEnabled = false
     }
+    return true
   }
 }
