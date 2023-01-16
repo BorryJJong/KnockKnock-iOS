@@ -16,8 +16,8 @@ protocol FeedListViewProtocol: AnyObject {
   func fetchFeedList(feedList: FeedList)
   func reloadFeedList()
   func fetchLikeStatus(isToggle: Bool, indexPath: IndexPath)
-  func deleteFeedPost(feedId: Int)
   func toggleLikeButton(feedId: Int)
+  func deleteFeedPost(feedList: FeedList)
 }
 
 final class FeedListViewController: BaseViewController<FeedListView> {
@@ -49,7 +49,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     super.viewDidLoad()
 
     self.interactor?.setNotification()
-    
+
     self.interactor?.fetchFeedList(
       currentPage: self.currentPage,
       pageSize: self.pageSize,
@@ -277,7 +277,7 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
 extension FeedListViewController: FeedListViewProtocol {
   func fetchFeedList(feedList: FeedList) {
     self.isNext = feedList.isNext
-    self.feedListPost += feedList.feeds
+    self.feedListPost = feedList.feeds
   }
 
   func reloadFeedList() {
@@ -289,13 +289,9 @@ extension FeedListViewController: FeedListViewProtocol {
       challengeId: self.challengeId
     )
   }
-
-  func deleteFeedPost(feedId: Int) {
-    if let feedIndex = self.feedListPost.firstIndex(where: {
-      $0.id == feedId
-    }) {
-      self.feedListPost.remove(at: feedIndex)
-    }
+  
+  func deleteFeedPost(feedList: FeedList) {
+    self.feedListPost = feedList.feeds
   }
 
   func fetchLikeStatus(isToggle: Bool, indexPath: IndexPath) {

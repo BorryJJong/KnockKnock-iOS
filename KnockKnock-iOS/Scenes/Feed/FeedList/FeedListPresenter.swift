@@ -12,9 +12,9 @@ protocol FeedListPresenterProtocol {
 
   func presentFetchFeedList(feedList: FeedList)
   func reloadFeedList()
-  func presentDeleteFeed(feedId: Int)
   func presentLikeStatus(isToggle: Bool, indexPath: IndexPath)
   func toggleLikeButton(feedId: Int)
+  func presentDeleteFeed(feedList: FeedList)
 }
 
 final class FeedListPresenter: FeedListPresenterProtocol {
@@ -29,8 +29,8 @@ final class FeedListPresenter: FeedListPresenterProtocol {
     self.view?.reloadFeedList()
   }
 
-  func presentDeleteFeed(feedId: Int) {
-    self.view?.deleteFeedPost(feedId: feedId)
+  func presentDeleteFeed(feedList: FeedList) {
+    self.view?.deleteFeedPost(feedList: feedList)
   }
 
   func presentLikeStatus(isToggle: Bool, indexPath: IndexPath) {

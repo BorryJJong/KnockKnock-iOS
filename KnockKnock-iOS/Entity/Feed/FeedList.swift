@@ -8,7 +8,7 @@
 import Foundation
 
 struct FeedList: Decodable {
-  let feeds: [Post]
+  var feeds: [Post]
   let isNext: Bool
   let total: Int
 

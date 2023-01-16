@@ -12,12 +12,7 @@ protocol FeedListInteractorProtocol {
   var worker: FeedListWorkerProtocol? { get set }
   var router: FeedListRouterProtocol? { get set }
   
-  func fetchFeedList(
-    currentPage: Int,
-    pageSize: Int,
-    feedId: Int,
-    challengeId: Int
-  )
+  func fetchFeedList(currentPage: Int, pageSize: Int, feedId: Int, challengeId: Int)
   func requestDelete(feedId: Int)
 
   func requestLike(feedId: Int, indexPath: IndexPath)
@@ -36,6 +31,8 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   var worker: FeedListWorkerProtocol?
   var router: FeedListRouterProtocol?
 
+  var postList: FeedList?
+
   // Business Logic
 
   func fetchFeedList(
@@ -52,17 +49,38 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       feedId: feedId,
       challengeId: challengeId,
       completionHandler: { [weak self] feedList in
-        self?.presenter?.presentFetchFeedList(feedList: feedList)
+
+        if currentPage == 1 {
+          self?.postList = feedList
+        } else {
+          self?.postList?.feeds += feedList.feeds
+        }
+
+        guard let postList = self?.postList else { return }
+
+        self?.presenter?.presentFetchFeedList(feedList: postList)
       }
     )
   }
 
   func requestDelete(feedId: Int) {
+
     self.worker?.requestDeleteFeed(
       feedId: feedId,
       completionHandler: { isSuccess in
+
         if isSuccess {
-          self.presenter?.presentDeleteFeed(feedId: feedId)
+
+          if let feedIndex = self.postList?.feeds.firstIndex(where: {
+            $0.id == feedId
+          }) {
+            self.postList?.feeds.remove(at: feedIndex)
+          }
+
+          guard let postList = self.postList else { return }
+
+          self.presenter?.presentDeleteFeed(feedList: postList)
+
         } else {
           print(isSuccess)
         }
