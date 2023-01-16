@@ -124,7 +124,6 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   }
 
   private func likeButtonDidTap(sender: UIButton) {
-
     if sender.isSelected {
       self.interactor?.requestLikeCancel(feedId: sender.tag)
     } else {
