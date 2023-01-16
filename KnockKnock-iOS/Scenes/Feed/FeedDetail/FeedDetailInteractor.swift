@@ -18,9 +18,7 @@ protocol FeedDetailInteractorProtocol {
 
   func fetchVisibleComments(comments: [Comment])
   func requestAddComment(comment: AddCommentDTO)
-
   func toggleVisibleStatus(commentId: Int)
-
   func requestDeleteComment(commentId: Int)
   
   func requestLike(feedId: Int)
@@ -138,7 +136,6 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   func fetchVisibleComments(comments: [Comment]) {
     self.presenter?.presentVisibleComments(comments: comments)
   }
-
 
   /// 댓글 등록
   func requestAddComment(
