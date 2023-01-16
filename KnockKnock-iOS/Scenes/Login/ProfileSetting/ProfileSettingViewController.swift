@@ -15,6 +15,11 @@ protocol ProfileSettingViewProtocol: AnyObject {
 
 final class ProfileSettingViewController: BaseViewController<ProfileSettingView> {
 
+  private enum Nickname {
+    static let maxLength = 30
+    static let minLength = 2
+  }
+
   // MARK: - Properties
 
   var interactor: ProfileSettingInteractorProtocol?
@@ -40,11 +45,10 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
     self.navigationItem.title = "프로필 설정"
 
     self.containerView.nicknameTextField.do {
-      $0.delegate = self
       $0.addTarget(
         self,
-        action: #selector(self.textFieldDidTap(_:)),
-        for: .touchDown
+        action: #selector(self.textFieldDidChange(_:)),
+        for: .allEditingEvents
       )
     }
     self.containerView.confirmButton.do {
@@ -60,8 +64,25 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
 
   // MARK: - TextField Actions
 
-  @objc private func textFieldDidTap(_ textField: UITextField) {
-    self.containerView.bind(isClicked: true)
+  @objc private func textFieldDidChange(_ textField: UITextField) {
+    guard let text = textField.text else { return }
+
+    if text.count >= Nickname.minLength && text.count < Nickname.maxLength {
+      textField.layer.borderColor = UIColor.green50?.cgColor
+      self.containerView.confirmButton.backgroundColor = .green50
+      self.containerView.confirmButton.isEnabled = true
+    } else {
+      textField.layer.borderColor = UIColor.gray30?.cgColor
+      self.containerView.confirmButton.backgroundColor = .gray40
+      self.containerView.confirmButton.isEnabled = false
+    }
+
+    // 최대 글자 수 초과시 입력 제한
+    if text.count >= Nickname.maxLength {
+      let index = text.index(text.startIndex, offsetBy: Nickname.maxLength)
+      let newString = text[text.startIndex..<index]
+      textField.text = String(newString)
+    }
   }
 
   // MARK: - Button Actions
@@ -91,21 +112,4 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
 
 extension ProfileSettingViewController: ProfileSettingViewProtocol {
   
-}
-
-// MARK: - TextField delegate
-
-extension ProfileSettingViewController: UITextFieldDelegate {
-  func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-    if textField.hasText {
-      textField.layer.borderColor = UIColor.green50?.cgColor
-      self.containerView.confirmButton.backgroundColor = .green50
-      self.containerView.confirmButton.isEnabled = true
-    } else {
-      textField.layer.borderColor = UIColor.gray30?.cgColor
-      self.containerView.confirmButton.backgroundColor = .gray40
-      self.containerView.confirmButton.isEnabled = false
-    }
-    return true
-  }
 }

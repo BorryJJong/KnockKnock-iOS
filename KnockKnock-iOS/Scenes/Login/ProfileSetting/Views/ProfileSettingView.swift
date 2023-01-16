@@ -91,11 +91,11 @@ final class ProfileSettingView: UIView {
   // MARK: - Bind
   
   func bind(isClicked: Bool) {
-    if isClicked {
-      self.nicknameTextField.layer.borderColor = KKDS.Color.green50.cgColor
-    } else {
-      self.nicknameTextField.layer.borderColor = KKDS.Color.gray40.cgColor
-    }
+//    if isClicked {
+//      self.nicknameTextField.layer.borderColor = KKDS.Color.green50.cgColor
+//    } else {
+//      self.nicknameTextField.layer.borderColor = KKDS.Color.gray40.cgColor
+//    }
   }
   
   // MARK: - Configure
