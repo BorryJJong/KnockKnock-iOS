@@ -12,9 +12,6 @@ protocol FeedListPresenterProtocol {
 
   func presentFetchFeedList(feedList: FeedList)
   func reloadFeedList()
-  func toggleLikeButton(feedId: Int)
-  func presentDeleteFeed(feedList: FeedList)
-  func presentLike(feedList: FeedList)
 }
 
 final class FeedListPresenter: FeedListPresenterProtocol {
@@ -27,17 +24,5 @@ final class FeedListPresenter: FeedListPresenterProtocol {
 
   func reloadFeedList() {
     self.view?.reloadFeedList()
-  }
-
-  func presentDeleteFeed(feedList: FeedList) {
-    self.view?.fetchFeedList(feedList: feedList)
-  }
-
-  func toggleLikeButton(feedId: Int) {
-    self.view?.toggleLikeButton(feedId: feedId)
-  }
-
-  func presentLike(feedList: FeedList) {
-    self.view?.fetchFeedList(feedList: feedList)
   }
 }

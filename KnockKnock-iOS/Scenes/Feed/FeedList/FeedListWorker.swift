@@ -18,7 +18,7 @@ protocol FeedListWorkerProtocol {
   func requestDeleteFeed(feedId: Int, completionHandler: @escaping (Bool) -> Void)
   func requestLike(feedId: Int, completionHandler: @escaping (Bool) -> Void)
   func requestLikeCancel(feedId: Int, completionHandler: @escaping (Bool) -> Void)
-  func checkTokenExisted(completionHandler: @escaping (Bool) -> Void)
+  func checkTokenExisted() -> Bool
 }
 
 final class FeedListWorker: FeedListWorkerProtocol {
@@ -34,7 +34,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
   ) {
     self.feedRepository = feedRepository
     self.likeRepository = likeRepository
-    self.userDataManager =       userDataManager
+    self.userDataManager = userDataManager
   }
   
   func requestDeleteFeed(
@@ -49,9 +49,9 @@ final class FeedListWorker: FeedListWorkerProtocol {
     )
   }
   
-  func checkTokenExisted(completionHandler: @escaping (Bool) -> Void) {
+  func checkTokenExisted() -> Bool {
     let isExisted = self.userDataManager.checkTokenIsExisted()
-    completionHandler(isExisted)
+    return isExisted
   }
   
   func fetchFeedList(

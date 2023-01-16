@@ -15,7 +15,6 @@ protocol FeedListViewProtocol: AnyObject {
   
   func fetchFeedList(feedList: FeedList)
   func reloadFeedList()
-  func toggleLikeButton(feedId: Int)
 }
 
 final class FeedListViewController: BaseViewController<FeedListView> {
@@ -25,15 +24,14 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   var interactor: FeedListInteractorProtocol?
 
   private var isNext: Bool = true
-
   private var feedListPost: [FeedList.Post] = [] {
     didSet {
       self.containerView.feedListCollectionView.reloadData()
     }
   }
+
   private var currentPage: Int = 1
   private var pageSize: Int = 5
-  
   var challengeId: Int = 0
   var feedId: Int = 2
 
@@ -276,30 +274,11 @@ extension FeedListViewController: FeedListViewProtocol {
   }
 
   func reloadFeedList() {
-    self.feedListPost = []
     self.interactor?.fetchFeedList(
       currentPage: self.currentPage,
       pageSize: self.pageSize,
       feedId: self.feedId,
       challengeId: self.challengeId
     )
-  }
-
-  func toggleLikeButton(feedId: Int) {
-    let post = self.feedListPost.enumerated().filter {
-      $0.1.id == feedId
-    }.map { $0.0 }
-
-    post.forEach {
-      self.feedListPost[$0].isLike.toggle()
-
-      let likeCount = self.containerView.setLikeButtonTitle(
-        currentNum: self.feedListPost[$0].blogLikeCount,
-        isSelected: self.feedListPost[$0].isLike
-      )
-
-      self.feedListPost[$0].blogLikeCount = likeCount
-      
-    }
   }
 }

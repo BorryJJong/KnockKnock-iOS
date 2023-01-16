@@ -57,7 +57,6 @@ final class FeedListInteractor: FeedListInteractorProtocol {
         }
 
         guard let postList = self?.postList else { return }
-
         self?.presenter?.presentFetchFeedList(feedList: postList)
       }
     )
@@ -70,7 +69,6 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       completionHandler: { isSuccess in
 
         if isSuccess {
-
           if let feedIndex = self.postList?.feeds.firstIndex(where: {
             $0.id == feedId
           }) {
@@ -78,11 +76,10 @@ final class FeedListInteractor: FeedListInteractorProtocol {
           }
 
           guard let postList = self.postList else { return }
-
-          self.presenter?.presentDeleteFeed(feedList: postList)
+          self.presenter?.presentFetchFeedList(feedList: postList)
 
         } else {
-          print(isSuccess)
+          print(isSuccess) // error
         }
       }
     )
@@ -93,47 +90,45 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     self.postList?.toggleIsLike(feedId: feedId)
 
     guard let postList = self.postList else { return }
-
-    self.presenter?.presentLike(feedList: postList)
+    self.presenter?.presentFetchFeedList(feedList: postList)
   }
 
   func requestLike(feedId: Int) {
-    self.worker?.checkTokenExisted(completionHandler: { isExisted in
-      if isExisted {
-        self.worker?.requestLike(
-          feedId: feedId,
-          completionHandler: { result in
-            if result {
-              self.toggleLike(feedId: feedId)
-            } else {
-              // error
-            }
+    guard let isExistedUser = self.worker?.checkTokenExisted() else { return }
+
+    if isExistedUser {
+      self.worker?.requestLike(
+        feedId: feedId,
+        completionHandler: { result in
+          if result {
+            self.toggleLike(feedId: feedId)
+          } else {
+            // error
           }
-        )
-      } else {
-        self.router?.navigateToLoginView()
-      }
-    })
+        }
+      )
+    } else {
+      self.router?.navigateToLoginView()
+    }
   }
   
   func requestLikeCancel(feedId: Int) {
-    self.worker?.checkTokenExisted(completionHandler: { isExisted in
-      if isExisted {
-        
-        self.worker?.requestLikeCancel(
-          feedId: feedId,
-          completionHandler: {  result in
-            if result {
-              self.toggleLike(feedId: feedId)
-            } else {
-              // error
-            }
+    guard let isExistedUser = self.worker?.checkTokenExisted() else { return }
+
+    if isExistedUser {
+      self.worker?.requestLikeCancel(
+        feedId: feedId,
+        completionHandler: {  result in
+          if result {
+            self.toggleLike(feedId: feedId)
+          } else {
+            // error
           }
-        )
-      } else {
-        self.router?.navigateToLoginView()
-      }
-    })
+        }
+      )
+    } else {
+      self.router?.navigateToLoginView()
+    }
   }
 
   // Routing
@@ -196,6 +191,6 @@ final class FeedListInteractor: FeedListInteractorProtocol {
 
   @objc private func getFeedId(_ notification: Notification) {
     guard let feedId = notification.object as? Int else { return }
-    self.presenter?.toggleLikeButton(feedId: feedId)
+    self.toggleLike(feedId: feedId)
   }
 }
