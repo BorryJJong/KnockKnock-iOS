@@ -15,8 +15,8 @@ protocol FeedListInteractorProtocol {
   func fetchFeedList(currentPage: Int, pageSize: Int, feedId: Int, challengeId: Int)
   func requestDelete(feedId: Int)
 
-  func requestLike(feedId: Int, indexPath: IndexPath)
-  func requestLikeCancel(feedId: Int, indexPath: IndexPath)
+  func requestLike(feedId: Int)
+  func requestLikeCancel(feedId: Int)
 
   func navigateToFeedMain()
   func navigateToFeedDetail(feedId: Int)
@@ -88,14 +88,23 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     )
   }
 
-  func requestLike(feedId: Int, indexPath: IndexPath) {
+  func toggleLike(feedId: Int) {
+
+    self.postList?.toggleIsLike(feedId: feedId)
+
+    guard let postList = self.postList else { return }
+
+    self.presenter?.presentLike(feedList: postList)
+  }
+
+  func requestLike(feedId: Int) {
     self.worker?.checkTokenExisted(completionHandler: { isExisted in
       if isExisted {
         self.worker?.requestLike(
           feedId: feedId,
           completionHandler: { result in
             if result {
-              self.presenter?.presentLikeStatus(isToggle: isExisted, indexPath: indexPath)
+              self.toggleLike(feedId: feedId)
             } else {
               // error
             }
@@ -103,12 +112,11 @@ final class FeedListInteractor: FeedListInteractorProtocol {
         )
       } else {
         self.router?.navigateToLoginView()
-        self.presenter?.presentLikeStatus(isToggle: isExisted, indexPath: indexPath)
       }
     })
   }
   
-  func requestLikeCancel(feedId: Int, indexPath: IndexPath) {
+  func requestLikeCancel(feedId: Int) {
     self.worker?.checkTokenExisted(completionHandler: { isExisted in
       if isExisted {
         
@@ -116,7 +124,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
           feedId: feedId,
           completionHandler: {  result in
             if result {
-              self.presenter?.presentLikeStatus(isToggle: isExisted, indexPath: indexPath)
+              self.toggleLike(feedId: feedId)
             } else {
               // error
             }
@@ -124,7 +132,6 @@ final class FeedListInteractor: FeedListInteractorProtocol {
         )
       } else {
         self.router?.navigateToLoginView()
-        self.presenter?.presentLikeStatus(isToggle: isExisted, indexPath: indexPath)
       }
     })
   }

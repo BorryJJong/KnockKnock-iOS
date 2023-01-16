@@ -15,9 +15,7 @@ protocol FeedListViewProtocol: AnyObject {
   
   func fetchFeedList(feedList: FeedList)
   func reloadFeedList()
-  func fetchLikeStatus(isToggle: Bool, indexPath: IndexPath)
   func toggleLikeButton(feedId: Int)
-  func deleteFeedPost(feedList: FeedList)
 }
 
 final class FeedListViewController: BaseViewController<FeedListView> {
@@ -27,6 +25,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   var interactor: FeedListInteractorProtocol?
 
   private var isNext: Bool = true
+
   private var feedListPost: [FeedList.Post] = [] {
     didSet {
       self.containerView.feedListCollectionView.reloadData()
@@ -126,13 +125,12 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     self.interactor?.navigateToCommentView(feedId: sender.tag)
   }
 
-  private func likeButtonDidTap(sender: UIButton, indexPath: IndexPath) {
-    sender.isEnabled = false
+  private func likeButtonDidTap(sender: UIButton) {
 
     if sender.isSelected {
-      self.interactor?.requestLikeCancel(feedId: sender.tag, indexPath: indexPath)
+      self.interactor?.requestLikeCancel(feedId: sender.tag)
     } else {
-      self.interactor?.requestLike(feedId: sender.tag, indexPath: indexPath)
+      self.interactor?.requestLike(feedId: sender.tag)
     }
   }
 }
@@ -174,10 +172,7 @@ extension FeedListViewController: UICollectionViewDataSource {
     cell.likeButton.addAction(
       for: .touchUpInside,
       closure: {
-        self.likeButtonDidTap(
-          sender: $0,
-          indexPath: indexPath
-        )
+        self.likeButtonDidTap(sender: $0)
       }
     )
 
@@ -288,32 +283,6 @@ extension FeedListViewController: FeedListViewProtocol {
       feedId: self.feedId,
       challengeId: self.challengeId
     )
-  }
-  
-  func deleteFeedPost(feedList: FeedList) {
-    self.feedListPost = feedList.feeds
-  }
-
-  func fetchLikeStatus(isToggle: Bool, indexPath: IndexPath) {
-
-    let collectionView = self.containerView.feedListCollectionView
-
-    guard let cell = collectionView.cellForItem(
-      at: indexPath
-    ) as? FeedListCell else { return }
-
-    if isToggle {
-      cell.likeButton.isSelected.toggle()
-
-      let title = self.containerView.setLikeButtonTitle(
-        currentNum: cell.likeButton.titleLabel?.text,
-        isSelected: cell.likeButton.isSelected
-      )
-
-      cell.likeButton.setTitle(title, for: .normal)
-    }
-    
-    cell.likeButton.isEnabled = true
   }
 
   func toggleLikeButton(feedId: Int) {
