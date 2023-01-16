@@ -31,7 +31,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   var worker: FeedListWorkerProtocol?
   var router: FeedListRouterProtocol?
 
-  var postList: FeedList?
+  var feedListData: FeedList?
 
   // Business Logic
 
@@ -51,13 +51,13 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       completionHandler: { [weak self] feedList in
 
         if currentPage == 1 {
-          self?.postList = feedList
+          self?.feedListData = feedList
         } else {
-          self?.postList?.feeds += feedList.feeds
+          self?.feedListData?.feeds += feedList.feeds
         }
 
-        guard let postList = self?.postList else { return }
-        self?.presenter?.presentFetchFeedList(feedList: postList)
+        guard let feedListData = self?.feedListData else { return }
+        self?.presenter?.presentFetchFeedList(feedList: feedListData)
       }
     )
   }
@@ -69,14 +69,14 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       completionHandler: { isSuccess in
 
         if isSuccess {
-          if let feedIndex = self.postList?.feeds.firstIndex(where: {
+          if let feedIndex = self.feedListData?.feeds.firstIndex(where: {
             $0.id == feedId
           }) {
-            self.postList?.feeds.remove(at: feedIndex)
+            self.feedListData?.feeds.remove(at: feedIndex)
           }
 
-          guard let postList = self.postList else { return }
-          self.presenter?.presentFetchFeedList(feedList: postList)
+          guard let feedListData = self.feedListData else { return }
+          self.presenter?.presentFetchFeedList(feedList: feedListData)
 
         } else {
           print(isSuccess) // error
@@ -87,10 +87,10 @@ final class FeedListInteractor: FeedListInteractorProtocol {
 
   func toggleLike(feedId: Int) {
 
-    self.postList?.toggleIsLike(feedId: feedId)
+    self.feedListData?.toggleIsLike(feedId: feedId)
 
-    guard let postList = self.postList else { return }
-    self.presenter?.presentFetchFeedList(feedList: postList)
+    guard let feedListData = self.feedListData else { return }
+    self.presenter?.presentFetchFeedList(feedList: feedListData)
   }
 
   func requestLike(feedId: Int) {
