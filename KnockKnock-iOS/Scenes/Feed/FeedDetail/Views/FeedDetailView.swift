@@ -144,6 +144,12 @@ final class FeedDetailView: UIView {
     super.init(coder: aDecoder)
   }
 
+  // MARK: - Bind
+
+  func bind(isLike: Bool) {
+    self.likeButton.isSelected = isLike
+  }
+
   // MARK: - Configure
 
   func setPlaceholder() {

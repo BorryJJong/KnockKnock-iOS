@@ -9,7 +9,7 @@ import Foundation
 
 protocol CommentRepositoryProtocol {
   func requestComments(feedId: Int, completionHandler: @escaping ([CommentResponse]) -> Void)
-  func requestAddComment(comment: AddCommentRequest, completionHandler: @escaping (Bool) -> Void)
+  func requestAddComment(comment: AddCommentDTO, completionHandler: @escaping (Bool) -> Void)
   func requestDeleteComment(commentId: Int, completionHandler: @escaping (Bool) -> Void)
 }
 
@@ -37,7 +37,7 @@ final class CommentRepository: CommentRepositoryProtocol {
   }
 
   func requestAddComment(
-    comment: AddCommentRequest,
+    comment: AddCommentDTO,
     completionHandler: @escaping (Bool) -> Void
   ) {
 
@@ -70,15 +70,12 @@ final class CommentRepository: CommentRepositoryProtocol {
     commentId: Int,
     completionHandler: @escaping (Bool) -> Void
   ) {
-    let parameters = [
-      "id": commentId
-    ] as [String: Any]
 
     KKNetworkManager
       .shared
       .request(
         object: ApiResponseDTO<Bool>.self,
-        router: KKRouter.deleteComment(id: parameters),
+        router: KKRouter.deleteComment(id: commentId),
         success: { response in
           guard let data = response.data else {
             // no data error

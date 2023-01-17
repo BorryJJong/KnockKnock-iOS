@@ -55,7 +55,7 @@ enum KKRouter: URLRequestConvertible {
   // Comment
   case getComment(id: Int)
   case postAddComment(comment: Parameters)
-  case deleteComment(id: Parameters)
+  case deleteComment(id: Int)
 
   // MARK: - HTTP Method
 
@@ -124,7 +124,7 @@ enum KKRouter: URLRequestConvertible {
     // Comment
     case .getComment(let id): return "feed/\(id)/comment"
     case .postAddComment: return "feed/comment"
-    case .deleteComment: return "feed/comment"
+    case .deleteComment(let id): return "feed/comment/\(id)"
 
     }
   }
@@ -165,9 +165,6 @@ enum KKRouter: URLRequestConvertible {
     case let .postAddComment(comment):
       return comment
 
-    case let .deleteComment(id):
-      return id
-
     case .getChallengeDetail,
          .getChallengeResponse,
          .getChallengeTitles,
@@ -178,6 +175,7 @@ enum KKRouter: URLRequestConvertible {
          .getLikeList,
          .postFeed,
          .postLogOut,
+         .deleteComment,
          .deleteFeed,
          .deleteWithdraw,
          .getComment:
@@ -194,7 +192,8 @@ enum KKRouter: URLRequestConvertible {
       let multipartFormData = MultipartFormData()
 
       let content = feedWriteForm.content.data(using: .utf8) ?? Data()
-      let storeAddress = feedWriteForm.storeAddress.data(using: .utf8) ?? Data()
+      let storeAddress = feedWriteForm.storeAddress?.data(using: .utf8)
+      let storeName = feedWriteForm.storeName?.data(using: .utf8)
       let locationX = feedWriteForm.locationX.data(using: .utf8) ?? Data()
       let locationY = feedWriteForm.locationY.data(using: .utf8) ?? Data()
       let scale = feedWriteForm.scale.data(using: .utf8) ?? Data()
@@ -203,7 +202,11 @@ enum KKRouter: URLRequestConvertible {
       let images = feedWriteForm.images.map { $0.pngData() ?? Data() }
 
       multipartFormData.append(content, withName: "content")
-      multipartFormData.append(storeAddress, withName: "storeAddress")
+      if let storeName = storeName,
+         let storeAddress = storeAddress {
+        multipartFormData.append(storeAddress, withName: "storeAddress")
+        multipartFormData.append(storeName, withName: "storeName")
+      }
       multipartFormData.append(locationX, withName: "locationX")
       multipartFormData.append(locationY, withName: "locationY")
       multipartFormData.append(scale, withName: "scale")
@@ -251,7 +254,7 @@ enum KKRouter: URLRequestConvertible {
       case .deleteWithdraw, .postLogOut:
         request = try JSONEncoding.default.encode(request)
         
-      case .postFeedLike, .deleteFeedLike, .deleteFeed:
+      case .postFeedLike, .deleteFeedLike, .deleteFeed, .deleteComment:
         request = try JSONEncoding.default.encode(request)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 
