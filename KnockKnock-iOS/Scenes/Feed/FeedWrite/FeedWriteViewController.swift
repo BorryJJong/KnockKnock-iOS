@@ -139,7 +139,7 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   // MARK: - ImagePicker
 
   func callImagePicker() {
-    self.selectedImages = []
+    var images: [UIImage] = []
 
     let picker = ImagePickerManager.shared.setImagePicker()
 
@@ -147,7 +147,9 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
       for item in items {
         switch item {
         case let .photo(photo):
-          self.selectedImages.append(photo.image)
+          images.append(photo.image)
+          self.selectedImages = images
+
           self.containerView.photoCollectionView.reloadData()
         default:
           print("error")
