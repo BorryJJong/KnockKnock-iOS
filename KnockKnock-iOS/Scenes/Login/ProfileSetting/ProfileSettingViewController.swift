@@ -8,6 +8,7 @@
 import UIKit
 
 import KKDSKit
+import Then
 
 protocol ProfileSettingViewProtocol: AnyObject {
   var interactor: ProfileSettingInteractorProtocol? { get set }
@@ -23,6 +24,14 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
   // MARK: - Properties
 
   var interactor: ProfileSettingInteractorProtocol?
+
+  var selectedImage: UIImage = KKDS.Image.ic_my_img_86
+
+  lazy var imagePicker = UIImagePickerController().then {
+    $0.sourceType = .photoLibrary
+    $0.allowsEditing = true
+    $0.delegate = self
+  }
 
   // MARK: - Life Cycles
 
@@ -51,6 +60,15 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
         for: .allEditingEvents
       )
     }
+
+    self.containerView.profileButton.do {
+      $0.addTarget(
+        self,
+        action: #selector(self.profileButtonDidTap(_:)),
+        for: .touchUpInside
+      )
+    }
+
     self.containerView.confirmButton.do {
       $0.addTarget(
         self,
@@ -58,6 +76,7 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
         for: .touchUpInside
       )
     }
+
     self.addKeyboardNotification()
     self.hideKeyboardWhenTappedAround()
   }
@@ -140,12 +159,16 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
     self.interactor?.navigateToMyView()
   }
 
+  @objc private func profileButtonDidTap(_ sender: UIButton) {
+    self.present(self.imagePicker, animated: true)
+  }
+
   @objc private func confirmButtonDidTap(_ sender: UIButton) {
     let nickname = self.containerView.nicknameTextField.text ?? ""
 
     self.interactor?.requestSignUp(
       nickname: nickname,
-      image: ""
+      image: self.selectedImage
     )
 
     self.showAlert(
@@ -161,4 +184,25 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
 
 extension ProfileSettingViewController: ProfileSettingViewProtocol {
   
+}
+
+// MARK: - ImagePicker Delegate
+
+extension ProfileSettingViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+
+  func imagePickerController(
+    _ picker: UIImagePickerController,
+    didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
+  ) {
+
+    if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+      self.selectedImage = editedImage
+    } else if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+      self.selectedImage = originalImage
+    }
+
+    self.containerView.setProfileImage(image: self.selectedImage)
+
+    picker.dismiss(animated: true, completion: nil)
+  }
 }

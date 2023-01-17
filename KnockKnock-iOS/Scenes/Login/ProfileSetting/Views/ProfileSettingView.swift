@@ -88,6 +88,12 @@ final class ProfileSettingView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  // MARK: - Bind
+
+  func setProfileImage(image: UIImage) {
+    self.profileImageView.image = image
+  }
+
   // MARK: - Configure
   
   private func setupConstraints() {
