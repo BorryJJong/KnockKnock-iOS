@@ -75,7 +75,7 @@ final class HomeViewController: BaseViewController<HomeView> {
 
   // MARK: - button action
 
-  @objc func didTapMoreButton(_ sender: UIButton) {
+  @objc func moreButtonDidTap(_ sender: UIButton) {
     let section = HomeSection(rawValue: sender.tag)
     if section == .store {
       self.interactor?.navigateToStoreListView()
@@ -156,11 +156,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         challengeList: self.challengeList,
         selectedIndex: indexPath
       )
-
-      // hot post reload
-
-//    case .popularPost:
-
+      // popular section reload
 
     default:
       print("error")
@@ -188,7 +184,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
       header.moreButton.tag = indexPath.section
       header.moreButton.addTarget(
         self,
-        action: #selector(didTapMoreButton(_:)),
+        action: #selector(moreButtonDidTap(_:)),
         for: .touchUpInside
       )
       
@@ -199,6 +195,13 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         withType: PopularFooterCollectionReusableView.self,
         for: indexPath
       )
+
+     footer.morePostButton.addAction(
+        for: .touchUpInside,
+        closure: { _ in
+          self.tabBarController?.selectedIndex = Tab.feed.rawValue
+        }
+     )
 
       return footer
 
