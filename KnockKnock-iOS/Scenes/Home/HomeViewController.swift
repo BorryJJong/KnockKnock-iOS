@@ -12,6 +12,8 @@ import KKDSKit
 
 protocol HomeViewProtocol: AnyObject {
   var interactor: HomeInteractorProtocol? { get set }
+
+  func fetchHotPostList(hotPostList: [HotPost])
 }
 
 final class HomeViewController: BaseViewController<HomeView> {
@@ -20,11 +22,20 @@ final class HomeViewController: BaseViewController<HomeView> {
 
   var interactor: HomeInteractorProtocol?
 
+  var hotPostList: [HotPost] = [] {
+    didSet {
+      self.containerView.homeCollectionView.reloadSections(
+        IndexSet(integer: HomeSection.popularPost.rawValue)
+      )
+    }
+  }
+
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setupConfigure()
+    self.interactor?.fetchHotpost(challengeId: 0) // challengeId 추후 변경
   }
 
   // MARK: - Configure
@@ -70,7 +81,9 @@ final class HomeViewController: BaseViewController<HomeView> {
 // MARK: - HomeViewProtocol
 
 extension HomeViewController: HomeViewProtocol {
-
+  func fetchHotPostList(hotPostList: [HotPost]) {
+    self.hotPostList = hotPostList
+  }
 }
 
 // MARK: - CollectionView DataSource, Delegate
@@ -86,8 +99,11 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     case .main, .tag:
       return 1
 
-    case .event, .banner, .popularPost, .store:
+    case .event, .banner, .store:
       return 6
+
+    case .popularPost:
+      return self.hotPostList.count
 
     default:
       return 1
@@ -184,6 +200,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         withType: PopularPostCell.self,
         for: indexPath
       )
+      cell.bind(data: self.hotPostList[indexPath.item])
 
       return cell
 

@@ -8,9 +8,20 @@
 import UIKit
 
 protocol HomeWorkerProtocol {
-
+  func fetchHotPostList(completionHandler: @escaping ([HotPost]) -> Void)
 }
 
 final class HomeWorker: HomeWorkerProtocol {
-  
+
+  private let homeRepository: HomeRepositoryProtocol
+
+  init(homeRepository: HomeRepositoryProtocol) {
+    self.homeRepository = homeRepository
+  }
+
+  func fetchHotPostList(completionHandler: @escaping ([HotPost]) -> Void) {
+    self.homeRepository.requestHotPost(completionHandler: { hotPostList in
+      completionHandler(hotPostList)
+    })
+  }
 }

@@ -16,7 +16,8 @@ protocol FeedWriteRepositoryProtocol {
 final class FeedWriteRepository: FeedWriteRepositoryProtocol {
 
   func requestChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void) {
-    KKNetworkManager.shared
+    KKNetworkManager
+      .shared
       .request(
         object: ApiResponseDTO<[ChallengeTitleDTO]>.self,
         router: KKRouter.getChallengeTitles,

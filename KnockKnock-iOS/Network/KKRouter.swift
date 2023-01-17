@@ -25,6 +25,9 @@ enum KKRouter: URLRequestConvertible {
 
   // MARK: - APIs
 
+  // Home
+  case getHotPost
+
   // Account
   case postSocialLogin(signInInfo: Parameters)
   case postSignUp(userInfo: Parameters)
@@ -70,6 +73,7 @@ enum KKRouter: URLRequestConvertible {
          .getChallengeDetail,
          .requestShopAddress,
          .getLikeList,
+         .getHotPost,
          .getComment:
       return .get
 
@@ -99,6 +103,9 @@ enum KKRouter: URLRequestConvertible {
     case .postSignUp: return "users/sign-up"
     case .postLogOut: return "users/logout"
     case .deleteWithdraw: return "users"
+
+    // Home
+    case .getHotPost: return "home/hot-post"
 
     // Challenge
     case .getChallengeResponse: return "challenges"
@@ -178,6 +185,7 @@ enum KKRouter: URLRequestConvertible {
          .deleteComment,
          .deleteFeed,
          .deleteWithdraw,
+         .getHotPost,
          .getComment:
 
       return nil
@@ -236,7 +244,7 @@ enum KKRouter: URLRequestConvertible {
 
       switch self {
 
-      case .getChallengeDetail, .getFeed, .getPromotions, .getComment, .getLikeList:
+      case .getChallengeDetail, .getFeed, .getPromotions, .getComment, .getLikeList, .getHotPost:
         break
 
       case .requestShopAddress:
