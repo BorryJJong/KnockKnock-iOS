@@ -76,7 +76,7 @@ final class ProfileSettingView: UIView {
     $0.backgroundColor = .gray40
     $0.isEnabled = false
   }
-  
+
   // MARK: - Initialize
   
   override init(frame: CGRect) {
@@ -87,17 +87,7 @@ final class ProfileSettingView: UIView {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
-  // MARK: - Bind
-  
-  func bind(isClicked: Bool) {
-//    if isClicked {
-//      self.nicknameTextField.layer.borderColor = KKDS.Color.green50.cgColor
-//    } else {
-//      self.nicknameTextField.layer.borderColor = KKDS.Color.gray40.cgColor
-//    }
-  }
-  
+
   // MARK: - Configure
   
   private func setupConstraints() {
@@ -130,10 +120,10 @@ final class ProfileSettingView: UIView {
       $0.top.equalTo(self.nicknameTextField.snp.bottom).offset(Metric.noticeLabelTopMargin)
       $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.noticeLabelLeadingMargin)
     }
-    
+
     self.confirmButton.snp.makeConstraints {
       $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.confirmButtonLeadingMargin)
-      $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(Metric.confirmButtonBottomMargin)
+      $0.top.equalTo(self.safeAreaLayoutGuide.snp.bottom).inset(Metric.confirmButtonHeight)
       $0.height.equalTo(Metric.confirmButtonHeight)
     }
   }

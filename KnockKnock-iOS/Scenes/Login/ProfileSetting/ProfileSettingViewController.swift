@@ -58,8 +58,57 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
         for: .touchUpInside
       )
     }
-
+    self.addKeyboardNotification()
     self.hideKeyboardWhenTappedAround()
+  }
+
+  // MARK: - Keyboard Show & Hide
+
+  private func addKeyboardNotification() {
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(keyboardWillShow(_:)),
+      name: UIResponder.keyboardWillShowNotification,
+      object: nil
+    )
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(keyboardWillHide(_:)),
+      name: UIResponder.keyboardWillHideNotification,
+      object: nil
+    )
+  }
+
+  @objc private func keyboardWillShow(_ notification: Notification) {
+    self.setContainerViewConstant(notification: notification, isAppearing: true)
+  }
+
+  @objc private func keyboardWillHide(_ notification: Notification) {
+    self.setContainerViewConstant(notification: notification, isAppearing: false)
+  }
+
+  private func setContainerViewConstant(notification: Notification, isAppearing: Bool) {
+    let userInfo = notification.userInfo
+
+    if let keyboardFrame = userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+      let keyboardSize = keyboardFrame.cgRectValue
+      let keyboardHeight = keyboardSize.height
+
+      guard let animationDurationValue = userInfo?[
+        UIResponder
+          .keyboardAnimationDurationUserInfoKey
+      ] as? NSNumber else { return }
+
+      let viewHeightConstant = isAppearing ? (keyboardHeight + 30) : 50
+
+      UIView.animate(withDuration: animationDurationValue.doubleValue) {
+        self.containerView.confirmButton.snp.updateConstraints {
+          $0.top.equalTo(self.containerView.safeAreaLayoutGuide.snp.bottom).inset(viewHeightConstant)
+        }
+        self.containerView.layoutIfNeeded()
+      }
+    }
   }
 
   // MARK: - TextField Actions
