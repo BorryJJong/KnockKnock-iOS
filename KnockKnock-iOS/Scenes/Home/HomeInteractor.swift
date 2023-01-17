@@ -10,6 +10,10 @@ import UIKit
 protocol HomeInteractorProtocol {
   var presenter: HomePresenterProtocol? { get set }
   var worker: HomeWorkerProtocol? { get set }
+  var router: HomeRouterProtocol? { get set }
+
+  func navigateToStoreListView()
+  func navigateToEventPageView()
 }
 
 final class HomeInteractor: HomeInteractorProtocol {
@@ -18,4 +22,13 @@ final class HomeInteractor: HomeInteractorProtocol {
 
   var presenter: HomePresenterProtocol?
   var worker: HomeWorkerProtocol?
+  var router: HomeRouterProtocol?
+
+  func navigateToStoreListView() {
+    self.router?.navigateToStoreListView()
+  }
+
+  func navigateToEventPageView() {
+    self.router?.navigateToEventPageView()
+  }
 }

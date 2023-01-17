@@ -12,7 +12,6 @@ import KKDSKit
 
 protocol HomeViewProtocol: AnyObject {
   var interactor: HomeInteractorProtocol? { get set }
-  var router: HomeRouter? { get set }
 }
 
 final class HomeViewController: BaseViewController<HomeView> {
@@ -20,7 +19,6 @@ final class HomeViewController: BaseViewController<HomeView> {
   // MARK: - Properties
 
   var interactor: HomeInteractorProtocol?
-  var router: HomeRouter?
 
   // MARK: - Life Cycles
 
@@ -62,9 +60,9 @@ final class HomeViewController: BaseViewController<HomeView> {
   @objc func didTapMoreButton(_ sender: UIButton) {
     let section = HomeSection(rawValue: sender.tag)
     if section == .store {
-      self.router?.navigateToStoreListView(source: self)
+      self.interactor?.navigateToStoreListView()
     } else if section == .event {
-      self.router?.navigateToEventPageView(source: self)
+      self.interactor?.navigateToEventPageView()
     }
   }
 }
