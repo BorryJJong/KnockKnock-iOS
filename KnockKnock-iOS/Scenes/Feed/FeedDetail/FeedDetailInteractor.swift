@@ -24,6 +24,7 @@ protocol FeedDetailInteractorProtocol {
   func fetchLikeList(feedId: Int)
 
   func navigateToLikeDetail()
+  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?)
 }
 
 final class FeedDetailInteractor: FeedDetailInteractorProtocol {
@@ -166,5 +167,9 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
 
   func navigateToLikeDetail() {
     self.router?.navigateToLikeDetail(like: self.likeList)
+  }
+
+  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?) {
+    self.router?.presentBottomSheetView(isMyPost: isMyPost, deleteAction: deleteAction)
   }
 }

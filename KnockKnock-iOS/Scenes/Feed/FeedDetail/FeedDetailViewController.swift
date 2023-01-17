@@ -160,6 +160,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   }
   
   @objc private func moreButtonDidTap(_ sender: UIButton) {
+//    self.interactor?.presentBottomSheetView(isMyPost: self.feedDetail.isWriter, deleteAction: <#T##(() -> Void)?##(() -> Void)?##() -> Void#>)
   }
   
   @objc private func replyMoreButtonDidTap(_ sender: UIButton) {
