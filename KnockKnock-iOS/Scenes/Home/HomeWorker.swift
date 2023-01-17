@@ -9,6 +9,7 @@ import UIKit
 
 protocol HomeWorkerProtocol {
   func fetchHotPostList(completionHandler: @escaping ([HotPost]) -> Void)
+  func fetchChallengeList(completionHandler: @escaping([ChallengeTitle]) -> Void)
 }
 
 final class HomeWorker: HomeWorkerProtocol {
@@ -22,6 +23,12 @@ final class HomeWorker: HomeWorkerProtocol {
   func fetchHotPostList(completionHandler: @escaping ([HotPost]) -> Void) {
     self.homeRepository.requestHotPost(completionHandler: { hotPostList in
       completionHandler(hotPostList)
+    })
+  }
+
+  func fetchChallengeList(completionHandler: @escaping([ChallengeTitle]) -> Void) {
+    self.homeRepository.requestChallengeTitles(completionHandler: { challengeList in
+      completionHandler(challengeList)
     })
   }
 }

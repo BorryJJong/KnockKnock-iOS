@@ -169,7 +169,6 @@
 		61A8DC50287E9120000512EC /* CommentRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC4F287E9120000512EC /* CommentRouter.swift */; };
 		61A8DC52287E9131000512EC /* CommentWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC51287E9131000512EC /* CommentWorker.swift */; };
 		61A8DC572881B173000512EC /* UIViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A8DC562881B173000512EC /* UIViewController+Ext.swift */; };
-		61AB2E4828A0A7E900A1AE30 /* HomeTagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AB2E4728A0A7E900A1AE30 /* HomeTagCell.swift */; };
 		61AB2E4C28A36E0400A1AE30 /* LikeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AB2E4B28A36E0400A1AE30 /* LikeDetailView.swift */; };
 		61AB2E4E28A36E3E00A1AE30 /* LikeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AB2E4D28A36E3E00A1AE30 /* LikeDetailViewController.swift */; };
 		61AB2E5428A3775300A1AE30 /* Double+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AB2E5328A3775300A1AE30 /* Double+Ext.swift */; };
@@ -406,7 +405,6 @@
 		61A8DC4F287E9120000512EC /* CommentRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRouter.swift; sourceTree = "<group>"; };
 		61A8DC51287E9131000512EC /* CommentWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentWorker.swift; sourceTree = "<group>"; };
 		61A8DC562881B173000512EC /* UIViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Ext.swift"; sourceTree = "<group>"; };
-		61AB2E4728A0A7E900A1AE30 /* HomeTagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTagCell.swift; sourceTree = "<group>"; };
 		61AB2E4B28A36E0400A1AE30 /* LikeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeDetailView.swift; sourceTree = "<group>"; };
 		61AB2E4D28A36E3E00A1AE30 /* LikeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeDetailViewController.swift; sourceTree = "<group>"; };
 		61AB2E5328A3775300A1AE30 /* Double+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Ext.swift"; sourceTree = "<group>"; };
@@ -789,7 +787,6 @@
 				613856E3289CCA0F00BE347E /* PopularPostCell.swift */,
 				613856E7289CD43F00BE347E /* EventCell.swift */,
 				613856EB289F738D00BE347E /* HomeMainPagerCell.swift */,
-				61AB2E4728A0A7E900A1AE30 /* HomeTagCell.swift */,
 				61A5EA2628B3BEDC00A0214D /* StoreListCell.swift */,
 			);
 			path = Home;
@@ -1606,7 +1603,6 @@
 				61A730E228ED4ECD00C6BD98 /* MyView.swift in Sources */,
 				61AB2E5928A620B700A1AE30 /* EventPageView.swift in Sources */,
 				611BD4C127E767CE007D5C79 /* shopSearchView.swift in Sources */,
-				61AB2E4828A0A7E900A1AE30 /* HomeTagCell.swift in Sources */,
 				6143294D285DD2A0008BDCC9 /* FeedMainFooterCollectionReusableView.swift in Sources */,
 				611BD4A527E3080B007D5C79 /* FeedWriteView.swift in Sources */,
 				61DEFE8E2941AF9000ABC13E /* AlertViewController.swift in Sources */,

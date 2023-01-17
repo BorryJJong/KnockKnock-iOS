@@ -11,6 +11,7 @@ protocol HomePresenterProtocol {
   var view: HomeViewProtocol? { get set }
 
   func presentHotPostList(hotPostList: [HotPost])
+  func presentChallengeList(challengeList: [ChallengeTitle], index: IndexPath?)
 }
 
 final class HomePresenter: HomePresenterProtocol {
@@ -18,5 +19,9 @@ final class HomePresenter: HomePresenterProtocol {
 
   func presentHotPostList(hotPostList: [HotPost]) {
     self.view?.fetchHotPostList(hotPostList: hotPostList)
+  }
+
+  func presentChallengeList(challengeList: [ChallengeTitle], index: IndexPath?) {
+    self.view?.fetchChallengeList(challengeList: challengeList, index: index)
   }
 }

@@ -13,6 +13,8 @@ protocol HomeInteractorProtocol {
   var router: HomeRouterProtocol? { get set }
 
   func fetchHotpost(challengeId: Int)
+  func fetchChallengeList()
+  func setSelectedStatus(challengeList: [ChallengeTitle], selectedIndex: IndexPath)
 
   func navigateToStoreListView()
   func navigateToEventPageView()
@@ -35,6 +37,28 @@ final class HomeInteractor: HomeInteractorProtocol {
       self?.hotPostList = hotPostList
       self?.presenter?.presentHotPostList(hotPostList: hotPostList)
     })
+  }
+
+  func fetchChallengeList() {
+    self.worker?.fetchChallengeList { [weak self] challenges in
+      var challenges = challenges
+      challenges[0].isSelected = true
+
+      self?.presenter?.presentChallengeList(challengeList: challenges, index: nil)
+    }
+  }
+
+  func setSelectedStatus(challengeList: [ChallengeTitle], selectedIndex: IndexPath) {
+    var challenges = challengeList
+
+    for index in 0..<challenges.count {
+      if index == selectedIndex.item {
+        challenges[index].isSelected = true
+      } else {
+        challenges[index].isSelected = false
+      }
+    }
+    presenter?.presentChallengeList(challengeList: challenges, index: selectedIndex)
   }
 
   // Routing

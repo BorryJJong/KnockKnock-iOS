@@ -14,6 +14,10 @@ protocol HomeViewProtocol: AnyObject {
   var interactor: HomeInteractorProtocol? { get set }
 
   func fetchHotPostList(hotPostList: [HotPost])
+  func fetchChallengeList(
+    challengeList: [ChallengeTitle],
+    index: IndexPath?
+  )
 }
 
 final class HomeViewController: BaseViewController<HomeView> {
@@ -30,12 +34,15 @@ final class HomeViewController: BaseViewController<HomeView> {
     }
   }
 
+  var challengeList: [ChallengeTitle] = []
+
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setupConfigure()
     self.interactor?.fetchHotpost(challengeId: 0) // challengeId 추후 변경
+    self.interactor?.fetchChallengeList()
   }
 
   // MARK: - Configure
@@ -50,7 +57,7 @@ final class HomeViewController: BaseViewController<HomeView> {
       $0.registCell(type: HomeMainPagerCell.self)
       $0.registCell(type: StoreCell.self)
       $0.registCell(type: BannerCell.self)
-      $0.registCell(type: HomeTagCell.self)
+      $0.registCell(type: TagCell.self)
       $0.registCell(type: PopularPostCell.self)
       $0.registFooterView(type: PopularFooterCollectionReusableView.self)
       $0.registCell(type: EventCell.self)
@@ -84,6 +91,24 @@ extension HomeViewController: HomeViewProtocol {
   func fetchHotPostList(hotPostList: [HotPost]) {
     self.hotPostList = hotPostList
   }
+
+  func fetchChallengeList(
+    challengeList: [ChallengeTitle],
+    index: IndexPath?
+  ) {
+    self.challengeList = challengeList
+    if let index = index {
+      UIView.performWithoutAnimation {
+        self.containerView.homeCollectionView.reloadSections([HomeSection.tag.rawValue])
+        self.containerView.homeCollectionView.scrollToItem(
+          at: index,
+          at: .centeredHorizontally,
+          animated: false)
+      }
+    } else {
+      self.containerView.homeCollectionView.reloadSections([HomeSection.tag.rawValue])
+    }
+  }
 }
 
 // MARK: - CollectionView DataSource, Delegate
@@ -96,8 +121,11 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     let section = HomeSection(rawValue: section)
 
     switch section {
-    case .main, .tag:
+    case .main:
       return 1
+
+    case .tag:
+      return self.challengeList.count
 
     case .event, .banner, .store:
       return 6
@@ -114,6 +142,29 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     in collectionView: UICollectionView
   ) -> Int {
     return HomeSection.allCases.count
+  }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    didSelectItemAt indexPath: IndexPath
+  ) {
+    let section = HomeSection(rawValue: indexPath.section)
+
+    switch section {
+    case .tag:
+      self.interactor?.setSelectedStatus(
+        challengeList: self.challengeList,
+        selectedIndex: indexPath
+      )
+
+      // hot post reload
+
+//    case .popularPost:
+
+
+    default:
+      print("error")
+    }
   }
 
   func collectionView(
@@ -189,9 +240,10 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
 
     case .tag:
       let cell = collectionView.dequeueCell(
-        withType: HomeTagCell.self,
+        withType: TagCell.self,
         for: indexPath
       )
+      cell.bind(tag: self.challengeList[indexPath.item])
 
       return cell
 
