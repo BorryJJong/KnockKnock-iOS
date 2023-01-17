@@ -231,14 +231,13 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   
   @objc private func keyboardWillShow(_ notification: Notification) {
     self.setCommentsTextViewConstant(isAppearing: true)
-    self.setContainerViewConstant(notification: notification, isAppearing: true)
+//    self.setContainerViewConstant(notification: notification, isAppearing: true)
     self.containerView.likeButton.isHidden = true
   }
   
   @objc private func keyboardWillHide(_ notification: Notification) {
     self.setCommentsTextViewConstant(isAppearing: false)
-    self.setContainerViewConstant(notification: notification, isAppearing: false)
-    
+
     if self.containerView.commentTextView.text.isEmpty {
       self.containerView.likeButton.isHidden = false
       self.containerView.commentTextView.leadingConstraint?.constant = 0
@@ -269,6 +268,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       self.containerView.frame.origin.y = viewHeightConstant
       
       UIView.animate(withDuration: animationDurationValue.doubleValue) {
+        self.setContainerViewConstant(notification: notification, isAppearing: isAppearing)
         self.containerView.layoutIfNeeded()
       }
     }
