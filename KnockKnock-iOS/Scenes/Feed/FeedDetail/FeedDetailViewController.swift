@@ -231,12 +231,13 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   
   @objc private func keyboardWillShow(_ notification: Notification) {
     self.setCommentsTextViewConstant(isAppearing: true)
-//    self.setContainerViewConstant(notification: notification, isAppearing: true)
+    self.setContainerViewConstant(notification: notification, isAppearing: true)
     self.containerView.likeButton.isHidden = true
   }
   
   @objc private func keyboardWillHide(_ notification: Notification) {
     self.setCommentsTextViewConstant(isAppearing: false)
+    self.setContainerViewConstant(notification: notification, isAppearing: false)
 
     if self.containerView.commentTextView.text.isEmpty {
       self.containerView.likeButton.isHidden = false
@@ -246,9 +247,11 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   
   private func setCommentsTextViewConstant(isAppearing: Bool) {
     let textViewHeightConstant = isAppearing ? 15.f : -19.f
-    
-    self.containerView.commentTextView.bottomConstraint?.constant = textViewHeightConstant
-    self.containerView.commentTextView.leadingConstraint?.constant = -20
+
+    self.containerView.commentTextView.snp.updateConstraints {
+      $0.bottom.equalTo(self.containerView.safeAreaLayoutGuide).offset(textViewHeightConstant)
+      $0.leading.equalTo(self.containerView.likeButton.snp.trailing).offset(-20)
+    }
   }
   
   private func setContainerViewConstant(notification: Notification, isAppearing: Bool) {
@@ -264,11 +267,14 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       ] as? NSNumber else { return }
       
       let viewHeightConstant = isAppearing ? (-keyboardHeight) : 0
-      
-      self.containerView.frame.origin.y = viewHeightConstant
-      
+
       UIView.animate(withDuration: animationDurationValue.doubleValue) {
-        self.setContainerViewConstant(notification: notification, isAppearing: isAppearing)
+        self.containerView.postCollectionView.snp.updateConstraints {
+          $0.bottom.equalTo(self.containerView.safeAreaLayoutGuide).offset(viewHeightConstant)
+        }
+        self.containerView.commentTextView.snp.updateConstraints {
+          $0.bottom.equalTo(self.containerView.safeAreaLayoutGuide).offset(viewHeightConstant)
+        }
         self.containerView.layoutIfNeeded()
       }
     }
