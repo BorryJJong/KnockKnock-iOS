@@ -185,7 +185,11 @@ final class FeedEditView: UIView {
   }
 
   func setPromotion(promotion: String) {
-    self.promotionLabel.text = promotion
+    if promotion == "" {
+      self.promotionLabel.text = "프로모션"
+    } else {
+      self.promotionLabel.text = promotion
+    }
   }
 
   func setAddress(name: String, address: String) {
