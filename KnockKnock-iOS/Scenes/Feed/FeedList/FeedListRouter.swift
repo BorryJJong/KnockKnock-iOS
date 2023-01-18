@@ -12,9 +12,10 @@ protocol FeedListRouterProtocol {
 
   func navigateToFeedMain(source: FeedListViewProtocol)
   func navigateToFeedDetail(source: FeedListViewProtocol, feedId: Int)
+  func navigateToFeedEdit(source: FeedListViewProtocol, feedId: Int)
   func navigateToCommentView(feedId: Int, source: FeedListViewProtocol)
   func navigateToLoginView(source: FeedListViewProtocol)
-  func presentBottomSheetView(source: FeedListViewProtocol, isMyPost: Bool, deleteAction: (() -> Void)?)
+  func presentBottomSheetView(source: FeedListViewProtocol, isMyPost: Bool, deleteAction: (() -> Void)?, editAction: (() -> Void)?)
 }
 
 final class FeedListRouter: FeedListRouterProtocol {
@@ -56,6 +57,14 @@ final class FeedListRouter: FeedListRouterProtocol {
     }
   }
 
+  func navigateToFeedEdit(source: FeedListViewProtocol, feedId: Int) {
+    let feedEditViewController = FeedEditRouter.createFeedEdit(feedId: feedId)
+    if let sourceView = source as? UIViewController {
+      feedEditViewController.hidesBottomBarWhenPushed = true
+      sourceView.navigationController?.pushViewController(feedEditViewController, animated: true)
+    }
+  }
+
   func navigateToCommentView(feedId: Int, source: FeedListViewProtocol) {
     let commentViewController = CommentRouter.createCommentView(feedId: feedId)
     if let sourceView = source as? UIViewController {
@@ -73,7 +82,12 @@ final class FeedListRouter: FeedListRouterProtocol {
     }
   }
 
-  func presentBottomSheetView(source: FeedListViewProtocol, isMyPost: Bool, deleteAction: (() -> Void)?) {
+  func presentBottomSheetView(
+    source: FeedListViewProtocol,
+    isMyPost: Bool,
+    deleteAction: (() -> Void)?,
+    editAction: (() -> Void)?
+  ) {
     let bottomSheetViewController = BottomSheetViewController().then {
       if isMyPost {
         $0.setBottomSheetContents(
@@ -96,7 +110,9 @@ final class FeedListRouter: FeedListRouterProtocol {
       }
       $0.modalPresentationStyle = .overFullScreen
       $0.deleteAction = deleteAction
+      $0.editAction = editAction
     }
+
     if let sourceView = source as? UIViewController {
       sourceView.present(
         bottomSheetViewController,

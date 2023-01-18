@@ -8,12 +8,12 @@
 import UIKit
 
 protocol FeedEditRouterProtocol {
-  static func createFeedEdit() -> UIViewController
+  static func createFeedEdit(feedId: Int) -> UIViewController
 }
 
 final class FeedEditRouter: FeedEditRouterProtocol {
 
-  static func createFeedEdit() -> UIViewController {
+  static func createFeedEdit(feedId: Int) -> UIViewController {
     let view = FeedEditViewController()
     let interactor = FeedEditInteractor()
     let presenter = FeedEditPresenter()
@@ -25,6 +25,8 @@ final class FeedEditRouter: FeedEditRouterProtocol {
     interactor.worker = worker
     interactor.presenter = presenter
     presenter.view = view
+
+    view.feedId = feedId
 
     return view
   }

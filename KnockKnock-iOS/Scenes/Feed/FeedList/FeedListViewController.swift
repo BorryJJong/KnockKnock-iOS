@@ -117,6 +117,9 @@ final class FeedListViewController: BaseViewController<FeedListView> {
       isMyPost: isMyPost,
       deleteAction: {
         self.interactor?.requestDelete(feedId: feedId)
+      },
+      editAction: {
+        self.interactor?.navigateToFeedEdit(feedId: feedId, source: self)
       }
     )
   }

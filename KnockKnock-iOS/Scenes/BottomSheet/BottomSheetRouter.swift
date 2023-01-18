@@ -16,6 +16,7 @@ protocol BottomSheetRouterProtocol: AnyObject {
   func passCountyDataToShopSearch(county: String)
 
   func navigateToShopSearch()
+  func dissmissWithCompletion(completion: (() -> Void)?)
 }
 
 final class BottomSheetRouter: BottomSheetRouterProtocol {
@@ -53,5 +54,11 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
     if let sourceView = self.view as? UIViewController {
       sourceView.dismiss(animated: true)
     }
+  }
+
+  func dissmissWithCompletion(completion: (() -> Void)?) {
+//    if let sourceView = self.view as? UIViewController {
+//      sourceView.dismiss(animated: true, completion: completion)
+//    }
   }
 }

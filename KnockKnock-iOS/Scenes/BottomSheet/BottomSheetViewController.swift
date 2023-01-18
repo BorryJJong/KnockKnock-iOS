@@ -21,6 +21,7 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
   
   var router: BottomSheetRouterProtocol?
   var deleteAction: (() -> Void)?
+  var editAction: (() -> Void)?
   
   // MARK: - Life Cycle
   
@@ -172,9 +173,7 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
         )
         
       case .postEdit:
-        self.containerView.hideBottomSheet(view: self)
-        
-        // 추후 케이스 별 코드 작성 필요
+        self.dismiss(animated: true, completion: self.editAction)
         
       default:
         print("Error")

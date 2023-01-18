@@ -19,6 +19,8 @@ final class FeedEditViewController: BaseViewController<FeedEditView> {
 
   var interactor: FeedEditInteractorProtocol?
 
+  var feedId: Int = 0
+
   // MARK: - UIs
 
   private lazy var backButton = UIBarButtonItem(

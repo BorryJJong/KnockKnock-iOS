@@ -25,8 +25,9 @@ protocol FeedListInteractorProtocol {
 
   func navigateToFeedMain(source: FeedListViewProtocol)
   func navigateToFeedDetail(source: FeedListViewProtocol, feedId: Int)
+  func navigateToFeedEdit(feedId: Int, source: FeedListViewProtocol)
   func navigateToCommentView(feedId: Int, source: FeedListViewProtocol)
-  func presentBottomSheetView(source: FeedListViewProtocol, isMyPost: Bool, deleteAction: (() -> Void)?)
+  func presentBottomSheetView(source: FeedListViewProtocol, isMyPost: Bool, deleteAction: (() -> Void)?, editAction: (() -> Void)?)
 }
 
 final class FeedListInteractor: FeedListInteractorProtocol {
@@ -121,6 +122,16 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     )
   }
 
+  func navigateToFeedEdit(
+    feedId: Int,
+    source: FeedListViewProtocol
+  ) {
+    self.router?.navigateToFeedEdit(
+      source: source,
+      feedId: feedId
+    )
+  }
+
   func navigateToFeedMain(source: FeedListViewProtocol) {
     self.router?.navigateToFeedMain(source: source)
   }
@@ -128,12 +139,14 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   func presentBottomSheetView(
     source: FeedListViewProtocol,
     isMyPost: Bool,
-    deleteAction: (() -> Void)?
+    deleteAction: (() -> Void)?,
+    editAction: (() -> Void)?
   ) {
     self.router?.presentBottomSheetView(
       source: source,
       isMyPost: isMyPost,
-      deleteAction: deleteAction
+      deleteAction: deleteAction,
+      editAction: editAction
     )
   }
 }
