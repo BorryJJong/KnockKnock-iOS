@@ -47,6 +47,9 @@ enum KKRouter: URLRequestConvertible {
   case getFeed(id: Int)
   case deleteFeed(id: Int)
 
+  // Feed Edit
+  case postFeedUpdate(data: Parameters)
+
   // Like
   case postFeedLike(id: Int)
   case deleteFeedLike(id: Int)
@@ -73,7 +76,8 @@ enum KKRouter: URLRequestConvertible {
          .getComment:
       return .get
 
-    case .postSocialLogin,
+    case .postFeedUpdate,
+         .postSocialLogin,
          .postSignUp,
          .postLogOut,
          .postAddComment,
@@ -115,6 +119,9 @@ enum KKRouter: URLRequestConvertible {
     case .getFeedBlogPost: return "feed/blog-post"
     case .getFeed(let id): return "feed/\(id)"
     case .deleteFeed(let id): return "feed/\(id)"
+
+    // Feed Edit
+    case .postFeedUpdate(let data): return "feed/update"
 
     // Like
     case .postFeedLike(let id): return "like/feed/\(id)"
@@ -164,6 +171,9 @@ enum KKRouter: URLRequestConvertible {
 
     case let .postAddComment(comment):
       return comment
+
+    case let .postFeedUpdate(data):
+      return data
 
     case .getChallengeDetail,
          .getChallengeResponse,
