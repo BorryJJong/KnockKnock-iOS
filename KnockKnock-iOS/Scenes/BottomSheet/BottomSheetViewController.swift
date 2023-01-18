@@ -9,7 +9,7 @@ import UIKit
 
 import Then
 
-protocol BottomSheetViewProtocol {
+protocol BottomSheetViewProtocol: AnyObject {
 }
 
 final class BottomSheetViewController: BaseViewController<BottomSheetView> {
@@ -154,15 +154,9 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
     if let districtsType = self.districtsType {
       switch districtsType {
       case .city:
-        self.router?.passCityDataToShopSearch(
-          source: self,
-          city: options[indexPath.row]
-        )
+        self.router?.passCityDataToShopSearch(city: options[indexPath.row])
       case .county:
-        self.router?.passCountyDataToShopSearch(
-          source: self,
-          county: options[indexPath.row]
-        )
+        self.router?.passCountyDataToShopSearch(county: options[indexPath.row])
       }
     } else {
       
