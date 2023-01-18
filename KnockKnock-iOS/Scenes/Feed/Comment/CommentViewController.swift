@@ -100,18 +100,10 @@ final class CommentViewController: BaseViewController<CommentView> {
   
   @objc private func keyboardWillShow(_ notification: Notification) {
     self.setContainerViewConstant(notification: notification, isAppearing: true)
-    self.setCommentsTextViewConstant(isAppearing: true)
   }
   
   @objc private func keyboardWillHide(_ notification: Notification) {
     self.setContainerViewConstant(notification: notification, isAppearing: false)
-    self.setCommentsTextViewConstant(isAppearing: false)
-  }
-  
-  private func setCommentsTextViewConstant(isAppearing: Bool) {
-    let textViewHeightConstant = isAppearing ? 15.f : -19.f
-    
-    self.containerView.commentTextView.bottomConstraint?.constant = textViewHeightConstant
   }
   
   private func setContainerViewConstant(notification: Notification, isAppearing: Bool) {
@@ -126,11 +118,18 @@ final class CommentViewController: BaseViewController<CommentView> {
           .keyboardAnimationDurationUserInfoKey
       ] as? NSNumber else { return }
       
-      let viewHeightConstant = isAppearing ? (-keyboardHeight) : 0
-      
-      self.containerView.contentView.frame.origin.y = viewHeightConstant + 100
+      let viewBottomConstant = isAppearing ? (-keyboardHeight) : 0
+      let textViewBottomConstant = isAppearing ? 15.f : -19.f
       
       UIView.animate(withDuration: animationDurationValue.doubleValue) {
+        self.containerView.contentView.snp.updateConstraints {
+          $0.bottom.equalTo(self.containerView.safeAreaLayoutGuide).offset(viewBottomConstant)
+        }
+
+        self.containerView.commentTextView.snp.updateConstraints {
+          $0.bottom.equalTo(self.containerView.contentView).offset(textViewBottomConstant)
+        }
+
         self.containerView.layoutIfNeeded()
       }
     }

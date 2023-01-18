@@ -241,7 +241,10 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
 
     if self.containerView.commentTextView.text.isEmpty {
       self.containerView.likeButton.isHidden = false
-      self.containerView.commentTextView.leadingConstraint?.constant = 0
+      
+      self.containerView.commentTextView.snp.updateConstraints {
+        $0.leading.equalTo(self.containerView.likeButton.snp.trailing)
+      }
     }
   }
   
@@ -266,14 +269,14 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
           .keyboardAnimationDurationUserInfoKey
       ] as? NSNumber else { return }
       
-      let viewHeightConstant = isAppearing ? (-keyboardHeight) : 0
+      let viewBottomConstant = isAppearing ? (-keyboardHeight) : 0
 
       UIView.animate(withDuration: animationDurationValue.doubleValue) {
         self.containerView.postCollectionView.snp.updateConstraints {
-          $0.bottom.equalTo(self.containerView.safeAreaLayoutGuide).offset(viewHeightConstant)
+          $0.bottom.equalTo(self.containerView.safeAreaLayoutGuide).offset(viewBottomConstant)
         }
         self.containerView.commentTextView.snp.updateConstraints {
-          $0.bottom.equalTo(self.containerView.safeAreaLayoutGuide).offset(viewHeightConstant)
+          $0.bottom.equalTo(self.containerView.safeAreaLayoutGuide).offset(viewBottomConstant)
         }
         self.containerView.layoutIfNeeded()
       }
