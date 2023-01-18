@@ -17,7 +17,7 @@ final class FeedEditRouter: FeedEditRouterProtocol {
     let view = FeedEditViewController()
     let interactor = FeedEditInteractor()
     let presenter = FeedEditPresenter()
-    let worker = FeedEditWorker()
+    let worker = FeedEditWorker(feedRepository: FeedRepository())
     let router = FeedEditRouter()
 
     view.interactor = interactor

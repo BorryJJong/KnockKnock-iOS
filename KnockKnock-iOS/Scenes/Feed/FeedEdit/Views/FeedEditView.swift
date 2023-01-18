@@ -133,9 +133,8 @@ final class FeedEditView: UIView {
   }
 
   let contentTextView = UITextView().then {
-    $0.textColor = .gray40
+    $0.textColor = .black
     $0.font = .systemFont(ofSize: 14)
-    $0.text = "내용을 입력해주세요. (글자수 1,000자 이내)"
   }
 
   let doneButton = UIButton().then {
@@ -157,6 +156,29 @@ final class FeedEditView: UIView {
   }
 
   // MARK: - Bind
+
+  func bind(data: FeedDetail?) {
+    guard let challenges = data?.challenges
+      .map({ $0.title })
+      .joined(separator: ", ")
+    else { return }
+
+    self.setTag(tag: challenges)
+
+    if let promotions = data?.promotions
+      .map({ $0.title })
+      .joined(separator: ", ") {
+
+      self.setPromotion(promotion: promotions)
+    }
+
+    self.contentTextView.text = data?.feed?.content
+
+    guard let storeName = data?.feed?.storeName,
+          let storeAddress = data?.feed?.storeAddress else { return }
+
+    self.setAddress(name: storeName, address: storeAddress)
+  }
 
   func setTag(tag: String) {
     self.tagLabel.text = tag
