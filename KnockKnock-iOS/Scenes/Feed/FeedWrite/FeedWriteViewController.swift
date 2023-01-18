@@ -100,33 +100,33 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
   // MARK: - Button Actions
 
-  @objc func tagSelectButtonDidTap(_ sender: UIButton) {
+  @objc private func tagSelectButtonDidTap(_ sender: UIButton) {
     self.interactor?.navigateToProperty(
       source: self,
       propertyType: .tag
     )
   }
 
-  @objc func promotionSelectButtonDidTap(_ sender: UIButton) {
+  @objc private func promotionSelectButtonDidTap(_ sender: UIButton) {
     self.interactor?.navigateToProperty(
       source: self,
       propertyType: .promotion
     )
   }
 
-  @objc func dismissBarButtonDidTap(_ sender: UIBarButtonItem) {
+  @objc private func dismissBarButtonDidTap(_ sender: UIBarButtonItem) {
     self.interactor?.dismissFeedWriteView(source: self)
   }
 
-  @objc func shopSearchButtonDidTap(_ sender: UIButton) {
+  @objc private func shopSearchButtonDidTap(_ sender: UIButton) {
     self.interactor?.navigateToShopSearch(source: self)
   }
 
-  @objc func photoAddButtonDidTap(_ sender: UIButton) {
+  @objc private func photoAddButtonDidTap(_ sender: UIButton) {
     self.callImagePicker()
   }
 
-  @objc func photoDeleteButtonDidTap(_ sender: UIButton) {
+  @objc private func photoDeleteButtonDidTap(_ sender: UIButton) {
     self.selectedImages.remove(at: sender.tag)
     self.containerView.bindPhotoCount(count: self.selectedImages.count)
     self.containerView.photoCollectionView.reloadData()
@@ -138,7 +138,7 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
   // MARK: - ImagePicker
 
-  func callImagePicker() {
+  private func callImagePicker() {
     self.selectedImages = []
 
     let picker = ImagePickerManager.shared.setImagePicker()

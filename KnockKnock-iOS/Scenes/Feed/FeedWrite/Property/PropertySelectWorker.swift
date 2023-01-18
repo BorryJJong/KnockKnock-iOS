@@ -28,7 +28,6 @@ final class PropertySelectWorker: PropertySelectWorkerProtocol {
   func requestTagList(completionHandler: @escaping ([ChallengeTitle]) -> Void) {
     self.repository?.requestChallengeTitles(completionHandler: { response in
       completionHandler(response)
-    }
-    )
+    })
   }
 }

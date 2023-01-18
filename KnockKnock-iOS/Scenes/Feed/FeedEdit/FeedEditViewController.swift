@@ -13,6 +13,9 @@ protocol FeedEditViewProtocol: AnyObject {
   var interactor: FeedEditInteractorProtocol? { get set}
 
   func fetchOriginPost(feedDetail: FeedDetail)
+  func fetchTag(tag: String)
+  func fetchPromotion(promotion: String)
+  func fetchAddress(address: AddressResponse.Documents)
 }
 
 final class FeedEditViewController: BaseViewController<FeedEditView> {
@@ -52,6 +55,24 @@ final class FeedEditViewController: BaseViewController<FeedEditView> {
       $0.leftBarButtonItem = self.backButton
     }
 
+    self.containerView.tagSelectButton.addTarget(
+      self,
+      action: #selector(self.tagSelectButtonDidTap(_:)),
+      for: .touchUpInside
+    )
+
+    self.containerView.promotionSelectButton.addTarget(
+      self,
+      action: #selector(self.promotionSelectButtonDidTap(_:)),
+      for: .touchUpInside
+    )
+
+    self.containerView.shopSearchButton.addTarget(
+      self,
+      action: #selector(self.shopSearchButtonDidTap(_:)),
+      for: .touchUpInside
+    )
+
     self.containerView.contentTextView.delegate = self
     
     self.navigationController?.navigationBar.setDefaultAppearance()
@@ -59,9 +80,22 @@ final class FeedEditViewController: BaseViewController<FeedEditView> {
 
   // MARK: - Buttton Actions
 
-  @objc func backButtonDidTap(_ sender: UIBarButtonItem) {
+  @objc private func backButtonDidTap(_ sender: UIBarButtonItem) {
     self.navigationController?.popViewController(animated: true)
   }
+
+  @objc private func tagSelectButtonDidTap(_ sender: UIButton) {
+    self.interactor?.navigateToProperty(propertyType: .tag)
+  }
+
+  @objc private func promotionSelectButtonDidTap(_ sender: UIButton) {
+    self.interactor?.navigateToProperty(propertyType: .promotion)
+  }
+
+  @objc private func shopSearchButtonDidTap(_ sender: UIButton) {
+    self.interactor?.navigateToShopSearch()
+  }
+
 }
 
 // MARK: - FeedEdit View Protocol
@@ -69,6 +103,21 @@ final class FeedEditViewController: BaseViewController<FeedEditView> {
 extension FeedEditViewController: FeedEditViewProtocol {
   func fetchOriginPost(feedDetail: FeedDetail) {
     self.feedData = feedDetail
+  }
+
+  func fetchTag(tag: String) {
+    self.containerView.setTag(tag: tag)
+  }
+
+  func fetchPromotion(promotion: String) {
+    self.containerView.setPromotion(promotion: promotion)
+  }
+
+  func fetchAddress(address: AddressResponse.Documents) {
+    self.containerView.setAddress(
+      name: address.placeName,
+      address: address.addressName
+    )
   }
 }
 

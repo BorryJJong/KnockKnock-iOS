@@ -14,6 +14,10 @@ protocol FeedEditInteractorProtocol: AnyObject {
 
   func fetchOriginPost(feedId: Int)
   func setCurrentText(text: String)
+
+  func dismissFeedWriteView()
+  func navigateToShopSearch()
+  func navigateToProperty(propertyType: PropertyType)
 }
 
 final class FeedEditInteractor: FeedEditInteractorProtocol {
@@ -24,8 +28,9 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
   var worker: FeedEditWorkerProtocol?
   var presenter: FeedEditPresenterProtocol?
 
-  private var feedDetail: FeedDetail?
-
+  private var promotions: [Promotion] = []
+  private var challenges: [ChallengeTitle] = []
+  private var selectedAddress: AddressResponse.Documents?
   private var postContent: String = ""
 
   // MARK: - Business Logic
@@ -35,7 +40,7 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
     self.worker?.fetchOriginPost(
       feedId: feedId,
       completionHandler: { [weak self] feedDetail in
-        self?.feedDetail = feedDetail
+        self?.setSelectedProperties(feedDetail: feedDetail)
         self?.presenter?.presentOriginPost(feedDetail: feedDetail)
       }
     )
@@ -45,6 +50,81 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
     self.postContent = text
   }
 
-  // MARK: - Routing
+  func setSelectedProperties(feedDetail: FeedDetail) {
 
+    self.worker?.requestPromotionList(completionHandler: { [weak self] result in
+      self?.promotions = result
+      self?.promotions.insert(
+        Promotion(
+          id: 0,
+          type: "없음",
+          isSelected: feedDetail.promotions.count == 0
+        ), at: 0
+      )
+
+      feedDetail.promotions.forEach { selectedPromotion in
+        if let index = self?.promotions.firstIndex(where: {
+          selectedPromotion.promotionId == $0.id
+        }) {
+          self?.promotions[index].isSelected = true
+        }
+      }
+    })
+
+    self.worker?.requestTagList(completionHandler: { [weak self] result in
+      self?.challenges = result
+      self?.challenges.remove(at: 0) // '전체' 컬럼 삭제
+
+      feedDetail.challenges.forEach { selectedChallenge in
+        if let index = self?.challenges.firstIndex(where: {
+          selectedChallenge.challengeId == $0.id
+        }) {
+          self?.challenges[index].isSelected = true
+        }
+      }
+    })
+  }
+
+  // Routing
+
+  func dismissFeedWriteView() {
+    self.router?.dismissFeedWriteView()
+  }
+
+  func navigateToShopSearch() {
+    self.router?.navigateToShopSearch()
+  }
+
+  func navigateToProperty(propertyType: PropertyType) {
+    self.router?.navigateToProperty(
+      propertyType: propertyType,
+      promotionList: self.promotions,
+      tagList: self.challenges
+    )
+  }
+}
+
+// MARK: - Shop Search Delegate
+
+extension FeedEditInteractor: ShopSearchDelegate {
+  func fetchShopData(shopData: AddressResponse.Documents) {
+    self.selectedAddress = shopData
+    self.presenter?.presentShopAddress(address: shopData)
+  }
+}
+
+// MARK: - Property Delegate(태그, 프로모션)
+
+extension FeedEditInteractor: PropertyDelegate {
+  func fetchSelectedPromotion(promotionList: [Promotion]) {
+    self.promotions = promotionList
+
+    self.presenter?.presentSelectedPromotions(promotionList: promotionList)
+  }
+
+  func fetchSelectedTag(tagList: [ChallengeTitle]) {
+    self.challenges = tagList
+
+    self.presenter?.presentSelectedTags(tagList: tagList)
+  }
 }

@@ -8,16 +8,34 @@
 import UIKit
 
 protocol FeedEditRouterProtocol {
+  var view: FeedEditViewProtocol? { get set }
+
   static func createFeedEdit(feedId: Int) -> UIViewController
+
+  func dismissFeedWriteView()
+  func navigateToShopSearch()
+  func navigateToProperty(
+    propertyType: PropertyType,
+    promotionList: [Promotion]?,
+    tagList: [ChallengeTitle]?
+  )
 }
 
 final class FeedEditRouter: FeedEditRouterProtocol {
+
+  weak var view: FeedEditViewProtocol?
+
+  var shopSearchDelegate: ShopSearchDelegate?
+  var propertyDelegate: PropertyDelegate?
 
   static func createFeedEdit(feedId: Int) -> UIViewController {
     let view = FeedEditViewController()
     let interactor = FeedEditInteractor()
     let presenter = FeedEditPresenter()
-    let worker = FeedEditWorker(feedRepository: FeedRepository())
+    let worker = FeedEditWorker(
+      feedRepository: FeedRepository(),
+      feedWriterepository: FeedWriteRepository()
+    )
     let router = FeedEditRouter()
 
     view.interactor = interactor
@@ -25,9 +43,47 @@ final class FeedEditRouter: FeedEditRouterProtocol {
     interactor.worker = worker
     interactor.presenter = presenter
     presenter.view = view
+    router.view = view
 
     view.feedId = feedId
+    router.shopSearchDelegate = interactor
+    router.propertyDelegate = interactor
 
     return view
+  }
+
+  func dismissFeedWriteView() {
+    if let sourceView = self.view as? UIViewController {
+      sourceView.dismiss(animated: true)
+    }
+  }
+
+  func navigateToShopSearch() {
+    if let delegate = self.shopSearchDelegate {
+      let shopSearchViewController = ShopSearchRouter.createShopSearch(delegate: delegate)
+
+      if let sourceView = self.view as? UIViewController {
+        sourceView.navigationController?.pushViewController(shopSearchViewController, animated: true)
+      }
+    }
+  }
+
+  func navigateToProperty(
+    propertyType: PropertyType,
+    promotionList: [Promotion]?,
+    tagList: [ChallengeTitle]?
+  ) {
+    if let delegate = self.propertyDelegate {
+      let propertyViewController = PropertySelectRouter.createPropertySelectView(
+        delegate: delegate,
+        propertyType: propertyType.self,
+        promotionList: promotionList,
+        tagList: tagList
+      )
+
+      if let sourceView = self.view as? UIViewController {
+        sourceView.navigationController?.pushViewController(propertyViewController, animated: true)
+      }
+    }
   }
 }
