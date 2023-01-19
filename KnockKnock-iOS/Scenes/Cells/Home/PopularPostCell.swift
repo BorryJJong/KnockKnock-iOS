@@ -27,6 +27,7 @@ final class PopularPostCell: BaseCollectionViewCell {
     $0.backgroundColor = .gray40
     $0.layer.cornerRadius = 5
     $0.clipsToBounds = true
+    $0.contentMode = .scaleAspectFill
   }
 
   private let gradientImageView = UIImageView().then {
