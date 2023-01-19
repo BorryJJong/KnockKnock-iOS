@@ -14,6 +14,7 @@ protocol HomeRouterProtocol {
   
   func navigateToStoreListView()
   func navigateToEventPageView()
+  func navigateToFeedDetail(feedId: Int)
 }
 
 final class HomeRouter: HomeRouterProtocol {
@@ -49,6 +50,19 @@ final class HomeRouter: HomeRouterProtocol {
     if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.pushViewController(
         eventPageViewController,
+        animated: true
+      )
+    }
+  }
+
+  func navigateToFeedDetail(feedId: Int) {
+    let feedDetailViewController = FeedDetailRouter.createFeedDetail(feedId: feedId)
+
+    feedDetailViewController.hidesBottomBarWhenPushed = true
+
+    if let sourceView = self.view as? UIViewController {
+      sourceView.navigationController?.pushViewController(
+        feedDetailViewController,
         animated: true
       )
     }

@@ -18,6 +18,7 @@ protocol HomeInteractorProtocol {
 
   func navigateToStoreListView()
   func navigateToEventPageView()
+  func navigateToFeedDetail(feedId: Int)
 }
 
 final class HomeInteractor: HomeInteractorProtocol {
@@ -72,5 +73,9 @@ final class HomeInteractor: HomeInteractorProtocol {
 
   func navigateToEventPageView() {
     self.router?.navigateToEventPageView()
+  }
+
+  func navigateToFeedDetail(feedId: Int) {
+    self.router?.navigateToFeedDetail(feedId: feedId)
   }
 }

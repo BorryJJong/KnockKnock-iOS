@@ -163,6 +163,9 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
       )
       self.interactor?.fetchHotpost(challengeId: challengeId)
 
+    case .popularPost:
+      self.interactor?.navigateToFeedDetail(feedId: self.hotPostList[indexPath.item].postId)
+
     default:
       print("error")
     }
