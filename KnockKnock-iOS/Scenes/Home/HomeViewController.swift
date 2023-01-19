@@ -28,9 +28,11 @@ final class HomeViewController: BaseViewController<HomeView> {
 
   var hotPostList: [HotPost] = [] {
     didSet {
-      self.containerView.homeCollectionView.reloadSections(
-        IndexSet(integer: HomeSection.popularPost.rawValue)
-      )
+      UIView.performWithoutAnimation {
+        self.containerView.homeCollectionView.reloadSections(
+          IndexSet(integer: HomeSection.popularPost.rawValue)
+        )
+      }
     }
   }
 
@@ -42,7 +44,7 @@ final class HomeViewController: BaseViewController<HomeView> {
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setupConfigure()
-    self.interactor?.fetchHotpost(challengeId: self.challengeId) // challengeId 추후 변경
+    self.interactor?.fetchHotpost(challengeId: self.challengeId)
     self.interactor?.fetchChallengeList()
   }
 
@@ -151,6 +153,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     didSelectItemAt indexPath: IndexPath
   ) {
     let section = HomeSection(rawValue: indexPath.section)
+    let challengeId = self.challengeList[indexPath.item].id
 
     switch section {
     case .tag:
@@ -158,7 +161,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         challengeList: self.challengeList,
         selectedIndex: indexPath
       )
-      // popular section reload
+      self.interactor?.fetchHotpost(challengeId: challengeId)
 
     default:
       print("error")
@@ -198,12 +201,12 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         for: indexPath
       )
 
-     footer.morePostButton.addAction(
+      footer.morePostButton.addAction(
         for: .touchUpInside,
         closure: { _ in
           self.tabBarController?.selectedIndex = Tab.feed.rawValue
         }
-     )
+      )
 
       return footer
 
