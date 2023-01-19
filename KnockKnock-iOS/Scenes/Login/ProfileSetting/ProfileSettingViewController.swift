@@ -19,6 +19,8 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
 
   var interactor: ProfileSettingInteractorProtocol?
 
+  var profileSettingViewType: ProfileSettingViewType = .update
+
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
@@ -73,17 +75,26 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
   @objc private func confirmButtonDidTap(_ sender: UIButton) {
     let nickname = self.containerView.nicknameTextField.text ?? ""
 
-    self.interactor?.requestSignUp(
-      nickname: nickname,
-      image: ""
-    )
+    switch self.profileSettingViewType {
+    case .update:
+      self.showAlert(content: Alert.profileSetting.message,
+                     confirmActionCompletion: {
+        self.navigationController?.popViewController(animated: true)
+      })
+    case .signUp:
 
-    self.showAlert(
-      content: Alert.profileSetting.message,
-      confirmActionCompletion: {
-        self.interactor?.navigateToMyView()
-      }
-    )
+      self.interactor?.requestSignUp(
+        nickname: nickname,
+        image: ""
+      )
+
+      self.showAlert(
+        content: Alert.profileSetting.message,
+        confirmActionCompletion: {
+          self.interactor?.navigateToMyView()
+        }
+      )
+    }
   }
 }
 
