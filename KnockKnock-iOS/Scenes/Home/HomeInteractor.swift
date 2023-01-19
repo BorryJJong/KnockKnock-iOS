@@ -33,10 +33,13 @@ final class HomeInteractor: HomeInteractorProtocol {
   // Buisiness logic
 
   func fetchHotpost(challengeId: Int) {
-    self.worker?.fetchHotPostList(completionHandler: { [weak self] hotPostList in
-      self?.hotPostList = hotPostList
-      self?.presenter?.presentHotPostList(hotPostList: hotPostList)
-    })
+    self.worker?.fetchHotPostList(
+      challengeId: challengeId,
+      completionHandler: { [weak self] hotPostList in
+        self?.hotPostList = hotPostList
+        self?.presenter?.presentHotPostList(hotPostList: hotPostList)
+      }
+    )
   }
 
   func fetchChallengeList() {

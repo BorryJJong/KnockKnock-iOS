@@ -35,13 +35,14 @@ final class HomeViewController: BaseViewController<HomeView> {
   }
 
   var challengeList: [ChallengeTitle] = []
+  private var challengeId: Int = 0
 
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setupConfigure()
-    self.interactor?.fetchHotpost(challengeId: 0) // challengeId 추후 변경
+    self.interactor?.fetchHotpost(challengeId: self.challengeId) // challengeId 추후 변경
     self.interactor?.fetchChallengeList()
   }
 
@@ -103,7 +104,8 @@ extension HomeViewController: HomeViewProtocol {
         self.containerView.homeCollectionView.scrollToItem(
           at: index,
           at: .centeredHorizontally,
-          animated: false)
+          animated: false
+        )
       }
     } else {
       self.containerView.homeCollectionView.reloadSections([HomeSection.tag.rawValue])

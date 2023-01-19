@@ -8,19 +8,23 @@
 import Foundation
 
 protocol HomeRepositoryProtocol {
-  func requestHotPost(completionHandler: @escaping ([HotPost]) -> Void)
+  func requestHotPost(challengeId: Int, completionHandler: @escaping ([HotPost]) -> Void)
   func requestChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void)
 }
 
 final class HomeRepository: HomeRepositoryProtocol {
 
   /// 인기 게시글 조회
-  func requestHotPost(completionHandler: @escaping ([HotPost]) -> Void) {
+  func requestHotPost(
+    challengeId: Int,
+    completionHandler: @escaping ([HotPost]) -> Void
+  ) {
+
     KKNetworkManager
       .shared
       .request(
         object: ApiResponseDTO<[HotPostDTO]>.self,
-        router: KKRouter.getChallengeTitles,
+        router: KKRouter.getHotPost(challengeId: challengeId),
         success: { response in
           guard let data = response.data else {
             // no data error
