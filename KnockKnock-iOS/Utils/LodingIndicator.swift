@@ -41,7 +41,7 @@ final class LoadingIndicator {
     loadingIndicatorView.loopMode = .loop
   }
 
-  static func hideLoading() {
+  static func hideLoading(isDone: Bool? = false) {
     guard let window = UIApplication.shared.windows.last else { return }
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -53,5 +53,6 @@ final class LoadingIndicator {
       shared.backgroundView?.removeFromSuperview()
 
     }
+
   }
 }

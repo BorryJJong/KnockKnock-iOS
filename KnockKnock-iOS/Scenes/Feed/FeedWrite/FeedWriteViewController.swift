@@ -182,6 +182,7 @@ extension FeedWriteViewController: FeedWriteViewProtocol {
   func showAlertView(isDone: Bool) {
     if isDone {
       self.showAlert(content: "게시글 등록을 완료 하시겠습니까?", confirmActionCompletion: {
+        LoadingIndicator.showLoading()
         self.interactor?.requestUploadFeed(
           source: self,
           content: self.containerView.contentTextView.text,

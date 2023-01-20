@@ -18,7 +18,7 @@ struct FeedDetail: Decodable {
     let id: Int
     let userId: Int
     let content: String
-    let storeAddress: String // optional 처리 필요함
+    let storeAddress: String?
     let storeName: String?
     let locationX: String
     let locationY: String

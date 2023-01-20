@@ -96,7 +96,7 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
     self.worker?.uploadFeed(
       postData: FeedWrite(
         content: content,
-        storeAddress: self.selectedAddress?.addressName ?? "",
+        storeAddress: self.selectedAddress?.addressName,
         storeName: self.selectedAddress?.placeName,
         locationX: self.selectedAddress?.longtitude ?? "",
         locationY: self.selectedAddress?.latitude ?? "",
@@ -104,9 +104,9 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
         promotions: promotions,
         challenges: challenges,
         images: images
-      ),
-      completionHandler: {
+      ), completionHandler: {
         // 게시물 등록이 완료되었습니다
+        LoadingIndicator.hideLoading()
         self.dismissFeedWriteView(source: source)
       }
     )
