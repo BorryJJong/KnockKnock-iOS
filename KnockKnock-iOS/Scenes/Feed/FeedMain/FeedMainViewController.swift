@@ -188,22 +188,15 @@ extension FeedMainViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
+
     switch collectionView.tag {
+
     case CollectionViewTag.tag.rawValue:
       let cell = collectionView.dequeueCell(
         withType: TagCell.self,
         for: indexPath
       )
       cell.bind(tag: self.challengeTitles[indexPath.item])
-      
-      if indexPath.item == 0 {
-        cell.isSelected = true
-        collectionView.selectItem(
-          at: indexPath,
-          animated: false,
-          scrollPosition: .init()
-        )
-      }
       
       return cell
       
@@ -227,10 +220,12 @@ extension FeedMainViewController: UICollectionViewDataSource {
     viewForSupplementaryElementOfKind kind: String,
     at indexPath: IndexPath
   ) -> UICollectionReusableView {
+
     let footer = collectionView.dequeueReusableSupplementaryFooterView(
       withType: FeedMainFooterCollectionReusableView.self,
       for: indexPath
     )
+
     if let feedMain = self.feedMain {
       if !feedMain.isNext {
         footer.viewMoreButton.isHidden = true
@@ -253,6 +248,7 @@ extension FeedMainViewController: UICollectionViewDelegate {
     _ collectionView: UICollectionView,
     didSelectItemAt indexPath: IndexPath
   ) {
+
     switch collectionView.tag {
     case CollectionViewTag.tag.rawValue:
       self.interactor?.setSelectedStatus(

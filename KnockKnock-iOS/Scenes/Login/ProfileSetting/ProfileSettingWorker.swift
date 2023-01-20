@@ -9,9 +9,7 @@ import UIKit
 
 protocol ProfileSettingWorkerProtocol {
   func requestRegister(
-    signInInfo: SignInInfo,
-    nickname: String,
-    image: String,
+    registerInfo: RegisterInfo,
     completionHandler: @escaping (AccountResponse) -> Void
   )
   func saveUserInfo(response: AccountResponse)
@@ -30,16 +28,12 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
   }
 
   func requestRegister(
-    signInInfo: SignInInfo,
-    nickname: String,
-    image: String,
+    registerInfo: RegisterInfo,
     completionHandler: @escaping (AccountResponse) -> Void
   ) {
     
     self.accountManager.register(
-      signInInfo: signInInfo,
-      nickname: nickname,
-      image: image,
+      registerInfo: registerInfo,
       completionHandler: { response in
 
         guard let authInfo = response.authInfo else { return }

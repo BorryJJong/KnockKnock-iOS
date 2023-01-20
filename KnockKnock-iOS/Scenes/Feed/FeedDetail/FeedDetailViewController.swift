@@ -233,18 +233,23 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   @objc private func keyboardWillHide(_ notification: Notification) {
     self.setCommentsTextViewConstant(isAppearing: false)
     self.setContainerViewConstant(notification: notification, isAppearing: false)
-    
+
     if self.containerView.commentTextView.text.isEmpty {
       self.containerView.likeButton.isHidden = false
-      self.containerView.commentTextView.leadingConstraint?.constant = 0
+      
+      self.containerView.commentTextView.snp.updateConstraints {
+        $0.leading.equalTo(self.containerView.likeButton.snp.trailing)
+      }
     }
   }
   
   private func setCommentsTextViewConstant(isAppearing: Bool) {
     let textViewHeightConstant = isAppearing ? 15.f : -19.f
-    
-    self.containerView.commentTextView.bottomConstraint?.constant = textViewHeightConstant
-    self.containerView.commentTextView.leadingConstraint?.constant = -20
+
+    self.containerView.commentTextView.snp.updateConstraints {
+      $0.bottom.equalTo(self.containerView.safeAreaLayoutGuide).offset(textViewHeightConstant)
+      $0.leading.equalTo(self.containerView.likeButton.snp.trailing).offset(-20)
+    }
   }
   
   private func setContainerViewConstant(notification: Notification, isAppearing: Bool) {
@@ -259,11 +264,15 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
           .keyboardAnimationDurationUserInfoKey
       ] as? NSNumber else { return }
       
-      let viewHeightConstant = isAppearing ? (-keyboardHeight) : 0
-      
-      self.containerView.frame.origin.y = viewHeightConstant
-      
+      let viewBottomConstant = isAppearing ? (-keyboardHeight) : 0
+
       UIView.animate(withDuration: animationDurationValue.doubleValue) {
+        self.containerView.postCollectionView.snp.updateConstraints {
+          $0.bottom.equalTo(self.containerView.safeAreaLayoutGuide).offset(viewBottomConstant)
+        }
+        self.containerView.commentTextView.snp.updateConstraints {
+          $0.bottom.equalTo(self.containerView.safeAreaLayoutGuide).offset(viewBottomConstant)
+        }
         self.containerView.layoutIfNeeded()
       }
     }
