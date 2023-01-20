@@ -27,7 +27,11 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   
   var interactor: FeedWriteInteractorProtocol?
 
-  var selectedImages: [UIImage] = []
+  var selectedImages: [UIImage] = [] {
+    didSet {
+      self.containerView.photoCollectionView.reloadData()
+    }
+  }
 
   // MARK: - UIs
 
@@ -144,19 +148,22 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     let picker = ImagePickerManager.shared.setImagePicker()
 
     picker.didFinishPicking { [unowned picker] items, _ in
-      for item in items {
-        switch item {
-        case let .photo(photo):
-          images.append(photo.image)
-          self.selectedImages = images
+      Task {
+        for item in items {
+          switch item {
+          case let .photo(photo):
+            let resizeImage = await photo.image.resize(newWidth: self.containerView.frame.width)
+            images.append(resizeImage)
 
-          self.containerView.photoCollectionView.reloadData()
-        default:
-          print("error")
+            self.selectedImages = images
+          default:
+            print("error")
+          }
+
+          self.containerView.bindPhotoCount(count: self.selectedImages.count)
+          picker.dismiss(animated: true, completion: nil)
         }
       }
-      self.containerView.bindPhotoCount(count: self.selectedImages.count)
-      picker.dismiss(animated: true, completion: nil)
     }
     self.present(picker, animated: true, completion: nil)
   }
