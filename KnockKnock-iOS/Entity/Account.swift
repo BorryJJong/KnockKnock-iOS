@@ -5,12 +5,20 @@
 //  Created by Daye on 2022/11/01.
 //
 
-import Foundation
+import UIKit
 
 /// 로그인 요청시 request body에 사용
 struct SignInInfo {
   let socialUuid: String
   let socialType: String
+}
+
+/// 회원가입 요청
+struct RegisterInfo {
+  let socialUuid: String
+  let socialType: String
+  let nickname: String
+  let image: UIImage
 }
 
 /// 로그인/회원가입 응답 값
