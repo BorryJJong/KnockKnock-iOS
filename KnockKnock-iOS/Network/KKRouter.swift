@@ -25,6 +25,9 @@ enum KKRouter: URLRequestConvertible {
 
   // MARK: - APIs
 
+  // Home
+  case getHotPost(challengeId: Int)
+
   // Account
   case postSocialLogin(signInInfo: Parameters)
   case postSignUp(userInfo: RegisterInfo)
@@ -70,6 +73,7 @@ enum KKRouter: URLRequestConvertible {
          .getChallengeDetail,
          .requestShopAddress,
          .getLikeList,
+         .getHotPost,
          .getComment:
       return .get
 
@@ -99,6 +103,9 @@ enum KKRouter: URLRequestConvertible {
     case .postSignUp: return "users/sign-up"
     case .postLogOut: return "users/logout"
     case .deleteWithdraw: return "users"
+
+    // Home
+    case .getHotPost: return "home/hot-post"
 
     // Challenge
     case .getChallengeResponse: return "challenges"
@@ -133,6 +140,9 @@ enum KKRouter: URLRequestConvertible {
 
   var parameters: Parameters? {
     switch self {
+
+    case let .getHotPost(challengeId):
+      return [ "challengeId": challengeId ]
 
     case let .postSocialLogin(signInInfo):
       return signInInfo
@@ -260,6 +270,7 @@ enum KKRouter: URLRequestConvertible {
 
       default:
         request = try URLEncoding.default.encode(request, with: parameters)
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
       }
 
     case .post, .patch, .delete:
