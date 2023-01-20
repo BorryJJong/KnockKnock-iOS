@@ -17,6 +17,7 @@ protocol ProfileSettingInteractorProtocol {
   func requestSignUp(nickname: String, image: UIImage)
 
   func navigateToMyView()
+  func popProfileView()
 }
 
 final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
@@ -31,6 +32,10 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
 
   func navigateToMyView() {
     self.router?.navigateToMyView()
+  }
+
+  func popProfileView() {
+    self.router?.popProfileView()
   }
 
   func requestSignUp(

@@ -17,6 +17,7 @@ protocol FeedDetailViewProtocol: AnyObject {
   func getAllCommentsCount(allCommentsCount: Int)
   func fetchVisibleComments(visibleComments: [Comment])
   func fetchLikeList(like: [Like.Info])
+  func fetchLikeStatus(isToggle: Bool)
   func deleteComment()
 }
 
@@ -34,6 +35,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
         self.feedId = feed.id
         self.containerView.bind(isLike: feed.isLike)
       }
+
       self.containerView.postCollectionView.reloadData()
       self.containerView.layoutIfNeeded()
     }
@@ -60,7 +62,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       }
     }
   }
-  
+
   // MARK: - Life Cycles
   
   override func viewDidLoad() {
@@ -187,18 +189,11 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   }
 
   @objc func likeButtonDidTap(_ sender: UIButton) {
-    sender.isSelected.toggle()
-
+    sender.isEnabled = true
     if sender.isSelected {
-
-      self.interactor?.requestLike(
-        feedId: self.feedId
-      )
+      self.interactor?.requestLikeCancel(feedId: self.feedId)
     } else {
-
-      self.interactor?.requestLikeCancel(
-        feedId: self.feedId
-      )
+      self.interactor?.requestLike(feedId: self.feedId)
     }
   }
 
@@ -306,6 +301,15 @@ extension FeedDetailViewController: FeedDetailViewProtocol {
   
   func fetchLikeList(like: [Like.Info]) {
     self.like = like
+  }
+
+  func fetchLikeStatus(isToggle: Bool) {
+    if isToggle {
+      self.containerView.likeButton.do {
+        $0.isSelected.toggle()
+        $0.isEnabled = true
+      }
+    }
   }
 }
 

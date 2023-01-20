@@ -17,8 +17,9 @@ protocol FeedDetailWorkerProtocol {
   func fetchLikeList(feedId: Int, completionHandler: @escaping ([Like.Info]) -> Void)
 
   func getAllComments(feedId: Int, completionHandler: @escaping ([Comment]) -> Void)
-  func requestAddComment(comment: AddCommentDTO, completionHandler: @escaping (Bool) -> Void)
   func fetchVisibleComments(comments: [Comment]?) -> [Comment]
+
+  func requestAddComment(comment: AddCommentDTO, completionHandler: @escaping (Bool) -> Void)
   func requestDeleteComment(commentId: Int, completionHandler: @escaping () -> Void)
 }
 
@@ -138,7 +139,6 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
         }
       )
     }
-
 
   func fetchLikeList(
     feedId: Int,
