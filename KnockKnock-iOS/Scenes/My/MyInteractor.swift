@@ -52,16 +52,11 @@ final class MyInteractor: MyInteractorProtocol {
   }
 
   func requestSignOut() {
-    
-    self.worker?.requestSignOut(completionHandler: {
-      NotificationCenter.default.post(name: .signOutCompleted, object: nil)
-    })
+    self.worker?.requestSignOut()
   }
 
   func requestWithdraw() {
-    self.worker?.requestWithdraw(completionHandler: {
-      NotificationCenter.default.post(name: .signOutCompleted, object: nil)
-    })
+    self.worker?.requestWithdraw()
   }
 
   // Routing
@@ -82,7 +77,7 @@ final class MyInteractor: MyInteractorProtocol {
 
   func setNotification() {
     NotificationCenter.default.addObserver(
-      forName: .SignInCompleted,
+      forName: .signInCompleted,
       object: nil,
       queue: nil
     ) { _ in

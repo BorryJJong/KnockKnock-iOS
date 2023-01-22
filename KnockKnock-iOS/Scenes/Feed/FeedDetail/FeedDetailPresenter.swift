@@ -1,5 +1,5 @@
 //
-//  FeedDetailPresenter.swift
+//  FeedDetailPresengitter.swift
 //  KnockKnock-iOS
 //
 //  Created by Daye on 2022/07/30.
@@ -11,10 +11,13 @@ protocol FeedDetailPresenterProtocol {
   var view: FeedDetailViewProtocol? { get set }
 
   func presentFeedDetail(feedDetail: FeedDetail)
+
   func presentAllCommentsCount(allCommentsCount: Int)
   func presentVisibleComments(comments: [Comment])
-  func presentLike(like: [Like.Info])
 
+  func presentDeleteComment()
+  func presentLikeList(like: [Like.Info])
+  func presentLikeStatus(isToggle: Bool)
 }
 
 final class FeedDetailPresenter: FeedDetailPresenterProtocol {
@@ -25,8 +28,16 @@ final class FeedDetailPresenter: FeedDetailPresenterProtocol {
     LoadingIndicator.hideLoading()
   }
 
-  func presentLike(like: [Like.Info]) {
+  func presentLikeList(like: [Like.Info]) {
     self.view?.fetchLikeList(like: like)
+  }
+
+  func presentLikeStatus(isToggle: Bool) {
+    self.view?.fetchLikeStatus(isToggle: isToggle)
+  }
+
+  func presentDeleteComment() {
+    self.view?.deleteComment()
   }
 
   func presentVisibleComments(comments: [Comment]) {
