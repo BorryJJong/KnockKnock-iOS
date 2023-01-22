@@ -18,6 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     options connectionOptions: UIScene.ConnectionOptions
   ) {
     guard let scene = (scene as? UIWindowScene) else { return }
+
     self.window = UIWindow(frame: UIScreen.main.bounds)
 
     self.window?.windowScene = scene
@@ -35,7 +36,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
       }
     }
   }
-  
+
   func sceneDidDisconnect(_ scene: UIScene) { }
   
   func sceneDidBecomeActive(_ scene: UIScene) { }

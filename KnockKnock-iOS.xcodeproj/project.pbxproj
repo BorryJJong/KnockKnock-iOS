@@ -200,6 +200,7 @@
 		61B6D993288C2C2700E60F08 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D992288C2C2700E60F08 /* HomeView.swift */; };
 		61B6D998288C40BF00E60F08 /* HomeSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D997288C40BF00E60F08 /* HomeSection.swift */; };
 		61B6D9B6288E69D400E60F08 /* FeedListHeaderReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B6D9B5288E69D400E60F08 /* FeedListHeaderReusableView.swift */; };
+		61BB9DB22978E09900728E97 /* KakaoSDKShare in Frameworks */ = {isa = PBXBuildFile; productRef = 61BB9DB12978E09900728E97 /* KakaoSDKShare */; };
 		61BD0A9A28EAD3A5003038B7 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 61BD0A9928EAD3A5003038B7 /* Alamofire */; };
 		61C21CFD28C463E6009B5F4E /* DefaultCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C21CFC28C463E6009B5F4E /* DefaultCollectionViewCell.swift */; };
 		61C21D0228C46C9E009B5F4E /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 61C21D0128C46C9E009B5F4E /* FirebaseAnalytics */; };
@@ -488,6 +489,7 @@
 				61C21D0F28C75E97009B5F4E /* KakaoSDKUser in Frameworks */,
 				61C21D0428C46C9E009B5F4E /* FirebaseAppDistribution-Beta in Frameworks */,
 				61BD0A9A28EAD3A5003038B7 /* Alamofire in Frameworks */,
+				61BB9DB22978E09900728E97 /* KakaoSDKShare in Frameworks */,
 				61A02843290E347900943A40 /* Lottie in Frameworks */,
 				61C21D0228C46C9E009B5F4E /* FirebaseAnalytics in Frameworks */,
 				34F6FB7E518CFAF1AD6C3455 /* Pods_KnockKnock_iOS.framework in Frameworks */,
@@ -1271,6 +1273,7 @@
 				61C21D0328C46C9E009B5F4E /* FirebaseAppDistribution-Beta */,
 				61BD0A9928EAD3A5003038B7 /* Alamofire */,
 				61A02842290E347900943A40 /* Lottie */,
+				61BB9DB12978E09900728E97 /* KakaoSDKShare */,
 			);
 			productName = "KnockKnock-iOS";
 			productReference = 61FC60E527B9244D00A51DBC /* KnockKnock-iOS.app */;
@@ -1893,6 +1896,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 61A02841290E347900943A40 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		61BB9DB12978E09900728E97 /* KakaoSDKShare */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61C21D0928C75E97009B5F4E /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKShare;
 		};
 		61BD0A9928EAD3A5003038B7 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
