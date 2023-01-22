@@ -13,6 +13,7 @@ protocol FeedDetailInteractorProtocol {
   var router: FeedDetailRouterProtocol? { get set }
   
   func getFeedDeatil(feedId: Int)
+  func requestDelete(feedId: Int)
 
   func fetchAllComments(feedId: Int)
 
@@ -26,6 +27,7 @@ protocol FeedDetailInteractorProtocol {
   func fetchLikeList(feedId: Int)
   
   func navigateToLikeDetail()
+  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?)
 }
 
 final class FeedDetailInteractor: FeedDetailInteractorProtocol {
@@ -174,10 +176,38 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       }
     )
   }
+
+  func requestDelete(feedId: Int) {
+
+    self.worker?.requestDeleteFeed(
+      feedId: feedId,
+      completionHandler: { isSuccess in
+        if isSuccess {
+          self.navigateToFeedList()
+        } else {
+          // error
+        }
+      }
+    )
+  }
   
   // Routing
   
   func navigateToLikeDetail() {
     self.router?.navigateToLikeDetail(like: self.likeList)
+  }
+
+  func navigateToFeedList() {
+    self.router?.navigateToFeedList()
+  }
+
+  func presentBottomSheetView(
+    isMyPost: Bool,
+    deleteAction: (() -> Void)?
+  ) {
+    self.router?.presentBottomSheetView(
+      isMyPost: isMyPost,
+      deleteAction: deleteAction
+    )
   }
 }

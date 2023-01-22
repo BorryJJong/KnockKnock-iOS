@@ -14,6 +14,8 @@ protocol FeedDetailRouterProtocol {
 
   func navigateToLikeDetail(like: [Like.Info])
   func navigateToLoginView()
+  func navigateToFeedList()
+  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?)
 }
 
 final class FeedDetailRouter: FeedDetailRouterProtocol {
@@ -51,12 +53,51 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
     }
   }
 
+  func navigateToFeedList() {
+    if let sourceView = self.view as? UIViewController {
+      sourceView.navigationController?.popViewController(animated: true)
+    }
+  }
+
   func navigateToLoginView() {
     let loginViewController = LoginRouter.createLoginView()
 
     loginViewController.hidesBottomBarWhenPushed = true
     if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.pushViewController(loginViewController, animated: true)
+    }
+  }
+
+  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?) {
+    let bottomSheetViewController = BottomSheetViewController().then {
+      if isMyPost {
+        $0.setBottomSheetContents(
+          contents: [
+            BottomSheetOption.postDelete.rawValue,
+            BottomSheetOption.postEdit.rawValue
+          ],
+          bottomSheetType: .small
+        )
+
+      } else {
+        $0.setBottomSheetContents(
+          contents: [
+            BottomSheetOption.postReport.rawValue,
+            BottomSheetOption.postShare.rawValue,
+            BottomSheetOption.postHide.rawValue
+          ],
+          bottomSheetType: .medium
+        )
+      }
+      $0.modalPresentationStyle = .overFullScreen
+      $0.deleteAction = deleteAction
+    }
+    if let sourceView = self.view as? UIViewController {
+      sourceView.present(
+        bottomSheetViewController,
+        animated: false,
+        completion: nil
+      )
     }
   }
 }

@@ -27,6 +27,7 @@ struct FeedDetail: Decodable {
     let userImage: String?
     let scale: String = "1:1"
     let isLike: Bool
+    let isWriter: Bool
   }
   
   struct Promotion: Decodable {
