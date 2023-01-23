@@ -55,8 +55,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         tabBarController.selectedIndex = Tab.feed.rawValue
 
+        let feedDetailViewController = FeedDetailRouter.createFeedDetail(feedId: feedId)
+        feedDetailViewController.hidesBottomBarWhenPushed = true
+
         tabBarController.feed.navigationController?.pushViewController(
-          FeedDetailRouter.createFeedDetail(feedId: feedId),
+          feedDetailViewController,
           animated: true
         )
       }

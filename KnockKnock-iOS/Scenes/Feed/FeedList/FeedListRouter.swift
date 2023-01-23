@@ -83,7 +83,10 @@ final class FeedListRouter: FeedListRouterProtocol {
     feedData: FeedList.Post
   ) {
 
-    guard let bottomSheetViewController = BottomSheetRouter.createBottomSheet() as? BottomSheetViewController else { return }
+    guard let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
+      deleteAction: deleteAction,
+      feedData: feedData
+    ) as? BottomSheetViewController else { return }
     
     bottomSheetViewController.do {
       if isMyPost {
@@ -106,8 +109,6 @@ final class FeedListRouter: FeedListRouterProtocol {
         )
       }
       $0.modalPresentationStyle = .overFullScreen
-      $0.deleteAction = deleteAction
-      $0.feedData = feedData
     }
     if let sourceView = self.view as? UIViewController {
       sourceView.present(

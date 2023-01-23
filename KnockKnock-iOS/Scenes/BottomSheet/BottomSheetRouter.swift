@@ -9,7 +9,7 @@ import UIKit
 
 protocol BottomSheetRouterProtocol: AnyObject {
   var view: BottomSheetViewProtocol? { get set }
-  static func createBottomSheet(districtSelectDelegate: DistrictSelectDelegate?, districtsType: DistrictsType?) -> UIViewController
+  static func createBottomSheet(districtSelectDelegate: DistrictSelectDelegate?, districtsType: DistrictsType?, deleteAction: (() -> Void)?, feedData: FeedList.Post?) -> UIViewController
 
   func passCityDataToShopSearch(city: String)
   func passCountyDataToShopSearch(county: String)
@@ -24,8 +24,11 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
 
   static func createBottomSheet(
     districtSelectDelegate: DistrictSelectDelegate? = nil,
-    districtsType: DistrictsType? = nil
+    districtsType: DistrictsType? = nil,
+    deleteAction: (() -> Void)? = nil,
+    feedData: FeedList.Post? = nil
   ) -> UIViewController {
+
     let view = BottomSheetViewController()
     let router = BottomSheetRouter()
 
@@ -33,6 +36,9 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
     view.districtsType = districtsType
     router.view = view
     router.districtSelectDelegate = districtSelectDelegate
+
+    view.deleteAction = deleteAction
+    view.feedData = feedData
 
     return view
   }

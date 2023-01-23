@@ -158,15 +158,9 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
     if let districtsType = self.districtsType {
       switch districtsType {
       case .city:
-        self.router?.passCityDataToShopSearch(
-          source: self,
-          city: options[indexPath.row]
-        )
+        self.router?.passCityDataToShopSearch(city: options[indexPath.row])
       case .county:
-        self.router?.passCountyDataToShopSearch(
-          source: self,
-          county: options[indexPath.row]
-        )
+        self.router?.passCountyDataToShopSearch(county: options[indexPath.row])
       }
     } else {
       
@@ -225,6 +219,7 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
               }
             }
           }
+          self.dismiss(animated: true)
         } else {
           // 카카오톡 미설치: 웹 공유 사용 권장
           self.showAlert(content: "카카오톡 미설치 디바이스")
