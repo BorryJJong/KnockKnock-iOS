@@ -76,6 +76,7 @@ final class FeedWriteRouter: FeedWriteRouterProtocol {
   func dismissFeedWriteView(source: FeedWriteViewProtocol) {
     if let sourceView = source as? UIViewController {
       sourceView.dismiss(animated: true)
+      DoneAlerter.hideLoading()
     }
   }
 }

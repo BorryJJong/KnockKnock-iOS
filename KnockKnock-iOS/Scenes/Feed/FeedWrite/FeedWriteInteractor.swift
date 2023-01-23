@@ -107,6 +107,7 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
       ), completionHandler: {
         // 게시물 등록이 완료되었습니다
         LoadingIndicator.hideLoading()
+        DoneAlerter.showLoading()
         self.dismissFeedWriteView(source: source)
       }
     )
