@@ -85,31 +85,11 @@ final class FeedListRouter: FeedListRouterProtocol {
 
     guard let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
       deleteAction: deleteAction,
-      feedData: feedData
+      feedData: feedData,
+      isMyPost: isMyPost
     ) as? BottomSheetViewController else { return }
     
-    bottomSheetViewController.do {
-      if isMyPost {
-        $0.setBottomSheetContents(
-          contents: [
-            BottomSheetOption.postDelete.rawValue,
-            BottomSheetOption.postEdit.rawValue
-          ],
-          bottomSheetType: .small
-        )
-
-      } else {
-        $0.setBottomSheetContents(
-          contents: [
-            BottomSheetOption.postReport.rawValue,
-            BottomSheetOption.postShare.rawValue,
-            BottomSheetOption.postHide.rawValue
-          ],
-          bottomSheetType: .medium
-        )
-      }
-      $0.modalPresentationStyle = .overFullScreen
-    }
+    
     if let sourceView = self.view as? UIViewController {
       sourceView.present(
         bottomSheetViewController,

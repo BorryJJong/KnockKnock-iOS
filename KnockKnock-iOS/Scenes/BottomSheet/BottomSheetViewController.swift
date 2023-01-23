@@ -13,6 +13,7 @@ import KakaoSDKTemplate
 import KakaoSDKCommon
 
 protocol BottomSheetViewProtocol: AnyObject {
+  var interactor: BottomSheetInteractorProtocol? { get set }
 }
 
 final class BottomSheetViewController: BaseViewController<BottomSheetView> {
@@ -21,8 +22,9 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
   
   private var options: [String] = []
   var districtsType: DistrictsType?
-  
-  var router: BottomSheetRouterProtocol?
+
+  var interactor: BottomSheetInteractorProtocol?
+
   var deleteAction: (() -> Void)?
   var feedData: FeedList.Post?
   
@@ -158,9 +160,9 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
     if let districtsType = self.districtsType {
       switch districtsType {
       case .city:
-        self.router?.passCityDataToShopSearch(city: options[indexPath.row])
+        self.interactor?.passCityDataToShopSearch(city: options[indexPath.row])
       case .county:
-        self.router?.passCountyDataToShopSearch(county: options[indexPath.row])
+        self.interactor?.passCountyDataToShopSearch(county: options[indexPath.row])
       }
     } else {
       
@@ -171,14 +173,12 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
         self.showAlert(
           content: "게시글을 삭제하시겠습니까?",
           confirmActionCompletion: {
-            self.dismiss(animated: true, completion: self.deleteAction)
+            self.interactor?.dismissView(actionType: .postDelete)
           }
         )
         
       case .postEdit:
-        self.containerView.hideBottomSheet(view: self)
-        
-        // 추후 케이스 별 코드 작성 필요
+        self.interactor?.dismissView(actionType: .postEdit)
 
       case .postShare:
 
@@ -221,7 +221,6 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
           }
           self.dismiss(animated: true)
         } else {
-          // 카카오톡 미설치: 웹 공유 사용 권장
           self.showAlert(content: "카카오톡 미설치 디바이스")
         }
 
