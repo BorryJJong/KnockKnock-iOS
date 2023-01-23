@@ -8,9 +8,6 @@
 import UIKit
 
 import Then
-import KakaoSDKShare
-import KakaoSDKTemplate
-import KakaoSDKCommon
 
 protocol BottomSheetViewProtocol: AnyObject {
   var interactor: BottomSheetInteractorProtocol? { get set }
@@ -24,9 +21,6 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
   var districtsType: DistrictsType?
 
   var interactor: BottomSheetInteractorProtocol?
-
-  var deleteAction: (() -> Void)?
-  var feedData: FeedList.Post?
   
   // MARK: - Life Cycle
   
@@ -181,49 +175,8 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
         self.interactor?.dismissView(actionType: .postEdit)
 
       case .postShare:
-
-        guard let data = self.feedData,
-              let postImage = data.blogImages.first,
-              let likeCount = Int(data.blogLikeCount.filter { $0.isNumber }),
-              let commentCount = Int(data.blogCommentCount.filter { $0.isNumber })
-        else { return }
-
-        // 추후에 worker로 빼기
-        if ShareApi.isKakaoTalkSharingAvailable(){
-
-          let appLink = Link(iosExecutionParams: ["feedDetail": "\(data.id)"])
-
-          let button = Button(title: "앱에서 보기", link: appLink)
-
-          let content = Content(title: "\(data.userName)님의 게시물",
-                                imageUrl: URL(string: postImage.fileUrl)!,
-                                description: data.content,
-                                link: appLink)
-
-          let social = Social(likeCount: likeCount,
-                              commentCount: commentCount)
-
-          let template = FeedTemplate(content: content, social: social, buttons: [button])
-
-          if let templateJsonData = (try? SdkJSONEncoder.custom.encode(template)) {
-
-            if let templateJsonObject = SdkUtils.toJsonObject(templateJsonData) {
-              ShareApi.shared.shareDefault(templateObject: templateJsonObject) { (linkResult, error) in
-                if let error = error {
-                  print("error : \(error)")
-                } else {
-                  print("defaultLink(templateObject:templateJsonObject) success.")
-                  guard let linkResult = linkResult else { return }
-                  UIApplication.shared.open(linkResult.url, options: [:], completionHandler: nil)
-                }
-              }
-            }
-          }
-          self.dismiss(animated: true)
-        } else {
-          self.showAlert(content: "카카오톡 미설치 디바이스")
-        }
-
+        self.interactor?.sharePost()
+        
       default:
         print("Error")
       }

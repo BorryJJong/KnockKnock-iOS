@@ -36,11 +36,13 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
 
     let view = BottomSheetViewController()
     let interactor = BottomSheetInteractor()
+    let worker = BottomSheetWorker(kakaoShareManager: KakaoShareManager())
     let router = BottomSheetRouter()
 
     view.interactor = interactor
     view.districtsType = districtsType
     interactor.router = router
+    interactor.worker = worker
     router.view = view
 
     interactor.districtSelectDelegate = districtSelectDelegate

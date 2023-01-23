@@ -9,6 +9,9 @@ import Foundation
 
 protocol BottomSheetInteractorProtocol {
   var router: BottomSheetRouterProtocol? { get set }
+  var worker: BottomSheetWorkerProtocol? { get set }
+
+  func sharePost()
 
   func passCityDataToShopSearch(city: String)
   func passCountyDataToShopSearch(county: String)
@@ -20,12 +23,26 @@ protocol BottomSheetInteractorProtocol {
 final class BottomSheetInteractor: BottomSheetInteractorProtocol {
   
   weak var districtSelectDelegate: DistrictSelectDelegate?
+
   var router: BottomSheetRouterProtocol?
+  var worker: BottomSheetWorkerProtocol?
 
   var deleteAction: (() -> Void)?
   var editAction: (() -> Void)?
 
   var feedData: FeedList.Post?
+
+  // MARK: - Buisiness Logic
+
+  func sharePost() {
+    self.worker?.sharePost(feedData: self.feedData, completionHandler: { isSuccess in
+      if isSuccess {
+        self.router?.dismissView(action: nil)
+      } else {
+        // error alert
+      }
+    })
+  }
 
   // MARK: - Routing
 
