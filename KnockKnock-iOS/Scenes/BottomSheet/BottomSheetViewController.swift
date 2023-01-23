@@ -12,7 +12,7 @@ import KakaoSDKShare
 import KakaoSDKTemplate
 import KakaoSDKCommon
 
-protocol BottomSheetViewProtocol {
+protocol BottomSheetViewProtocol: AnyObject {
 }
 
 final class BottomSheetViewController: BaseViewController<BottomSheetView> {

@@ -60,7 +60,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
           animated: true
         )
       }
-    } 
+    }
   }
 
   func sceneDidDisconnect(_ scene: UIScene) { }
