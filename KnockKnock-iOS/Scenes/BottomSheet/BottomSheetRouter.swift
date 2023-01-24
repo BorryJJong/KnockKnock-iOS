@@ -63,9 +63,10 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
         $0.setBottomSheetContents(
           contents: [
             BottomSheetOption.postDelete.rawValue,
-            BottomSheetOption.postEdit.rawValue
+            BottomSheetOption.postEdit.rawValue,
+            BottomSheetOption.postShare.rawValue
           ],
-          bottomSheetType: .small
+          bottomSheetType: .medium
         )
 
       } else {
@@ -92,5 +93,6 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
     guard let sourceView = self.view as? UIViewController else { return }
 
     sourceView.dismiss(animated: false, completion: action)
+    LoadingIndicator.hideLoading()
   }
 }

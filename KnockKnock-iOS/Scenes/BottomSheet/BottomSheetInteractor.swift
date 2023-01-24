@@ -35,6 +35,7 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
   // MARK: - Buisiness Logic
 
   func sharePost() {
+    LoadingIndicator.showLoading()
     self.worker?.sharePost(feedData: self.feedData, completionHandler: { isSuccess in
       if isSuccess {
         self.router?.dismissView(action: nil)
