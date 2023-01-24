@@ -11,6 +11,7 @@ import KakaoSDKAuth
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
   var window: UIWindow?
+  var deeplinkNavigator = DeeplinkNavigator()
 
   func scene(
     _ scene: UIScene,
@@ -31,38 +32,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   }
 
   func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-    if let url = URLContexts.first?.url {
-      if AuthApi.isKakaoTalkLoginUrl(url) {
-        _ = AuthController.handleOpenUrl(url: url)
-      } else {
-        guard url.scheme == "kakaob9a1e7f94579107a50b5e58c9ce13adc", url.host == "kakaolink" else { return }
 
-        let urlString = url.absoluteString
-        guard urlString.contains("feedDetail") else { return }
+    guard let url = URLContexts.first?.url else { return }
 
-        let components = URLComponents(string: urlString)
-        let urlQueryItems = components?.queryItems ?? []
+    if AuthApi.isKakaoTalkLoginUrl(url) {
+      _ = AuthController.handleOpenUrl(url: url)
 
-        var dictionaryData = [String: String]()
-        
-        urlQueryItems.forEach {
-          dictionaryData[$0.name] = $0.value
-        }
+    } else {
+      self.deeplinkNavigator.setUrl(window: self.window, url: url)
 
-        guard let feedId = Int(dictionaryData["feedDetail"]?.filter{ $0.isNumber } ?? "") else { return }
-
-        guard let tabBarController = self.window?.rootViewController as? MainTabBarController else { return }
-
-        tabBarController.selectedIndex = Tab.feed.rawValue
-
-        let feedDetailViewController = FeedDetailRouter.createFeedDetail(feedId: feedId)
-        feedDetailViewController.hidesBottomBarWhenPushed = true
-
-        tabBarController.feed.navigationController?.pushViewController(
-          feedDetailViewController,
-          animated: true
-        )
-      }
     }
   }
 

@@ -26,10 +26,9 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
           let commentCount = Int(data.blogCommentCount.filter { $0.isNumber })
     else { return !isSuccess }
 
-    // 추후에 worker로 빼기
     if ShareApi.isKakaoTalkSharingAvailable(){
 
-      let appLink = Link(iosExecutionParams: ["feedDetail": "\(data.id)"])
+      let appLink = Link(iosExecutionParams: [ShareURL.feed: "\(data.id)"])
 
       let button = Button(title: "앱에서 보기", link: appLink)
 
@@ -56,7 +55,7 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
       }
 
       return isSuccess
-
+      
     } else {
 
       return !isSuccess
