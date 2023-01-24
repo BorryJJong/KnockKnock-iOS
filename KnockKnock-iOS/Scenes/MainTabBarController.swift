@@ -14,16 +14,6 @@ import Then
 
 final class MainTabBarController: UITabBarController {
   
-  // MARK: - Tab
-  
-  enum Tab: Int {
-    case home
-    case feed
-    case post
-    case challenge
-    case my
-  }
-  
   // MARK: - Properties
   
   lazy var tabBarItems: [Tab: UITabBarItem] = [

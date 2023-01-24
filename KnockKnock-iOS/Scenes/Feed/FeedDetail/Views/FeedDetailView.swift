@@ -8,6 +8,7 @@
 import UIKit
 
 import KKDSKit
+import SnapKit
 import Then
 
 final class FeedDetailView: UIView {
@@ -52,7 +53,6 @@ final class FeedDetailView: UIView {
     collectionViewLayout: UICollectionViewFlowLayout().then {
       $0.scrollDirection = .horizontal
     }).then {
-      $0.translatesAutoresizingMaskIntoConstraints = false
       $0.backgroundColor = .clear
       $0.contentInset = .init(
         top: 0,
@@ -63,7 +63,6 @@ final class FeedDetailView: UIView {
     }
 
   private let imagePageControl = UIPageControl().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.currentPage = 0
     $0.pageIndicatorTintColor = UIColor(
       red: 255/255,
@@ -82,7 +81,6 @@ final class FeedDetailView: UIView {
       bottom: 7,
       right: 15
     )).then {
-      $0.translatesAutoresizingMaskIntoConstraints = false
       $0.backgroundColor = UIColor(
         red: 34/255,
         green: 34/255,
@@ -98,7 +96,6 @@ final class FeedDetailView: UIView {
     }
 
   let commentInputView = UIView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .white
     $0.layer.borderWidth = 1
     $0.layer.borderColor = UIColor.white.cgColor
@@ -109,13 +106,11 @@ final class FeedDetailView: UIView {
   }
 
   let likeButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setImage(KKDS.Image.ic_like_24_off, for: .normal)
     $0.setImage(KKDS.Image.ic_like_24_on, for: .selected)
   }
 
   lazy var commentTextView = UITextView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.text = self.commentTextViewPlaceholder
     $0.textColor = .gray50
     $0.font = .systemFont(ofSize: 15, weight: .regular)
@@ -124,7 +119,6 @@ final class FeedDetailView: UIView {
   }
 
   let registButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setTitle("등록", for: .normal)
     $0.titleLabel?.font = .systemFont(ofSize: 13, weight: .bold)
     $0.clipsToBounds = true
@@ -167,34 +161,36 @@ final class FeedDetailView: UIView {
   func setupConstraints() {
     [self.postCollectionView].addSubViews(self)
 
-    NSLayoutConstraint.activate([
-      self.postCollectionView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-      self.postCollectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-      self.postCollectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-      self.postCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor)
-    ])
+    self.postCollectionView.snp.makeConstraints {
+      $0.top.bottom.equalTo(self.safeAreaLayoutGuide)
+      $0.leading.trailing.equalTo(self)
+    }
 
     [self.commentInputView, self.likeButton, self.commentTextView, self.registButton].addSubViews(self)
 
-    NSLayoutConstraint.activate([
-      self.commentInputView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
-      self.commentInputView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
-      self.commentInputView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-      self.commentInputView.topAnchor.constraint(equalTo: self.commentTextView.topAnchor, constant: Metric.commentInputViewTopMargin),
+    self.commentInputView.snp.makeConstraints {
+      $0.top.equalTo(self.commentTextView).offset(Metric.commentInputViewTopMargin)
+      $0.bottom.leading.trailing.equalTo(self.safeAreaLayoutGuide)
+    }
 
-      self.likeButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.likeButtonLeadingMargin),
-      self.likeButton.centerYAnchor.constraint(equalTo: self.commentTextView.centerYAnchor),
+    self.likeButton.snp.makeConstraints {
+      $0.leading.equalTo(self.safeAreaLayoutGuide).offset(Metric.likeButtonLeadingMargin)
+      $0.centerY.equalTo(self.commentTextView)
+    }
 
-      self.commentTextView.heightAnchor.constraint(equalToConstant: Metric.commentTextViewHeight),
-      self.commentTextView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: Metric.commentTextViewBottomMargin),
-      self.commentTextView.trailingAnchor.constraint(equalTo: self.registButton.leadingAnchor, constant: Metric.commentTextViewTrailingMargin),
-      self.commentTextView.leadingAnchor.constraint(equalTo: self.likeButton.trailingAnchor, constant: Metric.commentTextViewLeadingMargin),
+    self.commentTextView.snp.makeConstraints {
+      $0.height.equalTo(Metric.commentTextViewHeight)
+      $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(Metric.commentTextViewBottomMargin)
+      $0.trailing.equalTo(self.registButton.snp.leading).offset(Metric.commentTextViewTrailingMargin)
+      $0.leading.equalTo(self.likeButton.snp.trailing).offset(Metric.commentTextViewLeadingMargin)
+    }
 
-      self.registButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.registButtonTrailingMargin),
-      self.registButton.bottomAnchor.constraint(equalTo: self.commentTextView.bottomAnchor),
-      self.registButton.widthAnchor.constraint(equalToConstant: Metric.registButtonWidth),
-      self.registButton.heightAnchor.constraint(equalToConstant: Metric.registButtonHeight)
-    ])
+    self.registButton.snp.makeConstraints {
+      $0.trailing.equalTo(self.safeAreaLayoutGuide).offset(Metric.registButtonTrailingMargin)
+      $0.bottom.equalTo(self.commentTextView.snp.bottom)
+      $0.width.equalTo(Metric.registButtonWidth)
+      $0.height.equalTo(Metric.registButtonHeight)
+    }
   }
 
   func createDefaultSection() -> NSCollectionLayoutSection {

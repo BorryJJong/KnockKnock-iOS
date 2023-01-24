@@ -10,8 +10,7 @@ import Foundation
 import KakaoSDKUser
 
 protocol KakaoLoginManagerProtocol {
-
-
+  func loginWithKakao(completionHandler: @escaping (String) -> Void)
 }
 
 final class KakaoAccountManager: KakaoLoginManagerProtocol {
