@@ -153,10 +153,9 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
           default:
             print("error")
           }
-
-          self.containerView.bindPhotoCount(count: self.selectedImages.count)
-          picker.dismiss(animated: true, completion: nil)
         }
+        self.containerView.bindPhotoCount(count: self.selectedImages.count)
+        picker.dismiss(animated: true, completion: nil)
       }
     }
     self.present(picker, animated: true, completion: nil)

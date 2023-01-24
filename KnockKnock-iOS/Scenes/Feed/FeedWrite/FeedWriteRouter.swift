@@ -83,8 +83,8 @@ final class FeedWriteRouter: FeedWriteRouterProtocol {
 
     let feedWriteCompetedViewController = FeedWriteCompletedViewController()
 
-    feedWriteCompetedViewController.modalPresentationStyle = .formSheet
-    
+    feedWriteCompetedViewController.modalPresentationStyle = .overFullScreen
+
     sourceView.navigationController?.present(
       feedWriteCompetedViewController,
       animated: true,
