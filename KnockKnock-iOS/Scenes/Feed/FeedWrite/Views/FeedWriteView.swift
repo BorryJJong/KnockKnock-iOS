@@ -212,6 +212,30 @@ class FeedWriteView: UIView {
     super.init(coder: aDecoder)
   }
 
+  // MARK: - Configure
+
+  func setContainerViewConstant(notification: Notification, isAppearing: Bool) {
+    let userInfo = notification.userInfo
+
+    if let keyboardFrame = userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+      let keyboardSize = keyboardFrame.cgRectValue
+      let keyboardHeight = keyboardSize.height
+
+      guard let animationDurationValue = userInfo?[
+        UIResponder
+          .keyboardAnimationDurationUserInfoKey
+      ] as? NSNumber else { return }
+
+      let viewBottomConstant = isAppearing ? -(keyboardHeight) + 60 : 0
+
+      self.frame.origin.y = viewBottomConstant
+
+      UIView.animate(withDuration: animationDurationValue.doubleValue) {
+        self.layoutIfNeeded()
+      }
+    }
+  }
+
   // MARK: - Bind
 
   func setTag(tag: String) {

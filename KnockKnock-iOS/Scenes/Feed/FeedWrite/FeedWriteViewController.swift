@@ -50,6 +50,14 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     super.viewDidLoad()
   }
 
+  override func viewDidAppear(_ animated: Bool) {
+    self.changeStatusBarBgColor(bgColor: .white)
+  }
+
+  override func viewWillDisappear(_ animated: Bool) {
+    self.changeStatusBarBgColor(bgColor: .clear)
+  }
+
   // MARK: - Configure
 
   override func setupConfigure() {
@@ -59,7 +67,11 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
       $0.title = "새 게시글"
       $0.leftBarButtonItem = self.dismissBarButtonItem
     }
-    self.navigationController?.navigationBar.setDefaultAppearance()
+    self.navigationController?.navigationBar.do {
+      $0.backgroundColor = .white
+    }
+
+    self.addKeyboardNotification()
 
     self.containerView.photoCollectionView.do {
       $0.delegate = self
@@ -102,6 +114,32 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     )
   }
 
+  // MARK: - Keyboard Show & Hide
+
+  private func addKeyboardNotification() {
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(keyboardWillShow(_:)),
+      name: UIResponder.keyboardWillShowNotification,
+      object: nil
+    )
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(keyboardWillHide(_:)),
+      name: UIResponder.keyboardWillHideNotification,
+      object: nil
+    )
+  }
+
+  @objc private func keyboardWillShow(_ notification: Notification) {
+    self.containerView.setContainerViewConstant(notification: notification, isAppearing: true)
+  }
+
+  @objc private func keyboardWillHide(_ notification: Notification) {
+    self.containerView.setContainerViewConstant(notification: notification, isAppearing: false)
+  }
+ 
   // MARK: - Button Actions
 
   @objc func tagSelectButtonDidTap(_ sender: UIButton) {
