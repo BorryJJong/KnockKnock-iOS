@@ -14,6 +14,7 @@ protocol FeedWriteInteractorProtocol: AnyObject {
   var router: FeedWriteRouterProtocol? { get set }
 
   func dismissFeedWriteView()
+  func presentFeedWriteCompletedView()
   func navigateToShopSearch()
   func navigateToProperty(propertyType: PropertyType)
 
@@ -38,6 +39,10 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
   // Routing
 
   func dismissFeedWriteView() {
+    self.router?.dismissFeedWriteView()
+  }
+
+  func presentFeedWriteCompletedView() {
     self.router?.presenetFeedWriteCompletedView()
   }
 
@@ -101,7 +106,7 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
         LoadingIndicator.hideLoading()
 
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1, execute: {
-          self.dismissFeedWriteView()
+          self.presentFeedWriteCompletedView()
         })
       }
     )
