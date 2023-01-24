@@ -16,7 +16,10 @@ final class ChallengeDetailRouter: ChallengeDetailRouterProtocol {
     let view = ChallengeDetailViewController()
     let interactor = ChallengeDetailInteractor()
     let presenter = ChallengeDetailPresenter()
-    let worker = ChallengeDetailWorker(repository: ChallengeRepository())
+    let worker = ChallengeDetailWorker(
+      repository: ChallengeRepository(),
+      kakaoShareManager: KakaoShareManager()
+    )
     let router = ChallengeDetailRouter()
 
     view.interactor = interactor

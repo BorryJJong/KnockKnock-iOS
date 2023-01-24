@@ -12,13 +12,20 @@ protocol ChallengeDetailWorkerProtocol {
     challengeId: Int,
     completionHandler: @escaping (ChallengeDetail) -> Void
   )
+
+  func shareChallenge(challengeData: ChallengeDetail?, completionHandler: @escaping (Bool) -> Void)
 }
 
 final class ChallengeDetailWorker: ChallengeDetailWorkerProtocol {
   private let repository: ChallengeRepositoryProtocol
+  private let kakaoShareManager: KakaoShareManagerProtocol
   
-  init(repository: ChallengeRepositoryProtocol) {
+  init(
+    repository: ChallengeRepositoryProtocol,
+    kakaoShareManager: KakaoShareManagerProtocol
+  ) {
     self.repository = repository
+    self.kakaoShareManager = kakaoShareManager
   }
   
   func getChallengeDetail(
@@ -29,6 +36,17 @@ final class ChallengeDetailWorker: ChallengeDetailWorkerProtocol {
       challengeId: challengeId,
       completionHandler: { result in
         completionHandler(result)
-      })
+      }
+    )
+  }
+
+  func shareChallenge(
+    challengeData: ChallengeDetail?,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
+
+    let result = self.kakaoShareManager.shareChallenge(challengeData: challengeData)
+    completionHandler(result)
+
   }
 }

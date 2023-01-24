@@ -41,7 +41,7 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
     image: KKDS.Image.ic_gnb_share_24_wh,
     style: .plain,
     target: self,
-    action: nil
+    action: #selector(self.shareBarButtonDidTap(_:))
   )
 
   lazy var homeBarButtonItem = UIBarButtonItem(
@@ -100,6 +100,10 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
 
   @objc func tapBackBarButton(_ sender: UIBarButtonItem) {
     self.navigationController?.popViewController(animated: true)
+  }
+
+  @objc func shareBarButtonDidTap(_ sender: UIBarButtonItem) {
+    self.interactor?.shareChallenge(challengeData: self.challengeDetail)
   }
 }
 

@@ -13,9 +13,49 @@ import KakaoSDKCommon
 
 protocol KakaoShareManagerProtocol {
   func sharePost(feedData: FeedShare?) -> Bool
+  func shareChallenge(challengeData: ChallengeDetail?) -> Bool
 }
 
 final class KakaoShareManager: KakaoShareManagerProtocol {
+
+  func shareChallenge(challengeData: ChallengeDetail?) -> Bool {
+    let isSuccess = true
+
+    guard let data = challengeData else { return !isSuccess }
+
+    if ShareApi.isKakaoTalkSharingAvailable(){
+
+      let appLink = Link(iosExecutionParams: [ShareURL.challenge: "\(data.challenge.id)"])
+
+      let button = Button(title: "앱에서 보기", link: appLink)
+
+      let content = Content(title: "\(data.challenge.title)",
+                            imageUrl: URL(string: data.content.image ??  "https://ecode.s3.ap-northeast-2.amazonaws.com/feed/1674532084081v3bgfbrzrzs.webp")!,
+                            description: data.challenge.subTitle,
+                            link: appLink)
+
+      let template = FeedTemplate(content: content, buttons: [button])
+
+      guard let templateJsonData = (try? SdkJSONEncoder.custom.encode(template)),
+            let templateJsonObject = SdkUtils.toJsonObject(templateJsonData) else {
+        return !isSuccess
+      }
+
+      ShareApi.shared.shareDefault(templateObject: templateJsonObject) { (linkResult, error) in
+        guard error == nil else { return }
+        guard let linkResult = linkResult else { return }
+
+        UIApplication.shared.open(linkResult.url, options: [:], completionHandler: nil)
+      }
+
+      return isSuccess
+
+    } else {
+
+      return !isSuccess
+
+    }
+  }
 
   func sharePost(feedData: FeedShare?) -> Bool {
     let isSuccess = true
