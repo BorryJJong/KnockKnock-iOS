@@ -101,25 +101,19 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   // MARK: - Button Actions
 
   @objc func tagSelectButtonDidTap(_ sender: UIButton) {
-    self.interactor?.navigateToProperty(
-      source: self,
-      propertyType: .tag
-    )
+    self.interactor?.navigateToProperty(propertyType: .tag)
   }
 
   @objc func promotionSelectButtonDidTap(_ sender: UIButton) {
-    self.interactor?.navigateToProperty(
-      source: self,
-      propertyType: .promotion
-    )
+    self.interactor?.navigateToProperty(propertyType: .promotion)
   }
 
   @objc func dismissBarButtonDidTap(_ sender: UIBarButtonItem) {
-    self.interactor?.dismissFeedWriteView(source: self)
+    self.interactor?.dismissFeedWriteView()
   }
 
   @objc func shopSearchButtonDidTap(_ sender: UIButton) {
-    self.interactor?.navigateToShopSearch(source: self)
+    self.interactor?.navigateToShopSearch()
   }
 
   @objc func photoAddButtonDidTap(_ sender: UIButton) {
@@ -184,7 +178,6 @@ extension FeedWriteViewController: FeedWriteViewProtocol {
       self.showAlert(content: "게시글 등록을 완료 하시겠습니까?", confirmActionCompletion: {
         LoadingIndicator.showLoading()
         self.interactor?.requestUploadFeed(
-          source: self,
           content: self.containerView.contentTextView.text,
           images: self.selectedImages
         )

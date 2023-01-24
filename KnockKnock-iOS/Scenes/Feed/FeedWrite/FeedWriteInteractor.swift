@@ -13,16 +13,13 @@ protocol FeedWriteInteractorProtocol: AnyObject {
   var worker: FeedWriteWorkerProtocol? { get set }
   var router: FeedWriteRouterProtocol? { get set }
 
-  func dismissFeedWriteView(source: FeedWriteViewProtocol)
-  func navigateToShopSearch(source: FeedWriteViewProtocol)
-  func navigateToProperty(
-    source: FeedWriteViewProtocol,
-    propertyType: PropertyType
-  )
+  func dismissFeedWriteView()
+  func navigateToShopSearch()
+  func navigateToProperty(propertyType: PropertyType)
 
   func setCurrentText(text: String) 
   func checkEssentialField(imageCount: Int)
-  func requestUploadFeed(source: FeedWriteViewProtocol, content: String, images: [UIImage])
+  func requestUploadFeed(content: String, images: [UIImage])
 }
 
 final class FeedWriteInteractor: FeedWriteInteractorProtocol {
@@ -40,20 +37,16 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
 
   // Routing
 
-  func dismissFeedWriteView(source: FeedWriteViewProtocol) {
-    self.router?.dismissFeedWriteView(source: source)
+  func dismissFeedWriteView() {
+    self.router?.presenetFeedWriteCompletedView()
   }
 
-  func navigateToShopSearch(source: FeedWriteViewProtocol) {
-    self.router?.navigateToShopSearch(source: source)
+  func navigateToShopSearch() {
+    self.router?.navigateToShopSearch()
   }
 
-  func navigateToProperty(
-    source: FeedWriteViewProtocol,
-    propertyType: PropertyType
-  ) {
+  func navigateToProperty(propertyType: PropertyType) {
     self.router?.navigateToProperty(
-      source: source,
       propertyType: propertyType,
       promotionList: self.selectedPromotionList,
       tagList: self.selectedTagList
@@ -73,11 +66,11 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
       promotion: self.selectedPromotionList,
       content: self.postContent
     ) else { return }
+
     self.presenter?.presentAlertView(isDone: isDone)
   }
 
   func requestUploadFeed(
-    source: FeedWriteViewProtocol,
     content: String,
     images: [UIImage]
   ) {
@@ -105,10 +98,11 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
         challenges: challenges,
         images: images
       ), completionHandler: {
-        // 게시물 등록이 완료되었습니다
         LoadingIndicator.hideLoading()
-        DoneAlerter.showLoading()
-        self.dismissFeedWriteView(source: source)
+
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1, execute: {
+          self.dismissFeedWriteView()
+        })
       }
     )
   }
