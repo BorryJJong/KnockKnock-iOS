@@ -30,7 +30,7 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
   var deleteAction: (() -> Void)?
   var editAction: (() -> Void)?
 
-  var feedData: FeedList.Post?
+  var feedData: FeedShare?
 
   // MARK: - Buisiness Logic
 

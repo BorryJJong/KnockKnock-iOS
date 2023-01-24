@@ -154,7 +154,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     self.router?.presentBottomSheetView(
       isMyPost: isMyPost,
       deleteAction: deleteAction,
-      feedData: feedData
+      feedData: feedData.toShare()
     )
   }
 

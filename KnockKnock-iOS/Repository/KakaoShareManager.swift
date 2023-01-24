@@ -12,19 +12,18 @@ import KakaoSDKTemplate
 import KakaoSDKCommon
 
 protocol KakaoShareManagerProtocol {
-  func sharePost(feedData: FeedList.Post?) -> Bool
+  func sharePost(feedData: FeedShare?) -> Bool
 }
 
 final class KakaoShareManager: KakaoShareManagerProtocol {
 
-  func sharePost(feedData: FeedList.Post?) -> Bool {
+  func sharePost(feedData: FeedShare?) -> Bool {
     let isSuccess = true
 
-    guard let data = feedData,
-          let postImage = data.blogImages.first,
-          let likeCount = Int(data.blogLikeCount.filter { $0.isNumber }),
-          let commentCount = Int(data.blogCommentCount.filter { $0.isNumber })
-    else { return !isSuccess }
+    guard let data = feedData else { return !isSuccess }
+
+    let likeCount = Int(data.likeCount.filter { $0.isNumber }) ?? 0
+    let commentCount = Int(data.commentCount.filter { $0.isNumber }) ?? 0
 
     if ShareApi.isKakaoTalkSharingAvailable(){
 
@@ -32,13 +31,12 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
 
       let button = Button(title: "앱에서 보기", link: appLink)
 
-      let content = Content(title: "\(data.userName)님의 게시물",
-                            imageUrl: URL(string: postImage.fileUrl)!,
+      let content = Content(title: "\(data.nickname)님의 게시물",
+                            imageUrl: URL(string: data.imageUrl)!,
                             description: data.content,
                             link: appLink)
 
-      let social = Social(likeCount: likeCount,
-                          commentCount: commentCount)
+      let social = Social(likeCount: likeCount, commentCount: commentCount)
 
       let template = FeedTemplate(content: content, social: social, buttons: [button])
 

@@ -8,7 +8,7 @@
 import Foundation
 
 protocol BottomSheetWorkerProtocol {
-  func sharePost(feedData: FeedList.Post?, completionHandler: @escaping (Bool) -> Void)
+  func sharePost(feedData: FeedShare?, completionHandler: @escaping (Bool) -> Void)
 }
 
 final class BottomSheetWorker: BottomSheetWorkerProtocol {
@@ -20,7 +20,7 @@ final class BottomSheetWorker: BottomSheetWorkerProtocol {
   }
 
   func sharePost(
-    feedData: FeedList.Post?,
+    feedData: FeedShare?,
     completionHandler: @escaping (Bool) -> Void
   ) {
 

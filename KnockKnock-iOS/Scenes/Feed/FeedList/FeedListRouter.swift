@@ -11,7 +11,7 @@ protocol FeedListRouterProtocol {
   var view: FeedListViewProtocol? { get set }
   static func createFeedList(feedId: Int, challengeId: Int) -> UIViewController
 
-  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?, feedData: FeedList.Post)
+  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?, feedData: FeedShare?)
   func navigateToFeedMain()
   func navigateToFeedDetail(feedId: Int)
   func navigateToCommentView(feedId: Int)
@@ -80,7 +80,7 @@ final class FeedListRouter: FeedListRouterProtocol {
   func presentBottomSheetView(
     isMyPost: Bool,
     deleteAction: (() -> Void)?,
-    feedData: FeedList.Post
+    feedData: FeedShare?
   ) {
 
     guard let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
@@ -88,8 +88,7 @@ final class FeedListRouter: FeedListRouterProtocol {
       feedData: feedData,
       isMyPost: isMyPost
     ) as? BottomSheetViewController else { return }
-    
-    
+
     if let sourceView = self.view as? UIViewController {
       sourceView.present(
         bottomSheetViewController,
