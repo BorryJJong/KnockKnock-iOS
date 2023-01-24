@@ -19,6 +19,7 @@ protocol KakaoShareManagerProtocol {
 final class KakaoShareManager: KakaoShareManagerProtocol {
 
   func shareChallenge(challengeData: ChallengeDetail?) -> Bool {
+
     let isSuccess = true
 
     guard let data = challengeData else { return !isSuccess }
@@ -29,31 +30,51 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
 
       let button = Button(title: "앱에서 보기", link: appLink)
 
-      let content = Content(title: "\(data.challenge.title)",
-                            imageUrl: URL(string: data.content.image ??  "https://ecode.s3.ap-northeast-2.amazonaws.com/feed/1674532084081v3bgfbrzrzs.webp")!,
-                            description: data.challenge.subTitle,
-                            link: appLink)
+      if let imageUrl = URL(string: data.content.image ??  "https://ecode.s3.ap-northeast-2.amazonaws.com/feed/1674532084081v3bgfbrzrzs.webp") {
 
-      let template = FeedTemplate(content: content, buttons: [button])
+        let content = Content(title: "\(data.challenge.title)",
+                              imageUrl: imageUrl,
+                              description: data.challenge.subTitle,
+                              link: appLink)
 
-      guard let templateJsonData = (try? SdkJSONEncoder.custom.encode(template)),
-            let templateJsonObject = SdkUtils.toJsonObject(templateJsonData) else {
-        return !isSuccess
-      }
+        let template = FeedTemplate(content: content, buttons: [button])
 
-      ShareApi.shared.shareDefault(templateObject: templateJsonObject) { (linkResult, error) in
-        guard error == nil else { return }
-        guard let linkResult = linkResult else { return }
+        guard let templateJsonData = (try? SdkJSONEncoder.custom.encode(template)),
+              let templateJsonObject = SdkUtils.toJsonObject(templateJsonData) else {
+          return !isSuccess
+        }
 
-        UIApplication.shared.open(linkResult.url, options: [:], completionHandler: nil)
+        ShareApi.shared.shareDefault(templateObject: templateJsonObject) { (linkResult, error) in
+          guard error == nil else { return }
+          guard let linkResult = linkResult else { return }
+
+          UIApplication.shared.open(linkResult.url, options: [:], completionHandler: nil)
+        }
+
+      } else {
+
+        let template = TextTemplate(
+          text: "\(data.challenge.title)",
+          link: appLink
+        )
+
+        guard let templateJsonData = (try? SdkJSONEncoder.custom.encode(template)),
+              let templateJsonObject = SdkUtils.toJsonObject(templateJsonData) else {
+          return !isSuccess
+        }
+
+        ShareApi.shared.shareDefault(templateObject: templateJsonObject) { (linkResult, error) in
+          guard error == nil else { return }
+          guard let linkResult = linkResult else { return }
+
+          UIApplication.shared.open(linkResult.url, options: [:], completionHandler: nil)
+        }
       }
 
       return isSuccess
 
     } else {
-
       return !isSuccess
-
     }
   }
 
@@ -71,33 +92,51 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
 
       let button = Button(title: "앱에서 보기", link: appLink)
 
-      let content = Content(title: "\(data.nickname)님의 게시물",
-                            imageUrl: URL(string: data.imageUrl)!,
-                            description: data.content,
-                            link: appLink)
+      if let imageUrl = URL(string: data.imageUrl) {
+        let content = Content(title: "\(data.nickname)님의 게시물",
+                              imageUrl: imageUrl,
+                              description: data.content,
+                              link: appLink)
 
-      let social = Social(likeCount: likeCount, commentCount: commentCount)
+        let social = Social(likeCount: likeCount, commentCount: commentCount)
 
-      let template = FeedTemplate(content: content, social: social, buttons: [button])
+        let template = FeedTemplate(content: content, social: social, buttons: [button])
 
-      guard let templateJsonData = (try? SdkJSONEncoder.custom.encode(template)),
-            let templateJsonObject = SdkUtils.toJsonObject(templateJsonData) else {
-        return !isSuccess
-      }
+        guard let templateJsonData = (try? SdkJSONEncoder.custom.encode(template)),
+              let templateJsonObject = SdkUtils.toJsonObject(templateJsonData) else {
+          return !isSuccess
+        }
 
-      ShareApi.shared.shareDefault(templateObject: templateJsonObject) { (linkResult, error) in
-        guard error == nil else { return }
-        guard let linkResult = linkResult else { return }
+        ShareApi.shared.shareDefault(templateObject: templateJsonObject) { (linkResult, error) in
+          guard error == nil else { return }
+          guard let linkResult = linkResult else { return }
 
-        UIApplication.shared.open(linkResult.url, options: [:], completionHandler: nil)
+          UIApplication.shared.open(linkResult.url, options: [:], completionHandler: nil)
+        }
+
+      } else {
+        let template = TextTemplate(
+          text: "\(data.nickname)님의 게시물",
+          link: appLink
+        )
+
+        guard let templateJsonData = (try? SdkJSONEncoder.custom.encode(template)),
+              let templateJsonObject = SdkUtils.toJsonObject(templateJsonData) else {
+          return !isSuccess
+        }
+
+        ShareApi.shared.shareDefault(templateObject: templateJsonObject) { (linkResult, error) in
+          guard error == nil else { return }
+          guard let linkResult = linkResult else { return }
+
+          UIApplication.shared.open(linkResult.url, options: [:], completionHandler: nil)
+        }
       }
 
       return isSuccess
       
     } else {
-
       return !isSuccess
-
     }
   }
 }
