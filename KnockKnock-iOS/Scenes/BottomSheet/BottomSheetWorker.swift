@@ -8,7 +8,7 @@
 import Foundation
 
 protocol BottomSheetWorkerProtocol {
-  func sharePost(feedData: FeedShare?, completionHandler: @escaping (Bool) -> Void)
+  func sharePost(feedData: FeedShare?, completionHandler: @escaping (Bool, ErrorType?) -> Void)
 }
 
 final class BottomSheetWorker: BottomSheetWorkerProtocol {
@@ -21,11 +21,11 @@ final class BottomSheetWorker: BottomSheetWorkerProtocol {
 
   func sharePost(
     feedData: FeedShare?,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (Bool, ErrorType?) -> Void
   ) {
 
     let result = self.kakaoShareManager.sharePost(feedData: feedData)
-    completionHandler(result)
+    completionHandler(result.0, result.1)
 
   }
 }

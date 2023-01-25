@@ -13,7 +13,7 @@ protocol ChallengeDetailWorkerProtocol {
     completionHandler: @escaping (ChallengeDetail) -> Void
   )
 
-  func shareChallenge(challengeData: ChallengeDetail?, completionHandler: @escaping (Bool) -> Void)
+  func shareChallenge(challengeData: ChallengeDetail?, completionHandler: @escaping (Bool, ErrorType?) -> Void)
 }
 
 final class ChallengeDetailWorker: ChallengeDetailWorkerProtocol {
@@ -42,11 +42,11 @@ final class ChallengeDetailWorker: ChallengeDetailWorkerProtocol {
 
   func shareChallenge(
     challengeData: ChallengeDetail?,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (Bool, ErrorType?) -> Void
   ) {
 
     let result = self.kakaoShareManager.shareChallenge(challengeData: challengeData)
-    completionHandler(result)
+    completionHandler(result.0, result.1)
 
   }
 }

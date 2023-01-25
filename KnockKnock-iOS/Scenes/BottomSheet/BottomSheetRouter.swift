@@ -20,6 +20,7 @@ protocol BottomSheetRouterProtocol: AnyObject {
 
   func navigateToShopSearch()
   func dismissView(action: (() -> Void)?)
+  func presentErrorAlertView(message: String) 
 }
 
 final class BottomSheetRouter: BottomSheetRouterProtocol {
@@ -81,6 +82,13 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
       }
       $0.modalPresentationStyle = .overFullScreen
     }
+  }
+
+  func presentErrorAlertView(message: String) {
+    guard let sourceView = self.view as? UIViewController else { return }
+
+    LoadingIndicator.hideLoading()
+    sourceView.showAlert(content: message)
   }
 
   func navigateToShopSearch() {

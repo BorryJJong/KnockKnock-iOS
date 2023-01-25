@@ -18,6 +18,7 @@ protocol ChallengeDetailInteractorProtocol {
 final class ChallengeDetailInteractor: ChallengeDetailInteractorProtocol {
   var presenter: ChallengeDetailPresenterProtocol?
   var worker: ChallengeDetailWorkerProtocol?
+  var router: ChallengeDetailRouter?
   
   func getChallengeDetail(challengeId: Int) {
     self.worker?.getChallengeDetail(
@@ -28,9 +29,14 @@ final class ChallengeDetailInteractor: ChallengeDetailInteractorProtocol {
   }
   
   func shareChallenge(challengeData: ChallengeDetail?) {
-    self.worker?.shareChallenge(challengeData: challengeData, completionHandler: { isSuccess in
+    LoadingIndicator.showLoading()
+    self.worker?.shareChallenge(
+      challengeData: challengeData,
+      completionHandler: { isSuccess, error in
       if !isSuccess {
-        // error
+        guard let error = error else { return }
+
+        self.router?.presentErrorAlertView(message: error.message)
       }
     })
   }

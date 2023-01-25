@@ -9,9 +9,8 @@ import UIKit
 
 import KKDSKit
 
-protocol ChallengeDetailViewProtocol {
+protocol ChallengeDetailViewProtocol: AnyObject {
   var interactor: ChallengeDetailInteractorProtocol? { get set }
-  var router: ChallengeDetailRouterProtocol? { get set }
 
   func getChallengeDetail(challengeDetail: ChallengeDetail)
 }
@@ -21,7 +20,6 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
   // MARK: - Properties
 
   var interactor: ChallengeDetailInteractorProtocol?
-  var router: ChallengeDetailRouterProtocol?
 
   var challengeId: Int = 12
   var challengeDetail: ChallengeDetail? {

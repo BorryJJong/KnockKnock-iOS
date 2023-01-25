@@ -12,17 +12,20 @@ import KakaoSDKTemplate
 import KakaoSDKCommon
 
 protocol KakaoShareManagerProtocol {
-  func sharePost(feedData: FeedShare?) -> Bool
-  func shareChallenge(challengeData: ChallengeDetail?) -> Bool
+  func sharePost(feedData: FeedShare?) -> (Bool, ErrorType?)
+  func shareChallenge(challengeData: ChallengeDetail?) -> (Bool, ErrorType?)
 }
 
 final class KakaoShareManager: KakaoShareManagerProtocol {
 
-  func shareChallenge(challengeData: ChallengeDetail?) -> Bool {
+  /// 챌린지 공유하기 이벤트
+  ///
+  /// - Returns: (Bool: 공유하기 성공 여부, ErrorType?: 에러 타입)
+  func shareChallenge(challengeData: ChallengeDetail?) -> (Bool, ErrorType?) {
 
     let isSuccess = true
 
-    guard let data = challengeData else { return !isSuccess }
+    guard let data = challengeData else { return (!isSuccess, ErrorType.unowned) }
 
     if ShareApi.isKakaoTalkSharingAvailable(){
 
@@ -41,7 +44,7 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
 
         guard let templateJsonData = (try? SdkJSONEncoder.custom.encode(template)),
               let templateJsonObject = SdkUtils.toJsonObject(templateJsonData) else {
-          return !isSuccess
+          return (!isSuccess, ErrorType.unowned)
         }
 
         ShareApi.shared.shareDefault(templateObject: templateJsonObject) { (linkResult, error) in
@@ -60,7 +63,7 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
 
         guard let templateJsonData = (try? SdkJSONEncoder.custom.encode(template)),
               let templateJsonObject = SdkUtils.toJsonObject(templateJsonData) else {
-          return !isSuccess
+          return (!isSuccess, ErrorType.unowned)
         }
 
         ShareApi.shared.shareDefault(templateObject: templateJsonObject) { (linkResult, error) in
@@ -71,17 +74,20 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
         }
       }
 
-      return isSuccess
+      return (isSuccess, nil)
 
     } else {
-      return !isSuccess
+      return (!isSuccess, ErrorType.no_kakaotalk_installation)
     }
   }
 
-  func sharePost(feedData: FeedShare?) -> Bool {
+  /// 게시글 공유하기 이벤트
+  ///
+  /// - Returns: (Bool: 공유하기 성공 여부, ErrorType?: 에러 타입)
+  func sharePost(feedData: FeedShare?) -> (Bool, ErrorType?) {
     let isSuccess = true
 
-    guard let data = feedData else { return !isSuccess }
+    guard let data = feedData else { return (!isSuccess, ErrorType.unowned) }
 
     let likeCount = Int(data.likeCount.filter { $0.isNumber }) ?? 0
     let commentCount = Int(data.commentCount.filter { $0.isNumber }) ?? 0
@@ -104,7 +110,7 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
 
         guard let templateJsonData = (try? SdkJSONEncoder.custom.encode(template)),
               let templateJsonObject = SdkUtils.toJsonObject(templateJsonData) else {
-          return !isSuccess
+          return (!isSuccess, ErrorType.unowned)
         }
 
         ShareApi.shared.shareDefault(templateObject: templateJsonObject) { (linkResult, error) in
@@ -122,7 +128,7 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
 
         guard let templateJsonData = (try? SdkJSONEncoder.custom.encode(template)),
               let templateJsonObject = SdkUtils.toJsonObject(templateJsonData) else {
-          return !isSuccess
+          return (!isSuccess, ErrorType.unowned)
         }
 
         ShareApi.shared.shareDefault(templateObject: templateJsonObject) { (linkResult, error) in
@@ -133,10 +139,10 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
         }
       }
 
-      return isSuccess
+      return (isSuccess, nil)
       
     } else {
-      return !isSuccess
+      return (!isSuccess, ErrorType.no_kakaotalk_installation)
     }
   }
 }

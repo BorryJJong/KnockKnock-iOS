@@ -36,11 +36,13 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
 
   func sharePost() {
     LoadingIndicator.showLoading()
-    self.worker?.sharePost(feedData: self.feedData, completionHandler: { isSuccess in
+    self.worker?.sharePost(feedData: self.feedData, completionHandler: { isSuccess, error in
       if isSuccess {
         self.router?.dismissView(action: nil)
       } else {
-        // error alert
+        guard let error = error else { return }
+
+        self.router?.presentErrorAlertView(message: error.message)
       }
     })
   }
