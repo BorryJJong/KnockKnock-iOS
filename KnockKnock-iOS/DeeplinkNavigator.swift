@@ -9,7 +9,7 @@ import UIKit
 
 final class DeeplinkNavigator {
   
-  var window: UIWindow?
+  private var window: UIWindow?
 
   func setUrl(window: UIWindow?, url: URL) {
 
@@ -21,7 +21,7 @@ final class DeeplinkNavigator {
     let components = URLComponents(string: urlString)
     let urlQueryItems = components?.queryItems ?? []
 
-    var dictionaryData = [String: String]()
+    var dictionaryData: [String: String] = [:]
 
     urlQueryItems.forEach {
       dictionaryData[$0.name] = $0.value

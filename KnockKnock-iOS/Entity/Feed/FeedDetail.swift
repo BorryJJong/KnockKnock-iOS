@@ -45,9 +45,11 @@ struct FeedDetail: Decodable {
     let id: Int
     let fileUrl: String
   }
+}
 
+extension FeedDetail {
   func toShare() -> FeedShare? {
-    
+
     guard let feed = feed else { return nil }
 
     return FeedShare(
