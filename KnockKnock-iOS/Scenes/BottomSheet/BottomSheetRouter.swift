@@ -59,29 +59,24 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
   private func setBottomSheetOptions(isMyPost: Bool) {
     guard let view = self.view as? BottomSheetViewController else { return }
 
-    view.do {
+    let contents: [String] = {
       if isMyPost {
-        $0.setBottomSheetContents(
-          contents: [
-            BottomSheetOption.postDelete.rawValue,
-            BottomSheetOption.postEdit.rawValue,
-            BottomSheetOption.postShare.rawValue
-          ],
-          bottomSheetType: .medium
-        )
-
+        return [
+          BottomSheetOption.postDelete.rawValue,
+          BottomSheetOption.postEdit.rawValue,
+          BottomSheetOption.postShare.rawValue
+        ]
       } else {
-        $0.setBottomSheetContents(
-          contents: [
-            BottomSheetOption.postReport.rawValue,
-            BottomSheetOption.postShare.rawValue,
-            BottomSheetOption.postHide.rawValue
-          ],
-          bottomSheetType: .medium
-        )
+        return [
+          BottomSheetOption.postReport.rawValue,
+          BottomSheetOption.postShare.rawValue,
+          BottomSheetOption.postHide.rawValue
+        ]
       }
-      $0.modalPresentationStyle = .overFullScreen
-    }
+    }()
+
+      view.setBottomSheetContents(contents: contents, bottomSheetType: .medium)
+      view.modalPresentationStyle = .overFullScreen
   }
 
   func presentErrorAlertView(message: String) {
