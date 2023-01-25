@@ -88,11 +88,11 @@ final class AccountManager: AccountManagerProtocol {
         object: ApiResponseDTO<Bool>.self,
         router: KKRouter.postLogOut,
         success: { response in
-          guard let data = response.data else {
-            // no data error
-            return
+          if response.message == "SUCCESS" {
+            completionHandler(true)
+          } else {
+            // error
           }
-          completionHandler(data)
         }, failure: { error in
           print(error)
         }
@@ -107,11 +107,11 @@ final class AccountManager: AccountManagerProtocol {
         object: ApiResponseDTO<Bool>.self,
         router: KKRouter.deleteWithdraw,
         success: { response in
-          guard let data = response.data else {
-            // no data error
-            return
+          if response.message == "SUCCESS" {
+            completionHandler(true)
+          } else {
+            // error
           }
-          completionHandler(data)
         }, failure: { error in
           print(error)
         }

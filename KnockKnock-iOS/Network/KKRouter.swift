@@ -147,9 +147,6 @@ enum KKRouter: URLRequestConvertible {
     case let .postSocialLogin(signInInfo):
       return signInInfo
 
-//    case let .postSignUp(userInfo):
-//      return userInfo
-
     case let .requestShopAddress(query, page, size):
       return [
         "query": query,
