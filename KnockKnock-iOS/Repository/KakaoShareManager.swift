@@ -125,7 +125,7 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
 
         guard let templateJsonData = (try? SdkJSONEncoder.custom.encode(template)),
               let templateJsonObject = SdkUtils.toJsonObject(templateJsonData) else {
-          return (!isSuccess, ErrorType.unowned)
+          return (false, ErrorType.unowned)
         }
 
         ShareApi.shared.shareDefault(templateObject: templateJsonObject) { (linkResult, error) in
