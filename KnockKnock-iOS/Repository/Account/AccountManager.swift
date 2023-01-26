@@ -57,16 +57,14 @@ final class AccountManager: AccountManagerProtocol {
       socialType: socialType.rawValue
     )
 
-    let parameters = [
-      "socialUuid": accessToken,
-      "socialType": socialType.rawValue
-    ]
-
     KKNetworkManager
       .shared
       .request(
         object: ApiResponseDTO<AccountResponse>.self,
-        router: KKRouter.postSocialLogin(signInInfo: parameters),
+        router: KKRouter.postSocialLogin(
+          socialUuid: accessToken,
+          socialType: socialType.rawValue
+        ),
         success: { response in
           guard let data = response.data else {
             // no data error
