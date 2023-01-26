@@ -94,6 +94,14 @@ final class ProfileSettingView: UIView {
     self.profileImageView.image = image
   }
 
+  func setPreviousProfile(userData: UserDetail) {
+    self.nicknameTextField.text = userData.nickname
+    self.profileImageView.setImageFromStringUrl(
+      stringUrl: userData.image,
+      defaultImage: KKDS.Image.ic_my_img_86
+    )
+  }
+
   // MARK: - Configure
   
   private func setupConstraints() {

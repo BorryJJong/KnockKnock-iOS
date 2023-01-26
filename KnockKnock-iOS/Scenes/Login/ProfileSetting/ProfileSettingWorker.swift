@@ -12,19 +12,29 @@ protocol ProfileSettingWorkerProtocol {
     registerInfo: RegisterInfo,
     completionHandler: @escaping (AccountResponse) -> Void
   )
+  func fetchUserData(completionHandler: @escaping (UserDetail) -> Void)
   func saveUserInfo(response: AccountResponse) -> Bool
 }
 
 final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
   private let accountManager: AccountManagerProtocol
   private let userDataManager: UserDataManagerProtocol
+  private let profileRepository: ProfileRepositoryProtocol
 
   init(
     accountManager: AccountManagerProtocol,
-    userDataManager: UserDataManagerProtocol
+    userDataManager: UserDataManagerProtocol,
+    profileRepository: ProfileRepositoryProtocol
   ) {
     self.accountManager = accountManager
     self.userDataManager = userDataManager
+    self.profileRepository = profileRepository
+  }
+
+  func fetchUserData(completionHandler: @escaping (UserDetail) -> Void) {
+    self.profileRepository.requestUserDeatil(completionHandler: { response in
+      completionHandler(response)
+    })
   }
 
   func requestRegister(

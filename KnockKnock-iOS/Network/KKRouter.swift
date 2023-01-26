@@ -172,7 +172,7 @@ enum KKRouter: URLRequestConvertible {
     case .deleteComment(let id): return "feed/comment/\(id)"
 
     // My
-    case .getUsersDetail: return "users/deatil"
+    case .getUsersDetail: return "users/detail"
 
     }
   }
