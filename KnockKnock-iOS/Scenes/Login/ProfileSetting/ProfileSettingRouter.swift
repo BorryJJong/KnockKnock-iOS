@@ -14,7 +14,7 @@ protocol ProfileSettingRouterProtocol {
   
   func navigateToMyView()
   func popProfileView()
-  func showErrorAlertView(message: String)
+  func showAlertView(message: String)
 }
 
 final class ProfileSettingRouter: ProfileSettingRouterProtocol {
@@ -56,7 +56,7 @@ final class ProfileSettingRouter: ProfileSettingRouterProtocol {
     sourceView.navigationController?.popViewController(animated: true)
   }
 
-  func showErrorAlertView(message: String) {
+  func showAlertView(message: String) {
     guard let sourceView = self.view as? UIViewController else { return }
     sourceView.showAlert(content: message)
   }

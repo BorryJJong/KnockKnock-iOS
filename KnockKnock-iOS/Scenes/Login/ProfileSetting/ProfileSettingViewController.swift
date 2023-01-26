@@ -168,14 +168,19 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
   }
 
   @objc private func confirmButtonDidTap(_ sender: UIButton) {
-    let nickname = self.containerView.nicknameTextField.text ?? ""
+    guard let nickname = self.containerView.nicknameTextField.text else { return }
 
     switch self.profileSettingViewType {
+
     case .update:
+
       self.showAlert(
         content: Alert.profileSetting.message,
         confirmActionCompletion: {
-          self.navigationController?.popViewController(animated: true)
+          self.interactor?.requestEditProfile(
+            nickname: nickname,
+            image: self.selectedImage
+          )
         }
       )
     case .signUp:

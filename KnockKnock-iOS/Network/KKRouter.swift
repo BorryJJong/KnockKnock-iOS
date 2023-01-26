@@ -62,6 +62,7 @@ enum KKRouter: URLRequestConvertible {
 
   // MY
   case getUsersDetail
+  case putUsers(nickname: String?, image: UIImage?)
 
   // MARK: - HTTP Method
 
@@ -128,6 +129,9 @@ enum KKRouter: URLRequestConvertible {
     case .getUsersDetail:
       return .get
 
+    case .putUsers:
+      return .put
+
     }
   }
 
@@ -173,6 +177,7 @@ enum KKRouter: URLRequestConvertible {
 
     // My
     case .getUsersDetail: return "users/detail"
+    case .putUsers: return "users"
 
     }
   }
@@ -248,7 +253,8 @@ enum KKRouter: URLRequestConvertible {
       return nil
 
     // My
-    case .getUsersDetail:
+    case .getUsersDetail,
+         .putUsers:
       return nil
 
     }
@@ -304,6 +310,18 @@ enum KKRouter: URLRequestConvertible {
 
       return multipartFormData
 
+    case let .putUsers(nickname, image):
+      let multipartFormData = MultipartFormData()
+
+      if let nickname = nickname?.data(using: .utf8) {
+        multipartFormData.append(nickname, withName: "nickname")
+      }
+      if let image = image?.pngData() {
+        multipartFormData.append(image, withName: "image", fileName: "\(image).png", mimeType: "image/png")
+      }
+
+      return multipartFormData
+
     default:
       return MultipartFormData()
     }
@@ -333,7 +351,7 @@ enum KKRouter: URLRequestConvertible {
         request.setValue("application/json", forHTTPHeaderField: "Accept")
       }
 
-    case .post, .patch, .delete:
+    case .post, .patch, .delete, .put:
 
       switch self {
 
@@ -344,7 +362,7 @@ enum KKRouter: URLRequestConvertible {
         request = try JSONEncoding.default.encode(request)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 
-      case .postFeed, .postSignUp:
+      case .postFeed, .postSignUp, .putUsers:
         request.setValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
 
       default:

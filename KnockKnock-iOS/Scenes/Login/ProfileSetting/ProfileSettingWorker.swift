@@ -14,6 +14,11 @@ protocol ProfileSettingWorkerProtocol {
   )
   func fetchUserData(completionHandler: @escaping (UserDetail) -> Void)
   func saveUserInfo(response: AccountResponse) -> Bool
+  func requestEditProfile(
+    nickname: String?,
+    image: UIImage?,
+    completionHandler: @escaping (Bool) -> Void
+  )
 }
 
 final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
@@ -33,7 +38,7 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
 
   func fetchUserData(completionHandler: @escaping (UserDetail) -> Void) {
     self.profileRepository.requestUserDeatil(completionHandler: { response in
-      completionHandler(response)
+      completionHandler(response.toDomain())
     })
   }
 
@@ -50,6 +55,20 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
 
         self.userDataManager.userDefaultsService.set(value: authInfo.accessToken, forkey: .accessToken)
         self.userDataManager.userDefaultsService.set(value: authInfo.refreshToken, forkey: .refreshToken)
+      }
+    )
+  }
+
+  func requestEditProfile(
+    nickname: String?,
+    image: UIImage?,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
+    self.profileRepository.requestEditProfile(
+      nickname: nickname,
+      image: image,
+      completionHandler: { isSuccess in
+        completionHandler(isSuccess)
       }
     )
   }

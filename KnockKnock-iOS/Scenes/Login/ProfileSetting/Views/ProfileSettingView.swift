@@ -96,10 +96,7 @@ final class ProfileSettingView: UIView {
 
   func setPreviousProfile(userData: UserDetail) {
     self.nicknameTextField.text = userData.nickname
-    self.profileImageView.setImageFromStringUrl(
-      stringUrl: userData.image,
-      defaultImage: KKDS.Image.ic_my_img_86
-    )
+    self.profileImageView.image = userData.image
   }
 
   // MARK: - Configure

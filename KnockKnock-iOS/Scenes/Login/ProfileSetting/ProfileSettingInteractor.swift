@@ -7,6 +7,8 @@
 
 import UIKit
 
+import KKDSKit
+
 protocol ProfileSettingInteractorProtocol {
   var worker: ProfileSettingWorkerProtocol? { get set }
   var presenter: ProfileSettingPresenterProtocol? { get set }
@@ -16,6 +18,7 @@ protocol ProfileSettingInteractorProtocol {
 
   func requestSignUp(nickname: String, image: UIImage)
   func fetchUserData()
+  func requestEditProfile(nickname: String, image: UIImage)
 
   func navigateToMyView()
   func popProfileView()
@@ -30,6 +33,7 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
   var router: ProfileSettingRouterProtocol?
 
   var signInInfo: SignInInfo?
+  var userDetail: UserDetail?
 
   func navigateToMyView() {
     self.router?.navigateToMyView()
@@ -39,8 +43,10 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
     self.router?.popProfileView()
   }
 
+  /// 기존에 설정 된 프로필 불러오기
   func fetchUserData() {
     self.worker?.fetchUserData(completionHandler: { [weak self] data in
+      self?.userDetail = data
       self?.presenter?.presenUserData(userData: data)
     })
   }
@@ -50,6 +56,7 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
     image: UIImage
   ) {
     guard let signInInfo = signInInfo else { return }
+
     let registerInfo = RegisterInfo(
       socialUuid: signInInfo.socialUuid,
       socialType: signInInfo.socialType,
@@ -60,15 +67,41 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
     self.worker?.requestRegister(
       registerInfo: registerInfo,
       completionHandler: { [weak self] response in
-        
+
         guard let isSuccess = self?.worker?.saveUserInfo(response: response) else { return }
 
         if isSuccess {
           self?.popProfileView()
 
         } else {
-          self?.router?.showErrorAlertView(message: "회원가입에 실패하였습니다.")
+          self?.router?.showAlertView(message: "회원가입에 실패하였습니다.")
         }
+      }
+    )
+  }
+
+  /// 프로필 수정 이벤트
+  /// 기존 nickname, image와 입력 된 nickname, image를 비교하여 변경 된 요소들만 수정 되도록 함
+  /// 변경이 안된 요소는 nil 전달 되며, api 성공 여부에 따라 알림 메시지 노출
+  func requestEditProfile(
+    nickname: String,
+    image: UIImage
+  ) {
+    var newNickname: String?
+    var newImage: UIImage?
+
+    newNickname = nickname == self.userDetail?.nickname ? nil : self.userDetail?.nickname
+
+    newImage = image.isEqualToImage(image: self.userDetail?.image) ? nil : self.userDetail?.image
+    
+    self.worker?.requestEditProfile(
+      nickname: newNickname,
+      image: newImage,
+      completionHandler: { isSuccess in
+
+        let message = isSuccess ? "프로필 수정에 성공하였습니다." : "프로필 수정에 실패하였습니다."
+
+        self.router?.showAlertView(message: message)
       }
     )
   }
