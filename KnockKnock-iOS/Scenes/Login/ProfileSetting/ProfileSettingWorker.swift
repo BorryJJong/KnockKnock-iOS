@@ -9,58 +9,56 @@ import UIKit
 
 protocol ProfileSettingWorkerProtocol {
   func requestRegister(
-    signInInfo: SignInInfo,
-    nickname: String,
-    image: String,
+    registerInfo: RegisterInfo,
     completionHandler: @escaping (AccountResponse) -> Void
   )
-  func saveUserInfo(response: AccountResponse)
+  func saveUserInfo(response: AccountResponse) -> Bool
 }
 
 final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
   private let accountManager: AccountManagerProtocol
-  private let localDataManager: UserDataManagerProtocol
+  private let userDataManager: UserDataManagerProtocol
 
   init(
     accountManager: AccountManagerProtocol,
-    localDataManager: UserDataManagerProtocol
+    userDataManager: UserDataManagerProtocol
   ) {
     self.accountManager = accountManager
-    self.localDataManager = localDataManager
+    self.userDataManager = userDataManager
   }
 
   func requestRegister(
-    signInInfo: SignInInfo,
-    nickname: String,
-    image: String,
+    registerInfo: RegisterInfo,
     completionHandler: @escaping (AccountResponse) -> Void
   ) {
     
     self.accountManager.register(
-      signInInfo: signInInfo,
-      nickname: nickname,
-      image: image,
+      registerInfo: registerInfo,
       completionHandler: { response in
 
         guard let authInfo = response.authInfo else { return }
 
-        self.localDataManager.userDefaultsService.set(value: authInfo.accessToken, forkey: .accessToken)
-        self.localDataManager.userDefaultsService.set(value: authInfo.refreshToken, forkey: .refreshToken)
+        self.userDataManager.userDefaultsService.set(value: authInfo.accessToken, forkey: .accessToken)
+        self.userDataManager.userDefaultsService.set(value: authInfo.refreshToken, forkey: .refreshToken)
       }
     )
   }
 
-  func saveUserInfo(response: AccountResponse) {
+  /// UserDefaults에 회원 정보 저장
+  ///
+  /// - Returns: 성공 여부(Bool)
+  func saveUserInfo(response: AccountResponse) -> Bool {
 
-    guard let authInfo = response.authInfo else { return }
+    guard let authInfo = response.authInfo else { return false }
 
     if let userInfo = response.userInfo {
-      self.localDataManager.userDefaultsService.set(value: userInfo.image, forkey: .profileImage)
-      self.localDataManager.userDefaultsService.set(value: userInfo.nickname, forkey: .nickname)
+      self.userDataManager.userDefaultsService.set(value: userInfo.image, forkey: .profileImage)
+      self.userDataManager.userDefaultsService.set(value: userInfo.nickname, forkey: .nickname)
     }
 
-    self.localDataManager.userDefaultsService.set(value: authInfo.accessToken, forkey: .accessToken)
-    self.localDataManager.userDefaultsService.set(value: authInfo.refreshToken, forkey: .refreshToken)
+    self.userDataManager.userDefaultsService.set(value: authInfo.accessToken, forkey: .accessToken)
+    self.userDataManager.userDefaultsService.set(value: authInfo.refreshToken, forkey: .refreshToken)
 
+    return true
   }
 }

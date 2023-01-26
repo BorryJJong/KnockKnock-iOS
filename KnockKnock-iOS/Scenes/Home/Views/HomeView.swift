@@ -225,30 +225,38 @@ final class HomeView: UIView {
   // MARK: - Tag Section Layout
 
   private func tagSectionLayout() -> NSCollectionLayoutSection {
-    let tagHeight: CGFloat = 40
+
+    let tagEstimatedWidth: CGFloat = 50
+    let tagEstimatedHeight: CGFloat = 30
 
     let tagItemSize = NSCollectionLayoutSize(
-      widthDimension: .fractionalWidth(1),
-      heightDimension: .absolute(tagHeight)
+      widthDimension: .estimated(tagEstimatedWidth),
+      heightDimension: .estimated(tagEstimatedHeight)
     )
     let tagItem = NSCollectionLayoutItem(layoutSize: tagItemSize)
 
     let tagGroupSize = NSCollectionLayoutSize(
-      widthDimension: .fractionalWidth(1),
-      heightDimension: .absolute(tagHeight)
+      widthDimension: .estimated(tagEstimatedWidth),
+      heightDimension: .estimated(tagEstimatedHeight)
     )
+
     let tagGroup = NSCollectionLayoutGroup.horizontal(
       layoutSize: tagGroupSize,
       subitems: [tagItem]
     )
 
     let tagSection = NSCollectionLayoutSection(group: tagGroup)
+
+    tagSection.interGroupSpacing = 10 
     tagSection.contentInsets = NSDirectionalEdgeInsets(
       top: 0,
       leading: 20,
       bottom: 0,
-      trailing: 10
+      trailing: 20
     )
+
+    tagSection.orthogonalScrollingBehavior = .continuous
+
     return tagSection
   }
 

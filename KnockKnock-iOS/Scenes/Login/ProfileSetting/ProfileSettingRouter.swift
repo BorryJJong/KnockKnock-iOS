@@ -13,6 +13,8 @@ protocol ProfileSettingRouterProtocol {
   static func createProfileSettingView(signInInfo: SignInInfo?) -> UIViewController
   
   func navigateToMyView()
+  func popProfileView()
+  func showErrorAlertView(message: String)
 }
 
 final class ProfileSettingRouter: ProfileSettingRouterProtocol {
@@ -25,7 +27,7 @@ final class ProfileSettingRouter: ProfileSettingRouterProtocol {
     let presenter = ProfileSettingPresenter()
     let worker = ProfileSettingWorker(
       accountManager: AccountManager(),
-      localDataManager: UserDataManager()
+      userDataManager: UserDataManager()
     )
     let router = ProfileSettingRouter()
 
@@ -46,5 +48,15 @@ final class ProfileSettingRouter: ProfileSettingRouterProtocol {
   func navigateToMyView() {
     guard let sourceView = self.view as? UIViewController else { return }
     sourceView.navigationController?.popToRootViewController(animated: true)
+  }
+  
+  func popProfileView() {
+    guard let sourceView = self.view as? UIViewController else { return }
+    sourceView.navigationController?.popViewController(animated: true)
+  }
+
+  func showErrorAlertView(message: String) {
+    guard let sourceView = self.view as? UIViewController else { return }
+    sourceView.showAlert(content: message)
   }
 }

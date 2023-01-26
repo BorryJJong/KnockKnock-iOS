@@ -17,6 +17,7 @@ protocol FeedDetailViewProtocol: AnyObject {
   func getAllCommentsCount(allCommentsCount: Int)
   func fetchVisibleComments(visibleComments: [Comment])
   func fetchLikeList(like: [Like.Info])
+  func fetchLikeStatus(isToggle: Bool)
   func deleteComment()
 }
 
@@ -34,6 +35,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
         self.feedId = feed.id
         self.containerView.bind(isLike: feed.isLike)
       }
+
       self.containerView.postCollectionView.reloadData()
       self.containerView.layoutIfNeeded()
     }
@@ -60,7 +62,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       }
     }
   }
-  
+
   // MARK: - Life Cycles
   
   override func viewDidLoad() {
@@ -187,18 +189,11 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   }
 
   @objc func likeButtonDidTap(_ sender: UIButton) {
-    sender.isSelected.toggle()
-
+    sender.isEnabled = true
     if sender.isSelected {
-
-      self.interactor?.requestLike(
-        feedId: self.feedId
-      )
+      self.interactor?.requestLikeCancel(feedId: self.feedId)
     } else {
-
-      self.interactor?.requestLikeCancel(
-        feedId: self.feedId
-      )
+      self.interactor?.requestLike(feedId: self.feedId)
     }
   }
 
@@ -238,18 +233,23 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   @objc private func keyboardWillHide(_ notification: Notification) {
     self.setCommentsTextViewConstant(isAppearing: false)
     self.setContainerViewConstant(notification: notification, isAppearing: false)
-    
+
     if self.containerView.commentTextView.text.isEmpty {
       self.containerView.likeButton.isHidden = false
-      self.containerView.commentTextView.leadingConstraint?.constant = 0
+      
+      self.containerView.commentTextView.snp.updateConstraints {
+        $0.leading.equalTo(self.containerView.likeButton.snp.trailing)
+      }
     }
   }
   
   private func setCommentsTextViewConstant(isAppearing: Bool) {
     let textViewHeightConstant = isAppearing ? 15.f : -19.f
-    
-    self.containerView.commentTextView.bottomConstraint?.constant = textViewHeightConstant
-    self.containerView.commentTextView.leadingConstraint?.constant = -20
+
+    self.containerView.commentTextView.snp.updateConstraints {
+      $0.bottom.equalTo(self.containerView.safeAreaLayoutGuide).offset(textViewHeightConstant)
+      $0.leading.equalTo(self.containerView.likeButton.snp.trailing).offset(-20)
+    }
   }
   
   private func setContainerViewConstant(notification: Notification, isAppearing: Bool) {
@@ -264,11 +264,15 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
           .keyboardAnimationDurationUserInfoKey
       ] as? NSNumber else { return }
       
-      let viewHeightConstant = isAppearing ? (-keyboardHeight) : 0
-      
-      self.containerView.frame.origin.y = viewHeightConstant
-      
+      let viewBottomConstant = isAppearing ? (-keyboardHeight) : 0
+
       UIView.animate(withDuration: animationDurationValue.doubleValue) {
+        self.containerView.postCollectionView.snp.updateConstraints {
+          $0.bottom.equalTo(self.containerView.safeAreaLayoutGuide).offset(viewBottomConstant)
+        }
+        self.containerView.commentTextView.snp.updateConstraints {
+          $0.bottom.equalTo(self.containerView.safeAreaLayoutGuide).offset(viewBottomConstant)
+        }
         self.containerView.layoutIfNeeded()
       }
     }
@@ -297,6 +301,15 @@ extension FeedDetailViewController: FeedDetailViewProtocol {
   
   func fetchLikeList(like: [Like.Info]) {
     self.like = like
+  }
+
+  func fetchLikeStatus(isToggle: Bool) {
+    if isToggle {
+      self.containerView.likeButton.do {
+        $0.isSelected.toggle()
+        $0.isEnabled = true
+      }
+    }
   }
 }
 

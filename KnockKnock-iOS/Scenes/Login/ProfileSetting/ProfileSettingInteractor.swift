@@ -14,9 +14,10 @@ protocol ProfileSettingInteractorProtocol {
 
   var signInInfo: SignInInfo? { get set }
 
-  func requestSignUp(nickname: String, image: String)
+  func requestSignUp(nickname: String, image: UIImage)
 
   func navigateToMyView()
+  func popProfileView()
 }
 
 final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
@@ -33,23 +34,35 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
     self.router?.navigateToMyView()
   }
 
-  func requestSignUp(
-    nickname: String,
-    image: String
-  ) {
-    if let signInInfo = signInInfo {
-      self.worker?.requestRegister(
-        signInInfo: signInInfo,
-        nickname: nickname,
-        image: image,
-        completionHandler: { response in
-          self.saveUserInfo(response: response)
-        }
-      )
-    }
+  func popProfileView() {
+    self.router?.popProfileView()
   }
 
-  func saveUserInfo(response: AccountResponse) {
-    self.worker?.saveUserInfo(response: response)
+  func requestSignUp(
+    nickname: String,
+    image: UIImage
+  ) {
+    guard let signInInfo = signInInfo else { return }
+    let registerInfo = RegisterInfo(
+      socialUuid: signInInfo.socialUuid,
+      socialType: signInInfo.socialType,
+      nickname: nickname,
+      image: image
+    )
+
+    self.worker?.requestRegister(
+      registerInfo: registerInfo,
+      completionHandler: { [weak self] response in
+        
+        guard let isSuccess = self?.worker?.saveUserInfo(response: response) else { return }
+
+        if isSuccess {
+          self?.popProfileView()
+
+        } else {
+          self?.router?.showErrorAlertView(message: "회원가입에 실패하였습니다.")
+        }
+      }
+    )
   }
 }
