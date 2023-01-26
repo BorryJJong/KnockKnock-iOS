@@ -60,36 +60,74 @@ enum KKRouter: URLRequestConvertible {
   case postAddComment(comment: Parameters)
   case deleteComment(id: Int)
 
+  // MY
+  case getUsersDetail
+
   // MARK: - HTTP Method
 
   var method: HTTPMethod {
     switch self {
-    case .getChallengeResponse,
-         .getFeedBlogPost,
-         .getFeedMain,
-         .getFeed,
-         .getChallengeTitles,
-         .getPromotions,
-         .getChallengeDetail,
-         .requestShopAddress,
-         .getLikeList,
-         .getHotPost,
-         .getComment:
+
+    // Home
+    case .getHotPost:
       return .get
 
+      // Account
     case .postSocialLogin,
          .postSignUp,
-         .postLogOut,
-         .postAddComment,
-         .postFeed,
-         .postFeedLike:
+         .postLogOut:
       return .post
 
-    case .deleteFeed,
-         .deleteWithdraw,
-         .deleteFeedLike,
-         .deleteComment:
+    case .deleteWithdraw:
       return .delete
+
+    // Challenge
+    case .getChallengeResponse,
+         .getChallengeDetail:
+      return .get
+
+    // FeedWrite, Main
+    case .getChallengeTitles,
+         .getPromotions,
+         .requestShopAddress,
+         .getFeedMain:
+      return .get
+
+    case .postFeed:
+      return .post
+
+    // FeedList, Detail
+    case .getFeedBlogPost,
+         .getFeed:
+      return .get
+
+    case .deleteFeed:
+      return .delete
+
+    // Like
+    case .getLikeList:
+      return .get
+
+    case .postFeedLike:
+      return .post
+
+    case .deleteFeedLike:
+      return .delete
+
+    // Comment
+    case .getComment:
+      return .get
+
+    case .postAddComment:
+      return .post
+
+    case .deleteComment:
+      return .delete
+
+    // My
+    case .getUsersDetail:
+      return .get
+
     }
   }
 
@@ -133,6 +171,9 @@ enum KKRouter: URLRequestConvertible {
     case .postAddComment: return "feed/comment"
     case .deleteComment(let id): return "feed/comment/\(id)"
 
+    // My
+    case .getUsersDetail: return "users/deatil"
+
     }
   }
 
@@ -141,14 +182,29 @@ enum KKRouter: URLRequestConvertible {
   var parameters: Parameters? {
     switch self {
 
+      // Home
     case let .getHotPost(challengeId):
       return [ "challengeId": challengeId ]
 
+    // Account
     case let .postSocialLogin(signInInfo):
       return signInInfo
 
-//    case let .postSignUp(userInfo):
-//      return userInfo
+    case .postLogOut,
+         .postSignUp,
+         .deleteWithdraw:
+      return nil
+
+    // Challenge
+    case .getChallengeDetail,
+         .getChallengeResponse:
+      return nil
+
+    // FeedWrite, Main
+    case .getChallengeTitles,
+         .getPromotions,
+         .postFeed:
+      return nil
 
     case let .requestShopAddress(query, page, size):
       return [
@@ -164,6 +220,7 @@ enum KKRouter: URLRequestConvertible {
         "challengeId": challengeId
       ]
 
+    // FeedList, Detail
     case let .getFeedBlogPost(page, take, feedId, challengeId):
       return [
         "page": page,
@@ -172,25 +229,28 @@ enum KKRouter: URLRequestConvertible {
         "challengeId": challengeId
       ]
 
+    case .getFeed,
+         .deleteFeed:
+      return nil
+
+    // Like
+    case .getLikeList,
+         .postFeedLike,
+         .deleteFeedLike:
+      return nil
+
+    // Comment
     case let .postAddComment(comment):
       return comment
 
-    case .getChallengeDetail,
-         .getChallengeResponse,
-         .getChallengeTitles,
-         .getFeed,
-         .getPromotions,
-         .getLikeList,
-         .getComment,
-         .postFeedLike,
-         .postFeed,
-         .postLogOut,
-         .postSignUp,
-         .deleteFeedLike,
-         .deleteComment,
-         .deleteFeed,
-         .deleteWithdraw:
+    case .getComment,
+         .deleteComment:
       return nil
+
+    // My
+    case .getUsersDetail:
+      return nil
+
     }
   }
 
@@ -261,7 +321,7 @@ enum KKRouter: URLRequestConvertible {
 
       switch self {
 
-      case .getChallengeDetail, .getFeed, .getPromotions, .getComment, .getLikeList:
+      case .getChallengeDetail, .getFeed, .getPromotions, .getComment, .getLikeList, .getUsersDetail:
         break
 
       case .requestShopAddress:
