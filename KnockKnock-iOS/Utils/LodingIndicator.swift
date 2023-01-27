@@ -53,5 +53,6 @@ final class LoadingIndicator {
       shared.backgroundView?.removeFromSuperview()
 
     }
+
   }
 }
