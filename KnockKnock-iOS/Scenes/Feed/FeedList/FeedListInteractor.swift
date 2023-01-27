@@ -159,7 +159,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
 
   func setNotification() {
     NotificationCenter.default.addObserver(
-      forName: .feedRefreshAfterSigned,
+      forName: .feedListRefreshAfterSigned,
       object: nil,
       queue: nil
     ) { _ in
@@ -167,7 +167,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     }
 
     NotificationCenter.default.addObserver(
-      forName: .feedRefreshAfterUnsigned,
+      forName: .feedListRefreshAfterUnsigned,
       object: nil,
       queue: nil
     ) { _ in
