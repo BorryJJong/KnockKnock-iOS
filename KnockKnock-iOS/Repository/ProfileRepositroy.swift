@@ -40,10 +40,6 @@ final class ProfileRepository: ProfileRepositoryProtocol {
     completionHandler: @escaping (Bool) -> Void
   ) {
 
-//    KKNetworkManager
-//      .shared
-//      .upload(object: A, router: <#T##KKRouter#>, success: <#T##((Decodable) -> Void)##((Decodable) -> Void)##(Decodable) -> Void#>, failure: <#T##KKNetworkManager.Failure##KKNetworkManager.Failure##(_ error: Error) -> Void#>)
-
     KKNetworkManager
       .shared
       .upload(

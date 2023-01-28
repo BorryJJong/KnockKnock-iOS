@@ -319,7 +319,7 @@ enum KKRouter: URLRequestConvertible {
         multipartFormData.append(nicknameData, withName: "nickname")
       }
       if let imageData = image?.pngData() {
-        multipartFormData.append(imageData, withName: "images", fileName: "\(imageData).png", mimeType: "image/png")
+        multipartFormData.append(imageData, withName: "image", fileName: "\(imageData).png", mimeType: "image/png")
       }
 
       return multipartFormData
