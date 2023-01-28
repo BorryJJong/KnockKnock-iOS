@@ -101,7 +101,7 @@
 		616524BB297EC25F009610C3 /* BottomSheetInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616524BA297EC25F009610C3 /* BottomSheetInteractor.swift */; };
 		616524BD297ECC51009610C3 /* BottomSheetWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616524BC297ECC51009610C3 /* BottomSheetWorker.swift */; };
 		616524BF297ECCCA009610C3 /* KakaoShareManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616524BE297ECCCA009610C3 /* KakaoShareManager.swift */; };
-		616524C1297ECEE9009610C3 /* ErrorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616524C0297ECEE9009610C3 /* ErrorType.swift */; };
+		616524C1297ECEE9009610C3 /* KakaoShareErrorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616524C0297ECEE9009610C3 /* KakaoShareErrorType.swift */; };
 		616EB0882890E42F001BD18C /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616EB0872890E42F001BD18C /* PostCell.swift */; };
 		616EB08B28910485001BD18C /* PostHeaderReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616EB08A28910485001BD18C /* PostHeaderReusableView.swift */; };
 		616EB08D289120C7001BD18C /* PostFooterReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616EB08C289120C7001BD18C /* PostFooterReusableView.swift */; };
@@ -346,7 +346,7 @@
 		616524BA297EC25F009610C3 /* BottomSheetInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetInteractor.swift; sourceTree = "<group>"; };
 		616524BC297ECC51009610C3 /* BottomSheetWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetWorker.swift; sourceTree = "<group>"; };
 		616524BE297ECCCA009610C3 /* KakaoShareManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoShareManager.swift; sourceTree = "<group>"; };
-		616524C0297ECEE9009610C3 /* ErrorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorType.swift; sourceTree = "<group>"; };
+		616524C0297ECEE9009610C3 /* KakaoShareErrorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoShareErrorType.swift; sourceTree = "<group>"; };
 		616EB0872890E42F001BD18C /* PostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
 		616EB08A28910485001BD18C /* PostHeaderReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHeaderReusableView.swift; sourceTree = "<group>"; };
 		616EB08C289120C7001BD18C /* PostFooterReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFooterReusableView.swift; sourceTree = "<group>"; };
@@ -1205,7 +1205,7 @@
 				61B20B5C29261B9600EBA596 /* MyType.swift */,
 				61DEFE85294059BF00ABC13E /* Alert.swift */,
 				61BB9DA92976AF4200728E97 /* Tab.swift */,
-				616524C0297ECEE9009610C3 /* ErrorType.swift */,
+				616524C0297ECEE9009610C3 /* KakaoShareErrorType.swift */,
 				6128A4C0297F7B02005E36F3 /* ShareURL.swift */,
 			);
 			path = Enum;
@@ -1448,7 +1448,7 @@
 				618D8B6928BF36A200828794 /* FeedSearchResultFooterReusableView.swift in Sources */,
 				201077F227D3A97A00280991 /* BaseViewController.swift in Sources */,
 				619DEE9E2887B41B00C80095 /* CommentRepository.swift in Sources */,
-				616524C1297ECEE9009610C3 /* ErrorType.swift in Sources */,
+				616524C1297ECEE9009610C3 /* KakaoShareErrorType.swift in Sources */,
 				6105079628B4EE9F00C1B5CF /* HomeRouter.swift in Sources */,
 				6190E968294EEE5F00A48512 /* Encodable+Ext.swift in Sources */,
 				6128A4C3297F7CC6005E36F3 /* FeedShare.swift in Sources */,

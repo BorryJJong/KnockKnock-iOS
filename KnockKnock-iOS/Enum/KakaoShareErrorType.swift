@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum ErrorType: Error {
+public enum KakaoErrorType: Error {
 
   case unowned
   case no_kakaotalk_installation
