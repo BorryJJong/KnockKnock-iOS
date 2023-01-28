@@ -296,6 +296,7 @@ enum KKRouter: URLRequestConvertible {
       return multipartFormData
 
     case .postSignUp(let userInfo):
+
       let multipartFormData = MultipartFormData()
 
       let socialUuid = userInfo.socialUuid.data(using: .utf8) ?? Data()
@@ -311,13 +312,14 @@ enum KKRouter: URLRequestConvertible {
       return multipartFormData
 
     case let .putUsers(nickname, image):
+
       let multipartFormData = MultipartFormData()
 
       if let nicknameData = nickname?.data(using: .utf8) {
         multipartFormData.append(nicknameData, withName: "nickname")
       }
       if let imageData = image?.pngData() {
-        multipartFormData.append(imageData, withName: "image", fileName: "\(imageData).png", mimeType: "image/png")
+        multipartFormData.append(imageData, withName: "images", fileName: "\(imageData).png", mimeType: "image/png")
       }
 
       return multipartFormData

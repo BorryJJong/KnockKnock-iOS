@@ -28,7 +28,7 @@ final class AccountManager: AccountManagerProtocol {
 
     KKNetworkManager
       .shared
-      .request(
+      .upload(
         object: ApiResponseDTO<AccountResponse>.self,
         router: KKRouter.postSignUp(userInfo: registerInfo),
         success: { response in
