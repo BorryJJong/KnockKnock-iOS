@@ -62,6 +62,7 @@ enum KKRouter: URLRequestConvertible {
 
   // MY
   case getUsersDetail
+  case getDuplicateNickname(nickname: String)
   case putUsers(nickname: String?, image: UIImage?)
 
   // MARK: - HTTP Method
@@ -126,7 +127,8 @@ enum KKRouter: URLRequestConvertible {
       return .delete
 
     // My
-    case .getUsersDetail:
+    case .getUsersDetail,
+         .getDuplicateNickname:
       return .get
 
     case .putUsers:
@@ -177,6 +179,7 @@ enum KKRouter: URLRequestConvertible {
 
     // My
     case .getUsersDetail: return "users/detail"
+    case .getDuplicateNickname(let nickname): return "users/duplicate-nickname/\(nickname)"
     case .putUsers: return "users"
 
     }
@@ -257,6 +260,7 @@ enum KKRouter: URLRequestConvertible {
 
     // My
     case .getUsersDetail,
+         .getDuplicateNickname,
          .putUsers:
       return nil
 
@@ -352,7 +356,14 @@ enum KKRouter: URLRequestConvertible {
 
       switch self {
 
-      case .getChallengeDetail, .getFeed, .getPromotions, .getComment, .getLikeList, .getUsersDetail:
+      case .getChallengeDetail,
+           .getFeed,
+           .getPromotions,
+           .getComment,
+           .getLikeList,
+           .getUsersDetail,
+           .getDuplicateNickname:
+
         break
 
       case .requestShopAddress:

@@ -9,7 +9,15 @@ import UIKit
 
 protocol ProfileRepositoryProtocol {
   func requestUserDeatil(completionHandler: @escaping (UserDetailDTO) -> Void)
-  func requestEditProfile(nickname: String?, image: UIImage?, completionHandler: @escaping (Bool) -> Void)
+  func requestEditProfile(
+    nickname: String?,
+    image: UIImage?,
+    completionHandler: @escaping (Bool) -> Void
+  )
+  func checkDuplicateNickname(
+    nickname: String,
+    completionHandler: @escaping (Bool) -> Void
+  )
 }
 
 final class ProfileRepository: ProfileRepositoryProtocol {
@@ -47,6 +55,28 @@ final class ProfileRepository: ProfileRepositoryProtocol {
         router: KKRouter.putUsers(nickname: nickname, image: image),
         success: { response in
           completionHandler(response.code == 200)
+        },
+        failure: { error in
+          print(error)
+        }
+      )
+  }
+
+  func checkDuplicateNickname(
+    nickname: String,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
+    KKNetworkManager
+      .shared
+      .request(
+        object: ApiResponseDTO<Bool>.self,
+        router: KKRouter.getDuplicateNickname(nickname: nickname),
+        success: { response in
+          guard let isSuccess = response.data else {
+            // error
+            return
+          }
+          completionHandler(isSuccess)
         },
         failure: { error in
           print(error)

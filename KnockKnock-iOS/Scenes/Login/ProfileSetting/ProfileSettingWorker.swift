@@ -17,6 +17,10 @@ protocol ProfileSettingWorkerProtocol {
     image: UIImage?,
     completionHandler: @escaping (Bool) -> Void
   )
+  func checkDuplicateNickname(
+    nickname: String,
+    completionHandler: @escaping (Bool) -> Void
+  )
 
   func fetchUserData(completionHandler: @escaping (UserDetail) -> Void)
   func saveUserInfo(response: AccountResponse) -> Bool
@@ -67,6 +71,19 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
       image: image,
       completionHandler: { isSuccess in
         completionHandler(isSuccess)
+      }
+    )
+  }
+
+  func checkDuplicateNickname(
+    nickname: String,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
+
+    self.profileRepository.checkDuplicateNickname(
+      nickname: nickname,
+      completionHandler: { isDuplicated in
+        completionHandler(isDuplicated)
       }
     )
   }
