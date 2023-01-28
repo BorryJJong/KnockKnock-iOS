@@ -27,19 +27,20 @@ final class DeeplinkNavigator {
       dictionaryData[$0.name] = $0.value
     }
 
-    if urlString.contains(ShareURL.feed) {
+    // 첫 번째 urlQueryItem을 이용하여 어떤 화면으로 가야 할지 분기
+    guard let queryItem = urlQueryItems.first?.name,
+          let queryItemType = ShareQueryItemType(rawValue: queryItem),
+          let stringId = dictionaryData[queryItemType.rawValue]?.filter({ $0.isNumber }),
+          let id = Int(stringId) else { return }
 
-      guard let stringId = dictionaryData[ShareURL.feed]?.filter({ $0.isNumber }),
-            let feedId = Int(stringId) else { return }
+    switch queryItemType {
 
-      self.navigateFeedDetail(feedId: feedId)
+    case .feed:
+      self.navigateFeedDetail(feedId: id)
 
-    } else if urlString.contains(ShareURL.challenge) {
+    case .challenge:
+      self.navigateChallengeDetail(challengeId: id)
 
-      guard let stringId = dictionaryData[ShareURL.challenge]?.filter({ $0.isNumber }),
-            let challengeId = Int(stringId) else { return }
-
-      self.navigateChallengeDetail(challengeId: challengeId)
     }
   }
 

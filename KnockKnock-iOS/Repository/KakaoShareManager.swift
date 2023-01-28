@@ -27,7 +27,9 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
 
     if ShareApi.isKakaoTalkSharingAvailable(){
 
-      let appLink = Link(iosExecutionParams: [ShareURL.challenge: "\(data.challenge.id)"])
+      let appLink = Link(
+        iosExecutionParams: [ShareQueryItemType.challenge.rawValue: "\(data.challenge.id)"]
+      )
 
       let button = Button(title: "앱에서 보기", link: appLink)
 
@@ -91,7 +93,7 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
 
     if ShareApi.isKakaoTalkSharingAvailable(){
 
-      let appLink = Link(iosExecutionParams: [ShareURL.feed: "\(data.id)"])
+      let appLink = Link(iosExecutionParams: [ShareQueryItemType.feed.rawValue: "\(data.id)"])
 
       let button = Button(title: "앱에서 보기", link: appLink)
 
