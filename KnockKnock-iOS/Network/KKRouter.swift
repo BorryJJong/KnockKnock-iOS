@@ -29,7 +29,7 @@ enum KKRouter: URLRequestConvertible {
   case getHotPost(challengeId: Int)
 
   // Account
-  case postSocialLogin(signInInfo: Parameters)
+  case postSocialLogin(socialUuid: String, socialType: String)
   case postSignUp(userInfo: RegisterInfo)
   case deleteWithdraw
   case postLogOut
@@ -192,8 +192,11 @@ enum KKRouter: URLRequestConvertible {
       return [ "challengeId": challengeId ]
 
     // Account
-    case let .postSocialLogin(signInInfo):
-      return signInInfo
+    case let .postSocialLogin(socialUuid, socialType):
+      return [
+        "socialUuid": socialUuid,
+        "socialType": socialType
+      ]
 
     case .postLogOut,
          .postSignUp,
