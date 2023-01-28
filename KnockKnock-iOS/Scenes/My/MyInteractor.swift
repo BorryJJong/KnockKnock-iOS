@@ -91,5 +91,13 @@ final class MyInteractor: MyInteractorProtocol {
     ) { _ in
       self.presenter?.presentLoginStatus(isSignedIn: false)
     }
+
+    NotificationCenter.default.addObserver(
+      forName: .profileUpdated,
+      object: nil,
+      queue: nil
+    ) { _ in
+      self.fetchNickname()
+    }
   }
 }

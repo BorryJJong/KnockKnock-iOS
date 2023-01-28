@@ -28,7 +28,7 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
   var interactor: ProfileSettingInteractorProtocol?
   
   var profileSettingViewType: ProfileSettingViewType = .update
-  var selectedImage: UIImage = KKDS.Image.ic_my_img_86
+  var selectedImage: UIImage?
   
   lazy var imagePicker = UIImagePickerController().then {
     $0.sourceType = .photoLibrary
@@ -183,7 +183,7 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
       
       self.interactor?.requestSignUp(
         nickname: nickname,
-        image: self.selectedImage
+        image: self.selectedImage ?? KKDS.Image.ic_my_img_86
       )
     }
   }
@@ -212,7 +212,7 @@ extension ProfileSettingViewController: UIImagePickerControllerDelegate, UINavig
     } else if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
       self.selectedImage = originalImage
     }
-    
+
     self.containerView.setProfileImage(image: self.selectedImage)
     
     picker.dismiss(animated: true, completion: nil)

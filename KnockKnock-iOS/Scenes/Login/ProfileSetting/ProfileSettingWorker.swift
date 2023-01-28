@@ -12,13 +12,15 @@ protocol ProfileSettingWorkerProtocol {
     registerInfo: RegisterInfo,
     completionHandler: @escaping (AccountResponse) -> Void
   )
-  func fetchUserData(completionHandler: @escaping (UserDetail) -> Void)
-  func saveUserInfo(response: AccountResponse) -> Bool
   func requestEditProfile(
     nickname: String?,
     image: UIImage?,
     completionHandler: @escaping (Bool) -> Void
   )
+
+  func fetchUserData(completionHandler: @escaping (UserDetail) -> Void)
+  func saveUserInfo(response: AccountResponse) -> Bool
+  func saveNickname(nickname: String)
 }
 
 final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
@@ -73,17 +75,10 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
   ///
   /// - Returns: 성공 여부(Bool)
   func saveUserInfo(response: AccountResponse) -> Bool {
+    return self.userDataManager.saveUserInfo(response: response)
+  }
 
-    guard let authInfo = response.authInfo else { return false }
-
-    if let userInfo = response.userInfo {
-      self.userDataManager.userDefaultsService.set(value: userInfo.image, forkey: .profileImage)
-      self.userDataManager.userDefaultsService.set(value: userInfo.nickname, forkey: .nickname)
-    }
-
-    self.userDataManager.userDefaultsService.set(value: authInfo.accessToken, forkey: .accessToken)
-    self.userDataManager.userDefaultsService.set(value: authInfo.refreshToken, forkey: .refreshToken)
-
-    return true
+  func saveNickname(nickname: String) {
+    self.userDataManager.saveNickname(nickname: nickname)
   }
 }

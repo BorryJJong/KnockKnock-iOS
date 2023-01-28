@@ -90,8 +90,8 @@ final class ProfileSettingView: UIView {
 
   // MARK: - Bind
 
-  func setProfileImage(image: UIImage) {
-    self.profileImageView.image = image
+  func setProfileImage(image: UIImage?) {
+    self.profileImageView.image = image ?? KKDS.Image.ic_my_img_86
   }
 
   func setPreviousProfile(userData: UserDetail) {

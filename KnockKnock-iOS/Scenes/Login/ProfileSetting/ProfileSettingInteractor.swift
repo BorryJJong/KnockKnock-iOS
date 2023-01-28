@@ -18,7 +18,7 @@ protocol ProfileSettingInteractorProtocol {
   
   func requestSignUp(nickname: String, image: UIImage)
   func fetchUserData()
-  func requestEditProfile(nickname: String, image: UIImage)
+  func requestEditProfile(nickname: String, image: UIImage?)
   
   func navigateToMyView()
   func popProfileView()
@@ -74,7 +74,7 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
           self?.navigateToMyView()
 
         } else {
-          self?.router?.showAlertView(message: "회원가입에 실패하였습니다.")
+          self?.router?.showAlertView(message: "회원가입에 실패하였습니다.", completion: nil)
         }
       }
     )
@@ -85,23 +85,40 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
   /// 변경이 안된 요소는 nil 전달 되며, api 성공 여부에 따라 알림 메시지 노출
   func requestEditProfile(
     nickname: String,
-    image: UIImage
+    image: UIImage?
   ) {
     var newNickname: String?
     var newImage: UIImage?
     
     newNickname = nickname == self.userDetail?.nickname ? nil : nickname
-    
-    newImage = image.isEqualToImage(image: self.userDetail?.image) ? nil : image
+
+    if let image = image {
+      newImage = image.isEqualToImage(image: self.userDetail?.image) ? nil : image
+    }
     
     self.worker?.requestEditProfile(
       nickname: newNickname,
       image: newImage,
       completionHandler: { isSuccess in
-        
-        let message = isSuccess ? "프로필 수정에 성공하였습니다." : "프로필 수정에 실패하였습니다."
-        
-        self.router?.showAlertView(message: message)
+
+        if isSuccess {
+          self.router?.showAlertView(
+            message: "프로필 수정에 성공하였습니다." ,
+            completion: {
+              if let newNickname = newNickname {
+                self.worker?.saveNickname(nickname: newNickname)
+              }
+              self.router?.navigateToMyView()
+            }
+          )
+        } else {
+          self.router?.showAlertView(
+            message: "프로필 수정에 실패하였습니다.",
+            completion: {
+              self.router?.navigateToMyView()
+            }
+          )
+        }
       }
     )
   }
