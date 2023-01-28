@@ -64,14 +64,20 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
       image: image
     )
     
-    guard let isSuccess = self.worker?.requestRegister(registerInfo: registerInfo) else { return }
-    
-    if isSuccess {
-      self.popProfileView()
-      
-    } else {
-      self.router?.showAlertView(message: "회원가입에 실패하였습니다.")
-    }
+    self.worker?.requestRegister(
+      registerInfo: registerInfo,
+      completionHandler: { [weak self] response in
+
+        guard let isSuccess = self?.worker?.saveUserInfo(response: response) else { return }
+
+        if isSuccess {
+          self?.navigateToMyView()
+
+        } else {
+          self?.router?.showAlertView(message: "회원가입에 실패하였습니다.")
+        }
+      }
+    )
   }
   
   /// 프로필 수정 이벤트
@@ -98,7 +104,5 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
         self.router?.showAlertView(message: message)
       }
     )
-    
   }
-  
 }

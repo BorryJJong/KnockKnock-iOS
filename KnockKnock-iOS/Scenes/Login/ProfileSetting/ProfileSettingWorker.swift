@@ -8,7 +8,10 @@
 import UIKit
 
 protocol ProfileSettingWorkerProtocol {
-  func requestRegister(registerInfo: RegisterInfo) -> Bool
+  func requestRegister(
+    registerInfo: RegisterInfo,
+    completionHandler: @escaping (AccountResponse) -> Void
+  )
   func fetchUserData(completionHandler: @escaping (UserDetail) -> Void)
   func saveUserInfo(response: AccountResponse) -> Bool
   func requestEditProfile(
@@ -39,17 +42,17 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
     })
   }
 
-  func requestRegister(registerInfo: RegisterInfo) -> Bool {
-    var isSuccess = false
+  func requestRegister(
+    registerInfo: RegisterInfo,
+    completionHandler: @escaping (AccountResponse) -> Void
+  ) {
 
     self.accountManager.register(
       registerInfo: registerInfo,
       completionHandler: { response in
-
-        isSuccess = self.saveUserInfo(response: response)
+        completionHandler(response)
       }
     )
-    return isSuccess
   }
 
   func requestEditProfile(
