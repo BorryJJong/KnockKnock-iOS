@@ -19,6 +19,10 @@ protocol ProfileSettingInteractorProtocol {
   func requestSignUp(nickname: String, image: UIImage)
   func fetchUserData()
   func requestEditProfile(nickname: String, image: UIImage?)
+  func isChangedUserData(
+    nickname: String,
+    image: UIImage?
+  ) -> Bool
   
   func navigateToMyView()
   func popProfileView()
@@ -34,6 +38,9 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
   
   var signInInfo: SignInInfo?
   var userDetail: UserDetail?
+
+  var newNickname: String?
+  var newImage: UIImage?
   
   func navigateToMyView() {
     self.router?.navigateToMyView()
@@ -49,6 +56,27 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
       self?.userDetail = data
       self?.presenter?.presenUserData(userData: data)
     })
+  }
+
+  /// nickname, image 중 하나라도 수정 되었는지 판별
+  func isChangedUserData(
+    nickname: String,
+    image: UIImage?
+  ) -> Bool {
+
+    self.newNickname = nickname == self.userDetail?.nickname ? nil : nickname
+
+    if let image = image {
+      self.newImage = image.isEqualToImage(image: self.userDetail?.image) ? nil : image
+    }
+
+    guard self.newImage != nil, self.newNickname != nil else {
+      self.navigateToMyView()
+      return false
+    }
+
+    return true
+
   }
 
   func requestSignUp(
@@ -102,13 +130,14 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
     nickname: String,
     image: UIImage?
   ) {
-    var newNickname: String?
-    var newImage: UIImage?
 
+    // 닉네임 중복검사
     self.worker?.checkDuplicateNickname(
       nickname: nickname,
       completionHandler: { isDuplicated in
 
+        // 본인이 사용하고 있는 닉네임이 아니고,
+        // 중복 검사 결과 true일 경우 이미 사용 중인 닉네임 noti
         if nickname != self.userDetail?.nickname, isDuplicated {
           self.router?.showAlertView(
             message: "이미 사용되고 있는 닉네임입니다.",
@@ -117,22 +146,22 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
 
         } else {
 
-          newNickname = nickname == self.userDetail?.nickname ? nil : nickname
+          self.newNickname = nickname == self.userDetail?.nickname ? nil : nickname
 
           if let image = image {
-            newImage = image.isEqualToImage(image: self.userDetail?.image) ? nil : image
+            self.newImage = image.isEqualToImage(image: self.userDetail?.image) ? nil : image
           }
 
           self.worker?.requestEditProfile(
-            nickname: newNickname,
-            image: newImage,
+            nickname: self.newNickname,
+            image: self.newImage,
             completionHandler: { isSuccess in
 
               if isSuccess {
                 self.router?.showAlertView(
                   message: "프로필 수정에 성공하였습니다." ,
                   completion: {
-                    if let newNickname = newNickname {
+                    if let newNickname = self.newNickname {
                       self.worker?.saveNickname(nickname: newNickname)
                     }
                     self.router?.navigateToMyView()

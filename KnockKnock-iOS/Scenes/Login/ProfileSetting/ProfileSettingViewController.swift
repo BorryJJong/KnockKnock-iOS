@@ -40,7 +40,11 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.interactor?.fetchUserData()
+
+    if profileSettingViewType == .update {
+      self.interactor?.fetchUserData()
+      self.containerView.enableConfirmButton(isEnable: true)
+    }
   }
   
   // MARK: - Configure
@@ -173,18 +177,28 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
     switch self.profileSettingViewType {
       
     case .update:
-      
-      self.interactor?.requestEditProfile(
+
+      // 수정 될 값이 없으면 my view로 이동
+      guard let isChanged = self.interactor?.isChangedUserData(
         nickname: nickname,
         image: self.selectedImage
-      )
+      ) else { return }
+
+      if isChanged {
+
+        self.interactor?.requestEditProfile(
+          nickname: nickname,
+          image: self.selectedImage
+        )
+      }
       
     case .register:
-      
+
       self.interactor?.requestSignUp(
         nickname: nickname,
         image: self.selectedImage ?? KKDS.Image.ic_my_img_86
       )
+
     }
   }
 }

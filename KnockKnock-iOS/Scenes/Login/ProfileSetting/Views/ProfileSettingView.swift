@@ -99,6 +99,11 @@ final class ProfileSettingView: UIView {
     self.profileImageView.image = userData.image
   }
 
+  func enableConfirmButton(isEnable: Bool) {
+    self.confirmButton.isEnabled = isEnable
+    self.confirmButton.backgroundColor = .green50
+  }
+
   // MARK: - Configure
   
   private func setupConstraints() {
