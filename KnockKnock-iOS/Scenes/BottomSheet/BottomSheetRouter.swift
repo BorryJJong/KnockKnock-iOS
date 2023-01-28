@@ -83,7 +83,14 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
     guard let sourceView = self.view as? UIViewController else { return }
 
     LoadingIndicator.hideLoading()
-    sourceView.showAlert(content: message)
+
+    sourceView.showAlert(
+      content: message,
+      isCancelActive: false,
+      confirmActionCompletion: {
+        self.dismissView(action: nil)
+      }
+    )
   }
 
   func navigateToShopSearch() {

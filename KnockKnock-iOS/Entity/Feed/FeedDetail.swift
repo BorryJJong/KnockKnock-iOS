@@ -57,8 +57,8 @@ extension FeedDetail {
       nickname: feed.userName,
       content: feed.content,
       imageUrl: images[0].fileUrl,
-      likeCount: "0",
-      commentCount: "0"
+      likeCount: nil,
+      commentCount: nil
     )
   }
 }

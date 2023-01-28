@@ -12,8 +12,15 @@ import KakaoSDKTemplate
 import KakaoSDKCommon
 
 protocol KakaoShareManagerProtocol {
-  func sharePost(feedData: FeedShare?) -> (Bool, KakaoErrorType?)
-  func shareChallenge(challengeData: ChallengeDetail?) -> (Bool, KakaoErrorType?)
+  func sharePost(feedData: FeedShare) -> (Bool, KakaoShareErrorType?)
+  func shareChallenge(challengeData: ChallengeDetail) -> (Bool, KakaoShareErrorType?)
+  func openKakaoShare<T: Encodable>(template: T?) -> (Bool, KakaoShareErrorType?)
+
+  func generateTextTemplate(
+    text: String,
+    appLink: Link,
+    shareQueryItemType: ShareQueryItemType
+  ) -> TextTemplate
 }
 
 final class KakaoShareManager: KakaoShareManagerProtocol {
@@ -21,127 +28,138 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
   /// 챌린지 공유하기 이벤트
   ///
   /// - Returns: (Bool: 공유하기 성공 여부, ErrorType?: 에러 타입)
-  func shareChallenge(challengeData: ChallengeDetail?) -> (Bool, KakaoErrorType?) {
+  func shareChallenge(challengeData: ChallengeDetail) -> (Bool, KakaoShareErrorType?) {
 
-    guard let data = challengeData else { return (false, KakaoErrorType.unowned) }
+    let appLink = Link(
+      iosExecutionParams: [ShareQueryItemType.challenge.rawValue: "\(challengeData.challenge.id)"]
+    )
 
-    if ShareApi.isKakaoTalkSharingAvailable(){
+    let button = Button(title: "앱에서 보기", link: appLink)
 
-      let appLink = Link(
-        iosExecutionParams: [ShareQueryItemType.challenge.rawValue: "\(data.challenge.id)"]
+    if let image = challengeData.content.image,
+       let imageUrl = URL(string: image) {
+
+      let content = Content(
+        title: "\(challengeData.challenge.title)",
+        imageUrl: imageUrl,
+        description: challengeData.challenge.subTitle,
+        link: appLink
       )
 
-      let button = Button(title: "앱에서 보기", link: appLink)
+      let feedTemplate = FeedTemplate(
+        content: content,
+        buttons: [button]
+      )
 
-      if let imageUrl = URL(string: data.content.image ??  "https://ecode.s3.ap-northeast-2.amazonaws.com/feed/1674532084081v3bgfbrzrzs.webp") {
-
-        let content = Content(title: "\(data.challenge.title)",
-                              imageUrl: imageUrl,
-                              description: data.challenge.subTitle,
-                              link: appLink)
-
-        let template = FeedTemplate(content: content, buttons: [button])
-
-        guard let templateJsonData = (try? SdkJSONEncoder.custom.encode(template)),
-              let templateJsonObject = SdkUtils.toJsonObject(templateJsonData) else {
-          return (false, KakaoErrorType.unowned)
-        }
-
-        ShareApi.shared.shareDefault(templateObject: templateJsonObject) { (linkResult, error) in
-          guard error == nil else { return }
-          guard let linkResult = linkResult else { return }
-
-          UIApplication.shared.open(linkResult.url, options: [:], completionHandler: nil)
-        }
-
-      } else {
-
-        let template = TextTemplate(
-          text: "\(data.challenge.title)",
-          link: appLink
-        )
-
-        guard let templateJsonData = (try? SdkJSONEncoder.custom.encode(template)),
-              let templateJsonObject = SdkUtils.toJsonObject(templateJsonData) else {
-          return (false, KakaoErrorType.unowned)
-        }
-
-        ShareApi.shared.shareDefault(templateObject: templateJsonObject) { (linkResult, error) in
-          guard error == nil else { return }
-          guard let linkResult = linkResult else { return }
-
-          UIApplication.shared.open(linkResult.url, options: [:], completionHandler: nil)
-        }
-      }
-
-      return (true, nil)
+      return self.openKakaoShare(template: feedTemplate)
 
     } else {
-      return (false, KakaoErrorType.no_kakaotalk_installation)
+
+      let textTemplate = generateTextTemplate(
+        text: challengeData.challenge.title,
+        appLink: appLink,
+        shareQueryItemType: .challenge
+      )
+
+      return self.openKakaoShare(template: textTemplate)
     }
   }
 
   /// 게시글 공유하기 이벤트
   ///
   /// - Returns: (Bool: 공유하기 성공 여부, ErrorType?: 에러 타입)
-  func sharePost(feedData: FeedShare?) -> (Bool, KakaoErrorType?) {
+  func sharePost(feedData: FeedShare) -> (Bool, KakaoShareErrorType?) {
 
-    guard let data = feedData else { return (false, KakaoErrorType.unowned) }
+    var socialData: Social?
 
-    let likeCount = Int(data.likeCount.filter { $0.isNumber }) ?? 0
-    let commentCount = Int(data.commentCount.filter { $0.isNumber }) ?? 0
+    if let like = feedData.likeCount,
+       let comment = feedData.commentCount,
+       let likeCount = Int(like.filter { $0.isNumber }),
+       let commentCount = Int(comment.filter { $0.isNumber }) {
+
+      socialData = Social(likeCount: likeCount, commentCount: commentCount)
+    }
+
+    let appLink = Link(iosExecutionParams: [ShareQueryItemType.feed.rawValue: "\(feedData.id)"])
+    let button = Button(title: "앱에서 보기", link: appLink)
+
+    // image 변환 실패시 textTemplate 사용
+    if let imageUrl = URL(string: feedData.imageUrl) {
+
+      let content = Content(title: "\(feedData.nickname)님의 게시글",
+                            imageUrl: imageUrl,
+                            description: feedData.content,
+                            link: appLink)
+
+      let feedTemplate = FeedTemplate(
+        content: content,
+        social: socialData,
+        buttons: [button]
+      )
+
+      return self.openKakaoShare(template: feedTemplate)
+
+    } else {
+
+      let textTemplate = self.generateTextTemplate(
+        text: feedData.nickname,
+        appLink: appLink,
+        shareQueryItemType: .feed
+      )
+
+      return self.openKakaoShare(template: textTemplate)
+
+    }
+  }
+
+  /// FeedTemplate 생성에 오류 발생 시 textTemplate을 생성하여 리턴
+  func generateTextTemplate(
+    text: String,
+    appLink: Link,
+    shareQueryItemType: ShareQueryItemType
+  ) -> TextTemplate {
+
+    switch shareQueryItemType {
+
+    case .feed:
+      return TextTemplate(
+        text: "\(text)님의 게시글",
+        link: appLink
+      )
+
+    case .challenge:
+      return TextTemplate(
+        text: text,
+        link: appLink
+      )
+    }
+  }
+
+  /// 생성된 템플릿을 받아 카카오 링크 api 실행
+  ///
+  /// - Returns: (Bool: 공유하기 성공 여부, ErrorType?: 에러 타입)
+  func openKakaoShare<T: Encodable>(template: T?) -> (Bool, KakaoShareErrorType?) {
 
     if ShareApi.isKakaoTalkSharingAvailable(){
 
-      let appLink = Link(iosExecutionParams: [ShareQueryItemType.feed.rawValue: "\(data.id)"])
+      guard let templateJsonData = (try? SdkJSONEncoder.custom.encode(template)),
+            let templateJsonObject = SdkUtils.toJsonObject(templateJsonData) else {
+        return (false, KakaoShareErrorType.unowned)
+      }
 
-      let button = Button(title: "앱에서 보기", link: appLink)
+      ShareApi.shared.shareDefault(templateObject: templateJsonObject) { (linkResult, error) in
+        guard error == nil else { return }
+        guard let linkResult = linkResult else { return }
 
-      if let imageUrl = URL(string: data.imageUrl) {
-        let content = Content(title: "\(data.nickname)님의 게시물",
-                              imageUrl: imageUrl,
-                              description: data.content,
-                              link: appLink)
-
-        let social = Social(likeCount: likeCount, commentCount: commentCount)
-
-        let template = FeedTemplate(content: content, social: social, buttons: [button])
-
-        guard let templateJsonData = (try? SdkJSONEncoder.custom.encode(template)),
-              let templateJsonObject = SdkUtils.toJsonObject(templateJsonData) else {
-          return (false, KakaoErrorType.unowned)
-        }
-
-        ShareApi.shared.shareDefault(templateObject: templateJsonObject) { (linkResult, error) in
-          guard error == nil else { return }
-          guard let linkResult = linkResult else { return }
-
-          UIApplication.shared.open(linkResult.url, options: [:], completionHandler: nil)
-        }
-
-      } else {
-        let template = TextTemplate(
-          text: "\(data.nickname)님의 게시물",
-          link: appLink
-        )
-
-        guard let templateJsonData = (try? SdkJSONEncoder.custom.encode(template)),
-              let templateJsonObject = SdkUtils.toJsonObject(templateJsonData) else {
-          return (false, KakaoErrorType.unowned)
-        }
-
-        ShareApi.shared.shareDefault(templateObject: templateJsonObject) { (linkResult, error) in
-          guard error == nil else { return }
-          guard let linkResult = linkResult else { return }
-
-          UIApplication.shared.open(linkResult.url, options: [:], completionHandler: nil)
-        }
+        UIApplication.shared.open(linkResult.url, options: [:], completionHandler: nil)
       }
 
       return (true, nil)
-      
+
     } else {
-      return (false, KakaoErrorType.no_kakaotalk_installation)
+
+      return (false, KakaoShareErrorType.no_kakaotalk_installation)
     }
   }
+
 }
