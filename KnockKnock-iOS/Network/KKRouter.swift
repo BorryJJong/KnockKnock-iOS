@@ -313,11 +313,11 @@ enum KKRouter: URLRequestConvertible {
     case let .putUsers(nickname, image):
       let multipartFormData = MultipartFormData()
 
-      if let nickname = nickname?.data(using: .utf8) {
-        multipartFormData.append(nickname, withName: "nickname")
+      if let nicknameData = nickname?.data(using: .utf8) {
+        multipartFormData.append(nicknameData, withName: "nickname")
       }
-      if let image = image?.pngData() {
-        multipartFormData.append(image, withName: "image", fileName: "\(image).png", mimeType: "image/png")
+      if let imageData = image?.pngData() {
+        multipartFormData.append(imageData, withName: "image", fileName: "\(imageData).png", mimeType: "image/png")
       }
 
       return multipartFormData

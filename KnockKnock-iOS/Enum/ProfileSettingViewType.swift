@@ -9,5 +9,5 @@ import Foundation
 
 enum ProfileSettingViewType {
   case update
-  case signUp
+  case register
 }

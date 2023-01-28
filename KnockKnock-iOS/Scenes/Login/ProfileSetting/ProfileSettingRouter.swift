@@ -10,7 +10,10 @@ import UIKit
 protocol ProfileSettingRouterProtocol {
   var view: ProfileSettingViewProtocol? { get set }
 
-  static func createProfileSettingView(signInInfo: SignInInfo?) -> UIViewController
+  static func createProfileSettingView(
+    profileSettingViewType: ProfileSettingViewType,
+    signInInfo: SignInInfo?
+  ) -> UIViewController
   
   func navigateToMyView()
   func popProfileView()
@@ -21,7 +24,11 @@ final class ProfileSettingRouter: ProfileSettingRouterProtocol {
 
   weak var view: ProfileSettingViewProtocol?
 
-  static func createProfileSettingView(signInInfo: SignInInfo?) -> UIViewController {
+  static func createProfileSettingView(
+    profileSettingViewType: ProfileSettingViewType,
+    signInInfo: SignInInfo?
+  ) -> UIViewController {
+    
     let view = ProfileSettingViewController()
     let interactor = ProfileSettingInteractor()
     let presenter = ProfileSettingPresenter()
@@ -42,6 +49,7 @@ final class ProfileSettingRouter: ProfileSettingRouterProtocol {
     if let signInInfo = signInInfo {
       interactor.signInInfo = signInInfo
     }
+    view.profileSettingViewType = profileSettingViewType
 
     return view
   }

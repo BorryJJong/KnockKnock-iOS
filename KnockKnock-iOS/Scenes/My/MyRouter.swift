@@ -65,7 +65,10 @@ final class MyRouter: MyRouterProtocol {
   }
 
   func navigateToProfileSettingView() {
-    let profileViewController = ProfileSettingRouter.createProfileSettingView(signInInfo: nil)
+    let profileViewController = ProfileSettingRouter.createProfileSettingView(
+      profileSettingViewType: .update,
+      signInInfo: nil
+    )
 
     if let sourceView = self.view as? UIViewController {
       profileViewController.hidesBottomBarWhenPushed = true

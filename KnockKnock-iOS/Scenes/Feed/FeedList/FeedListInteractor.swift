@@ -74,7 +74,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
           }) {
             self.feedListData?.feeds.remove(at: feedIndex)
           }
-
+ 
           guard let feedListData = self.feedListData else { return }
           self.presenter?.presentFetchFeedList(feedList: feedListData)
 
