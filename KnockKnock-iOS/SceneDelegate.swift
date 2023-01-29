@@ -11,7 +11,6 @@ import KakaoSDKAuth
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
   var window: UIWindow?
-  var deeplinkNavigator = DeeplinkNavigator()
 
   func scene(
     _ scene: UIScene,
@@ -39,7 +38,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
       _ = AuthController.handleOpenUrl(url: url)
 
     } else {
-      self.deeplinkNavigator.setUrl(window: self.window, url: url)
+      DeeplinkNavigator.shared.setUrl(url: url)
 
     }
   }

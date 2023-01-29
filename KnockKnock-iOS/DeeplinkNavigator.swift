@@ -8,12 +8,16 @@
 import UIKit
 
 final class DeeplinkNavigator {
-  
-  private var window: UIWindow?
 
-  func setUrl(window: UIWindow?, url: URL) {
+  static let shared = DeeplinkNavigator()
 
-    self.window = window
+  private init() { }
+
+  var window: UIWindow?
+
+  func setUrl(url: URL) {
+
+    self.window = UIApplication.shared.windows.first
 
     guard url.scheme == ShareURL.kakaoScheme, url.host == ShareURL.kakaoHost else { return }
 
@@ -46,7 +50,7 @@ final class DeeplinkNavigator {
 
   func navigateFeedDetail(feedId: Int) {
 
-    guard let tabBarController = self.window?.rootViewController as? MainTabBarController else { return }
+    guard let tabBarController = window?.rootViewController as? MainTabBarController else { return }
 
     tabBarController.selectedIndex = Tab.feed.rawValue
 
@@ -61,7 +65,8 @@ final class DeeplinkNavigator {
   }
 
   func navigateChallengeDetail(challengeId: Int) {
-    guard let tabBarController = self.window?.rootViewController as? MainTabBarController else { return }
+
+    guard let tabBarController = window?.rootViewController as? MainTabBarController else { return }
 
     tabBarController.selectedIndex = Tab.challenge.rawValue
 
