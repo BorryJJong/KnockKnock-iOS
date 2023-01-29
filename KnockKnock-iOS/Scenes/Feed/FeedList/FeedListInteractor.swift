@@ -16,14 +16,11 @@ protocol FeedListInteractorProtocol {
   func requestDelete(feedId: Int)
 
   func requestLike(feedId: Int)
-  func requestLikeCancel(feedId: Int)
 
   func navigateToFeedMain()
   func navigateToFeedDetail(feedId: Int)
   func navigateToCommentView(feedId: Int)
   func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?)
-
-  func setNotification()
 }
 
 final class FeedListInteractor: FeedListInteractorProtocol {
@@ -33,8 +30,21 @@ final class FeedListInteractor: FeedListInteractorProtocol {
 
   var feedListData: FeedList?
 
-  // Business Logic
+  // MARK: - Initialize
 
+  init() {
+    self.setNotification()
+  }
+
+  // MARK: - Business Logic
+
+  /// 피드 리스트 조회
+  ///
+  /// - Parameters:
+  ///   - currentPage: 현재 페이지
+  ///   - pageSize: 페이지 사이즈
+  ///   - feedId: 피드 아이디
+  ///   - challengeId: 챌린지 아이디
   func fetchFeedList(
     currentPage: Int,
     pageSize: Int,
@@ -62,6 +72,10 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     )
   }
 
+  /// 피드 삭제
+  ///
+  /// - Parameters:
+  ///   - feedId: 피드 아이디
   func requestDelete(feedId: Int) {
 
     self.worker?.requestDeleteFeed(
@@ -85,51 +99,47 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     )
   }
 
-  func toggleLike(feedId: Int) {
-
-    self.feedListData?.toggleIsLike(feedId: feedId)
-
-    guard let feedListData = self.feedListData else { return }
-    self.presenter?.presentFetchFeedList(feedList: feedListData)
-  }
-
+  /// 피드 좋아요
+  ///
+  /// - Parameters:
+  ///   - feedId: 피드 아이디
   func requestLike(feedId: Int) {
-    guard let isExistedUser = self.worker?.checkTokenExisted() else { return }
 
-    if isExistedUser {
-      self.worker?.requestLike(
-        feedId: feedId,
-        completionHandler: { result in
-          if result {
-            self.toggleLike(feedId: feedId)
-          } else {
-            // error
-          }
-        }
-      )
-    } else {
+    // 비로그인 유저인 경우 로그인 화면으로 이동
+    guard self.worker?.checkTokenExisted() ?? false else {
       self.router?.navigateToLoginView()
+      return
     }
-  }
-  
-  func requestLikeCancel(feedId: Int) {
-    guard let isExistedUser = self.worker?.checkTokenExisted() else { return }
 
-    if isExistedUser {
-      self.worker?.requestLikeCancel(
-        feedId: feedId,
-        completionHandler: {  result in
-          if result {
-            self.toggleLike(feedId: feedId)
-          } else {
-            // error
-          }
-        }
-      )
-    } else {
-      self.router?.navigateToLoginView()
+    guard let feedList = self.feedListData?.feeds else { return }
+    guard !feedList.isEmpty else { return }
+
+    // 좋아요 누른 피드가 현재 존재하는지 피드인지 체크
+    guard feedList.contains(where: { feedId == $0.id }) else { return }
+
+    // 좋아요 이벤트 실행한 피드의 좋아요 여부
+    guard let isLike = self.worker?.checkCurrentLikeState(
+      feedList: feedList,
+      feedId: feedId
+    ) else {
+      return
     }
+
+    self.worker?.requestLike(
+      isLike: isLike,
+      feedId: feedId,
+      completionHandler: { [weak self] isSuccess in
+        guard let self = self else { return }
+        guard isSuccess else {
+          // error handle
+          return
+        }
+
+        self.toggleLike(feedId: feedId)
+      }
+    )
   }
+
 
   // Routing
 
@@ -152,6 +162,45 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     self.router?.presentBottomSheetView(
       isMyPost: isMyPost,
       deleteAction: deleteAction
+    )
+  }
+}
+
+// MARK: - Inner Actions
+
+extension FeedListInteractor {
+
+  /// Get Feed ID
+  @objc
+  private func getFeedId(_ notification: Notification) {
+    guard let feedId = notification.object as? Int else { return }
+    self.toggleLike(feedId: feedId)
+  }
+
+  /// Toggle Like
+  private func toggleLike(feedId: Int) {
+
+    guard let feedListData = self.feedListData else { return }
+    guard !feedListData.feeds.isEmpty else { return }
+
+    guard let convertFeedList = self.worker?.convertLikeFeed(
+      feeds: feedListData,
+      id: feedId
+    ) else {
+      return
+    }
+
+    self.feedListData = convertFeedList
+
+    let updatedSections: [IndexPath] = self.worker?.changedLikeSections(
+      feeds: feedListData.feeds,
+      id: feedId
+    )
+      .map { IndexPath(item: 0, section: $0) } ?? []
+
+    self.presenter?.presentUpdateFeedList(
+      feedList: convertFeedList,
+      sections: updatedSections
     )
   }
 
@@ -187,10 +236,5 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       name: .postLikeCancel,
       object: nil
     )
-  }
-
-  @objc private func getFeedId(_ notification: Notification) {
-    guard let feedId = notification.object as? Int else { return }
-    self.toggleLike(feedId: feedId)
   }
 }
