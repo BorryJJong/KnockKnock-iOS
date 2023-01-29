@@ -125,11 +125,11 @@ final class FeedRepository: FeedRepositoryProtocol {
         object: ApiResponseDTO<Bool>.self,
         router: KKRouter.deleteFeed(id: feedId),
         success: { response in
-          guard let data = response.data else {
-            // no data error
-            return
+          if response.code == 200 {
+            completionHandler(true)
+          } else {
+            completionHandler(false)
           }
-          completionHandler(data)
         }, failure: { error in
           print(error)
         }

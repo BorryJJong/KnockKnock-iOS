@@ -15,20 +15,31 @@ protocol FeedListWorkerProtocol {
     challengeId: Int,
     completionHandler: @escaping (FeedList) -> Void
   )
-  func requestDeleteFeed(feedId: Int, completionHandler: @escaping (Bool) -> Void)
-  func requestLike(isLike: Bool, feedId: Int, completionHandler: @escaping (Bool) -> Void)
+  func requestDeleteFeed(
+    feedId: Int,
+    completionHandler: @escaping (Bool) -> Void
+  )
+  func requestLike(
+    isLike: Bool,
+    feedId: Int,
+    completionHandler: @escaping (Bool) -> Void
+  )
+  func removePostInFeedList(
+    feeds: FeedList,
+    id: Int
+  ) -> FeedList
   func checkTokenExisted() -> Bool
-
+  
   func checkCurrentLikeState(
     feedList: [FeedList.Post],
     feedId: Int
   ) -> Bool
-
-  func changedLikeSections(
+  
+  func changedSections(
     feeds: [FeedList.Post],
     id: Int
   ) -> [Int]
-
+  
   func convertLikeFeed(
     feeds: FeedList,
     id: Int
@@ -62,6 +73,25 @@ final class FeedListWorker: FeedListWorkerProtocol {
         completionHandler(isSuccess)
       }
     )
+  }
+
+  func removePostInFeedList(
+    feeds: FeedList,
+    id: Int
+  ) -> FeedList {
+    var feeds = feeds
+
+    let sections = self.changedSections(feeds: feeds.feeds, id: id)
+
+    for _ in 0..<sections.count {
+      if let feedIndex = feeds.feeds.firstIndex(where: {
+        $0.id == id
+      }) {
+        feeds.feeds.remove(at: feedIndex)
+      }
+    }
+
+    return feeds
   }
   
   func checkTokenExisted() -> Bool {
@@ -107,41 +137,41 @@ final class FeedListWorker: FeedListWorkerProtocol {
       )
     }
   }
-
-  func changedLikeSections(
+  
+  func changedSections(
     feeds: [FeedList.Post],
     id: Int
   ) -> [Int] {
-
+    
     var sections: [Int] = []
-
+    
     for (index, feed) in feeds.enumerated() where feed.id == id {
       sections.append(index)
     }
-
+    
     return sections
   }
-
+  
   func convertLikeFeed(
     feeds: FeedList,
     id: Int
   ) -> FeedList {
     var feeds = feeds
-
-    self.changedLikeSections(feeds: feeds.feeds, id: id).forEach {
+    
+    self.changedSections(feeds: feeds.feeds, id: id).forEach {
       self.setToggleLike(feed: &feeds.feeds[$0])
       self.setLikeCount(feed: &feeds.feeds[$0])
     }
-
+    
     return feeds
   }
-
+  
   func checkCurrentLikeState(
     feedList: [FeedList.Post],
     feedId: Int
   ) -> Bool {
     var isLike = true
-
+    
     for (index, feed) in feedList.enumerated() where feed.id == feedId {
       isLike = feedList[index].isLike
     }
@@ -151,23 +181,23 @@ final class FeedListWorker: FeedListWorkerProtocol {
 
 // MARK: - Inner Action
 extension FeedListWorker {
-
+  
   private func setToggleLike(feed: inout FeedList.Post) {
     feed.isLike.toggle()
   }
-
+  
   private func setLikeCount(feed: inout FeedList.Post) {
     let title = feed.blogLikeCount.filter { $0.isNumber }
-
+    
     let numberFormatter = NumberFormatter().then {
       $0.numberStyle = .decimal
     }
-
+    
     guard let titleToInt = Int(title) else { return }
-
+    
     let number = feed.isLike ? (titleToInt + 1) : (titleToInt - 1)
     let newTitle = numberFormatter.string(from: NSNumber(value: number)) ?? ""
-
+    
     feed.blogLikeCount = " \(newTitle)"
   }
 }

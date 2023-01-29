@@ -50,11 +50,7 @@ final class CommentRepository: CommentRepositoryProtocol {
           object: ApiResponseDTO<Bool>.self,
           router: KKRouter.postAddComment(comment: parameters),
           success: { response in
-            guard let data = response.data else {
-              // no data error
-              return
-            }
-            completionHandler(data)
+            completionHandler(response.code == 200)
           },
           failure: { error in
             print(error)
@@ -77,11 +73,7 @@ final class CommentRepository: CommentRepositoryProtocol {
         object: ApiResponseDTO<Bool>.self,
         router: KKRouter.deleteComment(id: commentId),
         success: { response in
-          guard let data = response.data else {
-            // no data error
-            return
-          }
-          completionHandler(data)
+          completionHandler(response.code == 200)
         }, failure: { error in
           print(error)
         }
