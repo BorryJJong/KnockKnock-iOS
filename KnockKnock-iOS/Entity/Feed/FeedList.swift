@@ -39,6 +39,18 @@ struct FeedList: Decodable {
 
       blogLikeCount = " \(newTitle)"
     }
+
+    func toShare() -> FeedShare? {
+      
+      return FeedShare(
+        id: id,
+        nickname: userName,
+        content: content ?? "",
+        imageUrl: blogImages[0].fileUrl,
+        likeCount: blogLikeCount,
+        commentCount: blogCommentCount
+      )
+    }
   }
 
   struct Image: Decodable {
@@ -56,4 +68,5 @@ struct FeedList: Decodable {
       feeds[$0].setLikeCount()
     }
   }
+
 }

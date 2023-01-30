@@ -115,7 +115,8 @@ final class FeedListViewController: BaseViewController<FeedListView> {
       isMyPost: isMyPost,
       deleteAction: {
         self.interactor?.requestDelete(feedId: feedId)
-      }
+      },
+      feedData: self.feedListPost[sender.tag]
     )
   }
 
