@@ -51,7 +51,7 @@ enum KKRouter: URLRequestConvertible {
   case deleteFeed(id: Int)
 
   // Feed Edit
-  case postFeedUpdate(data: Parameters)
+  case putFeed(id: Int, post: FeedEdit)
 
   // Like
   case postFeedLike(id: Int)
@@ -80,8 +80,7 @@ enum KKRouter: URLRequestConvertible {
          .getComment:
       return .get
 
-    case .postFeedUpdate,
-         .postSocialLogin,
+    case .postSocialLogin,
          .postSignUp,
          .postLogOut,
          .postAddComment,
@@ -94,6 +93,9 @@ enum KKRouter: URLRequestConvertible {
          .deleteFeedLike,
          .deleteComment:
       return .delete
+
+    case .putFeed:
+      return .put
     }
   }
 
@@ -128,7 +130,7 @@ enum KKRouter: URLRequestConvertible {
     case .deleteFeed(let id): return "feed/\(id)"
 
     // Feed Edit
-    case .postFeedUpdate(let data): return "feed/update"
+    case .putFeed(let id, _): return "feed/\(id)"
 
     // Like
     case .postFeedLike(let id): return "like/feed/\(id)"
@@ -153,9 +155,6 @@ enum KKRouter: URLRequestConvertible {
 
     case let .postSocialLogin(signInInfo):
       return signInInfo
-
-//    case let .postSignUp(userInfo):
-//      return userInfo
 
     case let .requestShopAddress(query, page, size):
       return [
@@ -182,8 +181,38 @@ enum KKRouter: URLRequestConvertible {
     case let .postAddComment(comment):
       return comment
 
-    case let .postFeedUpdate(data):
-      return data
+    case let .putFeed(_, post):
+      var params: [String: String] = [:]
+
+      if let promotions = post.promotions {
+        params["promotions"] = promotions
+      }
+
+      if let challenges = post.challenges {
+        params["challenges"] = challenges
+      }
+
+      if let content = post.content {
+        params["content"] = content
+      }
+
+      if let storeAddress = post.storeAddress {
+        params["storeAddress"] = storeAddress
+      }
+
+      if let storeName = post.storeName {
+        params["storeName"] = storeName
+      }
+
+      if let locationX = post.locationX {
+        params["locationX"] = locationX
+      }
+
+      if let locationY = post.locationY {
+        params["locationY"] = locationY
+      }
+
+      return params
 
     case .getChallengeDetail,
          .getChallengeResponse,
@@ -283,7 +312,7 @@ enum KKRouter: URLRequestConvertible {
         request.setValue("application/json", forHTTPHeaderField: "Accept")
       }
 
-    case .post, .patch, .delete:
+    case .post, .patch, .delete, .put:
 
       switch self {
 

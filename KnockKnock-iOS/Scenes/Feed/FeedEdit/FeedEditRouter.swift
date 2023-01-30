@@ -12,13 +12,14 @@ protocol FeedEditRouterProtocol {
 
   static func createFeedEdit(feedId: Int) -> UIViewController
 
-  func dismissFeedWriteView()
+  func popFeedEditView()
   func navigateToShopSearch()
   func navigateToProperty(
     propertyType: PropertyType,
     promotionList: [Promotion]?,
     tagList: [ChallengeTitle]?
   )
+  func showAlertView(message: String, confirmAction: (() -> Void)?) 
 }
 
 final class FeedEditRouter: FeedEditRouterProtocol {
@@ -34,7 +35,8 @@ final class FeedEditRouter: FeedEditRouterProtocol {
     let presenter = FeedEditPresenter()
     let worker = FeedEditWorker(
       feedRepository: FeedRepository(),
-      feedWriterepository: FeedWriteRepository()
+      feedWriteRepository: FeedWriteRepository(),
+      feedEditRepository: FeedEditRepository()
     )
     let router = FeedEditRouter()
 
@@ -52,9 +54,19 @@ final class FeedEditRouter: FeedEditRouterProtocol {
     return view
   }
 
-  func dismissFeedWriteView() {
+  func showAlertView(message: String, confirmAction: (() -> Void)?) {
     if let sourceView = self.view as? UIViewController {
-      sourceView.dismiss(animated: true)
+      sourceView.showAlert(
+        content: message,
+        isCancelActive: false,
+        confirmActionCompletion: nil
+      )
+    }
+  }
+
+  func popFeedEditView() {
+    if let sourceView = self.view as? UIViewController {
+      sourceView.navigationController?.popViewController(animated: true)
     }
   }
 

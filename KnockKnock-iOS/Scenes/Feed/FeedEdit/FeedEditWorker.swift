@@ -11,22 +11,29 @@ protocol FeedEditWorkerProtocol {
   func fetchOriginPost(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void)
   func requestPromotionList(completionHandler: @escaping ([Promotion]) -> Void)
   func requestTagList(completionHandler: @escaping ([ChallengeTitle]) -> Void)
+  func requestFeedEdit(id: Int, postData: FeedEdit, completionHandler: @escaping (Bool) -> Void)
 }
 
 final class FeedEditWorker: FeedEditWorkerProtocol {
 
   private let feedRepository: FeedRepositoryProtocol
-  private let feedWriterepository: FeedWriteRepositoryProtocol
+  private let feedWriteRepository: FeedWriteRepositoryProtocol
+  private let feedEditRepository: FeedEditRepositoryProtocol
 
   init(
     feedRepository: FeedRepositoryProtocol,
-    feedWriterepository: FeedWriteRepositoryProtocol
+    feedWriteRepository: FeedWriteRepositoryProtocol,
+    feedEditRepository: FeedEditRepositoryProtocol
   ) {
     self.feedRepository = feedRepository
-    self.feedWriterepository = feedWriterepository
+    self.feedWriteRepository = feedWriteRepository
+    self.feedEditRepository = feedEditRepository
   }
 
-  func fetchOriginPost(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void) {
+  func fetchOriginPost(
+    feedId: Int,
+    completionHandler: @escaping (FeedDetail) -> Void
+  ) {
     self.feedRepository.requestFeedDetail(
       feedId: feedId,
       completionHandler: { feed in
@@ -36,14 +43,33 @@ final class FeedEditWorker: FeedEditWorkerProtocol {
   }
 
   func requestPromotionList(completionHandler: @escaping ([Promotion]) -> Void) {
-    self.feedWriterepository.requestPromotionList(completionHandler: { response in
+    self.feedWriteRepository.requestPromotionList(completionHandler: { response in
       completionHandler(response)
     })
   }
 
   func requestTagList(completionHandler: @escaping ([ChallengeTitle]) -> Void) {
-    self.feedWriterepository.requestChallengeTitles(completionHandler: { response in
+    self.feedWriteRepository.requestChallengeTitles(completionHandler: { response in
       completionHandler(response)
     })
+  }
+
+  /// 피드 수정
+  ///
+  /// - Parameters:
+  /// - id: 피드 아이디
+  /// - postData: 수정 된 데이터
+  func requestFeedEdit(
+    id: Int,
+    postData: FeedEdit,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
+    self.feedEditRepository.requestEditFeed(
+      id: id,
+      postData: postData,
+      completionHandler: { isSuccess in
+        completionHandler(isSuccess)
+      }
+    )
   }
 }

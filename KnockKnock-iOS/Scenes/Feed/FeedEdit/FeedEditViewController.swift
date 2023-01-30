@@ -72,6 +72,11 @@ final class FeedEditViewController: BaseViewController<FeedEditView> {
       action: #selector(self.shopSearchButtonDidTap(_:)),
       for: .touchUpInside
     )
+    self.containerView.doneButton.addTarget(
+      self,
+      action: #selector(self.doneButtonDidTap(_:)),
+      for: .touchUpInside
+    )
 
     self.containerView.contentTextView.delegate = self
     
@@ -94,6 +99,10 @@ final class FeedEditViewController: BaseViewController<FeedEditView> {
 
   @objc private func shopSearchButtonDidTap(_ sender: UIButton) {
     self.interactor?.navigateToShopSearch()
+  }
+
+  @objc private func doneButtonDidTap(_ sender: UIButton) {
+    self.interactor?.updateFeed(id: self.feedId)
   }
 
 }
