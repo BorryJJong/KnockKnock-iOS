@@ -199,7 +199,9 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
 extension ProfileSettingViewController: ProfileSettingViewProtocol {
   
   func fetchUserData(userData: UserDetail) {
-    self.containerView.setPreviousProfile(userData: userData)
+    DispatchQueue.main.async {
+      self.containerView.setPreviousProfile(userData: userData)
+    }
   }
 }
 

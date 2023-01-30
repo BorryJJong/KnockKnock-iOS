@@ -71,5 +71,6 @@ final class LoadingIndicator {
 
       }
     }
+
   }
 }
