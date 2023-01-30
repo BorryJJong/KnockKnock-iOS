@@ -26,6 +26,8 @@ final class ImagePickerManager {
       $0.onlySquareImagesFromCamera = true
       $0.startOnScreen = .library
       $0.showsPhotoFilters = false
+      $0.showsCrop = .rectangle(ratio: 1)
+      $0.shouldSaveNewPicturesToAlbum = false
       $0.colors.tintColor = KKDS.Color.green50
       $0.wordings.libraryTitle = "갤러리"
       $0.wordings.cameraTitle = "카메라"

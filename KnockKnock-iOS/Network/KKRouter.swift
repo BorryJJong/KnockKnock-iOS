@@ -25,9 +25,12 @@ enum KKRouter: URLRequestConvertible {
 
   // MARK: - APIs
 
+  // Home
+  case getHotPost(challengeId: Int)
+
   // Account
   case postSocialLogin(signInInfo: Parameters)
-  case postSignUp(userInfo: Parameters)
+  case postSignUp(userInfo: RegisterInfo)
   case deleteWithdraw
   case postLogOut
 
@@ -73,6 +76,7 @@ enum KKRouter: URLRequestConvertible {
          .getChallengeDetail,
          .requestShopAddress,
          .getLikeList,
+         .getHotPost,
          .getComment:
       return .get
 
@@ -103,6 +107,9 @@ enum KKRouter: URLRequestConvertible {
     case .postSignUp: return "users/sign-up"
     case .postLogOut: return "users/logout"
     case .deleteWithdraw: return "users"
+
+    // Home
+    case .getHotPost: return "home/hot-post"
 
     // Challenge
     case .getChallengeResponse: return "challenges"
@@ -141,11 +148,14 @@ enum KKRouter: URLRequestConvertible {
   var parameters: Parameters? {
     switch self {
 
+    case let .getHotPost(challengeId):
+      return [ "challengeId": challengeId ]
+
     case let .postSocialLogin(signInInfo):
       return signInInfo
 
-    case let .postSignUp(userInfo):
-      return userInfo
+//    case let .postSignUp(userInfo):
+//      return userInfo
 
     case let .requestShopAddress(query, page, size):
       return [
@@ -180,16 +190,16 @@ enum KKRouter: URLRequestConvertible {
          .getChallengeTitles,
          .getFeed,
          .getPromotions,
-         .postFeedLike,
-         .deleteFeedLike,
          .getLikeList,
+         .getComment,
+         .postFeedLike,
          .postFeed,
          .postLogOut,
+         .postSignUp,
+         .deleteFeedLike,
          .deleteComment,
          .deleteFeed,
-         .deleteWithdraw,
-         .getComment:
-
+         .deleteWithdraw:
       return nil
     }
   }
@@ -229,6 +239,21 @@ enum KKRouter: URLRequestConvertible {
 
       return multipartFormData
 
+    case .postSignUp(let userInfo):
+      let multipartFormData = MultipartFormData()
+
+      let socialUuid = userInfo.socialUuid.data(using: .utf8) ?? Data()
+      let socialType = userInfo.socialType.data(using: .utf8) ?? Data()
+      let nickname = userInfo.nickname.data(using: .utf8) ?? Data()
+      let image = userInfo.image.pngData() ?? Data()
+
+      multipartFormData.append(socialUuid, withName: "socialUuid")
+      multipartFormData.append(socialType, withName: "socialType")
+      multipartFormData.append(nickname, withName: "nickname")
+      multipartFormData.append(image, withName: "image", fileName: "\(image).png", mimeType: "image/png")
+
+      return multipartFormData
+
     default:
       return MultipartFormData()
     }
@@ -255,6 +280,7 @@ enum KKRouter: URLRequestConvertible {
 
       default:
         request = try URLEncoding.default.encode(request, with: parameters)
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
       }
 
     case .post, .patch, .delete:
@@ -268,7 +294,7 @@ enum KKRouter: URLRequestConvertible {
         request = try JSONEncoding.default.encode(request)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 
-      case .postFeed:
+      case .postFeed, .postSignUp:
         request.setValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
 
       default:

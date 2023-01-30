@@ -11,18 +11,20 @@ protocol FeedDetailInteractorProtocol {
   var worker: FeedDetailWorkerProtocol? { get set }
   var presenter: FeedDetailPresenterProtocol? { get set }
   var router: FeedDetailRouterProtocol? { get set }
-
+  
   func getFeedDeatil(feedId: Int)
 
   func fetchAllComments(feedId: Int)
+
+  func fetchVisibleComments(comments: [Comment])
   func requestAddComment(comment: AddCommentDTO)
   func toggleVisibleStatus(commentId: Int)
   func requestDeleteComment(commentId: Int)
-
+  
   func requestLike(feedId: Int)
   func requestLikeCancel(feedId: Int)
   func fetchLikeList(feedId: Int)
-
+  
   func navigateToLikeDetail()
   func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?)
 }
@@ -31,7 +33,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   var worker: FeedDetailWorkerProtocol?
   var presenter: FeedDetailPresenterProtocol?
   var router: FeedDetailRouterProtocol?
-
+  
   private var likeList: [Like.Info] = []
 
   /// 서버에서 받아온 전체 댓글 array
@@ -50,44 +52,48 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       }
     )
   }
-
+  
   func requestLike(feedId: Int) {
     self.worker?.checkTokenExisted(completionHandler: { isExisted in
       if isExisted {
         self.worker?.requestLike(
           id: feedId,
           completionHandler: { result in
-            print(result) // 추후 error 처리
+            if result {
+              self.presenter?.presentLikeStatus(isToggle: true)
+              NotificationCenter.default.post(name: .postLike, object: feedId)
+            } else {
+              // error
+            }
           }
         )
       } else {
         self.router?.navigateToLoginView()
+        self.presenter?.presentLikeStatus(isToggle: isExisted)
       }
     })
   }
-
+  
   func requestLikeCancel(feedId: Int) {
-    self.worker?.checkTokenExisted(completionHandler: { isExisted in
-      if isExisted {
-
-        self.worker?.requestLikeCancel(
-          id: feedId,
-          completionHandler: { result in
-            print(result) // 추후 error 처리
-          }
-        )
-      } else {
-        self.router?.navigateToLoginView()
+    self.worker?.requestLikeCancel(
+      id: feedId,
+      completionHandler: { result in
+        if result {
+          self.presenter?.presentLikeStatus(isToggle: true)
+          NotificationCenter.default.post(name: .postLikeCancel, object: feedId)
+        } else {
+          // error
+        }
       }
-    })
+    )
   }
-
+  
   func fetchLikeList(feedId: Int) {
     self.worker?.fetchLikeList(
       feedId: feedId,
       completionHandler: { [weak self] likeList in
         self?.likeList = likeList
-        self?.presenter?.presentLike(like: likeList)
+        self?.presenter?.presentLikeList(like: likeList)
       }
     )
   }
@@ -119,11 +125,17 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   /// 답글을 포함한 모든 댓글의 수 (헤더에 표기)
   func fetchAllCommentsCount(comments: [Comment]) {
     var count = comments.count
-
+    
     comments.forEach {
       count += $0.data.reply?.count ?? 0
     }
     self.presenter?.presentAllCommentsCount(allCommentsCount: count)
+  }
+  
+  /// 비숨김 처리 댓글 fetch
+  /// 매번 모든 댓글을 받아오지 않도록 별도 정의
+  func fetchVisibleComments(comments: [Comment]) {
+    self.presenter?.presentVisibleComments(comments: comments)
   }
 
   /// 댓글 등록
@@ -163,8 +175,9 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       }
     )
   }
-  // MARK: - Routing
-
+  
+  // Routing
+  
   func navigateToLikeDetail() {
     self.router?.navigateToLikeDetail(like: self.likeList)
   }

@@ -149,7 +149,6 @@ final class AccountManager: AccountManagerProtocol {
     })
   }
 
-
   // 로그아웃
 
   func logOut(completionHanlder: @escaping (Bool) -> Void) {

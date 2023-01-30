@@ -25,7 +25,7 @@ final class PopularFooterCollectionReusableView: UICollectionReusableView {
 
   // MARK: - UIs
 
-  private let morePostButton = UIButton().then {
+  let morePostButton = UIButton().then {
     $0.setTitle("더 많은 게시글 살펴보기", for: .normal)
     $0.setTitleColor(.gray80, for: .normal)
     $0.titleLabel?.font = .systemFont(ofSize: 13, weight: .medium)

@@ -8,17 +8,20 @@
 import UIKit
 
 protocol FeedListRouterProtocol {
+  var view: FeedListViewProtocol? { get set }
   static func createFeedList(feedId: Int, challengeId: Int) -> UIViewController
 
-  func navigateToFeedMain(source: FeedListViewProtocol)
-  func navigateToFeedDetail(source: FeedListViewProtocol, feedId: Int)
-  func navigateToFeedEdit(source: FeedListViewProtocol, feedId: Int)
-  func navigateToCommentView(feedId: Int, source: FeedListViewProtocol)
-  func navigateToLoginView(source: FeedListViewProtocol)
-  func presentBottomSheetView(source: FeedListViewProtocol, isMyPost: Bool, deleteAction: (() -> Void)?, editAction: (() -> Void)?)
+  func navigateToFeedEdit(feedId: Int)
+  func navigateToFeedMain()
+  func navigateToFeedDetail(feedId: Int)
+  func navigateToCommentView(feedId: Int)
+  func navigateToLoginView()
+  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?, editAction: (() -> Void)?)
 }
 
 final class FeedListRouter: FeedListRouterProtocol {
+  weak var view: FeedListViewProtocol?
+
   static func createFeedList(feedId: Int, challengeId: Int) -> UIViewController {
 
     let view = FeedListViewController()
@@ -27,7 +30,7 @@ final class FeedListRouter: FeedListRouterProtocol {
     let worker = FeedListWorker(
       feedRepository: FeedRepository(),
       likeRepository: LikeRepository(),
-      localDataManager: UserDataManager()
+      userDataManager: UserDataManager()
     )
     let router = FeedListRouter()
 
@@ -36,6 +39,7 @@ final class FeedListRouter: FeedListRouterProtocol {
     interactor.presenter = presenter
     interactor.worker = worker
     presenter.view = view
+    router.view = view
 
     view.feedId = feedId
     view.challengeId = challengeId
@@ -43,51 +47,52 @@ final class FeedListRouter: FeedListRouterProtocol {
     return view
   }
 
-  func navigateToFeedMain(source: FeedListViewProtocol) {
-    if let sourceView = source as? UIViewController {
+  func navigateToFeedMain() {
+    if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.popViewController(animated: true)
     }
   }
 
-  func navigateToFeedDetail(source: FeedListViewProtocol, feedId: Int) {
+  func navigateToFeedDetail(feedId: Int) {
     let feedDetailViewController = FeedDetailRouter.createFeedDetail(feedId: feedId)
-    if let sourceView = source as? UIViewController {
+    if let sourceView = self.view as? UIViewController {
       feedDetailViewController.hidesBottomBarWhenPushed = true
       sourceView.navigationController?.pushViewController(feedDetailViewController, animated: true)
     }
   }
 
-  func navigateToFeedEdit(source: FeedListViewProtocol, feedId: Int) {
+  func navigateToFeedEdit(feedId: Int) {
     let feedEditViewController = FeedEditRouter.createFeedEdit(feedId: feedId)
-    if let sourceView = source as? UIViewController {
+    if let sourceView = self.view as? UIViewController {
       feedEditViewController.hidesBottomBarWhenPushed = true
       sourceView.navigationController?.pushViewController(feedEditViewController, animated: true)
     }
   }
 
-  func navigateToCommentView(feedId: Int, source: FeedListViewProtocol) {
+  func navigateToCommentView(feedId: Int) {
     let commentViewController = CommentRouter.createCommentView(feedId: feedId)
-    if let sourceView = source as? UIViewController {
+    if let sourceView = self.view as? UIViewController {
       commentViewController.modalPresentationStyle = .fullScreen
       sourceView.present(commentViewController, animated: true, completion: nil)
     }
   }
 
-  func navigateToLoginView(source: FeedListViewProtocol) {
+  func navigateToLoginView() {
     let loginViewController = LoginRouter.createLoginView()
     
     loginViewController.hidesBottomBarWhenPushed = true
-    if let sourceView = source as? UIViewController {
+    if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.pushViewController(loginViewController, animated: true)
     }
   }
 
+
   func presentBottomSheetView(
-    source: FeedListViewProtocol,
     isMyPost: Bool,
     deleteAction: (() -> Void)?,
     editAction: (() -> Void)?
   ) {
+
     let bottomSheetViewController = BottomSheetViewController().then {
       if isMyPost {
         $0.setBottomSheetContents(
@@ -113,7 +118,7 @@ final class FeedListRouter: FeedListRouterProtocol {
       $0.editAction = editAction
     }
 
-    if let sourceView = source as? UIViewController {
+    if let sourceView = self.view as? UIViewController {
       sourceView.present(
         bottomSheetViewController,
         animated: false,

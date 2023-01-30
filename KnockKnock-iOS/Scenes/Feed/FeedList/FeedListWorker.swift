@@ -16,25 +16,25 @@ protocol FeedListWorkerProtocol {
     completionHandler: @escaping (FeedList) -> Void
   )
   func requestDeleteFeed(feedId: Int, completionHandler: @escaping (Bool) -> Void)
-  func requestLike(id: Int, completionHandler: @escaping (Bool) -> Void)
-  func requestLikeCancel(id: Int, completionHandler: @escaping (Bool) -> Void)
-  func checkTokenExisted(completionHandler: @escaping (Bool) -> Void)
+  func requestLike(feedId: Int, completionHandler: @escaping (Bool) -> Void)
+  func requestLikeCancel(feedId: Int, completionHandler: @escaping (Bool) -> Void)
+  func checkTokenExisted() -> Bool
 }
 
 final class FeedListWorker: FeedListWorkerProtocol {
   
   private let feedRepository: FeedRepositoryProtocol
   private let likeRepository: LikeRepositoryProtocol
-  private let localDataManager: UserDataManagerProtocol
+  private let userDataManager: UserDataManagerProtocol
   
   init(
     feedRepository: FeedRepositoryProtocol,
     likeRepository: LikeRepositoryProtocol,
-    localDataManager: UserDataManagerProtocol
+    userDataManager: UserDataManagerProtocol
   ) {
     self.feedRepository = feedRepository
     self.likeRepository = likeRepository
-    self.localDataManager = localDataManager
+    self.userDataManager = userDataManager
   }
   
   func requestDeleteFeed(
@@ -49,9 +49,9 @@ final class FeedListWorker: FeedListWorkerProtocol {
     )
   }
   
-  func checkTokenExisted(completionHandler: @escaping (Bool) -> Void) {
-    let isExisted = self.localDataManager.checkTokenIsExisted()
-    completionHandler(isExisted)
+  func checkTokenExisted() -> Bool {
+    let isExisted = self.userDataManager.checkTokenIsExisted()
+    return isExisted
   }
   
   func fetchFeedList(
@@ -74,11 +74,11 @@ final class FeedListWorker: FeedListWorkerProtocol {
   }
   
   func requestLike(
-    id: Int,
+    feedId: Int,
     completionHandler: @escaping (Bool) -> Void
   ) {
     self.likeRepository.requestLike(
-      id: id,
+      id: feedId,
       completionHandler: { result in
         completionHandler(result)
       }
@@ -86,11 +86,11 @@ final class FeedListWorker: FeedListWorkerProtocol {
   }
   
   func requestLikeCancel(
-    id: Int,
+    feedId: Int,
     completionHandler: @escaping (Bool) -> Void
   ) {
     self.likeRepository.requestLikeCancel(
-      id: id,
+      id: feedId,
       completionHandler: { result in
         completionHandler(result)
       }

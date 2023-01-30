@@ -52,12 +52,6 @@ final class LoginInteractor: LoginInteractorProtocol {
     if response.isExistUser {
       self.saveTokens(response: response)
       self.popLoginView()
-
-      NotificationCenter.default.post(
-        name: .SignInCompleted,
-        object: nil
-      )
-
     } else {
       self.navigateToProfileSettingView(signInInfo: signInInfo)
     }

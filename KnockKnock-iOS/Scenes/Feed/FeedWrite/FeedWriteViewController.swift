@@ -27,7 +27,11 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   
   var interactor: FeedWriteInteractorProtocol?
 
-  var selectedImages: [UIImage] = []
+  var selectedImages: [UIImage] = [] {
+    didSet {
+      self.containerView.photoCollectionView.reloadData()
+    }
+  }
 
   // MARK: - UIs
 
@@ -46,6 +50,14 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     super.viewDidLoad()
   }
 
+  override func viewDidAppear(_ animated: Bool) {
+    self.changeStatusBarBgColor(bgColor: .white)
+  }
+
+  override func viewWillDisappear(_ animated: Bool) {
+    self.changeStatusBarBgColor(bgColor: .clear)
+  }
+
   // MARK: - Configure
 
   override func setupConfigure() {
@@ -55,7 +67,11 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
       $0.title = "새 게시글"
       $0.leftBarButtonItem = self.dismissBarButtonItem
     }
-    self.navigationController?.navigationBar.setDefaultAppearance()
+    self.navigationController?.navigationBar.do {
+      $0.backgroundColor = .white
+    }
+
+    self.addKeyboardNotification()
 
     self.containerView.photoCollectionView.do {
       $0.delegate = self
@@ -98,28 +114,48 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     )
   }
 
+  // MARK: - Keyboard Show & Hide
+
+  private func addKeyboardNotification() {
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(keyboardWillShow(_:)),
+      name: UIResponder.keyboardWillShowNotification,
+      object: nil
+    )
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(keyboardWillHide(_:)),
+      name: UIResponder.keyboardWillHideNotification,
+      object: nil
+    )
+  }
+
+  @objc private func keyboardWillShow(_ notification: Notification) {
+    self.containerView.setContainerViewConstant(notification: notification, isAppearing: true)
+  }
+
+  @objc private func keyboardWillHide(_ notification: Notification) {
+    self.containerView.setContainerViewConstant(notification: notification, isAppearing: false)
+  }
+ 
   // MARK: - Button Actions
 
-  @objc private func tagSelectButtonDidTap(_ sender: UIButton) {
-    self.interactor?.navigateToProperty(
-      source: self,
-      propertyType: .tag
-    )
+  @objc func tagSelectButtonDidTap(_ sender: UIButton) {
+    self.interactor?.navigateToProperty(propertyType: .tag)
   }
 
-  @objc private func promotionSelectButtonDidTap(_ sender: UIButton) {
-    self.interactor?.navigateToProperty(
-      source: self,
-      propertyType: .promotion
-    )
+  @objc func promotionSelectButtonDidTap(_ sender: UIButton) {
+    self.interactor?.navigateToProperty(propertyType: .promotion)
   }
 
-  @objc private func dismissBarButtonDidTap(_ sender: UIBarButtonItem) {
-    self.interactor?.dismissFeedWriteView(source: self)
+  @objc func dismissBarButtonDidTap(_ sender: UIBarButtonItem) {
+    self.interactor?.dismissFeedWriteView()
   }
 
-  @objc private func shopSearchButtonDidTap(_ sender: UIButton) {
-    self.interactor?.navigateToShopSearch(source: self)
+  @objc func shopSearchButtonDidTap(_ sender: UIButton) {
+    self.interactor?.navigateToShopSearch()
   }
 
   @objc private func photoAddButtonDidTap(_ sender: UIButton) {
@@ -138,23 +174,27 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
 
   // MARK: - ImagePicker
 
-  private func callImagePicker() {
-    self.selectedImages = []
+  func callImagePicker() {
+    var images: [UIImage] = []
 
     let picker = ImagePickerManager.shared.setImagePicker()
 
     picker.didFinishPicking { [unowned picker] items, _ in
-      for item in items {
-        switch item {
-        case let .photo(photo):
-          self.selectedImages.append(photo.image)
-          self.containerView.photoCollectionView.reloadData()
-        default:
-          print("error")
+      Task {
+        for item in items {
+          switch item {
+          case let .photo(photo):
+            let resizeImage = await photo.image.resize(newWidth: self.containerView.frame.width)
+            images.append(resizeImage)
+
+            self.selectedImages = images
+          default:
+            print("error")
+          }
         }
+        self.containerView.bindPhotoCount(count: self.selectedImages.count)
+        picker.dismiss(animated: true, completion: nil)
       }
-      self.containerView.bindPhotoCount(count: self.selectedImages.count)
-      picker.dismiss(animated: true, completion: nil)
     }
     self.present(picker, animated: true, completion: nil)
   }
@@ -182,8 +222,8 @@ extension FeedWriteViewController: FeedWriteViewProtocol {
   func showAlertView(isDone: Bool) {
     if isDone {
       self.showAlert(content: "게시글 등록을 완료 하시겠습니까?", confirmActionCompletion: {
+        LoadingIndicator.showLoading()
         self.interactor?.requestUploadFeed(
-          source: self,
           content: self.containerView.contentTextView.text,
           images: self.selectedImages
         )

@@ -8,6 +8,13 @@
 import Foundation
 
 extension Notification.Name {
-  static let SignInCompleted = Notification.Name("SignInCompleted")
+  // My
+  static let signInCompleted = Notification.Name("signInCompleted")
   static let signOutCompleted = Notification.Name("signOutCompleted")
+
+  // Feed
+  static let feedRefreshAfterSigned = Notification.Name("feedRefreshAfterSigned")
+  static let feedRefreshAfterUnsigned = Notification.Name("feedRefreshAfterUnsigned")
+  static let postLike = Notification.Name("postLike")
+  static let postLikeCancel = Notification.Name("postLikeCancel")
 }
