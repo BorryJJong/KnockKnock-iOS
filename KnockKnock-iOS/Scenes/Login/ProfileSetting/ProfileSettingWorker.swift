@@ -15,7 +15,7 @@ protocol ProfileSettingWorkerProtocol {
   func requestEditProfile(
     nickname: String?,
     image: UIImage?,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (Bool, String) -> Void
   )
   func checkDuplicateNickname(
     nickname: String,
@@ -24,7 +24,6 @@ protocol ProfileSettingWorkerProtocol {
 
   func fetchUserData(completionHandler: @escaping (UserDetail) -> Void)
   func saveUserInfo(response: AccountResponse) -> Bool
-  func saveNickname(nickname: String)
 }
 
 final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
@@ -44,7 +43,9 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
 
   func fetchUserData(completionHandler: @escaping (UserDetail) -> Void) {
     self.profileRepository.requestUserDeatil(completionHandler: { response in
-      completionHandler(response.toDomain())
+      Task {
+        completionHandler(await response.toDomain())
+      }
     })
   }
 
@@ -64,13 +65,20 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
   func requestEditProfile(
     nickname: String?,
     image: UIImage?,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (Bool, String) -> Void
   ) {
+
     self.profileRepository.requestEditProfile(
       nickname: nickname,
       image: image,
       completionHandler: { isSuccess in
-        completionHandler(isSuccess)
+
+        if isSuccess {
+          self.saveNickname(nickname: nickname)
+        }
+
+        let message = isSuccess ? "프로필 수정에 성공하였습니다." : "프로필 수정에 실패하였습니다."
+        completionHandler(isSuccess, message)
       }
     )
   }
@@ -87,6 +95,9 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
       }
     )
   }
+}
+
+extension ProfileSettingWorker {
 
   /// UserDefaults에 회원 정보 저장
   ///
@@ -95,7 +106,8 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
     return self.userDataManager.saveUserInfo(response: response)
   }
 
-  func saveNickname(nickname: String) {
+  private func saveNickname(nickname: String?) {
+    guard let nickname = nickname else { return }
     self.userDataManager.saveNickname(nickname: nickname)
   }
 }

@@ -178,19 +178,10 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
       
     case .update:
 
-      // 수정 될 값이 없으면 my view로 이동
-      guard let isChanged = self.interactor?.isChangedUserData(
+      self.interactor?.requestEditProfile(
         nickname: nickname,
         image: self.selectedImage
-      ) else { return }
-
-      if isChanged {
-
-        self.interactor?.requestEditProfile(
-          nickname: nickname,
-          image: self.selectedImage
-        )
-      }
+      )
       
     case .register:
 

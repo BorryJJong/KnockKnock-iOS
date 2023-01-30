@@ -65,7 +65,10 @@ final class ProfileSettingRouter: ProfileSettingRouterProtocol {
   }
 
   func showAlertView(message: String, completion: (() -> Void)?) {
+    LoadingIndicator.hideLoading()
+
     guard let sourceView = self.view as? UIViewController else { return }
+
     sourceView.showAlert(
       content: message,
       isCancelActive: false,

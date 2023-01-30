@@ -108,6 +108,8 @@
 		61725C192902428E00A84D87 /* PropertySelectRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61725C182902428E00A84D87 /* PropertySelectRouter.swift */; };
 		6174B93B296555A000C0C2BC /* UserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6174B93A296555A000C0C2BC /* UserDefaultsService.swift */; };
 		6174B93D29667D5E00C0C2BC /* APIEventLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6174B93C29667D5E00C0C2BC /* APIEventLogger.swift */; };
+		617E99C129879D1700E3FBD5 /* DispatchTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617E99C029879D1700E3FBD5 /* DispatchTimeInterval.swift */; };
+		617E99C32987A04400E3FBD5 /* ImageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617E99C22987A04400E3FBD5 /* ImageError.swift */; };
 		617F9D65282A5AED00C2BC9A /* ChallengeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D64282A5AED00C2BC9A /* ChallengeDetailView.swift */; };
 		617F9D67282A5B0300C2BC9A /* ChallengeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D66282A5B0300C2BC9A /* ChallengeDetailViewController.swift */; };
 		617F9D69282A6EB200C2BC9A /* ChallengeDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F9D68282A6EB200C2BC9A /* ChallengeDetailCell.swift */; };
@@ -348,6 +350,8 @@
 		61725C182902428E00A84D87 /* PropertySelectRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertySelectRouter.swift; sourceTree = "<group>"; };
 		6174B93A296555A000C0C2BC /* UserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsService.swift; sourceTree = "<group>"; };
 		6174B93C29667D5E00C0C2BC /* APIEventLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEventLogger.swift; sourceTree = "<group>"; };
+		617E99C029879D1700E3FBD5 /* DispatchTimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchTimeInterval.swift; sourceTree = "<group>"; };
+		617E99C22987A04400E3FBD5 /* ImageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageError.swift; sourceTree = "<group>"; };
 		617F9D64282A5AED00C2BC9A /* ChallengeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailView.swift; sourceTree = "<group>"; };
 		617F9D66282A5B0300C2BC9A /* ChallengeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailViewController.swift; sourceTree = "<group>"; };
 		617F9D68282A6EB200C2BC9A /* ChallengeDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailCell.swift; sourceTree = "<group>"; };
@@ -588,6 +592,7 @@
 				61AB2E5328A3775300A1AE30 /* Double+Ext.swift */,
 				61CD48032935BC0D00FEE2F7 /* Notification+Ext.swift */,
 				6190E967294EEE5F00A48512 /* Encodable+Ext.swift */,
+				617E99C029879D1700E3FBD5 /* DispatchTimeInterval.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -1194,6 +1199,7 @@
 				61DEFE85294059BF00ABC13E /* Alert.swift */,
 				61BB9DAD2978D50E00728E97 /* ProfileSettingViewType.swift */,
 				61BB9DA92976AF4200728E97 /* Tab.swift */,
+				617E99C22987A04400E3FBD5 /* ImageError.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -1464,6 +1470,7 @@
 				61B23BAB296923E5005AFA6D /* UserDefaultsKey.swift in Sources */,
 				61EC54FD296BE32A005D98DE /* ChallengeTitle.swift in Sources */,
 				2090811A27CA4F61005A1573 /* ChallengeViewController.swift in Sources */,
+				617E99C32987A04400E3FBD5 /* ImageError.swift in Sources */,
 				613856D82899015000BE347E /* HomeMainCell.swift in Sources */,
 				61CD48042935BC0D00FEE2F7 /* Notification+Ext.swift in Sources */,
 				2010780427D3D62300280991 /* UITableView+Ext.swift in Sources */,
@@ -1570,6 +1577,7 @@
 				61B6D998288C40BF00E60F08 /* HomeSection.swift in Sources */,
 				61B20B6929273CAF00EBA596 /* UITableHeaderFooterView+Ext.swift in Sources */,
 				616EB0972892341F001BD18C /* ReactFooterReusableView.swift in Sources */,
+				617E99C129879D1700E3FBD5 /* DispatchTimeInterval.swift in Sources */,
 				61E3087C287334C1001394B6 /* ImageScaleType.swift in Sources */,
 				61B20B5D29261B9600EBA596 /* MyType.swift in Sources */,
 				611BD4A327E3017E007D5C79 /* FeedWriteViewController.swift in Sources */,

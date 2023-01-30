@@ -9,10 +9,6 @@ import UIKit
 
 extension UIImageView {
 
-  enum ImageError: Error {
-    case loadError
-  }
-
   func setImageFromStringUrl(
     stringUrl: String?,
     defaultImage: UIImage
@@ -26,7 +22,7 @@ extension UIImageView {
         }
 
       } catch {
-        let image = await defaultImage.resize(newWidth: self.frame.width)
+        let image = defaultImage.resize(newWidth: self.frame.width)
 
         await MainActor.run {
           self.image = image
@@ -70,7 +66,7 @@ extension UIImageView {
         throw ImageError.loadError
       }
 
-      let resizeImage = await image.resize(newWidth: self.frame.width)
+      let resizeImage = image.resize(newWidth: self.frame.width)
 
       return resizeImage
     }

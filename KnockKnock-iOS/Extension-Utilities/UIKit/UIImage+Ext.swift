@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIImage {
-  func resize(newWidth: CGFloat) async -> UIImage {
+  func resize(newWidth: CGFloat) -> UIImage {
     let scale = newWidth / self.size.width
     let newHeight = self.size.height * scale
 
@@ -30,5 +30,4 @@ extension UIImage {
 
     return data1.isEqual(data2)
   }
-
 }
