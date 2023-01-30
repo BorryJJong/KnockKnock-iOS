@@ -16,11 +16,11 @@ protocol FeedListInteractorProtocol {
   func requestDelete(feedId: Int)
   
   func requestLike(feedId: Int)
-  
+
+  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?, feedData: FeedList.Post)
   func navigateToFeedMain()
   func navigateToFeedDetail(feedId: Int)
   func navigateToCommentView(feedId: Int)
-  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?)
 }
 
 final class FeedListInteractor: FeedListInteractorProtocol {
@@ -162,11 +162,13 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   
   func presentBottomSheetView(
     isMyPost: Bool,
-    deleteAction: (() -> Void)?
+    deleteAction: (() -> Void)?,
+    feedData: FeedList.Post
   ) {
     self.router?.presentBottomSheetView(
       isMyPost: isMyPost,
-      deleteAction: deleteAction
+      deleteAction: deleteAction,
+      feedData: feedData.toShare()
     )
   }
 }

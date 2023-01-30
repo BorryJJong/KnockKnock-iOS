@@ -11,11 +11,11 @@ protocol FeedListRouterProtocol {
   var view: FeedListViewProtocol? { get set }
   static func createFeedList(feedId: Int, challengeId: Int) -> UIViewController
 
+  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?, feedData: FeedShare?)
   func navigateToFeedMain()
   func navigateToFeedDetail(feedId: Int)
   func navigateToCommentView(feedId: Int)
   func navigateToLoginView()
-  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?)
 }
 
 final class FeedListRouter: FeedListRouterProtocol {
@@ -77,30 +77,18 @@ final class FeedListRouter: FeedListRouterProtocol {
     }
   }
 
-  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?) {
-    let bottomSheetViewController = BottomSheetViewController().then {
-      if isMyPost {
-        $0.setBottomSheetContents(
-          contents: [
-            BottomSheetOption.postDelete.rawValue,
-            BottomSheetOption.postEdit.rawValue
-          ],
-          bottomSheetType: .small
-        )
+  func presentBottomSheetView(
+    isMyPost: Bool,
+    deleteAction: (() -> Void)?,
+    feedData: FeedShare?
+  ) {
 
-      } else {
-        $0.setBottomSheetContents(
-          contents: [
-            BottomSheetOption.postReport.rawValue,
-            BottomSheetOption.postShare.rawValue,
-            BottomSheetOption.postHide.rawValue
-          ],
-          bottomSheetType: .medium
-        )
-      }
-      $0.modalPresentationStyle = .overFullScreen
-      $0.deleteAction = deleteAction
-    }
+    guard let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
+      deleteAction: deleteAction,
+      feedData: feedData,
+      isMyPost: isMyPost
+    ) as? BottomSheetViewController else { return }
+
     if let sourceView = self.view as? UIViewController {
       sourceView.present(
         bottomSheetViewController,
