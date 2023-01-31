@@ -65,15 +65,8 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
   }
 
   @objc func tapSortChallengeButton(_ sender: UIButton) {
-    let bottomSheetViewController = BottomSheetViewController()
-    bottomSheetViewController.setBottomSheetContents(
-      contents: [
-        BottomSheetOption.postEdit.rawValue,
-        BottomSheetOption.postDelete.rawValue
-      ],
-      bottomSheetType: .small
-    )
-    bottomSheetViewController.modalPresentationStyle = .overFullScreen
+    let bottomSheetViewController = BottomSheetRouter.createBottomSheet(isChallenge: true)
+
     self.present(bottomSheetViewController, animated: false, completion: nil)
   }
 }
@@ -96,12 +89,17 @@ extension ChallengeViewController: UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
+
     let cell = collectionView.dequeueReusableCell(
       withReuseIdentifier: ChallengeCell.reusableIdentifier,
-      for: indexPath) as! ChallengeCell
+      for: indexPath)
+    as! ChallengeCell
+
     let challenge = self.challenges[indexPath.row]
+
     cell.backgroundColor = .white
     cell.bind(data: challenge)
+
     return cell
   }
 }

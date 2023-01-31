@@ -13,6 +13,8 @@ enum BottomSheetOption: String {
   case postReport = "신고하기"
   case postShare = "공유하기"
   case postHide = "숨기기"
+  case challengeNew = "최신순"
+  case challengePopular = "인기순"
 }
 
 enum BottomSheetType: CGFloat {

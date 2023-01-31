@@ -13,6 +13,7 @@ protocol BottomSheetRouterProtocol: AnyObject {
   static func createBottomSheet(
     districtSelectDelegate: DistrictSelectDelegate?,
     districtsType: DistrictsType?,
+    isChallenge: Bool?,
     deleteAction: (() -> Void)?,
     feedData: FeedShare?,
     isMyPost: Bool?
@@ -20,7 +21,7 @@ protocol BottomSheetRouterProtocol: AnyObject {
 
   func navigateToShopSearch()
   func dismissView(action: (() -> Void)?)
-  func presentErrorAlertView(message: String) 
+  func presentErrorAlertView(message: String)
 }
 
 final class BottomSheetRouter: BottomSheetRouterProtocol {
@@ -30,6 +31,7 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
   static func createBottomSheet(
     districtSelectDelegate: DistrictSelectDelegate? = nil,
     districtsType: DistrictsType? = nil,
+    isChallenge: Bool? = nil,
     deleteAction: (() -> Void)? = nil,
     feedData: FeedShare? = nil,
     isMyPost: Bool? = nil
@@ -50,10 +52,27 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
     interactor.deleteAction = deleteAction
     interactor.feedData = feedData
 
-    guard let isMyPost = isMyPost else { return view }
-    router.setBottomSheetOptions(isMyPost: isMyPost)
+    if let isMyPost = isMyPost {
+      router.setBottomSheetOptions(isMyPost: isMyPost)
+    }
+    
+    guard isChallenge != nil else { return view }
+    router.setChallengeBottomSheetOption()
 
     return view
+  }
+
+  private func setChallengeBottomSheetOption() {
+    guard let view = self.view as? BottomSheetViewController else { return }
+
+    view.setBottomSheetContents(
+      contents: [
+        BottomSheetOption.challengeNew.rawValue,
+        BottomSheetOption.challengePopular.rawValue
+      ],
+      bottomSheetType: BottomSheetType.small
+    )
+    view.modalPresentationStyle = .overFullScreen
   }
 
   private func setBottomSheetOptions(isMyPost: Bool) {
@@ -75,8 +94,8 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
       }
     }()
 
-      view.setBottomSheetContents(contents: contents, bottomSheetType: .medium)
-      view.modalPresentationStyle = .overFullScreen
+    view.setBottomSheetContents(contents: contents, bottomSheetType: .medium)
+    view.modalPresentationStyle = .overFullScreen
   }
 
   func presentErrorAlertView(message: String) {
