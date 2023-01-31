@@ -12,7 +12,12 @@ import KKDSKit
 
 protocol HomeViewProtocol: AnyObject {
   var interactor: HomeInteractorProtocol? { get set }
-  var router: HomeRouter? { get set }
+
+  func fetchHotPostList(hotPostList: [HotPost])
+  func fetchChallengeList(
+    challengeList: [ChallengeTitle],
+    index: IndexPath?
+  )
 }
 
 final class HomeViewController: BaseViewController<HomeView> {
@@ -20,13 +25,31 @@ final class HomeViewController: BaseViewController<HomeView> {
   // MARK: - Properties
 
   var interactor: HomeInteractorProtocol?
-  var router: HomeRouter?
+
+  var hotPostList: [HotPost] = [] {
+    didSet {
+      UIView.performWithoutAnimation {
+        self.containerView.homeCollectionView.reloadSections(
+          IndexSet(integer: HomeSection.popularPost.rawValue)
+        )
+      }
+    }
+  }
+
+  var challengeList: [ChallengeTitle] = []
+  private var challengeId: Int = 0
 
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setupConfigure()
+    self.interactor?.fetchHotpost(challengeId: self.challengeId)
+    self.interactor?.fetchChallengeList()
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    self.changeStatusBarBgColor(bgColor: .clear)
   }
 
   // MARK: - Configure
@@ -41,7 +64,7 @@ final class HomeViewController: BaseViewController<HomeView> {
       $0.registCell(type: HomeMainPagerCell.self)
       $0.registCell(type: StoreCell.self)
       $0.registCell(type: BannerCell.self)
-      $0.registCell(type: HomeTagCell.self)
+      $0.registCell(type: TagCell.self)
       $0.registCell(type: PopularPostCell.self)
       $0.registFooterView(type: PopularFooterCollectionReusableView.self)
       $0.registCell(type: EventCell.self)
@@ -59,12 +82,12 @@ final class HomeViewController: BaseViewController<HomeView> {
 
   // MARK: - button action
 
-  @objc func didTapMoreButton(_ sender: UIButton) {
+  @objc func moreButtonDidTap(_ sender: UIButton) {
     let section = HomeSection(rawValue: sender.tag)
     if section == .store {
-      self.router?.navigateToStoreListView(source: self)
+      self.interactor?.navigateToStoreListView()
     } else if section == .event {
-      self.router?.navigateToEventPageView(source: self)
+      self.interactor?.navigateToEventPageView()
     }
   }
 }
@@ -72,7 +95,28 @@ final class HomeViewController: BaseViewController<HomeView> {
 // MARK: - HomeViewProtocol
 
 extension HomeViewController: HomeViewProtocol {
+  func fetchHotPostList(hotPostList: [HotPost]) {
+    self.hotPostList = hotPostList
+  }
 
+  func fetchChallengeList(
+    challengeList: [ChallengeTitle],
+    index: IndexPath?
+  ) {
+    self.challengeList = challengeList
+    if let index = index {
+      UIView.performWithoutAnimation {
+        self.containerView.homeCollectionView.reloadSections([HomeSection.tag.rawValue])
+        self.containerView.homeCollectionView.scrollToItem(
+          at: index,
+          at: .centeredHorizontally,
+          animated: false
+        )
+      }
+    } else {
+      self.containerView.homeCollectionView.reloadSections([HomeSection.tag.rawValue])
+    }
+  }
 }
 
 // MARK: - CollectionView DataSource, Delegate
@@ -85,11 +129,17 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     let section = HomeSection(rawValue: section)
 
     switch section {
-    case .main, .tag:
+    case .main:
       return 1
 
-    case .event, .banner, .popularPost, .store:
+    case .tag:
+      return self.challengeList.count
+
+    case .event, .banner, .store:
       return 6
+
+    case .popularPost:
+      return self.hotPostList.count
 
     default:
       return 1
@@ -100,6 +150,29 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     in collectionView: UICollectionView
   ) -> Int {
     return HomeSection.allCases.count
+  }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    didSelectItemAt indexPath: IndexPath
+  ) {
+    let section = HomeSection(rawValue: indexPath.section)
+    let challengeId = self.challengeList[indexPath.item].id
+
+    switch section {
+    case .tag:
+      self.interactor?.setSelectedStatus(
+        challengeList: self.challengeList,
+        selectedIndex: indexPath
+      )
+      self.interactor?.fetchHotpost(challengeId: challengeId)
+
+    case .popularPost:
+      self.interactor?.navigateToFeedDetail(feedId: self.hotPostList[indexPath.item].postId)
+
+    default:
+      print("error")
+    }
   }
 
   func collectionView(
@@ -123,7 +196,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
       header.moreButton.tag = indexPath.section
       header.moreButton.addTarget(
         self,
-        action: #selector(didTapMoreButton(_:)),
+        action: #selector(moreButtonDidTap(_:)),
         for: .touchUpInside
       )
       
@@ -133,6 +206,13 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
       let footer = collectionView.dequeueReusableSupplementaryFooterView(
         withType: PopularFooterCollectionReusableView.self,
         for: indexPath
+      )
+
+      footer.morePostButton.addAction(
+        for: .touchUpInside,
+        closure: { _ in
+          self.tabBarController?.selectedIndex = Tab.feed.rawValue
+        }
       )
 
       return footer
@@ -175,9 +255,10 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
 
     case .tag:
       let cell = collectionView.dequeueCell(
-        withType: HomeTagCell.self,
+        withType: TagCell.self,
         for: indexPath
       )
+      cell.bind(tag: self.challengeList[indexPath.item])
 
       return cell
 
@@ -186,6 +267,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         withType: PopularPostCell.self,
         for: indexPath
       )
+      cell.bind(data: self.hotPostList[indexPath.item])
 
       return cell
 

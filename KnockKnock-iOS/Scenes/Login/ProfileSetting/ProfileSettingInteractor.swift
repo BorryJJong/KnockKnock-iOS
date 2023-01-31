@@ -14,9 +14,10 @@ protocol ProfileSettingInteractorProtocol {
 
   var signInInfo: SignInInfo? { get set }
 
-  func requestSignUp(nickname: String, image: String)
+  func requestSignUp(nickname: String, image: UIImage)
 
   func navigateToMyView()
+  func popProfileView()
 }
 
 final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
@@ -33,20 +34,26 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
     self.router?.navigateToMyView()
   }
 
+  func popProfileView() {
+    self.router?.popProfileView()
+  }
+
   func requestSignUp(
     nickname: String,
-    image: String
+    image: UIImage
   ) {
-    if let signInInfo = signInInfo {
+    guard let signInInfo = signInInfo else { return }
+    let registerInfo = RegisterInfo(socialUuid: signInInfo.socialUuid,
+                                    socialType: signInInfo.socialType,
+                                    nickname: nickname,
+                                    image: image)
+
       self.worker?.requestRegister(
-        signInInfo: signInInfo,
-        nickname: nickname,
-        image: image,
+        registerInfo: registerInfo,
         completionHandler: { response in
           self.saveUserInfo(response: response)
         }
       )
-    }
   }
 
   func saveUserInfo(response: AccountResponse) {

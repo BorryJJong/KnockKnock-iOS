@@ -11,20 +11,20 @@ protocol MyWorkerProtocol {
   func fetchMenuData(completionHandler: @escaping (MyMenu) -> Void)
   func checkSignInStatus(completionHandler: @escaping(Bool) -> Void)
   func fetchNickname(completionHandler: @escaping(String) -> Void)
-  func requestSignOut(completionHandler: @escaping() -> Void)
-  func requestWithdraw(completionHandler: @escaping() -> Void)
+  func requestSignOut()
+  func requestWithdraw()
 }
 
 final class MyWorker: MyWorkerProtocol {
 
-  private let localDataManager: LocalDataManagerProtocol?
+  private let userDataManager: UserDataManagerProtocol?
   private let accountManager: AccountManagerProtocol?
 
   init(
-    localDataManager: LocalDataManagerProtocol,
+    userDataManager: UserDataManagerProtocol,
     accountManager: AccountManagerProtocol
   ) {
-    self.localDataManager = localDataManager
+    self.userDataManager = userDataManager
     self.accountManager = accountManager
   }
 
@@ -62,32 +62,34 @@ final class MyWorker: MyWorkerProtocol {
   }
 
   func fetchNickname(completionHandler: @escaping(String) -> Void) {
-    guard let nickname = self.localDataManager?.userDefaultsService.value(forkey: .nickname) else {
+    guard let nickname = self.userDataManager?.userDefaultsService.value(forkey: .nickname) else {
       return
     }
       completionHandler(nickname)
   }
 
   func checkSignInStatus(completionHandler: @escaping(Bool) -> Void) {
-    if let isSignedIn = self.localDataManager?.checkTokenIsExisted() {
+    if let isSignedIn = self.userDataManager?.checkTokenIsExisted() {
       completionHandler(isSignedIn)
     }
   }
 
-  func requestSignOut(completionHandler: @escaping() -> Void) {
-    self.accountManager?.signOut(completionHanlder: { [weak self] success in
+  func requestSignOut() {
+    self.accountManager?.signOut(completionHandler: { [weak self] success in
       if success {
-        self?.localDataManager?.removeAllUserInfo()
-        completionHandler()
+        self?.userDataManager?.removeAllUserInfo()
+      } else {
+        // error
       }
     })
   }
 
-  func requestWithdraw(completionHandler: @escaping() -> Void) {
-    self.accountManager?.withdraw(completionHanlder: { [weak self] success in
+  func requestWithdraw() {
+    self.accountManager?.withdraw(completionHandler: { [weak self] success in
       if success {
-        self?.localDataManager?.removeAllUserInfo()
-        completionHandler()
+        self?.userDataManager?.removeAllUserInfo()
+      } else {
+        // error
       }
     })
   }

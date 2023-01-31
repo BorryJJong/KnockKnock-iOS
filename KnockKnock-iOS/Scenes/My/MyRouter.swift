@@ -25,7 +25,7 @@ final class MyRouter: MyRouterProtocol {
     let interactor = MyInteractor()
     let presenter = MyPresenter()
     let worker = MyWorker(
-      localDataManager: LocalDataManager(),
+      userDataManager: UserDataManager(),
       accountManager: AccountManager()
     )
     let router = MyRouter()

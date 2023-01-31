@@ -14,7 +14,8 @@ protocol FeedListViewProtocol: AnyObject {
   var interactor: FeedListInteractorProtocol? { get set }
   
   func fetchFeedList(feedList: FeedList)
-  func deleteFeedPost(feedId: Int)
+  func updateFeedList(feedList: FeedList, sections: [IndexPath])
+  func reloadFeedList()
 }
 
 final class FeedListViewController: BaseViewController<FeedListView> {
@@ -24,14 +25,10 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   var interactor: FeedListInteractorProtocol?
 
   private var isNext: Bool = true
-  private var feedListPost: [FeedList.Post] = [] {
-    didSet {
-      self.containerView.feedListCollectionView.reloadData()
-    }
-  }
+  private var feedListPost: [FeedList.Post] = []
+
   private var currentPage: Int = 1
   private var pageSize: Int = 5
-  
   var challengeId: Int = 0
   var feedId: Int = 2
 
@@ -44,7 +41,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+
     self.interactor?.fetchFeedList(
       currentPage: self.currentPage,
       pageSize: self.pageSize,
@@ -93,10 +90,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     if let indexPath = indexPath {
       if let cell = collectionView.cellForItem(at: indexPath) {
         if !cell.isSelected {
-          self.interactor?.navigateToFeedDetail(
-            source: self,
-            feedId: self.feedListPost[indexPath.section].id
-          )
+          self.interactor?.navigateToFeedDetail(feedId: self.feedListPost[indexPath.section].id)
         }
       }
     }
@@ -105,7 +99,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   // MARK: - Button Actions
 
   @objc private func backButtonDidTap(_ sender: UIButton) {
-    self.interactor?.navigateToFeedMain(source: self)
+    self.interactor?.navigateToFeedMain()
   }
 
   @objc func configureButtonDidTap(_ sender: UIButton) {
@@ -113,47 +107,24 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     let feedId = self.feedListPost[sender.tag].id
 
     self.interactor?.presentBottomSheetView(
-      source: self,
       isMyPost: isMyPost,
       deleteAction: {
         self.interactor?.requestDelete(feedId: feedId)
-      }
+      },
+      feedData: self.feedListPost[sender.tag]
     )
   }
 
   @objc func commentButtonDidTap(_ sender: UIButton) {
-    self.interactor?.navigateToCommentView(
-      feedId: sender.tag,
-      source: self
-    )
+    self.interactor?.navigateToCommentView(feedId: sender.tag)
   }
 
-  @objc func likeButtonDidTap(_ sender: UIButton) {
-    sender.isSelected.toggle()
-    
-    let title = self.containerView.setLikeButtonTitle(
-      currentNum: sender.titleLabel?.text,
-      isSelected: sender.isSelected
-    )
-    sender.setTitle(title, for: .normal)
-
-    if sender.isSelected {
-
-      self.interactor?.requestLike(
-        source: self,
-        feedId: sender.tag
-      )
-    } else {
-
-      self.interactor?.requestLikeCancel(
-        source: self,
-        feedId: sender.tag
-      )
-    }
+  private func likeButtonDidTap(sender: UIButton) {
+    self.interactor?.requestLike(feedId: sender.tag)
   }
 }
 
-// MARK: - Extensions
+// MARK: - UICollectionView DataSource
 
 extension FeedListViewController: UICollectionViewDataSource {
   func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -186,10 +157,12 @@ extension FeedListViewController: UICollectionViewDataSource {
       for: .touchUpInside
     )
     cell.likeButton.tag = self.feedListPost[indexPath.section].id
-    cell.likeButton.addTarget(
-      self,
-      action: #selector(self.likeButtonDidTap(_:)),
-      for: .touchUpInside
+
+    cell.likeButton.addAction(
+      for: .touchUpInside,
+      closure: {
+        self.likeButtonDidTap(sender: $0)
+      }
     )
 
     return cell
@@ -241,6 +214,8 @@ extension FeedListViewController: UICollectionViewDataSource {
   }
 }
 
+// MARK: - UICollectionView Delegate
+
 extension FeedListViewController: UICollectionViewDelegateFlowLayout {
   func collectionView(
     _ collectionView: UICollectionView,
@@ -281,17 +256,47 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
   }
 }
 
+// MARK: - Feed List View Protocol
+
 extension FeedListViewController: FeedListViewProtocol {
+
+  /// 피드 최초 요청 이벤트
+  ///
+  /// - Parameters:
+  ///   - feedList: 최초 요청한 피드리스트
   func fetchFeedList(feedList: FeedList) {
     self.isNext = feedList.isNext
-    self.feedListPost += feedList.feeds
-  }
-  
-  func deleteFeedPost(feedId: Int) {
-    if let feedIndex = self.feedListPost.firstIndex(where: {
-      $0.id == feedId
-    }) {
-      self.feedListPost.remove(at: feedIndex)
+    self.feedListPost = feedList.feeds
+
+    DispatchQueue.main.async {
+      self.containerView.feedListCollectionView.reloadData()
     }
+  }
+
+  /// 피드 업데이트 이벤트
+  ///
+  /// - Parameters:
+  ///   - feedList: 업데이트 되어진 피드 리스트
+  ///   - sections: 업데이트 된 피드의 Sections
+  func updateFeedList(feedList: FeedList, sections: [IndexPath]) {
+    self.feedListPost = feedList.feeds
+
+    DispatchQueue.main.async {
+      UIView.performWithoutAnimation {
+        sections.forEach { indexPath in
+          self.containerView.feedListCollectionView.reloadSections(IndexSet(integer: indexPath.section))
+        }
+      }
+    }
+  }
+
+  /// 로그인/로그아웃 시 피드 데이터 re-fatch & reload
+  func reloadFeedList() {
+    self.interactor?.fetchFeedList(
+      currentPage: self.currentPage,
+      pageSize: self.pageSize,
+      feedId: self.feedId,
+      challengeId: self.challengeId
+    )
   }
 }

@@ -13,16 +13,14 @@ protocol FeedWriteInteractorProtocol: AnyObject {
   var worker: FeedWriteWorkerProtocol? { get set }
   var router: FeedWriteRouterProtocol? { get set }
 
-  func dismissFeedWriteView(source: FeedWriteViewProtocol)
-  func navigateToShopSearch(source: FeedWriteViewProtocol)
-  func navigateToProperty(
-    source: FeedWriteViewProtocol,
-    propertyType: PropertyType
-  )
+  func dismissFeedWriteView()
+  func presentFeedWriteCompletedView()
+  func navigateToShopSearch()
+  func navigateToProperty(propertyType: PropertyType)
 
   func setCurrentText(text: String) 
   func checkEssentialField(imageCount: Int)
-  func requestUploadFeed(source: FeedWriteViewProtocol, content: String, images: [UIImage])
+  func requestUploadFeed(content: String, images: [UIImage])
 }
 
 final class FeedWriteInteractor: FeedWriteInteractorProtocol {
@@ -40,20 +38,20 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
 
   // Routing
 
-  func dismissFeedWriteView(source: FeedWriteViewProtocol) {
-    self.router?.dismissFeedWriteView(source: source)
+  func dismissFeedWriteView() {
+    self.router?.dismissFeedWriteView()
   }
 
-  func navigateToShopSearch(source: FeedWriteViewProtocol) {
-    self.router?.navigateToShopSearch(source: source)
+  func presentFeedWriteCompletedView() {
+    self.router?.presenetFeedWriteCompletedView()
   }
 
-  func navigateToProperty(
-    source: FeedWriteViewProtocol,
-    propertyType: PropertyType
-  ) {
+  func navigateToShopSearch() {
+    self.router?.navigateToShopSearch()
+  }
+
+  func navigateToProperty(propertyType: PropertyType) {
     self.router?.navigateToProperty(
-      source: source,
       propertyType: propertyType,
       promotionList: self.selectedPromotionList,
       tagList: self.selectedTagList
@@ -73,18 +71,18 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
       promotion: self.selectedPromotionList,
       content: self.postContent
     ) else { return }
+
     self.presenter?.presentAlertView(isDone: isDone)
   }
 
   func requestUploadFeed(
-    source: FeedWriteViewProtocol,
     content: String,
     images: [UIImage]
   ) {
     let promotions = self.selectedPromotionList.filter{
       $0.isSelected == true
     }.map {
-      String($0.promotionInfo.id)
+      String($0.id)
     }.joined(separator: ",")
 
     let challenges = self.selectedTagList.filter{
@@ -96,7 +94,7 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
     self.worker?.uploadFeed(
       postData: FeedWrite(
         content: content,
-        storeAddress: self.selectedAddress?.addressName ?? "",
+        storeAddress: self.selectedAddress?.addressName,
         storeName: self.selectedAddress?.placeName,
         locationX: self.selectedAddress?.longtitude ?? "",
         locationY: self.selectedAddress?.latitude ?? "",
@@ -104,10 +102,12 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
         promotions: promotions,
         challenges: challenges,
         images: images
-      ),
-      completionHandler: {
-        // 게시물 등록이 완료되었습니다
-        self.dismissFeedWriteView(source: source)
+      ), completionHandler: {
+        LoadingIndicator.hideLoading()
+
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1, execute: {
+          self.presentFeedWriteCompletedView()
+        })
       }
     )
   }

@@ -9,32 +9,41 @@ import Foundation
 
 protocol FeedWriteRepositoryProtocol {
   func requestChallengeTitles(completionHandler: @escaping (([ChallengeTitle])) -> Void)
-  func requestPromotionList(completionHandler: @escaping ([PromotionInfo]) -> Void)
+  func requestPromotionList(completionHandler: @escaping ([Promotion]) -> Void)
   func requestFeedPost(postData: FeedWrite, completionHandler: @escaping () -> Void)
 }
 
 final class FeedWriteRepository: FeedWriteRepositoryProtocol {
 
   func requestChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void) {
-    KKNetworkManager.shared
+    KKNetworkManager
+      .shared
       .request(
-        object: [ChallengeTitle].self,
+        object: ApiResponseDTO<[ChallengeTitleDTO]>.self,
         router: KKRouter.getChallengeTitles,
         success: { response in
-          completionHandler(response)
+          guard let data = response.data else {
+            // no data error
+            return
+          }
+          completionHandler(data.map{$0.toDomain()})
         }, failure: { error in
           print(error)
         })
   }
 
-  func requestPromotionList(completionHandler: @escaping ([PromotionInfo]) -> Void) {
+  func requestPromotionList(completionHandler: @escaping ([Promotion]) -> Void) {
     KKNetworkManager
       .shared
       .request(
-        object: [PromotionInfo].self,
+        object: ApiResponseDTO<[PromotionDTO]>.self,
         router: KKRouter.getPromotions,
         success: { response in
-          completionHandler(response)
+          guard let data = response.data else {
+            // no data error
+            return
+          }
+          completionHandler(data.map{$0.toDomain()})
         },
         failure: { error in
           print(error)

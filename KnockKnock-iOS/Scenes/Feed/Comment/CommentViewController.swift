@@ -15,7 +15,6 @@ protocol CommentViewProtocol {
   var interactor: CommentInteractorProtocol? { get set }
   
   func fetchVisibleComments(comments: [Comment])
-  func deleteComment()
 }
 
 final class CommentViewController: BaseViewController<CommentView> {
@@ -27,13 +26,13 @@ final class CommentViewController: BaseViewController<CommentView> {
   
   var visibleComments: [Comment] = [] {
     didSet {
-      self.containerView.commentCollectionView.reloadData()
-      self.containerView.layoutIfNeeded()
+      UIView.performWithoutAnimation {
+        self.containerView.commentCollectionView.reloadData()
+      }
     }
   }
   
   var feedId: Int = 6
-  var userId: Int = 1
   var commentId: Int?
   
   // MARK: - Life Cycles
@@ -101,18 +100,10 @@ final class CommentViewController: BaseViewController<CommentView> {
   
   @objc private func keyboardWillShow(_ notification: Notification) {
     self.setContainerViewConstant(notification: notification, isAppearing: true)
-    self.setCommentsTextViewConstant(isAppearing: true)
   }
   
   @objc private func keyboardWillHide(_ notification: Notification) {
     self.setContainerViewConstant(notification: notification, isAppearing: false)
-    self.setCommentsTextViewConstant(isAppearing: false)
-  }
-  
-  private func setCommentsTextViewConstant(isAppearing: Bool) {
-    let textViewHeightConstant = isAppearing ? 15.f : -19.f
-    
-    self.containerView.commentTextView.bottomConstraint?.constant = textViewHeightConstant
   }
   
   private func setContainerViewConstant(notification: Notification, isAppearing: Bool) {
@@ -127,11 +118,18 @@ final class CommentViewController: BaseViewController<CommentView> {
           .keyboardAnimationDurationUserInfoKey
       ] as? NSNumber else { return }
       
-      let viewHeightConstant = isAppearing ? (-keyboardHeight) : 0
-      
-      self.containerView.contentView.frame.origin.y = viewHeightConstant + 100
+      let viewBottomConstant = isAppearing ? (-keyboardHeight) : 0
+      let textViewBottomConstant = isAppearing ? 15.f : -19.f
       
       UIView.animate(withDuration: animationDurationValue.doubleValue) {
+        self.containerView.contentView.snp.updateConstraints {
+          $0.bottom.equalTo(self.containerView.safeAreaLayoutGuide).offset(viewBottomConstant)
+        }
+
+        self.containerView.commentTextView.snp.updateConstraints {
+          $0.bottom.equalTo(self.containerView.contentView).offset(textViewBottomConstant)
+        }
+
         self.containerView.layoutIfNeeded()
       }
     }
@@ -149,10 +147,7 @@ final class CommentViewController: BaseViewController<CommentView> {
   }
   
   @objc private func replyMoreButtonDidTap(_ sender: UIButton) {
-    self.visibleComments[sender.tag].isOpen.toggle()
-    
-    self.interactor?.fetchVisibleComments(comments: self.visibleComments)
-    self.containerView.commentCollectionView.reloadData()
+    self.interactor?.toggleVisibleStatus(commentId: sender.tag)
   }
   
   private func commentDeleteButtonDidTap(commentId: Int) {
@@ -167,9 +162,8 @@ final class CommentViewController: BaseViewController<CommentView> {
   @objc private func regitstButtonDidTap(_ sender: UIButton) {
     if let content = self.containerView.commentTextView.text {
       self.interactor?.requestAddComment(
-        comment: AddCommentRequest(
+        comment: AddCommentDTO(
           postId: self.feedId,
-          userId: self.userId,
           content: content,
           commentId: self.commentId
         )
@@ -186,10 +180,6 @@ final class CommentViewController: BaseViewController<CommentView> {
 extension CommentViewController: CommentViewProtocol {
   func fetchVisibleComments(comments: [Comment]) {
     self.visibleComments = comments
-  }
-  
-  func deleteComment() {
-    self.interactor?.fetchAllComments(feedId: self.feedId)
   }
 }
 
@@ -216,7 +206,7 @@ extension CommentViewController: UICollectionViewDataSource {
     cell.bind(comment: self.visibleComments[indexPath.item])
     
     cell.replyMoreButton.do {
-      $0.tag = indexPath.item
+      $0.tag = commentId
       $0.addTarget(
         self,
         action: #selector(self.replyMoreButtonDidTap(_:)),

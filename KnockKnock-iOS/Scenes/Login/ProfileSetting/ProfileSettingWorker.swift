@@ -9,9 +9,7 @@ import UIKit
 
 protocol ProfileSettingWorkerProtocol {
   func requestRegister(
-    signInInfo: SignInInfo,
-    nickname: String,
-    image: String,
+    registerInfo: RegisterInfo,
     completionHandler: @escaping (AccountResponse) -> Void
   )
   func saveUserInfo(response: AccountResponse)
@@ -19,33 +17,29 @@ protocol ProfileSettingWorkerProtocol {
 
 final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
   private let accountManager: AccountManagerProtocol
-  private let localDataManager: LocalDataManagerProtocol
+  private let userDataManager: UserDataManagerProtocol
 
   init(
     accountManager: AccountManagerProtocol,
-    localDataManager: LocalDataManagerProtocol
+    userDataManager: UserDataManagerProtocol
   ) {
     self.accountManager = accountManager
-    self.localDataManager = localDataManager
+    self.userDataManager = userDataManager
   }
 
   func requestRegister(
-    signInInfo: SignInInfo,
-    nickname: String,
-    image: String,
+    registerInfo: RegisterInfo,
     completionHandler: @escaping (AccountResponse) -> Void
   ) {
     
     self.accountManager.register(
-      signInInfo: signInInfo,
-      nickname: nickname,
-      image: image,
+      registerInfo: registerInfo,
       completionHandler: { response in
 
         guard let authInfo = response.authInfo else { return }
 
-        self.localDataManager.userDefaultsService.set(value: authInfo.accessToken, forkey: .accessToken)
-        self.localDataManager.userDefaultsService.set(value: authInfo.refreshToken, forkey: .refreshToken)
+        self.userDataManager.userDefaultsService.set(value: authInfo.accessToken, forkey: .accessToken)
+        self.userDataManager.userDefaultsService.set(value: authInfo.refreshToken, forkey: .refreshToken)
       }
     )
   }
@@ -55,12 +49,12 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
     guard let authInfo = response.authInfo else { return }
 
     if let userInfo = response.userInfo {
-      self.localDataManager.userDefaultsService.set(value: userInfo.image, forkey: .profileImage)
-      self.localDataManager.userDefaultsService.set(value: userInfo.nickname, forkey: .nickname)
+      self.userDataManager.userDefaultsService.set(value: userInfo.image, forkey: .profileImage)
+      self.userDataManager.userDefaultsService.set(value: userInfo.nickname, forkey: .nickname)
     }
 
-    self.localDataManager.userDefaultsService.set(value: authInfo.accessToken, forkey: .accessToken)
-    self.localDataManager.userDefaultsService.set(value: authInfo.refreshToken, forkey: .refreshToken)
+    self.userDataManager.userDefaultsService.set(value: authInfo.accessToken, forkey: .accessToken)
+    self.userDataManager.userDefaultsService.set(value: authInfo.refreshToken, forkey: .refreshToken)
 
   }
 }

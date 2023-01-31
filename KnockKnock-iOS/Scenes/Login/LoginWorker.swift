@@ -28,18 +28,18 @@ final class LoginWorker: LoginWorkerProtocol {
   private let kakaoLoginManager: KakaoLoginManagerProtocol
   private let appleLoginManager: AppleLoginManagerProtocol
   private let accountManager: AccountManagerProtocol
-  private let localDataManager: LocalDataManagerProtocol
+  private let userDataManager: UserDataManagerProtocol
 
   init(
     kakaoLoginManager: KakaoLoginManagerProtocol,
     appleLoginManager: AppleLoginManagerProtocol,
     accountManager: AccountManagerProtocol,
-    localDataManager: LocalDataManagerProtocol
+    userDataManager: UserDataManagerProtocol
   ) {
     self.kakaoLoginManager = kakaoLoginManager
     self.appleLoginManager = appleLoginManager
     self.accountManager = accountManager
-    self.localDataManager = localDataManager
+    self.userDataManager = userDataManager
   }
 
   /// 로그인 api response 받아오기
@@ -70,16 +70,7 @@ final class LoginWorker: LoginWorkerProtocol {
   /// - Parameters:
   ///   - response: 회원가입/로그인 api response(userinfo)
   func saveUserInfo(response: AccountResponse) {
-
-    guard let authInfo = response.authInfo else { return }
-
-    if let userInfo = response.userInfo {
-      self.localDataManager.userDefaultsService.set(value: userInfo.image, forkey: .profileImage)
-      self.localDataManager.userDefaultsService.set(value: userInfo.nickname, forkey: .nickname)
-    }
-
-    self.localDataManager.userDefaultsService.set(value: authInfo.accessToken, forkey: .accessToken)
-    self.localDataManager.userDefaultsService.set(value: authInfo.refreshToken, forkey: .refreshToken)
+    self.userDataManager.saveUserInfo(response: response)
   }
 }
 

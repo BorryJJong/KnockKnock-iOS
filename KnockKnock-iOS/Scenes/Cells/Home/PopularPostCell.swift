@@ -27,6 +27,7 @@ final class PopularPostCell: BaseCollectionViewCell {
     $0.backgroundColor = .gray40
     $0.layer.cornerRadius = 5
     $0.clipsToBounds = true
+    $0.contentMode = .scaleAspectFill
   }
 
   private let gradientImageView = UIImageView().then {
@@ -39,6 +40,13 @@ final class PopularPostCell: BaseCollectionViewCell {
     $0.font = .systemFont(ofSize: 12, weight: .medium)
     $0.textColor = .white
     $0.text = "@ksungmin94"
+  }
+
+  // MARK: - Bind
+
+  func bind(data: HotPost) {
+    self.thumbnailImageView.setImageFromStringUrl(stringUrl: data.fileUrl, defaultImage: KKDS.Image.ic_no_data_60)
+    self.nickNameLabel.text = "@\(data.nickname)"
   }
 
   // MARK: - Constraints

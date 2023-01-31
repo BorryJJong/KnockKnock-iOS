@@ -119,14 +119,14 @@ final class ChallengeCell: BaseCollectionViewCell {
   
   // MARK: - Bind
   
-  func bind(data: Challenges) {
+  func bind(data: Challenge) {
     self.titleLabel.text = data.title
     self.contentsLabel.text = data.subTitle
     self.setParticipantsImageStackView(participants: data.participants)
     self.setParticipantLabel(count: data.participants.count)
   }
 
-  private func setParticipantsImageStackView(participants: [Participant]) {
+  private func setParticipantsImageStackView(participants: [Challenge.Participant]) {
     var images: [String?] = []
 
     participants.forEach {
