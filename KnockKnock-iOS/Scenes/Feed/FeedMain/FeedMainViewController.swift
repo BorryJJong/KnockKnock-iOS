@@ -29,23 +29,23 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
   var interactor: FeedMainInteractorProtocol?
   var router: FeedMainRouterProtocol?
   
-  var feedMain: FeedMain?
+  private var feedMain: FeedMain?
 
-  var feedMainPost: [FeedMain.Post] = [] {
+  private var feedMainPost: [FeedMain.Post] = [] {
     didSet {
       DispatchQueue.main.async {
         self.containerView.feedCollectionView.reloadData()
       }
     }
   }
-  var challengeTitles: [ChallengeTitle] = []
-  var searchKeyword: [SearchKeyword] = []
-  var popularPost: [String] = []
+  private var challengeTitles: [ChallengeTitle] = []
+  private var searchKeyword: [SearchKeyword] = []
+  private var popularPost: [String] = []
   
-  var currentPage = 1
-  let pageSize = 9 // pageSize 논의 필요
+  private var currentPage = 1
+  private let pageSize = 9 // pageSize 논의 필요
 
-  var challengeId = 0
+  private var challengeId = 0
 
   // MARK: - UIs
 
