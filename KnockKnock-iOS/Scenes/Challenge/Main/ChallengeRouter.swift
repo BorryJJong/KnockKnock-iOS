@@ -8,12 +8,18 @@
 import UIKit
 
 protocol ChallengeRouterProtocol: AnyObject {
+  var view: ChallengeViewProtocol? { get set }
+
   static func createChallenge() -> UIViewController
-  func navigateToChallengeDetail(source: ChallengeViewProtocol, challengeId: Int)
+
+  func navigateToChallengeDetail(challengeId: Int)
+  func presentBottomSheet()
 }
 
 final class ChallengeRouter: ChallengeRouterProtocol {
-  
+
+  weak var view: ChallengeViewProtocol?
+
   static func createChallenge() -> UIViewController {
     let view = ChallengeViewController()
     let interactor = ChallengeInteractor()
@@ -22,24 +28,34 @@ final class ChallengeRouter: ChallengeRouterProtocol {
     let router = ChallengeRouter()
     
     view.interactor = interactor
-    view.router = router
+    interactor.router = router
     interactor.presenter = presenter
     interactor.worker = worker
     presenter.view = view
+    router.view = view
     
     return view
   }
 
-  func navigateToChallengeDetail(
-    source: ChallengeViewProtocol,
-    challengeId: Int
-  ) {
+  func presentBottomSheet() {
+    guard let sourceView = self.view as? UIViewController else { return }
+
+    let bottomSheetViewController = BottomSheetRouter.createBottomSheet(isChallenge: true)
+
+    sourceView.present(
+      bottomSheetViewController,
+      animated: false,
+      completion: nil
+    )
+  }
+
+  func navigateToChallengeDetail(challengeId: Int) {
     let challengeDetailViewController = ChallengeDetailRouter.createChallengeDetail(
       challengeId: challengeId
     )
     challengeDetailViewController.hidesBottomBarWhenPushed = true
     
-    if let sourceView = source as? UIViewController {
+    if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.pushViewController(
         challengeDetailViewController,
         animated: true

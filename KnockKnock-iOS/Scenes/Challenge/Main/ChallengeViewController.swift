@@ -11,7 +11,6 @@ import KKDSKit
 
 protocol ChallengeViewProtocol: AnyObject {
   var interactor: ChallengeInteractorProtocol? { get set }
-  var router: ChallengeRouterProtocol? { get set }
 
   func fetchChallenges(challenges: [Challenge])
 }
@@ -21,7 +20,6 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
   // MARK: Properties
   
   var interactor: ChallengeInteractorProtocol?
-  var router: ChallengeRouterProtocol?
 
   var challenges: [Challenge] = []
   
@@ -37,6 +35,8 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
     self.tabBarController?.tabBar.isHidden = false
     self.setNavigationItem()
   }
+
+  // MARK: - Configure
 
   override func setupConfigure() {
     self.containerView.challengeCollectionView.do {
@@ -64,12 +64,14 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
     self.navigationItem.rightBarButtonItem = searchBarButtonItem
   }
 
-  @objc func tapSortChallengeButton(_ sender: UIButton) {
-    let bottomSheetViewController = BottomSheetRouter.createBottomSheet(isChallenge: true)
+  // MARK: - Button Actions
 
-    self.present(bottomSheetViewController, animated: false, completion: nil)
+  @objc func tapSortChallengeButton(_ sender: UIButton) {
+    self.interactor?.presentBottomSheet()
   }
 }
+
+// MARK: - Challenge View Protocol
 
 extension ChallengeViewController: ChallengeViewProtocol {
   func fetchChallenges(challenges: [Challenge]) {
@@ -77,6 +79,8 @@ extension ChallengeViewController: ChallengeViewProtocol {
     self.containerView.challengeCollectionView.reloadData()
   }
 }
+
+// MARK: - UICollectionView Data Source
 
 extension ChallengeViewController: UICollectionViewDataSource {
   func collectionView(
@@ -112,8 +116,7 @@ extension ChallengeViewController: UICollectionViewDelegate {
     _ collectionView: UICollectionView,
     didSelectItemAt indexPath: IndexPath
   ) {
-    self.router?.navigateToChallengeDetail(
-      source: self,
+    self.interactor?.navigateToChallengeDetail(
       challengeId: challenges[indexPath.item].id
     )
   }
