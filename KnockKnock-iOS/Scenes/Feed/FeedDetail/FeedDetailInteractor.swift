@@ -199,7 +199,10 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
           )
           self.navigateToFeedList()
         } else {
-          // error
+          self.showAlertView(
+            message: "게시글 삭제에 실패하였습니다.",
+            confirmAction: nil
+          )
         }
       }
     )
@@ -222,6 +225,16 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.router?.presentBottomSheetView(
       isMyPost: isMyPost,
       deleteAction: deleteAction
+    )
+  }
+
+  func showAlertView(
+    message: String,
+    confirmAction: (()-> Void)?
+  ) {
+    self.router?.showAlertView(
+      message: message,
+      confirmAction: confirmAction
     )
   }
 }
