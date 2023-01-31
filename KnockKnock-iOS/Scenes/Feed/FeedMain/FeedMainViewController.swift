@@ -40,10 +40,9 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
   }
   private var challengeTitles: [ChallengeTitle] = []
   private var searchKeyword: [SearchKeyword] = []
-  private var popularPost: [String] = []
   
   private var currentPage = 1
-  private let pageSize = 9 // pageSize 논의 필요
+  private let pageSize = 9
 
   private var challengeId = 0
 
@@ -224,14 +223,11 @@ extension FeedMainViewController: UICollectionViewDataSource {
       for: indexPath
     )
 
-    if let feedMain = self.feedMain {
-      if !feedMain.isNext {
-        footer.viewMoreButton.isHidden = true
-      } else {
-        footer.viewMoreButton.isHidden = false
-      }
+    guard let feedMain = self.feedMain else {
+      return UICollectionReusableView()
     }
     
+    footer.viewMoreButton.isHidden = !feedMain.isNext
     footer.viewMoreButton.addTarget(
       self,
       action: #selector(self.didTapViewMoreButton(_:)),
