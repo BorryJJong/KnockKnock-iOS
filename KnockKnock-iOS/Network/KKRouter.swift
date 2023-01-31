@@ -48,6 +48,7 @@ enum KKRouter: URLRequestConvertible {
   // Feed List, Detail
   case getFeedBlogPost(page: Int, take: Int, feedId: Int, challengeId: Int)
   case getFeed(id: Int)
+  case postHideBlogPost(id: Int)
   case deleteFeed(id: Int)
 
   // Like
@@ -82,7 +83,8 @@ enum KKRouter: URLRequestConvertible {
          .postLogOut,
          .postAddComment,
          .postFeed,
-         .postFeedLike:
+         .postFeedLike,
+         .postHideBlogPost:
       return .post
 
     case .deleteFeed,
@@ -122,6 +124,7 @@ enum KKRouter: URLRequestConvertible {
     case .getFeedBlogPost: return "feed/blog-post"
     case .getFeed(let id): return "feed/\(id)"
     case .deleteFeed(let id): return "feed/\(id)"
+    case .postHideBlogPost(let id): return "users/hide/blog-post/\(id)"
 
     // Like
     case .postFeedLike(let id): return "like/feed/\(id)"
@@ -146,9 +149,6 @@ enum KKRouter: URLRequestConvertible {
 
     case let .postSocialLogin(signInInfo):
       return signInInfo
-
-//    case let .postSignUp(userInfo):
-//      return userInfo
 
     case let .requestShopAddress(query, page, size):
       return [
@@ -189,7 +189,8 @@ enum KKRouter: URLRequestConvertible {
          .deleteFeedLike,
          .deleteComment,
          .deleteFeed,
-         .deleteWithdraw:
+         .deleteWithdraw,
+         .postHideBlogPost:
       return nil
     }
   }
@@ -261,7 +262,12 @@ enum KKRouter: URLRequestConvertible {
 
       switch self {
 
-      case .getChallengeDetail, .getFeed, .getPromotions, .getComment, .getLikeList:
+      case .getChallengeDetail,
+           .getFeed,
+           .getPromotions,
+           .getComment,
+           .getLikeList:
+        
         break
 
       case .requestShopAddress:
@@ -277,14 +283,20 @@ enum KKRouter: URLRequestConvertible {
 
       switch self {
 
-      case .deleteWithdraw, .postLogOut:
-        request = try JSONEncoding.default.encode(request)
-        
-      case .postFeedLike, .deleteFeedLike, .deleteFeed, .deleteComment:
+      case .postFeedLike,
+           .postHideBlogPost,
+           .postLogOut,
+           .deleteFeedLike,
+           .deleteFeed,
+           .deleteWithdraw,
+           .deleteComment:
+
         request = try JSONEncoding.default.encode(request)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 
-      case .postFeed, .postSignUp:
+      case .postFeed,
+           .postSignUp:
+        
         request.setValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
 
       default:

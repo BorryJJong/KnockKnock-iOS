@@ -176,6 +176,14 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
 
       case .postShare:
         self.interactor?.sharePost()
+
+      case .postHide:
+        self.showAlert(
+          content: "이 게시글을 숨김 처리 하시겠습니까?",
+          confirmActionCompletion: {
+            self.interactor?.dismissView(actionType: .postHide)
+          }
+        )
         
       default:
         print("Error")
