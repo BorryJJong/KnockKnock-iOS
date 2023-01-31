@@ -190,11 +190,11 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       completionHandler: { isSuccess in
         if isSuccess {
           NotificationCenter.default.post(
-            name: .feedListRefresh,
+            name: .feedListRefreshAfterDelete,
             object: feedId
           )
           NotificationCenter.default.post(
-            name: .feedMainRefresh,
+            name: .feedMainRefreshAfterDelete,
             object: feedId
           )
           self.navigateToFeedList()

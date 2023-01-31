@@ -89,14 +89,10 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       completionHandler: { isSuccess in
         
         if isSuccess {
-
-          // 피드 리스트 내 해당 게시글 모두 삭제
-          guard let feedListData = self.worker?.removePostInFeedList(
-            feeds: feedList,
-            id: feedId
-          ) else { return }
-          
-          self.presenter?.presentFetchFeedList(feedList: feedListData)
+          self.deletePost(
+            feedList: feedList,
+            feedId: feedId
+          )
           
         } else {
           print(isSuccess) // error
@@ -177,11 +173,25 @@ final class FeedListInteractor: FeedListInteractorProtocol {
 
 extension FeedListInteractor {
   
-  /// Get Feed ID
+  /// 피드 상세에서 발생한 좋아요 이벤트 반영
   @objc
-  private func getFeedId(_ notification: Notification) {
+  private func likeNotificationEvent(_ notification: Notification) {
     guard let feedId = notification.object as? Int else { return }
     self.toggleLike(feedId: feedId)
+  }
+
+  /// 피드 상세에서 발생한 삭제 이벤트 반영
+  @objc
+  private func deleteNotificationEvent(_ notification: Notification) {
+    guard let feedId = notification.object as? Int else { return }
+
+    guard let feedList = self.feedListData else { return }
+    guard !feedList.feeds.isEmpty else { return }
+
+    // 삭제 요청한 피드가 현재 존재하는지 피드인지 체크
+    guard feedList.feeds.contains(where: { feedId == $0.id }) else { return }
+
+    self.deletePost(feedList: feedList, feedId: feedId)
   }
   
   /// Toggle Like
@@ -210,10 +220,23 @@ extension FeedListInteractor {
       sections: updatedSections
     )
   }
+
+  private func deletePost(
+    feedList: FeedList,
+    feedId: Int
+  ) {
+    // 피드 리스트 내 해당 게시글 모두 삭제
+    guard let feedListData = self.worker?.removePostInFeedList(
+      feeds: feedList,
+      id: feedId
+    ) else { return }
+
+    self.presenter?.presentFetchFeedList(feedList: feedListData)
+  }
   
   // Notification Center
   
-  func setNotification() {
+  private func setNotification() {
     NotificationCenter.default.addObserver(
       forName: .feedListRefreshAfterSigned,
       object: nil,
@@ -232,24 +255,23 @@ extension FeedListInteractor {
     
     NotificationCenter.default.addObserver(
       self,
-      selector: #selector(self.getFeedId(_:)),
+      selector: #selector(self.likeNotificationEvent(_:)),
       name: .postLike,
       object: nil
     )
     
     NotificationCenter.default.addObserver(
       self,
-      selector: #selector(self.getFeedId(_:)),
+      selector: #selector(self.likeNotificationEvent(_:)),
       name: .postLikeCancel,
       object: nil
     )
 
     NotificationCenter.default.addObserver(
-      forName: .feedListRefresh,
-      object: nil,
-      queue: nil
-    ) { _ in
-      self.presenter?.reloadFeedList()
-    }
+      self,
+      selector: #selector(self.deleteNotificationEvent(_:)),
+      name: .feedListRefreshAfterDelete,
+      object: nil
+    )
   }
 }
