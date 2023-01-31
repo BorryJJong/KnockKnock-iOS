@@ -62,7 +62,10 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
           completionHandler: { result in
             if result {
               self.presenter?.presentLikeStatus(isToggle: true)
-              NotificationCenter.default.post(name: .postLike, object: feedId)
+              NotificationCenter.default.post(
+                name: .postLike,
+                object: feedId
+              )
             } else {
               // error
             }
@@ -81,7 +84,10 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       completionHandler: { result in
         if result {
           self.presenter?.presentLikeStatus(isToggle: true)
-          NotificationCenter.default.post(name: .postLikeCancel, object: feedId)
+          NotificationCenter.default.post(
+            name: .postLikeCancel,
+            object: feedId
+          )
         } else {
           // error
         }
@@ -183,6 +189,14 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       feedId: feedId,
       completionHandler: { isSuccess in
         if isSuccess {
+          NotificationCenter.default.post(
+            name: .feedListRefresh,
+            object: feedId
+          )
+          NotificationCenter.default.post(
+            name: .feedMainRefresh,
+            object: feedId
+          )
           self.navigateToFeedList()
         } else {
           // error

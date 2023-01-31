@@ -243,5 +243,13 @@ extension FeedListInteractor {
       name: .postLikeCancel,
       object: nil
     )
+
+    NotificationCenter.default.addObserver(
+      forName: .feedListRefresh,
+      object: nil,
+      queue: nil
+    ) { _ in
+      self.presenter?.reloadFeedList()
+    }
   }
 }
