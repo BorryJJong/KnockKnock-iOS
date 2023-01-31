@@ -15,7 +15,14 @@ protocol FeedDetailRouterProtocol {
   func navigateToLikeDetail(like: [Like.Info])
   func navigateToLoginView()
   func navigateToFeedList()
-  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?)
+  func presentBottomSheetView(
+    isMyPost: Bool,
+    deleteAction: (() -> Void)?
+  )
+  func showAlertView(
+    message: String,
+    confirmAction: (()-> Void)?
+  )
 }
 
 final class FeedDetailRouter: FeedDetailRouterProtocol {
