@@ -15,7 +15,8 @@ extension UIImageView {
 
   func setImageFromStringUrl(
     stringUrl: String?,
-    defaultImage: UIImage
+    defaultImage: UIImage,
+    imageWidth: CGFloat? = nil
   ) {
     Task {
       do {
@@ -26,7 +27,8 @@ extension UIImageView {
         }
 
       } catch {
-        let image = await defaultImage.resize(newWidth: self.frame.width)
+
+        let image = await defaultImage.resize(newWidth: imageWidth ?? self.frame.width)
 
         await MainActor.run {
           self.image = image
@@ -59,7 +61,10 @@ extension UIImageView {
   }
 
   /// 이미지 로드
-  private func loadImage(stringUrl: String?) async throws -> UIImage {
+  private func loadImage(
+    stringUrl: String?,
+    imageWidth: CGFloat? = nil
+  ) async throws -> UIImage {
 
     guard let chacedImage = await self.setCachedImage(stringUrl: stringUrl) else {
 
@@ -70,7 +75,7 @@ extension UIImageView {
         throw ImageError.loadError
       }
 
-      let resizeImage = await image.resize(newWidth: self.frame.width)
+      let resizeImage = await image.resize(newWidth: imageWidth ?? self.frame.width)
 
       return resizeImage
     }
