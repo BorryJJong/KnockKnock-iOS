@@ -8,45 +8,101 @@
 import UIKit
 
 protocol BottomSheetRouterProtocol: AnyObject {
-  static func createBottomSheet(districtSelectDelegate: DistrictSelectDelegate?, districtsType: DistrictsType?) -> UIViewController
+  var view: BottomSheetViewProtocol? { get set }
 
-  func passCityDataToShopSearch(source: BottomSheetViewProtocol, city: String)
-  func passCountyDataToShopSearch(source: BottomSheetViewProtocol, county: String)
+  static func createBottomSheet(
+    districtSelectDelegate: DistrictSelectDelegate?,
+    districtsType: DistrictsType?,
+    deleteAction: (() -> Void)?,
+    feedData: FeedShare?,
+    isMyPost: Bool?
+  ) -> UIViewController
 
-  func navigateToShopSearch(source: BottomSheetViewProtocol)
+  func navigateToShopSearch()
+  func dismissView(action: (() -> Void)?)
+  func presentErrorAlertView(message: String) 
 }
 
 final class BottomSheetRouter: BottomSheetRouterProtocol {
 
-  weak var districtSelectDelegate: DistrictSelectDelegate?
+  weak var view: BottomSheetViewProtocol?
 
   static func createBottomSheet(
     districtSelectDelegate: DistrictSelectDelegate? = nil,
-    districtsType: DistrictsType? = nil
+    districtsType: DistrictsType? = nil,
+    deleteAction: (() -> Void)? = nil,
+    feedData: FeedShare? = nil,
+    isMyPost: Bool? = nil
   ) -> UIViewController {
+
     let view = BottomSheetViewController()
+    let interactor = BottomSheetInteractor()
+    let worker = BottomSheetWorker(kakaoShareManager: KakaoShareManager())
     let router = BottomSheetRouter()
 
-    view.router = router
+    view.interactor = interactor
     view.districtsType = districtsType
-    router.districtSelectDelegate = districtSelectDelegate
+    interactor.router = router
+    interactor.worker = worker
+    router.view = view
+
+    interactor.districtSelectDelegate = districtSelectDelegate
+    interactor.deleteAction = deleteAction
+    interactor.feedData = feedData
+
+    guard let isMyPost = isMyPost else { return view }
+    router.setBottomSheetOptions(isMyPost: isMyPost)
 
     return view
   }
 
-  func passCityDataToShopSearch(source: BottomSheetViewProtocol, city: String) {
-    self.districtSelectDelegate?.fetchSelectedCity(city: city)
-    self.navigateToShopSearch(source: source)
+  private func setBottomSheetOptions(isMyPost: Bool) {
+    guard let view = self.view as? BottomSheetViewController else { return }
+
+    let contents: [String] = {
+      if isMyPost {
+        return [
+          BottomSheetOption.postDelete.rawValue,
+          BottomSheetOption.postEdit.rawValue,
+          BottomSheetOption.postShare.rawValue
+        ]
+      } else {
+        return [
+          BottomSheetOption.postReport.rawValue,
+          BottomSheetOption.postShare.rawValue,
+          BottomSheetOption.postHide.rawValue
+        ]
+      }
+    }()
+
+      view.setBottomSheetContents(contents: contents, bottomSheetType: .medium)
+      view.modalPresentationStyle = .overFullScreen
   }
 
-  func passCountyDataToShopSearch(source: BottomSheetViewProtocol, county: String) {
-    self.districtSelectDelegate?.fetchSelectedCounty(county: county)
-    self.navigateToShopSearch(source: source)
+  func presentErrorAlertView(message: String) {
+    guard let sourceView = self.view as? UIViewController else { return }
+
+    LoadingIndicator.hideLoading()
+
+    sourceView.showAlert(
+      content: message,
+      isCancelActive: false,
+      confirmActionCompletion: {
+        self.dismissView(action: nil)
+      }
+    )
   }
 
-  func navigateToShopSearch(source: BottomSheetViewProtocol) {
-    if let sourceView = source as? UIViewController {
-      sourceView.dismiss(animated: true)
-    }
+  func navigateToShopSearch() {
+    guard let sourceView = self.view as? UIViewController else { return }
+
+    sourceView.dismiss(animated: true)
+  }
+
+  func dismissView(action: (() -> Void)?) {
+    guard let sourceView = self.view as? UIViewController else { return }
+
+    sourceView.dismiss(animated: false, completion: action)
+    LoadingIndicator.hideLoading()
   }
 }

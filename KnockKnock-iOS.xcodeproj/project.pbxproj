@@ -55,6 +55,9 @@
 		61215AE228572055003FDCAA /* FeedMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AE128572055003FDCAA /* FeedMainViewController.swift */; };
 		61215AE428577933003FDCAA /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AE328577933003FDCAA /* FeedCell.swift */; };
 		61215AE628577A9C003FDCAA /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AE528577A9C003FDCAA /* TagCell.swift */; };
+		6128A4BF297F6B24005E36F3 /* DeeplinkNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6128A4BE297F6B24005E36F3 /* DeeplinkNavigator.swift */; };
+		6128A4C1297F7B02005E36F3 /* ShareURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6128A4C0297F7B02005E36F3 /* ShareURL.swift */; };
+		6128A4C3297F7CC6005E36F3 /* FeedShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6128A4C2297F7CC6005E36F3 /* FeedShare.swift */; };
 		6128A4C5297FEC2B005E36F3 /* FeedWriteCompletedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6128A4C4297FEC2B005E36F3 /* FeedWriteCompletedViewController.swift */; };
 		6128A4C7297FED8E005E36F3 /* FeedWriteCompletedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6128A4C6297FED8E005E36F3 /* FeedWriteCompletedView.swift */; };
 		6128A4C92982429B005E36F3 /* ProfileRepositroy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6128A4C82982429B005E36F3 /* ProfileRepositroy.swift */; };
@@ -99,6 +102,10 @@
 		6143297828687B69008BDCC9 /* FeedListInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6143297728687B69008BDCC9 /* FeedListInteractor.swift */; };
 		6143297A28687B74008BDCC9 /* FeedListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6143297928687B74008BDCC9 /* FeedListPresenter.swift */; };
 		6143297C28687B7F008BDCC9 /* FeedListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6143297B28687B7F008BDCC9 /* FeedListRouter.swift */; };
+		616524BB297EC25F009610C3 /* BottomSheetInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616524BA297EC25F009610C3 /* BottomSheetInteractor.swift */; };
+		616524BD297ECC51009610C3 /* BottomSheetWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616524BC297ECC51009610C3 /* BottomSheetWorker.swift */; };
+		616524BF297ECCCA009610C3 /* KakaoShareManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616524BE297ECCCA009610C3 /* KakaoShareManager.swift */; };
+		616524C1297ECEE9009610C3 /* KakaoShareErrorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616524C0297ECEE9009610C3 /* KakaoShareErrorType.swift */; };
 		616EB0882890E42F001BD18C /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616EB0872890E42F001BD18C /* PostCell.swift */; };
 		616EB08B28910485001BD18C /* PostHeaderReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616EB08A28910485001BD18C /* PostHeaderReusableView.swift */; };
 		616EB08D289120C7001BD18C /* PostFooterReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616EB08C289120C7001BD18C /* PostFooterReusableView.swift */; };
@@ -209,7 +216,10 @@
 		61BB9DA62976784200728E97 /* HomeRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BB9DA52976784200728E97 /* HomeRepository.swift */; };
 		61BB9DA8297679CC00728E97 /* HotPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BB9DA7297679CC00728E97 /* HotPost.swift */; };
 		61BB9DAA2976AF4200728E97 /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BB9DA92976AF4200728E97 /* Tab.swift */; };
+
 		61BB9DAE2978D50E00728E97 /* ProfileSettingViewType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BB9DAD2978D50E00728E97 /* ProfileSettingViewType.swift */; };
+		61BB9DB22978E09900728E97 /* KakaoSDKShare in Frameworks */ = {isa = PBXBuildFile; productRef = 61BB9DB12978E09900728E97 /* KakaoSDKShare */; };
+
 		61BD0A9A28EAD3A5003038B7 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 61BD0A9928EAD3A5003038B7 /* Alamofire */; };
 		61C21CFD28C463E6009B5F4E /* DefaultCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C21CFC28C463E6009B5F4E /* DefaultCollectionViewCell.swift */; };
 		61C21D0228C46C9E009B5F4E /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 61C21D0128C46C9E009B5F4E /* FirebaseAnalytics */; };
@@ -222,6 +232,7 @@
 		61C21D1528C7653B009B5F4E /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C21D1428C7653B009B5F4E /* LoginView.swift */; };
 		61C21D1728CA2244009B5F4E /* ProfileSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C21D1628CA2244009B5F4E /* ProfileSettingView.swift */; };
 		61C21D1928CB3247009B5F4E /* ProfileSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C21D1828CB3247009B5F4E /* ProfileSettingViewController.swift */; };
+		61CCF3FB2984D7F000FBAB07 /* SharQueryItemType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CCF3FA2984D7F000FBAB07 /* SharQueryItemType.swift */; };
 		61CD47FC293473F900FEE2F7 /* MyInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CD47FB293473F900FEE2F7 /* MyInteractor.swift */; };
 		61CD47FE2934741D00FEE2F7 /* MyPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CD47FD2934741D00FEE2F7 /* MyPresenter.swift */; };
 		61CD4800293478B900FEE2F7 /* MyWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CD47FF293478B900FEE2F7 /* MyWorker.swift */; };
@@ -301,6 +312,9 @@
 		61215AE128572055003FDCAA /* FeedMainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMainViewController.swift; sourceTree = "<group>"; };
 		61215AE328577933003FDCAA /* FeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
 		61215AE528577A9C003FDCAA /* TagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
+		6128A4BE297F6B24005E36F3 /* DeeplinkNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeeplinkNavigator.swift; sourceTree = "<group>"; };
+		6128A4C0297F7B02005E36F3 /* ShareURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareURL.swift; sourceTree = "<group>"; };
+		6128A4C2297F7CC6005E36F3 /* FeedShare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedShare.swift; sourceTree = "<group>"; };
 		6128A4C4297FEC2B005E36F3 /* FeedWriteCompletedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWriteCompletedViewController.swift; sourceTree = "<group>"; };
 		6128A4C6297FED8E005E36F3 /* FeedWriteCompletedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWriteCompletedView.swift; sourceTree = "<group>"; };
 		6128A4C82982429B005E36F3 /* ProfileRepositroy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRepositroy.swift; sourceTree = "<group>"; };
@@ -344,6 +358,10 @@
 		6143297728687B69008BDCC9 /* FeedListInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedListInteractor.swift; sourceTree = "<group>"; };
 		6143297928687B74008BDCC9 /* FeedListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedListPresenter.swift; sourceTree = "<group>"; };
 		6143297B28687B7F008BDCC9 /* FeedListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedListRouter.swift; sourceTree = "<group>"; };
+		616524BA297EC25F009610C3 /* BottomSheetInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetInteractor.swift; sourceTree = "<group>"; };
+		616524BC297ECC51009610C3 /* BottomSheetWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetWorker.swift; sourceTree = "<group>"; };
+		616524BE297ECCCA009610C3 /* KakaoShareManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoShareManager.swift; sourceTree = "<group>"; };
+		616524C0297ECEE9009610C3 /* KakaoShareErrorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoShareErrorType.swift; sourceTree = "<group>"; };
 		616EB0872890E42F001BD18C /* PostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
 		616EB08A28910485001BD18C /* PostHeaderReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHeaderReusableView.swift; sourceTree = "<group>"; };
 		616EB08C289120C7001BD18C /* PostFooterReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFooterReusableView.swift; sourceTree = "<group>"; };
@@ -461,6 +479,7 @@
 		61C21D1428C7653B009B5F4E /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		61C21D1628CA2244009B5F4E /* ProfileSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingView.swift; sourceTree = "<group>"; };
 		61C21D1828CB3247009B5F4E /* ProfileSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewController.swift; sourceTree = "<group>"; };
+		61CCF3FA2984D7F000FBAB07 /* SharQueryItemType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharQueryItemType.swift; sourceTree = "<group>"; };
 		61CD47FB293473F900FEE2F7 /* MyInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInteractor.swift; sourceTree = "<group>"; };
 		61CD47FD2934741D00FEE2F7 /* MyPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPresenter.swift; sourceTree = "<group>"; };
 		61CD47FF293478B900FEE2F7 /* MyWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWorker.swift; sourceTree = "<group>"; };
@@ -508,6 +527,7 @@
 				61C21D0F28C75E97009B5F4E /* KakaoSDKUser in Frameworks */,
 				61C21D0428C46C9E009B5F4E /* FirebaseAppDistribution-Beta in Frameworks */,
 				61BD0A9A28EAD3A5003038B7 /* Alamofire in Frameworks */,
+				61BB9DB22978E09900728E97 /* KakaoSDKShare in Frameworks */,
 				61A02843290E347900943A40 /* Lottie in Frameworks */,
 				61C21D0228C46C9E009B5F4E /* FirebaseAnalytics in Frameworks */,
 				34F6FB7E518CFAF1AD6C3455 /* Pods_KnockKnock_iOS.framework in Frameworks */,
@@ -551,7 +571,11 @@
 				61B20B562924BD7800EBA596 /* UserDataManager.swift */,
 				61CD480F293DC5A000FEE2F7 /* FeedWriteRepository.swift */,
 				61BB9DA52976784200728E97 /* HomeRepository.swift */,
+
 				6128A4C82982429B005E36F3 /* ProfileRepositroy.swift */,
+
+				616524BE297ECCCA009610C3 /* KakaoShareManager.swift */,
+
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -890,8 +914,10 @@
 			isa = PBXGroup;
 			children = (
 				61A0283B29090B2D00943A40 /* Views */,
+				616524BA297EC25F009610C3 /* BottomSheetInteractor.swift */,
 				617F9D70282BAC1300C2BC9A /* BottomSheetViewController.swift */,
 				61A0283C29090B4500943A40 /* BottomSheetRouter.swift */,
+				616524BC297ECC51009610C3 /* BottomSheetWorker.swift */,
 			);
 			path = BottomSheet;
 			sourceTree = "<group>";
@@ -1057,6 +1083,7 @@
 				61B23BA42966F34C005AFA6D /* FeedDetail.swift */,
 				61B23BA62966F367005AFA6D /* FeedMain.swift */,
 				61B23BA82966F440005AFA6D /* Address.swift */,
+				6128A4C2297F7CC6005E36F3 /* FeedShare.swift */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -1208,7 +1235,13 @@
 				61DEFE85294059BF00ABC13E /* Alert.swift */,
 				61BB9DAD2978D50E00728E97 /* ProfileSettingViewType.swift */,
 				61BB9DA92976AF4200728E97 /* Tab.swift */,
+
 				617E99C22987A04400E3FBD5 /* ImageError.swift */,
+
+				616524C0297ECEE9009610C3 /* KakaoShareErrorType.swift */,
+				6128A4C0297F7B02005E36F3 /* ShareURL.swift */,
+				61CCF3FA2984D7F000FBAB07 /* SharQueryItemType.swift */,
+
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -1259,6 +1292,7 @@
 				201A288127BAAFDE004F7CD9 /* Scenes */,
 				61FC60E827B9244D00A51DBC /* AppDelegate.swift */,
 				61FC60EA27B9244E00A51DBC /* SceneDelegate.swift */,
+				6128A4BE297F6B24005E36F3 /* DeeplinkNavigator.swift */,
 				61FC60F627B9244F00A51DBC /* Info.plist */,
 			);
 			path = "KnockKnock-iOS";
@@ -1301,6 +1335,7 @@
 				61C21D0328C46C9E009B5F4E /* FirebaseAppDistribution-Beta */,
 				61BD0A9928EAD3A5003038B7 /* Alamofire */,
 				61A02842290E347900943A40 /* Lottie */,
+				61BB9DB12978E09900728E97 /* KakaoSDKShare */,
 			);
 			productName = "KnockKnock-iOS";
 			productReference = 61FC60E527B9244D00A51DBC /* KnockKnock-iOS.app */;
@@ -1449,8 +1484,10 @@
 				618D8B6928BF36A200828794 /* FeedSearchResultFooterReusableView.swift in Sources */,
 				201077F227D3A97A00280991 /* BaseViewController.swift in Sources */,
 				619DEE9E2887B41B00C80095 /* CommentRepository.swift in Sources */,
+				616524C1297ECEE9009610C3 /* KakaoShareErrorType.swift in Sources */,
 				6105079628B4EE9F00C1B5CF /* HomeRouter.swift in Sources */,
 				6190E968294EEE5F00A48512 /* Encodable+Ext.swift in Sources */,
+				6128A4C3297F7CC6005E36F3 /* FeedShare.swift in Sources */,
 				20EAE2972814054F009242A1 /* ChellengeRepository.swift in Sources */,
 				618FDAC527E80C6B00C2823F /* ShopSearchViewController.swift in Sources */,
 				61E87EBD28D189640005CAA6 /* FeedSearchRouter.swift in Sources */,
@@ -1520,6 +1557,7 @@
 				61215AD028559B6E003FDCAA /* UICollectionViewCell+Ext.swift in Sources */,
 				617F9D75282BEB2A00C2BC9A /* BottomMenuCell.swift in Sources */,
 				613856C3289553CB00BE347E /* FeedDetailInteractor.swift in Sources */,
+				6128A4BF297F6B24005E36F3 /* DeeplinkNavigator.swift in Sources */,
 				61BB9DA62976784200728E97 /* HomeRepository.swift in Sources */,
 				618D8B6428BDFD3200828794 /* SearchResultCell.swift in Sources */,
 				611BD4AC27E48B9F007D5C79 /* FeedWritePresenter.swift in Sources */,
@@ -1532,13 +1570,16 @@
 				6143296A28644458008BDCC9 /* FeedRepository.swift in Sources */,
 				61B6D97F2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift in Sources */,
 				61B20B51292398C700EBA596 /* KKRequestInterceptor.swift in Sources */,
+				616524BF297ECCCA009610C3 /* KakaoShareManager.swift in Sources */,
 				613856DB289948F500BE347E /* StoreCell.swift in Sources */,
 				61E87EC328D30E9F0005CAA6 /* ImageCacheManager.swift in Sources */,
 				61A5EA2528B3B72100A0214D /* StoreListViewController.swift in Sources */,
+				61CCF3FB2984D7F000FBAB07 /* SharQueryItemType.swift in Sources */,
 				6139FF7128E4165D00CC9950 /* PropertyType.swift in Sources */,
 				614329552862EFE0008BDCC9 /* FeedListView.swift in Sources */,
 				61DEFE8429402DEE00ABC13E /* UIImage+Ext.swift in Sources */,
 				613856DE289A795200BE347E /* HomeHeaderCollectionReusableView.swift in Sources */,
+				616524BB297EC25F009610C3 /* BottomSheetInteractor.swift in Sources */,
 				61A8DC47287E905B000512EC /* CommentView.swift in Sources */,
 				613856C7289554E600BE347E /* FeedDetailWorker.swift in Sources */,
 				6143296628642745008BDCC9 /* UILabel+Ext.swift in Sources */,
@@ -1629,6 +1670,7 @@
 				2010780827D48FDD00280991 /* Int+Ext.swift in Sources */,
 				616EB091289154B8001BD18C /* FeedDetailSection.swift in Sources */,
 				61725C192902428E00A84D87 /* PropertySelectRouter.swift in Sources */,
+				616524BD297ECC51009610C3 /* BottomSheetWorker.swift in Sources */,
 				613856CF2898B6D500BE347E /* LikeRepository.swift in Sources */,
 				61FC60EB27B9244E00A51DBC /* SceneDelegate.swift in Sources */,
 				611BD4BA27E702F5007D5C79 /* PropertySelectView.swift in Sources */,
@@ -1644,6 +1686,7 @@
 				61DEFE8E2941AF9000ABC13E /* AlertViewController.swift in Sources */,
 				618D8B6028BDF6C900828794 /* SearchTap.swift in Sources */,
 				201077F827D3BF4B00280991 /* Array+Ext.swift in Sources */,
+				6128A4C1297F7B02005E36F3 /* ShareURL.swift in Sources */,
 				20D28F8627CFC7B300A809DB /* ChallengeWorker.swift in Sources */,
 				611BD4B827E6DD5F007D5C79 /* PropertyCell.swift in Sources */,
 				2090811827CA4F56005A1573 /* HomeViewController.swift in Sources */,
@@ -1933,6 +1976,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 61A02841290E347900943A40 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		61BB9DB12978E09900728E97 /* KakaoSDKShare */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61C21D0928C75E97009B5F4E /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKShare;
 		};
 		61BD0A9928EAD3A5003038B7 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
