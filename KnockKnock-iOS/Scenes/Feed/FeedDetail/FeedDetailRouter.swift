@@ -69,29 +69,12 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
   }
 
   func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?) {
-    let bottomSheetViewController = BottomSheetViewController().then {
-      if isMyPost {
-        $0.setBottomSheetContents(
-          contents: [
-            BottomSheetOption.postDelete.rawValue,
-            BottomSheetOption.postEdit.rawValue
-          ],
-          bottomSheetType: .small
-        )
 
-      } else {
-        $0.setBottomSheetContents(
-          contents: [
-            BottomSheetOption.postReport.rawValue,
-            BottomSheetOption.postShare.rawValue,
-            BottomSheetOption.postHide.rawValue
-          ],
-          bottomSheetType: .medium
-        )
-      }
-      $0.modalPresentationStyle = .overFullScreen
-      $0.deleteAction = deleteAction
-    }
+    guard let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
+      deleteAction: deleteAction,
+      isMyPost: isMyPost
+    ) as? BottomSheetViewController else { return }
+
     if let sourceView = self.view as? UIViewController {
       sourceView.present(
         bottomSheetViewController,
