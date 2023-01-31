@@ -98,7 +98,10 @@ extension ChallengeViewController: UICollectionViewDataSource {
     let challenge = self.challenges[indexPath.row]
 
     cell.backgroundColor = .white
-    cell.bind(data: challenge)
+    
+    DispatchQueue.main.async {
+      cell.bind(data: challenge)
+    }
 
     return cell
   }
