@@ -24,32 +24,13 @@ struct UserDetail {
 extension UserDetailDTO {
 
   func toDomain() -> UserDetail {
-    guard let urlString = image,
-          let url = URL(string: urlString) else {
 
-      return UserDetail(
-        nickname: nickname,
-        socialType: socialType,
-        image: KKDS.Image.ic_my_img_86
-      )
-    }
-
-    do {
-      let data = try Data(contentsOf: url)
-      let image = UIImage(data: data)
-
-      return UserDetail(
-        nickname: nickname,
-        socialType: socialType,
-        image: image ?? KKDS.Image.ic_my_img_86
-      )
-    } catch {
-
-      return UserDetail(
-        nickname: nickname,
-        socialType: socialType,
-        image: KKDS.Image.ic_my_img_86
-      )
-    }
+    return UserDetail(
+      nickname: nickname,
+      socialType: socialType,
+      image: image?.stringUrlToImage(
+        defaultImage: KKDS.Image.ic_my_img_86
+      ) ?? KKDS.Image.ic_my_img_86
+    )
   }
 }
