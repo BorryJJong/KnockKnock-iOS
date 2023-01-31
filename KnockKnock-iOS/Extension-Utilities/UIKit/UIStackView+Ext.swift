@@ -33,14 +33,22 @@ extension UIStackView {
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.white.cgColor
         $0.backgroundColor = .white
-
-        $0.image = images[index]
-          .flatMap { URL(string: $0) }
-          .flatMap { try? Data(contentsOf: $0) }
-          .flatMap { UIImage(data: $0) }
-        ?? KKDS.Image.ic_person_24
+        $0.clipsToBounds = true
       }
-      addArrangedSubview(imageView)
+
+      Task {
+        do {
+          let profileImage = images[index]
+            .flatMap { URL(string: $0) }
+            .flatMap { try? Data(contentsOf: $0) }
+            .flatMap { UIImage(data: $0) }
+          ?? KKDS.Image.ic_person_24
+
+          imageView.image = await profileImage.resize(newWidth: 24)
+
+          addArrangedSubview(imageView)
+        }
+      }
 
       if index == 2 {
         break
