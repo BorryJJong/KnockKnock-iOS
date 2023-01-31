@@ -47,3 +47,19 @@ struct FeedDetail: Decodable {
     let fileUrl: String
   }
 }
+
+extension FeedDetail {
+  func toShare() -> FeedShare? {
+
+    guard let feed = feed else { return nil }
+
+    return FeedShare(
+      id: feed.id,
+      nickname: feed.userName,
+      content: feed.content,
+      imageUrl: images[0].fileUrl,
+      likeCount: nil,
+      commentCount: nil
+    )
+  }
+}

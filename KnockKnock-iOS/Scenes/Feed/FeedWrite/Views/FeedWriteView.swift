@@ -162,10 +162,32 @@ class FeedWriteView: UIView {
     $0.backgroundColor = .gray20
   }
 
-  let contentTextView = UITextView().then {
+  private lazy var doneBarButton = UIBarButtonItem(
+    barButtonSystemItem: .done,
+    target: nil,
+    action: #selector(self.doneBarButtonDidTap)
+  ).then {
+    $0.tintColor = KKDS.Color.green50
+  }
+
+  private let flexibleSpaceButton = UIBarButtonItem(
+    barButtonSystemItem: .flexibleSpace,
+    target: nil,
+    action: nil
+  )
+
+  private lazy var toolbar = UIToolbar().then {
+    $0.sizeToFit()
+    $0.setItems([self.flexibleSpaceButton,
+                 self.flexibleSpaceButton,
+                 self.doneBarButton], animated: false)
+  }
+
+  lazy var contentTextView = UITextView().then {
     $0.textColor = .gray40
     $0.font = .systemFont(ofSize: 14)
     $0.text = "내용을 입력해주세요. (글자수 1,000자 이내)"
+    $0.inputAccessoryView = self.toolbar
   }
 
   let doneButton = UIButton().then {
@@ -173,6 +195,10 @@ class FeedWriteView: UIView {
     $0.setTitle("등록", for: .normal)
     $0.layer.cornerRadius = Metric.buttonCornerRadius
     $0.backgroundColor = .green50
+  }
+
+  @objc private func doneBarButtonDidTap(_ sender: UIBarButtonItem) {
+    self.endEditing(true)
   }
 
   // MARK: - Initialize
@@ -184,6 +210,30 @@ class FeedWriteView: UIView {
 
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
+  }
+
+  // MARK: - Configure
+
+  func setContainerViewConstant(notification: Notification, isAppearing: Bool) {
+    let userInfo = notification.userInfo
+
+    if let keyboardFrame = userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+      let keyboardSize = keyboardFrame.cgRectValue
+      let keyboardHeight = keyboardSize.height
+
+      guard let animationDurationValue = userInfo?[
+        UIResponder
+          .keyboardAnimationDurationUserInfoKey
+      ] as? NSNumber else { return }
+
+      let viewBottomConstant = isAppearing ? -(keyboardHeight) + 60 : 0
+
+      self.frame.origin.y = viewBottomConstant
+
+      UIView.animate(withDuration: animationDurationValue.doubleValue) {
+        self.layoutIfNeeded()
+      }
+    }
   }
 
   // MARK: - Bind
