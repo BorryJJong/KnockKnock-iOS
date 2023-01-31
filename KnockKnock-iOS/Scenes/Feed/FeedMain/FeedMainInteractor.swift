@@ -25,20 +25,36 @@ final class FeedMainInteractor: FeedMainInteractorProtocol {
   var presenter: FeedMainPresenterProtocol?
   var worker: FeedMainWorkerProtocol?
 
+  private var feedData: FeedMain?
+
   func saveSearchKeyword(searchKeyword: [SearchKeyword]) {
     self.worker?.saveSearchKeyword(searchKeyword: searchKeyword)
   }
 
-  func fetchFeedMain(currentPage: Int, pageSize: Int, challengeId: Int) {
+  func fetchFeedMain(
+    currentPage: Int,
+    pageSize: Int,
+    challengeId: Int
+  ) {
     LoadingIndicator.showLoading()
     
     self.worker?.fetchFeedMain(
       currentPage: currentPage,
       pageSize: pageSize,
       challengeId: challengeId,
-      completionHandler: { [weak self] feed in
-      self?.presenter?.presentFeedMain(feed: feed)
-    })
+      completionHandler: { [weak self] data in
+
+        if currentPage == 1 {
+          self?.feedData = data
+        } else {
+          self?.feedData?.feeds += data.feeds
+          self?.feedData?.isNext = data.isNext
+        }
+
+        guard let feedData = self?.feedData else { return }
+        self?.presenter?.presentFeedMain(feed: feedData)
+      }
+    )
   }
 
   func fetchChallengeTitles() {

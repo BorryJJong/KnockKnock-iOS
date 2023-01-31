@@ -29,15 +29,14 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
   var interactor: FeedMainInteractorProtocol?
   var router: FeedMainRouterProtocol?
   
-  private var feedMain: FeedMain?
-
-  private var feedMainPost: [FeedMain.Post] = [] {
+  private var feedMain: FeedMain? {
     didSet {
-      DispatchQueue.main.async {
-        self.containerView.feedCollectionView.reloadData()
-      }
+      guard let feedPosts = feedMain?.feeds else { return }
+      self.feedMainPost = feedPosts
     }
   }
+  private var feedMainPost: [FeedMain.Post] = []
+
   private var challengeTitles: [ChallengeTitle] = []
   private var searchKeyword: [SearchKeyword] = []
   
@@ -121,7 +120,10 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
 extension FeedMainViewController: FeedMainViewProtocol {
   func fetchFeedMain(feed: FeedMain) {
     self.feedMain = feed
-    self.feedMainPost += feedMain?.feeds ?? []
+
+    DispatchQueue.main.async {
+      self.containerView.feedCollectionView.reloadData()
+    }
   }
 
   func fetchSearchLog(searchKeyword: [SearchKeyword]) {
@@ -140,7 +142,8 @@ extension FeedMainViewController: FeedMainViewProtocol {
         self.containerView.tagCollectionView.scrollToItem(
           at: index,
           at: .centeredHorizontally,
-          animated: false)
+          animated: false
+        )
       }
     } else {
       self.containerView.tagCollectionView.reloadData()
@@ -224,9 +227,9 @@ extension FeedMainViewController: UICollectionViewDataSource {
     )
 
     guard let feedMain = self.feedMain else {
-      return UICollectionReusableView()
+      return footer
     }
-    
+
     footer.viewMoreButton.isHidden = !feedMain.isNext
     footer.viewMoreButton.addTarget(
       self,
