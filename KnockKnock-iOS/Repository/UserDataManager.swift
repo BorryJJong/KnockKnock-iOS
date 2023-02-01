@@ -44,7 +44,7 @@ final class UserDataManager: UserDataManagerProtocol {
     self.userDefaultsService.set(value: authInfo.refreshToken, forkey: .refreshToken)
 
     NotificationCenter.default.post(name: .signInCompleted, object: nil)
-    NotificationCenter.default.post(name: .feedRefreshAfterSigned, object: nil)
+    NotificationCenter.default.post(name: .feedListRefreshAfterSigned, object: nil)
 
     return true
   }
@@ -54,6 +54,7 @@ final class UserDataManager: UserDataManagerProtocol {
     self.userDefaultsService.set(value: nickname, forkey: .nickname)
 
     NotificationCenter.default.post(name: .profileUpdated, object: nil)
+    NotificationCenter.default.post(name: .feedListRefreshAfterSigned, object: nil)
   }
 
   /// 회원 탈퇴 및 로그아웃 시 유저 데이터 삭제
@@ -64,6 +65,6 @@ final class UserDataManager: UserDataManagerProtocol {
     self.userDefaultsService.remove(forkey: .profileImage)
 
     NotificationCenter.default.post(name: .signOutCompleted, object: nil)
-    NotificationCenter.default.post(name: .feedRefreshAfterUnsigned, object: nil)
+    NotificationCenter.default.post(name: .feedListRefreshAfterUnsigned, object: nil)
   }
 }
