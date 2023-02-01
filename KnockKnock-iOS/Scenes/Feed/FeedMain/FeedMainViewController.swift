@@ -122,9 +122,7 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
 extension FeedMainViewController: FeedMainViewProtocol {
   func fetchFeedMain(feed: FeedMain) {
     self.feedMain = feed
-    self.feedMain?.feeds.forEach {
-      self.feedMainPost.append($0)
-    }
+    self.feedMainPost += feedMain?.feeds ?? []
   }
 
   func fetchSearchLog(searchKeyword: [SearchKeyword]) {

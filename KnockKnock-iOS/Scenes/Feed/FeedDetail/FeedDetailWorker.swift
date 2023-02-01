@@ -21,6 +21,8 @@ protocol FeedDetailWorkerProtocol {
 
   func requestAddComment(comment: AddCommentDTO, completionHandler: @escaping (Bool) -> Void)
   func requestDeleteComment(commentId: Int, completionHandler: @escaping () -> Void)
+
+  func requestDeleteFeed(feedId: Int, completionHandler: @escaping (Bool) -> Void)
 }
 
 final class FeedDetailWorker: FeedDetailWorkerProtocol {
@@ -50,6 +52,22 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
       feedId: feedId,
       completionHandler: { feed in
         completionHandler(feed)
+      }
+    )
+  }
+
+  func requestDeleteFeed(
+    feedId: Int,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
+    self.feedRepository.requestDeleteFeed(
+      feedId: feedId,
+      completionHandler: { isSuccess in
+
+        if isSuccess {
+          self.postNotification()
+        }
+        completionHandler(isSuccess)
       }
     )
   }
@@ -173,6 +191,21 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
       completionHandler: { _ in
         completionHandler()
       }
+    )
+  }
+}
+
+// MAKR: - Inner Actions
+
+extension FeedDetailWorker {
+  private func postNotification() {
+    NotificationCenter.default.post(
+      name: .feedListRefreshAfterDelete,
+      object: feedId
+    )
+    NotificationCenter.default.post(
+      name: .feedMainRefreshAfterDelete,
+      object: feedId
     )
   }
 }

@@ -59,8 +59,7 @@ final class KKNetworkManager {
 
     session.upload(
       multipartFormData: router.multipart,
-      with: router,
-      interceptor: self.interceptor
+      with: router
     ).validate(statusCode: 200..<500)
      .responseDecodable(of: object) { response in
         switch response.result {
