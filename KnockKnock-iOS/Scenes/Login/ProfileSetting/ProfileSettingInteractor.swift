@@ -120,71 +120,56 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
   ) {
     
     LoadingIndicator.showLoading()
-    // 수정 될 값이 없으면 my view로 이동
-    guard self.isChangedUserData(
-      nickname: nickname,
-      image: image
-    ) == true else { return }
-    
-    // 닉네임 중복검사
-    self.worker?.checkDuplicateNickname(
-      nickname: nickname,
-      completionHandler: { isDuplicated in
-        
-        // 본인이 사용하고 있는 닉네임이 아니고,
-        // 중복 검사 결과 true일 경우 이미 사용 중인 닉네임 noti
-        if nickname != self.userDetail?.nickname,
-           isDuplicated {
-          
-          self.router?.showAlertView(
-            message: "이미 사용되고 있는 닉네임입니다.",
-            completion: nil
-          )
-          
-        } else {
-          
-          // 프로필 수정 api 호출
-          self.worker?.requestEditProfile(
-            nickname: self.newNickname,
-            image: self.newImage,
-            completionHandler: { isSuccess, message in
+
+    guard let originNickname = self.userDetail?.nickname else { return }
+
+    self.worker?.isChangedUserData(
+      originNickname: originNickname,
+      originImage: self.userDetail?.image,
+      inputedNickname: nickname,
+      inputedImage: image,
+      completionHandler: { newNickname, newImage in
+
+        guard newNickname != nil, newImage != nil else {
+          self.navigateToMyView()
+
+          return
+        }
+
+        // 닉네임 중복검사
+        self.worker?.checkDuplicateNickname(
+          nickname: nickname,
+          completionHandler: { isDuplicated in
+
+            // 본인이 사용하고 있는 닉네임이 아니고,
+            // 중복 검사 결과 true일 경우 이미 사용 중인 닉네임 noti
+            if nickname != self.userDetail?.nickname,
+               isDuplicated {
+
               self.router?.showAlertView(
-                message: message ,
-                completion: {
-                  self.router?.navigateToMyView()
+                message: "이미 사용되고 있는 닉네임입니다.",
+                completion: nil
+              )
+
+            } else {
+
+              // 프로필 수정 api 호출
+              self.worker?.requestEditProfile(
+                nickname: self.newNickname,
+                image: self.newImage,
+                completionHandler: { isSuccess, message in
+                  self.router?.showAlertView(
+                    message: message ,
+                    completion: {
+                      self.router?.navigateToMyView()
+                    }
+                  )
                 }
               )
             }
-          )
-        }
+          }
+        )
       }
     )
-  }
-}
-
-// MARK: - Inner Actions
-
-extension ProfileSettingInteractor {
-  
-  /// nickname, image 중 하나라도 수정 되었는지 판별
-  private func isChangedUserData(
-    nickname: String,
-    image: UIImage?
-  ) -> Bool {
-    
-    self.newNickname = nickname == self.userDetail?.nickname ? nil : nickname
-    
-    if let image = image {
-      self.newImage = image.isEqualToImage(image: self.userDetail?.image) ? nil : image.resize(newWidth: 100)
-    }
-    
-    if self.newImage == nil,
-       self.newNickname == nil {
-      
-      self.navigateToMyView()
-      return false
-    }
-    
-    return true
   }
 }
