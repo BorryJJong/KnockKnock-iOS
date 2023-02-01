@@ -45,7 +45,10 @@ final class LoginRouter: LoginRouterProtocol {
   /// - Parameters:
   ///  - signInInfo: 로그인 시 입력받은 소셜로그인 정보(socialtype, token)
   func navigateToProfileSettingView(signInInfo: SignInInfo) {
-    let profileSettingViewController = ProfileSettingRouter.createProfileSettingView(signInInfo: signInInfo)
+    let profileSettingViewController = ProfileSettingRouter.createProfileSettingView(
+      profileSettingViewType: .register,
+      signInInfo: signInInfo
+    )
 
     if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.pushViewController(

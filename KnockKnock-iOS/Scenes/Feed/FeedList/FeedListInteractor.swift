@@ -89,6 +89,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       completionHandler: { isSuccess in
         
         if isSuccess {
+
           self.deletePost(
             feedList: feedList,
             feedId: feedId

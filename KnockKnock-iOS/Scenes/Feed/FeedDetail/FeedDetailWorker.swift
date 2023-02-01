@@ -65,7 +65,7 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
       completionHandler: { isSuccess in
 
         if isSuccess {
-          self.postNotification()
+          self.postNotification(feedId: feedId)
         }
         completionHandler(isSuccess)
       }
@@ -198,7 +198,7 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
 // MAKR: - Inner Actions
 
 extension FeedDetailWorker {
-  private func postNotification() {
+  private func postNotification(feedId: Int) {
     NotificationCenter.default.post(
       name: .feedListRefreshAfterDelete,
       object: feedId

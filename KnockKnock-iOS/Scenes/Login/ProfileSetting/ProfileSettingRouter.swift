@@ -10,23 +10,32 @@ import UIKit
 protocol ProfileSettingRouterProtocol {
   var view: ProfileSettingViewProtocol? { get set }
 
-  static func createProfileSettingView(signInInfo: SignInInfo?) -> UIViewController
+  static func createProfileSettingView(
+    profileSettingViewType: ProfileSettingViewType,
+    signInInfo: SignInInfo?
+  ) -> UIViewController
   
   func navigateToMyView()
   func popProfileView()
+  func showAlertView(message: String, completion: (() -> Void)?) 
 }
 
 final class ProfileSettingRouter: ProfileSettingRouterProtocol {
 
   weak var view: ProfileSettingViewProtocol?
 
-  static func createProfileSettingView(signInInfo: SignInInfo?) -> UIViewController {
+  static func createProfileSettingView(
+    profileSettingViewType: ProfileSettingViewType,
+    signInInfo: SignInInfo?
+  ) -> UIViewController {
+    
     let view = ProfileSettingViewController()
     let interactor = ProfileSettingInteractor()
     let presenter = ProfileSettingPresenter()
     let worker = ProfileSettingWorker(
       accountManager: AccountManager(),
-      userDataManager: UserDataManager()
+      userDataManager: UserDataManager(),
+      profileRepository: ProfileRepository()
     )
     let router = ProfileSettingRouter()
 
@@ -40,17 +49,31 @@ final class ProfileSettingRouter: ProfileSettingRouterProtocol {
     if let signInInfo = signInInfo {
       interactor.signInInfo = signInInfo
     }
+    view.profileSettingViewType = profileSettingViewType
 
     return view
   }
 
   func navigateToMyView() {
     guard let sourceView = self.view as? UIViewController else { return }
+    LoadingIndicator.hideLoading()
     sourceView.navigationController?.popToRootViewController(animated: true)
   }
   
   func popProfileView() {
     guard let sourceView = self.view as? UIViewController else { return }
     sourceView.navigationController?.popViewController(animated: true)
+  }
+
+  func showAlertView(message: String, completion: (() -> Void)?) {
+    LoadingIndicator.hideLoading()
+
+    guard let sourceView = self.view as? UIViewController else { return }
+
+    sourceView.showAlert(
+      content: message,
+      isCancelActive: false,
+      confirmActionCompletion: completion
+    )
   }
 }
