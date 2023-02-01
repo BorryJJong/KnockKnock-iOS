@@ -7,8 +7,6 @@
 
 import UIKit
 
-import KKDSKit
-
 protocol ProfileSettingInteractorProtocol {
   var worker: ProfileSettingWorkerProtocol? { get set }
   var presenter: ProfileSettingPresenterProtocol? { get set }
@@ -57,8 +55,8 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
   /// 회원가입 요청 이벤트
   ///
   /// - Parameters:
-  /// - nickname: 닉네임
-  /// - image: 프로필 이미지
+  ///  - nickname: 닉네임
+  ///  - image: 프로필 이미지
   func requestSignUp(
     nickname: String,
     image: UIImage
@@ -114,8 +112,8 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
   /// 변경이 안된 요소는 nil 전달 되며, api 성공 여부에 따라 알림 메시지 노출
   ///
   /// - Parameters:
-  /// - nickname: 닉네임
-  /// - image: 프로필 이미지
+  ///  - nickname: 닉네임
+  ///  - image: 프로필 이미지
   func requestEditProfile(
     nickname: String,
     image: UIImage?
