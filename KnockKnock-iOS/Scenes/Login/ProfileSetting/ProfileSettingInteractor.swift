@@ -131,6 +131,7 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
       completionHandler: { newNickname, newImage in
 
         guard newNickname != nil, newImage != nil else {
+          
           self.navigateToMyView()
 
           return

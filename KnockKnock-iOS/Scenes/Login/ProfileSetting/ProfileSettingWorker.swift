@@ -93,7 +93,6 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
     completionHandler(newNickname, newImage)
   }
   
-  
   func requestEditProfile(
     nickname: String?,
     image: UIImage?,

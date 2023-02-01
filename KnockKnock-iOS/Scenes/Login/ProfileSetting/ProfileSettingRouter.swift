@@ -56,6 +56,7 @@ final class ProfileSettingRouter: ProfileSettingRouterProtocol {
 
   func navigateToMyView() {
     guard let sourceView = self.view as? UIViewController else { return }
+    LoadingIndicator.hideLoading()
     sourceView.navigationController?.popToRootViewController(animated: true)
   }
   
