@@ -189,15 +189,12 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       feedId: feedId,
       completionHandler: { isSuccess in
         if isSuccess {
-          NotificationCenter.default.post(
-            name: .feedListRefreshAfterDelete,
-            object: feedId
+          self.showAlertView(
+            message: "게시글이 삭제되었습니다.",
+            confirmAction: {
+              self.navigateToFeedList()
+            }
           )
-          NotificationCenter.default.post(
-            name: .feedMainRefreshAfterDelete,
-            object: feedId
-          )
-          self.navigateToFeedList()
         } else {
           self.showAlertView(
             message: "게시글 삭제에 실패하였습니다.",
