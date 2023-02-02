@@ -13,7 +13,11 @@ protocol ChallengeRouterProtocol: AnyObject {
   static func createChallenge() -> UIViewController
 
   func navigateToChallengeDetail(challengeId: Int)
-  func presentBottomSheet()
+  func presentBottomSheet(challengeSortDelegate: ChallengeSortDelegate)
+}
+
+protocol ChallengeSortDelegate: AnyObject {
+  func getSortType(sortType: ChallengeSortType)
 }
 
 final class ChallengeRouter: ChallengeRouterProtocol {
@@ -37,10 +41,12 @@ final class ChallengeRouter: ChallengeRouterProtocol {
     return view
   }
 
-  func presentBottomSheet() {
+  func presentBottomSheet(challengeSortDelegate: ChallengeSortDelegate) {
     guard let sourceView = self.view as? UIViewController else { return }
 
-    let bottomSheetViewController = BottomSheetRouter.createBottomSheet(isChallenge: true)
+    let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
+      challengeSortDelegate: challengeSortDelegate
+    )
 
     sourceView.present(
       bottomSheetViewController,

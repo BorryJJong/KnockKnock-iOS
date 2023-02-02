@@ -13,7 +13,7 @@ protocol BottomSheetRouterProtocol: AnyObject {
   static func createBottomSheet(
     districtSelectDelegate: DistrictSelectDelegate?,
     districtsType: DistrictsType?,
-    isChallenge: Bool?,
+    challengeSortDelegate: ChallengeSortDelegate?,
     deleteAction: (() -> Void)?,
     feedData: FeedShare?,
     isMyPost: Bool?
@@ -31,7 +31,7 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
   static func createBottomSheet(
     districtSelectDelegate: DistrictSelectDelegate? = nil,
     districtsType: DistrictsType? = nil,
-    isChallenge: Bool? = nil,
+    challengeSortDelegate: ChallengeSortDelegate? = nil,
     deleteAction: (() -> Void)? = nil,
     feedData: FeedShare? = nil,
     isMyPost: Bool? = nil
@@ -56,7 +56,8 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
       router.setBottomSheetOptions(isMyPost: isMyPost)
     }
     
-    guard isChallenge != nil else { return view }
+    guard challengeSortDelegate != nil else { return view }
+    interactor.challengeSortDelegate = challengeSortDelegate
     router.setChallengeBottomSheetOption()
 
     return view

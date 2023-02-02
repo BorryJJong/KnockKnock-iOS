@@ -10,7 +10,7 @@ import Foundation
 protocol ChallengePresenterProtocol: AnyObject {
   var view: ChallengeViewProtocol? { get set }
   
-  func presentFetchChallenge(challenges: [Challenge], sortType: String)
+  func presentFetchChallenge(challenges: [Challenge], sortType: ChallengeSortType)
 }
 
 final class ChallengePresenter: ChallengePresenterProtocol {
@@ -18,11 +18,12 @@ final class ChallengePresenter: ChallengePresenterProtocol {
   
   func presentFetchChallenge(
     challenges: [Challenge],
-    sortType: String
+    sortType: ChallengeSortType
   ) {
     self.view?.fetchChallenges(
       challenges: challenges,
       sortType: sortType
     )
+    LoadingIndicator.hideLoading()
   }
 }

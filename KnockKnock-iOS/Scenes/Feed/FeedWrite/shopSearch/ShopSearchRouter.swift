@@ -69,8 +69,7 @@ final class ShopSearchRouter: ShopSearchRouterProtocol {
   ) {
     guard let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
       districtSelectDelegate: self.districtSelectDelegate,
-      districtsType: districtsType,
-      isMyPost: nil
+      districtsType: districtsType
     ) as? BottomSheetViewController else { return }
 
     bottomSheetViewController.setBottomSheetContents(contents: content, bottomSheetType: .large)

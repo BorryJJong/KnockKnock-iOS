@@ -11,7 +11,7 @@ protocol ChallengeInteractorProtocol: AnyObject {
   var presenter: ChallengePresenterProtocol? { get set }
   var worker: ChallengeWorkerProtocol? { get set }
   
-  func fetchChallenge(sortType: String)
+  func fetchChallenge(sortType: ChallengeSortType)
   func presentBottomSheet()
   func navigateToChallengeDetail(challengeId: Int)
 }
@@ -24,10 +24,13 @@ final class ChallengeInteractor: ChallengeInteractorProtocol {
   var worker: ChallengeWorkerProtocol?
   var router: ChallengeRouterProtocol?
   
-  func fetchChallenge(sortType: String) {
+  func fetchChallenge(sortType: ChallengeSortType) {
+    LoadingIndicator.showLoading()
+
     self.worker?.fetchChallenge(
       sortType: sortType,
       completionHandler: { [weak self] challenges in
+        
         self?.presenter?.presentFetchChallenge(
           challenges: challenges,
           sortType: sortType
@@ -37,10 +40,16 @@ final class ChallengeInteractor: ChallengeInteractorProtocol {
   }
 
   func presentBottomSheet() {
-    self.router?.presentBottomSheet()
+    self.router?.presentBottomSheet(challengeSortDelegate: self)
   }
 
   func navigateToChallengeDetail(challengeId: Int) {
     self.router?.navigateToChallengeDetail(challengeId: challengeId)
+  }
+}
+
+extension ChallengeInteractor: ChallengeSortDelegate {
+  func getSortType(sortType: ChallengeSortType) {
+    self.fetchChallenge(sortType: sortType)
   }
 }

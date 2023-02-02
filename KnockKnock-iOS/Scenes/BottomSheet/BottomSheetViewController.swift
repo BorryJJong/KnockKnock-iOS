@@ -176,6 +176,12 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
 
       case .postShare:
         self.interactor?.sharePost()
+
+      case .challengeNew:
+        self.interactor?.passChallengeSortType(sortType: ChallengeSortType.new)
+
+      case .challengePopular:
+        self.interactor?.passChallengeSortType(sortType: ChallengeSortType.popular)
         
       default:
         print("Error")
