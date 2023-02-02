@@ -8,9 +8,9 @@
 import UIKit
 
 extension UIImage {
-  func resize(newWidth: CGFloat) async -> UIImage {
-    let scale = newWidth / self.size.width
-    let newHeight = self.size.height * scale
+  /// 이미지 리사이징(정방형)
+  func resizeSquareImage(newWidth: CGFloat) async -> UIImage {
+    let newHeight = newWidth
 
     let size = CGSize(width: newWidth, height: newHeight)
     let render = UIGraphicsImageRenderer(size: size)

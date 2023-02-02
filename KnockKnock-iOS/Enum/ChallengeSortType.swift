@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ChallengeSortType {
-  case new
-  case popular
+enum ChallengeSortType: String {
+  case new = "BRAND_NEW"
+  case popular = "POPULAR"
 }

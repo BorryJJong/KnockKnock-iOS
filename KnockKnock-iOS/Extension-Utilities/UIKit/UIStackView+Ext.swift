@@ -44,7 +44,7 @@ extension UIStackView {
             .flatMap { UIImage(data: $0) }
           ?? KKDS.Image.ic_person_24
 
-          imageView.image = await profileImage.resize(newWidth: 24)
+          imageView.image = await profileImage.resizeSquareImage(newWidth: 24)
 
           addArrangedSubview(imageView)
         }

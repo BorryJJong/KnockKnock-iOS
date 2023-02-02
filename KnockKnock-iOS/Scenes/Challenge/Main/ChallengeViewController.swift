@@ -12,7 +12,7 @@ import KKDSKit
 protocol ChallengeViewProtocol: AnyObject {
   var interactor: ChallengeInteractorProtocol? { get set }
 
-  func fetchChallenges(challenges: [Challenge])
+  func fetchChallenges(challenges: [Challenge], sortType: String)
 }
 
 final class ChallengeViewController: BaseViewController<ChallengeView> {
@@ -28,7 +28,7 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setNavigationItem()
-    self.interactor?.fetchChallenge()
+    self.interactor?.fetchChallenge(sortType: ChallengeSortType.new.rawValue)
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -74,9 +74,13 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
 // MARK: - Challenge View Protocol
 
 extension ChallengeViewController: ChallengeViewProtocol {
-  func fetchChallenges(challenges: [Challenge]) {
+  func fetchChallenges(challenges: [Challenge], sortType: String) {
     self.challenges = challenges
-    self.containerView.challengeCollectionView.reloadData()
+
+    DispatchQueue.main.async {
+      self.containerView.setSortButton(sortType: sortType)
+      self.containerView.challengeCollectionView.reloadData()
+    }
   }
 }
 
@@ -102,10 +106,8 @@ extension ChallengeViewController: UICollectionViewDataSource {
     let challenge = self.challenges[indexPath.row]
 
     cell.backgroundColor = .white
-    
-    DispatchQueue.main.async {
-      cell.bind(data: challenge)
-    }
+
+    cell.bind(data: challenge)
 
     return cell
   }

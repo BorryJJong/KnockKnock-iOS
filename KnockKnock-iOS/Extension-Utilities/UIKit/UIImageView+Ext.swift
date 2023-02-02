@@ -28,7 +28,7 @@ extension UIImageView {
 
       } catch {
 
-        let image = await defaultImage.resize(newWidth: imageWidth ?? self.frame.width)
+        let image = await defaultImage.resizeSquareImage(newWidth: imageWidth ?? self.frame.width)
 
         await MainActor.run {
           self.image = image
@@ -75,7 +75,7 @@ extension UIImageView {
         throw ImageError.loadError
       }
 
-      let resizeImage = await image.resize(newWidth: imageWidth ?? self.frame.width)
+      let resizeImage = await image.resizeSquareImage(newWidth: imageWidth ?? self.frame.width)
 
       return resizeImage
     }

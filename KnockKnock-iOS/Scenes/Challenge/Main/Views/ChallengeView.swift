@@ -74,6 +74,25 @@ final class ChallengeView: UIView {
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
   }
+
+  // MARK: - Bind
+
+  func setSortButton(sortType: String) {
+    let type = ChallengeSortType(rawValue: sortType)
+
+    switch type {
+    case .new:
+      self.sortChallengeButton.setTitle("최신순", for: .normal)
+
+    case .popular:
+      self.sortChallengeButton.setTitle("인기순", for: .normal)
+
+    case .none:
+      self.sortChallengeButton.setTitle("최신순", for: .normal)
+    }
+  }
+
+  // MARK: - Constraints
   
   private func setupConstraints() {
     [self.numOfNewChallengeLabel, self.totalChallengeLabel, self.sortChallengeButton].addSubViews(self.headerView)

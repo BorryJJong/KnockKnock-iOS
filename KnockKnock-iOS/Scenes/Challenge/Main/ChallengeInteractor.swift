@@ -11,7 +11,7 @@ protocol ChallengeInteractorProtocol: AnyObject {
   var presenter: ChallengePresenterProtocol? { get set }
   var worker: ChallengeWorkerProtocol? { get set }
   
-  func fetchChallenge()
+  func fetchChallenge(sortType: String)
   func presentBottomSheet()
   func navigateToChallengeDetail(challengeId: Int)
 }
@@ -24,10 +24,16 @@ final class ChallengeInteractor: ChallengeInteractorProtocol {
   var worker: ChallengeWorkerProtocol?
   var router: ChallengeRouterProtocol?
   
-  func fetchChallenge() {
-    self.worker?.fetchChallenge { [weak self] challenges in
-      self?.presenter?.presentFetchChallenge(challenges: challenges)
-    }
+  func fetchChallenge(sortType: String) {
+    self.worker?.fetchChallenge(
+      sortType: sortType,
+      completionHandler: { [weak self] challenges in
+        self?.presenter?.presentFetchChallenge(
+          challenges: challenges,
+          sortType: sortType
+        )
+      }
+    )
   }
 
   func presentBottomSheet() {

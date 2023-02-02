@@ -35,7 +35,7 @@ enum KKRouter: URLRequestConvertible {
   case postLogOut
 
   // Challenge
-  case getChallengeResponse
+  case getChallenges(sort: String)
   case getChallengeDetail(id: Int)
 
   // Feed Write, Main
@@ -64,7 +64,7 @@ enum KKRouter: URLRequestConvertible {
 
   var method: HTTPMethod {
     switch self {
-    case .getChallengeResponse,
+    case .getChallenges,
          .getFeedBlogPost,
          .getFeedMain,
          .getFeed,
@@ -108,7 +108,7 @@ enum KKRouter: URLRequestConvertible {
     case .getHotPost: return "home/hot-post"
 
     // Challenge
-    case .getChallengeResponse: return "challenges"
+    case .getChallenges: return "challenges"
     case .getChallengeDetail(let id): return "challenges/\(id)"
 
     // Feed Write, Main
@@ -147,8 +147,8 @@ enum KKRouter: URLRequestConvertible {
     case let .postSocialLogin(signInInfo):
       return signInInfo
 
-//    case let .postSignUp(userInfo):
-//      return userInfo
+    case let .getChallenges(sort):
+      return [ "sort": sort ]
 
     case let .requestShopAddress(query, page, size):
       return [
@@ -176,7 +176,6 @@ enum KKRouter: URLRequestConvertible {
       return comment
 
     case .getChallengeDetail,
-         .getChallengeResponse,
          .getChallengeTitles,
          .getFeed,
          .getPromotions,
