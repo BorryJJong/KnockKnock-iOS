@@ -65,11 +65,12 @@ final class FeedListWorker: FeedListWorkerProtocol {
   
   func requestDeleteFeed(
     feedId: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping OnCompletionHandler
   ) {
     self.feedRepository.requestDeleteFeed(
       feedId: feedId,
       completionHandler: { isSuccess in
+        self.postResfreshNotificationEvent(feedId: feedId)
         completionHandler(isSuccess)
       }
     )
@@ -199,5 +200,12 @@ extension FeedListWorker {
     let newTitle = numberFormatter.string(from: NSNumber(value: number)) ?? ""
     
     feed.blogLikeCount = " \(newTitle)"
+  }
+
+  private func postResfreshNotificationEvent(feedId: Int) {
+    NotificationCenter.default.post(
+      name: .feedMainRefreshAfterDelete,
+      object: feedId
+    )
   }
 }
