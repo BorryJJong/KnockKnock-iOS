@@ -57,16 +57,15 @@ struct FeedList: Decodable {
     let id: Int
     let fileUrl: String
   }
-
-  mutating func toggleIsLike(feedId: Int) {
-    let indexArray = feeds.enumerated().filter {
-      $0.1.id == feedId
-    }.map { $0.0 }
-
-    indexArray.forEach {
-      feeds[$0].isLike.toggle()
-      feeds[$0].setLikeCount()
-    }
-  }
-
+//
+//  mutating func toggleIsLike(feedId: Int) {
+//    let indexArray = feeds.enumerated().filter {
+//      $0.1.id == feedId
+//    }.map { $0.0 }
+//
+//    indexArray.forEach {
+//      feeds[$0].isLike.toggle()
+//      feeds[$0].setLikeCount()
+//    }
+//  }
 }

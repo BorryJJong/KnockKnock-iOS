@@ -227,7 +227,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
 
   func showAlertView(
     message: String,
-    confirmAction: (()-> Void)?
+    confirmAction: (() -> Void)?
   ) {
     self.router?.showAlertView(
       message: message,
