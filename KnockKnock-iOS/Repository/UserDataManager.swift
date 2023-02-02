@@ -13,7 +13,8 @@ protocol UserDataManagerProtocol {
   func checkTokenIsExisted() -> Bool
   
   func removeAllUserInfo()
-  func saveUserInfo(response: AccountResponse)
+  func saveNickname(nickname: String)
+  func saveUserInfo(response: AccountResponse) -> Bool
 }
 
 final class UserDataManager: UserDataManagerProtocol {
@@ -30,9 +31,9 @@ final class UserDataManager: UserDataManagerProtocol {
   }
 
   /// 회원 가입 및 로그인 시 유저 데이터 저장
-  func saveUserInfo(response: AccountResponse) {
+  func saveUserInfo(response: AccountResponse) -> Bool {
 
-    guard let authInfo = response.authInfo else { return }
+    guard let authInfo = response.authInfo else { return false }
 
     if let userInfo = response.userInfo {
       self.userDefaultsService.set(value: userInfo.image, forkey: .profileImage)
@@ -43,7 +44,17 @@ final class UserDataManager: UserDataManagerProtocol {
     self.userDefaultsService.set(value: authInfo.refreshToken, forkey: .refreshToken)
 
     NotificationCenter.default.post(name: .signInCompleted, object: nil)
-    NotificationCenter.default.post(name: .feedRefreshAfterSigned, object: nil)
+    NotificationCenter.default.post(name: .feedListRefreshAfterSigned, object: nil)
+
+    return true
+  }
+
+  /// 프로필 수정 시 닉네임 저장
+  func saveNickname(nickname: String) {
+    self.userDefaultsService.set(value: nickname, forkey: .nickname)
+
+    NotificationCenter.default.post(name: .profileUpdated, object: nil)
+    NotificationCenter.default.post(name: .feedListRefreshAfterSigned, object: nil)
   }
 
   /// 회원 탈퇴 및 로그아웃 시 유저 데이터 삭제
@@ -54,6 +65,6 @@ final class UserDataManager: UserDataManagerProtocol {
     self.userDefaultsService.remove(forkey: .profileImage)
 
     NotificationCenter.default.post(name: .signOutCompleted, object: nil)
-    NotificationCenter.default.post(name: .feedRefreshAfterUnsigned, object: nil)
+    NotificationCenter.default.post(name: .feedListRefreshAfterUnsigned, object: nil)
   }
 }

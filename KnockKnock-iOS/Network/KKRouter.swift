@@ -29,7 +29,7 @@ enum KKRouter: URLRequestConvertible {
   case getHotPost(challengeId: Int)
 
   // Account
-  case postSocialLogin(signInInfo: Parameters)
+  case postSocialLogin(socialUuid: String, socialType: String)
   case postSignUp(userInfo: RegisterInfo)
   case deleteWithdraw
   case postLogOut
@@ -61,37 +61,83 @@ enum KKRouter: URLRequestConvertible {
   case postAddComment(comment: Parameters)
   case deleteComment(id: Int)
 
+  // MY
+  case getUsersDetail
+  case getDuplicateNickname(nickname: String)
+  case putUsers(nickname: String?, image: UIImage?)
+
   // MARK: - HTTP Method
 
   var method: HTTPMethod {
     switch self {
-    case .getChallengeResponse,
-         .getFeedBlogPost,
-         .getFeedMain,
-         .getFeed,
-         .getChallengeTitles,
-         .getPromotions,
-         .getChallengeDetail,
-         .requestShopAddress,
-         .getLikeList,
-         .getHotPost,
-         .getComment:
+
+    // Home
+    case .getHotPost:
       return .get
 
+      // Account
     case .postSocialLogin,
          .postSignUp,
-         .postLogOut,
-         .postAddComment,
-         .postFeed,
-         .postFeedLike,
-         .postHideBlogPost:
+         .postLogOut:
       return .post
 
-    case .deleteFeed,
-         .deleteWithdraw,
-         .deleteFeedLike,
-         .deleteComment:
+    case .deleteWithdraw:
       return .delete
+
+    // Challenge
+    case .getChallengeResponse,
+         .getChallengeDetail:
+      return .get
+
+    // FeedWrite, Main
+    case .getChallengeTitles,
+         .getPromotions,
+         .requestShopAddress,
+         .getFeedMain:
+      return .get
+
+    case .postFeed:
+      return .post
+
+    // FeedList, Detail
+    case .getFeedBlogPost,
+         .getFeed:
+      return .get
+
+    case .postHideBlogPost:
+      return .post
+
+    case .deleteFeed:
+      return .delete
+
+    // Like
+    case .getLikeList:
+      return .get
+
+    case .postFeedLike:
+      return .post
+
+    case .deleteFeedLike:
+      return .delete
+
+    // Comment
+    case .getComment:
+      return .get
+
+    case .postAddComment:
+      return .post
+
+    case .deleteComment:
+      return .delete
+
+    // My
+    case .getUsersDetail,
+         .getDuplicateNickname:
+      return .get
+
+    case .putUsers:
+      return .put
+
     }
   }
 
@@ -136,6 +182,11 @@ enum KKRouter: URLRequestConvertible {
     case .postAddComment: return "feed/comment"
     case .deleteComment(let id): return "feed/comment/\(id)"
 
+    // My
+    case .getUsersDetail: return "users/detail"
+    case .getDuplicateNickname(let nickname): return "users/duplicate-nickname/\(nickname)"
+    case .putUsers: return "users"
+
     }
   }
 
@@ -144,11 +195,32 @@ enum KKRouter: URLRequestConvertible {
   var parameters: Parameters? {
     switch self {
 
+      // Home
     case let .getHotPost(challengeId):
       return [ "challengeId": challengeId ]
 
-    case let .postSocialLogin(signInInfo):
-      return signInInfo
+    // Account
+    case let .postSocialLogin(socialUuid, socialType):
+      return [
+        "socialUuid": socialUuid,
+        "socialType": socialType
+      ]
+
+    case .postLogOut,
+         .postSignUp,
+         .deleteWithdraw:
+      return nil
+
+    // Challenge
+    case .getChallengeDetail,
+         .getChallengeResponse:
+      return nil
+
+    // FeedWrite, Main
+    case .getChallengeTitles,
+         .getPromotions,
+         .postFeed:
+      return nil
 
     case let .requestShopAddress(query, page, size):
       return [
@@ -164,6 +236,7 @@ enum KKRouter: URLRequestConvertible {
         "challengeId": challengeId
       ]
 
+    // FeedList, Detail
     case let .getFeedBlogPost(page, take, feedId, challengeId):
       return [
         "page": page,
@@ -172,26 +245,31 @@ enum KKRouter: URLRequestConvertible {
         "challengeId": challengeId
       ]
 
+    case .getFeed,
+         .postHideBlogPost,
+         .deleteFeed:
+      return nil
+
+    // Like
+    case .getLikeList,
+         .postFeedLike,
+         .deleteFeedLike:
+      return nil
+
+    // Comment
     case let .postAddComment(comment):
       return comment
 
-    case .getChallengeDetail,
-         .getChallengeResponse,
-         .getChallengeTitles,
-         .getFeed,
-         .getPromotions,
-         .getLikeList,
-         .getComment,
-         .postFeedLike,
-         .postFeed,
-         .postLogOut,
-         .postSignUp,
-         .deleteFeedLike,
-         .deleteComment,
-         .deleteFeed,
-         .deleteWithdraw,
-         .postHideBlogPost:
+    case .getComment,
+         .deleteComment:
       return nil
+
+    // My
+    case .getUsersDetail,
+         .getDuplicateNickname,
+         .putUsers:
+      return nil
+
     }
   }
 
@@ -231,6 +309,7 @@ enum KKRouter: URLRequestConvertible {
       return multipartFormData
 
     case .postSignUp(let userInfo):
+
       let multipartFormData = MultipartFormData()
 
       let socialUuid = userInfo.socialUuid.data(using: .utf8) ?? Data()
@@ -242,6 +321,27 @@ enum KKRouter: URLRequestConvertible {
       multipartFormData.append(socialType, withName: "socialType")
       multipartFormData.append(nickname, withName: "nickname")
       multipartFormData.append(image, withName: "image", fileName: "\(image).png", mimeType: "image/png")
+
+      return multipartFormData
+
+    case let .putUsers(nickname, image):
+
+      let multipartFormData = MultipartFormData()
+
+      if let nickname = nickname,
+         let nicknameData = nickname.data(using: .utf8) {
+        multipartFormData.append(nicknameData, withName: "nickname")
+      }
+
+      if let image = image,
+         let imageData = image.pngData() {
+        multipartFormData.append(
+          imageData,
+          withName: "image",
+          fileName: "\(imageData).png",
+          mimeType: "image/png"
+        )
+      }
 
       return multipartFormData
 
@@ -266,8 +366,9 @@ enum KKRouter: URLRequestConvertible {
            .getFeed,
            .getPromotions,
            .getComment,
-           .getLikeList:
-        
+           .getLikeList,
+           .getUsersDetail,
+           .getDuplicateNickname:
         break
 
       case .requestShopAddress:
@@ -279,7 +380,7 @@ enum KKRouter: URLRequestConvertible {
         request.setValue("application/json", forHTTPHeaderField: "Accept")
       }
 
-    case .post, .patch, .delete:
+    case .post, .patch, .delete, .put:
 
       switch self {
 
@@ -295,8 +396,8 @@ enum KKRouter: URLRequestConvertible {
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 
       case .postFeed,
-           .postSignUp:
-        
+           .postSignUp,
+           .putUsers:
         request.setValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
 
       default:

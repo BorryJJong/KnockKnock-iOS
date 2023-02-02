@@ -28,7 +28,7 @@ final class AccountManager: AccountManagerProtocol {
 
     KKNetworkManager
       .shared
-      .request(
+      .upload(
         object: ApiResponseDTO<AccountResponse>.self,
         router: KKRouter.postSignUp(userInfo: registerInfo),
         success: { response in
@@ -57,16 +57,14 @@ final class AccountManager: AccountManagerProtocol {
       socialType: socialType.rawValue
     )
 
-    let parameters = [
-      "socialUuid": accessToken,
-      "socialType": socialType.rawValue
-    ]
-
     KKNetworkManager
       .shared
       .request(
         object: ApiResponseDTO<AccountResponse>.self,
-        router: KKRouter.postSocialLogin(signInInfo: parameters),
+        router: KKRouter.postSocialLogin(
+          socialUuid: accessToken,
+          socialType: socialType.rawValue
+        ),
         success: { response in
           guard let data = response.data else {
             // no data error
@@ -88,11 +86,11 @@ final class AccountManager: AccountManagerProtocol {
         object: ApiResponseDTO<Bool>.self,
         router: KKRouter.postLogOut,
         success: { response in
-          guard let data = response.data else {
-            // no data error
-            return
+          if response.message == "SUCCESS" {
+            completionHandler(true)
+          } else {
+            // error
           }
-          completionHandler(data)
         }, failure: { error in
           print(error)
         }
@@ -107,11 +105,11 @@ final class AccountManager: AccountManagerProtocol {
         object: ApiResponseDTO<Bool>.self,
         router: KKRouter.deleteWithdraw,
         success: { response in
-          guard let data = response.data else {
-            // no data error
-            return
+          if response.message == "SUCCESS" {
+            completionHandler(true)
+          } else {
+            // error
           }
-          completionHandler(data)
         }, failure: { error in
           print(error)
         }

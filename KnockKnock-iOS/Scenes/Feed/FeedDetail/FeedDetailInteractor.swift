@@ -13,6 +13,7 @@ protocol FeedDetailInteractorProtocol {
   var router: FeedDetailRouterProtocol? { get set }
   
   func getFeedDeatil(feedId: Int)
+  func requestDelete(feedId: Int)
 
   func fetchAllComments(feedId: Int)
 
@@ -26,6 +27,7 @@ protocol FeedDetailInteractorProtocol {
   func fetchLikeList(feedId: Int)
   
   func navigateToLikeDetail()
+  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?)
 }
 
 final class FeedDetailInteractor: FeedDetailInteractorProtocol {
@@ -60,7 +62,10 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
           completionHandler: { result in
             if result {
               self.presenter?.presentLikeStatus(isToggle: true)
-              NotificationCenter.default.post(name: .postLike, object: feedId)
+              NotificationCenter.default.post(
+                name: .postLike,
+                object: feedId
+              )
             } else {
               // error
             }
@@ -79,7 +84,10 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       completionHandler: { result in
         if result {
           self.presenter?.presentLikeStatus(isToggle: true)
-          NotificationCenter.default.post(name: .postLikeCancel, object: feedId)
+          NotificationCenter.default.post(
+            name: .postLikeCancel,
+            object: feedId
+          )
         } else {
           // error
         }
@@ -174,10 +182,56 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       }
     )
   }
+
+  func requestDelete(feedId: Int) {
+
+    self.worker?.requestDeleteFeed(
+      feedId: feedId,
+      completionHandler: { isSuccess in
+        if isSuccess {
+          self.showAlertView(
+            message: "게시글이 삭제되었습니다.",
+            confirmAction: {
+              self.navigateToFeedList()
+            }
+          )
+        } else {
+          self.showAlertView(
+            message: "게시글 삭제에 실패하였습니다.",
+            confirmAction: nil
+          )
+        }
+      }
+    )
+  }
   
   // Routing
   
   func navigateToLikeDetail() {
     self.router?.navigateToLikeDetail(like: self.likeList)
+  }
+
+  func navigateToFeedList() {
+    self.router?.navigateToFeedList()
+  }
+
+  func presentBottomSheetView(
+    isMyPost: Bool,
+    deleteAction: (() -> Void)?
+  ) {
+    self.router?.presentBottomSheetView(
+      isMyPost: isMyPost,
+      deleteAction: deleteAction
+    )
+  }
+
+  func showAlertView(
+    message: String,
+    confirmAction: (()-> Void)?
+  ) {
+    self.router?.showAlertView(
+      message: message,
+      confirmAction: confirmAction
+    )
   }
 }

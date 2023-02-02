@@ -104,12 +104,15 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     self.containerView.commentTextView.do {
       $0.delegate = self
     }
+
     self.containerView.registButton.do {
       $0.addTarget(self, action: #selector(self.registButtonDidTap(_:)), for: .touchUpInside)
     }
+
     self.containerView.likeButton.do {
       $0.addTarget(self, action: #selector(self.likeButtonDidTap(_:)), for: .touchUpInside)
     }
+
     self.addKeyboardNotification()
     self.hideKeyboardWhenTappedAround()
   }
@@ -147,6 +150,15 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   }
   
   @objc private func moreButtonDidTap(_ sender: UIButton) {
+    guard let isMyPost = self.feedDetail?.feed?.isWriter,
+          let feedId = self.feedDetail?.feed?.id else { return }
+
+    self.interactor?.presentBottomSheetView(
+      isMyPost: isMyPost,
+      deleteAction: {
+        self.interactor?.requestDelete(feedId: feedId)
+      }
+    )
   }
   
   @objc private func replyMoreButtonDidTap(_ sender: UIButton) {

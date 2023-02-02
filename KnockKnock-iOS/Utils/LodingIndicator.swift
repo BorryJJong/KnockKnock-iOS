@@ -13,6 +13,7 @@ import Lottie
 final class LoadingIndicator {
   private static let shared = LoadingIndicator()
   private var backgroundView: UIView?
+  private var showTime: DispatchTime?
 
   static func showLoading() {
     guard let window = UIApplication.shared.windows.last else { return }
@@ -23,6 +24,8 @@ final class LoadingIndicator {
     }) as? LottieAnimationView {
       loadingIndicatorView = existedView
     } else {
+      shared.showTime = DispatchTime.now()
+
       let backgroundView = UIView().then {
         $0.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.5)
         $0.frame = window.frame
@@ -44,14 +47,29 @@ final class LoadingIndicator {
   static func hideLoading() {
     guard let window = UIApplication.shared.windows.last else { return }
 
-    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-      window.subviews.filter({
-        $0 is LottieAnimationView
-      }).forEach {
-        $0.removeFromSuperview()
-      }
-      shared.backgroundView?.removeFromSuperview()
+    guard let distance = shared.showTime?.distance(to: DispatchTime.now()).toDouble() else { return }
 
+    if distance > 0.5 {
+      DispatchQueue.main.asyncAfter(deadline: .now()) {
+        window.subviews.filter({
+          $0 is LottieAnimationView
+        }).forEach {
+          $0.removeFromSuperview()
+        }
+        shared.backgroundView?.removeFromSuperview()
+      }
+
+    } else {
+
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.5 - distance) {
+        window.subviews.filter({
+          $0 is LottieAnimationView
+        }).forEach {
+          $0.removeFromSuperview()
+        }
+        shared.backgroundView?.removeFromSuperview()
+
+      }
     }
 
   }
