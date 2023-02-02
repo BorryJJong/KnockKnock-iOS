@@ -12,6 +12,7 @@ extension Notification.Name {
   // My
   static let signInCompleted = Notification.Name("signInCompleted")
   static let signOutCompleted = Notification.Name("signOutCompleted")
+  static let profileUpdated = Notification.Name("profileUpdated")
 
   // Feed
   static let feedListRefreshAfterSigned = Notification.Name("feedRefreshAfterSigned")

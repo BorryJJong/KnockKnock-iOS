@@ -77,7 +77,7 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
   
   func showAlertView(
     message: String,
-    confirmAction: (()-> Void)?
+    confirmAction: (() -> Void)?
   ) {
     if let sourceView = self.view as? UIViewController {
       sourceView.showAlert(
