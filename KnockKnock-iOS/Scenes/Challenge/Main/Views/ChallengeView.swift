@@ -77,18 +77,13 @@ final class ChallengeView: UIView {
 
   // MARK: - Bind
 
-  func setSortButton(sortType: String) {
-    let type = ChallengeSortType(rawValue: sortType)
-
-    switch type {
+  func setSortButton(sortType: ChallengeSortType) {
+    switch sortType {
     case .new:
       self.sortChallengeButton.setTitle("최신순", for: .normal)
-
+      
     case .popular:
       self.sortChallengeButton.setTitle("인기순", for: .normal)
-
-    case .none:
-      self.sortChallengeButton.setTitle("최신순", for: .normal)
     }
   }
 
@@ -104,17 +99,14 @@ final class ChallengeView: UIView {
       self.headerView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Metric.headerViewLeadingMargin),
       self.headerView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: Metric.headerViewTrailingMargin),
 
-      self.totalChallengeLabel.topAnchor.constraint(equalTo: self.headerView.topAnchor),
-      self.totalChallengeLabel.bottomAnchor.constraint(equalTo: self.headerView.bottomAnchor),
+      self.totalChallengeLabel.centerYAnchor.constraint(equalTo: self.headerView.centerYAnchor),
       self.totalChallengeLabel.leadingAnchor.constraint(equalTo: self.headerView.leadingAnchor),
 
-      self.numOfNewChallengeLabel.topAnchor.constraint(equalTo: self.headerView.topAnchor),
-      self.numOfNewChallengeLabel.bottomAnchor.constraint(equalTo: self.headerView.bottomAnchor),
+      self.numOfNewChallengeLabel.centerYAnchor.constraint(equalTo: self.headerView.centerYAnchor),
       self.numOfNewChallengeLabel.leadingAnchor.constraint(equalTo: self.totalChallengeLabel.trailingAnchor),
 
-      self.sortChallengeButton.topAnchor.constraint(equalTo: self.headerView.topAnchor),
       self.sortChallengeButton.trailingAnchor.constraint(equalTo: self.headerView.trailingAnchor),
-      self.sortChallengeButton.bottomAnchor.constraint(equalTo: self.headerView.bottomAnchor),
+      self.sortChallengeButton.centerYAnchor.constraint(equalTo: self.headerView.centerYAnchor),
 
       self.challengeCollectionView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor, constant: Metric.challengeCollectionViewTopMargin),
       self.challengeCollectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
