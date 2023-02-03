@@ -81,6 +81,7 @@ final class FeedEditViewController: BaseViewController<FeedEditView> {
     self.containerView.contentTextView.delegate = self
     
     self.navigationController?.navigationBar.setDefaultAppearance()
+    self.addKeyboardNotification()
   }
 
   // MARK: - Buttton Actions
@@ -103,6 +104,32 @@ final class FeedEditViewController: BaseViewController<FeedEditView> {
 
   @objc private func doneButtonDidTap(_ sender: UIButton) {
     self.interactor?.checkEssentialField(feedId: self.feedId)
+  }
+  
+  // MARK: - Keyboard Show & Hide
+
+  private func addKeyboardNotification() {
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(keyboardWillShow(_:)),
+      name: UIResponder.keyboardWillShowNotification,
+      object: nil
+    )
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(keyboardWillHide(_:)),
+      name: UIResponder.keyboardWillHideNotification,
+      object: nil
+    )
+  }
+
+  @objc private func keyboardWillShow(_ notification: Notification) {
+    self.containerView.setContainerViewConstant(notification: notification, isAppearing: true)
+  }
+
+  @objc private func keyboardWillHide(_ notification: Notification) {
+    self.containerView.setContainerViewConstant(notification: notification, isAppearing: false)
   }
 }
 
