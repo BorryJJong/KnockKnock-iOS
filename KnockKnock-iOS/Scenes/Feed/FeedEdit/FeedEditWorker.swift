@@ -39,6 +39,10 @@ final class FeedEditWorker: FeedEditWorkerProtocol {
     self.feedEditRepository = feedEditRepository
   }
 
+  /// 기존 게시글 데이터 조회
+  ///
+  /// - Parameters:
+  ///  - feedId: 피드 아이디
   func fetchOriginPost(
     feedId: Int,
     completionHandler: @escaping (FeedDetail) -> Void
@@ -51,12 +55,14 @@ final class FeedEditWorker: FeedEditWorkerProtocol {
     )
   }
 
+  /// 프로모션 리스트 조회 api call
   func requestPromotionList(completionHandler: @escaping ([Promotion]) -> Void) {
     self.feedWriteRepository.requestPromotionList(completionHandler: { response in
       completionHandler(response)
     })
   }
 
+  /// 챌린지 리스트 조회 api call
   func requestTagList(completionHandler: @escaping ([ChallengeTitle]) -> Void) {
     self.feedWriteRepository.requestChallengeTitles(completionHandler: { response in
       completionHandler(response)
@@ -66,8 +72,8 @@ final class FeedEditWorker: FeedEditWorkerProtocol {
   /// 피드 수정
   ///
   /// - Parameters:
-  /// - id: 피드 아이디
-  /// - postData: 수정 된 데이터
+  ///  - id: 피드 아이디
+  ///  - postData: 수정 된 데이터
   func requestFeedEdit(
     id: Int,
     postData: FeedEdit,
@@ -77,12 +83,20 @@ final class FeedEditWorker: FeedEditWorkerProtocol {
       id: id,
       postData: postData,
       completionHandler: { isSuccess in
+        if isSuccess {
+          self.postEditNotificationEvent(feedId: id, contents: postData.content)
+        }
         completionHandler(isSuccess)
       }
     )
   }
 
   /// 필수 값 입력 유무 판별
+  ///
+  /// - Parameters:
+  ///  - tag: 챌린지 Array
+  ///  - promotion: 프로모션 Array
+  ///  - content: 내용
   func checkEssentialField(
     tag: [ChallengeTitle],
     promotion: [Promotion],
@@ -104,4 +118,33 @@ final class FeedEditWorker: FeedEditWorkerProtocol {
     return result
    }
 
+}
+
+extension FeedEditWorker {
+
+  /// Notification Center post(피드 수정)
+  ///
+  /// - Parameters:
+  ///  - feedId: 수정 피드 아이디
+  ///  - contents: 피드 내용(피드 리스트에서만 사용)
+  private func postEditNotificationEvent(
+    feedId: Int,
+    contents: String? = nil
+  ) {
+
+    let feedData: [String: Any] = [
+      "feedId": feedId,
+      "contents": contents
+    ]
+
+    NotificationCenter.default.post(
+      name: .feedListRefreshAfterEdited,
+      object: feedData
+    )
+
+    NotificationCenter.default.post(
+      name: .feedDetailRefreshAfterEdited,
+      object: feedId
+    )
+  }
 }

@@ -23,7 +23,7 @@ protocol FeedDetailRouterProtocol {
   )
   func showAlertView(
     message: String,
-    confirmAction: (()-> Void)?
+    confirmAction: (() -> Void)?
   )
 }
 

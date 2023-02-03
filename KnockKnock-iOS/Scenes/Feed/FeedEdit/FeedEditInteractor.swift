@@ -56,7 +56,7 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
     )
   }
 
-  /// interactor에 내용에 입력된 텍스트 업데이트
+  /// interactor에 내용에 입력 된 텍스트 업데이트
   func setCurrentText(text: String) {
     self.postContent = text
   }

@@ -48,6 +48,12 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   /// view에서 보여지는 댓글 array(open 상태 댓글만)
   var visibleComments: [Comment] = []
 
+  // MARK: - Initialize
+
+  init() {
+    self.setNotification()
+  }
+
   // MARK: - Business logic
 
   func getFeedDeatil(feedId: Int) {
@@ -243,6 +249,25 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.router?.showAlertView(
       message: message,
       confirmAction: confirmAction
+    )
+  }
+}
+
+extension FeedDetailInteractor {
+
+  /// 수정 된 피드 refetch
+  @objc
+  private func editNotificationEvent(_ notification: Notification) {
+    guard let feedId = notification.object as? Int else { return }
+    self.getFeedDeatil(feedId: feedId)
+  }
+
+  private func setNotification() {
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(self.editNotificationEvent(_:)),
+      name: .feedDetailRefreshAfterEdited,
+      object: nil
     )
   }
 }
