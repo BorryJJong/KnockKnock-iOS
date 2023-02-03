@@ -90,8 +90,18 @@ final class ProfileSettingView: UIView {
 
   // MARK: - Bind
 
-  func setProfileImage(image: UIImage) {
-    self.profileImageView.image = image
+  func setProfileImage(image: UIImage?) {
+    self.profileImageView.image = image ?? KKDS.Image.ic_my_img_86
+  }
+
+  func setPreviousProfile(userData: UserDetail) {
+    self.nicknameTextField.text = userData.nickname
+    self.profileImageView.image = userData.image
+  }
+
+  func enableConfirmButton(isEnable: Bool) {
+    self.confirmButton.isEnabled = isEnable
+    self.confirmButton.backgroundColor = .green50
   }
 
   // MARK: - Configure

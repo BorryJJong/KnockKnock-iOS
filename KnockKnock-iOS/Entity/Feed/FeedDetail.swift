@@ -27,6 +27,7 @@ struct FeedDetail: Decodable {
     let userImage: String?
     let scale: String = "1:1"
     let isLike: Bool
+    let isWriter: Bool
   }
   
   struct Promotion: Decodable {
@@ -44,5 +45,21 @@ struct FeedDetail: Decodable {
   struct Image: Decodable {
     let id: Int
     let fileUrl: String
+  }
+}
+
+extension FeedDetail {
+  func toShare() -> FeedShare? {
+
+    guard let feed = feed else { return nil }
+
+    return FeedShare(
+      id: feed.id,
+      nickname: feed.userName,
+      content: feed.content,
+      imageUrl: images[0].fileUrl,
+      likeCount: nil,
+      commentCount: nil
+    )
   }
 }

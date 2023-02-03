@@ -14,6 +14,7 @@ protocol FeedListViewProtocol: AnyObject {
   var interactor: FeedListInteractorProtocol? { get set }
   
   func fetchFeedList(feedList: FeedList)
+  func updateFeedList(feedList: FeedList, sections: [IndexPath])
   func reloadFeedList()
 }
 
@@ -24,11 +25,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   var interactor: FeedListInteractorProtocol?
 
   private var isNext: Bool = true
-  private var feedListPost: [FeedList.Post] = [] {
-    didSet {
-      self.containerView.feedListCollectionView.reloadData()
-    }
-  }
+  private var feedListPost: [FeedList.Post] = []
 
   private var currentPage: Int = 1
   private var pageSize: Int = 5
@@ -44,8 +41,6 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-
-    self.interactor?.setNotification()
 
     self.interactor?.fetchFeedList(
       currentPage: self.currentPage,
@@ -118,7 +113,8 @@ final class FeedListViewController: BaseViewController<FeedListView> {
       },
       editAction: {
         self.interactor?.navigateToFeedEdit(feedId: feedId)
-      }
+      },
+      feedData: self.feedListPost[sender.tag]
     )
   }
 
@@ -127,11 +123,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   }
 
   private func likeButtonDidTap(sender: UIButton) {
-    if sender.isSelected {
-      self.interactor?.requestLikeCancel(feedId: sender.tag)
-    } else {
-      self.interactor?.requestLike(feedId: sender.tag)
-    }
+    self.interactor?.requestLike(feedId: sender.tag)
   }
 }
 
@@ -270,11 +262,38 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - Feed List View Protocol
 
 extension FeedListViewController: FeedListViewProtocol {
+
+  /// 피드 최초 요청 이벤트
+  ///
+  /// - Parameters:
+  ///   - feedList: 최초 요청한 피드리스트
   func fetchFeedList(feedList: FeedList) {
     self.isNext = feedList.isNext
     self.feedListPost = feedList.feeds
+
+    DispatchQueue.main.async {
+      self.containerView.feedListCollectionView.reloadData()
+    }
   }
 
+  /// 피드 업데이트 이벤트
+  ///
+  /// - Parameters:
+  ///   - feedList: 업데이트 되어진 피드 리스트
+  ///   - sections: 업데이트 된 피드의 Sections
+  func updateFeedList(feedList: FeedList, sections: [IndexPath]) {
+    self.feedListPost = feedList.feeds
+
+    DispatchQueue.main.async {
+      UIView.performWithoutAnimation {
+        sections.forEach { indexPath in
+          self.containerView.feedListCollectionView.reloadSections(IndexSet(integer: indexPath.section))
+        }
+      }
+    }
+  }
+
+  /// 로그인/로그아웃 시 피드 데이터 re-fatch & reload
   func reloadFeedList() {
     self.interactor?.fetchFeedList(
       currentPage: self.currentPage,

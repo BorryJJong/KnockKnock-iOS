@@ -31,7 +31,10 @@ final class FeedRepository: FeedRepositoryProtocol {
 
   // MARK: - Feed main APIs
 
-  func requestChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void) {
+  func requestChallengeTitles(
+    completionHandler: @escaping ([ChallengeTitle]) -> Void
+  ) {
+
     KKNetworkManager
       .shared
       .request(
@@ -85,7 +88,9 @@ final class FeedRepository: FeedRepositoryProtocol {
     pageSize: Int,
     feedId: Int,
     challengeId: Int,
-    completionHandler: @escaping (FeedList) -> Void) {
+    completionHandler: @escaping (FeedList) -> Void
+  ) {
+
       KKNetworkManager
         .shared
         .request(
@@ -113,18 +118,19 @@ final class FeedRepository: FeedRepositoryProtocol {
     feedId: Int,
     completionHandler: @escaping (Bool) -> Void
   ) {
+
     KKNetworkManager
       .shared
       .request(
         object: ApiResponseDTO<Bool>.self,
         router: KKRouter.deleteFeed(id: feedId),
         success: { response in
-          guard let data = response.data else {
-            // no data error
-            return
-          }
-          completionHandler(data)
+
+          let isSuccess = response.code == 200
+          completionHandler(isSuccess)
+
         }, failure: { error in
+
           print(error)
         }
       )
@@ -136,6 +142,7 @@ final class FeedRepository: FeedRepositoryProtocol {
     feedId: Int,
     completionHandler: @escaping (FeedDetail) -> Void
   ) {
+    
     KKNetworkManager
       .shared
       .request(

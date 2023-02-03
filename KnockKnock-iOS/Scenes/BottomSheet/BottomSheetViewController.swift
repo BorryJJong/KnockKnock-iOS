@@ -10,19 +10,21 @@ import UIKit
 import Then
 
 protocol BottomSheetViewProtocol: AnyObject {
+  var interactor: BottomSheetInteractorProtocol? { get set }
 }
 
 final class BottomSheetViewController: BaseViewController<BottomSheetView> {
   
   // MARK: - Properties
+
+  var interactor: BottomSheetInteractorProtocol?
   
   private var options: [String] = []
   var districtsType: DistrictsType?
-  
-  var router: BottomSheetRouterProtocol?
-  var deleteAction: (() -> Void)?
-  var editAction: (() -> Void)?
-  
+
+//  var deleteAction: (() -> Void)?
+//  var editAction: (() -> Void)?
+
   // MARK: - Life Cycle
   
   override func viewDidLoad() {
@@ -154,10 +156,13 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
   ) {
     if let districtsType = self.districtsType {
       switch districtsType {
+
       case .city:
-        self.router?.passCityDataToShopSearch(city: options[indexPath.row])
+        self.interactor?.passCityDataToShopSearch(city: options[indexPath.row])
+
       case .county:
-        self.router?.passCountyDataToShopSearch(county: options[indexPath.row])
+        self.interactor?.passCountyDataToShopSearch(county: options[indexPath.row])
+
       }
     } else {
       
@@ -168,12 +173,15 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
         self.showAlert(
           content: "게시글을 삭제하시겠습니까?",
           confirmActionCompletion: {
-            self.dismiss(animated: true, completion: self.deleteAction)
+            self.interactor?.dismissView(actionType: .postDelete)
           }
         )
         
       case .postEdit:
-        self.dismiss(animated: true, completion: self.editAction)
+        self.interactor?.dismissView(actionType: .postEdit)
+
+      case .postShare:
+        self.interactor?.sharePost()
         
       default:
         print("Error")

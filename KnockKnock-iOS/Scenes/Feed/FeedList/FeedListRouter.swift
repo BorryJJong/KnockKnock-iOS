@@ -16,7 +16,13 @@ protocol FeedListRouterProtocol {
   func navigateToFeedDetail(feedId: Int)
   func navigateToCommentView(feedId: Int)
   func navigateToLoginView()
-  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?, editAction: (() -> Void)?)
+
+  func presentBottomSheetView(
+    isMyPost: Bool,
+    deleteAction: (() -> Void)?,
+    editAction: (() -> Void)?,
+    feedData: FeedShare?
+  )
 }
 
 final class FeedListRouter: FeedListRouterProtocol {
@@ -86,37 +92,19 @@ final class FeedListRouter: FeedListRouterProtocol {
     }
   }
 
-
   func presentBottomSheetView(
     isMyPost: Bool,
     deleteAction: (() -> Void)?,
-    editAction: (() -> Void)?
+    editAction: (() -> Void)?,
+    feedData: FeedShare?
   ) {
 
-    let bottomSheetViewController = BottomSheetViewController().then {
-      if isMyPost {
-        $0.setBottomSheetContents(
-          contents: [
-            BottomSheetOption.postDelete.rawValue,
-            BottomSheetOption.postEdit.rawValue
-          ],
-          bottomSheetType: .small
-        )
-
-      } else {
-        $0.setBottomSheetContents(
-          contents: [
-            BottomSheetOption.postReport.rawValue,
-            BottomSheetOption.postShare.rawValue,
-            BottomSheetOption.postHide.rawValue
-          ],
-          bottomSheetType: .medium
-        )
-      }
-      $0.modalPresentationStyle = .overFullScreen
-      $0.deleteAction = deleteAction
-      $0.editAction = editAction
-    }
+    guard let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
+      deleteAction: deleteAction,
+      editAction: editAction,
+      feedData: feedData,
+      isMyPost: isMyPost
+    ) as? BottomSheetViewController else { return }
 
     if let sourceView = self.view as? UIViewController {
       sourceView.present(
