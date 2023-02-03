@@ -15,6 +15,7 @@ protocol FeedEditInteractorProtocol: AnyObject {
   func fetchOriginPost(feedId: Int)
   func setCurrentText(text: String)
   func updateFeed(id: Int)
+  func checkEssentialField(feedId: Int)
 
   func popFeedEditView()
   func navigateToShopSearch()
@@ -47,6 +48,7 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
       feedId: feedId,
       completionHandler: { [weak self] feedDetail in
         /// 기존에 선택 상태에 있던 속성(프로모션, 챌린지) 상태 반영
+        self?.postContent = feedDetail.feed?.content ?? ""
         self?.setSelectedPromotion(selectedPromotions: feedDetail.promotions)
         self?.setSelectedChallenge(selectedChallenges: feedDetail.challenges)
         self?.presenter?.presentOriginPost(feedDetail: feedDetail)
@@ -57,6 +59,29 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
   /// interactor에 내용에 입력된 텍스트 업데이트
   func setCurrentText(text: String) {
     self.postContent = text
+  }
+
+  /// 필수 값 입력 상태 판별
+  func checkEssentialField(feedId: Int) {
+    guard let isDone = self.worker?.checkEssentialField(
+      tag: self.challenges,
+      promotion: self.promotions,
+      content: self.postContent
+    ) else { return }
+
+    if isDone {
+      self.showAlertView(
+        message: "게시글을 수정하시겠습니까?",
+        confirmAction: {
+          self.updateFeed(id: feedId)
+        }
+      )
+    } else {
+      self.showAlertView(
+        message: "사진, 태그, 프로모션, 내용은 필수 입력 항목입니다.",
+        confirmAction: nil
+      )
+    }
   }
 
   /// 피드 수정 이벤트
@@ -112,6 +137,16 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
       propertyType: propertyType,
       promotionList: self.promotions,
       tagList: self.challenges
+    )
+  }
+
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  ) {
+    self.router?.showAlertView(
+      message: message,
+      confirmAction: confirmAction
     )
   }
 }

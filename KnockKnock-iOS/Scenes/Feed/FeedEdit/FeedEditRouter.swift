@@ -59,7 +59,7 @@ final class FeedEditRouter: FeedEditRouterProtocol {
       sourceView.showAlert(
         content: message,
         isCancelActive: false,
-        confirmActionCompletion: nil
+        confirmActionCompletion: confirmAction
       )
     }
   }

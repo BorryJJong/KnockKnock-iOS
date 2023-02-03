@@ -102,9 +102,8 @@ final class FeedEditViewController: BaseViewController<FeedEditView> {
   }
 
   @objc private func doneButtonDidTap(_ sender: UIButton) {
-    self.interactor?.updateFeed(id: self.feedId)
+    self.interactor?.checkEssentialField(feedId: self.feedId)
   }
-
 }
 
 // MARK: - FeedEdit View Protocol

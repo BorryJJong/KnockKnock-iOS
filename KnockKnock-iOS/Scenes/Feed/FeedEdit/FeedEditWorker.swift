@@ -11,7 +11,16 @@ protocol FeedEditWorkerProtocol {
   func fetchOriginPost(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void)
   func requestPromotionList(completionHandler: @escaping ([Promotion]) -> Void)
   func requestTagList(completionHandler: @escaping ([ChallengeTitle]) -> Void)
-  func requestFeedEdit(id: Int, postData: FeedEdit, completionHandler: @escaping (Bool) -> Void)
+  func requestFeedEdit(
+    id: Int,
+    postData: FeedEdit,
+    completionHandler: @escaping (Bool) -> Void
+  )
+  func checkEssentialField(
+    tag: [ChallengeTitle],
+    promotion: [Promotion],
+    content: String
+  ) -> Bool
 }
 
 final class FeedEditWorker: FeedEditWorkerProtocol {
@@ -72,4 +81,27 @@ final class FeedEditWorker: FeedEditWorkerProtocol {
       }
     )
   }
+
+  /// 필수 값 입력 유무 판별
+  func checkEssentialField(
+    tag: [ChallengeTitle],
+    promotion: [Promotion],
+    content: String
+  ) -> Bool {
+
+    let isPromotionSelected = promotion.filter {
+      $0.isSelected == true
+    }.count != 0
+
+    let isTagSelected = tag.filter{
+      $0.isSelected == true
+    }.count != 0
+
+    let isContentFilled = !content.isEmpty
+
+    let result = isPromotionSelected && isTagSelected && isContentFilled
+
+    return result
+   }
+
 }
