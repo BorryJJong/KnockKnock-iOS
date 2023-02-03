@@ -158,6 +158,9 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       isMyPost: isMyPost,
       deleteAction: {
         self.interactor?.requestDelete(feedId: feedId)
+      },
+      editAction: {
+        self.interactor?.navigateToFeedEdit(feedId: feedId)
       }
     )
   }

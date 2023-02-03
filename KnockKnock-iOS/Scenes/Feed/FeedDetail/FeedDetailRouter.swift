@@ -12,10 +12,15 @@ protocol FeedDetailRouterProtocol {
   
   static func createFeedDetail(feedId: Int) -> UIViewController
   
+  func navigateToFeedEdit(feedId: Int)
   func navigateToLikeDetail(like: [Like.Info])
   func navigateToLoginView()
   func navigateToFeedList()
-  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?)
+  func presentBottomSheetView(
+    isMyPost: Bool,
+    deleteAction: (() -> Void)?,
+    editAction: (() -> Void)?
+  )
   func showAlertView(
     message: String,
     confirmAction: (()-> Void)?
@@ -62,6 +67,14 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
       sourceView.navigationController?.popViewController(animated: true)
     }
   }
+
+  func navigateToFeedEdit(feedId: Int) {
+    let feedEditViewController = FeedEditRouter.createFeedEdit(feedId: feedId)
+    if let sourceView = self.view as? UIViewController {
+      feedEditViewController.hidesBottomBarWhenPushed = true
+      sourceView.navigationController?.pushViewController(feedEditViewController, animated: true)
+    }
+  }
   
   func navigateToLoginView() {
     let loginViewController = LoginRouter.createLoginView()
@@ -74,7 +87,7 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
   
   func showAlertView(
     message: String,
-    confirmAction: (()-> Void)?
+    confirmAction: (() -> Void)?
   ) {
     if let sourceView = self.view as? UIViewController {
       sourceView.showAlert(
@@ -85,10 +98,15 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
     }
   }
   
-  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?) {
+  func presentBottomSheetView(
+    isMyPost: Bool,
+    deleteAction: (() -> Void)?,
+    editAction: (() -> Void)?
+  ) {
     
     guard let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
       deleteAction: deleteAction,
+      editAction: editAction,
       isMyPost: isMyPost
     ) as? BottomSheetViewController else { return }
     
