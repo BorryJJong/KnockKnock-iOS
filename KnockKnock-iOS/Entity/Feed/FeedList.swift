@@ -25,21 +25,6 @@ struct FeedList: Decodable {
     let blogImages: [Image]
     let isWriter: Bool
 
-    mutating func setLikeCount() {
-      let title = blogLikeCount.filter({ $0.isNumber })
-
-      let numberFormatter = NumberFormatter().then {
-        $0.numberStyle = .decimal
-      }
-
-      guard let titleToInt = Int(title) else { return }
-
-      let number = isLike ? (titleToInt + 1) : (titleToInt - 1)
-      let newTitle = numberFormatter.string(from: NSNumber(value: number)) ?? ""
-
-      blogLikeCount = " \(newTitle)"
-    }
-
     func toShare() -> FeedShare? {
       
       return FeedShare(
@@ -57,15 +42,4 @@ struct FeedList: Decodable {
     let id: Int
     let fileUrl: String
   }
-//
-//  mutating func toggleIsLike(feedId: Int) {
-//    let indexArray = feeds.enumerated().filter {
-//      $0.1.id == feedId
-//    }.map { $0.0 }
-//
-//    indexArray.forEach {
-//      feeds[$0].isLike.toggle()
-//      feeds[$0].setLikeCount()
-//    }
-//  }
 }
