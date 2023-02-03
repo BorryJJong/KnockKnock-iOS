@@ -255,35 +255,23 @@ enum KKRouter: URLRequestConvertible {
 
       // Feed Edit
     case let .putFeed(_, post):
-      var params: [String: String] = [:]
+      var params: [String: String] = [
+        "promotions": post.promotions,
+        "challenges": post.challenges,
+        "content": post.content
+      ]
 
-      if let promotions = post.promotions {
-        params["promotions"] = promotions
-      }
-
-      if let challenges = post.challenges {
-        params["challenges"] = challenges
-      }
-
-      if let content = post.content {
-        params["content"] = content
-      }
-
-      if let storeAddress = post.storeAddress {
+      if let storeAddress = post.storeAddress,
+         let storeName = post.storeName,
+         let locationX = post.locationX,
+         let locationY = post.locationY {
+        
         params["storeAddress"] = storeAddress
-      }
-
-      if let storeName = post.storeName {
         params["storeName"] = storeName
-      }
-
-      if let locationX = post.locationX {
         params["locationX"] = locationX
-      }
-
-      if let locationY = post.locationY {
         params["locationY"] = locationY
       }
+
 
       return params
 

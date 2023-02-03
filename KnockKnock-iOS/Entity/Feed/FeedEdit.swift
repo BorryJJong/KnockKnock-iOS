@@ -8,9 +8,9 @@
 import Foundation
 
 struct FeedEdit {
-  let promotions: String?
-  let challenges: String?
-  let content: String?
+  let promotions: String
+  let challenges: String
+  let content: String
   let storeAddress: String?
   let storeName: String?
   let locationX: String?

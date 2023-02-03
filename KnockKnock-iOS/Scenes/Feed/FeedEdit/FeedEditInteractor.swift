@@ -34,6 +34,9 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
   private var updatedPromotions: [Promotion] = []
   private var updatedChallenges: [ChallengeTitle] = []
 
+//  private var promotions: [Promotion] = []
+//  private var challenges: [ChallengeTitle] = []
+
   private var selectedAddress: AddressResponse.Documents?
   private var postContent: String = ""
   private var originPostData: FeedDetail?
