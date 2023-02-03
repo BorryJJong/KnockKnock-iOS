@@ -74,7 +74,9 @@ final class FeedListWorker: FeedListWorkerProtocol {
     self.feedRepository.requestDeleteFeed(
       feedId: feedId,
       completionHandler: { isSuccess in
-        self.postResfreshNotificationEvent(feedId: feedId)
+        if isSuccess {
+          self.postResfreshNotificationEvent(feedId: feedId)
+        }
         completionHandler(isSuccess)
       }
     )
@@ -87,6 +89,9 @@ final class FeedListWorker: FeedListWorkerProtocol {
     self.feedRepository.requestHidePost(
       feedId: feedId,
       completionHandler: { isSuccess in
+        if isSuccess {
+          self.postResfreshNotificationEvent(feedId: feedId)
+        }
         completionHandler(isSuccess)
       }
     )
