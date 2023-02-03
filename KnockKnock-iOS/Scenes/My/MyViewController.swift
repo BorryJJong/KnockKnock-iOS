@@ -106,6 +106,14 @@ final class MyViewController: BaseViewController<MyView> {
   @objc func signOutButtonDidTap(_ sender: UIButton) {
     self.interactor?.requestSignOut()
   }
+
+  func pushSwitchDidTap() {
+    guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+
+    if UIApplication.shared.canOpenURL(url) {
+        UIApplication.shared.open(url)
+    }
+  }
 }
 
 // MARK: - My View Protocol
@@ -168,7 +176,10 @@ extension MyViewController: UITableViewDataSource {
     switch menu.type {
     case .alert:
       cell.accessoryType = .none
-      cell.accessoryView = UISwitch()
+      cell.accessoryView = UISwitch().then {
+        $0.isOn = UIApplication.shared.isRegisteredForRemoteNotifications
+        $0.isEnabled = false
+      }
     case .plain:
       cell.accessoryType = .disclosureIndicator
     case .version:
@@ -271,6 +282,8 @@ extension MyViewController: UITableViewDelegate {
           self.interactor?.requestWithdraw()
         }
       )
+    case .pushNotification:
+      self.pushSwitchDidTap()
 
     case .versionInfo:
       self.showAlert(
