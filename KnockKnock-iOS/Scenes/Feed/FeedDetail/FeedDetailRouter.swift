@@ -15,10 +15,13 @@ protocol FeedDetailRouterProtocol {
   func navigateToLikeDetail(like: [Like.Info])
   func navigateToLoginView()
   func navigateToFeedList()
-  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?)
+  func presentBottomSheetView(
+    isMyPost: Bool,
+    deleteAction: (() -> Void)?
+  )
   func showAlertView(
     message: String,
-    confirmAction: (()-> Void)?
+    confirmAction: (() -> Void)?
   )
 }
 
@@ -74,7 +77,7 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
   
   func showAlertView(
     message: String,
-    confirmAction: (()-> Void)?
+    confirmAction: (() -> Void)?
   ) {
     if let sourceView = self.view as? UIViewController {
       sourceView.showAlert(

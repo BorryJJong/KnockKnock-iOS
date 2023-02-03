@@ -10,10 +10,15 @@ import UIKit
 protocol FeedDetailWorkerProtocol {
   func getFeedDetail(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void)
 
-  func checkTokenExisted(completionHandler: @escaping (Bool) -> Void)
+  func checkTokenExisted() -> Bool
   
-  func requestLike(id: Int, completionHandler: @escaping (Bool) -> Void)
-  func requestLikeCancel(id: Int, completionHandler: @escaping (Bool) -> Void)
+  func requestLike(
+    isLike: Bool,
+    feedId: Int,
+    completionHandler: @escaping (Bool) -> Void
+  )
+
+  func toggleLike(feedDetail: FeedDetail) -> FeedDetail
   func fetchLikeList(feedId: Int, completionHandler: @escaping ([Like.Info]) -> Void)
 
   func getAllComments(feedId: Int, completionHandler: @escaping ([Comment]) -> Void)
@@ -26,6 +31,7 @@ protocol FeedDetailWorkerProtocol {
 }
 
 final class FeedDetailWorker: FeedDetailWorkerProtocol {
+  typealias OnCompletionHandler = (Bool) -> Void
 
   private let feedRepository: FeedRepositoryProtocol
   private let commentRepository: CommentRepositoryProtocol
@@ -65,7 +71,7 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
       completionHandler: { isSuccess in
 
         if isSuccess {
-          self.postNotification(feedId: feedId)
+          self.postResfreshNotificationEvent(feedId: feedId)
         }
         completionHandler(isSuccess)
       }
@@ -129,34 +135,51 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
     )
   }
 
-  func checkTokenExisted(completionHandler: @escaping (Bool) -> Void) {
+  func checkTokenExisted() -> Bool {
     let isExisted = self.userDataManager.checkTokenIsExisted()
-    completionHandler(isExisted)
+    return isExisted
   }
 
   func requestLike(
-    id: Int,
-    completionHandler: @escaping (Bool) -> Void
+    isLike: Bool,
+    feedId: Int,
+    completionHandler: @escaping OnCompletionHandler
   ) {
-    self.likeRepository.requestLike(
-      id: id,
-      completionHandler: { result in
-        completionHandler(result)
-      }
-    )
-  }
 
-  func requestLikeCancel(
-    id: Int,
-    completionHandler: @escaping (Bool) -> Void
-  ) {
-      self.likeRepository.requestLikeCancel(
-        id: id,
+    if !isLike {
+      self.likeRepository.requestLike(
+        id: feedId,
         completionHandler: { result in
+          
+          NotificationCenter.default.post(
+            name: .postLikeToggled,
+            object: feedId
+          )
+          completionHandler(result)
+        }
+      )
+    } else {
+      self.likeRepository.requestLikeCancel(
+        id: feedId,
+        completionHandler: { result in
+
+          NotificationCenter.default.post(
+            name: .postLikeToggled,
+            object: feedId
+          )
           completionHandler(result)
         }
       )
     }
+  }
+
+  func toggleLike(feedDetail: FeedDetail) -> FeedDetail {
+    var feedDetail = feedDetail
+
+    feedDetail.feed?.isLike.toggle()
+
+    return feedDetail
+  }
 
   func fetchLikeList(
     feedId: Int,
@@ -198,11 +221,12 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
 // MAKR: - Inner Actions
 
 extension FeedDetailWorker {
-  private func postNotification(feedId: Int) {
+  private func postResfreshNotificationEvent(feedId: Int) {
     NotificationCenter.default.post(
       name: .feedListRefreshAfterDelete,
       object: feedId
     )
+    
     NotificationCenter.default.post(
       name: .feedMainRefreshAfterDelete,
       object: feedId
