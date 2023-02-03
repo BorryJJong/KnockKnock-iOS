@@ -29,17 +29,11 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
   var worker: FeedEditWorkerProtocol?
   var presenter: FeedEditPresenterProtocol?
 
-  private var originPromotions: [Promotion] = []
-  private var originChallenges: [ChallengeTitle] = []
-  private var updatedPromotions: [Promotion] = []
-  private var updatedChallenges: [ChallengeTitle] = []
-
-//  private var promotions: [Promotion] = []
-//  private var challenges: [ChallengeTitle] = []
+  private var promotions: [Promotion] = []
+  private var challenges: [ChallengeTitle] = []
 
   private var selectedAddress: AddressResponse.Documents?
   private var postContent: String = ""
-  private var originPostData: FeedDetail?
 
   // MARK: - Business Logic
 
@@ -53,9 +47,8 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
       feedId: feedId,
       completionHandler: { [weak self] feedDetail in
         /// 기존에 선택 상태에 있던 속성(프로모션, 챌린지) 상태 반영
-        self?.originPostData = feedDetail
-        self?.setSelectedPromotion(promotions: feedDetail.promotions)
-        self?.setSelectedChallenge(challenges: feedDetail.challenges)
+        self?.setSelectedPromotion(selectedPromotions: feedDetail.promotions)
+        self?.setSelectedChallenge(selectedChallenges: feedDetail.challenges)
         self?.presenter?.presentOriginPost(feedDetail: feedDetail)
       }
     )
@@ -66,13 +59,14 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
     self.postContent = text
   }
 
+  /// 피드 수정 이벤트
+  ///
+  /// - Parameters:
+  ///  - id: 피드 아이디
   func updateFeed(id: Int) {
 
-    let content = self.originPostData?.feed?.content == self.postContent
-    ? nil : self.postContent
-    
-    let addressData = self.originPostData?.feed?.storeAddress == self.selectedAddress?.addressName
-    ? nil : self.selectedAddress
+    let content = self.postContent
+    let addressData = self.selectedAddress
 
     self.worker?.requestFeedEdit(
       id: id,
@@ -116,8 +110,8 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
   func navigateToProperty(propertyType: PropertyType) {
     self.router?.navigateToProperty(
       propertyType: propertyType,
-      promotionList: self.updatedPromotions,
-      tagList: self.updatedChallenges
+      promotionList: self.promotions,
+      tagList: self.challenges
     )
   }
 }
@@ -135,13 +129,13 @@ extension FeedEditInteractor: ShopSearchDelegate {
 
 extension FeedEditInteractor: PropertyDelegate {
   func fetchSelectedPromotion(promotionList: [Promotion]) {
-    self.updatedPromotions = promotionList
+    self.promotions = promotionList
 
     self.presenter?.presentSelectedPromotions(promotionList: promotionList)
   }
 
   func fetchSelectedTag(tagList: [ChallengeTitle]) {
-    self.updatedChallenges = tagList
+    self.challenges = tagList
 
     self.presenter?.presentSelectedTags(tagList: tagList)
   }
@@ -154,89 +148,65 @@ extension FeedEditInteractor {
   /// 기존 글의 프로모션 선택 상태 업데이트
   ///
   /// - Parameters:
-  /// - promotions: 프로모션 리스트
-  private func setSelectedPromotion(promotions: [FeedDetail.Promotion]) {
+  ///  - promotions: 프로모션 리스트
+  private func setSelectedPromotion(selectedPromotions: [FeedDetail.Promotion]) {
 
     // 프로모션 리스트 api
     self.worker?.requestPromotionList(completionHandler: { [weak self] result in
-      self?.originPromotions = result
-      self?.originPromotions.insert(
+      self?.promotions = result
+      self?.promotions.insert(
         Promotion(
           id: 0,
           type: "없음",
-          isSelected: promotions.count == 0
+          isSelected: self?.promotions.count == 0
         ), at: 0
       )
 
-      promotions.forEach { selectedPromotion in
-        if let index = self?.originPromotions.firstIndex(where: {
+      selectedPromotions.forEach { selectedPromotion in
+        if let index = self?.promotions.firstIndex(where: {
           selectedPromotion.promotionId == $0.id
         }) {
-          self?.originPromotions[index].isSelected = true
+          self?.promotions[index].isSelected = true
         }
       }
-
-      guard let originPromotions = self?.originPromotions else { return}
-      self?.updatedPromotions = originPromotions
     })
   }
 
   /// 기존 글의 챌린지 선택 상태 업데이트
   ///
   /// - Parameters:
-  /// - feedDetail: Api로부터 받아온 기존 게시글 데이터
-  private func setSelectedChallenge(challenges: [FeedDetail.Challenge]) {
+  ///  - feedDetail: Api로부터 받아온 기존 게시글 데이터
+  private func setSelectedChallenge(selectedChallenges: [FeedDetail.Challenge]) {
 
     // 태그(챌린지) 리스트 api
     self.worker?.requestTagList(completionHandler: { [weak self] result in
-      self?.originChallenges = result
-      self?.originChallenges.remove(at: 0) // '전체' 컬럼 삭제
+      self?.challenges = result
+      self?.challenges.remove(at: 0) // '전체' 컬럼 삭제
 
-      challenges.forEach { selectedChallenge in
-        if let index = self?.originChallenges.firstIndex(where: {
+      selectedChallenges.forEach { selectedChallenge in
+        if let index = self?.challenges.firstIndex(where: {
           selectedChallenge.challengeId == $0.id
         }) {
-          self?.originChallenges[index].isSelected = true
+          self?.challenges[index].isSelected = true
         }
       }
-
-      guard let originChallenges = self?.originChallenges else { return }
-      self?.updatedChallenges = originChallenges
     })
   }
 
-  /// 프로모션이 수정되었는지 확인 후 선택 된 프로모션 아이디 추출하여 "1, 2" 형태로 리턴
-  /// 이전과 같은 프로모션을 선택했다면 nil 리턴
-  private func getPromotionId() -> String? {
+  /// 선택 된 프로모션 아이디를 추출하여 "1, 2" 형태로 리턴
+  private func getPromotionId() -> String {
 
-    return self.updatedPromotions
-      .filter { $0.isSelected == true }
-      .map { $0.id }
-      .elementsEqual(
-        self.originPromotions
-          .filter { $0.isSelected == true }
-          .map { $0.id }
-      )
-    ? nil : self.updatedPromotions.filter{
-        $0.isSelected == true
-      }.map {
-        String($0.id)
-      }.joined(separator: ",")
+    return self.promotions.filter{
+      $0.isSelected == true
+    }.map {
+      String($0.id)
+    }.joined(separator: ",")
   }
 
-  /// 챌린지가 수정 되었는지 확인 후 선택 된 챌린지 아이디 추출하여 "1, 2" 형태로 리턴
-  /// 이전과 같은 챌린지를 선택했다면 nil 리턴
-  private func getChallengeId() -> String? {
+  /// 선택 된 챌린지 아이디를 추출하여 "1, 2" 형태로 리턴
+  private func getChallengeId() -> String {
 
-    return self.updatedChallenges
-      .filter { $0.isSelected == true }
-      .map { $0.id }
-      .elementsEqual(
-        self.originChallenges
-          .filter { $0.isSelected == true }
-          .map { $0.id }
-      )
-    ? nil : self.updatedChallenges.filter{
+    return self.challenges.filter{
       $0.isSelected == true
     }.map {
       String($0.id)
