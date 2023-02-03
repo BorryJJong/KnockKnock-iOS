@@ -22,9 +22,6 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
   private var options: [String] = []
   var districtsType: DistrictsType?
 
-//  var deleteAction: (() -> Void)?
-//  var editAction: (() -> Void)?
-
   // MARK: - Life Cycle
   
   override func viewDidLoad() {
