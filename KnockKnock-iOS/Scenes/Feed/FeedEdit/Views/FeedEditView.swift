@@ -55,6 +55,7 @@ final class FeedEditView: UIView {
 
   private let tagLabel = UILabel().then {
     $0.text = "#태그"
+    $0.font = .systemFont(ofSize: 14)
     $0.tintColor = .black
   }
 
@@ -71,6 +72,7 @@ final class FeedEditView: UIView {
 
   private let promotionLabel = UILabel().then {
     $0.text = "프로모션"
+    $0.font = .systemFont(ofSize: 14)
     $0.tintColor = .black
   }
 
@@ -87,6 +89,7 @@ final class FeedEditView: UIView {
 
   private let shopNameLabel = UILabel().then {
     $0.text = "매장명 (선택)"
+    $0.font = .systemFont(ofSize: 14)
     $0.tintColor = KKDS.Color.black
 
     if let text = $0.text {
@@ -114,6 +117,7 @@ final class FeedEditView: UIView {
 
   private let shopAddressLabel = UILabel().then {
     $0.text = "매장주소 (선택)"
+    $0.font = .systemFont(ofSize: 14)
     $0.tintColor = KKDS.Color.black
 
     if let text = $0.text {
@@ -148,9 +152,13 @@ final class FeedEditView: UIView {
 
   private lazy var toolbar = UIToolbar().then {
     $0.sizeToFit()
-    $0.setItems([self.flexibleSpaceButton,
+    $0.setItems([
+      self.flexibleSpaceButton,
                  self.flexibleSpaceButton,
-                 self.doneBarButton], animated: false)
+                 self.doneBarButton
+    ],
+                animated: false
+    )
   }
 
   lazy var contentTextView = UITextView().then {
