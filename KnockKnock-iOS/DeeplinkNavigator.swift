@@ -44,7 +44,7 @@ final class DeeplinkNavigator {
 
     case .challenge:
       self.navigateChallengeDetail(challengeId: id)
-
+      
     }
   }
 
@@ -76,6 +76,20 @@ final class DeeplinkNavigator {
 
     tabBarController.challenge.navigationController?.pushViewController(
       challengeDetailViewController,
+      animated: true
+    )
+  }
+
+  func navigateFeedMain() {
+
+    guard let tabBarController = window?.rootViewController as? MainTabBarController else { return }
+
+    tabBarController.selectedIndex = Tab.feed.rawValue
+
+    let feedMainViewController = FeedMainRouter.createFeed()
+
+    tabBarController.challenge.navigationController?.pushViewController(
+      feedMainViewController,
       animated: true
     )
   }

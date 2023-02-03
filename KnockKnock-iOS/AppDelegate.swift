@@ -9,9 +9,10 @@ import UIKit
 
 import KakaoSDKCommon
 import Firebase
+import FirebaseMessaging
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
   func application(
     _ application: UIApplication,
@@ -20,8 +21,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     KakaoSDK.initSDK(appKey: API.KAKAO_APP_KEY)
     FirebaseApp.configure()
+    self.registerRemoteNotification()
 
     return true
+  }
+
+  private func registerRemoteNotification() {
+    let center = UNUserNotificationCenter.current()
+    center.delegate = self
+    
+    let options: UNAuthorizationOptions = [.alert, .sound, .badge]
+    center.requestAuthorization(options: options) { granted, _ in
+
+      DispatchQueue.main.async {
+        UIApplication.shared.registerForRemoteNotifications()
+      }
+    }
+  }
+
+  func application(
+    _ application: UIApplication,
+    didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
+  ) {
+    Messaging.messaging().apnsToken = deviceToken
   }
 
   // MARK: - UISceneSession Lifecycle
