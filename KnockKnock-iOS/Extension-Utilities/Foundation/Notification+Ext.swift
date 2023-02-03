@@ -21,6 +21,5 @@ extension Notification.Name {
   static let feedMainRefreshAfterDelete = Notification.Name("feedMainRefreshAfterDelete")
   static let feedListRefreshAfterDelete = Notification.Name("feedListRefreshedAfterDelete")
 
-  static let postLike = Notification.Name("postLike")
-  static let postLikeCancel = Notification.Name("postLikeCancel")
+  static let postLikeToggled = Notification.Name("postLikeToggled")
 }

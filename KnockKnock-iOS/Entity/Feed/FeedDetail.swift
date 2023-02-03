@@ -9,7 +9,7 @@ import Foundation
 
 struct FeedDetail: Decodable {
   
-  let feed: Post?
+  var feed: Post?
   let promotions: [Promotion]
   let challenges: [Challenge]
   let images: [Image]
@@ -26,7 +26,7 @@ struct FeedDetail: Decodable {
     let userName: String
     let userImage: String?
     let scale: String = "1:1"
-    let isLike: Bool
+    var isLike: Bool
     let isWriter: Bool
   }
   

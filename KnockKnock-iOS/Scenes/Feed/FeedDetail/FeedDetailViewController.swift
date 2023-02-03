@@ -186,12 +186,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   }
 
   @objc func likeButtonDidTap(_ sender: UIButton) {
-    sender.isEnabled = true
-    if sender.isSelected {
-      self.interactor?.requestLikeCancel(feedId: self.feedId)
-    } else {
-      self.interactor?.requestLike(feedId: self.feedId)
-    }
+    self.interactor?.requestLike(feedId: self.feedId)
   }
 
   private func commentDeleteButtonDidTap(commentId: Int) {
@@ -304,7 +299,6 @@ extension FeedDetailViewController: FeedDetailViewProtocol {
     if isToggle {
       self.containerView.likeButton.do {
         $0.isSelected.toggle()
-        $0.isEnabled = true
       }
     }
   }
