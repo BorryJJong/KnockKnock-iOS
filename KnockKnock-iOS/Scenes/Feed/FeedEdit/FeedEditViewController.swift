@@ -86,7 +86,7 @@ final class FeedEditViewController: BaseViewController<FeedEditView> {
   // MARK: - Buttton Actions
 
   @objc private func backButtonDidTap(_ sender: UIBarButtonItem) {
-    self.navigationController?.popViewController(animated: true)
+    self.interactor?.popFeedEditView()
   }
 
   @objc private func tagSelectButtonDidTap(_ sender: UIButton) {
