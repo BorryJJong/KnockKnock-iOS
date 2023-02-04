@@ -319,14 +319,7 @@ extension FeedListInteractor {
     NotificationCenter.default.addObserver(
       self,
       selector: #selector(self.likeNotificationEvent(_:)),
-      name: .postLike,
-      object: nil
-    )
-    
-    NotificationCenter.default.addObserver(
-      self,
-      selector: #selector(self.likeNotificationEvent(_:)),
-      name: .postLikeCancel,
+      name: .postLikeToggled,
       object: nil
     )
 

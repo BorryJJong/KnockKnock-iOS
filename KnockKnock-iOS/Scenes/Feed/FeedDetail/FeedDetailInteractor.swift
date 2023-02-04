@@ -23,7 +23,6 @@ protocol FeedDetailInteractorProtocol {
   func requestDeleteComment(commentId: Int)
   
   func requestLike(feedId: Int)
-  func requestLikeCancel(feedId: Int)
   func fetchLikeList(feedId: Int)
   
   func navigateToLikeDetail()
@@ -43,10 +42,12 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   private var likeList: [Like.Info] = []
 
   /// 서버에서 받아온 전체 댓글 array
-  var comments: [Comment] = []
+  private var comments: [Comment] = []
 
   /// view에서 보여지는 댓글 array(open 상태 댓글만)
-  var visibleComments: [Comment] = []
+  private var visibleComments: [Comment] = []
+
+  private var feedDetail: FeedDetail?
 
   // MARK: - Initialize
 
@@ -60,48 +61,33 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.worker?.getFeedDetail(
       feedId: feedId,
       completionHandler: { [weak self] feedDetail in
+        self?.feedDetail = feedDetail
         self?.presenter?.presentFeedDetail(feedDetail: feedDetail)
       }
     )
   }
   
   func requestLike(feedId: Int) {
-    self.worker?.checkTokenExisted(completionHandler: { isExisted in
-      if isExisted {
-        self.worker?.requestLike(
-          id: feedId,
-          completionHandler: { result in
-            if result {
-              self.presenter?.presentLikeStatus(isToggle: true)
-              NotificationCenter.default.post(
-                name: .postLike,
-                object: feedId
-              )
-            } else {
-              // error
-            }
-          }
-        )
-      } else {
-        self.router?.navigateToLoginView()
-        self.presenter?.presentLikeStatus(isToggle: isExisted)
-      }
-    })
-  }
-  
-  func requestLikeCancel(feedId: Int) {
-    self.worker?.requestLikeCancel(
-      id: feedId,
-      completionHandler: { result in
-        if result {
-          self.presenter?.presentLikeStatus(isToggle: true)
-          NotificationCenter.default.post(
-            name: .postLikeCancel,
-            object: feedId
-          )
-        } else {
-          // error
+    
+    // 비로그인 유저인 경우 로그인 화면으로 이동
+    guard self.worker?.checkTokenExisted() ?? false else {
+      self.router?.navigateToLoginView()
+      return
+    }
+
+    // 좋아요 이벤트 실행한 피드의 좋아요 여부
+    guard let isLike = self.feedDetail?.feed?.isLike else { return }
+
+    self.worker?.requestLike(
+      isLike: isLike,
+      feedId: feedId,
+      completionHandler: { [weak self] isSuccess in
+        guard let self = self else { return }
+        guard isSuccess else {
+          // error handle
+          return
         }
+        self.presenter?.presentLikeStatus(isToggle: isSuccess)
       }
     )
   }
