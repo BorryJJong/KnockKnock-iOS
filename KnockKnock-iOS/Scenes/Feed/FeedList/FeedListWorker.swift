@@ -24,6 +24,10 @@ protocol FeedListWorkerProtocol {
     feedId: Int,
     completionHandler: @escaping (Bool) -> Void
   )
+  func requestHidePost(
+    feedId: Int,
+    completionHandler: @escaping (Bool) -> Void
+  )
   func removePostInFeedList(
     feeds: FeedList,
     id: Int
@@ -78,7 +82,24 @@ final class FeedListWorker: FeedListWorkerProtocol {
     self.feedRepository.requestDeleteFeed(
       feedId: feedId,
       completionHandler: { isSuccess in
-        self.postResfreshNotificationEvent(feedId: feedId)
+        if isSuccess {
+          self.postResfreshNotificationEvent(feedId: feedId)
+        }
+        completionHandler(isSuccess)
+      }
+    )
+  }
+
+  func requestHidePost(
+    feedId: Int,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
+    self.feedRepository.requestHidePost(
+      feedId: feedId,
+      completionHandler: { isSuccess in
+        if isSuccess {
+          self.postResfreshNotificationEvent(feedId: feedId)
+        }
         completionHandler(isSuccess)
       }
     )

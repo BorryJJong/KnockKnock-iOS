@@ -14,6 +14,7 @@ protocol FeedDetailInteractorProtocol {
   
   func getFeedDeatil(feedId: Int)
   func requestDelete(feedId: Int)
+  func requestHide(feedId: Int)
 
   func fetchAllComments(feedId: Int)
 
@@ -26,12 +27,13 @@ protocol FeedDetailInteractorProtocol {
   func fetchLikeList(feedId: Int)
   
   func navigateToLikeDetail()
-  func navigateToFeedEdit(feedId: Int)
   func presentBottomSheetView(
     isMyPost: Bool,
     deleteAction: (() -> Void)?,
+    hideAction: (() -> Void)?,
     editAction: (() -> Void)?
   )
+  func navigateToFeedEdit(feedId: Int)
 }
 
 final class FeedDetailInteractor: FeedDetailInteractorProtocol {
@@ -183,6 +185,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     )
   }
 
+  /// 피드 삭제
   func requestDelete(feedId: Int) {
 
     self.worker?.requestDeleteFeed(
@@ -204,7 +207,32 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       }
     )
   }
-  
+
+  /// 피드 숨기기
+  ///
+  func requestHide(feedId: Int) {
+
+    self.worker?.requestHidePost(
+      feedId: feedId,
+      completionHandler: { isSuccess in
+
+        if isSuccess {
+          self.showAlertView(
+            message: "게시글이 숨김 처리 되었습니다.",
+            confirmAction: {
+              self.navigateToFeedList()
+            }
+          )
+        } else {
+          self.showAlertView(
+            message: "게시글 숨김 처리에 실패하였습니다.",
+            confirmAction: nil
+          )
+        }
+      }
+    )
+  }
+
   // Routing
   
   func navigateToLikeDetail() {
@@ -222,11 +250,13 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   func presentBottomSheetView(
     isMyPost: Bool,
     deleteAction: (() -> Void)?,
+    hideAction: (() -> Void)?,
     editAction: (() -> Void)?
   ) {
     self.router?.presentBottomSheetView(
       isMyPost: isMyPost,
       deleteAction: deleteAction,
+      hideAction: hideAction,
       editAction: editAction
     )
   }

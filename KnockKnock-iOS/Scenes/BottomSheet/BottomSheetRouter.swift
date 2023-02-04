@@ -14,6 +14,7 @@ protocol BottomSheetRouterProtocol: AnyObject {
     districtSelectDelegate: DistrictSelectDelegate?,
     districtsType: DistrictsType?,
     deleteAction: (() -> Void)?,
+    hideAction: (() -> Void)?,
     editAction: (() -> Void)?,
     feedData: FeedShare?,
     isMyPost: Bool?
@@ -33,6 +34,7 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
     districtSelectDelegate: DistrictSelectDelegate? = nil,
     districtsType: DistrictsType? = nil,
     deleteAction: (() -> Void)? = nil,
+    hideAction: (() -> Void)? = nil,
     editAction: (() -> Void)? = nil,
     feedData: FeedShare? = nil,
     isMyPost: Bool? = nil
@@ -51,6 +53,9 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
     router.view = view
 
     interactor.districtSelectDelegate = districtSelectDelegate
+    interactor.deleteAction = deleteAction
+    interactor.hideAction = hideAction
+    interactor.feedData = feedData
 
     guard let isMyPost = isMyPost else { return view }
     router.setBottomSheetOptions(isMyPost: isMyPost)

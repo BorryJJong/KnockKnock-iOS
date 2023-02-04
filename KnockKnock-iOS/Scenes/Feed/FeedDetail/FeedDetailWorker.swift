@@ -19,15 +19,34 @@ protocol FeedDetailWorkerProtocol {
   )
 
   func toggleLike(feedDetail: FeedDetail?) -> FeedDetail?
-  func fetchLikeList(feedId: Int, completionHandler: @escaping ([Like.Info]) -> Void)
+  func fetchLikeList(
+    feedId: Int,
+    completionHandler: @escaping ([Like.Info]) -> Void
+  )
 
-  func getAllComments(feedId: Int, completionHandler: @escaping ([Comment]) -> Void)
+  func getAllComments(
+    feedId: Int,
+    completionHandler: @escaping ([Comment]) -> Void
+  )
   func fetchVisibleComments(comments: [Comment]?) -> [Comment]
 
-  func requestAddComment(comment: AddCommentDTO, completionHandler: @escaping (Bool) -> Void)
-  func requestDeleteComment(commentId: Int, completionHandler: @escaping () -> Void)
+  func requestAddComment(
+    comment: AddCommentDTO,
+    completionHandler: @escaping (Bool) -> Void
+  )
+  func requestDeleteComment(
+    commentId: Int,
+    completionHandler: @escaping () -> Void
+  )
 
-  func requestDeleteFeed(feedId: Int, completionHandler: @escaping (Bool) -> Void)
+  func requestDeleteFeed(
+    feedId: Int,
+    completionHandler: @escaping (Bool) -> Void
+  )
+  func requestHidePost(
+    feedId: Int,
+    completionHandler: @escaping (Bool) -> Void
+  )
 }
 
 final class FeedDetailWorker: FeedDetailWorkerProtocol {
@@ -67,6 +86,22 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
     completionHandler: @escaping (Bool) -> Void
   ) {
     self.feedRepository.requestDeleteFeed(
+      feedId: feedId,
+      completionHandler: { isSuccess in
+
+        if isSuccess {
+          self.postResfreshNotificationEvent(feedId: feedId)
+        }
+        completionHandler(isSuccess)
+      }
+    )
+  }
+
+  func requestHidePost(
+    feedId: Int,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
+    self.feedRepository.requestHidePost(
       feedId: feedId,
       completionHandler: { isSuccess in
 

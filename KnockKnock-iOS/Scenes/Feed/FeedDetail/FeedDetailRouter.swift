@@ -19,8 +19,9 @@ protocol FeedDetailRouterProtocol {
   func presentBottomSheetView(
     isMyPost: Bool,
     deleteAction: (() -> Void)?,
+    hideAction: (() -> Void)?,
     editAction: (() -> Void)?
-  )
+ )
   func showAlertView(
     message: String,
     confirmAction: (() -> Void)?
@@ -101,11 +102,13 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
   func presentBottomSheetView(
     isMyPost: Bool,
     deleteAction: (() -> Void)?,
+    hideAction: (() -> Void)?,
     editAction: (() -> Void)?
   ) {
     
     guard let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
       deleteAction: deleteAction,
+      hideAction: hideAction,
       editAction: editAction,
       isMyPost: isMyPost
     ) as? BottomSheetViewController else { return }

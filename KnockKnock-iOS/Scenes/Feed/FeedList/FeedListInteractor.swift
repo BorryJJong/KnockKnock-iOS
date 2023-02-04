@@ -14,19 +14,20 @@ protocol FeedListInteractorProtocol {
   
   func fetchFeedList(currentPage: Int, pageSize: Int, feedId: Int, challengeId: Int)
   func requestDelete(feedId: Int)
-  
+  func requestHide(feedId: Int)
   func requestLike(feedId: Int)
 
+  func presentBottomSheetView(
+    isMyPost: Bool,
+    deleteAction: (() -> Void)?,
+    hideAction: (() -> Void)?,
+    editAction: (() -> Void)?,
+    feedData: FeedList.Post
+  )
   func navigateToFeedEdit(feedId: Int)
   func navigateToFeedMain()
   func navigateToFeedDetail(feedId: Int)
   func navigateToCommentView(feedId: Int)
-  func presentBottomSheetView(
-    isMyPost: Bool,
-    deleteAction: (() -> Void)?,
-    editAction: (() -> Void)?,
-    feedData: FeedList.Post
-  )
 }
 
 final class FeedListInteractor: FeedListInteractorProtocol {
@@ -148,6 +149,37 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       }
     )
   }
+
+  /// 피드 숨기기
+  ///
+  func requestHide(feedId: Int) {
+
+    guard let feedList = self.feedListData else { return }
+    guard !feedList.feeds.isEmpty else { return }
+
+    // 삭제 요청한 피드가 현재 존재하는지 피드인지 체크
+    guard feedList.feeds.contains(where: { feedId == $0.id }) else { return }
+
+    self.worker?.requestHidePost(
+      feedId: feedId,
+      completionHandler: { isSuccess in
+
+        if isSuccess {
+          // 피드 리스트 내 해당 게시글 모두 삭제
+          guard let feedListData = self.worker?.removePostInFeedList(
+            feeds: feedList,
+            id: feedId
+          ) else { return }
+
+          self.presenter?.presentFetchFeedList(feedList: feedListData)
+
+        } else {
+          // error
+        }
+
+      }
+    )
+  }
   
   // Routing
   
@@ -170,12 +202,14 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   func presentBottomSheetView(
     isMyPost: Bool,
     deleteAction: (() -> Void)?,
+    hideAction: (() -> Void)?,
     editAction: (() -> Void)?,
     feedData: FeedList.Post
   ) {
     self.router?.presentBottomSheetView(
       isMyPost: isMyPost,
       deleteAction: deleteAction,
+      hideAction: hideAction,
       editAction: editAction,
       feedData: feedData.toShare()
     )

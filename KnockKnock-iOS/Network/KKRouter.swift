@@ -48,6 +48,7 @@ enum KKRouter: URLRequestConvertible {
   // Feed List, Detail
   case getFeedBlogPost(page: Int, take: Int, feedId: Int, challengeId: Int)
   case getFeed(id: Int)
+  case postHideBlogPost(id: Int)
   case deleteFeed(id: Int)
 
   // Feed Edit
@@ -105,6 +106,9 @@ enum KKRouter: URLRequestConvertible {
     case .getFeedBlogPost,
         .getFeed:
       return .get
+
+    case .postHideBlogPost:
+      return .post
 
     case .deleteFeed:
       return .delete
@@ -172,6 +176,7 @@ enum KKRouter: URLRequestConvertible {
     case .getFeedBlogPost: return "feed/blog-post"
     case .getFeed(let id): return "feed/\(id)"
     case .deleteFeed(let id): return "feed/\(id)"
+    case .postHideBlogPost(let id): return "users/hide/blog-post/\(id)"
 
       // Feed Edit
     case .putFeed(let id, _): return "feed/\(id)"
@@ -250,6 +255,7 @@ enum KKRouter: URLRequestConvertible {
       ]
 
     case .getFeed,
+         .postHideBlogPost,
          .deleteFeed:
       return nil
 
@@ -394,7 +400,6 @@ enum KKRouter: URLRequestConvertible {
            .getLikeList,
            .getUsersDetail,
            .getDuplicateNickname:
-
         break
 
       case .requestShopAddress:
@@ -410,14 +415,20 @@ enum KKRouter: URLRequestConvertible {
 
       switch self {
 
-      case .deleteWithdraw, .postLogOut:
-        request = try JSONEncoding.default.encode(request)
-        
-      case .postFeedLike, .deleteFeedLike, .deleteFeed, .deleteComment:
+      case .postFeedLike,
+           .postHideBlogPost,
+           .postLogOut,
+           .deleteFeedLike,
+           .deleteFeed,
+           .deleteWithdraw,
+           .deleteComment:
+
         request = try JSONEncoding.default.encode(request)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 
-      case .postFeed, .postSignUp, .putUsers:
+      case .postFeed,
+           .postSignUp,
+           .putUsers:
         request.setValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
 
       default:

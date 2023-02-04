@@ -132,6 +132,9 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       deleteAction: {
         self.interactor?.requestDelete(feedId: feedId)
       },
+      hideAction: {
+        self.interactor?.requestHide(feedId: feedId)
+      },
       editAction: {
         self.interactor?.navigateToFeedEdit(feedId: feedId)
       }
