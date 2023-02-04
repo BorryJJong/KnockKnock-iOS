@@ -31,6 +31,8 @@ final class LikeDetailCell: BaseCollectionViewCell {
 
   private let profileImageView = UIImageView().then {
     $0.image = KKDS.Image.ic_person_24
+    $0.layer.cornerRadius = (Metric.profileImageViewWidth / 2)
+    $0.clipsToBounds = true
   }
 
   private let likeImageView = UIImageView().then {
@@ -52,12 +54,11 @@ final class LikeDetailCell: BaseCollectionViewCell {
   // MARK: - Bind
 
   func bind(like: Like.Info) {
-    if let image = like.userImage {
-      self.profileImageView.image = UIImage(named: image)
-    } else {
-      self.profileImageView.image = KKDS.Image.ic_person_24
-    }
-      self.userNameLabel.text = like.userName
+    self.profileImageView.setImageFromStringUrl(
+      stringUrl: like.userImage,
+      defaultImage: KKDS.Image.ic_person_24
+    )
+    self.userNameLabel.text = like.userName
   }
 
   // MARK: - Constraints
