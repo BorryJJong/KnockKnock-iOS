@@ -114,6 +114,9 @@ final class FeedListViewController: BaseViewController<FeedListView> {
       hideAction: {
         self.interactor?.requestHide(feedId: feedId)
       },
+      editAction: {
+        self.interactor?.navigateToFeedEdit(feedId: feedId)
+      },
       feedData: self.feedListPost[sender.tag]
     )
   }
@@ -225,11 +228,11 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
     layout collectionViewLayout: UICollectionViewLayout,
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
-
-    let scale = feedListPost[indexPath.section].imageScale
-    let scaleType = ImageScaleType(rawValue: scale)
     
-    return scaleType?.cellSize(width: self.containerView.frame.width) ?? CGSize.init()
+    return CGSize(
+      width: (self.containerView.frame.width - 40),
+      height: (self.containerView.frame.width - 40) + 100
+    )
   }
 
   func collectionView(

@@ -12,14 +12,16 @@ protocol FeedDetailRouterProtocol {
   
   static func createFeedDetail(feedId: Int) -> UIViewController
   
+  func navigateToFeedEdit(feedId: Int)
   func navigateToLikeDetail(like: [Like.Info])
   func navigateToLoginView()
   func navigateToFeedList()
   func presentBottomSheetView(
     isMyPost: Bool,
     deleteAction: (() -> Void)?,
-    hideAction: (() -> Void)?
-  )
+    hideAction: (() -> Void)?,
+    editAction: (() -> Void)?
+ )
   func showAlertView(
     message: String,
     confirmAction: (() -> Void)?
@@ -52,7 +54,7 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
     
     return view
   }
-  
+
   func navigateToLikeDetail(like: [Like.Info]) {
     let likeDetailViewController = LikeDetailViewContoller()
     if let sourceView = self.view as? UIViewController {
@@ -64,6 +66,14 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
   func navigateToFeedList() {
     if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.popViewController(animated: true)
+    }
+  }
+
+  func navigateToFeedEdit(feedId: Int) {
+    let feedEditViewController = FeedEditRouter.createFeedEdit(feedId: feedId)
+    if let sourceView = self.view as? UIViewController {
+      feedEditViewController.hidesBottomBarWhenPushed = true
+      sourceView.navigationController?.pushViewController(feedEditViewController, animated: true)
     }
   }
   
@@ -92,12 +102,14 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
   func presentBottomSheetView(
     isMyPost: Bool,
     deleteAction: (() -> Void)?,
-    hideAction: (() -> Void)?
+    hideAction: (() -> Void)?,
+    editAction: (() -> Void)?
   ) {
     
     guard let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
       deleteAction: deleteAction,
       hideAction: hideAction,
+      editAction: editAction,
       isMyPost: isMyPost
     ) as? BottomSheetViewController else { return }
     

@@ -158,11 +158,11 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     self.interactor?.navigateToShopSearch()
   }
 
-  @objc func photoAddButtonDidTap(_ sender: UIButton) {
+  @objc private func photoAddButtonDidTap(_ sender: UIButton) {
     self.callImagePicker()
   }
 
-  @objc func photoDeleteButtonDidTap(_ sender: UIButton) {
+  @objc private func photoDeleteButtonDidTap(_ sender: UIButton) {
     self.selectedImages.remove(at: sender.tag)
     self.containerView.bindPhotoCount(count: self.selectedImages.count)
     self.containerView.photoCollectionView.reloadData()
@@ -184,10 +184,12 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
         for item in items {
           switch item {
           case let .photo(photo):
-            let resizeImage = await photo.image.resize(newWidth: self.containerView.frame.width)
+
+            let resizeImage = photo.image.resize(newWidth: self.containerView.frame.width)
             images.append(resizeImage)
 
             self.selectedImages = images
+
           default:
             print("error")
           }

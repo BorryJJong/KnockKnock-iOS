@@ -16,12 +16,12 @@ protocol BottomSheetViewProtocol: AnyObject {
 final class BottomSheetViewController: BaseViewController<BottomSheetView> {
   
   // MARK: - Properties
+
+  var interactor: BottomSheetInteractorProtocol?
   
   private var options: [String] = []
   var districtsType: DistrictsType?
 
-  var interactor: BottomSheetInteractorProtocol?
-  
   // MARK: - Life Cycle
   
   override func viewDidLoad() {
@@ -153,10 +153,13 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
   ) {
     if let districtsType = self.districtsType {
       switch districtsType {
+
       case .city:
         self.interactor?.passCityDataToShopSearch(city: options[indexPath.row])
+
       case .county:
         self.interactor?.passCountyDataToShopSearch(county: options[indexPath.row])
+
       }
     } else {
       

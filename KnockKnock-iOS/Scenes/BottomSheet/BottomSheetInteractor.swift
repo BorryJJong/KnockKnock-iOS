@@ -76,6 +76,9 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
 
     case .postHide:
       self.router?.dismissView(action: self.hideAction)
+
+    case .postEdit:
+      self.router?.dismissView(action: self.editAction)
       
     default:
       self.router?.dismissView(action: nil)

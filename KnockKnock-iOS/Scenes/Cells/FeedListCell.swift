@@ -189,14 +189,15 @@ class FeedListCell: BaseCollectionViewCell {
       imageView.layer.cornerRadius = 5
       imageView.clipsToBounds = true
 
-      let imageSizeType = ImageScaleType(rawValue: scale)
       let width = self.contentView.frame.width
       let xPosition = width * CGFloat(index)
 
-      imageView.frame = imageSizeType?.imageSize(
-        xPosition: xPosition,
-        width: width
-      ) ?? CGRect.init()
+      imageView.frame = CGRect(
+        x: xPosition,
+        y: 0,
+        width: width,
+        height: width
+      )
 
       self.imageScrollView.contentSize.width = width * CGFloat(index+1)
       self.imageScrollView.addSubview(imageView)

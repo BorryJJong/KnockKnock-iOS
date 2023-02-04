@@ -15,13 +15,15 @@ protocol BottomSheetRouterProtocol: AnyObject {
     districtsType: DistrictsType?,
     deleteAction: (() -> Void)?,
     hideAction: (() -> Void)?,
+    editAction: (() -> Void)?,
     feedData: FeedShare?,
     isMyPost: Bool?
   ) -> UIViewController
 
   func navigateToShopSearch()
+
   func dismissView(action: (() -> Void)?)
-  func presentErrorAlertView(message: String) 
+  func presentErrorAlertView(message: String)
 }
 
 final class BottomSheetRouter: BottomSheetRouterProtocol {
@@ -33,6 +35,7 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
     districtsType: DistrictsType? = nil,
     deleteAction: (() -> Void)? = nil,
     hideAction: (() -> Void)? = nil,
+    editAction: (() -> Void)? = nil,
     feedData: FeedShare? = nil,
     isMyPost: Bool? = nil
   ) -> UIViewController {
@@ -44,6 +47,7 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
 
     view.interactor = interactor
     view.districtsType = districtsType
+
     interactor.router = router
     interactor.worker = worker
     router.view = view
@@ -56,7 +60,17 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
     guard let isMyPost = isMyPost else { return view }
     router.setBottomSheetOptions(isMyPost: isMyPost)
 
+    interactor.deleteAction = deleteAction
+    interactor.editAction = editAction
+    interactor.feedData = feedData
+
     return view
+  }
+
+  func navigateToShopSearch() {
+    if let sourceView = self.view as? UIViewController {
+      sourceView.dismiss(animated: true)
+    }
   }
 
   private func setBottomSheetOptions(isMyPost: Bool) {
@@ -94,12 +108,6 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
         self.dismissView(action: nil)
       }
     )
-  }
-
-  func navigateToShopSearch() {
-    guard let sourceView = self.view as? UIViewController else { return }
-
-    sourceView.dismiss(animated: true)
   }
 
   func dismissView(action: (() -> Void)?) {
