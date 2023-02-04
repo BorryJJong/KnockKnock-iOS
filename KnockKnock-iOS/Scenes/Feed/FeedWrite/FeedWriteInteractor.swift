@@ -18,7 +18,7 @@ protocol FeedWriteInteractorProtocol: AnyObject {
   func navigateToShopSearch()
   func navigateToProperty(propertyType: PropertyType)
 
-  func setCurrentText(text: String) 
+  func setCurrentText(text: String)
   func checkEssentialField(imageCount: Int)
   func requestUploadFeed(content: String, images: [UIImage])
 }
@@ -102,12 +102,20 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
         promotions: promotions,
         challenges: challenges,
         images: images
-      ), completionHandler: {
+      ), completionHandler: { isSuccess in
+
         LoadingIndicator.hideLoading()
 
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1, execute: {
-          self.presentFeedWriteCompletedView()
-        })
+        if isSuccess {
+          DispatchQueue.main.asyncAfter(
+            deadline: DispatchTime.now(),
+            execute: {
+              self.presentFeedWriteCompletedView()
+            }
+          )
+        } else {
+          // error
+        }
       }
     )
   }

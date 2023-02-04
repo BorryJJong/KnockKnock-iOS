@@ -116,5 +116,13 @@ extension FeedMainInteractor {
       name: .feedMainRefreshAfterDelete,
       object: nil
     )
+
+    NotificationCenter.default.addObserver(
+      forName: .feedMainRefreshAfterWrite,
+      object: nil,
+      queue: nil
+    ) { _ in
+      self.presenter?.reloadFeedMain()
+    }
   }
 }

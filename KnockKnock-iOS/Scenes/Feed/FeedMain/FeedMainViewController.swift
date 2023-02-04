@@ -13,6 +13,7 @@ protocol FeedMainViewProtocol: AnyObject {
   func fetchFeedMain(feed: FeedMain)
   func fetchChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?)
   func fetchSearchLog(searchKeyword: [SearchKeyword])
+  func reloadFeedMain()
 }
 
 final class FeedMainViewController: BaseViewController<FeedMainView> {
@@ -148,6 +149,15 @@ extension FeedMainViewController: FeedMainViewProtocol {
     } else {
       self.containerView.tagCollectionView.reloadData()
     }
+  }
+
+  /// 피드 데이터 re-fatch
+  func reloadFeedMain() {
+    self.interactor?.fetchFeedMain(
+      currentPage: self.currentPage,
+      pageSize: self.pageSize,
+      challengeId: self.challengeId
+    )
   }
 }
 

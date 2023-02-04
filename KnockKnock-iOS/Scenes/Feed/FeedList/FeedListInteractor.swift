@@ -267,5 +267,13 @@ extension FeedListInteractor {
       name: .feedListRefreshAfterDelete,
       object: nil
     )
+
+    NotificationCenter.default.addObserver(
+      forName: .feedListRefreshAfterWrite,
+      object: nil,
+      queue: nil
+    ) { _ in
+      self.presenter?.reloadFeedList()
+    }
   }
 }

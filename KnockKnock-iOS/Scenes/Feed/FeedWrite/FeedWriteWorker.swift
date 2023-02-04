@@ -8,8 +8,16 @@
 import Foundation
 
 protocol FeedWriteWorkerProtocol: AnyObject {
-  func uploadFeed(postData: FeedWrite, completionHandler: @escaping () -> Void)
-  func checkEssentialField(imageCount: Int, tag: [ChallengeTitle], promotion: [Promotion], content: String) -> Bool
+  func uploadFeed(
+    postData: FeedWrite,
+    completionHandler: @escaping (Bool) -> Void
+  )
+  func checkEssentialField(
+    imageCount: Int,
+    tag: [ChallengeTitle],
+    promotion: [Promotion],
+    content: String
+  ) -> Bool
 }
 
 final class FeedWriteWorker: FeedWriteWorkerProtocol {
@@ -21,12 +29,15 @@ final class FeedWriteWorker: FeedWriteWorkerProtocol {
 
   func uploadFeed(
     postData: FeedWrite,
-    completionHandler: @escaping () -> Void
+    completionHandler: @escaping (Bool) -> Void
   ) {
     self.feedWriteRepository.requestFeedPost(
       postData: postData,
-      completionHandler: {
-        completionHandler()
+      completionHandler: { isSuccess in
+        if isSuccess {
+          self.postWriteNotificationEvent()
+        }
+        completionHandler(isSuccess)
       }
     )
   }
@@ -53,4 +64,19 @@ final class FeedWriteWorker: FeedWriteWorkerProtocol {
 
     return result
    }
+}
+
+extension FeedWriteWorker {
+
+  private func postWriteNotificationEvent() {
+    NotificationCenter.default.post(
+      name: .feedListRefreshAfterWrite,
+      object: nil
+    )
+
+    NotificationCenter.default.post(
+      name: .feedMainRefreshAfterWrite,
+      object: nil
+    )
+  }
 }
