@@ -278,13 +278,18 @@ extension FeedListViewController: FeedListViewProtocol {
   /// - Parameters:
   ///   - feedList: 업데이트 되어진 피드 리스트
   ///   - sections: 업데이트 된 피드의 Sections
-  func updateFeedList(feedList: FeedList, sections: [IndexPath]) {
+  func updateFeedList(
+    feedList: FeedList,
+    sections: [IndexPath]
+  ) {
     self.feedListPost = feedList.feeds
 
     DispatchQueue.main.async {
       UIView.performWithoutAnimation {
         sections.forEach { indexPath in
-          self.containerView.feedListCollectionView.reloadSections(IndexSet(integer: indexPath.section))
+          self.containerView.feedListCollectionView.reloadSections(
+            IndexSet(integer: indexPath.section)
+          )
         }
       }
     }
