@@ -8,9 +8,9 @@
 import Foundation
 
 struct FeedMain: Decodable {
-  let isNext: Bool
+  var isNext: Bool
   let total: Int
-  let feeds: [Post]
+  var feeds: [Post]
 
   struct Post: Decodable {
     let id: Int

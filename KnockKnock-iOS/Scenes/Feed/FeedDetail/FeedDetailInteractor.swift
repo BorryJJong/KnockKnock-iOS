@@ -14,6 +14,7 @@ protocol FeedDetailInteractorProtocol {
   
   func getFeedDeatil(feedId: Int)
   func requestDelete(feedId: Int)
+  func requestHide(feedId: Int)
 
   func fetchAllComments(feedId: Int)
 
@@ -23,11 +24,16 @@ protocol FeedDetailInteractorProtocol {
   func requestDeleteComment(commentId: Int)
   
   func requestLike(feedId: Int)
-  func requestLikeCancel(feedId: Int)
   func fetchLikeList(feedId: Int)
   
   func navigateToLikeDetail()
-  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?)
+  func presentBottomSheetView(
+    isMyPost: Bool,
+    deleteAction: (() -> Void)?,
+    hideAction: (() -> Void)?,
+    editAction: (() -> Void)?
+  )
+  func navigateToFeedEdit(feedId: Int)
 }
 
 final class FeedDetailInteractor: FeedDetailInteractorProtocol {
@@ -38,10 +44,18 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   private var likeList: [Like.Info] = []
 
   /// 서버에서 받아온 전체 댓글 array
-  var comments: [Comment] = []
+  private var comments: [Comment] = []
 
   /// view에서 보여지는 댓글 array(open 상태 댓글만)
-  var visibleComments: [Comment] = []
+  private var visibleComments: [Comment] = []
+
+  private var feedDetail: FeedDetail?
+
+  // MARK: - Initialize
+
+  init() {
+    self.setNotification()
+  }
 
   // MARK: - Business logic
 
@@ -49,48 +63,36 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.worker?.getFeedDetail(
       feedId: feedId,
       completionHandler: { [weak self] feedDetail in
+        self?.feedDetail = feedDetail
         self?.presenter?.presentFeedDetail(feedDetail: feedDetail)
       }
     )
   }
   
   func requestLike(feedId: Int) {
-    self.worker?.checkTokenExisted(completionHandler: { isExisted in
-      if isExisted {
-        self.worker?.requestLike(
-          id: feedId,
-          completionHandler: { result in
-            if result {
-              self.presenter?.presentLikeStatus(isToggle: true)
-              NotificationCenter.default.post(
-                name: .postLike,
-                object: feedId
-              )
-            } else {
-              // error
-            }
-          }
-        )
-      } else {
-        self.router?.navigateToLoginView()
-        self.presenter?.presentLikeStatus(isToggle: isExisted)
-      }
-    })
-  }
-  
-  func requestLikeCancel(feedId: Int) {
-    self.worker?.requestLikeCancel(
-      id: feedId,
-      completionHandler: { result in
-        if result {
-          self.presenter?.presentLikeStatus(isToggle: true)
-          NotificationCenter.default.post(
-            name: .postLikeCancel,
-            object: feedId
-          )
-        } else {
-          // error
+    
+    // 비로그인 유저인 경우 로그인 화면으로 이동
+    guard self.worker?.checkTokenExisted() ?? false else {
+      self.router?.navigateToLoginView()
+      return
+    }
+
+    // 좋아요 이벤트 실행한 피드의 좋아요 여부
+    guard let isLike = self.feedDetail?.feed?.isLike else { return }
+
+    self.worker?.requestLike(
+      isLike: isLike,
+      feedId: feedId,
+      completionHandler: { [weak self] isSuccess in
+        guard let self = self else { return }
+        guard isSuccess else {
+          // error handle
+          return
         }
+        self.feedDetail = self.worker?.toggleLike(feedDetail: self.feedDetail)
+
+        self.presenter?.presentLikeStatus(isToggle: isSuccess)
+        self.fetchLikeList(feedId: feedId)
       }
     )
   }
@@ -183,6 +185,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     )
   }
 
+  /// 피드 삭제
   func requestDelete(feedId: Int) {
 
     self.worker?.requestDeleteFeed(
@@ -204,7 +207,32 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       }
     )
   }
-  
+
+  /// 피드 숨기기
+  ///
+  func requestHide(feedId: Int) {
+
+    self.worker?.requestHidePost(
+      feedId: feedId,
+      completionHandler: { isSuccess in
+
+        if isSuccess {
+          self.showAlertView(
+            message: "게시글이 숨김 처리 되었습니다.",
+            confirmAction: {
+              self.navigateToFeedList()
+            }
+          )
+        } else {
+          self.showAlertView(
+            message: "게시글 숨김 처리에 실패하였습니다.",
+            confirmAction: nil
+          )
+        }
+      }
+    )
+  }
+
   // Routing
   
   func navigateToLikeDetail() {
@@ -215,23 +243,50 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.router?.navigateToFeedList()
   }
 
+  func navigateToFeedEdit(feedId: Int) {
+    self.router?.navigateToFeedEdit(feedId: feedId)
+  }
+
   func presentBottomSheetView(
     isMyPost: Bool,
-    deleteAction: (() -> Void)?
+    deleteAction: (() -> Void)?,
+    hideAction: (() -> Void)?,
+    editAction: (() -> Void)?
   ) {
     self.router?.presentBottomSheetView(
       isMyPost: isMyPost,
-      deleteAction: deleteAction
+      deleteAction: deleteAction,
+      hideAction: hideAction,
+      editAction: editAction
     )
   }
 
   func showAlertView(
     message: String,
-    confirmAction: (()-> Void)?
+    confirmAction: (() -> Void)?
   ) {
     self.router?.showAlertView(
       message: message,
       confirmAction: confirmAction
+    )
+  }
+}
+
+extension FeedDetailInteractor {
+
+  /// 수정 된 피드 refetch
+  @objc
+  private func editNotificationEvent(_ notification: Notification) {
+    guard let feedId = notification.object as? Int else { return }
+    self.getFeedDeatil(feedId: feedId)
+  }
+
+  private func setNotification() {
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(self.editNotificationEvent(_:)),
+      name: .feedDetailRefreshAfterEdited,
+      object: nil
     )
   }
 }

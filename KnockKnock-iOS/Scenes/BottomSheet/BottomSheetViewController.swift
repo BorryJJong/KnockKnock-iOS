@@ -16,12 +16,12 @@ protocol BottomSheetViewProtocol: AnyObject {
 final class BottomSheetViewController: BaseViewController<BottomSheetView> {
   
   // MARK: - Properties
+
+  var interactor: BottomSheetInteractorProtocol?
   
   private var options: [String] = []
   var districtsType: DistrictsType?
 
-  var interactor: BottomSheetInteractorProtocol?
-  
   // MARK: - Life Cycle
   
   override func viewDidLoad() {
@@ -153,10 +153,13 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
   ) {
     if let districtsType = self.districtsType {
       switch districtsType {
+
       case .city:
         self.interactor?.passCityDataToShopSearch(city: options[indexPath.row])
+
       case .county:
         self.interactor?.passCountyDataToShopSearch(county: options[indexPath.row])
+
       }
     } else {
       
@@ -182,6 +185,14 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
 
       case .challengePopular:
         self.interactor?.passChallengeSortType(sortType: ChallengeSortType.popular)
+
+      case .postHide:
+        self.showAlert(
+          content: "이 게시글을 숨김 처리 하시겠습니까?",
+          confirmActionCompletion: {
+            self.interactor?.dismissView(actionType: .postHide)
+          }
+        )
         
       default:
         print("Error")

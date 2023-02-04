@@ -29,23 +29,21 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
   var interactor: FeedMainInteractorProtocol?
   var router: FeedMainRouterProtocol?
   
-  var feedMain: FeedMain?
-
-  var feedMainPost: [FeedMain.Post] = [] {
+  private var feedMain: FeedMain? {
     didSet {
-      DispatchQueue.main.async {
-        self.containerView.feedCollectionView.reloadData()
-      }
+      guard let feedPosts = feedMain?.feeds else { return }
+      self.feedMainPost = feedPosts
     }
   }
-  var challengeTitles: [ChallengeTitle] = []
-  var searchKeyword: [SearchKeyword] = []
-  var popularPost: [String] = []
-  
-  var currentPage = 1
-  let pageSize = 9 // pageSize 논의 필요
+  private var feedMainPost: [FeedMain.Post] = []
 
-  var challengeId = 0
+  private var challengeTitles: [ChallengeTitle] = []
+  private var searchKeyword: [SearchKeyword] = []
+  
+  private var currentPage = 1
+  private let pageSize = 9
+
+  private var challengeId = 0
 
   // MARK: - UIs
 
@@ -122,7 +120,10 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
 extension FeedMainViewController: FeedMainViewProtocol {
   func fetchFeedMain(feed: FeedMain) {
     self.feedMain = feed
-    self.feedMainPost += feedMain?.feeds ?? []
+
+    DispatchQueue.main.async {
+      self.containerView.feedCollectionView.reloadData()
+    }
   }
 
   func fetchSearchLog(searchKeyword: [SearchKeyword]) {
@@ -141,7 +142,8 @@ extension FeedMainViewController: FeedMainViewProtocol {
         self.containerView.tagCollectionView.scrollToItem(
           at: index,
           at: .centeredHorizontally,
-          animated: false)
+          animated: false
+        )
       }
     } else {
       self.containerView.tagCollectionView.reloadData()
@@ -224,14 +226,11 @@ extension FeedMainViewController: UICollectionViewDataSource {
       for: indexPath
     )
 
-    if let feedMain = self.feedMain {
-      if !feedMain.isNext {
-        footer.viewMoreButton.isHidden = true
-      } else {
-        footer.viewMoreButton.isHidden = false
-      }
+    guard let feedMain = self.feedMain else {
+      return footer
     }
-    
+
+    footer.viewMoreButton.isHidden = !feedMain.isNext
     footer.viewMoreButton.addTarget(
       self,
       action: #selector(self.didTapViewMoreButton(_:)),

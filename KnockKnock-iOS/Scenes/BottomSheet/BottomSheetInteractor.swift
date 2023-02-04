@@ -31,6 +31,7 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
 
   var deleteAction: (() -> Void)?
   var editAction: (() -> Void)?
+  var hideAction: (() -> Void)?
 
   var feedData: FeedShare?
 
@@ -38,9 +39,14 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
 
   func sharePost() {
     LoadingIndicator.showLoading()
-    self.worker?.sharePost(feedData: self.feedData, completionHandler: { isSuccess, error in
+
+    self.worker?.sharePost(
+      feedData: self.feedData,
+      completionHandler: { isSuccess, error in
+
       if isSuccess {
         self.router?.dismissView(action: nil)
+        
       } else {
         guard let error = error else { return }
 
@@ -75,6 +81,12 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
     case .postDelete:
       self.router?.dismissView(action: self.deleteAction)
 
+    case .postHide:
+      self.router?.dismissView(action: self.hideAction)
+
+    case .postEdit:
+      self.router?.dismissView(action: self.editAction)
+      
     default:
       self.router?.dismissView(action: nil)
     }

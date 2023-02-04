@@ -14,10 +14,17 @@ protocol FeedListInteractorProtocol {
   
   func fetchFeedList(currentPage: Int, pageSize: Int, feedId: Int, challengeId: Int)
   func requestDelete(feedId: Int)
-  
+  func requestHide(feedId: Int)
   func requestLike(feedId: Int)
 
-  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?, feedData: FeedList.Post)
+  func presentBottomSheetView(
+    isMyPost: Bool,
+    deleteAction: (() -> Void)?,
+    hideAction: (() -> Void)?,
+    editAction: (() -> Void)?,
+    feedData: FeedList.Post
+  )
+  func navigateToFeedEdit(feedId: Int)
   func navigateToFeedMain()
   func navigateToFeedDetail(feedId: Int)
   func navigateToCommentView(feedId: Int)
@@ -142,6 +149,37 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       }
     )
   }
+
+  /// 피드 숨기기
+  ///
+  func requestHide(feedId: Int) {
+
+    guard let feedList = self.feedListData else { return }
+    guard !feedList.feeds.isEmpty else { return }
+
+    // 삭제 요청한 피드가 현재 존재하는지 피드인지 체크
+    guard feedList.feeds.contains(where: { feedId == $0.id }) else { return }
+
+    self.worker?.requestHidePost(
+      feedId: feedId,
+      completionHandler: { isSuccess in
+
+        if isSuccess {
+          // 피드 리스트 내 해당 게시글 모두 삭제
+          guard let feedListData = self.worker?.removePostInFeedList(
+            feeds: feedList,
+            id: feedId
+          ) else { return }
+
+          self.presenter?.presentFetchFeedList(feedList: feedListData)
+
+        } else {
+          // error
+        }
+
+      }
+    )
+  }
   
   // Routing
   
@@ -152,7 +190,11 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   func navigateToCommentView(feedId: Int) {
     self.router?.navigateToCommentView(feedId: feedId)
   }
-  
+
+  func navigateToFeedEdit(feedId: Int) {
+    self.router?.navigateToFeedEdit(feedId: feedId)
+  }
+
   func navigateToFeedMain() {
     self.router?.navigateToFeedMain()
   }
@@ -160,11 +202,15 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   func presentBottomSheetView(
     isMyPost: Bool,
     deleteAction: (() -> Void)?,
+    hideAction: (() -> Void)?,
+    editAction: (() -> Void)?,
     feedData: FeedList.Post
   ) {
     self.router?.presentBottomSheetView(
       isMyPost: isMyPost,
       deleteAction: deleteAction,
+      hideAction: hideAction,
+      editAction: editAction,
       feedData: feedData.toShare()
     )
   }
@@ -194,8 +240,32 @@ extension FeedListInteractor {
 
     self.deletePost(feedList: feedList, feedId: feedId)
   }
+
+  /// 피드 수정 이벤트 반영
+  @objc
+  private func editNotificationEvent(_ notification: Notification) {
+    guard let feedData = notification.object as? [String: Any] else { return }
+
+    guard let feedId = feedData["feedId"] as? Int else { return }
+    guard let contents = feedData["contents"] as? String else { return }
+
+    guard let feedList = self.feedListData else { return }
+    guard !feedList.feeds.isEmpty else { return }
+
+    // 수정 요청한 피드가 현재 존재하는지 피드인지 체크
+    guard feedList.feeds.contains(where: { feedId == $0.id }) else { return }
+
+    self.updatePost(
+      feedList: feedList,
+      feedId: feedId,
+      contents: contents
+    )
+  }
   
-  /// Toggle Like
+  /// 좋아요 상태 toggle
+  ///
+  /// - Parameters:
+  ///  - feedId: 피드 아이디
   private func toggleLike(feedId: Int) {
     
     guard let feedListData = self.feedListData else { return }
@@ -222,6 +292,11 @@ extension FeedListInteractor {
     )
   }
 
+  /// 피드 삭제 반영
+  ///
+  /// - Parameters:
+  ///  - feedList: 현재 조회 된 피드 데이터
+  ///  - feedId: 삭제 될 피드 아이디
   private func deletePost(
     feedList: FeedList,
     feedId: Int
@@ -230,6 +305,27 @@ extension FeedListInteractor {
     guard let feedListData = self.worker?.removePostInFeedList(
       feeds: feedList,
       id: feedId
+    ) else { return }
+
+    self.presenter?.presentFetchFeedList(feedList: feedListData)
+  }
+
+  /// 피드 수정 반영
+  ///
+  /// - Parameters:
+  ///  - feedList: 현재 로드 된 피드 리스트 데이터
+  ///  - feedId: 피드 아이디
+  ///  - contents: 수정 된 내용
+  private func updatePost(
+    feedList: FeedList,
+    feedId: Int,
+    contents: String
+  ) {
+    // 피드 리스트 내 해당 게시글 모두 삭제
+    guard let feedListData = self.worker?.updatePostInFeedList(
+      feeds: feedList,
+      feedId: feedId,
+      contents: contents
     ) else { return }
 
     self.presenter?.presentFetchFeedList(feedList: feedListData)
@@ -257,14 +353,7 @@ extension FeedListInteractor {
     NotificationCenter.default.addObserver(
       self,
       selector: #selector(self.likeNotificationEvent(_:)),
-      name: .postLike,
-      object: nil
-    )
-    
-    NotificationCenter.default.addObserver(
-      self,
-      selector: #selector(self.likeNotificationEvent(_:)),
-      name: .postLikeCancel,
+      name: .postLikeToggled,
       object: nil
     )
 
@@ -272,6 +361,13 @@ extension FeedListInteractor {
       self,
       selector: #selector(self.deleteNotificationEvent(_:)),
       name: .feedListRefreshAfterDelete,
+      object: nil
+    )
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(self.editNotificationEvent(_:)),
+      name: .feedListRefreshAfterEdited,
       object: nil
     )
   }

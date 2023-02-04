@@ -27,7 +27,8 @@ final class LikeCell: BaseCollectionViewCell {
   private let profileImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.image = KKDS.Image.ic_person_24
-    
+    $0.layer.cornerRadius = (Metric.profileImageViewWidth / 2)
+    $0.clipsToBounds = true
     $0.contentMode = .scaleToFill
   }
   
@@ -54,6 +55,13 @@ final class LikeCell: BaseCollectionViewCell {
       self.profileImageView.isHidden = false
       self.likeImageView.isHidden = false
     }
+  }
+
+  func setImage(imageUrl: String?) {
+    self.profileImageView.setImageFromStringUrl(
+      stringUrl: imageUrl,
+      defaultImage: KKDS.Image.ic_like_circle_16
+    )
   }
   
   // MARK: - Constraints

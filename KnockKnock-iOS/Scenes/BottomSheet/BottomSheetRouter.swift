@@ -15,11 +15,14 @@ protocol BottomSheetRouterProtocol: AnyObject {
     districtsType: DistrictsType?,
     challengeSortDelegate: ChallengeSortDelegate?,
     deleteAction: (() -> Void)?,
+    hideAction: (() -> Void)?,
+    editAction: (() -> Void)?,
     feedData: FeedShare?,
     isMyPost: Bool?
   ) -> UIViewController
 
   func navigateToShopSearch()
+
   func dismissView(action: (() -> Void)?)
   func presentErrorAlertView(message: String)
 }
@@ -33,6 +36,8 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
     districtsType: DistrictsType? = nil,
     challengeSortDelegate: ChallengeSortDelegate? = nil,
     deleteAction: (() -> Void)? = nil,
+    hideAction: (() -> Void)? = nil,
+    editAction: (() -> Void)? = nil,
     feedData: FeedShare? = nil,
     isMyPost: Bool? = nil
   ) -> UIViewController {
@@ -44,12 +49,14 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
 
     view.interactor = interactor
     view.districtsType = districtsType
+
     interactor.router = router
     interactor.worker = worker
     router.view = view
 
     interactor.districtSelectDelegate = districtSelectDelegate
     interactor.deleteAction = deleteAction
+    interactor.hideAction = hideAction
     interactor.feedData = feedData
 
     if let isMyPost = isMyPost {
@@ -59,6 +66,10 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
     guard challengeSortDelegate != nil else { return view }
     interactor.challengeSortDelegate = challengeSortDelegate
     router.setChallengeBottomSheetOption()
+
+    interactor.deleteAction = deleteAction
+    interactor.editAction = editAction
+    interactor.feedData = feedData
 
     return view
   }
@@ -74,6 +85,12 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
       bottomSheetType: BottomSheetType.small
     )
     view.modalPresentationStyle = .overFullScreen
+  }
+  
+  func navigateToShopSearch() {
+    if let sourceView = self.view as? UIViewController {
+      sourceView.dismiss(animated: true)
+    }
   }
 
   private func setBottomSheetOptions(isMyPost: Bool) {
@@ -111,12 +128,6 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
         self.dismissView(action: nil)
       }
     )
-  }
-
-  func navigateToShopSearch() {
-    guard let sourceView = self.view as? UIViewController else { return }
-
-    sourceView.dismiss(animated: true)
   }
 
   func dismissView(action: (() -> Void)?) {
