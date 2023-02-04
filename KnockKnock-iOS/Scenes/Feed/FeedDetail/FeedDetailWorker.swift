@@ -18,7 +18,7 @@ protocol FeedDetailWorkerProtocol {
     completionHandler: @escaping (Bool) -> Void
   )
 
-  func toggleLike(feedDetail: FeedDetail) -> FeedDetail
+  func toggleLike(feedDetail: FeedDetail?) -> FeedDetail?
   func fetchLikeList(feedId: Int, completionHandler: @escaping ([Like.Info]) -> Void)
 
   func getAllComments(feedId: Int, completionHandler: @escaping ([Comment]) -> Void)
@@ -173,10 +173,10 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
     }
   }
 
-  func toggleLike(feedDetail: FeedDetail) -> FeedDetail {
+  func toggleLike(feedDetail: FeedDetail?) -> FeedDetail? {
     var feedDetail = feedDetail
 
-    feedDetail.feed?.isLike.toggle()
+    feedDetail?.feed?.isLike.toggle()
 
     return feedDetail
   }
