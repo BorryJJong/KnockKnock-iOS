@@ -182,9 +182,12 @@ class FeedWriteView: UIView {
 
   private lazy var toolbar = UIToolbar().then {
     $0.sizeToFit()
-    $0.setItems([self.flexibleSpaceButton,
-                 self.flexibleSpaceButton,
-                 self.doneBarButton], animated: false)
+    $0.setItems([
+      self.flexibleSpaceButton,
+      self.flexibleSpaceButton,
+      self.doneBarButton
+    ], animated: false
+    )
   }
 
   lazy var contentTextView = UITextView().then {
@@ -194,11 +197,9 @@ class FeedWriteView: UIView {
     $0.inputAccessoryView = self.toolbar
   }
 
-  let doneButton = UIButton().then {
+  let doneButton = KKDSLargeButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setTitle("등록", for: .normal)
-    $0.layer.cornerRadius = Metric.buttonCornerRadius
-    $0.backgroundColor = .green50
   }
 
   @objc private func doneBarButtonDidTap(_ sender: UIBarButtonItem) {

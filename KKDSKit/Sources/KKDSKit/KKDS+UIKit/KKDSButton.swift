@@ -7,43 +7,19 @@
 
 import UIKit
 
-public extension KKDS {
-  enum Button { }
-}
+public class KKDSButton: UIButton {
 
-public extension KKDS.Button {
-  static var MiddleButton: UIButton = {
-    let button = UIButton()
+  public init() {
+    super.init(frame: .zero)
+    self.setupConfigure()
+  }
 
-    button.setTitleColor(
-      KKDS.Color.gray80,
-      for: .normal
-    )
-    button.titleLabel?.font = .systemFont(
-      ofSize: 13,
-      weight: .medium
-    )
-    button.layer.borderWidth = 1
-    button.layer.borderColor = KKDS.Color.gray40.cgColor
-    button.layer.cornerRadius = 3
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
 
-    return button
-  }()
-
-  static var LargeButton: UIButton = {
-    let button = UIButton()
-
-    button.setTitleColor(
-      .white,
-      for: .normal
-    )
-    button.titleLabel?.font = .systemFont(
-      ofSize: 15,
-      weight: .medium
-    )
-    button.backgroundColor = KKDS.Color.green50
-    button.layer.cornerRadius = 3
-
-    return button
-  }()
+  func setupConfigure() {
+    self.adjustsImageWhenHighlighted = false
+    self.adjustsImageWhenDisabled = false
+  }
 }

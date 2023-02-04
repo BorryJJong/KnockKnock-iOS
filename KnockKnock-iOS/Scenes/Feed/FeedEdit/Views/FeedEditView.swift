@@ -154,10 +154,9 @@ final class FeedEditView: UIView {
     $0.sizeToFit()
     $0.setItems([
       self.flexibleSpaceButton,
-                 self.flexibleSpaceButton,
-                 self.doneBarButton
-    ],
-                animated: false
+      self.flexibleSpaceButton,
+      self.doneBarButton
+    ], animated: false
     )
   }
 
@@ -167,11 +166,9 @@ final class FeedEditView: UIView {
     $0.inputAccessoryView = self.toolbar
   }
 
-  let doneButton = UIButton().then {
+  let doneButton = KKDSLargeButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setTitle("수정", for: .normal)
-    $0.layer.cornerRadius = Metric.buttonCornerRadius
-    $0.backgroundColor = .green50
   }
 
   // MARK: - Initialize

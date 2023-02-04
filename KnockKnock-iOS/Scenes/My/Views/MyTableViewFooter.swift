@@ -32,7 +32,7 @@ final class MyTableViewFooter: BaseTableViewHeaderFooterView<MySection> {
     $0.backgroundColor = KKDS.Color.gray10
   }
 
-  let signOutButton = KKDS.Button.MiddleButton.then {
+  let signOutButton = KKDSMiddleButton().then {
     $0.setTitle("로그아웃", for: .normal)
   }
 
