@@ -15,6 +15,7 @@ protocol BottomSheetInteractorProtocol {
 
   func passCityDataToShopSearch(city: String)
   func passCountyDataToShopSearch(county: String)
+  func passChallengeSortType(sortType: ChallengeSortType)
 
   func navigateToShopSearch()
   func dismissView(actionType: BottomSheetOption)
@@ -23,6 +24,7 @@ protocol BottomSheetInteractorProtocol {
 final class BottomSheetInteractor: BottomSheetInteractorProtocol {
   
   weak var districtSelectDelegate: DistrictSelectDelegate?
+  weak var challengeSortDelegate: ChallengeSortDelegate?
 
   var router: BottomSheetRouterProtocol?
   var worker: BottomSheetWorkerProtocol?
@@ -63,6 +65,11 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
   func passCountyDataToShopSearch(county: String) {
     self.districtSelectDelegate?.fetchSelectedCounty(county: county)
     self.navigateToShopSearch()
+  }
+
+  func passChallengeSortType(sortType: ChallengeSortType) {
+    self.challengeSortDelegate?.getSortType(sortType: sortType)
+    self.dismissView(actionType: .challengeNew)
   }
 
   func navigateToShopSearch() {

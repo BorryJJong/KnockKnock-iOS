@@ -180,6 +180,12 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
       case .postShare:
         self.interactor?.sharePost()
 
+      case .challengeNew:
+        self.interactor?.passChallengeSortType(sortType: ChallengeSortType.new)
+
+      case .challengePopular:
+        self.interactor?.passChallengeSortType(sortType: ChallengeSortType.popular)
+
       case .postHide:
         self.showAlert(
           content: "이 게시글을 숨김 처리 하시겠습니까?",

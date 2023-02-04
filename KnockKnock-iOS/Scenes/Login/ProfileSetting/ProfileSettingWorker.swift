@@ -87,7 +87,7 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
     
     if let inputedImage = inputedImage {
       newImage = inputedImage.isEqualToImage(image: originImage)
-      ? nil : inputedImage.resize(newWidth: 100)
+      ? nil : inputedImage.resizeSquareImage(newWidth: 100)
     }
     
     completionHandler(newNickname, newImage)

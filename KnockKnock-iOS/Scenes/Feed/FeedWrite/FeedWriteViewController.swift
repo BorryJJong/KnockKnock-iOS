@@ -183,9 +183,10 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
       Task {
         for item in items {
           switch item {
+            
           case let .photo(photo):
+            let resizeImage = photo.image.resizeSquareImage(newWidth: self.containerView.frame.width)
 
-            let resizeImage = photo.image.resize(newWidth: self.containerView.frame.width)
             images.append(resizeImage)
 
             self.selectedImages = images
