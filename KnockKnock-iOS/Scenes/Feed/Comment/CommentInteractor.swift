@@ -54,8 +54,8 @@ final class CommentInteractor: CommentInteractorProtocol {
   func requestAddComment(comment: AddCommentDTO) {
     self.worker?.requestAddComment(
       comment: comment,
-      completionHandler: { success in
-        if success {
+      completionHandler: { isSuccess in
+        if isSuccess {
           self.fetchAllComments(feedId: comment.postId)
         }
       }

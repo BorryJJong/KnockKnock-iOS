@@ -11,11 +11,18 @@ protocol CommentWorkerProtocol {
   func getAllComments(feedId: Int, completionHandler: @escaping ([Comment]) -> Void)
   func requestAddComment(comment: AddCommentDTO, completionHandler: @escaping (Bool) -> Void)
   func fetchVisibleComments(comments: [Comment]?) -> [Comment]
-  func requestDeleteComment(commentId: Int, completionHandler: @escaping () -> Void)
+  func requestDeleteComment(commentId: Int, completionHandler: @escaping (Bool) -> Void)
 }
 
 final class CommentWorker: CommentWorkerProtocol {
-  private let repository: CommentRepositoryProtocol
+
+  typealias OnCompletionHandler = (Bool) -> Void
+
+  // MARK: - Properties
+
+  private let repository: CommentRepositoryProtocol?
+
+  // MARK: - Initialize
 
   init(repository: CommentRepositoryProtocol){
     self.repository = repository
@@ -26,7 +33,7 @@ final class CommentWorker: CommentWorkerProtocol {
     completionHandler: @escaping ([Comment]) -> Void
   ) {
     var data: [Comment] = []
-    self.repository.requestComments(
+    self.repository?.requestComments(
       feedId: feedId,
       completionHandler: { comment in
         let commentData = comment.map { Comment(data: $0) }
@@ -80,25 +87,56 @@ final class CommentWorker: CommentWorkerProtocol {
 
   func requestAddComment(
     comment: AddCommentDTO,
-    completionHandler: @escaping ((Bool) -> Void)
+    completionHandler: @escaping OnCompletionHandler
   ) {
-    self.repository.requestAddComment(
+    self.repository?.requestAddComment(
       comment: comment,
-      completionHandler: { response in
-        completionHandler(response)
+      completionHandler: { isSuccess in
+        if isSuccess {
+          self.postAddNotificationEvent(feedId: comment.postId)
+        }
+        completionHandler(isSuccess)
       }
     )
   }
 
   func requestDeleteComment(
     commentId: Int,
-    completionHandler: @escaping () -> Void
+    completionHandler: @escaping OnCompletionHandler
   ) {
-    self.repository.requestDeleteComment(
+    self.repository?.requestDeleteComment(
       commentId: commentId,
-      completionHandler: { _ in
-        completionHandler()
+      completionHandler: { isSuccess in
+        if isSuccess {
+          self.postDeleteNotificationEvent(feedId: commentId)
+        }
+        completionHandler(isSuccess)
       }
+    )
+  }
+}
+
+extension CommentWorker {
+  private func postAddNotificationEvent(feedId: Int) {
+    NotificationCenter.default.post(
+      name: .feedListCommentRefreshAfterAdd,
+      object: feedId
+    )
+    NotificationCenter.default.post(
+      name: .feedDetailCommentRefreshAfterAdd,
+      object: feedId
+    )
+
+  }
+
+  private func postDeleteNotificationEvent(feedId: Int) {
+    NotificationCenter.default.post(
+      name: .feedListCommentRefreshAfterDelete,
+      object: feedId
+    )
+    NotificationCenter.default.post(
+      name: .feedDetailCommentRefreshAfterDelete,
+      object: feedId
     )
   }
 }
