@@ -66,22 +66,29 @@ final class CommentInteractor: CommentInteractorProtocol {
   func requestDeleteComment(commentId: Int) {
     self.worker?.requestDeleteComment(
       commentId: commentId,
-      completionHandler: {
+      completionHandler: { isSuccess in
 
-        if let index = self.comments.firstIndex(where: { $0.data.id == commentId }) {
-          self.comments[index].data.isDeleted = true
-        }
+        if isSuccess {
 
-        for commentIndex in 0..<self.comments.count {
-          if let replyIndex = self.comments[commentIndex].data.reply?.firstIndex(where: {
-            $0.id == commentId
-          }) {
-            self.comments[commentIndex].data.reply?[replyIndex].isDeleted = true
+          if let index = self.comments.firstIndex(where: { $0.data.id == commentId }) {
+            self.comments[index].data.isDeleted = true
           }
-        }
 
-        self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
-        self.presenter?.presentVisibleComments(comments: self.visibleComments)
+          for commentIndex in 0..<self.comments.count {
+            if let replyIndex = self.comments[commentIndex].data.reply?.firstIndex(where: {
+              $0.id == commentId
+            }) {
+              self.comments[commentIndex].data.reply?[replyIndex].isDeleted = true
+            }
+          }
+
+          self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
+          self.presenter?.presentVisibleComments(comments: self.visibleComments)
+
+        } else {
+          
+          // error handle
+        }
       }
     )
   }
