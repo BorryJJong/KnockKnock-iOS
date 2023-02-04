@@ -76,7 +76,10 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
           // error handle
           return
         }
+        self.feedDetail = self.worker?.toggleLike(feedDetail: self.feedDetail)
+
         self.presenter?.presentLikeStatus(isToggle: isSuccess)
+        self.fetchLikeList(feedId: feedId)
       }
     )
   }
