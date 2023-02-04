@@ -150,6 +150,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   }
   
   @objc private func moreButtonDidTap(_ sender: UIButton) {
+
     guard let isMyPost = self.feedDetail?.feed?.isWriter,
           let feedId = self.feedDetail?.feed?.id else { return }
 
@@ -157,6 +158,9 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       isMyPost: isMyPost,
       deleteAction: {
         self.interactor?.requestDelete(feedId: feedId)
+      },
+      editAction: {
+        self.interactor?.navigateToFeedEdit(feedId: feedId)
       }
     )
   }

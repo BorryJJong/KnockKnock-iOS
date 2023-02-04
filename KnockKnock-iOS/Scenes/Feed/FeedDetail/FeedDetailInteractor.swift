@@ -26,7 +26,12 @@ protocol FeedDetailInteractorProtocol {
   func fetchLikeList(feedId: Int)
   
   func navigateToLikeDetail()
-  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?)
+  func navigateToFeedEdit(feedId: Int)
+  func presentBottomSheetView(
+    isMyPost: Bool,
+    deleteAction: (() -> Void)?,
+    editAction: (() -> Void)?
+  )
 }
 
 final class FeedDetailInteractor: FeedDetailInteractorProtocol {
@@ -43,6 +48,12 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   private var visibleComments: [Comment] = []
 
   private var feedDetail: FeedDetail?
+
+  // MARK: - Initialize
+
+  init() {
+    self.setNotification()
+  }
 
   // MARK: - Business logic
 
@@ -201,13 +212,19 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.router?.navigateToFeedList()
   }
 
+  func navigateToFeedEdit(feedId: Int) {
+    self.router?.navigateToFeedEdit(feedId: feedId)
+  }
+
   func presentBottomSheetView(
     isMyPost: Bool,
-    deleteAction: (() -> Void)?
+    deleteAction: (() -> Void)?,
+    editAction: (() -> Void)?
   ) {
     self.router?.presentBottomSheetView(
       isMyPost: isMyPost,
-      deleteAction: deleteAction
+      deleteAction: deleteAction,
+      editAction: editAction
     )
   }
 
@@ -218,6 +235,25 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.router?.showAlertView(
       message: message,
       confirmAction: confirmAction
+    )
+  }
+}
+
+extension FeedDetailInteractor {
+
+  /// 수정 된 피드 refetch
+  @objc
+  private func editNotificationEvent(_ notification: Notification) {
+    guard let feedId = notification.object as? Int else { return }
+    self.getFeedDeatil(feedId: feedId)
+  }
+
+  private func setNotification() {
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(self.editNotificationEvent(_:)),
+      name: .feedDetailRefreshAfterEdited,
+      object: nil
     )
   }
 }
