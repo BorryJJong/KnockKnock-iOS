@@ -154,7 +154,7 @@ extension FeedMainViewController: FeedMainViewProtocol {
   /// 피드 데이터 re-fatch
   func reloadFeedMain() {
     self.interactor?.fetchFeedMain(
-      currentPage: self.currentPage,
+      currentPage: 1,
       pageSize: self.pageSize,
       challengeId: self.challengeId
     )
