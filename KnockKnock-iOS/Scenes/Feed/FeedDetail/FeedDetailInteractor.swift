@@ -124,7 +124,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
         guard let self = self else { return }
 
         self.comments = comments
-        self.fetchAllCommentsCount(comments: comments)
+        self.fetchAllCommentsCount()
         self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
         self.presenter?.presentVisibleComments(comments: self.visibleComments)
       }
@@ -144,11 +144,15 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   }
 
   /// 답글을 포함한 모든 댓글의 수 (헤더에 표기)
-  func fetchAllCommentsCount(comments: [Comment]?) {
-    var count = comments?.count ?? 0
+  func fetchAllCommentsCount() {
+    var count = self.comments.filter { !$0.data.isDeleted }.count
 
-    comments?.forEach {
-      count += $0.data.reply?.count ?? 0
+    self.comments.forEach { comment in
+      count += comment.data.reply
+        .map {
+          $0.filter { !$0.isDeleted }
+        }?
+        .count ?? 0
     }
     self.presenter?.presentAllCommentsCount(allCommentsCount: count)
   }
@@ -171,7 +175,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
 
         if isSuccess {
           self.fetchAllComments(feedId: comment.postId)
-          self.fetchAllCommentsCount(comments: self.comments)
+          self.fetchAllCommentsCount()
 
         } else {
           self.showAlertView(
@@ -207,7 +211,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
 
           self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
           self.presenter?.presentVisibleComments(comments: self.visibleComments)
-          self.fetchAllCommentsCount(comments: self.visibleComments)
+          self.fetchAllCommentsCount()
 
         } else {
           
