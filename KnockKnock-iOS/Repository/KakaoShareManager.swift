@@ -31,18 +31,17 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
   func shareChallenge(challengeData: ChallengeDetail) -> (Bool, KakaoShareErrorType?) {
 
     let appLink = Link(
-      iosExecutionParams: [ShareQueryItemType.challenge.rawValue: "\(challengeData.challenge.id)"]
+      iosExecutionParams: [ShareQueryItemType.challenge.rawValue: "\(challengeData.id)"]
     )
 
     let button = Button(title: "앱에서 보기", link: appLink)
 
-    if let image = challengeData.content.image,
-       let imageUrl = URL(string: image) {
+    if let imageUrl = URL(string: challengeData.contentImage) {
 
       let content = Content(
-        title: "\(challengeData.challenge.title)",
+        title: "\(challengeData.title)",
         imageUrl: imageUrl,
-        description: challengeData.challenge.subTitle,
+        description: challengeData.subTitle,
         link: appLink
       )
 
@@ -56,7 +55,7 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
     } else {
 
       let textTemplate = generateTextTemplate(
-        text: challengeData.challenge.title,
+        text: challengeData.title,
         appLink: appLink,
         shareQueryItemType: .challenge
       )

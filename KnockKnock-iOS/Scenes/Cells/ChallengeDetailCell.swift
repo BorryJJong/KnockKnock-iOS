@@ -8,6 +8,7 @@
 import UIKit
 
 import SnapKit
+import KKDSKit
 import Then
 
 final class ChallengeDetailCell: BaseCollectionViewCell {
@@ -62,11 +63,10 @@ final class ChallengeDetailCell: BaseCollectionViewCell {
   func bind(challengeContent: ChallengeDetail.SubContents, isLast: Bool) {
     self.titleLabel.text = challengeContent.title
 
-    self.exampleImageView.image = challengeContent.image
-      .flatMap { URL(string: $0) }
-      .flatMap { try? Data(contentsOf: $0) }
-      .flatMap { UIImage(data: $0) }
-    ?? UIImage(named: "challenge")
+    self.exampleImageView.setImageFromStringUrl(
+      stringUrl: challengeContent.image,
+      defaultImage: KKDS.Image.ic_no_data_60
+    )
 
     self.contentsLabel.setLineHeight(
       content: challengeContent.content,

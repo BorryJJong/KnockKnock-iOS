@@ -24,7 +24,11 @@ struct Challenge: Decodable {
 }
 
 struct ChallengeDetail: Decodable {
-  let challenge: Header
+  let id: Int
+  let title: String
+  let subTitle: String
+  let contentImage: String
+
   let participants: [Participant]
   let content: Content
 
@@ -33,14 +37,7 @@ struct ChallengeDetail: Decodable {
     let image: String?
   }
 
-  struct Header: Decodable {
-    let id: Int
-    let title: String
-    let subTitle: String
-  }
-
   struct Content: Decodable {
-    let image: String?
     let rule: [String]
     let subContents: [SubContents]
   }

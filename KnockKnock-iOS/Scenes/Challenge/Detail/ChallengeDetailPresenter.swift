@@ -18,5 +18,6 @@ final class ChallengeDetailPresenter: ChallengeDetailPresenterProtocol {
 
   func presentChallengeDetail(challengeDetail: ChallengeDetail) {
     self.view?.getChallengeDetail(challengeDetail: challengeDetail)
+    LoadingIndicator.hideLoading()
   }
 }
