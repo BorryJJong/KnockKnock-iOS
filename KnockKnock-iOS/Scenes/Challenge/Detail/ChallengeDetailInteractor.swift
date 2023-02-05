@@ -21,11 +21,13 @@ final class ChallengeDetailInteractor: ChallengeDetailInteractorProtocol {
   var router: ChallengeDetailRouter?
   
   func getChallengeDetail(challengeId: Int) {
+    LoadingIndicator.showLoading()
     self.worker?.getChallengeDetail(
       challengeId: challengeId,
       completionHandler: { challengeDetail in
         self.presenter?.presentChallengeDetail(challengeDetail: challengeDetail)
-      })
+      }
+    )
   }
   
   func shareChallenge(challengeData: ChallengeDetail?) {

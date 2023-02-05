@@ -55,6 +55,13 @@ protocol FeedListWorkerProtocol {
     feeds: FeedList,
     id: Int
   ) -> FeedList
+
+  func convertComment(
+    feeds: FeedList,
+    id: Int,
+    replyCount: Int?,
+    isAdded: Bool
+  ) -> FeedList
 }
 
 final class FeedListWorker: FeedListWorkerProtocol {
@@ -90,6 +97,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
     )
   }
 
+  /// 게시글 숨기기
   func requestHidePost(
     feedId: Int,
     completionHandler: @escaping (Bool) -> Void
@@ -253,6 +261,30 @@ final class FeedListWorker: FeedListWorkerProtocol {
     return feeds
   }
 
+  /// 댓글 등록/삭제 이벤트 발생 시 댓글 개수 업데이트한 피드 데이터 반환
+  ///
+  /// - Parameters:
+  ///  - feeds: 피드 리스트 데이터
+  ///  - id: 피드 아이디
+  func convertComment(
+    feeds: FeedList,
+    id: Int,
+    replyCount: Int? = nil,
+    isAdded: Bool
+  ) -> FeedList {
+    var feeds = feeds
+
+    self.changedSections(feeds: feeds.feeds, id: id).forEach {
+      self.setCommentCount(
+        feed: &feeds.feeds[$0],
+        replyCount: replyCount ?? 0,
+        isAdded: isAdded
+      )
+    }
+
+    return feeds
+  }
+
   /// 현재 좋아요 상태 체크 (좋아요/비좋아요)
   ///
   /// - Parameters:
@@ -295,6 +327,31 @@ extension FeedListWorker {
     feed.blogLikeCount = " \(newTitle)"
   }
 
+  /// 댓글 개수
+  ///
+  /// - Parameters:
+  ///  - feed: 피드 리스트 데이터
+  ///  - isAdded: 등록 이벤트(true), 삭제 이벤트(false)
+  private func setCommentCount(
+    feed: inout FeedList.Post,
+    replyCount: Int,
+    isAdded: Bool
+  ) {
+    let title = feed.blogCommentCount.filter { $0.isNumber }
+
+    let numberFormatter = NumberFormatter().then {
+      $0.numberStyle = .decimal
+    }
+
+    guard let titleToInt = Int(title) else { return }
+
+    let number = isAdded ? (titleToInt + 1) : (titleToInt - (replyCount + 1))
+    let newTitle = numberFormatter.string(from: NSNumber(value: number)) ?? ""
+
+    feed.blogCommentCount = " \(newTitle)"
+  }
+
+  /// Notification
   private func postResfreshNotificationEvent(feedId: Int) {
     NotificationCenter.default.post(
       name: .feedMainRefreshAfterDelete,

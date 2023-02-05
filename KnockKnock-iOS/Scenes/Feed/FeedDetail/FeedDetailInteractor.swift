@@ -21,7 +21,7 @@ protocol FeedDetailInteractorProtocol {
   func fetchVisibleComments(comments: [Comment])
   func requestAddComment(comment: AddCommentDTO)
   func toggleVisibleStatus(commentId: Int)
-  func requestDeleteComment(commentId: Int)
+  func requestDeleteComment(feedId: Int, commentId: Int)
   
   func requestLike(feedId: Int)
   func fetchLikeList(feedId: Int)
@@ -63,8 +63,11 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.worker?.getFeedDetail(
       feedId: feedId,
       completionHandler: { [weak self] feedDetail in
-        self?.feedDetail = feedDetail
-        self?.presenter?.presentFeedDetail(feedDetail: feedDetail)
+        
+        guard let self = self else { return }
+
+        self.feedDetail = feedDetail
+        self.presenter?.presentFeedDetail(feedDetail: feedDetail)
       }
     )
   }
@@ -84,7 +87,9 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       isLike: isLike,
       feedId: feedId,
       completionHandler: { [weak self] isSuccess in
+
         guard let self = self else { return }
+
         guard isSuccess else {
           // error handle
           return
@@ -101,8 +106,11 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.worker?.fetchLikeList(
       feedId: feedId,
       completionHandler: { [weak self] likeList in
-        self?.likeList = likeList
-        self?.presenter?.presentLikeList(like: likeList)
+
+        guard let self = self else { return }
+
+        self.likeList = likeList
+        self.presenter?.presentLikeList(like: likeList)
       }
     )
   }
@@ -112,9 +120,13 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.worker?.getAllComments(
       feedId: feedId,
       completionHandler: { [weak self] comments in
-        self?.comments = comments
-        self?.visibleComments = self?.worker?.fetchVisibleComments(comments: self?.comments) ?? []
-        self?.presenter?.presentVisibleComments(comments: self?.visibleComments ?? [])
+
+        guard let self = self else { return }
+
+        self.comments = comments
+        self.fetchAllCommentsCount()
+        self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
+        self.presenter?.presentVisibleComments(comments: self.visibleComments)
       }
     )
   }
@@ -132,11 +144,15 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   }
 
   /// 답글을 포함한 모든 댓글의 수 (헤더에 표기)
-  func fetchAllCommentsCount(comments: [Comment]) {
-    var count = comments.count
-    
-    comments.forEach {
-      count += $0.data.reply?.count ?? 0
+  func fetchAllCommentsCount() {
+    var count = self.comments.filter { !$0.data.isDeleted }.count
+
+    self.comments.forEach { comment in
+      count += comment.data.reply
+        .map {
+          $0.filter { !$0.isDeleted }
+        }?
+        .count ?? 0
     }
     self.presenter?.presentAllCommentsCount(allCommentsCount: count)
   }
@@ -153,34 +169,57 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   ) {
     self.worker?.requestAddComment(
       comment: comment,
-      completionHandler: { success in
-        if success {
+      completionHandler: { [weak self] isSuccess in
+
+        guard let self = self else { return }
+
+        if isSuccess {
           self.fetchAllComments(feedId: comment.postId)
+          self.fetchAllCommentsCount()
+
+        } else {
+          self.showAlertView(
+            message: "댓글 등록에 실패하였습니다.",
+            confirmAction: nil
+          )
         }
       }
     )
   }
 
   /// 댓글 삭제
-  func requestDeleteComment(commentId: Int) {
+  func requestDeleteComment(feedId: Int, commentId: Int) {
     self.worker?.requestDeleteComment(
+      feedId: feedId,
       commentId: commentId,
-      completionHandler: {
+      completionHandler: { [weak self] isSuccess in
 
-        if let index = self.comments.firstIndex(where: { $0.data.id == commentId }) {
-          self.comments[index].data.isDeleted = true
-        }
+        guard let self = self else { return }
 
-        for commentIndex in 0..<self.comments.count {
-          if let replyIndex = self.comments[commentIndex].data.reply?.firstIndex(where: {
-            $0.id == commentId
-          }) {
-            self.comments[commentIndex].data.reply?[replyIndex].isDeleted = true
+        if isSuccess {
+          if let index = self.comments.firstIndex(where: { $0.data.id == commentId }) {
+            self.comments[index].data.isDeleted = true
           }
-        }
+          
+          for commentIndex in 0..<self.comments.count {
+            if let replyIndex = self.comments[commentIndex].data.reply?.firstIndex(where: {
+              $0.id == commentId
+            }) {
+              self.comments[commentIndex].data.reply?[replyIndex].isDeleted = true
+            }
+          }
 
-        self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
-        self.presenter?.presentVisibleComments(comments: self.visibleComments)
+          self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
+          self.presenter?.presentVisibleComments(comments: self.visibleComments)
+          self.fetchAllCommentsCount()
+
+        } else {
+          
+          self.showAlertView(
+            message: "댓글 삭제에 실패하였습니다.",
+            confirmAction: nil
+          )
+        }
       }
     )
   }
@@ -190,7 +229,10 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
 
     self.worker?.requestDeleteFeed(
       feedId: feedId,
-      completionHandler: { isSuccess in
+      completionHandler: { [weak self] isSuccess in
+
+        guard let self = self else { return }
+
         if isSuccess {
           self.showAlertView(
             message: "게시글이 삭제되었습니다.",
@@ -214,7 +256,9 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
 
     self.worker?.requestHidePost(
       feedId: feedId,
-      completionHandler: { isSuccess in
+      completionHandler: { [weak self] isSuccess in
+
+        guard let self = self else { return }
 
         if isSuccess {
           self.showAlertView(

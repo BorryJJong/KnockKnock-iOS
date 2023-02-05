@@ -10,8 +10,7 @@ import Foundation
 import Then
 import KKDSKit
 
-protocol CommentViewProtocol {
-  var router: CommentRouterProtocol? { get set }
+protocol CommentViewProtocol: AnyObject {
   var interactor: CommentInteractorProtocol? { get set }
   
   func fetchVisibleComments(comments: [Comment])
@@ -20,8 +19,7 @@ protocol CommentViewProtocol {
 final class CommentViewController: BaseViewController<CommentView> {
   
   // MARK: - Properties
-  
-  var router: CommentRouterProtocol?
+
   var interactor: CommentInteractorProtocol?
   
   var visibleComments: [Comment] = [] {
@@ -138,7 +136,7 @@ final class CommentViewController: BaseViewController<CommentView> {
   // MARK: - Button action
   
   @objc private func exitButtonDidTap(_ sender: UIButton) {
-    self.router?.dismissCommentView(view: self)
+    self.interactor?.dismissCommentView()
   }
   
   @objc private func replyWriteButtonDidTap(_ sender: UIButton) {
@@ -154,7 +152,10 @@ final class CommentViewController: BaseViewController<CommentView> {
     self.showAlert(
       content: "댓글을 삭제하시겠습니까?",
       confirmActionCompletion: {
-        self.interactor?.requestDeleteComment(commentId: commentId)
+        self.interactor?.requestDeleteComment(
+          feedId: self.feedId,
+          commentId: commentId
+        )
       }
     )
   }

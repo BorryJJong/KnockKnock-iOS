@@ -8,14 +8,36 @@
 import Foundation
 
 protocol CommentWorkerProtocol {
-  func getAllComments(feedId: Int, completionHandler: @escaping ([Comment]) -> Void)
-  func requestAddComment(comment: AddCommentDTO, completionHandler: @escaping (Bool) -> Void)
+  func getAllComments(
+    feedId: Int,
+    completionHandler: @escaping ([Comment]) -> Void
+  )
+  func requestAddComment(
+    comment: AddCommentDTO,
+    completionHandler: @escaping (Bool) -> Void
+  )
   func fetchVisibleComments(comments: [Comment]?) -> [Comment]
-  func requestDeleteComment(commentId: Int, completionHandler: @escaping () -> Void)
+  func requestDeleteComment(
+    feedId: Int,
+    commentId: Int,
+    comments: [Comment],
+    completionHandler: @escaping (Bool) -> Void
+  )
+  func convertDeletedComment(
+    comments: [Comment],
+    commentId: Int
+  ) -> [Comment]
 }
 
 final class CommentWorker: CommentWorkerProtocol {
-  private let repository: CommentRepositoryProtocol
+
+  typealias OnCompletionHandler = (Bool) -> Void
+
+  // MARK: - Properties
+
+  private let repository: CommentRepositoryProtocol?
+
+  // MARK: - Initialize
 
   init(repository: CommentRepositoryProtocol){
     self.repository = repository
@@ -26,7 +48,7 @@ final class CommentWorker: CommentWorkerProtocol {
     completionHandler: @escaping ([Comment]) -> Void
   ) {
     var data: [Comment] = []
-    self.repository.requestComments(
+    self.repository?.requestComments(
       feedId: feedId,
       completionHandler: { comment in
         let commentData = comment.map { Comment(data: $0) }
@@ -80,25 +102,89 @@ final class CommentWorker: CommentWorkerProtocol {
 
   func requestAddComment(
     comment: AddCommentDTO,
-    completionHandler: @escaping ((Bool) -> Void)
+    completionHandler: @escaping OnCompletionHandler
   ) {
-    self.repository.requestAddComment(
+    self.repository?.requestAddComment(
       comment: comment,
-      completionHandler: { response in
-        completionHandler(response)
+      completionHandler: { isSuccess in
+        if isSuccess {
+          self.postAddNotificationEvent(feedId: comment.postId)
+        }
+        completionHandler(isSuccess)
       }
     )
   }
 
   func requestDeleteComment(
+    feedId: Int,
     commentId: Int,
-    completionHandler: @escaping () -> Void
+    comments: [Comment],
+    completionHandler: @escaping OnCompletionHandler
   ) {
-    self.repository.requestDeleteComment(
+
+    self.repository?.requestDeleteComment(
       commentId: commentId,
-      completionHandler: { _ in
-        completionHandler()
+      completionHandler: { isSuccess in
+        if isSuccess {
+
+          guard let commentIndex = comments.firstIndex(
+            where: { $0.data.id == commentId }
+          ) else { return }
+
+          self.postDeleteNotificationEvent(
+            feedId: feedId,
+            replyCount: comments[commentIndex].data.replyCnt
+          )
+
+        }
+        completionHandler(isSuccess)
       }
+    )
+  }
+
+  func convertDeletedComment(
+    comments: [Comment],
+    commentId: Int
+  ) -> [Comment] {
+    var comments = comments
+
+    if let index = comments.firstIndex(where: { $0.data.id == commentId }) {
+      comments[index].data.isDeleted = true
+    }
+
+    for commentIndex in 0..<comments.count {
+      if let replyIndex = comments[commentIndex].data.reply?.firstIndex(where: {
+        $0.id == commentId
+      }) {
+        comments[commentIndex].data.reply?[replyIndex].isDeleted = true
+      }
+    }
+
+    return comments
+  }
+}
+
+extension CommentWorker {
+  private func postAddNotificationEvent(feedId: Int) {
+    NotificationCenter.default.post(
+      name: .feedListCommentRefreshAfterAdd,
+      object: feedId
+    )
+  }
+
+  private func postDeleteNotificationEvent(
+    feedId: Int,
+    replyCount: Int
+  ) {
+
+    let object: [String: Any] = [
+      "feedId": feedId,
+      "replyCount": replyCount
+    ]
+
+    NotificationCenter.default.post(
+      name: .feedListCommentRefreshAfterDelete,
+      object: object
     )
   }
 }

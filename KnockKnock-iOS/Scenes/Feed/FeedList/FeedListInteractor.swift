@@ -241,6 +241,72 @@ extension FeedListInteractor {
     self.deletePost(feedList: feedList, feedId: feedId)
   }
 
+  /// 댓글 등록 시 댓글 개수 업데이트
+  @objc
+  private func addCommentNotificationEvent(_ notification: Notification) {
+    guard let feedId = notification.object as? Int else { return }
+
+    guard let feedListData = self.feedListData else { return }
+    guard !feedListData.feeds.isEmpty else { return }
+
+    // 현재 존재하는지 피드인지 체크
+    guard feedListData.feeds.contains(where: { feedId == $0.id }) else { return }
+
+    guard let convertFeedList = self.worker?.convertComment(
+      feeds: feedListData,
+      id: feedId,
+      replyCount: nil,
+      isAdded: true
+    ) else { return }
+
+    self.feedListData = convertFeedList
+
+    let updatedSections: [IndexPath] = self.worker?.changedSections(
+      feeds: feedListData.feeds,
+      id: feedId
+    )
+      .map { IndexPath(item: 0, section: $0) } ?? []
+
+    self.presenter?.presentUpdateFeedList(
+      feedList: convertFeedList,
+      sections: updatedSections
+    )
+  }
+
+  /// 댓글 삭제시 댓글 개수 업데이트
+  @objc
+  private func deleteCommentNotificationEvent(_ notification: Notification) {
+    guard let data = notification.object as? [String: Any],
+          let feedId = data["feedId"] as? Int,
+          let replyCount = data["replyCount"] as? Int else { return }
+
+    guard let feedListData = self.feedListData else { return }
+    guard !feedListData.feeds.isEmpty else { return }
+
+    // 현재 존재하는지 피드인지 체크
+    guard feedListData.feeds.contains(where: { feedId == $0.id }) else { return }
+
+    guard let convertFeedList = self.worker?.convertComment(
+      feeds: feedListData,
+      id: feedId,
+      replyCount: replyCount,
+      isAdded: false
+    ) else { return }
+
+    self.feedListData = convertFeedList
+
+    let updatedSections: [IndexPath] = self.worker?.changedSections(
+      feeds: feedListData.feeds,
+      id: feedId
+    )
+      .map { IndexPath(item: 0, section: $0) } ?? []
+
+    self.presenter?.presentUpdateFeedList(
+      feedList: convertFeedList,
+      sections: updatedSections
+    )
+  }
+
   /// 피드 수정 이벤트 반영
   @objc
   private func editNotificationEvent(_ notification: Notification) {
@@ -371,6 +437,20 @@ extension FeedListInteractor {
     ) { _ in
       self.presenter?.reloadFeedList()
     }
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(self.addCommentNotificationEvent(_:)),
+      name: .feedListCommentRefreshAfterAdd,
+      object: nil
+    )
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(self.deleteCommentNotificationEvent(_:)),
+      name: .feedListCommentRefreshAfterDelete,
+      object: nil
+    )
 
     NotificationCenter.default.addObserver(
       self,
