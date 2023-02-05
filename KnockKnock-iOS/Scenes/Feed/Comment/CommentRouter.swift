@@ -11,6 +11,10 @@ protocol CommentRouterProtocol {
   static func createCommentView(feedId: Int) -> UIViewController
   func dismissCommentView(view: CommentViewProtocol)
   func presentBottomSheetView(source: CommentViewProtocol)
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class CommentRouter: CommentRouterProtocol {
@@ -54,6 +58,20 @@ final class CommentRouter: CommentRouterProtocol {
         bottomSheetViewController,
         animated: false,
         completion: nil
+      )
+    }
+  }
+
+  /// AlertView
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  ) {
+    if let sourceView = self.view as? UIViewController {
+      sourceView.showAlert(
+        content: message,
+        isCancelActive: false,
+        confirmActionCompletion: confirmAction
       )
     }
   }

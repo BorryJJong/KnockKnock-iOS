@@ -14,7 +14,14 @@ protocol CommentInteractorProtocol {
   func fetchAllComments(feedId: Int)
   func requestAddComment(comment: AddCommentDTO)
   func toggleVisibleStatus(commentId: Int)
-  func requestDeleteComment(feedId: Int, commentId: Int)
+  func requestDeleteComment(
+    feedId: Int,
+    commentId: Int
+  )
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class CommentInteractor: CommentInteractorProtocol {
@@ -55,15 +62,25 @@ final class CommentInteractor: CommentInteractorProtocol {
     self.worker?.requestAddComment(
       comment: comment,
       completionHandler: { isSuccess in
+
         if isSuccess {
           self.fetchAllComments(feedId: comment.postId)
+
+        } else {
+          self.showAlertView(
+            message: "댓글 등록에 실패하였습니다.",
+            confirmAction: nil
+          )
         }
       }
     )
   }
 
   /// 댓글 삭제
-  func requestDeleteComment(feedId: Int, commentId: Int) {
+  func requestDeleteComment(
+    feedId: Int,
+    commentId: Int
+  ) {
     self.worker?.requestDeleteComment(
       feedId: feedId,
       commentId: commentId,
@@ -87,10 +104,23 @@ final class CommentInteractor: CommentInteractorProtocol {
           self.presenter?.presentVisibleComments(comments: self.visibleComments)
 
         } else {
-          
-          // error handle
+
+          self.showAlertView(
+            message: "댓글 삭제에 실패하였습니다.",
+            confirmAction: nil
+          )
         }
       }
+    )
+  }
+
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  ) {
+    self.router?.showAlertView(
+      message: message,
+      confirmAction: confirmAction
     )
   }
 }

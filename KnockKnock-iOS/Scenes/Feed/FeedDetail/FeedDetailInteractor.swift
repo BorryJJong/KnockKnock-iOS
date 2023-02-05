@@ -154,10 +154,17 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   ) {
     self.worker?.requestAddComment(
       comment: comment,
-      completionHandler: { success in
-        if success {
+      completionHandler: { isSuccess in
+
+        if isSuccess {
           self.fetchAllComments(feedId: comment.postId)
           self.fetchAllCommentsCount(comments: self.comments)
+
+        } else {
+          self.showAlertView(
+            message: "댓글 등록에 실패하였습니다.",
+            confirmAction: nil
+          )
         }
       }
     )
@@ -186,9 +193,13 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
           self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
           self.presenter?.presentVisibleComments(comments: self.visibleComments)
           self.fetchAllCommentsCount(comments: self.visibleComments)
+
         } else {
           
-          //error
+          self.showAlertView(
+            message: "댓글 삭제에 실패하였습니다.",
+            confirmAction: nil
+          )
         }
       }
     )
