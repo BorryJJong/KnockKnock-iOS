@@ -24,10 +24,21 @@ protocol FeedListWorkerProtocol {
     feedId: Int,
     completionHandler: @escaping (Bool) -> Void
   )
+  func requestHidePost(
+    feedId: Int,
+    completionHandler: @escaping (Bool) -> Void
+  )
   func removePostInFeedList(
     feeds: FeedList,
     id: Int
   ) -> FeedList
+  
+  func updatePostInFeedList(
+    feeds: FeedList,
+    feedId: Int,
+    contents: String
+  ) -> FeedList
+  
   func checkTokenExisted() -> Bool
   
   func checkCurrentLikeState(
@@ -68,7 +79,8 @@ final class FeedListWorker: FeedListWorkerProtocol {
     self.likeRepository = likeRepository
     self.userDataManager = userDataManager
   }
-  
+
+  /// 피드 삭제 api call
   func requestDeleteFeed(
     feedId: Int,
     completionHandler: @escaping OnCompletionHandler
@@ -76,20 +88,45 @@ final class FeedListWorker: FeedListWorkerProtocol {
     self.feedRepository.requestDeleteFeed(
       feedId: feedId,
       completionHandler: { isSuccess in
-        self.postResfreshNotificationEvent(feedId: feedId)
+        if isSuccess {
+          self.postResfreshNotificationEvent(feedId: feedId)
+        }
         completionHandler(isSuccess)
       }
     )
   }
 
+  func requestHidePost(
+    feedId: Int,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
+    self.feedRepository.requestHidePost(
+      feedId: feedId,
+      completionHandler: { isSuccess in
+        if isSuccess {
+          self.postResfreshNotificationEvent(feedId: feedId)
+        }
+        completionHandler(isSuccess)
+      }
+    )
+  }
+
+  /// 이미 조회 된 피드 리스트 내에서 게시글 삭제하기
+  ///
+  /// - Parameters:
+  ///  - feeds: 조회 된 피드 데이터
+  ///  - id: 피드 아이디
   func removePostInFeedList(
     feeds: FeedList,
     id: Int
   ) -> FeedList {
     var feeds = feeds
-
-    let sections = self.changedSections(feeds: feeds.feeds, id: id)
-
+    
+    let sections = self.changedSections(
+      feeds: feeds.feeds,
+      id: id
+    )
+    
     for _ in 0..<sections.count {
       if let feedIndex = feeds.feeds.firstIndex(where: {
         $0.id == id
@@ -97,14 +134,47 @@ final class FeedListWorker: FeedListWorkerProtocol {
         feeds.feeds.remove(at: feedIndex)
       }
     }
-
+    
     return feeds
   }
-  
+
+  /// 조회 된 피드 데이터 수정
+  ///
+  /// - Parameters:
+  ///  - feeds: 조회 된 피드 데이터
+  ///  - feedId: 피드 아이디
+  ///  - contents: 수정된 내용
+  func updatePostInFeedList(
+    feeds: FeedList,
+    feedId: Int,
+    contents: String
+  ) -> FeedList {
+    var feeds = feeds
+    
+    let sections = self.changedSections(
+      feeds: feeds.feeds,
+      id: feedId
+    )
+    
+    for section in sections {
+      feeds.feeds[section].content = contents
+    }
+    
+    return feeds
+  }
+
+  /// 토큰 존재 여부 판별을 통해 로그인 된 회원 인지 판별
   func checkTokenExisted() -> Bool {
     return self.userDataManager.checkTokenIsExisted()
   }
-  
+
+  /// 피드 리스트 조회 api call
+  ///
+  /// - Parameters:
+  ///  - currentPage: 현재 페이지 넘버
+  ///  - count: 조회할 개수
+  ///  - feedId: 첫 번째(시작) 피드 아이디
+  ///  - challengeId: 챌린지 아이디
   func fetchFeedList(
     currentPage: Int,
     count: Int,
@@ -122,7 +192,12 @@ final class FeedListWorker: FeedListWorkerProtocol {
       }
     )
   }
-  
+
+  /// 좋아요 api call
+  ///
+  /// - Parameters:
+  ///  - isLike: 좋아요 상태
+  ///  - feedId: 피드 아이디
   func requestLike(
     isLike: Bool,
     feedId: Int,
@@ -144,7 +219,12 @@ final class FeedListWorker: FeedListWorkerProtocol {
       )
     }
   }
-  
+
+  /// 이벤트(ex, 수정/삭제/좋아요..)가 발생한 게시글 섹션 넘버 찾기
+  ///
+  /// - Parameters:
+  ///  - feeds: 조회 된 피드 리스트
+  ///  - id: 이벤트가 발생한 피드 아이디
   func changedSections(
     feeds: [FeedList.Post],
     id: Int
@@ -158,11 +238,17 @@ final class FeedListWorker: FeedListWorkerProtocol {
     
     return sections
   }
-  
+
+  /// 피드 상세에서 좋아요 이벤트 발생 시 좋아요 상태를 반영한 피드 데이터 반환
+  ///
+  /// - Parameters:
+  ///  - feeds: 피드 리스트 데이터
+  ///  - id: 피드 아이디
   func convertLikeFeed(
     feeds: FeedList,
     id: Int
   ) -> FeedList {
+
     var feeds = feeds
     
     self.changedSections(feeds: feeds.feeds, id: id).forEach {
@@ -187,6 +273,12 @@ final class FeedListWorker: FeedListWorkerProtocol {
     return feeds
   }
   
+
+  /// 현재 좋아요 상태 체크 (좋아요/비좋아요)
+  ///
+  /// - Parameters:
+  ///  - feedList: 피드 리스트 데이터
+  ///  - id: 피드 아이디
   func checkCurrentLikeState(
     feedList: [FeedList.Post],
     feedId: Int
@@ -202,11 +294,13 @@ final class FeedListWorker: FeedListWorkerProtocol {
 
 // MARK: - Inner Action
 extension FeedListWorker {
-  
+
+  /// 좋아요 toggle
   private func setToggleLike(feed: inout FeedList.Post) {
     feed.isLike.toggle()
   }
-  
+
+  /// 좋아요 개수
   private func setLikeCount(feed: inout FeedList.Post) {
     let title = feed.blogLikeCount.filter { $0.isNumber }
     
