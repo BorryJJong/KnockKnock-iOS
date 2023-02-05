@@ -96,7 +96,6 @@ final class ChallengeCell: BaseCollectionViewCell {
 
   private let newChallengeLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-//    $0.frame = CGRect(x: 0, y: 0, width: Metric.newChallengeLabelWidth, height: Metric.newChallengeLabelHeight)
     $0.backgroundColor = .green50
     $0.textAlignment = .center
     $0.layer.cornerRadius = 3
@@ -108,7 +107,6 @@ final class ChallengeCell: BaseCollectionViewCell {
 
   private let hotChallengeLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-//    $0.frame = CGRect(x: 0, y: 0, width: Metric.newChallengeLabelWidth, height: Metric.newChallengeLabelHeight)
     $0.backgroundColor = UIColor(red: 236/255, green: 124/255, blue: 108/255, alpha: 1)
     $0.textAlignment = .center
     $0.layer.cornerRadius = 3
@@ -128,7 +126,9 @@ final class ChallengeCell: BaseCollectionViewCell {
   
   // MARK: - Bind
   
-  func bind(data: Challenge) {
+  func bind(data: Challenge.ChallengeData?) {
+    guard let data = data else { return }
+    
     self.titleLabel.text = data.title
     self.contentsLabel.text = data.subTitle
     self.challengeImageView.setImageFromStringUrl(

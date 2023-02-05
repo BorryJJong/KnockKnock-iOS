@@ -40,14 +40,12 @@ final class ChallengeView: UIView {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.textColor = .green50
     $0.font = .boldSystemFont(ofSize: 13)
-    $0.text = "총 10개"
   }
 
   let numOfNewChallengeLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.textColor = .gray60
     $0.font = .systemFont(ofSize: 13)
-    $0.text = " • 신규 2개"
   }
 
   let sortChallengeButton = UIButton().then {
@@ -85,6 +83,11 @@ final class ChallengeView: UIView {
     case .popular:
       self.sortChallengeButton.setTitle("인기순", for: .normal)
     }
+  }
+
+  func setCountLabel(totalCount: Int?, newCount: Int?) {
+    self.totalChallengeLabel.text = "총 \(totalCount ?? 0)개"
+    self.numOfNewChallengeLabel.text = " • 신규 \(newCount ?? 0)개"
   }
 
   // MARK: - Constraints
