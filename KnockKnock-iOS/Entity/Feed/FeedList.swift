@@ -21,7 +21,7 @@ struct FeedList: Decodable {
     let imageScale: String = "1:1"
     var blogLikeCount: String
     var isLike: Bool
-    let blogCommentCount: String
+    var blogCommentCount: String
     let blogImages: [Image]
     let isWriter: Bool
 
