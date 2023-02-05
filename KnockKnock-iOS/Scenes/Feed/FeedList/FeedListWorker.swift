@@ -59,6 +59,7 @@ protocol FeedListWorkerProtocol {
   func convertComment(
     feeds: FeedList,
     id: Int,
+    replyCount: Int?,
     isAdded: Bool
   ) -> FeedList
 }
@@ -268,12 +269,17 @@ final class FeedListWorker: FeedListWorkerProtocol {
   func convertComment(
     feeds: FeedList,
     id: Int,
+    replyCount: Int? = nil,
     isAdded: Bool
   ) -> FeedList {
     var feeds = feeds
 
     self.changedSections(feeds: feeds.feeds, id: id).forEach {
-      self.setCommentCount(feed: &feeds.feeds[$0], isAdded: isAdded)
+      self.setCommentCount(
+        feed: &feeds.feeds[$0],
+        replyCount: replyCount ?? 0,
+        isAdded: isAdded
+      )
     }
 
     return feeds
@@ -328,6 +334,7 @@ extension FeedListWorker {
   ///  - isAdded: 등록 이벤트(true), 삭제 이벤트(false)
   private func setCommentCount(
     feed: inout FeedList.Post,
+    replyCount: Int,
     isAdded: Bool
   ) {
     let title = feed.blogCommentCount.filter { $0.isNumber }
@@ -338,7 +345,7 @@ extension FeedListWorker {
 
     guard let titleToInt = Int(title) else { return }
 
-    let number = isAdded ? (titleToInt + 1) : (titleToInt - 1)
+    let number = isAdded ? (titleToInt + 1) : (titleToInt - (replyCount + 1))
     let newTitle = numberFormatter.string(from: NSNumber(value: number)) ?? ""
 
     feed.blogCommentCount = " \(newTitle)"

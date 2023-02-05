@@ -8,10 +8,25 @@
 import Foundation
 
 protocol CommentWorkerProtocol {
-  func getAllComments(feedId: Int, completionHandler: @escaping ([Comment]) -> Void)
-  func requestAddComment(comment: AddCommentDTO, completionHandler: @escaping (Bool) -> Void)
+  func getAllComments(
+    feedId: Int,
+    completionHandler: @escaping ([Comment]) -> Void
+  )
+  func requestAddComment(
+    comment: AddCommentDTO,
+    completionHandler: @escaping (Bool) -> Void
+  )
   func fetchVisibleComments(comments: [Comment]?) -> [Comment]
-  func requestDeleteComment(feedId: Int, commentId: Int, completionHandler: @escaping (Bool) -> Void)
+  func requestDeleteComment(
+    feedId: Int,
+    commentId: Int,
+    comments: [Comment],
+    completionHandler: @escaping (Bool) -> Void
+  )
+  func convertDeletedComment(
+    comments: [Comment],
+    commentId: Int
+  ) -> [Comment]
 }
 
 final class CommentWorker: CommentWorkerProtocol {
@@ -103,17 +118,49 @@ final class CommentWorker: CommentWorkerProtocol {
   func requestDeleteComment(
     feedId: Int,
     commentId: Int,
+    comments: [Comment],
     completionHandler: @escaping OnCompletionHandler
   ) {
+
     self.repository?.requestDeleteComment(
       commentId: commentId,
       completionHandler: { isSuccess in
         if isSuccess {
-          self.postDeleteNotificationEvent(feedId: feedId)
+
+          guard let commentIndex = comments.firstIndex(
+            where: { $0.data.id == commentId }
+          ) else { return }
+
+          self.postDeleteNotificationEvent(
+            feedId: feedId,
+            replyCount: comments[commentIndex].data.replyCnt
+          )
+
         }
         completionHandler(isSuccess)
       }
     )
+  }
+
+  func convertDeletedComment(
+    comments: [Comment],
+    commentId: Int
+  ) -> [Comment] {
+    var comments = comments
+
+    if let index = comments.firstIndex(where: { $0.data.id == commentId }) {
+      comments[index].data.isDeleted = true
+    }
+
+    for commentIndex in 0..<comments.count {
+      if let replyIndex = comments[commentIndex].data.reply?.firstIndex(where: {
+        $0.id == commentId
+      }) {
+        comments[commentIndex].data.reply?[replyIndex].isDeleted = true
+      }
+    }
+
+    return comments
   }
 }
 
@@ -125,10 +172,19 @@ extension CommentWorker {
     )
   }
 
-  private func postDeleteNotificationEvent(feedId: Int) {
+  private func postDeleteNotificationEvent(
+    feedId: Int,
+    replyCount: Int
+  ) {
+
+    let object: [String: Any] = [
+      "feedId": feedId,
+      "replyCount": replyCount
+    ]
+
     NotificationCenter.default.post(
       name: .feedListCommentRefreshAfterDelete,
-      object: feedId
+      object: object
     )
   }
 }

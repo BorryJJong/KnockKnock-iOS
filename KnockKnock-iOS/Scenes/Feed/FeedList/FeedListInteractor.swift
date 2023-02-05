@@ -241,6 +241,7 @@ extension FeedListInteractor {
     self.deletePost(feedList: feedList, feedId: feedId)
   }
 
+  /// 댓글 등록 시 댓글 개수 업데이트
   @objc
   private func addCommentNotificationEvent(_ notification: Notification) {
     guard let feedId = notification.object as? Int else { return }
@@ -254,6 +255,7 @@ extension FeedListInteractor {
     guard let convertFeedList = self.worker?.convertComment(
       feeds: feedListData,
       id: feedId,
+      replyCount: nil,
       isAdded: true
     ) else { return }
 
@@ -271,9 +273,12 @@ extension FeedListInteractor {
     )
   }
 
+  /// 댓글 삭제시 댓글 개수 업데이트
   @objc
   private func deleteCommentNotificationEvent(_ notification: Notification) {
-    guard let feedId = notification.object as? Int else { return }
+    guard let data = notification.object as? [String: Any],
+          let feedId = data["feedId"] as? Int,
+          let replyCount = data["replyCount"] as? Int else { return }
 
     guard let feedListData = self.feedListData else { return }
     guard !feedListData.feeds.isEmpty else { return }
@@ -284,6 +289,7 @@ extension FeedListInteractor {
     guard let convertFeedList = self.worker?.convertComment(
       feeds: feedListData,
       id: feedId,
+      replyCount: replyCount,
       isAdded: false
     ) else { return }
 

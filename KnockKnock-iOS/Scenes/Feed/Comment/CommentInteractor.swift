@@ -102,23 +102,19 @@ final class CommentInteractor: CommentInteractorProtocol {
     self.worker?.requestDeleteComment(
       feedId: feedId,
       commentId: commentId,
+      comments: self.comments,
       completionHandler: { [weak self] isSuccess in
 
         guard let self = self else { return }
 
         if isSuccess {
 
-          if let index = self.comments.firstIndex(where: { $0.data.id == commentId }) {
-            self.comments[index].data.isDeleted = true
-          }
-
-          for commentIndex in 0..<self.comments.count {
-            if let replyIndex = self.comments[commentIndex].data.reply?.firstIndex(where: {
-              $0.id == commentId
-            }) {
-              self.comments[commentIndex].data.reply?[replyIndex].isDeleted = true
-            }
-          }
+          guard let convertComments = self.worker?.convertDeletedComment(
+            comments: self.comments,
+            commentId: commentId
+          ) else { return }
+          
+          self.comments = convertComments
 
           self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
           self.presenter?.presentVisibleComments(comments: self.visibleComments)
