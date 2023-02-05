@@ -21,7 +21,7 @@ protocol FeedDetailInteractorProtocol {
   func fetchVisibleComments(comments: [Comment])
   func requestAddComment(comment: AddCommentDTO)
   func toggleVisibleStatus(commentId: Int)
-  func requestDeleteComment(commentId: Int)
+  func requestDeleteComment(feedId: Int, commentId: Int)
   
   func requestLike(feedId: Int)
   func fetchLikeList(feedId: Int)
@@ -162,25 +162,31 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   }
 
   /// 댓글 삭제
-  func requestDeleteComment(commentId: Int) {
+  func requestDeleteComment(feedId: Int, commentId: Int) {
     self.worker?.requestDeleteComment(
+      feedId: feedId,
       commentId: commentId,
-      completionHandler: {
-
-        if let index = self.comments.firstIndex(where: { $0.data.id == commentId }) {
-          self.comments[index].data.isDeleted = true
-        }
-
-        for commentIndex in 0..<self.comments.count {
-          if let replyIndex = self.comments[commentIndex].data.reply?.firstIndex(where: {
-            $0.id == commentId
-          }) {
-            self.comments[commentIndex].data.reply?[replyIndex].isDeleted = true
+      completionHandler: { isSuccess in
+        
+        if isSuccess {
+          if let index = self.comments.firstIndex(where: { $0.data.id == commentId }) {
+            self.comments[index].data.isDeleted = true
           }
+          
+          for commentIndex in 0..<self.comments.count {
+            if let replyIndex = self.comments[commentIndex].data.reply?.firstIndex(where: {
+              $0.id == commentId
+            }) {
+              self.comments[commentIndex].data.reply?[replyIndex].isDeleted = true
+            }
+          }
+          
+          self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
+          self.presenter?.presentVisibleComments(comments: self.visibleComments)
+        } else {
+          
+          //error
         }
-
-        self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
-        self.presenter?.presentVisibleComments(comments: self.visibleComments)
       }
     )
   }

@@ -123,20 +123,11 @@ extension CommentWorker {
       name: .feedListCommentRefreshAfterAdd,
       object: feedId
     )
-    NotificationCenter.default.post(
-      name: .feedDetailCommentRefreshAfterAdd,
-      object: feedId
-    )
-
   }
 
   private func postDeleteNotificationEvent(feedId: Int) {
     NotificationCenter.default.post(
       name: .feedListCommentRefreshAfterDelete,
-      object: feedId
-    )
-    NotificationCenter.default.post(
-      name: .feedDetailCommentRefreshAfterDelete,
       object: feedId
     )
   }

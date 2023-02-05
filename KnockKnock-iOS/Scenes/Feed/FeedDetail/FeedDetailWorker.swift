@@ -35,8 +35,9 @@ protocol FeedDetailWorkerProtocol {
     completionHandler: @escaping (Bool) -> Void
   )
   func requestDeleteComment(
+    feedId: Int,
     commentId: Int,
-    completionHandler: @escaping () -> Void
+    completionHandler: @escaping (Bool) -> Void
   )
 
   func requestDeleteFeed(
@@ -83,7 +84,7 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
 
   func requestDeleteFeed(
     feedId: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping OnCompletionHandler
   ) {
     self.feedRepository.requestDeleteFeed(
       feedId: feedId,
@@ -99,7 +100,7 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
 
   func requestHidePost(
     feedId: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping OnCompletionHandler
   ) {
     self.feedRepository.requestHidePost(
       feedId: feedId,
@@ -230,24 +231,33 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
 
   func requestAddComment(
     comment: AddCommentDTO,
-    completionHandler: @escaping ((Bool) -> Void)
+    completionHandler: @escaping OnCompletionHandler
   ) {
     self.commentRepository.requestAddComment(
       comment: comment,
-      completionHandler: { response in
-        completionHandler(response)
+      completionHandler: { isSuccess in
+        
+        if isSuccess {
+          self.postCommentAddNotificationEvent(feedId: comment.postId)
+        }
+        completionHandler(isSuccess)
       }
     )
   }
 
   func requestDeleteComment(
+    feedId: Int,
     commentId: Int,
-    completionHandler: @escaping () -> Void
+    completionHandler: @escaping OnCompletionHandler
   ) {
     self.commentRepository.requestDeleteComment(
       commentId: commentId,
-      completionHandler: { _ in
-        completionHandler()
+      completionHandler: { isSuccess in
+
+        if isSuccess {
+          self.postCommentDeleteNotificationEvent(feedId: feedId)
+        }
+        completionHandler(isSuccess)
       }
     )
   }
@@ -264,6 +274,20 @@ extension FeedDetailWorker {
     
     NotificationCenter.default.post(
       name: .feedMainRefreshAfterDelete,
+      object: feedId
+    )
+  }
+
+  private func postCommentAddNotificationEvent(feedId: Int) {
+    NotificationCenter.default.post(
+      name: .feedListCommentRefreshAfterAdd,
+      object: feedId
+    )
+  }
+
+  private func postCommentDeleteNotificationEvent(feedId: Int) {
+    NotificationCenter.default.post(
+      name: .feedListCommentRefreshAfterDelete,
       object: feedId
     )
   }
