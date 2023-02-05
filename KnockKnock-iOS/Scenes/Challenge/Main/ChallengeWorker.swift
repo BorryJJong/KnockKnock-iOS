@@ -8,7 +8,7 @@
 import Foundation
 
 protocol ChallengeWorkerProtocol: AnyObject {
-  func fetchChallenge(sortType: ChallengeSortType, completionHandler: @escaping ([Challenge]) -> Void)
+  func fetchChallenge(sortType: ChallengeSortType, completionHandler: @escaping (Challenge) -> Void)
 }
 
 final class ChallengeWorker: ChallengeWorkerProtocol {
@@ -21,7 +21,7 @@ final class ChallengeWorker: ChallengeWorkerProtocol {
   
   func fetchChallenge(
     sortType: ChallengeSortType,
-    completionHandler: @escaping ([Challenge]) -> Void
+    completionHandler: @escaping (Challenge) -> Void
   ) {
     repository.fetchChellenge(
       sortType: sortType.rawValue,

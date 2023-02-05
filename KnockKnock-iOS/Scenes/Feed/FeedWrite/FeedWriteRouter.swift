@@ -10,7 +10,7 @@ import UIKit
 protocol FeedWriteRouterProtocol: AnyObject {
   var view: FeedWriteViewProtocol? { get set }
 
-  static func createFeedWrite() -> UIViewController
+  static func createFeedWrite(challengeId: Int?) -> UIViewController
 
   func dismissFeedWriteView()
   func presenetFeedWriteCompletedView()
@@ -29,7 +29,7 @@ final class FeedWriteRouter: FeedWriteRouterProtocol {
 
   weak var view: FeedWriteViewProtocol?
 
-  static func createFeedWrite() -> UIViewController {
+  static func createFeedWrite(challengeId: Int? = nil) -> UIViewController {
     let view = FeedWriteViewController()
     let interactor = FeedWriteInteractor()
     let presenter = FeedWritePresenter()
@@ -45,6 +45,7 @@ final class FeedWriteRouter: FeedWriteRouterProtocol {
 
     router.shopSearchDelegate = interactor
     router.propertyDelegate = interactor
+    interactor.challengeId = challengeId
 
     return view
   }

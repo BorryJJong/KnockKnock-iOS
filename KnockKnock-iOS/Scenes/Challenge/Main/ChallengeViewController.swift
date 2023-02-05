@@ -12,7 +12,7 @@ import KKDSKit
 protocol ChallengeViewProtocol: AnyObject {
   var interactor: ChallengeInteractorProtocol? { get set }
 
-  func fetchChallenges(challenges: [Challenge], sortType: ChallengeSortType)
+  func fetchChallenges(challenges: Challenge, sortType: ChallengeSortType)
 }
 
 final class ChallengeViewController: BaseViewController<ChallengeView> {
@@ -21,7 +21,7 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
   
   var interactor: ChallengeInteractorProtocol?
 
-  var challenges: [Challenge] = []
+  var challenges: Challenge?
   
   // MARK: - Life cycle
   
@@ -74,11 +74,15 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
 // MARK: - Challenge View Protocol
 
 extension ChallengeViewController: ChallengeViewProtocol {
-  func fetchChallenges(challenges: [Challenge], sortType: ChallengeSortType) {
+  func fetchChallenges(challenges: Challenge, sortType: ChallengeSortType) {
     self.challenges = challenges
 
     DispatchQueue.main.async {
       self.containerView.setSortButton(sortType: sortType)
+      self.containerView.setCountLabel(
+        totalCount: self.challenges?.challengeTotalCount,
+        newCount: self.challenges?.challengeNewCount
+      )
       self.containerView.challengeCollectionView.reloadData()
     }
   }
@@ -90,7 +94,7 @@ extension ChallengeViewController: UICollectionViewDataSource {
   func collectionView(
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int) -> Int {
-    return self.challenges.count
+      return self.challenges?.challengeTotalCount ?? 0
   }
 
   func collectionView(
@@ -103,7 +107,7 @@ extension ChallengeViewController: UICollectionViewDataSource {
       for: indexPath)
     as! ChallengeCell
 
-    let challenge = self.challenges[indexPath.row]
+    let challenge = self.challenges?.challenges[indexPath.row]
 
     cell.backgroundColor = .white
 
@@ -118,8 +122,11 @@ extension ChallengeViewController: UICollectionViewDelegate {
     _ collectionView: UICollectionView,
     didSelectItemAt indexPath: IndexPath
   ) {
+
+    guard let id = challenges?.challenges[indexPath.item].id else { return }
+
     self.interactor?.navigateToChallengeDetail(
-      challengeId: challenges[indexPath.item].id
+      challengeId: id
     )
   }
 }
