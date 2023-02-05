@@ -67,6 +67,12 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
       $0.registHeaderView(type: ChallengeDetailHeaderCollectionReusableView.self)
       $0.collectionViewLayout = self.containerView.challengeCollectionViewLayout()
     }
+
+    self.containerView.participateButton.addTarget(
+      self,
+      action: #selector(self.participateButtonDidTap(_:)),
+      for: .touchUpInside
+    )
   }
 
   private func setNavigationItem() {
@@ -92,12 +98,19 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
     self.navigationItem.rightBarButtonItems = [self.shareBarButtonItem, self.homeBarButtonItem]
   }
 
-  @objc func tapBackBarButton(_ sender: UIBarButtonItem) {
-    self.navigationController?.popViewController(animated: true)
+  @objc
+  func tapBackBarButton(_ sender: UIBarButtonItem) {
+    self.interactor?.popChallengeDetailView()
   }
 
-  @objc func shareBarButtonDidTap(_ sender: UIBarButtonItem) {
+  @objc
+  func shareBarButtonDidTap(_ sender: UIBarButtonItem) {
     self.interactor?.shareChallenge(challengeData: self.challengeDetail)
+  }
+
+  @objc
+  func participateButtonDidTap(_ sender: UIButton) {
+    self.interactor?.presentToFeedWrite(challengeId: self.challengeId)
   }
 }
 
