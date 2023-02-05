@@ -65,7 +65,6 @@ final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableVie
 
   private let mainImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.image = UIImage(named: "challenge")
   }
 
   private let participantView = UIView().then {
@@ -96,7 +95,6 @@ final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableVie
   private let titleLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.tintColor = .black
-    $0.text = "#GOGO 챌린지"
     $0.font = .systemFont(ofSize: 22, weight: .bold)
     $0.numberOfLines = 1
     $0.textAlignment = .left
@@ -150,18 +148,18 @@ final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableVie
     self.waysStackView.subviews.forEach {
       $0.removeFromSuperview()
     }
-    self.mainImageView.image = challengeDetail.content.image
-      .flatMap { URL(string: $0) }
-      .flatMap { try? Data(contentsOf: $0) }
-      .flatMap { UIImage(data: $0) }
-    ?? UIImage(named: "challenge")
+    self.mainImageView.setImageFromStringUrl(
+      stringUrl: challengeDetail.contentImage,
+      defaultImage: KKDS.Image.ic_no_data_60
+    )
     
     self.summaryLabel.setLineHeight(
-      content: challengeDetail.challenge.subTitle,
+      content: challengeDetail.subTitle,
       font: .systemFont(ofSize: 14, weight: .regular)
     )
     self.setParticipantsImageStackView(participants: challengeDetail.participants)
-    self.titleLabel.text = challengeDetail.challenge.title
+    self.setParticipantLabel(count: challengeDetail.participants.count)
+    self.titleLabel.text = challengeDetail.title
     self.setWayStackView(ways: challengeDetail.content.rule)
   }
 
@@ -170,12 +168,15 @@ final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableVie
   private func setParticipantsImageStackView(participants: [ChallengeDetail.Participant]) {
     var images: [String?] = []
 
-    participants.forEach {
-      images.append($0.image)
+    Task {
+      participants.forEach {
+        images.append($0.image)
+      }
+      
+      self.participantImageStackView.removeAllSubViews()
+      
+      await self.participantImageStackView.addParticipantImageViews(images: images)
     }
-    self.participantImageStackView.removeAllSubViews()
-    self.participantImageStackView.addParticipantImageViews(images: images)
-    self.setParticipantLabel(count: participants.count)
   }
 
   private func setParticipantLabel(count: Int) {

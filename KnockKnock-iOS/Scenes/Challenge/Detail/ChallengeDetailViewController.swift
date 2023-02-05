@@ -20,13 +20,9 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
   // MARK: - Properties
 
   var interactor: ChallengeDetailInteractorProtocol?
-
+  
   var challengeId: Int = 12
-  var challengeDetail: ChallengeDetail? {
-    didSet {
-      self.containerView.challengeDetailCollectionView.reloadData()
-    }
-  }
+  var challengeDetail: ChallengeDetail?
 
   lazy var backBarButtonItem = UIBarButtonItem(
     image: KKDS.Image.ic_back_24_wh,
@@ -110,6 +106,10 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
 extension ChallengeDetailViewController: ChallengeDetailViewProtocol {
   func getChallengeDetail(challengeDetail: ChallengeDetail) {
     self.challengeDetail = challengeDetail
+    
+    DispatchQueue.main.async {
+      self.containerView.challengeDetailCollectionView.reloadData()
+    }
   }
 }
 
@@ -136,7 +136,7 @@ extension ChallengeDetailViewController: UICollectionViewDataSource {
 
     if let challengeDetail = self.challengeDetail {
       let isLast = challengeDetail.content.subContents.count - 1 == indexPath.item
-      print(isLast)
+
       cell.bind(challengeContent: challengeDetail.content.subContents[indexPath.item], isLast: isLast)
     }
 
@@ -154,6 +154,7 @@ extension ChallengeDetailViewController: UICollectionViewDataSource {
     )
 
     if let challengeDetail = self.challengeDetail {
+
       header.bind(challengeDetail: challengeDetail)
     }
 

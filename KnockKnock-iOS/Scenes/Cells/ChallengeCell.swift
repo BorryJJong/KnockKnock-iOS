@@ -51,7 +51,6 @@ final class ChallengeCell: BaseCollectionViewCell {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.layer.cornerRadius = 5
     $0.clipsToBounds = true
-    $0.image = UIImage(named: "challenge")
   }
   private let titleLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
@@ -97,6 +96,7 @@ final class ChallengeCell: BaseCollectionViewCell {
 
   private let newChallengeLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
+//    $0.frame = CGRect(x: 0, y: 0, width: Metric.newChallengeLabelWidth, height: Metric.newChallengeLabelHeight)
     $0.backgroundColor = .green50
     $0.textAlignment = .center
     $0.layer.cornerRadius = 3
@@ -108,6 +108,7 @@ final class ChallengeCell: BaseCollectionViewCell {
 
   private let hotChallengeLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
+//    $0.frame = CGRect(x: 0, y: 0, width: Metric.newChallengeLabelWidth, height: Metric.newChallengeLabelHeight)
     $0.backgroundColor = UIColor(red: 236/255, green: 124/255, blue: 108/255, alpha: 1)
     $0.textAlignment = .center
     $0.layer.cornerRadius = 3
@@ -116,24 +117,40 @@ final class ChallengeCell: BaseCollectionViewCell {
     $0.font = .systemFont(ofSize: 10, weight: .heavy)
     $0.text = "HOT"
   }
+
+  private let badgeStackView = UIStackView().then {
+    $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.axis = .horizontal
+    $0.alignment = .center
+    $0.distribution = .equalSpacing
+    $0.spacing = 5
+  }
   
   // MARK: - Bind
   
   func bind(data: Challenge) {
     self.titleLabel.text = data.title
     self.contentsLabel.text = data.subTitle
+    self.challengeImageView.setImageFromStringUrl(
+      stringUrl: data.mainImage,
+      defaultImage: KKDS.Image.ic_no_data_60
+    )
+
+    self.setBadges(isHot: data.isHotBadge, isNew: data.isNewBadge)
     self.setParticipantsImageStackView(participants: data.participants)
-    self.setParticipantLabel(count: data.participants.count)
+    self.setParticipantLabel(count: data.participantCount)
   }
 
   private func setParticipantsImageStackView(participants: [Challenge.Participant]) {
     var images: [String?] = []
 
-    participants.forEach {
-      images.append($0.image)
+    Task {
+      participants.forEach {
+        images.append($0.image)
+      }
+      self.participantImageStackView.removeAllSubViews()
+      await self.participantImageStackView.addParticipantImageViews(images: images)
     }
-    self.participantImageStackView.removeAllSubViews()
-    self.participantImageStackView.addParticipantImageViews(images: images)
   }
 
   private func setParticipantLabel(count: Int) {
@@ -144,11 +161,24 @@ final class ChallengeCell: BaseCollectionViewCell {
     }
   }
 
+  private func setBadges(
+    isHot: Bool,
+    isNew: Bool
+  ) {
+    if isNew {
+      self.badgeStackView.addArrangedSubview(self.newChallengeLabel)
+    }
+    if isHot {
+      self.badgeStackView.addArrangedSubview(self.hotChallengeLabel)
+    }
+  }
+
   // MARK: - Configure
   
   override func setupConstraints() {
     [self.participantLabel, self.participantImageStackView].addSubViews(self.participantView)
-    [self.challengeImageView, self.participantView, self.seperatorLineView, self.titleLabel, self.contentsLabel, self.newChallengeLabel, self.hotChallengeLabel].addSubViews(self.contentView)
+    [self.challengeImageView, self.participantView, self.seperatorLineView, self.titleLabel, self.contentsLabel,
+     self.badgeStackView].addSubViews(self.contentView)
     
     NSLayoutConstraint.activate([
       self.challengeImageView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
@@ -156,13 +186,13 @@ final class ChallengeCell: BaseCollectionViewCell {
       self.challengeImageView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
       self.challengeImageView.heightAnchor.constraint(equalTo: self.contentView.widthAnchor, multiplier: 0.75),
 
-      self.newChallengeLabel.topAnchor.constraint(equalTo: self.challengeImageView.topAnchor, constant: Metric.newChallengeLabelTopMargin),
-      self.newChallengeLabel.leadingAnchor.constraint(equalTo: self.challengeImageView.leadingAnchor, constant: Metric.newChallengeLabelLeadingMargin),
+      self.badgeStackView.topAnchor.constraint(equalTo: self.challengeImageView.topAnchor, constant: Metric.newChallengeLabelTopMargin),
+      self.badgeStackView.leadingAnchor.constraint(equalTo: self.challengeImageView.leadingAnchor, constant: Metric.newChallengeLabelLeadingMargin),
+      self.badgeStackView.heightAnchor.constraint(equalToConstant: Metric.newChallengeLabelHeight),
+
       self.newChallengeLabel.widthAnchor.constraint(equalToConstant: Metric.newChallengeLabelWidth),
       self.newChallengeLabel.heightAnchor.constraint(equalToConstant: Metric.newChallengeLabelHeight),
 
-      self.hotChallengeLabel.topAnchor.constraint(equalTo: self.challengeImageView.topAnchor, constant: Metric.hotChallengeLabelTopMargin),
-      self.hotChallengeLabel.leadingAnchor.constraint(equalTo: self.newChallengeLabel.trailingAnchor, constant: Metric.hotChallengeLabelLeadingMargin),
       self.hotChallengeLabel.widthAnchor.constraint(equalToConstant: Metric.hotChallengeLabelWidth),
       self.hotChallengeLabel.heightAnchor.constraint(equalToConstant: Metric.hotChallengeLabelHeight),
 
