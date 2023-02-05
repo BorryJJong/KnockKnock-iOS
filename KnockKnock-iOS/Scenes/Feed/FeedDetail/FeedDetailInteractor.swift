@@ -113,6 +113,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       feedId: feedId,
       completionHandler: { [weak self] comments in
         self?.comments = comments
+        self?.fetchAllCommentsCount(comments: comments)
         self?.visibleComments = self?.worker?.fetchVisibleComments(comments: self?.comments) ?? []
         self?.presenter?.presentVisibleComments(comments: self?.visibleComments ?? [])
       }
@@ -132,10 +133,10 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   }
 
   /// 답글을 포함한 모든 댓글의 수 (헤더에 표기)
-  func fetchAllCommentsCount(comments: [Comment]) {
-    var count = comments.count
-    
-    comments.forEach {
+  func fetchAllCommentsCount(comments: [Comment]?) {
+    var count = comments?.count ?? 0
+
+    comments?.forEach {
       count += $0.data.reply?.count ?? 0
     }
     self.presenter?.presentAllCommentsCount(allCommentsCount: count)
@@ -156,6 +157,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       completionHandler: { success in
         if success {
           self.fetchAllComments(feedId: comment.postId)
+          self.fetchAllCommentsCount(comments: self.comments)
         }
       }
     )
@@ -180,9 +182,10 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
               self.comments[commentIndex].data.reply?[replyIndex].isDeleted = true
             }
           }
-          
+
           self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
           self.presenter?.presentVisibleComments(comments: self.visibleComments)
+          self.fetchAllCommentsCount(comments: self.visibleComments)
         } else {
           
           //error
