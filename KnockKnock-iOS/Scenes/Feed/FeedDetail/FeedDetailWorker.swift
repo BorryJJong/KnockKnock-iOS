@@ -35,8 +35,9 @@ protocol FeedDetailWorkerProtocol {
     completionHandler: @escaping (Bool) -> Void
   )
   func requestDeleteComment(
+    feedId: Int,
     commentId: Int,
-    completionHandler: @escaping () -> Void
+    completionHandler: @escaping (Bool) -> Void
   )
 
   func requestDeleteFeed(
@@ -83,11 +84,13 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
 
   func requestDeleteFeed(
     feedId: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping OnCompletionHandler
   ) {
     self.feedRepository.requestDeleteFeed(
       feedId: feedId,
-      completionHandler: { isSuccess in
+      completionHandler: { [weak self] isSuccess in
+
+        guard let self = self else { return }
 
         if isSuccess {
           self.postResfreshNotificationEvent(feedId: feedId)
@@ -99,11 +102,13 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
 
   func requestHidePost(
     feedId: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping OnCompletionHandler
   ) {
     self.feedRepository.requestHidePost(
       feedId: feedId,
-      completionHandler: { isSuccess in
+      completionHandler: { [weak self] isSuccess in
+
+        guard let self = self else { return }
 
         if isSuccess {
           self.postResfreshNotificationEvent(feedId: feedId)
@@ -184,25 +189,29 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
     if !isLike {
       self.likeRepository.requestLike(
         id: feedId,
-        completionHandler: { result in
-          
-          NotificationCenter.default.post(
-            name: .postLikeToggled,
-            object: feedId
-          )
-          completionHandler(result)
+        completionHandler: { [weak self] isSuccess in
+
+          guard let self = self else { return }
+
+          if isSuccess {
+            self.postLikeNotificationEvent(feedId: feedId)
+          }
+
+          completionHandler(isSuccess)
         }
       )
     } else {
       self.likeRepository.requestLikeCancel(
         id: feedId,
-        completionHandler: { result in
+        completionHandler: { [weak self] isSuccess in
 
-          NotificationCenter.default.post(
-            name: .postLikeToggled,
-            object: feedId
-          )
-          completionHandler(result)
+          guard let self = self else { return }
+
+          if isSuccess {
+            self.postLikeNotificationEvent(feedId: feedId)
+          }
+
+          completionHandler(isSuccess)
         }
       )
     }
@@ -230,24 +239,37 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
 
   func requestAddComment(
     comment: AddCommentDTO,
-    completionHandler: @escaping ((Bool) -> Void)
+    completionHandler: @escaping OnCompletionHandler
   ) {
     self.commentRepository.requestAddComment(
       comment: comment,
-      completionHandler: { response in
-        completionHandler(response)
+      completionHandler: { [weak self] isSuccess in
+
+        guard let self = self else { return }
+
+        if isSuccess {
+          self.postCommentAddNotificationEvent(feedId: comment.postId)
+        }
+        completionHandler(isSuccess)
       }
     )
   }
 
   func requestDeleteComment(
+    feedId: Int,
     commentId: Int,
-    completionHandler: @escaping () -> Void
+    completionHandler: @escaping OnCompletionHandler
   ) {
     self.commentRepository.requestDeleteComment(
       commentId: commentId,
-      completionHandler: { _ in
-        completionHandler()
+      completionHandler: { [weak self] isSuccess in
+
+        guard let self = self else { return }
+
+        if isSuccess {
+          self.postCommentDeleteNotificationEvent(feedId: feedId)
+        }
+        completionHandler(isSuccess)
       }
     )
   }
@@ -264,6 +286,27 @@ extension FeedDetailWorker {
     
     NotificationCenter.default.post(
       name: .feedMainRefreshAfterDelete,
+      object: feedId
+    )
+  }
+
+  private func postLikeNotificationEvent(feedId: Int) {
+    NotificationCenter.default.post(
+      name: .postLikeToggled,
+      object: feedId
+    )
+  }
+
+  private func postCommentAddNotificationEvent(feedId: Int) {
+    NotificationCenter.default.post(
+      name: .feedListCommentRefreshAfterAdd,
+      object: feedId
+    )
+  }
+
+  private func postCommentDeleteNotificationEvent(feedId: Int) {
+    NotificationCenter.default.post(
+      name: .feedListCommentRefreshAfterDelete,
       object: feedId
     )
   }

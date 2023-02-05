@@ -173,7 +173,10 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     self.showAlert(
       content: "댓글을 삭제하시겠습니까?",
       confirmActionCompletion: {
-        self.interactor?.requestDeleteComment(commentId: commentId)
+        self.interactor?.requestDeleteComment(
+          feedId: self.feedId,
+          commentId: commentId
+        )
       }
     )
   }
