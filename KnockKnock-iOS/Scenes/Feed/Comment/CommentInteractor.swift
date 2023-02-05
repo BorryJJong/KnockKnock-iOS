@@ -18,6 +18,8 @@ protocol CommentInteractorProtocol {
     feedId: Int,
     commentId: Int
   )
+
+  func dismissCommentView()
   func showAlertView(
     message: String,
     confirmAction: (() -> Void)?
@@ -27,26 +29,33 @@ protocol CommentInteractorProtocol {
 final class CommentInteractor: CommentInteractorProtocol {
   var worker: CommentWorkerProtocol?
   var presenter: CommentPresenterProtocol?
+  var router: CommentRouterProtocol?
 
   /// 서버에서 받아온 전체 댓글 array
-  var comments: [Comment] = []
+  private var comments: [Comment] = []
 
   /// view에서 보여지는 댓글 array(open 상태 댓글만)
-  var visibleComments: [Comment] = []
+  private var visibleComments: [Comment] = []
 
   /// 댓글 목록 조회 api로부터 받은 전체 댓글 fetch
   func fetchAllComments(feedId: Int) {
     self.worker?.getAllComments(
       feedId: feedId,
       completionHandler: { [weak self] comments in
-        self?.comments = comments
-        self?.visibleComments = self?.worker?.fetchVisibleComments(comments: self?.comments) ?? []
-        self?.presenter?.presentVisibleComments(comments: self?.visibleComments ?? [])
+
+        guard let self = self else { return }
+
+        self.comments = comments
+        self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
+        self.presenter?.presentVisibleComments(comments: self.visibleComments)
       }
     )
   }
 
   /// 답글 펼침/숨김 상태 toggle
+  ///
+  /// - Parameters:
+  ///  - commentId: 댓글 아이디
   func toggleVisibleStatus(commentId: Int) {
     guard let index = self.comments.firstIndex(where: {
       $0.data.id == commentId
@@ -58,10 +67,15 @@ final class CommentInteractor: CommentInteractorProtocol {
   }
 
   /// 댓글 등록
+  ///
+  /// - Parameters:
+  ///  - comment: 등록 할 댓글 데이터
   func requestAddComment(comment: AddCommentDTO) {
     self.worker?.requestAddComment(
       comment: comment,
-      completionHandler: { isSuccess in
+      completionHandler: { [weak self] isSuccess in
+
+        guard let self = self else { return }
 
         if isSuccess {
           self.fetchAllComments(feedId: comment.postId)
@@ -77,6 +91,10 @@ final class CommentInteractor: CommentInteractorProtocol {
   }
 
   /// 댓글 삭제
+  ///
+  /// - Parameters:
+  ///  - feedId: 댓글이 달려있는 피드 아이디
+  ///  - commentId: 댓글 아이디
   func requestDeleteComment(
     feedId: Int,
     commentId: Int
@@ -84,7 +102,9 @@ final class CommentInteractor: CommentInteractorProtocol {
     self.worker?.requestDeleteComment(
       feedId: feedId,
       commentId: commentId,
-      completionHandler: { isSuccess in
+      completionHandler: { [weak self] isSuccess in
+
+        guard let self = self else { return }
 
         if isSuccess {
 
@@ -114,6 +134,17 @@ final class CommentInteractor: CommentInteractorProtocol {
     )
   }
 
+  // MARK: - Routing
+
+  func dismissCommentView() {
+    self.router?.dismissCommentView()
+  }
+
+  /// AlertView
+  ///
+  /// - Parameters:
+  ///  - message: 알림창 메세지
+  ///  - confirmAction: 확인 눌렀을 때 수행 될 액션
   func showAlertView(
     message: String,
     confirmAction: (() -> Void)?

@@ -63,8 +63,11 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.worker?.getFeedDetail(
       feedId: feedId,
       completionHandler: { [weak self] feedDetail in
-        self?.feedDetail = feedDetail
-        self?.presenter?.presentFeedDetail(feedDetail: feedDetail)
+        
+        guard let self = self else { return }
+
+        self.feedDetail = feedDetail
+        self.presenter?.presentFeedDetail(feedDetail: feedDetail)
       }
     )
   }
@@ -84,7 +87,9 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       isLike: isLike,
       feedId: feedId,
       completionHandler: { [weak self] isSuccess in
+
         guard let self = self else { return }
+
         guard isSuccess else {
           // error handle
           return
@@ -101,8 +106,11 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.worker?.fetchLikeList(
       feedId: feedId,
       completionHandler: { [weak self] likeList in
-        self?.likeList = likeList
-        self?.presenter?.presentLikeList(like: likeList)
+
+        guard let self = self else { return }
+
+        self.likeList = likeList
+        self.presenter?.presentLikeList(like: likeList)
       }
     )
   }
@@ -112,10 +120,13 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.worker?.getAllComments(
       feedId: feedId,
       completionHandler: { [weak self] comments in
-        self?.comments = comments
-        self?.fetchAllCommentsCount(comments: comments)
-        self?.visibleComments = self?.worker?.fetchVisibleComments(comments: self?.comments) ?? []
-        self?.presenter?.presentVisibleComments(comments: self?.visibleComments ?? [])
+
+        guard let self = self else { return }
+
+        self.comments = comments
+        self.fetchAllCommentsCount(comments: comments)
+        self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
+        self.presenter?.presentVisibleComments(comments: self.visibleComments)
       }
     )
   }
@@ -154,7 +165,9 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   ) {
     self.worker?.requestAddComment(
       comment: comment,
-      completionHandler: { isSuccess in
+      completionHandler: { [weak self] isSuccess in
+
+        guard let self = self else { return }
 
         if isSuccess {
           self.fetchAllComments(feedId: comment.postId)
@@ -175,8 +188,10 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.worker?.requestDeleteComment(
       feedId: feedId,
       commentId: commentId,
-      completionHandler: { isSuccess in
-        
+      completionHandler: { [weak self] isSuccess in
+
+        guard let self = self else { return }
+
         if isSuccess {
           if let index = self.comments.firstIndex(where: { $0.data.id == commentId }) {
             self.comments[index].data.isDeleted = true
@@ -210,7 +225,10 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
 
     self.worker?.requestDeleteFeed(
       feedId: feedId,
-      completionHandler: { isSuccess in
+      completionHandler: { [weak self] isSuccess in
+
+        guard let self = self else { return }
+
         if isSuccess {
           self.showAlertView(
             message: "게시글이 삭제되었습니다.",
@@ -234,7 +252,9 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
 
     self.worker?.requestHidePost(
       feedId: feedId,
-      completionHandler: { isSuccess in
+      completionHandler: { [weak self] isSuccess in
+
+        guard let self = self else { return }
 
         if isSuccess {
           self.showAlertView(
