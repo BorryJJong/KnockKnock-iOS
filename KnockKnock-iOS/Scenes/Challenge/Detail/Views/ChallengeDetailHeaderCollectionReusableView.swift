@@ -169,13 +169,17 @@ final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableVie
 
   private func setParticipantsImageStackView(participants: [ChallengeDetail.Participant]) {
     var images: [String?] = []
-
-    participants.forEach {
-      images.append($0.image)
+    Task {
+      participants.forEach {
+        images.append($0.image)
+      }
+      
+      self.participantImageStackView.removeAllSubViews()
+      
+      await self.participantImageStackView.addParticipantImageViews(images: images)
+      
+      self.setParticipantLabel(count: participants.count)
     }
-    self.participantImageStackView.removeAllSubViews()
-    self.participantImageStackView.addParticipantImageViews(images: images)
-    self.setParticipantLabel(count: participants.count)
   }
 
   private func setParticipantLabel(count: Int) {
