@@ -96,6 +96,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
     )
   }
 
+  /// 게시글 숨기기
   func requestHidePost(
     feedId: Int,
     completionHandler: @escaping (Bool) -> Void
@@ -259,6 +260,11 @@ final class FeedListWorker: FeedListWorkerProtocol {
     return feeds
   }
 
+  /// 댓글 등록/삭제 이벤트 발생 시 댓글 개수 업데이트한 피드 데이터 반환
+  ///
+  /// - Parameters:
+  ///  - feeds: 피드 리스트 데이터
+  ///  - id: 피드 아이디
   func convertComment(
     feeds: FeedList,
     id: Int,
@@ -272,7 +278,6 @@ final class FeedListWorker: FeedListWorkerProtocol {
 
     return feeds
   }
-  
 
   /// 현재 좋아요 상태 체크 (좋아요/비좋아요)
   ///
@@ -316,7 +321,15 @@ extension FeedListWorker {
     feed.blogLikeCount = " \(newTitle)"
   }
 
-  private func setCommentCount(feed: inout FeedList.Post, isAdded: Bool) {
+  /// 댓글 개수
+  ///
+  /// - Parameters:
+  ///  - feed: 피드 리스트 데이터
+  ///  - isAdded: 등록 이벤트(true), 삭제 이벤트(false)
+  private func setCommentCount(
+    feed: inout FeedList.Post,
+    isAdded: Bool
+  ) {
     let title = feed.blogCommentCount.filter { $0.isNumber }
 
     let numberFormatter = NumberFormatter().then {
@@ -331,6 +344,7 @@ extension FeedListWorker {
     feed.blogCommentCount = " \(newTitle)"
   }
 
+  /// Notification
   private func postResfreshNotificationEvent(feedId: Int) {
     NotificationCenter.default.post(
       name: .feedMainRefreshAfterDelete,
