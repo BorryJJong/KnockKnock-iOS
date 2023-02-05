@@ -44,6 +44,12 @@ protocol FeedListWorkerProtocol {
     feeds: FeedList,
     id: Int
   ) -> FeedList
+
+  func convertComment(
+    feeds: FeedList,
+    id: Int,
+    isAdded: Bool
+  ) -> FeedList
 }
 
 final class FeedListWorker: FeedListWorkerProtocol {
@@ -166,6 +172,20 @@ final class FeedListWorker: FeedListWorkerProtocol {
     
     return feeds
   }
+
+  func convertComment(
+    feeds: FeedList,
+    id: Int,
+    isAdded: Bool
+  ) -> FeedList {
+    var feeds = feeds
+
+    self.changedSections(feeds: feeds.feeds, id: id).forEach {
+      self.setCommentCount(feed: &feeds.feeds[$0], isAdded: isAdded)
+    }
+
+    return feeds
+  }
   
   func checkCurrentLikeState(
     feedList: [FeedList.Post],
@@ -200,6 +220,21 @@ extension FeedListWorker {
     let newTitle = numberFormatter.string(from: NSNumber(value: number)) ?? ""
     
     feed.blogLikeCount = " \(newTitle)"
+  }
+
+  private func setCommentCount(feed: inout FeedList.Post, isAdded: Bool) {
+    let title = feed.blogCommentCount.filter { $0.isNumber }
+
+    let numberFormatter = NumberFormatter().then {
+      $0.numberStyle = .decimal
+    }
+
+    guard let titleToInt = Int(title) else { return }
+
+    let number = isAdded ? (titleToInt + 1) : (titleToInt - 1)
+    let newTitle = numberFormatter.string(from: NSNumber(value: number)) ?? ""
+
+    feed.blogCommentCount = " \(newTitle)"
   }
 
   private func postResfreshNotificationEvent(feedId: Int) {

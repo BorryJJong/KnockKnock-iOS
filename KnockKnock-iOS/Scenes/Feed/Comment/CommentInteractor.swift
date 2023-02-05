@@ -14,7 +14,7 @@ protocol CommentInteractorProtocol {
   func fetchAllComments(feedId: Int)
   func requestAddComment(comment: AddCommentDTO)
   func toggleVisibleStatus(commentId: Int)
-  func requestDeleteComment(commentId: Int)
+  func requestDeleteComment(feedId: Int, commentId: Int)
 }
 
 final class CommentInteractor: CommentInteractorProtocol {
@@ -63,8 +63,9 @@ final class CommentInteractor: CommentInteractorProtocol {
   }
 
   /// 댓글 삭제
-  func requestDeleteComment(commentId: Int) {
+  func requestDeleteComment(feedId: Int, commentId: Int) {
     self.worker?.requestDeleteComment(
+      feedId: feedId,
       commentId: commentId,
       completionHandler: { isSuccess in
 

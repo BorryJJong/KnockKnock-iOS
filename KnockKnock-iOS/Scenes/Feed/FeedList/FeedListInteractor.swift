@@ -194,6 +194,66 @@ extension FeedListInteractor {
 
     self.deletePost(feedList: feedList, feedId: feedId)
   }
+
+  @objc
+  private func addCommentNotificationEvent(_ notification: Notification) {
+    guard let feedId = notification.object as? Int else { return }
+
+    guard let feedListData = self.feedListData else { return }
+    guard !feedListData.feeds.isEmpty else { return }
+
+    // 현재 존재하는지 피드인지 체크
+    guard feedListData.feeds.contains(where: { feedId == $0.id }) else { return }
+
+    guard let convertFeedList = self.worker?.convertComment(
+      feeds: feedListData,
+      id: feedId,
+      isAdded: true
+    ) else { return }
+
+    self.feedListData = convertFeedList
+
+    let updatedSections: [IndexPath] = self.worker?.changedSections(
+      feeds: feedListData.feeds,
+      id: feedId
+    )
+      .map { IndexPath(item: 0, section: $0) } ?? []
+
+    self.presenter?.presentUpdateFeedList(
+      feedList: convertFeedList,
+      sections: updatedSections
+    )
+  }
+
+  @objc
+  private func deleteCommentNotificationEvent(_ notification: Notification) {
+    guard let feedId = notification.object as? Int else { return }
+
+    guard let feedListData = self.feedListData else { return }
+    guard !feedListData.feeds.isEmpty else { return }
+
+    // 현재 존재하는지 피드인지 체크
+    guard feedListData.feeds.contains(where: { feedId == $0.id }) else { return }
+
+    guard let convertFeedList = self.worker?.convertComment(
+      feeds: feedListData,
+      id: feedId,
+      isAdded: false
+    ) else { return }
+
+    self.feedListData = convertFeedList
+
+    let updatedSections: [IndexPath] = self.worker?.changedSections(
+      feeds: feedListData.feeds,
+      id: feedId
+    )
+      .map { IndexPath(item: 0, section: $0) } ?? []
+
+    self.presenter?.presentUpdateFeedList(
+      feedList: convertFeedList,
+      sections: updatedSections
+    )
+  }
   
   /// Toggle Like
   private func toggleLike(feedId: Int) {
@@ -265,6 +325,20 @@ extension FeedListInteractor {
       self,
       selector: #selector(self.deleteNotificationEvent(_:)),
       name: .feedListRefreshAfterDelete,
+      object: nil
+    )
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(self.addCommentNotificationEvent(_:)),
+      name: .feedListCommentRefreshAfterAdd,
+      object: nil
+    )
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(self.deleteCommentNotificationEvent(_:)),
+      name: .feedListCommentRefreshAfterDelete,
       object: nil
     )
   }

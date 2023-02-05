@@ -11,7 +11,7 @@ protocol CommentWorkerProtocol {
   func getAllComments(feedId: Int, completionHandler: @escaping ([Comment]) -> Void)
   func requestAddComment(comment: AddCommentDTO, completionHandler: @escaping (Bool) -> Void)
   func fetchVisibleComments(comments: [Comment]?) -> [Comment]
-  func requestDeleteComment(commentId: Int, completionHandler: @escaping (Bool) -> Void)
+  func requestDeleteComment(feedId: Int, commentId: Int, completionHandler: @escaping (Bool) -> Void)
 }
 
 final class CommentWorker: CommentWorkerProtocol {
@@ -101,6 +101,7 @@ final class CommentWorker: CommentWorkerProtocol {
   }
 
   func requestDeleteComment(
+    feedId: Int,
     commentId: Int,
     completionHandler: @escaping OnCompletionHandler
   ) {
@@ -108,7 +109,7 @@ final class CommentWorker: CommentWorkerProtocol {
       commentId: commentId,
       completionHandler: { isSuccess in
         if isSuccess {
-          self.postDeleteNotificationEvent(feedId: commentId)
+          self.postDeleteNotificationEvent(feedId: feedId)
         }
         completionHandler(isSuccess)
       }
