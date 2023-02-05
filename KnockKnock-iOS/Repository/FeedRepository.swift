@@ -18,6 +18,7 @@ protocol FeedRepositoryProtocol {
   func requestDeleteFeed(feedId: Int, completionHandler: @escaping (Bool) -> Void)
   func requestChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void)
   func requestFeedDetail(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void)
+  func requestHidePost(feedId: Int,completionHandler: @escaping (Bool) -> Void)
   func requestFeedList(
     currentPage: Int,
     pageSize: Int,
@@ -39,7 +40,7 @@ final class FeedRepository: FeedRepositoryProtocol {
       .shared
       .request(
         object: ApiResponseDTO<[ChallengeTitleDTO]>.self,
-        router: KKRouter.getChallengeTitles,
+        router: .getChallengeTitles,
         success: { response in
           guard let data = response.data else {
             // no data error
@@ -63,7 +64,7 @@ final class FeedRepository: FeedRepositoryProtocol {
       .shared
       .request(
         object: ApiResponseDTO<FeedMain>.self,
-        router: KKRouter.getFeedMain(
+        router: .getFeedMain(
           page: currentPage,
           take: totalCount,
           challengeId: challengeId
@@ -95,7 +96,7 @@ final class FeedRepository: FeedRepositoryProtocol {
         .shared
         .request(
           object: ApiResponseDTO<FeedList>.self,
-          router: KKRouter.getFeedBlogPost(
+          router: .getFeedBlogPost(
             page: currentPage,
             take: pageSize,
             feedId: feedId,
@@ -123,7 +124,7 @@ final class FeedRepository: FeedRepositoryProtocol {
       .shared
       .request(
         object: ApiResponseDTO<Bool>.self,
-        router: KKRouter.deleteFeed(id: feedId),
+        router: .deleteFeed(id: feedId),
         success: { response in
 
           let isSuccess = response.code == 200
@@ -131,6 +132,24 @@ final class FeedRepository: FeedRepositoryProtocol {
 
         }, failure: { error in
 
+          print(error)
+        }
+      )
+  }
+
+  func requestHidePost(
+    feedId: Int,
+    completionHandler: @escaping (Bool) -> Void
+  ) {
+    KKNetworkManager
+      .shared
+      .request(
+        object: ApiResponseDTO<Bool>.self,
+        router: .postHideBlogPost(id: feedId),
+        success: { response in
+          completionHandler(response.code == 200)
+        },
+        failure: { error in
           print(error)
         }
       )
@@ -147,7 +166,7 @@ final class FeedRepository: FeedRepositoryProtocol {
       .shared
       .request(
         object: ApiResponseDTO<FeedDetail>.self,
-        router: KKRouter.getFeed(id: feedId),
+        router: .getFeed(id: feedId),
         success: { response in
           guard let data = response.data else {
             // no data error

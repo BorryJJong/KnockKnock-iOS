@@ -20,7 +20,6 @@ struct Challenge: Decodable {
 
   struct Participant: Decodable {
     let id: Int
-    let nickname: String
     let image: String?
   }
 }
@@ -32,7 +31,6 @@ struct ChallengeDetail: Decodable {
 
   struct Participant: Decodable {
     let id: Int
-    let nickname: String
     let image: String?
   }
 

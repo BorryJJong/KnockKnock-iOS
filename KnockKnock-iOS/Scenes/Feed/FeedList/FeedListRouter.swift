@@ -11,11 +11,19 @@ protocol FeedListRouterProtocol {
   var view: FeedListViewProtocol? { get set }
   static func createFeedList(feedId: Int, challengeId: Int) -> UIViewController
 
-  func presentBottomSheetView(isMyPost: Bool, deleteAction: (() -> Void)?, feedData: FeedShare?)
+  func presentBottomSheetView(
+    isMyPost: Bool,
+    deleteAction: (() -> Void)?,
+    hideAction: (() -> Void)?,
+    editAction: (() -> Void)?,
+    feedData: FeedShare?
+  )
+  func navigateToFeedEdit(feedId: Int)
   func navigateToFeedMain()
   func navigateToFeedDetail(feedId: Int)
   func navigateToCommentView(feedId: Int)
   func navigateToLoginView()
+
 }
 
 final class FeedListRouter: FeedListRouterProtocol {
@@ -60,6 +68,14 @@ final class FeedListRouter: FeedListRouterProtocol {
     }
   }
 
+  func navigateToFeedEdit(feedId: Int) {
+    let feedEditViewController = FeedEditRouter.createFeedEdit(feedId: feedId)
+    if let sourceView = self.view as? UIViewController {
+      feedEditViewController.hidesBottomBarWhenPushed = true
+      sourceView.navigationController?.pushViewController(feedEditViewController, animated: true)
+    }
+  }
+
   func navigateToCommentView(feedId: Int) {
     let commentViewController = CommentRouter.createCommentView(feedId: feedId)
     if let sourceView = self.view as? UIViewController {
@@ -80,11 +96,15 @@ final class FeedListRouter: FeedListRouterProtocol {
   func presentBottomSheetView(
     isMyPost: Bool,
     deleteAction: (() -> Void)?,
+    hideAction: (() -> Void)?,
+    editAction: (() -> Void)?,
     feedData: FeedShare?
   ) {
 
     guard let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
       deleteAction: deleteAction,
+      hideAction: hideAction,
+      editAction: editAction,
       feedData: feedData,
       isMyPost: isMyPost
     ) as? BottomSheetViewController else { return }

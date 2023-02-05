@@ -1,8 +1,8 @@
 //
-//  FeedWriteView.swift
+//  FeedEditView.swift
 //  KnockKnock-iOS
 //
-//  Created by Daye on 2022/03/17.
+//  Created by Daye on 2022/12/18.
 //
 
 import UIKit
@@ -11,21 +11,13 @@ import KKDSKit
 import SnapKit
 import Then
 
-class FeedWriteView: UIView {
+final class FeedEditView: UIView {
 
   // MARK: - Constants
 
   private enum Metric {
 
     static let buttonCornerRadius = 5.f
-
-    static let photoAddButtonWidth = 65.f
-    static let photoAddButtonHeight = 65.f
-    static let photoAddButtonTopMargin = 20.f
-    static let photoAddButtonLeadingMargin = 20.f
-
-    static let photoCollectionViewTopMargin = -10.f
-    static let photoCollectionViewLeadingMargin = 20.f
 
     static let tagTopMargin = 25.f
     static let tagLeadingMargin = 20.f
@@ -60,28 +52,6 @@ class FeedWriteView: UIView {
   }
 
   // MARK: - UI
-
-  let photoCollectionView = UICollectionView(
-    frame: .zero,
-    collectionViewLayout: UICollectionViewFlowLayout().then {
-      $0.scrollDirection = .horizontal
-    }
-  ).then {
-    $0.backgroundColor = .clear
-  }
-
-  let photoAddButton = UIButton().then {
-    $0.setImage(KKDS.Image.ic_post_camera_24_gr, for: .normal)
-    $0.setTitle("0/5", for: .normal)
-    $0.setTitleColor(.gray60, for: .normal)
-    $0.titleLabel?.font = .systemFont(ofSize: 14)
-    $0.contentVerticalAlignment = .center
-    $0.contentHorizontalAlignment = .center
-    $0.layer.borderWidth = 1
-    $0.layer.borderColor = UIColor.gray50?.cgColor
-    $0.layer.cornerRadius = Metric.buttonCornerRadius
-    $0.alignTextBelow(spacing: 0)
-  }
 
   private let tagLabel = UILabel().then {
     $0.text = "#태그"
@@ -191,19 +161,14 @@ class FeedWriteView: UIView {
   }
 
   lazy var contentTextView = UITextView().then {
-    $0.textColor = .gray40
+    $0.textColor = .black
     $0.font = .systemFont(ofSize: 14)
-    $0.text = "내용을 입력해주세요. (글자수 1,000자 이내)"
     $0.inputAccessoryView = self.toolbar
   }
 
   let doneButton = KKDSLargeButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.setTitle("등록", for: .normal)
-  }
-
-  @objc private func doneBarButtonDidTap(_ sender: UIBarButtonItem) {
-    self.endEditing(true)
+    $0.setTitle("수정", for: .normal)
   }
 
   // MARK: - Initialize
@@ -217,7 +182,53 @@ class FeedWriteView: UIView {
     super.init(coder: aDecoder)
   }
 
+  // MARK: - Bind
+
+  func bind(data: FeedDetail?) {
+    guard let challenges = data?.challenges
+      .map({ $0.title })
+      .joined(separator: ", ")
+    else { return }
+
+    self.setTag(tag: challenges)
+
+    if let promotions = data?.promotions
+      .map({ $0.title })
+      .joined(separator: ", ") {
+
+      self.setPromotion(promotion: promotions)
+    }
+
+    self.contentTextView.text = data?.feed?.content
+
+    guard let storeName = data?.feed?.storeName,
+          let storeAddress = data?.feed?.storeAddress else { return }
+
+    self.setAddress(name: storeName, address: storeAddress)
+  }
+
+  func setTag(tag: String) {
+    self.tagLabel.text = tag
+  }
+
+  func setPromotion(promotion: String) {
+    if promotion == "" {
+      self.promotionLabel.text = "프로모션"
+    } else {
+      self.promotionLabel.text = promotion
+    }
+  }
+
+  func setAddress(name: String, address: String) {
+    self.shopNameLabel.text = name
+    self.shopAddressLabel.text = address
+  }
+
   // MARK: - Configure
+
+  @objc private func doneBarButtonDidTap(_ sender: UIBarButtonItem) {
+    self.endEditing(true)
+  }
 
   func setContainerViewConstant(notification: Notification, isAppearing: Bool) {
     let userInfo = notification.userInfo
@@ -231,9 +242,13 @@ class FeedWriteView: UIView {
           .keyboardAnimationDurationUserInfoKey
       ] as? NSNumber else { return }
 
-      let viewBottomConstant = isAppearing ? -(keyboardHeight) + 60 : 0
+      let viewBottomConstant = isAppearing
+      ? -(keyboardHeight) + Metric.doneButtonHeight + -(Metric.doneButtonBottomMargin)
+      : Metric.contentTextViewBottomMargin
 
-      self.frame.origin.y = viewBottomConstant
+      self.contentTextView.snp.updateConstraints {
+        $0.bottom.equalTo(self.doneButton.snp.top).offset(viewBottomConstant)
+      }
 
       UIView.animate(withDuration: animationDurationValue.doubleValue) {
         self.layoutIfNeeded()
@@ -241,51 +256,17 @@ class FeedWriteView: UIView {
     }
   }
 
-  // MARK: - Bind
-
-  func setTag(tag: String) {
-    self.tagLabel.text = tag
-  }
-
-  func setPromotion(promotion: String) {
-    self.promotionLabel.text = promotion
-  }
-
-  func setAddress(name: String, address: String) {
-    self.shopNameLabel.text = name
-    self.shopAddressLabel.text = address
-  }
-
-  func bindPhotoCount(count: Int) {
-    self.photoAddButton.setTitle("\(count)/5", for: .normal)
-  }
-
   // MARK: - Constraints
 
   private func setupConstraints() {
-    [self.photoAddButton, self.photoCollectionView].addSubViews(self)
     [self.tagLabel, self.tagSelectButton, self.tagSeparateLineView].addSubViews(self)
     [self.promotionLabel, self.promotionSelectButton, self.promotionSeparateLineView].addSubViews(self)
     [self.shopAddressLabel, self.shopSearchButton, self.shopAddressSeparateLineView].addSubViews(self)
     [self.shopNameLabel, self.shopNameSeparateLineView].addSubViews(self)
     [self.contentTextView, self.doneButton].addSubViews(self)
 
-    self.photoAddButton.snp.makeConstraints {
-      $0.height.equalTo(Metric.photoAddButtonHeight)
-      $0.width.equalTo(Metric.photoAddButtonWidth)
-      $0.top.equalTo(self.safeAreaLayoutGuide).offset(Metric.photoAddButtonTopMargin)
-      $0.leading.equalTo(self.safeAreaLayoutGuide).offset(Metric.photoAddButtonLeadingMargin)
-    }
-
-    self.photoCollectionView.snp.makeConstraints {
-      $0.top.equalTo(self.photoAddButton).offset(Metric.photoCollectionViewTopMargin)
-      $0.bottom.equalTo(self.photoAddButton)
-      $0.leading.equalTo(self.photoAddButton.snp.trailing).offset(Metric.photoCollectionViewLeadingMargin)
-      $0.trailing.equalTo(self.safeAreaLayoutGuide)
-    }
-
     self.tagLabel.snp.makeConstraints {
-      $0.top.equalTo(self.photoAddButton.snp.bottom).offset(Metric.tagTopMargin)
+      $0.top.equalTo(self.safeAreaLayoutGuide).offset(Metric.tagTopMargin)
       $0.leading.equalTo(self.safeAreaLayoutGuide).inset(Metric.tagLeadingMargin)
       $0.trailing.equalTo(self.safeAreaLayoutGuide).offset(Metric.tagTrailingMargin)
     }
