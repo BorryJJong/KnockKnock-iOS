@@ -193,7 +193,9 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
             self.interactor?.dismissView(actionType: .postHide)
           }
         )
-        
+      case .postReport:
+        self.interactor?.dismissView(actionType: .postReport)
+
       default:
         print("Error")
       }
