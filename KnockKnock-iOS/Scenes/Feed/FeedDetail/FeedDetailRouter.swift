@@ -16,11 +16,13 @@ protocol FeedDetailRouterProtocol {
   func navigateToLikeDetail(like: [Like.Info])
   func navigateToLoginView()
   func navigateToFeedList()
+  func presentReportView()
   func presentBottomSheetView(
     isMyPost: Bool,
     deleteAction: (() -> Void)?,
     hideAction: (() -> Void)?,
-    editAction: (() -> Void)?
+    editAction: (() -> Void)?,
+    reportAction: (() -> Void)?
  )
   func showAlertView(
     message: String,
@@ -98,18 +100,27 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
       )
     }
   }
+
+  func presentReportView() {
+    guard let sourceView = self.view as? UIViewController else { return }
+    let reportView = UINavigationController(rootViewController: ReportViewController())
+
+    sourceView.present(reportView, animated: true)
+  }
   
   func presentBottomSheetView(
     isMyPost: Bool,
     deleteAction: (() -> Void)?,
     hideAction: (() -> Void)?,
-    editAction: (() -> Void)?
+    editAction: (() -> Void)?,
+    reportAction: (() -> Void)?
   ) {
     
     guard let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
       deleteAction: deleteAction,
       hideAction: hideAction,
       editAction: editAction,
+      reportAction: reportAction,
       isMyPost: isMyPost
     ) as? BottomSheetViewController else { return }
     

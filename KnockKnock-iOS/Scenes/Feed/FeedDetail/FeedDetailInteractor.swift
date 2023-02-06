@@ -25,13 +25,15 @@ protocol FeedDetailInteractorProtocol {
   
   func requestLike(feedId: Int)
   func fetchLikeList(feedId: Int)
-  
+
+  func presentReportView()
   func navigateToLikeDetail()
   func presentBottomSheetView(
     isMyPost: Bool,
     deleteAction: (() -> Void)?,
     hideAction: (() -> Void)?,
-    editAction: (() -> Void)?
+    editAction: (() -> Void)?,
+    reportAction: (() -> Void)?
   )
   func navigateToFeedEdit(feedId: Int)
 }
@@ -291,17 +293,23 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.router?.navigateToFeedEdit(feedId: feedId)
   }
 
+  func presentReportView() {
+    self.router?.presentReportView()
+  }
+
   func presentBottomSheetView(
     isMyPost: Bool,
     deleteAction: (() -> Void)?,
     hideAction: (() -> Void)?,
-    editAction: (() -> Void)?
+    editAction: (() -> Void)?,
+    reportAction: (() -> Void)?
   ) {
     self.router?.presentBottomSheetView(
       isMyPost: isMyPost,
       deleteAction: deleteAction,
       hideAction: hideAction,
-      editAction: editAction
+      editAction: editAction,
+      reportAction: reportAction
     )
   }
 

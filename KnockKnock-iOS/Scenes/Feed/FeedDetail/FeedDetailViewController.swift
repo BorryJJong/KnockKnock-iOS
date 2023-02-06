@@ -137,6 +137,9 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       },
       editAction: {
         self.interactor?.navigateToFeedEdit(feedId: feedId)
+      },
+      reportAction: {
+        self.interactor?.presentReportView()
       }
     )
   }
@@ -170,9 +173,11 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   }
 
   private func commentDeleteButtonDidTap(commentId: Int) {
+
     self.showAlert(
       content: "댓글을 삭제하시겠습니까?",
       confirmActionCompletion: {
+
         self.interactor?.requestDeleteComment(
           feedId: self.feedId,
           commentId: commentId
