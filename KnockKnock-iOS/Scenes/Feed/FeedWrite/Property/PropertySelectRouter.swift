@@ -71,9 +71,7 @@ final class PropertySelectRouter: PropertySelectRouterProtocol {
     source: PropertySelectViewProtocol,
     tagList: [ChallengeTitle]
   ) {
-    self.delegate?.fetchSelectedTag(
-      tagList: tagList
-    )
+    self.delegate?.fetchSelectedTag(tagList: tagList)
     self.navigateToFeedWriteView(source: source)
   }
 
@@ -81,9 +79,7 @@ final class PropertySelectRouter: PropertySelectRouterProtocol {
     source: PropertySelectViewProtocol,
     promotionList: [Promotion]
   ) {
-    self.delegate?.fetchSelectedPromotion(
-      promotionList: promotionList
-    )
+    self.delegate?.fetchSelectedPromotion(promotionList: promotionList)
     self.navigateToFeedWriteView(source: source)
   }
 

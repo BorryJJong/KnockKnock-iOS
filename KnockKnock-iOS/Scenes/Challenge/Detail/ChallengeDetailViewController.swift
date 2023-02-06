@@ -20,13 +20,9 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
   // MARK: - Properties
 
   var interactor: ChallengeDetailInteractorProtocol?
-
+  
   var challengeId: Int = 12
-  var challengeDetail: ChallengeDetail? {
-    didSet {
-      self.containerView.challengeDetailCollectionView.reloadData()
-    }
-  }
+  var challengeDetail: ChallengeDetail?
 
   lazy var backBarButtonItem = UIBarButtonItem(
     image: KKDS.Image.ic_back_24_wh,
@@ -71,6 +67,12 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
       $0.registHeaderView(type: ChallengeDetailHeaderCollectionReusableView.self)
       $0.collectionViewLayout = self.containerView.challengeCollectionViewLayout()
     }
+
+    self.containerView.participateButton.addTarget(
+      self,
+      action: #selector(self.participateButtonDidTap(_:)),
+      for: .touchUpInside
+    )
   }
 
   private func setNavigationItem() {
@@ -96,12 +98,19 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
     self.navigationItem.rightBarButtonItems = [self.shareBarButtonItem, self.homeBarButtonItem]
   }
 
-  @objc func tapBackBarButton(_ sender: UIBarButtonItem) {
-    self.navigationController?.popViewController(animated: true)
+  @objc
+  func tapBackBarButton(_ sender: UIBarButtonItem) {
+    self.interactor?.popChallengeDetailView()
   }
 
-  @objc func shareBarButtonDidTap(_ sender: UIBarButtonItem) {
+  @objc
+  func shareBarButtonDidTap(_ sender: UIBarButtonItem) {
     self.interactor?.shareChallenge(challengeData: self.challengeDetail)
+  }
+
+  @objc
+  func participateButtonDidTap(_ sender: UIButton) {
+    self.interactor?.presentToFeedWrite(challengeId: self.challengeId)
   }
 }
 
@@ -110,6 +119,10 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
 extension ChallengeDetailViewController: ChallengeDetailViewProtocol {
   func getChallengeDetail(challengeDetail: ChallengeDetail) {
     self.challengeDetail = challengeDetail
+    
+    DispatchQueue.main.async {
+      self.containerView.challengeDetailCollectionView.reloadData()
+    }
   }
 }
 
@@ -136,7 +149,7 @@ extension ChallengeDetailViewController: UICollectionViewDataSource {
 
     if let challengeDetail = self.challengeDetail {
       let isLast = challengeDetail.content.subContents.count - 1 == indexPath.item
-      print(isLast)
+
       cell.bind(challengeContent: challengeDetail.content.subContents[indexPath.item], isLast: isLast)
     }
 
@@ -154,6 +167,7 @@ extension ChallengeDetailViewController: UICollectionViewDataSource {
     )
 
     if let challengeDetail = self.challengeDetail {
+
       header.bind(challengeDetail: challengeDetail)
     }
 

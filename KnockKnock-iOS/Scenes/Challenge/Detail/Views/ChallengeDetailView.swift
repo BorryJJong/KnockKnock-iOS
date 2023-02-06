@@ -44,12 +44,12 @@ class ChallengeDetailView: UIView {
     $0.image = KKDS.Image.ic_bg_gradient_wh
   }
 
-  let participateButton = UIButton().then {
+  let participateButton = KKDSLargeButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .green50
     $0.setTitle("챌린지 참여하기", for: .normal)
     $0.titleLabel?.textColor = .white
-    $0.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
+    $0.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
     $0.layer.cornerRadius = 3
   }
 
@@ -80,6 +80,7 @@ class ChallengeDetailView: UIView {
     self.participateButton.snp.makeConstraints {
       $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(Metric.participateButtonBottomMargin)
       $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.participateButtonLeadingMargin)
+      $0.height.equalTo(Metric.participateButtonHeight)
     }
   }
 

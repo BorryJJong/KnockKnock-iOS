@@ -11,9 +11,8 @@ import KKDSKit
 
 protocol ChallengeViewProtocol: AnyObject {
   var interactor: ChallengeInteractorProtocol? { get set }
-  var router: ChallengeRouterProtocol? { get set }
 
-  func fetchChallenges(challenges: [Challenge])
+  func fetchChallenges(challenges: Challenge, sortType: ChallengeSortType)
 }
 
 final class ChallengeViewController: BaseViewController<ChallengeView> {
@@ -21,22 +20,23 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
   // MARK: Properties
   
   var interactor: ChallengeInteractorProtocol?
-  var router: ChallengeRouterProtocol?
 
-  var challenges: [Challenge] = []
+  var challenges: Challenge?
   
   // MARK: - Life cycle
   
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setNavigationItem()
-    self.interactor?.fetchChallenge()
+    self.interactor?.fetchChallenge(sortType: ChallengeSortType.new)
   }
 
   override func viewWillAppear(_ animated: Bool) {
     self.tabBarController?.tabBar.isHidden = false
     self.setNavigationItem()
   }
+
+  // MARK: - Configure
 
   override func setupConfigure() {
     self.containerView.challengeCollectionView.do {
@@ -64,44 +64,55 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
     self.navigationItem.rightBarButtonItem = searchBarButtonItem
   }
 
+  // MARK: - Button Actions
+
   @objc func tapSortChallengeButton(_ sender: UIButton) {
-    let bottomSheetViewController = BottomSheetViewController()
-    bottomSheetViewController.setBottomSheetContents(
-      contents: [
-        BottomSheetOption.postEdit.rawValue,
-        BottomSheetOption.postDelete.rawValue
-      ],
-      bottomSheetType: .small
-    )
-    bottomSheetViewController.modalPresentationStyle = .overFullScreen
-    self.present(bottomSheetViewController, animated: false, completion: nil)
+    self.interactor?.presentBottomSheet()
   }
 }
 
+// MARK: - Challenge View Protocol
+
 extension ChallengeViewController: ChallengeViewProtocol {
-  func fetchChallenges(challenges: [Challenge]) {
+  func fetchChallenges(challenges: Challenge, sortType: ChallengeSortType) {
     self.challenges = challenges
-    self.containerView.challengeCollectionView.reloadData()
+
+    DispatchQueue.main.async {
+      self.containerView.setSortButton(sortType: sortType)
+      self.containerView.setCountLabel(
+        totalCount: self.challenges?.challengeTotalCount,
+        newCount: self.challenges?.challengeNewCount
+      )
+      self.containerView.challengeCollectionView.reloadData()
+    }
   }
 }
+
+// MARK: - UICollectionView Data Source
 
 extension ChallengeViewController: UICollectionViewDataSource {
   func collectionView(
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int) -> Int {
-    return self.challenges.count
+      return self.challenges?.challengeTotalCount ?? 0
   }
 
   func collectionView(
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
+
     let cell = collectionView.dequeueReusableCell(
       withReuseIdentifier: ChallengeCell.reusableIdentifier,
-      for: indexPath) as! ChallengeCell
-    let challenge = self.challenges[indexPath.row]
+      for: indexPath)
+    as! ChallengeCell
+
+    let challenge = self.challenges?.challenges[indexPath.row]
+
     cell.backgroundColor = .white
+
     cell.bind(data: challenge)
+
     return cell
   }
 }
@@ -111,9 +122,11 @@ extension ChallengeViewController: UICollectionViewDelegate {
     _ collectionView: UICollectionView,
     didSelectItemAt indexPath: IndexPath
   ) {
-    self.router?.navigateToChallengeDetail(
-      source: self,
-      challengeId: challenges[indexPath.item].id
+
+    guard let id = challenges?.challenges[indexPath.item].id else { return }
+
+    self.interactor?.navigateToChallengeDetail(
+      challengeId: id
     )
   }
 }

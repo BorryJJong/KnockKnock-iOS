@@ -28,40 +28,13 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   var interactor: FeedDetailInteractorProtocol?
 
   var feedId: Int = 6
-  var feedDetail: FeedDetail? {
-    didSet {
-      if let feed = feedDetail?.feed {
-        self.containerView.navigationView.bind(feed: feed)
-        self.feedId = feed.id
-        self.containerView.bind(isLike: feed.isLike)
-      }
-
-      self.containerView.postCollectionView.reloadData()
-      self.containerView.layoutIfNeeded()
-    }
-  }
-
   var commentId: Int?
   var allCommentsCount: Int = 0
-  var visibleComments: [Comment] = [] {
-    didSet {
-      UIView.performWithoutAnimation {
-        self.containerView.postCollectionView.reloadSections(
-          IndexSet(integer: FeedDetailSection.comment.rawValue)
-        )
-      }
-    }
-  }
 
-  var like: [Like.Info] = [] {
-    didSet {
-      UIView.performWithoutAnimation {
-        self.containerView.postCollectionView.reloadSections(
-          IndexSet(integer: FeedDetailSection.like.rawValue)
-        )
-      }
-    }
-  }
+  var feedDetail: FeedDetail?
+  var visibleComments: [Comment] = []
+
+  var like: [Like.Info] = []
 
   // MARK: - Life Cycles
   
@@ -150,6 +123,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   }
   
   @objc private func moreButtonDidTap(_ sender: UIButton) {
+
     guard let isMyPost = self.feedDetail?.feed?.isWriter,
           let feedId = self.feedDetail?.feed?.id else { return }
 
@@ -157,6 +131,12 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       isMyPost: isMyPost,
       deleteAction: {
         self.interactor?.requestDelete(feedId: feedId)
+      },
+      hideAction: {
+        self.interactor?.requestHide(feedId: feedId)
+      },
+      editAction: {
+        self.interactor?.navigateToFeedEdit(feedId: feedId)
       }
     )
   }
@@ -186,19 +166,17 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   }
 
   @objc func likeButtonDidTap(_ sender: UIButton) {
-    sender.isEnabled = true
-    if sender.isSelected {
-      self.interactor?.requestLikeCancel(feedId: self.feedId)
-    } else {
-      self.interactor?.requestLike(feedId: self.feedId)
-    }
+    self.interactor?.requestLike(feedId: self.feedId)
   }
 
   private func commentDeleteButtonDidTap(commentId: Int) {
     self.showAlert(
       content: "댓글을 삭제하시겠습니까?",
       confirmActionCompletion: {
-        self.interactor?.requestDeleteComment(commentId: commentId)
+        self.interactor?.requestDeleteComment(
+          feedId: self.feedId,
+          commentId: commentId
+        )
       }
     )
   }
@@ -282,6 +260,17 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
 extension FeedDetailViewController: FeedDetailViewProtocol {
   func getFeedDetail(feedDetail: FeedDetail) {
     self.feedDetail = feedDetail
+
+    DispatchQueue.main.async {
+      if let feed = self.feedDetail?.feed {
+        self.containerView.navigationView.bind(feed: feed)
+        self.feedId = feed.id
+        self.containerView.bind(isLike: feed.isLike)
+      }
+
+      self.containerView.postCollectionView.reloadData()
+      self.containerView.layoutIfNeeded()
+    }
   }
   
   func getAllCommentsCount(allCommentsCount: Int) {
@@ -290,6 +279,14 @@ extension FeedDetailViewController: FeedDetailViewProtocol {
   
   func fetchVisibleComments(visibleComments: [Comment]) {
     self.visibleComments = visibleComments
+
+    DispatchQueue.main.async {
+      UIView.performWithoutAnimation {
+        self.containerView.postCollectionView.reloadSections(
+          IndexSet(integer: FeedDetailSection.comment.rawValue)
+        )
+      }
+    }
   }
   
   func deleteComment() {
@@ -298,13 +295,20 @@ extension FeedDetailViewController: FeedDetailViewProtocol {
   
   func fetchLikeList(like: [Like.Info]) {
     self.like = like
+
+    DispatchQueue.main.async {
+      UIView.performWithoutAnimation {
+        self.containerView.postCollectionView.reloadSections(
+          IndexSet(integer: FeedDetailSection.like.rawValue)
+        )
+      }
+    }
   }
 
   func fetchLikeStatus(isToggle: Bool) {
     if isToggle {
       self.containerView.likeButton.do {
         $0.isSelected.toggle()
-        $0.isEnabled = true
       }
     }
   }
@@ -365,9 +369,12 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       )
       if indexPath.item == self.like.count {
         cell.bind(isLast: true)
+
       } else {
         cell.bind(isLast: false)
+        cell.setImage(imageUrl: self.like[indexPath.item].userImage)
       }
+
       return cell
       
     case .comment:

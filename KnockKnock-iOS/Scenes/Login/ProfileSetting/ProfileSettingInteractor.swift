@@ -70,7 +70,7 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
       socialUuid: signInInfo.socialUuid,
       socialType: signInInfo.socialType,
       nickname: nickname,
-      image: image.resize(newWidth: 100)
+      image: image.resizeSquareImage(newWidth: 100)
     )
     
     // 닉네임 중복 검사
