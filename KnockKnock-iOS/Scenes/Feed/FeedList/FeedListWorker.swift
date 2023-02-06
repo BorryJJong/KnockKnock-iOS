@@ -301,6 +301,27 @@ final class FeedListWorker: FeedListWorkerProtocol {
     }
     return isLike
   }
+
+  /// 피드 신고하기
+  ///
+  /// - Parameters:
+  ///  - feedId: 피드 아이디
+  ///  - reportType: 신고 타입
+  func requestReportFeed(
+    feedId: Int,
+    reportType: ReportType,
+    completionHandler: @escaping OnCompletionHandler
+  ) {
+    self.feedRepository.requestReportPost(
+      feedId: feedId,
+      reportType: reportType,
+      completionHandler: { isSuccess in
+
+        completionHandler(isSuccess)
+
+      }
+    )
+  }
 }
 
 // MARK: - Inner Action

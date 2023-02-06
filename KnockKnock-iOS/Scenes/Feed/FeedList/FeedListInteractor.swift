@@ -16,6 +16,10 @@ protocol FeedListInteractorProtocol {
   func requestDelete(feedId: Int)
   func requestHide(feedId: Int)
   func requestLike(feedId: Int)
+  func requestReport(
+    feedId: Int,
+    reportType: ReportType
+  )
 
   func presentBottomSheetView(
     isMyPost: Bool,

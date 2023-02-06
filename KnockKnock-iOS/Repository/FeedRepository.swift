@@ -18,7 +18,12 @@ protocol FeedRepositoryProtocol {
   func requestDeleteFeed(feedId: Int, completionHandler: @escaping (Bool) -> Void)
   func requestChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void)
   func requestFeedDetail(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void)
-  func requestHidePost(feedId: Int,completionHandler: @escaping (Bool) -> Void)
+  func requestHidePost(feedId: Int, completionHandler: @escaping (Bool) -> Void)
+  func requestReportPost(
+    feedId: Int,
+    reportType: ReportType,
+    completionHandler: @escaping (Bool) -> Void)
+  )
   func requestFeedList(
     currentPage: Int,
     pageSize: Int,
@@ -29,6 +34,8 @@ protocol FeedRepositoryProtocol {
 }
 
 final class FeedRepository: FeedRepositoryProtocol {
+
+  typealias OnCompletionHandler = (Bool) -> Void
 
   // MARK: - Feed main APIs
 
@@ -117,7 +124,7 @@ final class FeedRepository: FeedRepositoryProtocol {
 
   func requestDeleteFeed(
     feedId: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping OnCompletionHandler
   ) {
 
     KKNetworkManager
@@ -139,7 +146,7 @@ final class FeedRepository: FeedRepositoryProtocol {
 
   func requestHidePost(
     feedId: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping OnCompletionHandler
   ) {
     KKNetworkManager
       .shared
@@ -176,6 +183,29 @@ final class FeedRepository: FeedRepositoryProtocol {
         },
         failure: { response in
           print(response)
+        }
+      )
+  }
+
+  func requestReportPost(
+    feedId: Int,
+    reportType: ReportType,
+    completionHandler: @escaping OnCompletionHandler
+  ) {
+
+    KKNetworkManager
+      .shared
+      .request(
+        object: ApiResponseDTO<Bool>.self,
+        router: .postReportBlogPost(
+          id: feedId,
+          reportType: reportType.rawValue
+        ),
+        success: { response in
+          completionHandler(response.code == 200)
+        },
+        failure: { error in
+          print(error)
         }
       )
   }
