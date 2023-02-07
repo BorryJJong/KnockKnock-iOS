@@ -8,14 +8,21 @@
 import Foundation
 
 struct Challenge: Decodable {
-  let id: Int
-  let title: String
-  let subTitle: String
-  let mainImage: String
-  let isHotBadge: Bool
-  let isNewBadge: Bool
-  let participants: [Participant]
-  let participantCount: Int
+  let challengeTotalCount: Int
+  let challengeNewCount: Int
+  let challenges: [ChallengeData]
+
+  struct ChallengeData: Decodable {
+    let id: Int
+    let title: String
+    let subTitle: String
+
+    let mainImage: String
+    let isHotBadge: Bool
+    let isNewBadge: Bool
+    let participants: [Participant]
+    let participantCount: Int
+  }
 
   struct Participant: Decodable {
     let id: Int

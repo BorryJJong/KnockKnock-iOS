@@ -31,6 +31,12 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
   var worker: FeedWriteWorkerProtocol?
   var router: FeedWriteRouterProtocol?
 
+  var challengeId: Int? {
+    didSet {
+      guard let id = challengeId else { return }
+      self.setSelectedChallenge(selectedChallengeId: id)
+    }
+  }
   private var selectedPromotionList: [Promotion] = []
   private var selectedTagList: [ChallengeTitle] = []
   private var selectedAddress: AddressResponse.Documents?
@@ -143,5 +149,32 @@ extension FeedWriteInteractor: PropertyDelegate {
     self.selectedTagList = tagList
 
     self.presenter?.presentSelectedTags(tagList: tagList)
+  }
+}
+
+// MARK: - Inner Actions
+
+extension FeedWriteInteractor {
+
+  /// 기존 글의 챌린지 선택 상태 업데이트
+  ///
+  /// - Parameters:
+  ///  - feedDetail: Api로부터 받아온 기존 게시글 데이터
+  private func setSelectedChallenge(
+    selectedChallengeId: Int
+  ) {
+
+    // 태그(챌린지) 리스트 api
+    self.worker?.requestTagList(
+      selectedChallengeId: selectedChallengeId,
+      completionHandler: { [weak self] challenges in
+
+        guard let self = self else { return }
+
+        self.selectedTagList = challenges
+
+        self.presenter?.presentSelectedTags(tagList: self.selectedTagList)
+      }
+    )
   }
 }

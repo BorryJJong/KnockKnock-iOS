@@ -20,8 +20,13 @@ protocol ChallengeDetailWorkerProtocol {
 }
 
 final class ChallengeDetailWorker: ChallengeDetailWorkerProtocol {
+
+  // MARK: - Properties
+
   private let repository: ChallengeRepositoryProtocol
   private let kakaoShareManager: KakaoShareManagerProtocol
+
+  // MARK: - Initialize
   
   init(
     repository: ChallengeRepositoryProtocol,
