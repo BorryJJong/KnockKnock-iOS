@@ -11,9 +11,16 @@ protocol FeedMainInteractorProtocol {
   var presenter: FeedMainPresenterProtocol? { get set }
   var worker: FeedMainWorkerProtocol? { get set }
 
-  func fetchFeedMain(currentPage: Int, pageSize: Int, challengeId: Int)
+  func fetchFeedMain(
+    currentPage: Int,
+    pageSize: Int,
+    challengeId: Int
+  )
   func fetchChallengeTitles()
-  func setSelectedStatus(challengeTitles: [ChallengeTitle], selectedIndex: IndexPath)
+  func setSelectedStatus(
+    challengeTitles: [ChallengeTitle],
+    selectedIndex: IndexPath
+  )
 
   func saveSearchKeyword(searchKeyword: [SearchKeyword])
 }
@@ -52,39 +59,54 @@ final class FeedMainInteractor: FeedMainInteractorProtocol {
       challengeId: challengeId,
       completionHandler: { [weak self] data in
 
+        guard let self = self else { return }
+
         if currentPage == 1 {
-          self?.feedData = data
+          self.feedData = data
         } else {
-          self?.feedData?.feeds += data.feeds
-          self?.feedData?.isNext = data.isNext
+          self.feedData?.feeds += data.feeds
+          self.feedData?.isNext = data.isNext
         }
 
-        guard let feedData = self?.feedData else { return }
-        self?.presenter?.presentFeedMain(feed: feedData)
+        guard let feedData = self.feedData else { return }
+        self.presenter?.presentFeedMain(feed: feedData)
       }
     )
   }
 
   func fetchChallengeTitles() {
     self.worker?.fetchChallengeTitles { [weak self] challengeTitle in
+      guard let self = self else { return }
+
       var challengeTitle = challengeTitle
       challengeTitle[0].isSelected = true
 
-      self?.presenter?.presentGetChallengeTitles(challengeTitle: challengeTitle, index: nil)
+      self.presenter?.presentGetChallengeTitles(
+        challengeTitle: challengeTitle,
+        index: nil
+      )
     }
   }
 
-  func setSelectedStatus(challengeTitles: [ChallengeTitle], selectedIndex: IndexPath) {
+  func setSelectedStatus(
+    challengeTitles: [ChallengeTitle],
+    selectedIndex: IndexPath
+  ) {
     var challengeTitles = challengeTitles
 
     for index in 0..<challengeTitles.count {
+
       if index == selectedIndex.item {
         challengeTitles[index].isSelected = true
+
       } else {
         challengeTitles[index].isSelected = false
       }
     }
-    presenter?.presentGetChallengeTitles(challengeTitle: challengeTitles, index: selectedIndex)
+    presenter?.presentGetChallengeTitles(
+      challengeTitle: challengeTitles,
+      index: selectedIndex
+    )
   }
 }
 

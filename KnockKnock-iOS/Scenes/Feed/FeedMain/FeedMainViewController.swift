@@ -29,14 +29,9 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
   
   var interactor: FeedMainInteractorProtocol?
   var router: FeedMainRouterProtocol?
-  
-  private var feedMain: FeedMain? {
-    didSet {
-      guard let feedPosts = feedMain?.feeds else { return }
-      self.feedMainPost = feedPosts
-    }
-  }
+
   private var feedMainPost: [FeedMain.Post] = []
+  private var isNext: Bool = false
 
   private var challengeTitles: [ChallengeTitle] = []
   private var searchKeyword: [SearchKeyword] = []
@@ -116,7 +111,8 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
 
 extension FeedMainViewController: FeedMainViewProtocol {
   func fetchFeedMain(feed: FeedMain) {
-    self.feedMain = feed
+    self.feedMainPost = feed.feeds
+    self.isNext = feed.isNext
 
     DispatchQueue.main.async {
       self.containerView.feedCollectionView.reloadData()
@@ -172,6 +168,7 @@ extension FeedMainViewController: UISearchBarDelegate {
 // MARK: - CollectionView DataSource, Delegate
 
 extension FeedMainViewController: UICollectionViewDataSource {
+
   func collectionView(
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
@@ -232,11 +229,7 @@ extension FeedMainViewController: UICollectionViewDataSource {
       for: indexPath
     )
 
-    guard let feedMain = self.feedMain else {
-      return footer
-    }
-
-    footer.viewMoreButton.isHidden = !feedMain.isNext
+    footer.viewMoreButton.isHidden = !self.isNext
     footer.viewMoreButton.addTarget(
       self,
       action: #selector(self.didTapViewMoreButton(_:)),

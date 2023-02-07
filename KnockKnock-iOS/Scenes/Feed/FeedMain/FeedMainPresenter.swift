@@ -11,7 +11,10 @@ protocol FeedMainPresenterProtocol {
   var view: FeedMainViewProtocol? { get set }
   
   func presentFeedMain(feed: FeedMain)
-  func presentGetChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?)
+  func presentGetChallengeTitles(
+    challengeTitle: [ChallengeTitle],
+    index: IndexPath?
+  )
   func reloadFeedMain()
 }
 
@@ -26,8 +29,14 @@ final class FeedMainPresenter: FeedMainPresenterProtocol {
     LoadingIndicator.hideLoading()
   }
 
-  func presentGetChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?) {
-    self.view?.fetchChallengeTitles(challengeTitle: challengeTitle, index: index)
+  func presentGetChallengeTitles(
+    challengeTitle: [ChallengeTitle],
+    index: IndexPath?
+  ) {
+    self.view?.fetchChallengeTitles(
+      challengeTitle: challengeTitle,
+      index: index
+    )
   }
 
   func reloadFeedMain() {
