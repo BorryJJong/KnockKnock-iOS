@@ -74,10 +74,6 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
     )
     self.interactor?.fetchChallengeTitles()
   }
-  
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-  }
 
   // MARK: - Configure
   

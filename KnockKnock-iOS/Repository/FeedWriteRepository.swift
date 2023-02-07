@@ -10,7 +10,7 @@ import Foundation
 protocol FeedWriteRepositoryProtocol {
   func requestChallengeTitles(completionHandler: @escaping (([ChallengeTitle])) -> Void)
   func requestPromotionList(completionHandler: @escaping ([Promotion]) -> Void)
-  func requestFeedPost(postData: FeedWrite, completionHandler: @escaping (Bool) -> Void)
+  func requestFeedPost(postData: FeedWrite, completionHandler: @escaping (Int?) -> Void)
 }
 
 final class FeedWriteRepository: FeedWriteRepositoryProtocol {
@@ -53,15 +53,15 @@ final class FeedWriteRepository: FeedWriteRepositoryProtocol {
 
   func requestFeedPost(
     postData: FeedWrite,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (Int?) -> Void
   ) {
     KKNetworkManager
       .shared
       .upload(
-        object: FeedWriteDTO.self,
+        object: ApiResponseDTO<FeedWriteDTO>.self,
         router: KKRouter.postFeed(postData: postData),
         success: { response in
-          completionHandler(response.code == 200)
+          completionHandler(response.data?.id)
         },
         failure: { error in
           print(error)

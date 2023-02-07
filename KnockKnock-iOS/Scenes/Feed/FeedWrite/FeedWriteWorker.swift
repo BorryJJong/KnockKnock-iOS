@@ -10,7 +10,7 @@ import Foundation
 protocol FeedWriteWorkerProtocol: AnyObject {
   func uploadFeed(
     postData: FeedWrite,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (Int?) -> Void
   )
   func checkEssentialField(
     imageCount: Int,
@@ -39,15 +39,14 @@ final class FeedWriteWorker: FeedWriteWorkerProtocol {
 
   func uploadFeed(
     postData: FeedWrite,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (Int?) -> Void
   ) {
     self.feedWriteRepository.requestFeedPost(
       postData: postData,
-      completionHandler: { isSuccess in
-        if isSuccess {
-          self.postWriteNotificationEvent()
-        }
-        completionHandler(isSuccess)
+      completionHandler: { feedId in
+        
+        self.postWriteNotificationEvent()
+        completionHandler(feedId)
       }
     )
   }

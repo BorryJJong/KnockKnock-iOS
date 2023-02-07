@@ -17,8 +17,6 @@ protocol FeedWriteViewProtocol: AnyObject {
   func fetchTag(tag: String)
   func fetchPromotion(promotion: String)
   func fetchAddress(address: AddressResponse.Documents)
-
-  func showAlertView(isDone: Bool)
 }
 
 final class FeedWriteViewController: BaseViewController<FeedWriteView> {
@@ -50,18 +48,11 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
     super.viewDidLoad()
   }
 
-  override func viewDidAppear(_ animated: Bool) {
-    self.changeStatusBarBgColor(bgColor: .white)
-  }
-
-  override func viewWillDisappear(_ animated: Bool) {
-    self.changeStatusBarBgColor(bgColor: .clear)
-  }
-
   // MARK: - Configure
 
   override func setupConfigure() {
     self.hideKeyboardWhenTappedAround()
+    self.changeStatusBarBgColor(bgColor: .clear)
 
     self.navigationItem.do {
       $0.title = "새 게시글"
@@ -220,22 +211,6 @@ extension FeedWriteViewController: FeedWriteViewProtocol {
       name: address.placeName,
       address: address.addressName
     )
-  }
-
-  func showAlertView(isDone: Bool) {
-//    if isDone {
-//      self.showAlert(
-//        content: "게시글 등록을 완료 하시겠습니까?",
-//        confirmActionCompletion: {
-//        LoadingIndicator.showLoading()
-//        self.interactor?.requestUploadFeed(
-//          content: self.containerView.contentTextView.text,
-//          images: self.selectedImages
-//        )
-//      })
-//    } else {
-//      self.showAlert(content: "사진, 태그, 프로모션, 내용은 필수 입력 항목입니다.")
-//    }
   }
 }
 

@@ -24,6 +24,5 @@ struct FeedWrite {
 
 /// 피드 등록 api response
 struct FeedWriteDTO: Decodable {
-  let code: Int
-  let message: String
+  let id: Int
 }

@@ -40,6 +40,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+
     LoadingIndicator.showLoading()
     
     self.setNavigationBar()
@@ -113,7 +114,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     self.navigationItem.rightBarButtonItem = moreButton
     self.navigationController?.navigationBar.backgroundColor = .white
     self.navigationController?.navigationBar.tintColor = .black
-    self.changeStatusBarBgColor(bgColor: .white)
+    self.changeStatusBarBgColor(bgColor: .clear)
   }
   
   // MARK: - Button Actions

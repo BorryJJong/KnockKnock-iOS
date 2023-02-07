@@ -106,11 +106,15 @@ final class MainTabBarController: UITabBarController {
   }
 
   @objc func postButtonDidTap(_ sender: UIButton) {
-    let post = FeedWriteRouter.createFeedWrite()
-    let postNVC = UINavigationController(rootViewController: post)
-    postNVC.modalPresentationStyle = .fullScreen
+    guard let navigationController = self.selectedViewController as? UINavigationController else { return }
 
-    self.present(postNVC, animated: true)
+    let feedWrite = FeedWriteRouter.createFeedWrite(
+      rootView: navigationController
+    )
+    let feedWriteNVC = UINavigationController(rootViewController: feedWrite)
+    feedWriteNVC.modalPresentationStyle = .overFullScreen
+
+    navigationController.present(feedWriteNVC, animated: true)
   }
 
   private func setMiddleButton() {

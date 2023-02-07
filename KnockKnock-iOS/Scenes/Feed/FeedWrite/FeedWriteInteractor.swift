@@ -13,7 +13,7 @@ protocol FeedWriteInteractorProtocol: AnyObject {
   var router: FeedWriteRouterProtocol? { get set }
 
   func dismissFeedWriteView()
-  func presentFeedWriteCompletedView()
+  func presentFeedWriteCompletedView(feedId: Int)
   func navigateToShopSearch()
   func navigateToProperty(propertyType: PropertyType)
   func showAlertView(
@@ -48,11 +48,11 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
   // Routing
 
   func dismissFeedWriteView() {
-    self.router?.dismissFeedWriteView()
+    self.router?.dismissFeedWriteView(feedId: nil)
   }
 
-  func presentFeedWriteCompletedView() {
-    self.router?.presenetFeedWriteCompletedView()
+  func presentFeedWriteCompletedView(feedId: Int) {
+    self.router?.presenetFeedWriteCompletedView(feedId: feedId)
   }
 
   func navigateToShopSearch() {
@@ -139,20 +139,22 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
         promotions: promotions,
         challenges: challenges,
         images: images
-      ), completionHandler: { isSuccess in
+      ), completionHandler: { feedId in
+
+        guard let feedId = feedId else {
+          // error
+
+          return
+        }
 
         LoadingIndicator.hideLoading()
 
-        if isSuccess {
-          DispatchQueue.main.asyncAfter(
-            deadline: DispatchTime.now(),
-            execute: {
-              self.presentFeedWriteCompletedView()
-            }
-          )
-        } else {
-          // error
-        }
+        DispatchQueue.main.asyncAfter(
+          deadline: DispatchTime.now(),
+          execute: {
+            self.presentFeedWriteCompletedView(feedId: feedId)
+          }
+        )
       }
     )
   }
