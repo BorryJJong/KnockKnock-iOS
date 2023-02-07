@@ -169,7 +169,7 @@ final class FeedWriteViewController: BaseViewController<FeedWriteView> {
   }
 
   @objc func doneButtonDidTap(_ sender: UIButton) {
-    self.interactor?.checkEssentialField(imageCount: self.selectedImages.count)
+    self.interactor?.checkEssentialField(image: self.selectedImages.map { $0.pngData() })
   }
 
   // MARK: - ImagePicker
@@ -223,17 +223,19 @@ extension FeedWriteViewController: FeedWriteViewProtocol {
   }
 
   func showAlertView(isDone: Bool) {
-    if isDone {
-      self.showAlert(content: "게시글 등록을 완료 하시겠습니까?", confirmActionCompletion: {
-        LoadingIndicator.showLoading()
-        self.interactor?.requestUploadFeed(
-          content: self.containerView.contentTextView.text,
-          images: self.selectedImages
-        )
-      })
-    } else {
-      self.showAlert(content: "사진, 태그, 프로모션, 내용은 필수 입력 항목입니다.")
-    }
+//    if isDone {
+//      self.showAlert(
+//        content: "게시글 등록을 완료 하시겠습니까?",
+//        confirmActionCompletion: {
+//        LoadingIndicator.showLoading()
+//        self.interactor?.requestUploadFeed(
+//          content: self.containerView.contentTextView.text,
+//          images: self.selectedImages
+//        )
+//      })
+//    } else {
+//      self.showAlert(content: "사진, 태그, 프로모션, 내용은 필수 입력 항목입니다.")
+//    }
   }
 }
 

@@ -5,7 +5,6 @@
 //  Created by Daye on 2022/03/18.
 //
 
-import UIKit
 import Foundation
 
 protocol FeedWriteInteractorProtocol: AnyObject {
@@ -17,10 +16,14 @@ protocol FeedWriteInteractorProtocol: AnyObject {
   func presentFeedWriteCompletedView()
   func navigateToShopSearch()
   func navigateToProperty(propertyType: PropertyType)
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  )
 
   func setCurrentText(text: String)
-  func checkEssentialField(imageCount: Int)
-  func requestUploadFeed(content: String, images: [UIImage])
+  func checkEssentialField(image: [Data?])
+  func requestUploadFeed(content: String, images: [Data?])
 }
 
 final class FeedWriteInteractor: FeedWriteInteractorProtocol {
@@ -64,26 +67,54 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
     )
   }
 
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  ) {
+    self.router?.showAlertView(
+      message: message,
+      confirmAction: confirmAction
+    )
+  }
+
   // Buisness Logic
 
   func setCurrentText(text: String) {
     self.postContent = text
   }
 
-  func checkEssentialField(imageCount: Int) {
+  func checkEssentialField(image: [Data?]) {
+
     guard let isDone = self.worker?.checkEssentialField(
-      imageCount: imageCount,
+      imageCount: image.count,
       tag: self.selectedTagList,
       promotion: self.selectedPromotionList,
       content: self.postContent
     ) else { return }
 
-    self.presenter?.presentAlertView(isDone: isDone)
+    if isDone {
+      self.showAlertView(
+        message: "게시글 등록을 완료 하시겠습니까?",
+        confirmAction: {
+          LoadingIndicator.showLoading()
+
+          self.requestUploadFeed(
+            content: self.postContent,
+            images: image
+          )
+        }
+      )
+    } else {
+      self.showAlertView(
+        message: "사진, 태그, 프로모션, 내용은 필수 입력 항목입니다.",
+        confirmAction: nil
+      )
+    }
   }
 
   func requestUploadFeed(
     content: String,
-    images: [UIImage]
+    images: [Data?]
   ) {
     let promotions = self.selectedPromotionList.filter{
       $0.isSelected == true
