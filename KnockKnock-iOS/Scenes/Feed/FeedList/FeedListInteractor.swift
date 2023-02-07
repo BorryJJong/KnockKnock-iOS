@@ -431,14 +431,6 @@ extension FeedListInteractor {
     )
 
     NotificationCenter.default.addObserver(
-      forName: .feedListRefreshAfterWrite,
-      object: nil,
-      queue: nil
-    ) { _ in
-      self.presenter?.reloadFeedList()
-    }
-
-    NotificationCenter.default.addObserver(
       self,
       selector: #selector(self.addCommentNotificationEvent(_:)),
       name: .feedListCommentRefreshAfterAdd,
