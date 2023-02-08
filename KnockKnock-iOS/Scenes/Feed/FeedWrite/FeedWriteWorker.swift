@@ -10,7 +10,7 @@ import Foundation
 protocol FeedWriteWorkerProtocol: AnyObject {
   func uploadFeed(
     postData: FeedWrite,
-    completionHandler: @escaping () -> Void
+    completionHandler: @escaping (Int?) -> Void
   )
   func checkEssentialField(
     imageCount: Int,
@@ -18,7 +18,7 @@ protocol FeedWriteWorkerProtocol: AnyObject {
     promotion: [Promotion],
     content: String
   ) -> Bool
-  
+
   func requestTagList(
     selectedChallengeId: Int,
     completionHandler: @escaping ([ChallengeTitle]) -> Void
@@ -39,12 +39,14 @@ final class FeedWriteWorker: FeedWriteWorkerProtocol {
 
   func uploadFeed(
     postData: FeedWrite,
-    completionHandler: @escaping () -> Void
+    completionHandler: @escaping (Int?) -> Void
   ) {
     self.feedWriteRepository.requestFeedPost(
       postData: postData,
-      completionHandler: {
-        completionHandler()
+      completionHandler: { feedId in
+        
+        self.postWriteNotificationEvent()
+        completionHandler(feedId)
       }
     )
   }
@@ -92,5 +94,20 @@ final class FeedWriteWorker: FeedWriteWorkerProtocol {
     let result = isPromotionSelected && isTagSelected && isImageSelected && isContentFilled
 
     return result
+  }
+}
+
+extension FeedWriteWorker {
+
+  private func postWriteNotificationEvent() {
+    NotificationCenter.default.post(
+      name: .feedListRefreshAfterWrite,
+      object: nil
+    )
+
+    NotificationCenter.default.post(
+      name: .feedMainRefreshAfterWrite,
+      object: nil
+    )
   }
 }
