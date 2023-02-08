@@ -276,6 +276,16 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       feedData: feedData.toShare()
     )
   }
+
+  func showAlertView(
+    message: String,
+    completion: (() -> Void)?
+  ) {
+    self.router?.showAlertView(
+      message: message,
+      completion: completion
+    )
+  }
 }
 
 // MARK: - Inner Actions
