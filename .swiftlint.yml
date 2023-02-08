@@ -9,3 +9,4 @@ disabled_rules:
 - line_length                   # 한줄 길이 제한 해제.
 - function_body_length          # 메소드 바디 길이 제한.
 - opening_brace
+- function_parameter_count
