@@ -28,6 +28,11 @@ protocol FeedListWorkerProtocol {
     feedId: Int,
     completionHandler: @escaping (Bool) -> Void
   )
+  func requestReportFeed(
+    feedId: Int,
+    reportType: ReportType,
+    completionHandler: @escaping (Bool) -> Void
+  )
   func removePostInFeedList(
     feeds: FeedList,
     id: Int

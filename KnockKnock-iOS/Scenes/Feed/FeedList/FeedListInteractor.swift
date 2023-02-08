@@ -17,8 +17,8 @@ protocol FeedListInteractorProtocol {
   func requestHide(feedId: Int)
   func requestLike(feedId: Int)
   func requestReport(
-    feedId: Int,
-    reportType: ReportType
+    feedId: Int
+    //    reportType: ReportType
   )
 
   func presentBottomSheetView(
@@ -29,19 +29,30 @@ protocol FeedListInteractorProtocol {
     reportAction: (() -> Void)?,
     feedData: FeedList.Post
   )
-  func presentReportView()
+  func presentReportView(feedId: Int)
   func navigateToFeedEdit(feedId: Int)
   func navigateToFeedMain()
   func navigateToFeedDetail(feedId: Int)
   func navigateToCommentView(feedId: Int)
 }
 
+extension FeedListInteractor: ReportDelegate {
+  func setReportType(reportType: ReportType) {
+    self.reportType = reportType
+  }
+}
+
 final class FeedListInteractor: FeedListInteractorProtocol {
+
+  // MARK: - Properties
+
   var presenter: FeedListPresenterProtocol?
   var worker: FeedListWorkerProtocol?
   var router: FeedListRouterProtocol?
   
-  var feedListData: FeedList?
+  private var feedListData: FeedList?
+
+  var reportType: ReportType?
   
   // MARK: - Initialize
   
@@ -157,7 +168,6 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   }
 
   /// 피드 숨기기
-  ///
   func requestHide(feedId: Int) {
 
     guard let feedList = self.feedListData else { return }
@@ -172,6 +182,41 @@ final class FeedListInteractor: FeedListInteractorProtocol {
 
         if isSuccess {
           // 피드 리스트 내 해당 게시글 모두 삭제
+          guard let feedListData = self.worker?.removePostInFeedList(
+            feeds: feedList,
+            id: feedId
+          ) else { return }
+
+          self.presenter?.presentFetchFeedList(feedList: feedListData)
+
+        } else {
+          // error
+        }
+
+      }
+    )
+  }
+
+  /// 피드 신고하기
+  func requestReport(
+    feedId: Int
+    //    reportType: ReportType
+  ) {
+
+    guard let feedList = self.feedListData else { return }
+    guard !feedList.feeds.isEmpty else { return }
+
+    guard let reportType = self.reportType else { return }
+
+    self.worker?.requestReportFeed(
+      feedId: feedId,
+      reportType: reportType,
+      completionHandler: { [weak self] isSuccess in
+
+        guard let self = self else { return }
+
+        if isSuccess {
+          // 피드 리스트 내 해당 게시글 모두 숨김(삭제)처리
           guard let feedListData = self.worker?.removePostInFeedList(
             feeds: feedList,
             id: feedId
@@ -205,8 +250,13 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     self.router?.navigateToFeedMain()
   }
 
-  func presentReportView() {
-    self.router?.presentReportView()
+  func presentReportView(feedId: Int) {
+    self.router?.presentReportView(
+      action: {
+        self.requestReport(feedId: feedId)
+      },
+      reportDelegate: self
+    )
   }
   
   func presentBottomSheetView(

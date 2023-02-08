@@ -22,7 +22,7 @@ protocol FeedRepositoryProtocol {
   func requestReportPost(
     feedId: Int,
     reportType: ReportType,
-    completionHandler: @escaping (Bool) -> Void)
+    completionHandler: @escaping (Bool) -> Void
   )
   func requestFeedList(
     currentPage: Int,

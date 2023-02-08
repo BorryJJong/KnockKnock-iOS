@@ -8,6 +8,10 @@
 import UIKit
 import KKDSKit
 
+protocol ReportDelegate: AnyObject {
+  func setReportType(reportType: ReportType)
+}
+
 final class ReportViewController: BaseViewController<ReportView> {
 
   // MARK: - Properties
@@ -26,6 +30,9 @@ final class ReportViewController: BaseViewController<ReportView> {
       isSelected: false
     )
   ]
+
+  var reportAction: (() -> Void)?
+  weak var reportDelegate: ReportDelegate?
 
   private lazy var dismissBarButtonItem = UIBarButtonItem(
     image: KKDS.Image.ic_close_24_bk,
@@ -55,6 +62,14 @@ final class ReportViewController: BaseViewController<ReportView> {
       $0.delegate = self
       $0.dataSource = self
     }
+
+    self.containerView.reportButton.addAction(
+      for: .touchUpInside,
+      closure: { _ in
+        guard let action = self.reportAction else { return }
+        action()
+      }
+    )
   }
 
   // MARK: - Button Actions
@@ -100,6 +115,9 @@ extension ReportViewController: UITableViewDelegate {
 
       if index == indexPath.item {
         self.reportTypeList[index].isSelected = true
+        self.reportDelegate?.setReportType(
+          reportType: self.reportTypeList[index].reportType
+        )
 
       } else {
         self.reportTypeList[index].isSelected = false

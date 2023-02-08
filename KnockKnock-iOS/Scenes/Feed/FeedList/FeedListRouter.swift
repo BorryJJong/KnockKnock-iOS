@@ -19,7 +19,10 @@ protocol FeedListRouterProtocol {
     reportAction: (() -> Void)?,
     feedData: FeedShare?
   )
-  func presentReportView()
+  func presentReportView(
+    action: (() -> Void)?,
+    reportDelegate: ReportDelegate
+  )
   func navigateToFeedEdit(feedId: Int)
   func navigateToFeedMain()
   func navigateToFeedDetail(feedId: Int)
@@ -31,7 +34,10 @@ protocol FeedListRouterProtocol {
 final class FeedListRouter: FeedListRouterProtocol {
   weak var view: FeedListViewProtocol?
 
-  static func createFeedList(feedId: Int, challengeId: Int) -> UIViewController {
+  static func createFeedList(
+    feedId: Int,
+    challengeId: Int
+  ) -> UIViewController {
 
     let view = FeedListViewController()
     let interactor = FeedListInteractor()
@@ -95,10 +101,23 @@ final class FeedListRouter: FeedListRouterProtocol {
     }
   }
 
-  func presentReportView() {
+  /// 신고하기 view present
+  ///
+  /// - Parameters:
+  ///  - action: 신고하기 이벤트 closure
+  ///  - reportDelegate: reportDelegate
+  func presentReportView(
+    action: (() -> Void)?,
+    reportDelegate: ReportDelegate
+  ) {
     guard let sourceView = self.view as? UIViewController else { return }
 
-    let reportView = UINavigationController(rootViewController: ReportViewController())
+    let reportView = UINavigationController(
+      rootViewController: ReportViewController().then {
+        $0.reportAction = action
+        $0.reportDelegate = reportDelegate
+      }
+    )
 
     sourceView.present(reportView, animated: true)
   }

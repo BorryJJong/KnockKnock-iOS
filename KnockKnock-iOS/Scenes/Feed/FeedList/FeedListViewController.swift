@@ -118,7 +118,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
         self.interactor?.navigateToFeedEdit(feedId: feedId)
       },
       reportAction: {
-        self.interactor?.presentReportView()
+        self.interactor?.presentReportView(feedId: feedId)
       },
       feedData: self.feedListPost[sender.tag]
     )
