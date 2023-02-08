@@ -14,7 +14,7 @@ protocol UserDataManagerProtocol {
   
   func removeAllUserInfo()
   func saveNickname(nickname: String)
-  func saveUserInfo(response: AccountResponse) -> Bool
+  func saveUserInfo(response: AccountResponse)
 }
 
 final class UserDataManager: UserDataManagerProtocol {
@@ -31,9 +31,9 @@ final class UserDataManager: UserDataManagerProtocol {
   }
 
   /// 회원 가입 및 로그인 시 유저 데이터 저장
-  func saveUserInfo(response: AccountResponse) -> Bool {
+  func saveUserInfo(response: AccountResponse){
 
-    guard let authInfo = response.authInfo else { return false }
+    guard let authInfo = response.authInfo else { return }
 
     if let userInfo = response.userInfo {
       self.userDefaultsService.set(value: userInfo.image, forkey: .profileImage)
@@ -45,8 +45,6 @@ final class UserDataManager: UserDataManagerProtocol {
 
     NotificationCenter.default.post(name: .signInCompleted, object: nil)
     NotificationCenter.default.post(name: .feedListRefreshAfterSigned, object: nil)
-
-    return true
   }
 
   /// 프로필 수정 시 닉네임 저장

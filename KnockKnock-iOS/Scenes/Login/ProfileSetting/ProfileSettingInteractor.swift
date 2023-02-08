@@ -89,17 +89,26 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
           self.worker?.requestRegister(
             registerInfo: registerInfo,
             completionHandler: { [weak self] response in
-              
-              guard let isSuccess = self?.worker?.saveUserInfo(response: response) else { return }
-              
-              if isSuccess {
-                self?.router?.showAlertView(message: "회원가입에 성공하였습니다.", completion: {
-                  self?.navigateToMyView()
-                })
-                
-              } else {
-                self?.router?.showAlertView(message: "회원가입에 실패하였습니다.", completion: nil)
+
+              guard let self = self else { return }
+
+              guard response.authInfo != nil else {
+
+                self.router?.showAlertView(
+                  message: "회원가입에 실패하였습니다.",
+                  completion: nil
+                )
+                return
               }
+
+              self.worker?.saveUserInfo(response: response)
+    
+              self.router?.showAlertView(
+                message: "회원가입에 성공하였습니다.",
+                completion: {
+                  self.navigateToMyView()
+                }
+              )
             }
           )
         }

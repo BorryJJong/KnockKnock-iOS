@@ -30,7 +30,7 @@ protocol ProfileSettingWorkerProtocol {
   )
   
   func fetchUserData(completionHandler: @escaping (UserDetail) -> Void)
-  func saveUserInfo(response: AccountResponse) -> Bool
+  func saveUserInfo(response: AccountResponse)
   
 }
 
@@ -131,10 +131,8 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
 extension ProfileSettingWorker {
   
   /// UserDefaults에 회원 정보 저장
-  ///
-  /// - Returns: 성공 여부(Bool)
-  func saveUserInfo(response: AccountResponse) -> Bool {
-    return self.userDataManager.saveUserInfo(response: response)
+  func saveUserInfo(response: AccountResponse) {
+    self.userDataManager.saveUserInfo(response: response)
   }
   
   private func saveNickname(nickname: String?) {
