@@ -47,9 +47,13 @@ final class HomeViewController: BaseViewController<HomeView> {
     self.interactor?.fetchHotpost(challengeId: self.challengeId)
     self.interactor?.fetchChallengeList()
   }
-  
+
   override func viewWillAppear(_ animated: Bool) {
-    self.changeStatusBarBgColor(bgColor: .clear)
+    self.navigationController?.setNavigationBarHidden(true, animated: animated)
+  }
+
+  override func viewWillDisappear(_ animated: Bool) {
+    self.navigationController?.setNavigationBarHidden(false, animated: animated)
   }
 
   // MARK: - Configure

@@ -32,6 +32,7 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
   var deleteAction: (() -> Void)?
   var editAction: (() -> Void)?
   var hideAction: (() -> Void)?
+  var reportAction: (() -> Void)?
 
   var feedData: FeedShare?
 
@@ -86,6 +87,9 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
 
     case .postEdit:
       self.router?.dismissView(action: self.editAction)
+
+    case .postReport:
+      self.router?.dismissView(action: self.reportAction)
       
     default:
       self.router?.dismissView(action: nil)

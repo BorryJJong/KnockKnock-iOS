@@ -16,8 +16,10 @@ protocol FeedListRouterProtocol {
     deleteAction: (() -> Void)?,
     hideAction: (() -> Void)?,
     editAction: (() -> Void)?,
+    reportAction: (() -> Void)?,
     feedData: FeedShare?
   )
+  func presentReportView()
   func navigateToFeedEdit(feedId: Int)
   func navigateToFeedMain()
   func navigateToFeedDetail(feedId: Int)
@@ -93,11 +95,20 @@ final class FeedListRouter: FeedListRouterProtocol {
     }
   }
 
+  func presentReportView() {
+    guard let sourceView = self.view as? UIViewController else { return }
+
+    let reportView = UINavigationController(rootViewController: ReportViewController())
+
+    sourceView.present(reportView, animated: true)
+  }
+
   func presentBottomSheetView(
     isMyPost: Bool,
     deleteAction: (() -> Void)?,
     hideAction: (() -> Void)?,
     editAction: (() -> Void)?,
+    reportAction: (() -> Void)?,
     feedData: FeedShare?
   ) {
 
@@ -105,6 +116,7 @@ final class FeedListRouter: FeedListRouterProtocol {
       deleteAction: deleteAction,
       hideAction: hideAction,
       editAction: editAction,
+      reportAction: reportAction,
       feedData: feedData,
       isMyPost: isMyPost
     ) as? BottomSheetViewController else { return }

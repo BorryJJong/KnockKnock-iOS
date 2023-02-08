@@ -10,15 +10,22 @@ import UIKit
 protocol FeedWriteRouterProtocol: AnyObject {
   var view: FeedWriteViewProtocol? { get set }
 
-  static func createFeedWrite(challengeId: Int?) -> UIViewController
+  static func createFeedWrite(
+    challengeId: Int?,
+    rootView: UINavigationController?
+  ) -> UIViewController
 
-  func dismissFeedWriteView()
-  func presenetFeedWriteCompletedView()
+  func dismissFeedWriteView(feedId: Int?)
+  func presenetFeedWriteCompletedView(feedId: Int)
   func navigateToShopSearch()
   func navigateToProperty(
     propertyType: PropertyType,
     promotionList: [Promotion]?,
     tagList: [ChallengeTitle]?
+  )
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
   )
 }
 
@@ -28,8 +35,13 @@ final class FeedWriteRouter: FeedWriteRouterProtocol {
   var propertyDelegate: PropertyDelegate?
 
   weak var view: FeedWriteViewProtocol?
+  private var rootView: UINavigationController?
 
-  static func createFeedWrite(challengeId: Int? = nil) -> UIViewController {
+  static func createFeedWrite(
+    challengeId: Int? = nil,
+    rootView: UINavigationController?
+  ) -> UIViewController {
+
     let view = FeedWriteViewController()
     let interactor = FeedWriteInteractor()
     let presenter = FeedWritePresenter()
@@ -47,7 +59,22 @@ final class FeedWriteRouter: FeedWriteRouterProtocol {
     router.propertyDelegate = interactor
     interactor.challengeId = challengeId
 
+    router.rootView = rootView
+
     return view
+  }
+
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  ) {
+    guard let sourceView = self.view as? UIViewController else { return }
+    
+    sourceView.showAlert(
+      content: message,
+      isCancelActive: false,
+      confirmActionCompletion: confirmAction
+    )
   }
 
   func navigateToShopSearch() {
@@ -79,30 +106,52 @@ final class FeedWriteRouter: FeedWriteRouterProtocol {
     }
   }
 
-  func presenetFeedWriteCompletedView() {
+  func presenetFeedWriteCompletedView(feedId: Int) {
     guard let sourceView = self.view as? UIViewController else { return }
 
-    let feedWriteCompetedViewController = FeedWriteCompletedViewController()
+    let feedWriteCompletedViewController = FeedWriteCompletedViewController()
 
-    feedWriteCompetedViewController.modalPresentationStyle = .overFullScreen
+    feedWriteCompletedViewController.modalPresentationStyle = .overFullScreen
 
     sourceView.navigationController?.present(
-      feedWriteCompetedViewController,
+      feedWriteCompletedViewController,
       animated: true,
       completion: {
+
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-          feedWriteCompetedViewController.dismiss(
+
+          feedWriteCompletedViewController.dismiss(
             animated: true,
-            completion: self.dismissFeedWriteView
+            completion: {
+              
+              self.dismissFeedWriteView(feedId: feedId)
+            }
           )
         }
       }
     )
   }
 
-  func dismissFeedWriteView() {
-    if let sourceView = self.view as? UIViewController {
+  func dismissFeedWriteView(feedId: Int? = nil) {
+    guard let sourceView = self.view as? UIViewController else { return }
+
+    guard let feedId = feedId else {
       sourceView.dismiss(animated: true)
+      return
     }
+
+    let feedDetailViewController = FeedDetailRouter.createFeedDetail(feedId: feedId)
+    feedDetailViewController.hidesBottomBarWhenPushed = true
+    
+    sourceView.dismiss(
+      animated: true,
+      completion: {
+        
+        self.rootView?.pushViewController(
+          feedDetailViewController,
+          animated: true
+        )
+      }
+    )
   }
 }
