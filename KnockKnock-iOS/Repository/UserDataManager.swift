@@ -10,8 +10,7 @@ import Foundation
 protocol UserDataManagerProtocol {
   var userDefaultsService: UserDefaultsServiceType { get }
 
-  func checkTokenIsExisted() -> Bool
-  
+  func checkTokenIsValidated(completionHandler: @escaping (Bool) -> Void)
   func removeAllUserInfo()
   func saveNickname(nickname: String)
   func saveUserInfo(response: AccountResponse) -> Bool
@@ -21,13 +20,26 @@ final class UserDataManager: UserDataManagerProtocol {
 
   var userDefaultsService: UserDefaultsServiceType = UserDefaultsService()
 
-  /// 로컬에 토큰 존재 여부 판별
-  func checkTokenIsExisted() -> Bool {
-    if userDefaultsService.value(forkey: .accessToken) != nil {
-      return true
-    } else {
-      return false
+  /// 로컬에 토큰이 존재하는지, 유효한 토큰인지 검증
+  func checkTokenIsValidated(completionHandler: @escaping (Bool) -> Void) {
+
+    guard self.checkTokenIsExisted() else {
+      completionHandler(false)
+      return
     }
+
+    KKNetworkManager
+      .shared
+      .request(
+        object: ApiResponseDTO<Bool>.self,
+        router: .getMyPage,
+        success: { response in
+          completionHandler(response.code == 200)
+        },
+        failure: { error in
+          print(error)
+        }
+      )
   }
 
   /// 회원 가입 및 로그인 시 유저 데이터 저장
@@ -66,5 +78,19 @@ final class UserDataManager: UserDataManagerProtocol {
 
     NotificationCenter.default.post(name: .signOutCompleted, object: nil)
     NotificationCenter.default.post(name: .feedListRefreshAfterUnsigned, object: nil)
+  }
+}
+
+  // MARK: - Inner Actions
+
+extension UserDataManager {
+
+  /// 로컬에 토큰 존재 여부 판별
+  private func checkTokenIsExisted() -> Bool {
+    if userDefaultsService.value(forkey: .accessToken) != nil {
+      return true
+    } else {
+      return false
+    }
   }
 }

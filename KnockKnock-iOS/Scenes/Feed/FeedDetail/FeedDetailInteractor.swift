@@ -77,10 +77,14 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   func requestLike(feedId: Int) {
     
     // 비로그인 유저인 경우 로그인 화면으로 이동
-    guard self.worker?.checkTokenExisted() ?? false else {
-      self.router?.navigateToLoginView()
-      return
-    }
+
+    self.worker?.checkTokenIsValidated(
+      completionHandler: { isSuccess in
+        if !isSuccess {
+          self.router?.navigateToLoginView()
+        }
+      }
+    )
 
     // 좋아요 이벤트 실행한 피드의 좋아요 여부
     guard let isLike = self.feedDetail?.feed?.isLike else { return }

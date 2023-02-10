@@ -118,10 +118,13 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   func requestLike(feedId: Int) {
     
     // 비로그인 유저인 경우 로그인 화면으로 이동
-    guard self.worker?.checkTokenExisted() ?? false else {
-      self.router?.navigateToLoginView()
-      return
-    }
+    self.worker?.checkTokenIsValidated(
+      completionHandler: { isSuccess in
+        if !isSuccess {
+          self.router?.navigateToLoginView()
+        }
+      }
+    )
     
     guard let feedList = self.feedListData?.feeds else { return }
     guard !feedList.isEmpty else { return }
