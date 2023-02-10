@@ -10,7 +10,7 @@ import UIKit
 protocol FeedDetailWorkerProtocol {
   func getFeedDetail(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void)
 
-  func checkTokenIsValidated(completionHandler: @escaping (Bool) -> Void)
+  func checkTokenIsValidated() async -> Bool
   
   func requestLike(
     isLike: Bool,
@@ -175,12 +175,8 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
     )
   }
 
-  func checkTokenIsValidated(completionHandler: @escaping OnCompletionHandler) {
-    self.userDataManager.checkTokenIsValidated(
-      completionHandler: { isSuccess in
-        completionHandler(isSuccess)
-      }
-    )
+  func checkTokenIsValidated() async -> Bool {
+    return await self.userDataManager.checkTokenIsValidated()
   }
 
   func requestLike(

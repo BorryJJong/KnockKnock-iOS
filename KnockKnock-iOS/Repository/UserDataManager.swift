@@ -10,7 +10,7 @@ import Foundation
 protocol UserDataManagerProtocol {
   var userDefaultsService: UserDefaultsServiceType { get }
 
-  func checkTokenIsValidated(completionHandler: @escaping (Bool) -> Void)
+  func checkTokenIsValidated() async -> Bool
   func removeAllUserInfo()
   func saveNickname(nickname: String)
   func saveUserInfo(response: AccountResponse) -> Bool
@@ -21,25 +21,27 @@ final class UserDataManager: UserDataManagerProtocol {
   var userDefaultsService: UserDefaultsServiceType = UserDefaultsService()
 
   /// 로컬에 토큰이 존재하는지, 유효한 토큰인지 검증
-  func checkTokenIsValidated(completionHandler: @escaping (Bool) -> Void) {
+  func checkTokenIsValidated() async -> Bool {
 
     guard self.checkTokenIsExisted() else {
-      completionHandler(false)
-      return
+      return false
     }
 
-    KKNetworkManager
-      .shared
-      .request(
-        object: ApiResponseDTO<Bool>.self,
-        router: .getMyPage,
-        success: { response in
-          completionHandler(response.code == 200)
-        },
-        failure: { error in
-          print(error)
-        }
-      )
+    do {
+      let result = try await KKNetworkManager
+        .shared
+        .asyncRequest(
+          object: ApiResponseDTO<Bool>.self,
+          router: .getMyPage
+        )
+
+      return result.code == 200
+
+    } catch let error {
+      print(error)
+
+      return false
+    }
   }
 
   /// 회원 가입 및 로그인 시 유저 데이터 저장

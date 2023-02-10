@@ -27,11 +27,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   private func checkTokenIsValidated() {
     let userDataManager = UserDataManager()
+    
+    Task {
 
-    userDataManager.checkTokenIsValidated(
-      completionHandler: { isSuccess in
+      let isValidated = await userDataManager.checkTokenIsValidated()
 
-        if isSuccess {
+      await MainActor.run {
+        if isValidated {
           NotificationCenter.default.post(
             name: .signInCompleted,
             object: nil
@@ -43,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
           )
         }
       }
-    )
+    }
   }
 
   // MARK: - UISceneSession Lifecycle
