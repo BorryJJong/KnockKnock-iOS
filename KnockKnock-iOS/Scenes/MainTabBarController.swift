@@ -24,8 +24,8 @@ final class MainTabBarController: UITabBarController {
     ),
     .feed: UITabBarItem(
       title: "피드",
-      image: KKDS.Image.ic_bottom_store_27_off,
-      selectedImage: KKDS.Image.ic_bottom_store_27_on
+      image: KKDS.Image.ic_bottom_search_27_off,
+      selectedImage: KKDS.Image.ic_bottom_search_27_on
     ),
     .post: UITabBarItem(
       title: nil,
