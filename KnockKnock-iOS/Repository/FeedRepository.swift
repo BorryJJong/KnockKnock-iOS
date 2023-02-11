@@ -15,10 +15,13 @@ protocol FeedRepositoryProtocol {
     challengeId: Int,
     completionHandler: @escaping (FeedMain) -> Void
   )
-  func requestDeleteFeed(feedId: Int, completionHandler: @escaping (Bool) -> Void)
+  func requestDeleteFeed(
+    feedId: Int,
+    completionHandler: @escaping (Bool) -> Void
+  )
   func requestChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void)
   func requestFeedDetail(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void)
-  func requestHidePost(feedId: Int,completionHandler: @escaping (Bool) -> Void)
+  func requestHidePost(feedId: Int, completionHandler: @escaping (Bool) -> Void)
   func requestFeedList(
     currentPage: Int,
     pageSize: Int,

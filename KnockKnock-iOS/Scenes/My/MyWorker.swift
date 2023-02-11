@@ -9,7 +9,6 @@ import UIKit
 
 protocol MyWorkerProtocol {
   func fetchMenuData(completionHandler: @escaping (MyMenu) -> Void)
-  func checkSignInStatus(completionHandler: @escaping(Bool) -> Void)
   func fetchNickname(completionHandler: @escaping(String) -> Void)
   func requestSignOut()
   func requestWithdraw()
@@ -66,12 +65,6 @@ final class MyWorker: MyWorkerProtocol {
       return
     }
       completionHandler(nickname)
-  }
-
-  func checkSignInStatus(completionHandler: @escaping(Bool) -> Void) {
-    if let isSignedIn = self.userDataManager?.checkTokenIsExisted() {
-      completionHandler(isSignedIn)
-    }
   }
 
   func requestSignOut() {
