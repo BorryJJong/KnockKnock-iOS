@@ -80,11 +80,19 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     }
 
     self.containerView.registButton.do {
-      $0.addTarget(self, action: #selector(self.registButtonDidTap(_:)), for: .touchUpInside)
+      $0.addTarget(
+        self,
+        action: #selector(self.registButtonDidTap(_:)),
+        for: .touchUpInside
+      )
     }
 
     self.containerView.likeButton.do {
-      $0.addTarget(self, action: #selector(self.likeButtonDidTap(_:)), for: .touchUpInside)
+      $0.addTarget(
+        self,
+        action: #selector(self.likeButtonDidTap(_:)),
+        for: .touchUpInside
+      )
     }
 
     self.addKeyboardNotification()
@@ -99,7 +107,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       target: self,
       action: #selector(backButtonDidTap(_:))
     )
-    
+
     let moreButton = UIBarButtonItem(
       image: KKDS.Image.ic_more_20_gr,
       style: .plain,

@@ -123,7 +123,6 @@
 		61767BB92990B22E00EA1FFC /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61767BB82990B22E00EA1FFC /* ReportViewController.swift */; };
 		61767BBE2990F17D00EA1FFC /* Report.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61767BBD2990F17D00EA1FFC /* Report.swift */; };
 		61767BC02990FC2400EA1FFC /* ReportTableFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61767BBF2990FC2400EA1FFC /* ReportTableFooterView.swift */; };
-		61767BC22991029300EA1FFC /* ReportType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61767BC12991029300EA1FFC /* ReportType.swift */; };
 		617E99C129879D1700E3FBD5 /* DispatchTimeInterval+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617E99C029879D1700E3FBD5 /* DispatchTimeInterval+Ext.swift */; };
 		617E99C32987A04400E3FBD5 /* ImageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617E99C22987A04400E3FBD5 /* ImageError.swift */; };
 		617E99C52987BCD700E3FBD5 /* FeedEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617E99C42987BCD700E3FBD5 /* FeedEdit.swift */; };
@@ -255,6 +254,7 @@
 		61CD4810293DC5A000FEE2F7 /* FeedWriteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CD480F293DC5A000FEE2F7 /* FeedWriteRepository.swift */; };
 		61D190B4296AAE3000329ABD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 61D190B3296AAE3000329ABD /* GoogleService-Info.plist */; };
 		61D190B8296BD76000329ABD /* ApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D190B7296BD76000329ABD /* ApiResponse.swift */; };
+		61DD8FE32998BDEA0061E348 /* ReportType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DD8FE22998BDEA0061E348 /* ReportType.swift */; };
 		61DEFE8429402DEE00ABC13E /* UIImage+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DEFE8329402DEE00ABC13E /* UIImage+Ext.swift */; };
 		61DEFE86294059BF00ABC13E /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DEFE85294059BF00ABC13E /* Alert.swift */; };
 		61DEFE8E2941AF9000ABC13E /* AlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DEFE8D2941AF9000ABC13E /* AlertViewController.swift */; };
@@ -393,7 +393,6 @@
 		61767BB82990B22E00EA1FFC /* ReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportViewController.swift; sourceTree = "<group>"; };
 		61767BBD2990F17D00EA1FFC /* Report.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Report.swift; sourceTree = "<group>"; };
 		61767BBF2990FC2400EA1FFC /* ReportTableFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportTableFooterView.swift; sourceTree = "<group>"; };
-		61767BC12991029300EA1FFC /* ReportType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ReportType.swift; path = "/Users/daye/git_BorryJJong/KnockKnock-iOS/KnockKnock-iOS/Enum/ReportType.swift"; sourceTree = "<absolute>"; };
 		617E99C029879D1700E3FBD5 /* DispatchTimeInterval+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchTimeInterval+Ext.swift"; sourceTree = "<group>"; };
 		617E99C22987A04400E3FBD5 /* ImageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageError.swift; sourceTree = "<group>"; };
 		617E99C42987BCD700E3FBD5 /* FeedEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEdit.swift; sourceTree = "<group>"; };
@@ -521,6 +520,7 @@
 		61D190B2296AA9E400329ABD /* firebase-tools-macos.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "firebase-tools-macos.zip"; sourceTree = "<group>"; };
 		61D190B3296AAE3000329ABD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		61D190B7296BD76000329ABD /* ApiResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiResponse.swift; sourceTree = "<group>"; };
+		61DD8FE22998BDEA0061E348 /* ReportType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportType.swift; sourceTree = "<group>"; };
 		61DEFE8329402DEE00ABC13E /* UIImage+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ext.swift"; sourceTree = "<group>"; };
 		61DEFE85294059BF00ABC13E /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		61DEFE8D2941AF9000ABC13E /* AlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertViewController.swift; sourceTree = "<group>"; };
@@ -1295,7 +1295,6 @@
 		61E3087A2873349B001394B6 /* Enum */ = {
 			isa = PBXGroup;
 			children = (
-				61767BC12991029300EA1FFC /* ReportType.swift */,
 				61E3087B287334C1001394B6 /* ImageScaleType.swift */,
 				61B6D997288C40BF00E60F08 /* HomeSection.swift */,
 				616EB090289154B8001BD18C /* FeedDetailSection.swift */,
@@ -1314,6 +1313,7 @@
 				6128A4C0297F7B02005E36F3 /* ShareURL.swift */,
 				61CCF3FA2984D7F000FBAB07 /* SharQueryItemType.swift */,
 				61A6B7262989174B002A1C57 /* ChallengeSortType.swift */,
+				61DD8FE22998BDEA0061E348 /* ReportType.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -1546,6 +1546,7 @@
 				61E87EB928D1894A0005CAA6 /* FeedSearchPresenter.swift in Sources */,
 				201077FC27D3D26E00280991 /* BaseTableViewCell.swift in Sources */,
 				617F9D71282BAC1300C2BC9A /* BottomSheetViewController.swift in Sources */,
+				61DD8FE32998BDEA0061E348 /* ReportType.swift in Sources */,
 				61A028772913AC5200943A40 /* Promotion.swift in Sources */,
 				2010780227D3D59F00280991 /* UITableViewCell+Ext.swift in Sources */,
 				61E3088428768D71001394B6 /* UIStackView+Ext.swift in Sources */,
@@ -1631,7 +1632,6 @@
 				614329622862F6E3008BDCC9 /* FeedMainWorker.swift in Sources */,
 				6105079A28B4EEDF00C1B5CF /* HomePresenter.swift in Sources */,
 				209B80E12955E897003E591C /* AppleLoginManager.swift in Sources */,
-				61767BC22991029300EA1FFC /* ReportType.swift in Sources */,
 				61A0287F2914DDF500943A40 /* PropertySelectPresenter.swift in Sources */,
 				613856D12898CB1300BE347E /* FeedDetailNavigtaionBarView.swift in Sources */,
 				61AB2E4E28A36E3E00A1AE30 /* LikeDetailViewController.swift in Sources */,

@@ -306,13 +306,27 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     editAction: (() -> Void)?,
     reportAction: (() -> Void)?
   ) {
-    self.router?.presentBottomSheetView(
-      isMyPost: isMyPost,
-      deleteAction: deleteAction,
-      hideAction: hideAction,
-      editAction: editAction,
-      reportAction: reportAction
-    )
+
+    Task {
+
+      if await self.checkTokenIsValidated() {
+
+        await MainActor.run {
+          self.router?.presentBottomSheetView(
+            isMyPost: isMyPost,
+            deleteAction: deleteAction,
+            hideAction: hideAction,
+            editAction: editAction,
+            reportAction: reportAction
+          )
+        }
+      } else {
+
+        await MainActor.run {
+          self.router?.navigateToLoginView()
+        }
+      }
+    }
   }
   
   func showAlertView(
