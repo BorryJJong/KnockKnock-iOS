@@ -204,7 +204,10 @@ extension CommentViewController: UICollectionViewDataSource {
     )
     let commentId = self.visibleComments[indexPath.item].data.id
     
-    cell.bind(comment: self.visibleComments[indexPath.item])
+    cell.bind(
+      comment: self.visibleComments[indexPath.item],
+      isLoggedIn: true
+    )
     
     cell.replyMoreButton.do {
       $0.tag = commentId

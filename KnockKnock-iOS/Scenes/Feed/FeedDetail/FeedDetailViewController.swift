@@ -19,6 +19,7 @@ protocol FeedDetailViewProtocol: AnyObject {
   func fetchLikeList(like: [Like.Info])
   func fetchLikeStatus(isToggle: Bool)
   func deleteComment()
+  func setLoginStatus(isLoggedIn: Bool)
 }
 
 final class FeedDetailViewController: BaseViewController<FeedDetailView> {
@@ -31,10 +32,11 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   var commentId: Int?
   var allCommentsCount: Int = 0
 
-  var feedDetail: FeedDetail?
-  var visibleComments: [Comment] = []
+  private var feedDetail: FeedDetail?
+  private var visibleComments: [Comment] = []
+  private var isLoggedIn: Bool = false
 
-  var like: [Like.Info] = []
+  private var like: [Like.Info] = []
 
   // MARK: - Life Cycles
   
@@ -42,7 +44,8 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     super.viewDidLoad()
 
     LoadingIndicator.showLoading()
-    
+
+    self.interactor?.checkLoginStatus()
     self.setNavigationBar()
     self.setupConfigure()
     self.fetchData()
@@ -127,11 +130,13 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   
   // MARK: - Button Actions
   
-  @objc private func backButtonDidTap(_ sender: UIButton) {
+  @objc
+  private func backButtonDidTap(_ sender: UIButton) {
     self.navigationController?.popViewController(animated: true)
   }
   
-  @objc private func moreButtonDidTap(_ sender: UIButton) {
+  @objc
+  private func moreButtonDidTap(_ sender: UIButton) {
 
     guard let isMyPost = self.feedDetail?.feed?.isWriter,
           let feedId = self.feedDetail?.feed?.id else { return }
@@ -153,31 +158,38 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     )
   }
   
-  @objc private func replyMoreButtonDidTap(_ sender: UIButton) {
+  @objc
+  private func replyMoreButtonDidTap(_ sender: UIButton) {
     self.interactor?.toggleVisibleStatus(commentId: sender.tag)
   }
   
-  @objc private func registButtonDidTap(_ sender: UIButton) {
-    if let content = self.containerView.commentTextView.text {
-      self.interactor?.requestAddComment(
-        comment: AddCommentDTO(
-          postId: self.feedId,
-          content: content,
-          commentId: self.commentId
-        )
+  @objc
+  private func registButtonDidTap(_ sender: UIButton) {
+    guard let content = self.containerView.commentTextView.text else { return }
+
+    self.interactor?.requestAddComment(
+      comment: AddCommentDTO(
+        postId: self.feedId,
+        content: content,
+        commentId: self.commentId
       )
-    }
-    self.containerView.commentTextView.text = ""
-    self.containerView.setPlaceholder()
+    )
+    self.containerView.commentTextView.text = nil
     self.commentId = nil
+
+    DispatchQueue.main.async {
+      self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
+    }
   }
   
-  @objc private func replyWriteButtonDidTap(_ sender: UIButton) {
+  @objc
+  private func replyWriteButtonDidTap(_ sender: UIButton) {
     self.commentId = sender.tag
     self.containerView.commentTextView.becomeFirstResponder()
   }
 
-  @objc func likeButtonDidTap(_ sender: UIButton) {
+  @objc
+  private func likeButtonDidTap(_ sender: UIButton) {
     self.interactor?.requestLike(feedId: self.feedId)
   }
 
@@ -283,7 +295,16 @@ extension FeedDetailViewController: FeedDetailViewProtocol {
       }
 
       self.containerView.postCollectionView.reloadData()
+      self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
       self.containerView.layoutIfNeeded()
+    }
+  }
+
+  func setLoginStatus(isLoggedIn: Bool) {
+    self.isLoggedIn = isLoggedIn
+
+    DispatchQueue.main.async {
+      self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
     }
   }
   
@@ -398,7 +419,10 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       )
       let commentId = self.visibleComments[indexPath.item].data.id
       
-      cell.bind(comment: self.visibleComments[indexPath.item])
+      cell.bind(
+        comment: self.visibleComments[indexPath.item],
+        isLoggedIn: self.isLoggedIn
+      )
       
       cell.replyMoreButton.do {
         $0.tag = commentId
@@ -544,11 +568,15 @@ extension FeedDetailViewController: UICollectionViewDelegateFlowLayout {
 
 extension FeedDetailViewController: UITextViewDelegate {
   func textViewDidBeginEditing(_ textView: UITextView) {
-    self.containerView.setPlaceholder()
+    DispatchQueue.main.async {
+      self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
+    }
   }
   
   func textViewDidEndEditing(_ textView: UITextView) {
-    self.containerView.setPlaceholder()
+    DispatchQueue.main.async {
+      self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
+    }
   }
   
   func textViewDidChange(_ textView: UITextView) {
