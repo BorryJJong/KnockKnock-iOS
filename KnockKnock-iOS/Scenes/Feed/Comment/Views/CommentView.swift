@@ -43,10 +43,6 @@ class CommentView: UIView {
     static let registButtonHeight = 30.f
   }
 
-  // MARK: - Properties
-
-  private let commentTextViewPlaceholder = "댓글을 입력하세요..."
-
   // MARK: - UIs
 
   private let headerView = UIView().then {
@@ -94,7 +90,7 @@ class CommentView: UIView {
 
   lazy var commentTextView = UITextView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.text = self.commentTextViewPlaceholder
+    $0.text = Placeholder.noText
     $0.textColor = .gray50
     $0.font = .systemFont(ofSize: 15, weight: .regular)
     $0.autocorrectionType = .no

@@ -543,7 +543,10 @@ extension FeedDetailViewController: UICollectionViewDataSource {
     }
   }
   
-  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    didSelectItemAt indexPath: IndexPath
+  ) {
     if indexPath.section == FeedDetailSection.like.rawValue {
       if indexPath.item == self.like.count {
         self.interactor?.navigateToLikeDetail()

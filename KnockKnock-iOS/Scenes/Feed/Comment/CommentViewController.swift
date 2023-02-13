@@ -186,6 +186,7 @@ extension CommentViewController: CommentViewProtocol {
     DispatchQueue.main.async {
       UIView.performWithoutAnimation {
         self.containerView.commentCollectionView.reloadData()
+        self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
       }
     }
   }
