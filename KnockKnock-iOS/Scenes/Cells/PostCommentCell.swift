@@ -45,6 +45,9 @@ final class PostCommentCell: BaseCollectionViewCell {
 
   private let profileImageView = UIImageView().then {
     $0.image = KKDS.Image.ic_person_24
+    $0.layer.cornerRadius = (Metric.profileImageViewWidth / 2)
+    $0.clipsToBounds = true
+    $0.contentMode = .scaleToFill
   }
 
   private let userIdLabel = UILabel().then {
@@ -100,17 +103,25 @@ final class PostCommentCell: BaseCollectionViewCell {
     let reply = comment.data.reply.map {
       $0.filter { !$0.isDeleted }
     } ?? []
-    self.setReplyMoreButton(count: reply.count, isOpen: comment.isOpen)
+    
+    self.setReplyMoreButton(
+      count: reply.count,
+      isOpen: comment.isOpen
+    )
 
     self.userIdLabel.text = comment.data.nickname
+    self.profileImageView.setImageFromStringUrl(
+      stringUrl: comment.data.image,
+      defaultImage: KKDS.Image.ic_person_24
+    )
     self.commentLabel.text = comment.data.content
     self.writtenDateLabel.text = comment.data.regDate
 
-    self.replyWriteButton.isHidden = comment.isReply
     self.replyWriteButton.isHidden = !isLoggedIn
     self.commentDeleteButton.isHidden = !isLoggedIn
 
     if comment.isReply {
+      self.replyWriteButton.isHidden = comment.isReply
       self.commentDeleteButton.snp.remakeConstraints {
         $0.top.equalTo(self.writtenDateLabel)
         $0.leading.equalTo(self.writtenDateLabel.snp.trailing).offset(Metric.commentDeleteButtonLeadingMargin)
