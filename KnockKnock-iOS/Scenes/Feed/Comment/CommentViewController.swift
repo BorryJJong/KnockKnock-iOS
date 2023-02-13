@@ -14,6 +14,7 @@ protocol CommentViewProtocol: AnyObject {
   var interactor: CommentInteractorProtocol? { get set }
   
   func fetchVisibleComments(comments: [Comment])
+  func setLoginStatus(isLoggedIn: Bool) 
 }
 
 final class CommentViewController: BaseViewController<CommentView> {
@@ -22,16 +23,12 @@ final class CommentViewController: BaseViewController<CommentView> {
 
   var interactor: CommentInteractorProtocol?
   
-  var visibleComments: [Comment] = [] {
-    didSet {
-      UIView.performWithoutAnimation {
-        self.containerView.commentCollectionView.reloadData()
-      }
-    }
-  }
+  private var visibleComments: [Comment] = []
   
   var feedId: Int = 6
   var commentId: Int?
+  
+  private var isLoggedIn: Bool = false
   
   // MARK: - Life Cycles
   
@@ -39,6 +36,7 @@ final class CommentViewController: BaseViewController<CommentView> {
     super.viewDidLoad()
     
     LoadingIndicator.showLoading()
+    self.interactor?.checkLoginStatus()
     self.interactor?.fetchAllComments(feedId: self.feedId)
   }
   
@@ -169,9 +167,12 @@ final class CommentViewController: BaseViewController<CommentView> {
           commentId: self.commentId
         )
       )
-      self.containerView.commentTextView.text = ""
-      self.containerView.setPlaceholder()
+      self.containerView.commentTextView.text = nil
       self.commentId = nil
+
+      DispatchQueue.main.async {
+        self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
+      }
     }
   }
 }
@@ -181,6 +182,20 @@ final class CommentViewController: BaseViewController<CommentView> {
 extension CommentViewController: CommentViewProtocol {
   func fetchVisibleComments(comments: [Comment]) {
     self.visibleComments = comments
+
+    DispatchQueue.main.async {
+      UIView.performWithoutAnimation {
+        self.containerView.commentCollectionView.reloadData()
+      }
+    }
+  }
+
+  func setLoginStatus(isLoggedIn: Bool) {
+    self.isLoggedIn = isLoggedIn
+
+    DispatchQueue.main.async {
+      self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
+    }
   }
 }
 
@@ -206,7 +221,7 @@ extension CommentViewController: UICollectionViewDataSource {
     
     cell.bind(
       comment: self.visibleComments[indexPath.item],
-      isLoggedIn: true
+      isLoggedIn: self.isLoggedIn
     )
     
     cell.replyMoreButton.do {
@@ -257,12 +272,14 @@ extension CommentViewController: UICollectionViewDelegateFlowLayout {
 
 extension CommentViewController: UITextViewDelegate {
   func textViewDidBeginEditing(_ textView: UITextView) {
-    self.containerView.setPlaceholder()
+    DispatchQueue.main.async {
+      self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
+    }
   }
   
   func textViewDidEndEditing(_ textView: UITextView) {
-    if textView.text == "" {
-      self.containerView.setPlaceholder()
+    DispatchQueue.main.async {
+      self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
     }
   }
   

@@ -232,7 +232,9 @@ final class FeedListInteractor: FeedListInteractorProtocol {
         }
       } else {
         
-        self.router?.navigateToLoginView()
+        await MainActor.run {
+          self.router?.navigateToLoginView()
+        }
       }
     }
   }

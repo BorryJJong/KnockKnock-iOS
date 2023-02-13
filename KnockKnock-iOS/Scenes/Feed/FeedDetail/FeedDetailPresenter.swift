@@ -48,6 +48,7 @@ final class FeedDetailPresenter: FeedDetailPresenterProtocol {
   func presentAllCommentsCount(allCommentsCount: Int) {
     self.view?.getAllCommentsCount(allCommentsCount: allCommentsCount)
   }
+  
   func presentLoginStatus(isLoggedIn: Bool) {
     self.view?.setLoginStatus(isLoggedIn: isLoggedIn)
   }

@@ -61,7 +61,16 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   }
   
   // MARK: - Business logic
-  
+
+  /// 로그인 상태 체크
+  func checkLoginStatus() {
+    Task {
+      self.presenter?.presentLoginStatus(
+        isLoggedIn: await self.checkTokenIsValidated()
+      )
+    }
+  }
+
   func getFeedDeatil(feedId: Int) {
     self.worker?.getFeedDetail(
       feedId: feedId,
@@ -300,14 +309,6 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
 
   func presentReportView() {
     self.router?.presentReportView()
-  }
-
-  func checkLoginStatus() {
-    Task {
-      self.presenter?.presentLoginStatus(
-        isLoggedIn: await self.checkTokenIsValidated()
-      )
-    }
   }
 
   func presentBottomSheetView(

@@ -140,8 +140,6 @@ final class FeedDetailView: UIView {
     self.likeButton.isSelected = isLike
   }
 
-  // MARK: - Configure
-
   func setCommentComponets(isLoggedIn: Bool) {
     self.commentTextView.isEditable = isLoggedIn
     self.registButton.isEnabled = isLoggedIn
