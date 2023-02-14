@@ -14,7 +14,7 @@ protocol CommentViewProtocol: AnyObject {
   var interactor: CommentInteractorProtocol? { get set }
   
   func fetchVisibleComments(comments: [Comment])
-  func setLoginStatus(isLoggedIn: Bool) 
+  func setLoginStatus(isLoggedIn: Bool)
 }
 
 final class CommentViewController: BaseViewController<CommentView> {
@@ -186,7 +186,6 @@ extension CommentViewController: CommentViewProtocol {
     DispatchQueue.main.async {
       UIView.performWithoutAnimation {
         self.containerView.commentCollectionView.reloadData()
-        self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
       }
     }
   }
