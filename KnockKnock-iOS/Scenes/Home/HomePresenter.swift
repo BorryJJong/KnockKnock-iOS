@@ -10,8 +10,12 @@ import UIKit
 protocol HomePresenterProtocol {
   var view: HomeViewProtocol? { get set }
 
+  func presentEventList(eventList: [Event])
   func presentHotPostList(hotPostList: [HotPost])
-  func presentChallengeList(challengeList: [ChallengeTitle], index: IndexPath?)
+  func presentChallengeList(
+    challengeList: [ChallengeTitle],
+    index: IndexPath?
+  )
 }
 
 final class HomePresenter: HomePresenterProtocol {
@@ -23,5 +27,9 @@ final class HomePresenter: HomePresenterProtocol {
 
   func presentChallengeList(challengeList: [ChallengeTitle], index: IndexPath?) {
     self.view?.fetchChallengeList(challengeList: challengeList, index: index)
+  }
+
+  func presentEventList(eventList: [Event]) {
+    self.view?.fetchEventList(eventList: eventList)
   }
 }

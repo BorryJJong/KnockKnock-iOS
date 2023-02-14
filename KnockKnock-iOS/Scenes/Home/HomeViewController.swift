@@ -18,6 +18,7 @@ protocol HomeViewProtocol: AnyObject {
     challengeList: [ChallengeTitle],
     index: IndexPath?
   )
+  func fetchEventList(eventList: [Event])
 }
 
 final class HomeViewController: BaseViewController<HomeView> {
@@ -26,26 +27,18 @@ final class HomeViewController: BaseViewController<HomeView> {
 
   var interactor: HomeInteractorProtocol?
 
-  var hotPostList: [HotPost] = [] {
-    didSet {
-      UIView.performWithoutAnimation {
-        self.containerView.homeCollectionView.reloadSections(
-          IndexSet(integer: HomeSection.popularPost.rawValue)
-        )
-      }
-    }
-  }
-
-  var challengeList: [ChallengeTitle] = []
+  private var hotPostList: [HotPost] = []
+  private var eventList: [Event] = []
+  private var challengeList: [ChallengeTitle] = []
   private var challengeId: Int = 0
 
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    
     self.setupConfigure()
-    self.interactor?.fetchHotpost(challengeId: self.challengeId)
-    self.interactor?.fetchChallengeList()
+    self.fetchData()
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -77,6 +70,12 @@ final class HomeViewController: BaseViewController<HomeView> {
     }
   }
 
+  private func fetchData() {
+    self.interactor?.fetchHotpost(challengeId: self.challengeId)
+    self.interactor?.fetchChallengeList()
+    self.interactor?.fetchEventList()
+  }
+
   // MARK: - Navigation Bar 설정
 
   func setNavigationItem() {
@@ -101,6 +100,15 @@ final class HomeViewController: BaseViewController<HomeView> {
 extension HomeViewController: HomeViewProtocol {
   func fetchHotPostList(hotPostList: [HotPost]) {
     self.hotPostList = hotPostList
+
+    DispatchQueue.main.async {
+
+      UIView.performWithoutAnimation {
+        self.containerView.homeCollectionView.reloadSections(
+          IndexSet(integer: HomeSection.popularPost.rawValue)
+        )
+      }
+    }
   }
 
   func fetchChallengeList(
@@ -108,7 +116,13 @@ extension HomeViewController: HomeViewProtocol {
     index: IndexPath?
   ) {
     self.challengeList = challengeList
-    if let index = index {
+
+    DispatchQueue.main.async {
+      guard let index = index else {
+        self.containerView.homeCollectionView.reloadSections([HomeSection.tag.rawValue])
+        return
+      }
+
       UIView.performWithoutAnimation {
         self.containerView.homeCollectionView.reloadSections([HomeSection.tag.rawValue])
         self.containerView.homeCollectionView.scrollToItem(
@@ -117,8 +131,14 @@ extension HomeViewController: HomeViewProtocol {
           animated: false
         )
       }
-    } else {
-      self.containerView.homeCollectionView.reloadSections([HomeSection.tag.rawValue])
+    }
+  }
+
+  func fetchEventList(eventList: [Event]) {
+    self.eventList = eventList
+
+    DispatchQueue.main.async {
+      self.containerView.homeCollectionView.reloadSections([HomeSection.event.rawValue])
     }
   }
 }
@@ -139,7 +159,10 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     case .tag:
       return self.challengeList.count
 
-    case .event, .banner, .store:
+    case .event:
+      return self.eventList.count
+
+    case .banner, .store:
       return 6
 
     case .popularPost:
@@ -280,7 +303,9 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         withType: EventCell.self,
         for: indexPath
       )
-      
+
+      cell.bind(event: self.eventList[indexPath.item])
+
       return cell
 
     default:

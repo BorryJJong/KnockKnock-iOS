@@ -14,7 +14,11 @@ protocol HomeInteractorProtocol {
 
   func fetchHotpost(challengeId: Int)
   func fetchChallengeList()
-  func setSelectedStatus(challengeList: [ChallengeTitle], selectedIndex: IndexPath)
+  func setSelectedStatus(
+    challengeList: [ChallengeTitle],
+    selectedIndex: IndexPath
+  )
+  func fetchEventList()
 
   func navigateToStoreListView()
   func navigateToEventPageView()
@@ -49,6 +53,17 @@ final class HomeInteractor: HomeInteractorProtocol {
       challenges[0].isSelected = true
 
       self?.presenter?.presentChallengeList(challengeList: challenges, index: nil)
+    }
+  }
+
+  func fetchEventList() {
+    Task {
+      guard let eventList = await self.worker?.fetchEventList() else {
+        // error
+        return
+      }
+
+      self.presenter?.presentEventList(eventList: eventList)
     }
   }
 

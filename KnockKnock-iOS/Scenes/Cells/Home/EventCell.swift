@@ -62,7 +62,6 @@ final class EventCell: BaseCollectionViewCell {
   }
 
   private let newEventLabel = UILabel().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .green50
     $0.textAlignment = .center
     $0.layer.cornerRadius = 3
@@ -80,6 +79,16 @@ final class EventCell: BaseCollectionViewCell {
     } else {
       self.coverView.isHidden = true
     }
+  }
+
+  func bind(event: Event) {
+    self.thumbnailImageView.setImageFromStringUrl(
+      stringUrl: event.image,
+      defaultImage: KKDS.Image.ic_no_data_60
+    )
+    self.periodLabel.text = event.eventPeriod
+    self.titleLabel.text = event.title
+    self.newEventLabel.isHidden = !event.isNewBadge
   }
 
   // MARK: - Configure
