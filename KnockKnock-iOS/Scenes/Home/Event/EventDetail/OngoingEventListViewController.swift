@@ -94,4 +94,13 @@ extension OngoingEventListViewController: UICollectionViewDataSource, UICollecti
       height: width/2
     )
   }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    didSelectItemAt indexPath: IndexPath
+  ) {
+    guard let url = self.ongoingEventList[indexPath.item].url else { return }
+
+    UIApplication.shared.open(url)
+  }
 }
