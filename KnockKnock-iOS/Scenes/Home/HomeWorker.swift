@@ -8,9 +8,13 @@
 import UIKit
 
 protocol HomeWorkerProtocol {
-  func fetchHotPostList(challengeId: Int, completionHandler: @escaping ([HotPost]) -> Void)
+  func fetchHotPostList(
+    challengeId: Int,
+    completionHandler: @escaping ([HotPost]) -> Void
+  )
   func fetchChallengeList(completionHandler: @escaping([ChallengeTitle]) -> Void)
   func fetchEventList() async -> [Event]
+
 }
 
 final class HomeWorker: HomeWorkerProtocol {
@@ -44,4 +48,5 @@ final class HomeWorker: HomeWorkerProtocol {
   func fetchEventList() async -> [Event] {
     return await self.homeRepository.requestEventList()
   }
+
 }

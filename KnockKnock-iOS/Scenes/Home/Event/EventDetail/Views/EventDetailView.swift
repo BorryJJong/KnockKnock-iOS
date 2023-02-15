@@ -1,17 +1,17 @@
 //
-//  EventListVIew.swift
+//  EventDetailView.swift
 //  KnockKnock-iOS
 //
-//  Created by Daye on 2022/08/12.
+//  Created by Daye on 2023/02/15.
 //
 
 import UIKit
 
+import KKDSKit
 import SnapKit
 import Then
-import KKDSKit
 
-final class EventPageView: UIView {
+final class EventDetailView: UIView {
 
   // MARK: - Constants
 

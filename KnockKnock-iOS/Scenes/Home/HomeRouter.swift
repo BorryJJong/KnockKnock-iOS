@@ -39,6 +39,7 @@ final class HomeRouter: HomeRouterProtocol {
 
   func navigateToStoreListView() {
     let storeListViewController = StoreListViewController()
+
     if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.pushViewController(
         storeListViewController, animated: true)
@@ -46,13 +47,14 @@ final class HomeRouter: HomeRouterProtocol {
   }
 
   func navigateToEventPageView() {
-    let eventPageViewController = EventPageViewController()
-    if let sourceView = self.view as? UIViewController {
-      sourceView.navigationController?.pushViewController(
-        eventPageViewController,
-        animated: true
-      )
-    }
+    let eventPageViewController = EventDetailRouter.createEventDetail()
+
+    guard let sourceView = self.view as? UIViewController else { return }
+
+    sourceView.navigationController?.pushViewController(
+      eventPageViewController,
+      animated: true
+    )
   }
 
   func navigateToFeedDetail(feedId: Int) {

@@ -1,8 +1,8 @@
 //
-//  EventListViewContoller.swift
+//  EventDetailViewController.swift
 //  KnockKnock-iOS
 //
-//  Created by Daye on 2022/08/12.
+//  Created by Daye on 2023/02/15.
 //
 
 import UIKit
@@ -10,24 +10,38 @@ import UIKit
 import Then
 import KKDSKit
 
-final class EventPageViewController: BaseViewController<EventPageView> {
+protocol EventDetailViewProtocol: AnyObject {
+  var interactor: EventDetailInteractorProtocol? { get set}
+}
+
+final class EventDetailViewController: BaseViewController<EventDetailView> {
 
   // MARK: - Properties
 
-  private let eventViewControllers = [OngoingEventListViewController(), ClosedEventListViewController()]
+  private let eventViewControllers = [
+    OngoingEventListViewController(),
+    ClosedEventListViewController()
+  ]
 
   private var currentPage: Int = 0 {
     didSet {
-      self.bind(oldValue: oldValue, newValue: currentPage)
+      self.bind(
+        oldValue: oldValue,
+        newValue: currentPage
+      )
       self.containerView.tapCollectionView.reloadData()
     }
   }
+
+  var interactor: EventDetailInteractorProtocol?
 
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
+
     self.setupConfigure()
+    self.interactor?.fetchEventDetailList()
   }
 
   // MARK: - Configure
@@ -40,7 +54,7 @@ final class EventPageViewController: BaseViewController<EventPageView> {
       $0.dataSource = self
       $0.registCell(type: TapCell.self)
     }
-    
+
     self.containerView.eventPageViewController.do {
       $0.delegate = self
       $0.dataSource = self
@@ -59,7 +73,9 @@ final class EventPageViewController: BaseViewController<EventPageView> {
   // MARK: - Bind
 
   private func bind(oldValue: Int, newValue: Int) {
-    let direction: UIPageViewController.NavigationDirection = oldValue < newValue ? .forward : .reverse
+    let direction: UIPageViewController.NavigationDirection = oldValue < newValue
+    ? .forward
+    : .reverse
 
     self.containerView.eventPageViewController.setViewControllers(
       [eventViewControllers[currentPage]],
@@ -84,11 +100,13 @@ final class EventPageViewController: BaseViewController<EventPageView> {
 
 // MARK: - CollectionView Delegate, DataSource
 
-extension EventPageViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+extension EventDetailViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+
   func collectionView(
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
+
     return 2
   }
 
@@ -108,6 +126,7 @@ extension EventPageViewController: UICollectionViewDelegateFlowLayout, UICollect
       cell.tapLabel.textColor = .gray70
       cell.tapLabel.font = .systemFont(ofSize: 15, weight: .light)
     }
+
     return cell
   }
 
@@ -116,6 +135,7 @@ extension EventPageViewController: UICollectionViewDelegateFlowLayout, UICollect
     layout collectionViewLayout: UICollectionViewLayout,
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
+
     return CGSize(
       width: 70,
       height: 40
@@ -126,13 +146,15 @@ extension EventPageViewController: UICollectionViewDelegateFlowLayout, UICollect
     _ collectionView: UICollectionView,
     didSelectItemAt indexPath: IndexPath
   ) {
+
     self.currentPage = indexPath.item
   }
 }
 
 // MARK: - PageViewController DataSource, Delegate
 
-extension EventPageViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+extension EventDetailViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+
   func pageViewController(
     _ pageViewController: UIPageViewController,
     viewControllerBefore viewController: UIViewController
@@ -149,6 +171,7 @@ extension EventPageViewController: UIPageViewControllerDataSource, UIPageViewCon
     if previousIndex < 0 {
       return nil
     }
+
     return self.eventViewControllers[previousIndex]
   }
 
@@ -176,6 +199,7 @@ extension EventPageViewController: UIPageViewControllerDataSource, UIPageViewCon
     previousViewControllers: [UIViewController],
     transitionCompleted completed: Bool
   ) {
+
     if completed {
       if previousViewControllers.first == self.eventViewControllers[0] {
         self.currentPage = 1
@@ -184,4 +208,10 @@ extension EventPageViewController: UIPageViewControllerDataSource, UIPageViewCon
       }
     }
   }
+}
+
+// MARK: - EventDetail View Protocol
+
+extension EventDetailViewController: EventDetailViewProtocol {
+
 }
