@@ -14,17 +14,18 @@ protocol EventDetailRouterProtocol {
 final class EventDetailRouter: EventDetailRouterProtocol {
 
   static func createEventDetail() -> UIViewController {
-    let view = EventDetailViewController()
-    let interactor = EventDetailInteractor()
-    let presenter = EventDetailPresenter()
-    let worker = EventDetailWorker()
-    let router = EventDetailRouter()
 
-    view.interactor = interactor
-    interactor.router = router
-    interactor.worker = worker
-    interactor.presenter = presenter
-    presenter.view = view
+    let view = EventDetailViewController()
+    let ongoingEventListViewController = OngoingEventListViewController()
+    let closedEventListViewController = ClosedEventListViewController()
+
+    ongoingEventListViewController.repository = HomeRepository()
+    closedEventListViewController.repository = HomeRepository()
+
+    view.eventViewControllers = [
+      ongoingEventListViewController,
+      closedEventListViewController
+    ]
 
     return view
   }

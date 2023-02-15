@@ -11,17 +11,13 @@ import Then
 import KKDSKit
 
 protocol EventDetailViewProtocol: AnyObject {
-  var interactor: EventDetailInteractorProtocol? { get set}
 }
 
 final class EventDetailViewController: BaseViewController<EventDetailView> {
 
   // MARK: - Properties
 
-  private let eventViewControllers = [
-    OngoingEventListViewController(),
-    ClosedEventListViewController()
-  ]
+  var eventViewControllers: [UIViewController] = []
 
   private var currentPage: Int = 0 {
     didSet {
@@ -33,15 +29,12 @@ final class EventDetailViewController: BaseViewController<EventDetailView> {
     }
   }
 
-  var interactor: EventDetailInteractorProtocol?
-
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
     self.setupConfigure()
-    self.interactor?.fetchEventDetailList()
   }
 
   // MARK: - Configure

@@ -167,7 +167,7 @@ enum KKRouter: URLRequestConvertible {
       // Home
     case .getHotPost: return "hot-post"
     case .getHomeEvent: return "home-event"
-    case .getEvent: return "/event"
+    case .getEvent: return "event"
 
     // Challenge
     case .getChallenges: return "challenges"

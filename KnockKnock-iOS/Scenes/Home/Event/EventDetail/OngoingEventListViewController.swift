@@ -9,11 +9,16 @@ import UIKit
 
 final class OngoingEventListViewController: BaseViewController<EventListView> {
 
+  var ongoingEventList: [EventDetail] = []
+  var repository: HomeRepositoryProtocol?
+
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setupConfigure()
+
+    self.fetchEventDetailList()
   }
 
   // MARK: - Configure
@@ -25,6 +30,21 @@ final class OngoingEventListViewController: BaseViewController<EventListView> {
       $0.registCell(type: EventCell.self)
     }
   }
+
+  private func fetchEventDetailList() {
+    
+    Task{
+
+      self.ongoingEventList = await self.repository?.requestEventDetailList(
+        eventTapType: .ongoing
+      ) ?? []
+
+      await MainActor.run {
+        self.containerView.eventCollectionView.reloadData()
+      }
+
+    }
+  }
 }
 
   // MARK: - CollectionView DataSource, Delegate
@@ -34,7 +54,7 @@ extension OngoingEventListViewController: UICollectionViewDataSource, UICollecti
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    return 5
+    return self.ongoingEventList.count
   }
 
   func collectionView(
@@ -45,6 +65,19 @@ extension OngoingEventListViewController: UICollectionViewDataSource, UICollecti
       withType: EventCell.self,
       for: indexPath
     )
+
+    let eventDetail = self.ongoingEventList[indexPath.item]
+
+    let event = Event(
+      id: eventDetail.id,
+      isNewBadge: eventDetail.isNewBadge,
+      title: eventDetail.title,
+      eventPeriod: eventDetail.eventPeriod,
+      image: eventDetail.image
+    )
+
+    cell.bind(event: event)
+    
     return cell
   }
 
