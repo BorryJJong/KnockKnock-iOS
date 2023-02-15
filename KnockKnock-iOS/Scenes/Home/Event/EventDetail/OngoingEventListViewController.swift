@@ -9,6 +9,8 @@ import UIKit
 
 final class OngoingEventListViewController: BaseViewController<EventListView> {
 
+  // MARK: - Properties
+
   var ongoingEventList: [EventDetail] = []
   var repository: HomeRepositoryProtocol?
 
@@ -16,8 +18,8 @@ final class OngoingEventListViewController: BaseViewController<EventListView> {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.setupConfigure()
 
+    self.setupConfigure()
     self.fetchEventDetailList()
   }
 
@@ -31,6 +33,7 @@ final class OngoingEventListViewController: BaseViewController<EventListView> {
     }
   }
 
+  /// 이벤트 상세 목록 조회
   private func fetchEventDetailList() {
     
     Task{
@@ -40,6 +43,7 @@ final class OngoingEventListViewController: BaseViewController<EventListView> {
       ) ?? []
 
       await MainActor.run {
+        self.containerView.showResult(hasData: self.ongoingEventList.count != 0)
         self.containerView.eventCollectionView.reloadData()
       }
 

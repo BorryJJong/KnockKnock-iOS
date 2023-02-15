@@ -10,14 +10,16 @@ import UIKit
 import Then
 import KKDSKit
 
-protocol EventDetailViewProtocol: AnyObject {
-}
-
 final class EventDetailViewController: BaseViewController<EventDetailView> {
 
   // MARK: - Properties
 
   var eventViewControllers: [UIViewController] = []
+
+  private enum TapMenu: String, CaseIterable {
+    case ongoing = "진행 이벤트"
+    case end = "종료 이벤트"
+  }
 
   private var currentPage: Int = 0 {
     didSet {
@@ -25,7 +27,6 @@ final class EventDetailViewController: BaseViewController<EventDetailView> {
         oldValue: oldValue,
         newValue: currentPage
       )
-      self.containerView.tapCollectionView.reloadData()
     }
   }
 
@@ -65,24 +66,32 @@ final class EventDetailViewController: BaseViewController<EventDetailView> {
 
   // MARK: - Bind
 
-  private func bind(oldValue: Int, newValue: Int) {
+  private func bind(
+    oldValue: Int,
+    newValue: Int
+  ) {
+
     let direction: UIPageViewController.NavigationDirection = oldValue < newValue
     ? .forward
     : .reverse
 
-    self.containerView.eventPageViewController.setViewControllers(
-      [eventViewControllers[currentPage]],
-      direction: direction,
-      animated: true,
-      completion: nil
-    )
-    self.movePager(currentPage: currentPage)
+    DispatchQueue.main.async {
+      self.containerView.eventPageViewController.setViewControllers(
+        [self.eventViewControllers[self.currentPage]],
+        direction: direction,
+        animated: true,
+        completion: nil
+      )
+      
+      self.movePager(currentPage: self.currentPage)
+      self.containerView.tapCollectionView.reloadData()
+    }
   }
 
   // MARK: - Pager 이동 애니메이션 메소드
 
   private func movePager(currentPage: Int) {
-    UIView.animate(withDuration: 0.3, animations: {
+    UIView.animate(withDuration: 0.2, animations: {
       self.containerView.underLineView.transform = CGAffineTransform(
         translationX: CGFloat(100 * currentPage),
         y: 0
@@ -100,25 +109,23 @@ extension EventDetailViewController: UICollectionViewDelegateFlowLayout, UIColle
     numberOfItemsInSection section: Int
   ) -> Int {
 
-    return 2
+    return TapMenu.allCases.count
   }
 
   func collectionView(
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
+
     let cell = collectionView.dequeueCell(
       withType: TapCell.self,
       for: indexPath
     )
 
-    if indexPath.item == currentPage {
-      cell.tapLabel.textColor = .green40
-      cell.tapLabel.font = .systemFont(ofSize: 15, weight: .bold)
-    } else {
-      cell.tapLabel.textColor = .gray70
-      cell.tapLabel.font = .systemFont(ofSize: 15, weight: .light)
-    }
+    cell.bind(
+      tapName: TapMenu.allCases[indexPath.item].rawValue,
+      isSelected: indexPath.item == currentPage
+    )
 
     return cell
   }
@@ -201,10 +208,4 @@ extension EventDetailViewController: UIPageViewControllerDataSource, UIPageViewC
       }
     }
   }
-}
-
-// MARK: - EventDetail View Protocol
-
-extension EventDetailViewController: EventDetailViewProtocol {
-
 }
