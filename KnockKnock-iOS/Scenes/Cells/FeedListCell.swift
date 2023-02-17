@@ -94,7 +94,7 @@ class FeedListCell: BaseCollectionViewCell {
 
   let contentLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.numberOfLines = 0
+    $0.numberOfLines = 2
     $0.backgroundColor = .white
     $0.font = UIFont(name: "Apple SD Gothic Neo", size: 13)
   }
@@ -123,6 +123,7 @@ class FeedListCell: BaseCollectionViewCell {
   // MARK: - Bind
 
   func bind(feedList: FeedList.Post) {
+
     if feedList.isLike {
       self.likeButton.isSelected = true
       self.likeButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .bold)
@@ -140,12 +141,10 @@ class FeedListCell: BaseCollectionViewCell {
 
     self.contentLabel.text = feedList.content
 
-    DispatchQueue.main.async {
-      self.setImageView(
-        images: feedList.blogImages,
-        scale: feedList.imageScale
-      )
-    }
+    self.setImageView(
+      images: feedList.blogImages,
+      scale: feedList.imageScale
+    )
 
     if feedList.blogImages.count > 1 {
       self.imageNumberLabel.isHidden = false
@@ -156,22 +155,6 @@ class FeedListCell: BaseCollectionViewCell {
       self.imageNumberLabel.isHidden = true
       self.imagePageControl.isHidden = true
     }
-    
-    guard let contentTextLength = self.contentLabel.text?.count
-    else {
-      return
-    }
-
-    if contentTextLength > 1 {
-      DispatchQueue.main.async {
-        self.contentLabel.addTrailing(
-          with: "... ",
-          moreText: "더보기",
-          moreTextFont: .systemFont(ofSize: 13),
-          moreTextColor: UIColor.gray
-        )
-      }
-    }
   }
 
   private func setImageView(
@@ -180,14 +163,16 @@ class FeedListCell: BaseCollectionViewCell {
   ) {
     for index in 0..<images.count {
 
-      let imageView = UIImageView()
-      imageView.setImageFromStringUrl(
-        stringUrl: images[index].fileUrl,
-        defaultImage: KKDS.Image.ic_no_data_60
-      )
-      imageView.contentMode = .scaleAspectFill
-      imageView.layer.cornerRadius = 5
-      imageView.clipsToBounds = true
+      let imageView = UIImageView().then {
+
+        $0.setImageFromStringUrl(
+          stringUrl: images[index].fileUrl,
+          defaultImage: KKDS.Image.ic_no_data_60
+        )
+        $0.contentMode = .scaleAspectFill
+        $0.layer.cornerRadius = 5
+        $0.clipsToBounds = true
+      }
 
       let imageSizeType = ImageScaleType(rawValue: scale)
       let width = self.contentView.frame.width
