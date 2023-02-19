@@ -246,6 +246,8 @@
 		61C21D1528C7653B009B5F4E /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C21D1428C7653B009B5F4E /* LoginView.swift */; };
 		61C21D1728CA2244009B5F4E /* ProfileSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C21D1628CA2244009B5F4E /* ProfileSettingView.swift */; };
 		61C21D1928CB3247009B5F4E /* ProfileSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C21D1828CB3247009B5F4E /* ProfileSettingViewController.swift */; };
+		61CA513129A2030500C43461 /* HomeBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CA513029A2030500C43461 /* HomeBanner.swift */; };
+		61CA513329A2035800C43461 /* BannerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CA513229A2035800C43461 /* BannerType.swift */; };
 		61CCF3FB2984D7F000FBAB07 /* SharQueryItemType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CCF3FA2984D7F000FBAB07 /* SharQueryItemType.swift */; };
 		61CD47FC293473F900FEE2F7 /* MyInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CD47FB293473F900FEE2F7 /* MyInteractor.swift */; };
 		61CD47FE2934741D00FEE2F7 /* MyPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CD47FD2934741D00FEE2F7 /* MyPresenter.swift */; };
@@ -510,6 +512,8 @@
 		61C21D1428C7653B009B5F4E /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		61C21D1628CA2244009B5F4E /* ProfileSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingView.swift; sourceTree = "<group>"; };
 		61C21D1828CB3247009B5F4E /* ProfileSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewController.swift; sourceTree = "<group>"; };
+		61CA513029A2030500C43461 /* HomeBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBanner.swift; sourceTree = "<group>"; };
+		61CA513229A2035800C43461 /* BannerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerType.swift; sourceTree = "<group>"; };
 		61CCF3FA2984D7F000FBAB07 /* SharQueryItemType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharQueryItemType.swift; sourceTree = "<group>"; };
 		61CD47FB293473F900FEE2F7 /* MyInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInteractor.swift; sourceTree = "<group>"; };
 		61CD47FD2934741D00FEE2F7 /* MyPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPresenter.swift; sourceTree = "<group>"; };
@@ -587,6 +591,7 @@
 				61BB9DA7297679CC00728E97 /* HotPost.swift */,
 				6128A4CA29824DB1005E36F3 /* UserDetail.swift */,
 				61DE4184299B6698006C960F /* Event.swift */,
+				61CA513029A2030500C43461 /* HomeBanner.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -1317,6 +1322,7 @@
 				6128A4C0297F7B02005E36F3 /* ShareURL.swift */,
 				61CCF3FA2984D7F000FBAB07 /* SharQueryItemType.swift */,
 				61A6B7262989174B002A1C57 /* ChallengeSortType.swift */,
+				61CA513229A2035800C43461 /* BannerType.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -1538,6 +1544,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				617F9D73282BAF8E00C2BC9A /* BottomSheetView.swift in Sources */,
+				61CA513329A2035800C43461 /* BannerType.swift in Sources */,
 				6139FF6B28E2CB0200CC9950 /* ShopSearchPresenter.swift in Sources */,
 				61B23BA92966F440005AFA6D /* Address.swift in Sources */,
 				613856E0289B5CF200BE347E /* BannerCell.swift in Sources */,
@@ -1634,6 +1641,7 @@
 				614329622862F6E3008BDCC9 /* FeedMainWorker.swift in Sources */,
 				6105079A28B4EEDF00C1B5CF /* HomePresenter.swift in Sources */,
 				209B80E12955E897003E591C /* AppleLoginManager.swift in Sources */,
+				61CA513129A2030500C43461 /* HomeBanner.swift in Sources */,
 				61767BC22991029300EA1FFC /* ReportType.swift in Sources */,
 				61A0287F2914DDF500943A40 /* PropertySelectPresenter.swift in Sources */,
 				613856D12898CB1300BE347E /* FeedDetailNavigtaionBarView.swift in Sources */,

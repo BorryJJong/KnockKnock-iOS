@@ -11,6 +11,7 @@ protocol HomeWorkerProtocol {
   func fetchHotPostList(challengeId: Int, completionHandler: @escaping ([HotPost]) -> Void)
   func fetchChallengeList(completionHandler: @escaping([ChallengeTitle]) -> Void)
   func fetchEventList() async -> [Event]
+  func fetchBanner(bannerType: BannerType) async -> [HomeBanner]? 
 }
 
 final class HomeWorker: HomeWorkerProtocol {
@@ -43,5 +44,9 @@ final class HomeWorker: HomeWorkerProtocol {
 
   func fetchEventList() async -> [Event] {
     return await self.homeRepository.requestEventList()
+  }
+
+  func fetchBanner(bannerType: BannerType) async -> [HomeBanner]? {
+    return await self.homeRepository.requestBanner(bannerType: bannerType)
   }
 }

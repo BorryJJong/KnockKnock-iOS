@@ -19,6 +19,8 @@ protocol HomeViewProtocol: AnyObject {
     index: IndexPath?
   )
   func fetchEventList(eventList: [Event])
+  func fetchMainBannerList(bannerList: [HomeBanner])
+  func fetchBarBannerList(bannerList: [HomeBanner])
 }
 
 final class HomeViewController: BaseViewController<HomeView> {
@@ -27,6 +29,8 @@ final class HomeViewController: BaseViewController<HomeView> {
 
   var interactor: HomeInteractorProtocol?
 
+  private var mainBannerList: [HomeBanner] = []
+  private var barBannerList: [HomeBanner] = []
   private var hotPostList: [HotPost] = []
   private var eventList: [Event] = []
   private var challengeList: [ChallengeTitle] = []
@@ -71,6 +75,8 @@ final class HomeViewController: BaseViewController<HomeView> {
   }
 
   private func fetchData() {
+    self.interactor?.fetchBanner(bannerType: .main)
+    self.interactor?.fetchBanner(bannerType: .bar)
     self.interactor?.fetchHotpost(challengeId: self.challengeId)
     self.interactor?.fetchChallengeList()
     self.interactor?.fetchEventList()
@@ -98,11 +104,31 @@ final class HomeViewController: BaseViewController<HomeView> {
 // MARK: - HomeViewProtocol
 
 extension HomeViewController: HomeViewProtocol {
+
+  func fetchMainBannerList(bannerList: [HomeBanner]) {
+    self.mainBannerList = bannerList
+
+    DispatchQueue.main.async {
+      UIView.performWithoutAnimation {
+        self.containerView.homeCollectionView.reloadSections([HomeSection.main.rawValue])
+      }
+    }
+  }
+
+  func fetchBarBannerList(bannerList: [HomeBanner]) {
+    self.barBannerList = bannerList
+
+    DispatchQueue.main.async {
+      UIView.performWithoutAnimation {
+        self.containerView.homeCollectionView.reloadSections([HomeSection.banner.rawValue])
+      }
+    }
+  }
+
   func fetchHotPostList(hotPostList: [HotPost]) {
     self.hotPostList = hotPostList
 
     DispatchQueue.main.async {
-
       UIView.performWithoutAnimation {
         self.containerView.homeCollectionView.reloadSections(
           IndexSet(integer: HomeSection.popularPost.rawValue)
@@ -154,7 +180,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
 
     switch section {
     case .main:
-      return 1
+      return self.mainBannerList.count
 
     case .tag:
       return self.challengeList.count
@@ -162,7 +188,10 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     case .event:
       return self.eventList.count
 
-    case .banner, .store:
+    case .banner:
+      return self.barBannerList.count
+
+    case .store:
       return 6
 
     case .popularPost:
