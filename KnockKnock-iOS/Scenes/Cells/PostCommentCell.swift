@@ -100,6 +100,11 @@ final class PostCommentCell: BaseCollectionViewCell {
     comment: Comment,
     isLoggedIn: Bool
   ) {
+    
+    Task {
+      self.profileImageView.image = await self.setProfileImage(stringUrl: comment.data.image)
+    }
+
     let reply = comment.data.reply.map {
       $0.filter { !$0.isDeleted }
     } ?? []
@@ -110,10 +115,6 @@ final class PostCommentCell: BaseCollectionViewCell {
     )
 
     self.userIdLabel.text = comment.data.nickname
-    self.profileImageView.setImageFromStringUrl(
-      stringUrl: comment.data.image,
-      defaultImage: KKDS.Image.ic_person_24
-    )
     self.commentLabel.text = comment.data.content
     self.writtenDateLabel.text = comment.data.regDate
 
@@ -206,5 +207,33 @@ final class PostCommentCell: BaseCollectionViewCell {
       $0.top.equalTo(self.writtenDateLabel)
       $0.leading.equalTo(self.replyWriteButton.snp.trailing).offset(Metric.commentDeleteButtonLeadingMargin)
     }
+  }
+}
+
+extension PostCommentCell {
+
+  /// 프로필 이미지 로드
+  ///
+  /// - Parameters:
+  ///  - stringUrl: 이미지 url(String type)
+  private func setProfileImage(stringUrl: String?) async -> UIImage {
+    var stringUrl = stringUrl
+
+      do {
+        if let stringUrl = stringUrl,
+           let url = URL(string: stringUrl) {
+
+          let (data, _) = try await URLSession.shared.data(from: url)
+          let image = UIImage(data: data)
+
+          return image?.resizeSquareImage(newWidth: 24) ?? KKDS.Image.ic_person_24
+
+        } else {
+          return KKDS.Image.ic_person_24
+        }
+
+      } catch {
+        return KKDS.Image.ic_person_24
+      }
   }
 }
