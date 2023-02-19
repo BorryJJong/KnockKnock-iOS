@@ -28,6 +28,7 @@ protocol FeedDetailInteractorProtocol {
   
   func presentReportView()
   func navigateToLikeDetail()
+  func navigateToFeedList()
   func checkLoginStatus()
   func presentBottomSheetView(
     isMyPost: Bool,

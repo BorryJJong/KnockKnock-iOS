@@ -54,9 +54,9 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   // MARK: - Configure
   
   private func fetchData() {
+    self.interactor?.fetchAllComments(feedId: feedId)
     self.interactor?.getFeedDeatil(feedId: feedId)
     self.interactor?.fetchLikeList(feedId: feedId)
-    self.interactor?.fetchAllComments(feedId: feedId)
   }
   
   override func setupConfigure() {
@@ -132,7 +132,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   
   @objc
   private func backButtonDidTap(_ sender: UIButton) {
-    self.navigationController?.popViewController(animated: true)
+    self.interactor?.navigateToFeedList()
   }
   
   @objc
@@ -287,16 +287,22 @@ extension FeedDetailViewController: FeedDetailViewProtocol {
   func getFeedDetail(feedDetail: FeedDetail) {
     self.feedDetail = feedDetail
 
-    DispatchQueue.main.async {
-      if let feed = self.feedDetail?.feed {
+    if let feed = self.feedDetail?.feed {
+      self.feedId = feed.id
+
+      DispatchQueue.main.async {
         self.containerView.navigationView.bind(feed: feed)
-        self.feedId = feed.id
         self.containerView.bind(isLike: feed.isLike)
       }
+    }
 
-      self.containerView.postCollectionView.reloadData()
+    DispatchQueue.main.async {
+      UIView.performWithoutAnimation {
+        self.containerView.postCollectionView.reloadSections(
+          IndexSet(integer: FeedDetailSection.content.rawValue)
+        )
+      }
       self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
-      self.containerView.layoutIfNeeded()
     }
   }
 
