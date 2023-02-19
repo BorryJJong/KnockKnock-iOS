@@ -209,6 +209,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.worker?.requestDeleteComment(
       feedId: feedId,
       commentId: commentId,
+      comments: self.comments,
       completionHandler: { [weak self] isSuccess in
 
         guard let self = self else { return }

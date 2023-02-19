@@ -100,7 +100,7 @@ final class PostCommentCell: BaseCollectionViewCell {
     comment: Comment,
     isLoggedIn: Bool
   ) {
-    
+
     Task {
       self.profileImageView.image = await self.setProfileImage(stringUrl: comment.data.image)
     }
