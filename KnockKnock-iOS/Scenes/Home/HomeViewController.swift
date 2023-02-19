@@ -180,7 +180,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
 
     switch section {
     case .main:
-      return self.mainBannerList.count
+      return 1
 
     case .tag:
       return self.challengeList.count
@@ -290,7 +290,8 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         withType: HomeMainPagerCell.self,
         for: indexPath
       )
-      
+      cell.bind(banner: self.mainBannerList)
+
       return cell
 
     case .store:
@@ -306,6 +307,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         withType: BannerCell.self,
         for: indexPath
       )
+      cell.bind(banner: self.barBannerList[indexPath.item])
 
       return cell
 
