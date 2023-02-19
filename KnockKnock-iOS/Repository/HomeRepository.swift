@@ -8,8 +8,14 @@
 import Foundation
 
 protocol HomeRepositoryProtocol {
-  func requestHotPost(challengeId: Int, completionHandler: @escaping ([HotPost]) -> Void)
-  func requestChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void)
+  func requestHotPost(
+    challengeId: Int,
+    completionHandler: @escaping ([HotPost]) -> Void
+  )
+  func requestChallengeTitles(
+    completionHandler: @escaping ([ChallengeTitle]) -> Void
+  )
+  func requestEventList() async -> [Event]
 }
 
 final class HomeRepository: HomeRepositoryProtocol {
@@ -38,7 +44,9 @@ final class HomeRepository: HomeRepositoryProtocol {
   }
 
   /// 태그 리스트(인기 게시글 필터용)
-  func requestChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void) {
+  func requestChallengeTitles(
+    completionHandler: @escaping ([ChallengeTitle]) -> Void
+  ) {
     KKNetworkManager
       .shared
       .request(
@@ -54,5 +62,25 @@ final class HomeRepository: HomeRepositoryProtocol {
           print(error)
         }
       )
+  }
+
+  /// 이벤트 목록 조회
+  func requestEventList() async -> [Event] {
+    do {
+      let result = try await KKNetworkManager
+        .shared
+        .asyncRequest(
+          object: ApiResponseDTO<[EventDTO]>.self,
+          router: .getHomeEvent
+        )
+
+      guard let data = result.data else { return [] }
+      return data.map { $0.toDomain() }
+
+    } catch let error {
+      print(error)
+
+      return []
+    }
   }
 }
