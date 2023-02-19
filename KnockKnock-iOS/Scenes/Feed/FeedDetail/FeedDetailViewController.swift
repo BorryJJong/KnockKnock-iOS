@@ -45,10 +45,10 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
 
     LoadingIndicator.showLoading()
 
+    self.fetchData()
     self.interactor?.checkLoginStatus()
     self.setNavigationBar()
     self.setupConfigure()
-    self.fetchData()
   }
   
   // MARK: - Configure
