@@ -44,7 +44,7 @@ protocol FeedListWorkerProtocol {
     contents: String
   ) -> FeedList
   
-  func checkTokenExisted() -> Bool
+  func checkTokenIsValidated() async -> Bool
   
   func checkCurrentLikeState(
     feedList: [FeedList.Post],
@@ -171,8 +171,8 @@ final class FeedListWorker: FeedListWorkerProtocol {
   }
 
   /// 토큰 존재 여부 판별을 통해 로그인 된 회원 인지 판별
-  func checkTokenExisted() -> Bool {
-    return self.userDataManager.checkTokenIsExisted()
+  func checkTokenIsValidated() async -> Bool {
+    return await self.userDataManager.checkTokenIsValidated()
   }
 
   /// 피드 리스트 조회 api call
@@ -330,6 +330,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
 }
 
 // MARK: - Inner Action
+
 extension FeedListWorker {
 
   /// 좋아요 toggle

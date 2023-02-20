@@ -13,7 +13,6 @@ protocol MyInteractorProtocol {
   var presenter: MyPresenter? { get set }
 
   func fetchMenuData()
-  func checkSignInStatus()
   func fetchNickname() 
   func requestSignOut()
   func requestWithdraw()
@@ -25,9 +24,17 @@ protocol MyInteractorProtocol {
 
 final class MyInteractor: MyInteractorProtocol {
 
+  // MARK: - Properties
+
   var router: MyRouterProtocol?
   var worker: MyWorkerProtocol?
   var presenter: MyPresenter?
+
+  // MARK: - Initailize
+
+  init() {
+    self.setNotification()
+  }
 
   // Busniess Logic
 
@@ -35,14 +42,7 @@ final class MyInteractor: MyInteractorProtocol {
     self.worker?.fetchMenuData(completionHandler: { [weak self] menu in
       self?.presenter?.presentMenuData(myMenu: menu)
     })
-    self.checkSignInStatus()
     self.setNotification()
-  }
-
-  func checkSignInStatus() {
-    self.worker?.checkSignInStatus(completionHandler: { [weak self] isSignedIn in
-      self?.presenter?.presentLoginStatus(isSignedIn: isSignedIn)
-    })
   }
 
   func fetchNickname() {

@@ -27,6 +27,7 @@ enum KKRouter: URLRequestConvertible {
 
   // Home
   case getHotPost(challengeId: Int)
+  case getHomeEvent
 
   // Account
   case postSocialLogin(socialUuid: String, socialType: String)
@@ -69,6 +70,7 @@ enum KKRouter: URLRequestConvertible {
   case getUsersDetail
   case getDuplicateNickname(nickname: String)
   case putUsers(nickname: String?, image: UIImage?)
+  case getMyPage
 
   // MARK: - HTTP Method
 
@@ -76,7 +78,8 @@ enum KKRouter: URLRequestConvertible {
     switch self {
 
       // Home
-    case .getHotPost:
+    case .getHotPost,
+         .getHomeEvent:
       return .get
 
     // Account
@@ -141,7 +144,8 @@ enum KKRouter: URLRequestConvertible {
 
       // My
     case .getUsersDetail,
-        .getDuplicateNickname:
+         .getMyPage,
+         .getDuplicateNickname:
       return .get
 
     case .putUsers:
@@ -161,7 +165,8 @@ enum KKRouter: URLRequestConvertible {
     case .deleteWithdraw: return "users"
 
       // Home
-    case .getHotPost: return "home/hot-post"
+    case .getHotPost: return "hot-post"
+    case .getHomeEvent: return "home-event"
 
     // Challenge
     case .getChallenges: return "challenges"
@@ -197,6 +202,7 @@ enum KKRouter: URLRequestConvertible {
       // My
     case .getUsersDetail: return "users/detail"
     case .getDuplicateNickname(let nickname): return "users/duplicate-nickname/\(nickname)"
+    case .getMyPage: return "my-page"
     case .putUsers: return "users"
 
     }
@@ -210,6 +216,9 @@ enum KKRouter: URLRequestConvertible {
       // Home
     case let .getHotPost(challengeId):
       return [ "challengeId": challengeId ]
+
+    case .getHomeEvent:
+      return nil
 
       // Account
     case let .postSocialLogin(socialUuid, socialType):
@@ -304,6 +313,7 @@ enum KKRouter: URLRequestConvertible {
 
       // My
     case .getUsersDetail,
+         .getMyPage,
          .getDuplicateNickname,
          .putUsers:
       return nil
