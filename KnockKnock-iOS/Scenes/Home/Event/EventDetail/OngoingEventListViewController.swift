@@ -11,8 +11,9 @@ final class OngoingEventListViewController: BaseViewController<EventListView> {
 
   // MARK: - Properties
 
-  var ongoingEventList: [EventDetail] = []
-  var repository: HomeRepositoryProtocol?
+  private var ongoingEventList: [EventDetail] = []
+  
+  var repository: EventRepositoryProtocol?
 
   // MARK: - Life Cycles
 

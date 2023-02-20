@@ -19,8 +19,8 @@ final class EventDetailRouter: EventDetailRouterProtocol {
     let ongoingEventListViewController = OngoingEventListViewController()
     let closedEventListViewController = ClosedEventListViewController()
 
-    ongoingEventListViewController.repository = HomeRepository()
-    closedEventListViewController.repository = HomeRepository()
+    ongoingEventListViewController.repository = EventRepository()
+    closedEventListViewController.repository = EventRepository()
 
     view.eventViewControllers = [
       ongoingEventListViewController,

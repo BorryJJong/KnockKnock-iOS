@@ -11,8 +11,9 @@ final class ClosedEventListViewController: BaseViewController<EventListView> {
 
   // MARK: - Properties
 
-  var endEventList: [EventDetail] = []
-  var repository: HomeRepositoryProtocol?
+  private var endEventList: [EventDetail] = []
+  
+  var repository: EventRepositoryProtocol?
 
   // MARK: - Life Cycles
 

@@ -24,7 +24,10 @@ final class HomeRouter: HomeRouterProtocol {
     let view = HomeViewController()
     let interactor = HomeInteractor()
     let presenter = HomePresenter()
-    let worker = HomeWorker(homeRepository: HomeRepository())
+    let worker = HomeWorker(
+      hotPostRepository: HotPostRepository(),
+      eventRepository: EventRepository()
+    )
     let router = HomeRouter()
 
     view.interactor = interactor
