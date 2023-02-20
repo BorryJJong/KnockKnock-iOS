@@ -44,44 +44,7 @@ final class StoreCell: BaseCollectionViewCell {
     $0.numberOfLines = 1
   }
 
-  private let promotionStackView = UIStackView().then {
-    $0.axis = .horizontal
-    $0.spacing = 5
-    $0.distribution = .fill
-    $0.alignment = .bottom
-  }
-
-  // MARK: - Configure
-
-  private func setPromotionStackView(promotions: [String]) {
-
-    for index in 0..<promotions.count {
-
-      let label = BasePaddingLabel(
-        padding: UIEdgeInsets(
-          top: 5,
-          left: 5,
-          bottom: 5,
-          right: 5
-        )
-      ).then {
-          $0.text = promotions[index]
-          $0.font = .systemFont(ofSize: 10)
-          $0.textColor = .gray70
-          $0.clipsToBounds = true
-          $0.layer.cornerRadius = 5
-          $0.backgroundColor = .gray20
-        }
-
-      if index == promotions.count - 1 {
-        label.setContentCompressionResistancePriority(
-          UILayoutPriority.defaultLow,
-          for: .horizontal
-        )
-      }
-      self.promotionStackView.addArrangedSubview(label)
-    }
-  }
+  private let promotionView = UIView()
 
   // MARK: - Bind
 
@@ -90,7 +53,7 @@ final class StoreCell: BaseCollectionViewCell {
       stringUrl: store.image,
       defaultImage: KKDS.Image.ic_no_data_60
     )
-    self.setPromotionStackView(promotions: store.shopPromotionNames)
+    self.setPromotionView(promotions: store.shopPromotionNames)
     self.storeNameLabel.text = store.name
     self.storeInfoLabel.text = store.description
   }
@@ -99,7 +62,7 @@ final class StoreCell: BaseCollectionViewCell {
 
   override func setupConstraints() {
 
-    [self.storeImageView, self.storeNameLabel, self.storeInfoLabel, self.promotionStackView].addSubViews(self.contentView)
+    [self.storeImageView, self.storeNameLabel, self.storeInfoLabel, self.promotionView].addSubViews(self.contentView)
 
     self.storeImageView.snp.makeConstraints {
       $0.top.leading.equalTo(self.contentView)
@@ -116,9 +79,49 @@ final class StoreCell: BaseCollectionViewCell {
       $0.top.equalTo(self.storeNameLabel.snp.bottom).offset(Metric.storeInfoLabelTopMargin)
     }
 
-    self.promotionStackView.snp.makeConstraints {
+    self.promotionView.snp.makeConstraints {
       $0.leading.bottom.trailing.equalTo(self.contentView)
       $0.top.equalTo(self.storeInfoLabel.snp.bottom).offset(Metric.promotionStackViewTopMargin)
+    }
+  }
+}
+
+extension StoreCell {
+
+  /// contentView 길이만큼 label 추가
+  private func setPromotionView(promotions: [String]) {
+
+    var totalLength = 0.f
+
+    for index in 0..<promotions.count {
+
+      let label = BasePaddingLabel(
+        padding: UIEdgeInsets(
+          top: 5,
+          left: 5,
+          bottom: 5,
+          right: 5
+        )
+      ).then {
+        $0.text = promotions[index]
+        $0.font = .systemFont(ofSize: 10)
+        $0.textColor = .gray70
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 5
+        $0.backgroundColor = .gray20
+        $0.sizeToFit()
+      }
+
+      if totalLength + label.bounds.width < Metric.storeImageViewWidth - 15 {
+        self.promotionView.addSubview(label)
+
+        label.snp.makeConstraints {
+          $0.leading.equalTo(self.promotionView).offset(totalLength)
+          $0.top.bottom.equalTo(self.promotionView)
+        }
+
+        totalLength += label.bounds.width + 15
+      }
     }
   }
 }
