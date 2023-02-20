@@ -25,10 +25,6 @@ final class StoreCell: BaseCollectionViewCell {
     static let promotionStackViewTopMargin = 10.f
   }
 
-  // MARK: - Properties
-
-  private let promotions = ["텀블러 할인", "사은품 증정", "포인트 적립"]
-
   // MARK: - UIs
 
   private let storeImageView = UIImageView().then {
@@ -38,13 +34,11 @@ final class StoreCell: BaseCollectionViewCell {
   }
 
   private let storeNameLabel = UILabel().then {
-    $0.text = "청담동 스타벅스"
     $0.font = .systemFont(ofSize: 15, weight: .semibold)
     $0.numberOfLines = 1
   }
 
   private let storeInfoLabel = UILabel().then {
-    $0.text = "환경을위한 다양한 프로모션 전문 상점"
     $0.font = .systemFont(ofSize: 12, weight: .medium)
     $0.textColor = .gray70
     $0.numberOfLines = 1
