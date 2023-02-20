@@ -66,8 +66,10 @@ final class ReportViewController: BaseViewController<ReportView> {
     self.containerView.reportButton.addAction(
       for: .touchUpInside,
       closure: { _ in
-        guard let action = self.reportAction else { return }
-        action()
+        self.dismiss(
+          animated: true,
+          completion: self.reportAction
+        )
       }
     )
   }

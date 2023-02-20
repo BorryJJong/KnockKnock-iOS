@@ -203,7 +203,6 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   /// 피드 신고하기
   func requestReport(
     feedId: Int
-    //    reportType: ReportType
   ) {
 
     guard let feedList = self.feedListData else { return }
