@@ -8,6 +8,8 @@
 import UIKit
 
 import SnapKit
+import Then
+import KKDSKit
 
 final class StoreCell: BaseCollectionViewCell {
 
@@ -30,9 +32,7 @@ final class StoreCell: BaseCollectionViewCell {
   // MARK: - UIs
 
   private let storeImageView = UIImageView().then {
-    $0.image = UIImage(named: "feed_sample_1")
     $0.layer.cornerRadius = 5
-    $0.backgroundColor = .darkGray
     $0.contentMode = .scaleToFill
     $0.clipsToBounds = true
   }
@@ -57,15 +57,20 @@ final class StoreCell: BaseCollectionViewCell {
     $0.alignment = .bottom
   }
 
+  // MARK: - Configure
+
   private func setPromotionStackView(promotions: [String]) {
+
     for index in 0..<promotions.count {
+
       let label = BasePaddingLabel(
         padding: UIEdgeInsets(
           top: 5,
           left: 5,
           bottom: 5,
           right: 5
-        )).then {
+        )
+      ).then {
           $0.text = promotions[index]
           $0.font = .systemFont(ofSize: 10)
           $0.textColor = .gray70
@@ -73,6 +78,7 @@ final class StoreCell: BaseCollectionViewCell {
           $0.layer.cornerRadius = 5
           $0.backgroundColor = .gray20
         }
+
       if index == promotions.count - 1 {
         label.setContentCompressionResistancePriority(
           UILayoutPriority.defaultLow,
@@ -83,8 +89,22 @@ final class StoreCell: BaseCollectionViewCell {
     }
   }
 
+  // MARK: - Bind
+
+  func bind(store: Store) {
+    self.storeImageView.setImageFromStringUrl(
+      stringUrl: store.image,
+      defaultImage: KKDS.Image.ic_no_data_60
+    )
+    self.setPromotionStackView(promotions: store.shopPromotionNames)
+    self.storeNameLabel.text = store.name
+    self.storeInfoLabel.text = store.description
+  }
+
+  // MARK: - Constraints
+
   override func setupConstraints() {
-    self.setPromotionStackView(promotions: self.promotions)
+
     [self.storeImageView, self.storeNameLabel, self.storeInfoLabel, self.promotionStackView].addSubViews(self.contentView)
 
     self.storeImageView.snp.makeConstraints {
