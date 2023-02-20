@@ -16,9 +16,30 @@ protocol HomeRepositoryProtocol {
     completionHandler: @escaping ([ChallengeTitle]) -> Void
   )
   func requestEventList() async -> [Event]
+  func requestVerifiedStoreList() async -> [Store]?
 }
 
 final class HomeRepository: HomeRepositoryProtocol {
+
+  /// 인증 스토어 목록 조회
+  func requestVerifiedStoreList() async -> [Store]? {
+    do {
+      let result = try await KKNetworkManager
+        .shared
+        .asyncRequest(
+          object: ApiResponseDTO<[StoreDTO]>.self,
+          router: .getHomeVerificationShop
+        )
+
+      guard let data = result.data else { return nil }
+      return data.map { $0.toDomain() }
+
+    } catch let error {
+      print(error)
+
+      return nil
+    }
+  }
 
   /// 인기 게시글 조회
   func requestHotPost(
