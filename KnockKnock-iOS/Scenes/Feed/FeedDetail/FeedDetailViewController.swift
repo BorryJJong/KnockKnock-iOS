@@ -140,7 +140,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
         self.interactor?.navigateToFeedEdit(feedId: feedId)
       },
       reportAction: {
-        self.interactor?.presentReportView()
+        self.interactor?.presentReportView(feedId: feedId)
       }
     )
   }

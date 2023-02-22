@@ -16,7 +16,10 @@ protocol FeedDetailRouterProtocol {
   func navigateToLikeDetail(like: [Like.Info])
   func navigateToLoginView()
   func navigateToFeedList()
-  func presentReportView()
+  func presentReportView(
+    action: (() -> Void)?,
+    reportDelegate: ReportDelegate
+  )
   func presentBottomSheetView(
     isMyPost: Bool,
     deleteAction: (() -> Void)?,
@@ -101,13 +104,27 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
     }
   }
 
-  func presentReportView() {
+  /// 신고하기 view present
+  ///
+  /// - Parameters:
+  ///  - action: 신고하기 이벤트 closure
+  ///  - reportDelegate: reportDelegate
+  func presentReportView(
+    action: (() -> Void)?,
+    reportDelegate: ReportDelegate
+  ) {
     guard let sourceView = self.view as? UIViewController else { return }
-    let reportView = UINavigationController(rootViewController: ReportViewController())
+
+    let reportView = UINavigationController(
+      rootViewController: ReportViewController().then {
+        $0.reportAction = action
+        $0.reportDelegate = reportDelegate
+      }
+    )
 
     sourceView.present(reportView, animated: true)
   }
-  
+
   func presentBottomSheetView(
     isMyPost: Bool,
     deleteAction: (() -> Void)?,

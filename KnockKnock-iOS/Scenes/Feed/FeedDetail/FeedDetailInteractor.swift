@@ -15,6 +15,7 @@ protocol FeedDetailInteractorProtocol {
   func getFeedDeatil(feedId: Int)
   func requestDelete(feedId: Int)
   func requestHide(feedId: Int)
+  func requestReport(feedId: Int)
   
   func fetchAllComments(feedId: Int)
   
@@ -26,7 +27,7 @@ protocol FeedDetailInteractorProtocol {
   func requestLike(feedId: Int)
   func fetchLikeList(feedId: Int)
   
-  func presentReportView()
+  func presentReportView(feedId: Int)
   func navigateToLikeDetail()
   func presentBottomSheetView(
     isMyPost: Bool,
@@ -36,6 +37,12 @@ protocol FeedDetailInteractorProtocol {
     reportAction: (() -> Void)?
   )
   func navigateToFeedEdit(feedId: Int)
+}
+
+extension FeedDetailInteractor: ReportDelegate {
+  func setReportType(reportType: ReportType) {
+    self.reportType = reportType
+  }
 }
 
 final class FeedDetailInteractor: FeedDetailInteractorProtocol {
@@ -50,6 +57,9 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   
   /// view에서 보여지는 댓글 array(open 상태 댓글만)
   private var visibleComments: [Comment] = []
+
+  /// 신고 타입
+  var reportType: ReportType?
   
   private var feedDetail: FeedDetail?
   
@@ -280,6 +290,37 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       }
     )
   }
+
+  /// 피드 신고하기
+  func requestReport(
+    feedId: Int
+  ) {
+
+    guard let reportType = self.reportType else { return }
+
+    self.worker?.requestReportFeed(
+      feedId: feedId,
+      reportType: reportType,
+      completionHandler: { [weak self] isSuccess in
+
+        guard let self = self else { return }
+
+        if isSuccess {
+          self.showAlertView(
+            message: "게시글이 신고 되었습니다.",
+            confirmAction: {
+              self.navigateToFeedList()
+            }
+          )
+        } else {
+          self.showAlertView(
+            message: "게시글 신고에 실패하였습니다.",
+            confirmAction: nil
+          )
+        }
+      }
+    )
+  }
   
   // Routing
   
@@ -295,8 +336,13 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.router?.navigateToFeedEdit(feedId: feedId)
   }
   
-  func presentReportView() {
-    self.router?.presentReportView()
+  func presentReportView(feedId: Int) {
+    self.router?.presentReportView(
+      action: {
+        self.requestReport(feedId: feedId)
+      },
+      reportDelegate: self
+    )
   }
   
   func presentBottomSheetView(
