@@ -145,6 +145,7 @@ extension ReportViewController: UITableViewDelegate {
     let footerView = tableView.dequeueHeaderFooterView(
       withType: ReportTableFooterView.self
     )
+    footerView.tintColor = .white
 
     return footerView
   }
