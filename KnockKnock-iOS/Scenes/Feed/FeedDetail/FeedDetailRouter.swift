@@ -42,7 +42,7 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
     let interactor = FeedDetailInteractor()
     let presenter = FeedDetailPresenter()
     let worker = FeedDetailWorker(
-      feedRepository: FeedRepository(),
+      feedDetailRepository: FeedDetailRepository(),
       commentRepository: CommentRepository(),
       likeRepository: LikeRepository(),
       userDataManager: UserDataManager()

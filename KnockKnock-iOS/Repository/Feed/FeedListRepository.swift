@@ -1,30 +1,25 @@
 //
-//  FeedRepository.swift
+//  FeedListRepository.swift
 //  KnockKnock-iOS
 //
-//  Created by Daye on 2022/06/23.
+//  Created by Daye on 2023/02/22.
 //
 
 import Foundation
+
 import Alamofire
 
-protocol FeedRepositoryProtocol {
-  func requestFeedMain(
+protocol FeedListRepositoryProtocol {
+  func requestFeedList(
     currentPage: Int,
-    totalCount: Int,
+    pageSize: Int,
+    feedId: Int,
     challengeId: Int,
-    completionHandler: @escaping (FeedMain) -> Void
+    completionHandler: @escaping (FeedList) -> Void
   )
   func requestDeleteFeed(
     feedId: Int,
     completionHandler: @escaping (Bool) -> Void
-  )
-  func requestChallengeTitles(
-    completionHandler: @escaping ([ChallengeTitle]) -> Void
-  )
-  func requestFeedDetail(
-    feedId: Int,
-    completionHandler: @escaping (FeedDetail) -> Void
   )
   func requestHidePost(
     feedId: Int,
@@ -35,70 +30,11 @@ protocol FeedRepositoryProtocol {
     reportType: ReportType,
     completionHandler: @escaping (Bool) -> Void
   )
-  func requestFeedList(
-    currentPage: Int,
-    pageSize: Int,
-    feedId: Int,
-    challengeId: Int,
-    completionHandler: @escaping (FeedList) -> Void
-  )
 }
 
-final class FeedRepository: FeedRepositoryProtocol {
+final class FeedListRepository: FeedListRepositoryProtocol {
 
   typealias OnCompletionHandler = (Bool) -> Void
-
-  // MARK: - Feed main APIs
-
-  func requestChallengeTitles(
-    completionHandler: @escaping ([ChallengeTitle]) -> Void
-  ) {
-
-    KKNetworkManager
-      .shared
-      .request(
-        object: ApiResponseDTO<[ChallengeTitleDTO]>.self,
-        router: .getChallengeTitles,
-        success: { response in
-          guard let data = response.data else {
-            // no data error
-            return
-          }
-          completionHandler(data.map{$0.toDomain()})
-        }, failure: { error in
-          print(error)
-        }
-      )
-  }
-
-  func requestFeedMain(
-    currentPage: Int,
-    totalCount: Int,
-    challengeId: Int,
-    completionHandler: @escaping (FeedMain) -> Void
-  ) {
-
-    KKNetworkManager
-      .shared
-      .request(
-        object: ApiResponseDTO<FeedMain>.self,
-        router: .getFeedMain(
-          page: currentPage,
-          take: totalCount,
-          challengeId: challengeId
-        ),
-        success: { response in
-          guard let data = response.data else {
-            // no data error
-            return
-          }
-          completionHandler(data)
-        },
-        failure: { response in
-          print(response)
-        }
-      )
-  }
 
   // MARK: - Feed list APIs
 
@@ -169,31 +105,6 @@ final class FeedRepository: FeedRepositoryProtocol {
         },
         failure: { error in
           print(error)
-        }
-      )
-  }
-
-  // MARK: - Feed detail APIs
-
-  func requestFeedDetail(
-    feedId: Int,
-    completionHandler: @escaping (FeedDetail) -> Void
-  ) {
-    
-    KKNetworkManager
-      .shared
-      .request(
-        object: ApiResponseDTO<FeedDetail>.self,
-        router: .getFeed(id: feedId),
-        success: { response in
-          guard let data = response.data else {
-            // no data error
-            return
-          }
-          completionHandler(data)
-        },
-        failure: { response in
-          print(response)
         }
       )
   }

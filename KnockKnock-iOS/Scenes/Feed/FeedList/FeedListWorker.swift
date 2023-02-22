@@ -72,12 +72,12 @@ protocol FeedListWorkerProtocol {
 final class FeedListWorker: FeedListWorkerProtocol {
   typealias OnCompletionHandler = (Bool) -> Void
   
-  private let feedRepository: FeedRepositoryProtocol
+  private let feedListRepository: FeedListRepositoryProtocol
   private let likeRepository: LikeRepositoryProtocol
   private let userDataManager: UserDataManagerProtocol
   
   init(
-    feedRepository: FeedRepositoryProtocol,
+    feedListRepository: FeedListRepositoryProtocol,
     likeRepository: LikeRepositoryProtocol,
     userDataManager: UserDataManagerProtocol
   ) {
@@ -91,7 +91,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
     feedId: Int,
     completionHandler: @escaping OnCompletionHandler
   ) {
-    self.feedRepository.requestDeleteFeed(
+    self.feedListRepository.requestDeleteFeed(
       feedId: feedId,
       completionHandler: { isSuccess in
         if isSuccess {
@@ -107,7 +107,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
     feedId: Int,
     completionHandler: @escaping (Bool) -> Void
   ) {
-    self.feedRepository.requestHidePost(
+    self.feedListRepository.requestHidePost(
       feedId: feedId,
       completionHandler: { isSuccess in
         if isSuccess {
@@ -189,7 +189,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
     challengeId: Int,
     completionHandler: @escaping (FeedList) -> Void
   ) {
-    self.feedRepository.requestFeedList(
+    self.feedListRepository.requestFeedList(
       currentPage: currentPage,
       pageSize: count,
       feedId: feedId,
@@ -317,7 +317,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
     reportType: ReportType,
     completionHandler: @escaping OnCompletionHandler
   ) {
-    self.feedRepository.requestReportPost(
+    self.feedListRepository.requestReportPost(
       feedId: feedId,
       reportType: reportType,
       completionHandler: { isSuccess in

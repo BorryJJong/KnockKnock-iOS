@@ -60,7 +60,7 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
 
   // MARK: - Properties
 
-  private let feedRepository: FeedRepositoryProtocol
+  private let feedDetailRepository: FeedDetailRepositoryProtocol
   private let commentRepository: CommentRepositoryProtocol
   private let likeRepository: LikeRepositoryProtocol
   private let userDataManager: UserDataManagerProtocol
@@ -68,7 +68,7 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
   // MARK: - Initialize
 
   init(
-    feedRepository: FeedRepositoryProtocol,
+    feedDetailRepository: FeedDetailRepositoryProtocol,
     commentRepository: CommentRepositoryProtocol,
     likeRepository: LikeRepositoryProtocol,
     userDataManager: UserDataManagerProtocol
@@ -86,7 +86,7 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
     feedId: Int,
     completionHandler: @escaping (FeedDetail) -> Void
   ) {
-    self.feedRepository.requestFeedDetail(
+    self.feedDetailRepository.requestFeedDetail(
       feedId: feedId,
       completionHandler: { feed in
         completionHandler(feed)
@@ -98,7 +98,7 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
     feedId: Int,
     completionHandler: @escaping OnCompletionHandler
   ) {
-    self.feedRepository.requestDeleteFeed(
+    self.feedDetailRepository.requestDeleteFeed(
       feedId: feedId,
       completionHandler: { [weak self] isSuccess in
 
@@ -119,7 +119,7 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
     feedId: Int,
     completionHandler: @escaping OnCompletionHandler
   ) {
-    self.feedRepository.requestHidePost(
+    self.feedDetailRepository.requestHidePost(
       feedId: feedId,
       completionHandler: { [weak self] isSuccess in
 
@@ -143,7 +143,7 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
     reportType: ReportType,
     completionHandler: @escaping OnCompletionHandler
   ) {
-    self.feedRepository.requestReportPost(
+    self.feedDetailRepository.requestReportPost(
       feedId: feedId,
       reportType: reportType,
       completionHandler: { isSuccess in
