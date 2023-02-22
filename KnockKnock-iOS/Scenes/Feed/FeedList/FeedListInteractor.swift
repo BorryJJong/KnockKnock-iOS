@@ -16,10 +16,7 @@ protocol FeedListInteractorProtocol {
   func requestDelete(feedId: Int)
   func requestHide(feedId: Int)
   func requestLike(feedId: Int)
-  func requestReport(
-    feedId: Int
-    //    reportType: ReportType
-  )
+  func requestReport(feedId: Int)
 
   func presentBottomSheetView(
     isMyPost: Bool,
@@ -224,12 +221,18 @@ final class FeedListInteractor: FeedListInteractorProtocol {
             id: feedId
           ) else { return }
 
+          self.showAlertView(
+            message: "게시글이 신고 되었습니다.",
+            completion: nil
+          )
           self.presenter?.presentFetchFeedList(feedList: feedListData)
 
         } else {
-          // error
+          self.showAlertView(
+            message: "게시글 신고에 실패하였습니다.",
+            completion: nil
+          )
         }
-
       }
     )
   }
