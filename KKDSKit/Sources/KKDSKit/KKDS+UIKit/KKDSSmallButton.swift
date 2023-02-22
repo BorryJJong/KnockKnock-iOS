@@ -9,6 +9,20 @@ import UIKit
 
 public final class KKDSSmallButton: KKDSButton {
 
+  // MARK: - Properties
+
+  private var disabledColor = KKDS.Color.gray40
+  private var enabledColor = KKDS.Color.green50
+
+  public override var isEnabled: Bool {
+    didSet {
+      self.backgroundColor = isEnabled
+      ? enabledColor : disabledColor
+    }
+  }
+
+  // MARK: - Configure
+
   override func setupConfigure() {
     self.setTitleColor(
       .white,
@@ -21,8 +35,5 @@ public final class KKDSSmallButton: KKDSButton {
 
     self.clipsToBounds = true
     self.layer.cornerRadius = 15
-
-    self.setBackgroundColor(KKDS.Color.green50, for: .normal)
-    self.setBackgroundColor(KKDS.Color.gray40, for: .disabled)
   }
 }
