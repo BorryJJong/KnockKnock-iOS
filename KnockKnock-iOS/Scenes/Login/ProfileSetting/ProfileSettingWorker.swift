@@ -50,11 +50,13 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
   }
   
   func fetchUserData(completionHandler: @escaping (UserDetail) -> Void) {
-    self.profileRepository.requestUserDeatil(completionHandler: { response in
-      Task {
-        completionHandler(response.toDomain())
+    self.profileRepository.requestUserDeatil(
+      completionHandler: { response in
+        Task {
+          completionHandler(await response.toDomain())
+        }
       }
-    })
+    )
   }
   
   func requestRegister(

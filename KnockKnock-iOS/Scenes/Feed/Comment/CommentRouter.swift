@@ -26,7 +26,10 @@ final class CommentRouter: CommentRouterProtocol {
     let view = CommentViewController()
     let interactor = CommentInteractor()
     let presenter = CommentPresenter()
-    let worker = CommentWorker(repository: CommentRepository())
+    let worker = CommentWorker(
+      commentRepository: CommentRepository(),
+      userDataManager: UserDataManager()
+    )
     let router = CommentRouter()
 
     view.interactor = interactor

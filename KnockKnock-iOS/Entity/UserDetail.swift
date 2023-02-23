@@ -23,13 +23,14 @@ struct UserDetail {
 
 extension UserDetailDTO {
 
-  func toDomain() -> UserDetail {
+  func toDomain() async -> UserDetail {
 
     return UserDetail(
       nickname: nickname,
       socialType: socialType,
-      image: image?.stringUrlToImage(
-        defaultImage: KKDS.Image.ic_my_img_86
+      image: await image?.getImageFromStringUrl(
+        defaultImage: KKDS.Image.ic_my_img_86,
+        imageWidth: 86
       ) ?? KKDS.Image.ic_my_img_86
     )
   }

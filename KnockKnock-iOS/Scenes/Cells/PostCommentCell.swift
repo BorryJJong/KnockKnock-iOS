@@ -45,6 +45,9 @@ final class PostCommentCell: BaseCollectionViewCell {
 
   private let profileImageView = UIImageView().then {
     $0.image = KKDS.Image.ic_person_24
+    $0.layer.cornerRadius = (Metric.profileImageViewWidth / 2)
+    $0.clipsToBounds = true
+    $0.contentMode = .scaleToFill
   }
 
   private let userIdLabel = UILabel().then {
@@ -93,18 +96,36 @@ final class PostCommentCell: BaseCollectionViewCell {
   
   // MARK: - Bind
 
-  func bind(comment: Comment) {
+  func bind(
+    comment: Comment,
+    isLoggedIn: Bool
+  ) {
+
+    Task {
+      self.profileImageView.image = await comment.data.image?.getImageFromStringUrl(
+        defaultImage: KKDS.Image.ic_person_24,
+        imageWidth: Metric.profileImageViewWidth
+      )
+    }
+
     let reply = comment.data.reply.map {
       $0.filter { !$0.isDeleted }
     } ?? []
-    self.setReplyMoreButton(count: reply.count, isOpen: comment.isOpen)
+    
+    self.setReplyMoreButton(
+      count: reply.count,
+      isOpen: comment.isOpen
+    )
 
     self.userIdLabel.text = comment.data.nickname
     self.commentLabel.text = comment.data.content
     self.writtenDateLabel.text = comment.data.regDate
 
+    self.replyWriteButton.isHidden = !isLoggedIn
+    self.commentDeleteButton.isHidden = !isLoggedIn
+
     if comment.isReply {
-      self.replyWriteButton.isHidden = true
+      self.replyWriteButton.isHidden = comment.isReply
       self.commentDeleteButton.snp.remakeConstraints {
         $0.top.equalTo(self.writtenDateLabel)
         $0.leading.equalTo(self.writtenDateLabel.snp.trailing).offset(Metric.commentDeleteButtonLeadingMargin)
@@ -116,7 +137,6 @@ final class PostCommentCell: BaseCollectionViewCell {
       }
       
     } else {
-      self.replyWriteButton.isHidden = false
       self.commentDeleteButton.snp.remakeConstraints {
         $0.top.equalTo(self.writtenDateLabel)
         $0.leading.equalTo(self.replyWriteButton.snp.trailing).offset(Metric.commentDeleteButtonLeadingMargin)
