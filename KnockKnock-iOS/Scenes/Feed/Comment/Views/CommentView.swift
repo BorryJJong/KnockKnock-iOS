@@ -15,6 +15,11 @@ class CommentView: UIView {
 
   // MARK: - Constants
 
+  private enum Placeholder {
+    static let noText = "댓글을 입력하세요..."
+    static let noLoggedIn = "로그인이 필요합니다."
+  }
+
   private enum Metric {
     static let headerViewHeight = 100.f
     static let headerViewTrailingMargin = -10.f
@@ -37,10 +42,6 @@ class CommentView: UIView {
     static let registButtonWidth = 50.f
     static let registButtonHeight = 30.f
   }
-
-  // MARK: - Properties
-
-  private let commentTextViewPlaceholder = "댓글을 입력하세요..."
 
   // MARK: - UIs
 
@@ -89,21 +90,14 @@ class CommentView: UIView {
 
   lazy var commentTextView = UITextView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.text = self.commentTextViewPlaceholder
     $0.textColor = .gray50
     $0.font = .systemFont(ofSize: 15, weight: .regular)
     $0.autocorrectionType = .no
     $0.spellCheckingType = .no
   }
 
-  let registButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
+  let registButton = KKDSSmallButton().then {
     $0.setTitle("등록", for: .normal)
-    $0.titleLabel?.font = .systemFont(ofSize: 13, weight: .bold)
-    $0.clipsToBounds = true
-    $0.layer.cornerRadius = 15
-    $0.backgroundColor = .green50
-    $0.setTitleColor(.white, for: .normal)
   }
 
   // MARK: - Initailize
@@ -117,14 +111,23 @@ class CommentView: UIView {
     super.init(coder: aDecoder)
   }
 
-  // MARK: - Configure
+  // MARK: - Bind
 
-  func setPlaceholder() {
-    if self.commentTextView.text == self.commentTextViewPlaceholder {
+  func setCommentComponets(isLoggedIn: Bool) {
+    self.commentTextView.isEditable = isLoggedIn
+    self.registButton.isEnabled = isLoggedIn
+
+    guard isLoggedIn else {
+      self.commentTextView.text = Placeholder.noLoggedIn
+      return
+    }
+
+    if self.commentTextView.text == Placeholder.noText ||
+        self.commentTextView.text == Placeholder.noLoggedIn {
       self.commentTextView.text = nil
       self.commentTextView.textColor = .black
     } else if self.commentTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-      self.commentTextView.text = self.commentTextViewPlaceholder
+      self.commentTextView.text = Placeholder.noText
       self.commentTextView.textColor = .gray50
     }
   }
