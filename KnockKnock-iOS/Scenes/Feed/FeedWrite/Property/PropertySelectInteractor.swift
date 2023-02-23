@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/11/04.
 //
 
-import UIKit
+import Foundation
 
 protocol PropertySelectInteractorProtocol {
   var worker: PropertySelectWorkerProtocol? { get set }

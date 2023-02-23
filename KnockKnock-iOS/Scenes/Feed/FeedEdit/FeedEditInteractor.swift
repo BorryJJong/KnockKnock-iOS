@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/12/18.
 //
 
-import UIKit
+import Foundation
 
 protocol FeedEditInteractorProtocol: AnyObject {
   var router: FeedEditRouterProtocol? { get set }
