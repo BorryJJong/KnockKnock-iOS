@@ -27,55 +27,62 @@ protocol CommentWorkerProtocol {
     comments: [Comment],
     commentId: Int
   ) -> [Comment]
+  
+  func checkTokenIsValidated() async -> Bool
 }
 
 final class CommentWorker: CommentWorkerProtocol {
-
+  
   typealias OnCompletionHandler = (Bool) -> Void
-
+  
   // MARK: - Properties
-
-  private let repository: CommentRepositoryProtocol?
-
+  
+  private let commentRepository: CommentRepositoryProtocol?
+  private let userDataManager: UserDataManagerProtocol
+  
   // MARK: - Initialize
-
-  init(repository: CommentRepositoryProtocol){
-    self.repository = repository
+  
+  init(
+    commentRepository: CommentRepositoryProtocol,
+    userDataManager: UserDataManagerProtocol
+  ){
+    self.commentRepository = commentRepository
+    self.userDataManager = userDataManager
   }
-
+  
   func getAllComments(
     feedId: Int,
     completionHandler: @escaping ([Comment]) -> Void
   ) {
     var data: [Comment] = []
-    self.repository?.requestComments(
+    self.commentRepository?.requestComments(
       feedId: feedId,
       completionHandler: { comment in
         let commentData = comment.map { Comment(data: $0) }
         data += commentData
-
+        
         completionHandler(data)
       }
     )
   }
-
+  
   /// 전체 댓글에서 삭제된 댓글, 숨김(접힘) 상태 댓글을 제외하고 보여질 댓글만 필터링
   func fetchVisibleComments(comments: [Comment]?) -> [Comment] {
     var visibleComments: [Comment] = []
-
+    
     guard let comments = comments else { return [] }
-
+    
     comments.filter({
       !$0.data.isDeleted
     }).forEach { comment in
-
+      
       if comment.isOpen {
         visibleComments.append(comment)
-
+        
         let reply = comment.data.reply.map {
           $0.filter { !$0.isDeleted }
         } ?? []
-
+        
         visibleComments += reply.map {
           Comment(
             data: CommentResponse(
@@ -99,12 +106,12 @@ final class CommentWorker: CommentWorkerProtocol {
     }
     return visibleComments
   }
-
+  
   func requestAddComment(
     comment: AddCommentDTO,
     completionHandler: @escaping OnCompletionHandler
   ) {
-    self.repository?.requestAddComment(
+    self.commentRepository?.requestAddComment(
       comment: comment,
       completionHandler: { isSuccess in
         if isSuccess {
@@ -114,44 +121,44 @@ final class CommentWorker: CommentWorkerProtocol {
       }
     )
   }
-
+  
   func requestDeleteComment(
     feedId: Int,
     commentId: Int,
     comments: [Comment],
     completionHandler: @escaping OnCompletionHandler
   ) {
-
-    self.repository?.requestDeleteComment(
+    
+    self.commentRepository?.requestDeleteComment(
       commentId: commentId,
       completionHandler: { isSuccess in
         if isSuccess {
-
+          
           guard let commentIndex = comments.firstIndex(
             where: { $0.data.id == commentId }
           ) else { return }
-
+          
           self.postDeleteNotificationEvent(
             feedId: feedId,
             replyCount: comments[commentIndex].data.replyCnt
           )
-
+          
         }
         completionHandler(isSuccess)
       }
     )
   }
-
+  
   func convertDeletedComment(
     comments: [Comment],
     commentId: Int
   ) -> [Comment] {
     var comments = comments
-
+    
     if let index = comments.firstIndex(where: { $0.data.id == commentId }) {
       comments[index].data.isDeleted = true
     }
-
+    
     for commentIndex in 0..<comments.count {
       if let replyIndex = comments[commentIndex].data.reply?.firstIndex(where: {
         $0.id == commentId
@@ -159,9 +166,14 @@ final class CommentWorker: CommentWorkerProtocol {
         comments[commentIndex].data.reply?[replyIndex].isDeleted = true
       }
     }
-
+    
     return comments
   }
+  
+  func checkTokenIsValidated() async -> Bool {
+    return await self.userDataManager.checkTokenIsValidated()
+  }
+  
 }
 
 extension CommentWorker {
@@ -171,17 +183,17 @@ extension CommentWorker {
       object: feedId
     )
   }
-
+  
   private func postDeleteNotificationEvent(
     feedId: Int,
     replyCount: Int
   ) {
-
+    
     let object: [String: Any] = [
       "feedId": feedId,
       "replyCount": replyCount
     ]
-
+    
     NotificationCenter.default.post(
       name: .feedListCommentRefreshAfterDelete,
       object: object

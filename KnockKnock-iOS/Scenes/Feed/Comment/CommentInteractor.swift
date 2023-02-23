@@ -18,6 +18,7 @@ protocol CommentInteractorProtocol {
     feedId: Int,
     commentId: Int
   )
+  func checkLoginStatus()
 
   func dismissCommentView()
   func showAlertView(
@@ -36,6 +37,15 @@ final class CommentInteractor: CommentInteractorProtocol {
 
   /// view에서 보여지는 댓글 array(open 상태 댓글만)
   private var visibleComments: [Comment] = []
+
+  /// 로그인 상태 체크
+  func checkLoginStatus() {
+    Task {
+      self.presenter?.presentLoginStatus(
+        isLoggedIn: await self.checkTokenIsValidated()
+      )
+    }
+  }
 
   /// 댓글 목록 조회 api로부터 받은 전체 댓글 fetch
   func fetchAllComments(feedId: Int) {
@@ -149,5 +159,13 @@ final class CommentInteractor: CommentInteractorProtocol {
       message: message,
       confirmAction: confirmAction
     )
+  }
+}
+
+extension CommentInteractor {
+  private func checkTokenIsValidated() async -> Bool {
+    guard let isValidate = await self.worker?.checkTokenIsValidated() else { return false }
+
+    return isValidate
   }
 }

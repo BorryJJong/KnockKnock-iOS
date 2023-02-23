@@ -8,7 +8,13 @@
 import UIKit
 
 extension UIImageView {
-  
+
+  /// Url(String)을 이미지로 변환하여 UIImageView.image 설정(정방형 비율 리사이징 포함)
+  ///
+  /// - Parameters:
+  ///  - stringUrl: 이미지 url(String type)
+  ///  - defaultImage: 이미지 변환에 실패한 경우 나타날 디폴트 이미지
+  ///  - imageWidth: 이미지 뷰 길이
   func setImageFromStringUrl(
     stringUrl: String?,
     defaultImage: UIImage,
@@ -57,7 +63,7 @@ extension UIImageView {
     return data
   }
   
-  /// 이미지 로드
+  /// 이미지 로드 및 이미지 리사이징
   private func loadImage(
     stringUrl: String?,
     imageWidth: CGFloat? = nil
