@@ -65,6 +65,9 @@ final class ChallengeDetailInteractor: ChallengeDetailInteractorProtocol {
           guard let error = error else { return }
 
           self.router?.presentErrorAlertView(message: error.message)
+        } else {
+          
+          LoadingIndicator.hideLoading()
         }
       }
     )
