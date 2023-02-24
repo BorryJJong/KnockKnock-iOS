@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/06/26.
 //
 
-import UIKit
+import Foundation
 
 protocol FeedListWorkerProtocol {
   func fetchFeedList(
@@ -81,7 +81,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
     likeRepository: LikeRepositoryProtocol,
     userDataManager: UserDataManagerProtocol
   ) {
-    self.feedRepository = feedRepository
+    self.feedListRepository = feedListRepository
     self.likeRepository = likeRepository
     self.userDataManager = userDataManager
   }

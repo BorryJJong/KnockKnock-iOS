@@ -62,6 +62,7 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
 
   func navigateToLikeDetail(like: [Like.Info]) {
     let likeDetailViewController = LikeDetailViewContoller()
+    
     if let sourceView = self.view as? UIViewController {
       likeDetailViewController.like = like
       sourceView.navigationController?.pushViewController(likeDetailViewController, animated: true)

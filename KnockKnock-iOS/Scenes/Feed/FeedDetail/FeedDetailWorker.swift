@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/07/30.
 //
 
-import UIKit
+import Foundation
 
 protocol FeedDetailWorkerProtocol {
   func getFeedDetail(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void)
@@ -37,6 +37,7 @@ protocol FeedDetailWorkerProtocol {
   func requestDeleteComment(
     feedId: Int,
     commentId: Int,
+    comments: [Comment],
     completionHandler: @escaping (Bool) -> Void
   )
 
@@ -73,7 +74,7 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
     likeRepository: LikeRepositoryProtocol,
     userDataManager: UserDataManagerProtocol
   ) {
-    self.feedRepository = feedRepository
+    self.feedDetailRepository = feedDetailRepository
     self.commentRepository = commentRepository
     self.likeRepository = likeRepository
     self.userDataManager = userDataManager
@@ -297,6 +298,7 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
   func requestDeleteComment(
     feedId: Int,
     commentId: Int,
+    comments: [Comment],
     completionHandler: @escaping OnCompletionHandler
   ) {
     self.commentRepository.requestDeleteComment(
@@ -306,7 +308,16 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
         guard let self = self else { return }
 
         if isSuccess {
-          self.postCommentDeleteNotificationEvent(feedId: feedId)
+
+          guard let commentIndex = comments.firstIndex(
+            where: { $0.data.id == commentId }
+          ) else { return }
+
+          self.postCommentDeleteNotificationEvent(
+            feedId: feedId,
+            replyCount: comments[commentIndex].data.replyCnt
+          )
+
         }
         completionHandler(isSuccess)
       }
@@ -343,10 +354,19 @@ extension FeedDetailWorker {
     )
   }
 
-  private func postCommentDeleteNotificationEvent(feedId: Int) {
+  private func postCommentDeleteNotificationEvent(
+    feedId: Int,
+    replyCount: Int
+  ) {
+
+    let object: [String: Any] = [
+      "feedId": feedId,
+      "replyCount": replyCount
+    ]
+
     NotificationCenter.default.post(
       name: .feedListCommentRefreshAfterDelete,
-      object: feedId
+      object: object
     )
   }
 }

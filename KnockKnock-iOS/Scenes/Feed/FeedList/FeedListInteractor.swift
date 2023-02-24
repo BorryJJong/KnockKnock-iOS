@@ -272,14 +272,27 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     reportAction: (() -> Void)?,
     feedData: FeedList.Post
   ) {
-    self.router?.presentBottomSheetView(
-      isMyPost: isMyPost,
-      deleteAction: deleteAction,
-      hideAction: hideAction,
-      editAction: editAction,
-      reportAction: reportAction,
-      feedData: feedData.toShare()
-    )
+    Task {
+
+      if await self.checkTokenIsValidated() {
+
+        await MainActor.run {
+          self.router?.presentBottomSheetView(
+            isMyPost: isMyPost,
+            deleteAction: deleteAction,
+            hideAction: hideAction,
+            editAction: editAction,
+            reportAction: reportAction,
+            feedData: feedData.toShare()
+          )
+        }
+      } else {
+        
+        await MainActor.run {
+          self.router?.navigateToLoginView()
+        }
+      }
+    }
   }
 
   func showAlertView(
@@ -410,31 +423,31 @@ extension FeedListInteractor {
       contents: contents
     )
   }
-  
+
   /// 좋아요 상태 toggle
   ///
   /// - Parameters:
   ///  - feedId: 피드 아이디
   private func toggleLike(feedId: Int) {
-    
+
     guard let feedListData = self.feedListData else { return }
     guard !feedListData.feeds.isEmpty else { return }
-    
+
     guard let convertFeedList = self.worker?.convertLikeFeed(
       feeds: feedListData,
       id: feedId
     ) else {
       return
     }
-    
+
     self.feedListData = convertFeedList
-    
+
     let updatedSections: [IndexPath] = self.worker?.changedSections(
       feeds: feedListData.feeds,
       id: feedId
     )
       .map { IndexPath(item: 0, section: $0) } ?? []
-    
+
     self.presenter?.presentUpdateFeedList(
       feedList: convertFeedList,
       sections: updatedSections
@@ -479,9 +492,9 @@ extension FeedListInteractor {
 
     self.presenter?.presentFetchFeedList(feedList: feedListData)
   }
-  
+
   // Notification Center
-  
+
   private func setNotification() {
     NotificationCenter.default.addObserver(
       forName: .feedListRefreshAfterSigned,
@@ -490,7 +503,7 @@ extension FeedListInteractor {
     ) { _ in
       self.presenter?.reloadFeedList()
     }
-    
+
     NotificationCenter.default.addObserver(
       forName: .feedListRefreshAfterUnsigned,
       object: nil,
@@ -498,7 +511,7 @@ extension FeedListInteractor {
     ) { _ in
       self.presenter?.reloadFeedList()
     }
-    
+
     NotificationCenter.default.addObserver(
       self,
       selector: #selector(self.likeNotificationEvent(_:)),

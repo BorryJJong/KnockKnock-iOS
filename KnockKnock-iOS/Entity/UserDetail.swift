@@ -5,7 +5,7 @@
 //  Created by Daye on 2023/01/26.
 //
 
-import UIKit
+import Foundation
 
 import KKDSKit
 
@@ -18,19 +18,17 @@ struct UserDetailDTO: Decodable {
 struct UserDetail {
   let nickname: String
   let socialType: String
-  let image: UIImage
+  let image: Data?
 }
 
 extension UserDetailDTO {
 
-  func toDomain() -> UserDetail {
+  func toDomain() async -> UserDetail {
 
     return UserDetail(
       nickname: nickname,
       socialType: socialType,
-      image: image?.stringUrlToImage(
-        defaultImage: KKDS.Image.ic_my_img_86
-      ) ?? KKDS.Image.ic_my_img_86
+      image: await image?.getDataFromStringUrl()
     )
   }
 }
