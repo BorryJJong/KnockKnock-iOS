@@ -20,6 +20,7 @@ protocol HomeInteractorProtocol {
   )
   func fetchEventList()
   func fetchBanner(bannerType: BannerType)
+  func fetchVerifiedStore()
 
   func navigateToStoreListView()
   func navigateToEventPageView()
@@ -72,6 +73,7 @@ final class HomeInteractor: HomeInteractorProtocol {
   func fetchBanner(bannerType: BannerType) {
     Task {
       guard let bannerList = await self.worker?.fetchBanner(bannerType: bannerType) else {
+
         // error
         return
       }
@@ -84,6 +86,17 @@ final class HomeInteractor: HomeInteractorProtocol {
       case .bar:
         self.presenter?.presentBarBannerList(bannerList: bannerList)
       }
+
+    }
+  }
+
+  func fetchVerifiedStore() {
+    Task {
+      guard let storeList = await self.worker?.fetchVerifiedStore() else {
+        // error
+        return
+      }
+      self.presenter?.presentStoreList(storeList: storeList)
     }
   }
 

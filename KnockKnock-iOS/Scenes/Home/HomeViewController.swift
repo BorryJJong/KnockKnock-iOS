@@ -21,6 +21,7 @@ protocol HomeViewProtocol: AnyObject {
   func fetchEventList(eventList: [Event])
   func fetchMainBannerList(bannerList: [HomeBanner])
   func fetchBarBannerList(bannerList: [HomeBanner])
+  func fetchStoreList(storeList: [Store])
 }
 
 final class HomeViewController: BaseViewController<HomeView> {
@@ -31,6 +32,7 @@ final class HomeViewController: BaseViewController<HomeView> {
 
   private var mainBannerList: [HomeBanner] = []
   private var barBannerList: [HomeBanner] = []
+  private var storeList: [Store] = []
   private var hotPostList: [HotPost] = []
   private var eventList: [Event] = []
   private var challengeList: [ChallengeTitle] = []
@@ -77,6 +79,7 @@ final class HomeViewController: BaseViewController<HomeView> {
   private func fetchData() {
     self.interactor?.fetchBanner(bannerType: .main)
     self.interactor?.fetchBanner(bannerType: .bar)
+    self.interactor?.fetchVerifiedStore()
     self.interactor?.fetchHotpost(challengeId: self.challengeId)
     self.interactor?.fetchChallengeList()
     self.interactor?.fetchEventList()
@@ -121,6 +124,19 @@ extension HomeViewController: HomeViewProtocol {
     DispatchQueue.main.async {
       UIView.performWithoutAnimation {
         self.containerView.homeCollectionView.reloadSections([HomeSection.banner.rawValue])
+      }
+    }
+  }
+
+  func fetchStoreList(storeList: [Store]) {
+    self.storeList = storeList
+
+    DispatchQueue.main.async {
+
+      UIView.performWithoutAnimation {
+        self.containerView.homeCollectionView.reloadSections(
+          IndexSet(integer: HomeSection.store.rawValue)
+        )
       }
     }
   }
@@ -192,7 +208,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
       return self.barBannerList.count
 
     case .store:
-      return 6
+      return self.storeList.count
 
     case .popularPost:
       return self.hotPostList.count
@@ -299,6 +315,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         withType: StoreCell.self,
         for: indexPath
       )
+      cell.bind(store: self.storeList[indexPath.item])
 
       return cell
 

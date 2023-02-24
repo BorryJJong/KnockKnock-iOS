@@ -245,6 +245,7 @@
 		61C21D1928CB3247009B5F4E /* ProfileSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C21D1828CB3247009B5F4E /* ProfileSettingViewController.swift */; };
 		61CA513129A2030500C43461 /* HomeBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CA513029A2030500C43461 /* HomeBanner.swift */; };
 		61CA513329A2035800C43461 /* BannerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CA513229A2035800C43461 /* BannerType.swift */; };
+		61CA513529A342A400C43461 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CA513429A342A400C43461 /* Store.swift */; };
 		61CA513929A3BC2500C43461 /* EventRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CA513829A3BC2500C43461 /* EventRepository.swift */; };
 		61CCF3FB2984D7F000FBAB07 /* SharQueryItemType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CCF3FA2984D7F000FBAB07 /* SharQueryItemType.swift */; };
 		61CD47FC293473F900FEE2F7 /* MyInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CD47FB293473F900FEE2F7 /* MyInteractor.swift */; };
@@ -255,6 +256,7 @@
 		61CD4810293DC5A000FEE2F7 /* FeedWriteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CD480F293DC5A000FEE2F7 /* FeedWriteRepository.swift */; };
 		61D190B4296AAE3000329ABD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 61D190B3296AAE3000329ABD /* GoogleService-Info.plist */; };
 		61D190B8296BD76000329ABD /* ApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D190B7296BD76000329ABD /* ApiResponse.swift */; };
+		61D96D6229A86372009E2842 /* VerifiedStoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6129A86372009E2842 /* VerifiedStoreRepository.swift */; };
 		61D96D6429A87207009E2842 /* BannerRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6329A87207009E2842 /* BannerRepository.swift */; };
 		61DD8FE32998BDEA0061E348 /* ReportType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DD8FE22998BDEA0061E348 /* ReportType.swift */; };
 		61DE4185299B6698006C960F /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DE4184299B6698006C960F /* Event.swift */; };
@@ -516,6 +518,7 @@
 		61C21D1828CB3247009B5F4E /* ProfileSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewController.swift; sourceTree = "<group>"; };
 		61CA513029A2030500C43461 /* HomeBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBanner.swift; sourceTree = "<group>"; };
 		61CA513229A2035800C43461 /* BannerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerType.swift; sourceTree = "<group>"; };
+		61CA513429A342A400C43461 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		61CA513829A3BC2500C43461 /* EventRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventRepository.swift; sourceTree = "<group>"; };
 		61CCF3FA2984D7F000FBAB07 /* SharQueryItemType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharQueryItemType.swift; sourceTree = "<group>"; };
 		61CD47FB293473F900FEE2F7 /* MyInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInteractor.swift; sourceTree = "<group>"; };
@@ -529,6 +532,7 @@
 		61D190B2296AA9E400329ABD /* firebase-tools-macos.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "firebase-tools-macos.zip"; sourceTree = "<group>"; };
 		61D190B3296AAE3000329ABD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		61D190B7296BD76000329ABD /* ApiResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiResponse.swift; sourceTree = "<group>"; };
+		61D96D6129A86372009E2842 /* VerifiedStoreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifiedStoreRepository.swift; sourceTree = "<group>"; };
 		61D96D6329A87207009E2842 /* BannerRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerRepository.swift; sourceTree = "<group>"; };
 		61DD8FE22998BDEA0061E348 /* ReportType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportType.swift; sourceTree = "<group>"; };
 		61DE4184299B6698006C960F /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
@@ -602,6 +606,7 @@
 				6128A4CA29824DB1005E36F3 /* UserDetail.swift */,
 				61DE4184299B6698006C960F /* Event.swift */,
 				61CA513029A2030500C43461 /* HomeBanner.swift */,
+				61CA513429A342A400C43461 /* Store.swift */,
 				61DE4186299C6360006C960F /* EventDetail.swift */,
 			);
 			path = Entity;
@@ -623,8 +628,9 @@
 				61BB9DA52976784200728E97 /* HotPostRepository.swift */,
 				6128A4C82982429B005E36F3 /* ProfileRepositroy.swift */,
 				616524BE297ECCCA009610C3 /* KakaoShareManager.swift */,
-				61CA513829A3BC2500C43461 /* EventRepository.swift */,
 				61D96D6329A87207009E2842 /* BannerRepository.swift */,
+				61CA513829A3BC2500C43461 /* EventRepository.swift */,
+				61D96D6129A86372009E2842 /* VerifiedStoreRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -1606,6 +1612,7 @@
 				6105079628B4EE9F00C1B5CF /* HomeRouter.swift in Sources */,
 				6190E968294EEE5F00A48512 /* Encodable+Ext.swift in Sources */,
 				6128A4C3297F7CC6005E36F3 /* FeedShare.swift in Sources */,
+				61CA513529A342A400C43461 /* Store.swift in Sources */,
 				20EAE2972814054F009242A1 /* ChellengeRepository.swift in Sources */,
 				618FDAC527E80C6B00C2823F /* ShopSearchViewController.swift in Sources */,
 				61E87EBD28D189640005CAA6 /* FeedSearchRouter.swift in Sources */,
@@ -1797,6 +1804,7 @@
 				61A730DF28ED4EBA00C6BD98 /* MyViewController.swift in Sources */,
 				61B20B672927393000EBA596 /* BaseTableViewHeaderFooterView.swift in Sources */,
 				618FDAC727E82A6F00C2823F /* AddressCell.swift in Sources */,
+				61D96D6229A86372009E2842 /* VerifiedStoreRepository.swift in Sources */,
 				61A028512910D3A700943A40 /* LoginInteractor.swift in Sources */,
 				6143297C28687B7F008BDCC9 /* FeedListRouter.swift in Sources */,
 				613856E6289CCE4800BE347E /* PopularFooterCollectionReusableView.swift in Sources */,
