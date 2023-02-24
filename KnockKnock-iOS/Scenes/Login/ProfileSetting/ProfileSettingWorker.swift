@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/11/03.
 //
 
-import UIKit
+import Foundation
 
 protocol ProfileSettingWorkerProtocol {
   func requestRegister(
@@ -14,8 +14,8 @@ protocol ProfileSettingWorkerProtocol {
   )
   func requestEditProfile(
     nickname: String?,
-    image: UIImage?,
-    completionHandler: @escaping (Bool, String) -> Void
+    image: Data?,
+    completionHandler: @escaping (String) -> Void
   )
   func checkDuplicateNickname(
     nickname: String,
@@ -23,10 +23,10 @@ protocol ProfileSettingWorkerProtocol {
   )
   func isChangedUserData(
     originNickname: String,
-    originImage: UIImage?,
+    originImage: Data?,
     inputedNickname: String,
-    inputedImage: UIImage?,
-    completionHandler: @escaping (String?, UIImage?) -> Void
+    inputedImage: Data?,
+    completionHandler: @escaping (String?, Data?) -> Void
   )
   
   func fetchUserData(completionHandler: @escaping (UserDetail) -> Void)
@@ -50,11 +50,13 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
   }
   
   func fetchUserData(completionHandler: @escaping (UserDetail) -> Void) {
-    self.profileRepository.requestUserDeatil(completionHandler: { response in
-      Task {
-        completionHandler(response.toDomain())
+    self.profileRepository.requestUserDeatil(
+      completionHandler: { response in
+        Task {
+          completionHandler(await response.toDomain())
+        }
       }
-    })
+    )
   }
   
   func requestRegister(
@@ -73,30 +75,28 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
   /// nickname, image 중 하나라도 수정 되었는지 판별
   func isChangedUserData(
     originNickname: String,
-    originImage: UIImage?,
+    originImage: Data?,
     inputedNickname: String,
-    inputedImage: UIImage?,
-    completionHandler: @escaping (String?, UIImage?) -> Void
+    inputedImage: Data?,
+    completionHandler: @escaping (String?, Data?) -> Void
   ) {
     
     var newNickname: String?
-    var newImage: UIImage?
+    var newImage: Data?
     
-    newNickname = newNickname == originNickname
-    ? nil : newNickname
-    
-    if let inputedImage = inputedImage {
-      newImage = inputedImage.isEqualToImage(image: originImage)
-      ? nil : inputedImage.resizeSquareImage(newWidth: 100)
-    }
+    newNickname = inputedNickname == originNickname
+    ? nil : inputedNickname
+
+    newImage = inputedImage == originImage
+    ? nil : inputedImage
     
     completionHandler(newNickname, newImage)
   }
   
   func requestEditProfile(
     nickname: String?,
-    image: UIImage?,
-    completionHandler: @escaping (Bool, String) -> Void
+    image: Data?,
+    completionHandler: @escaping (String) -> Void
   ) {
     
     self.profileRepository.requestEditProfile(
@@ -109,7 +109,7 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
         }
         
         let message = isSuccess ? "프로필 수정에 성공하였습니다." : "프로필 수정에 실패하였습니다."
-        completionHandler(isSuccess, message)
+        completionHandler(message)
       }
     )
   }

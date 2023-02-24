@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/07/22.
 //
 
-import UIKit
+import Foundation
 
 protocol ChallengeDetailInteractorProtocol {
   var presenter: ChallengeDetailPresenterProtocol? { get set }
@@ -65,6 +65,9 @@ final class ChallengeDetailInteractor: ChallengeDetailInteractorProtocol {
           guard let error = error else { return }
 
           self.router?.presentErrorAlertView(message: error.message)
+        } else {
+          
+          LoadingIndicator.hideLoading()
         }
       }
     )
