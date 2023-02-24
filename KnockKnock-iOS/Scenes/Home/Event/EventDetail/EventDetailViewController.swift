@@ -1,8 +1,8 @@
 //
-//  EventListViewContoller.swift
+//  EventDetailViewController.swift
 //  KnockKnock-iOS
 //
-//  Created by Daye on 2022/08/12.
+//  Created by Daye on 2023/02/15.
 //
 
 import UIKit
@@ -10,16 +10,23 @@ import UIKit
 import Then
 import KKDSKit
 
-final class EventPageViewController: BaseViewController<EventPageView> {
+final class EventDetailViewController: BaseViewController<EventDetailView> {
 
   // MARK: - Properties
 
-  private let eventViewControllers = [OngoingEventListViewController(), ClosedEventListViewController()]
+  var eventViewControllers: [UIViewController] = []
+
+  private enum TapMenu: String, CaseIterable {
+    case ongoing = "진행 이벤트"
+    case end = "종료 이벤트"
+  }
 
   private var currentPage: Int = 0 {
     didSet {
-      self.bind(oldValue: oldValue, newValue: currentPage)
-      self.containerView.tapCollectionView.reloadData()
+      self.bind(
+        oldValue: oldValue,
+        newValue: currentPage
+      )
     }
   }
 
@@ -27,6 +34,7 @@ final class EventPageViewController: BaseViewController<EventPageView> {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+
     self.setupConfigure()
   }
 
@@ -40,7 +48,7 @@ final class EventPageViewController: BaseViewController<EventPageView> {
       $0.dataSource = self
       $0.registCell(type: TapCell.self)
     }
-    
+
     self.containerView.eventPageViewController.do {
       $0.delegate = self
       $0.dataSource = self
@@ -58,22 +66,32 @@ final class EventPageViewController: BaseViewController<EventPageView> {
 
   // MARK: - Bind
 
-  private func bind(oldValue: Int, newValue: Int) {
-    let direction: UIPageViewController.NavigationDirection = oldValue < newValue ? .forward : .reverse
+  private func bind(
+    oldValue: Int,
+    newValue: Int
+  ) {
 
-    self.containerView.eventPageViewController.setViewControllers(
-      [eventViewControllers[currentPage]],
-      direction: direction,
-      animated: true,
-      completion: nil
-    )
-    self.movePager(currentPage: currentPage)
+    let direction: UIPageViewController.NavigationDirection = oldValue < newValue
+    ? .forward
+    : .reverse
+
+    DispatchQueue.main.async {
+      self.containerView.eventPageViewController.setViewControllers(
+        [self.eventViewControllers[self.currentPage]],
+        direction: direction,
+        animated: true,
+        completion: nil
+      )
+      
+      self.movePager(currentPage: self.currentPage)
+      self.containerView.tapCollectionView.reloadData()
+    }
   }
 
   // MARK: - Pager 이동 애니메이션 메소드
 
   private func movePager(currentPage: Int) {
-    UIView.animate(withDuration: 0.3, animations: {
+    UIView.animate(withDuration: 0.2, animations: {
       self.containerView.underLineView.transform = CGAffineTransform(
         translationX: CGFloat(100 * currentPage),
         y: 0
@@ -84,30 +102,31 @@ final class EventPageViewController: BaseViewController<EventPageView> {
 
 // MARK: - CollectionView Delegate, DataSource
 
-extension EventPageViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+extension EventDetailViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+
   func collectionView(
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    return 2
+
+    return TapMenu.allCases.count
   }
 
   func collectionView(
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
+
     let cell = collectionView.dequeueCell(
       withType: TapCell.self,
       for: indexPath
     )
 
-    if indexPath.item == currentPage {
-      cell.tapLabel.textColor = .green40
-      cell.tapLabel.font = .systemFont(ofSize: 15, weight: .bold)
-    } else {
-      cell.tapLabel.textColor = .gray70
-      cell.tapLabel.font = .systemFont(ofSize: 15, weight: .light)
-    }
+    cell.bind(
+      tapName: TapMenu.allCases[indexPath.item].rawValue,
+      isSelected: indexPath.item == currentPage
+    )
+
     return cell
   }
 
@@ -116,6 +135,7 @@ extension EventPageViewController: UICollectionViewDelegateFlowLayout, UICollect
     layout collectionViewLayout: UICollectionViewLayout,
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
+
     return CGSize(
       width: 70,
       height: 40
@@ -126,13 +146,15 @@ extension EventPageViewController: UICollectionViewDelegateFlowLayout, UICollect
     _ collectionView: UICollectionView,
     didSelectItemAt indexPath: IndexPath
   ) {
+
     self.currentPage = indexPath.item
   }
 }
 
 // MARK: - PageViewController DataSource, Delegate
 
-extension EventPageViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+extension EventDetailViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+
   func pageViewController(
     _ pageViewController: UIPageViewController,
     viewControllerBefore viewController: UIViewController
@@ -149,6 +171,7 @@ extension EventPageViewController: UIPageViewControllerDataSource, UIPageViewCon
     if previousIndex < 0 {
       return nil
     }
+
     return self.eventViewControllers[previousIndex]
   }
 
@@ -176,6 +199,7 @@ extension EventPageViewController: UIPageViewControllerDataSource, UIPageViewCon
     previousViewControllers: [UIViewController],
     transitionCompleted completed: Bool
   ) {
+
     if completed {
       if previousViewControllers.first == self.eventViewControllers[0] {
         self.currentPage = 1

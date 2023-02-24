@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum ShareQueryItemType: String {
+enum ShareQueryItemType: String {
   
   case feed = "feedDetail"
   case challenge = "challengeDetail"
