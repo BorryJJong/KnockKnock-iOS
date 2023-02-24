@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/07/22.
 //
 
-import UIKit
+import Foundation
 
 protocol ChallengeDetailPresenterProtocol {
   var view: ChallengeDetailViewProtocol? { get set }

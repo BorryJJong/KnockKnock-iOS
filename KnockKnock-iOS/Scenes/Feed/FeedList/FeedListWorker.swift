@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/06/26.
 //
 
-import UIKit
+import Foundation
 
 protocol FeedListWorkerProtocol {
   func fetchFeedList(
