@@ -5,13 +5,13 @@
 //  Created by Daye on 2023/01/26.
 //
 
-import UIKit
+import Foundation
 
 protocol ProfileRepositoryProtocol {
   func requestUserDeatil(completionHandler: @escaping (UserDetailDTO) -> Void)
   func requestEditProfile(
     nickname: String?,
-    image: UIImage?,
+    image: Data?,
     completionHandler: @escaping (Bool) -> Void
   )
   func checkDuplicateNickname(
@@ -44,7 +44,7 @@ final class ProfileRepository: ProfileRepositoryProtocol {
 
   func requestEditProfile(
     nickname: String?,
-    image: UIImage?,
+    image: Data?,
     completionHandler: @escaping (Bool) -> Void
   ) {
 
@@ -52,7 +52,10 @@ final class ProfileRepository: ProfileRepositoryProtocol {
       .shared
       .upload(
         object: ApiResponseDTO<Bool>.self,
-        router: KKRouter.putUsers(nickname: nickname, image: image),
+        router: KKRouter.putUsers(
+          nickname: nickname,
+          image: image
+        ),
         success: { response in
           completionHandler(response.code == 200)
         },

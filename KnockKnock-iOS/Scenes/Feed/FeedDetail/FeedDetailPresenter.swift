@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/07/30.
 //
 
-import UIKit
+import Foundation
 
 protocol FeedDetailPresenterProtocol {
   var view: FeedDetailViewProtocol? { get set }
@@ -18,6 +18,7 @@ protocol FeedDetailPresenterProtocol {
   func presentDeleteComment()
   func presentLikeList(like: [Like.Info])
   func presentLikeStatus(isToggle: Bool)
+  func presentLoginStatus(isLoggedIn: Bool)
 }
 
 final class FeedDetailPresenter: FeedDetailPresenterProtocol {
@@ -46,5 +47,9 @@ final class FeedDetailPresenter: FeedDetailPresenterProtocol {
 
   func presentAllCommentsCount(allCommentsCount: Int) {
     self.view?.getAllCommentsCount(allCommentsCount: allCommentsCount)
+  }
+  
+  func presentLoginStatus(isLoggedIn: Bool) {
+    self.view?.setLoginStatus(isLoggedIn: isLoggedIn)
   }
 }

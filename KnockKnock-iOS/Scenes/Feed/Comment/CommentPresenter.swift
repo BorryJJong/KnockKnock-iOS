@@ -11,6 +11,7 @@ protocol CommentPresenterProtocol {
   var view: CommentViewProtocol? { get set }
   
   func presentVisibleComments(comments: [Comment])
+  func presentLoginStatus(isLoggedIn: Bool)
 }
 
 final class CommentPresenter: CommentPresenterProtocol {
@@ -19,5 +20,9 @@ final class CommentPresenter: CommentPresenterProtocol {
   func presentVisibleComments(comments: [Comment]) {
     self.view?.fetchVisibleComments(comments: comments)
     LoadingIndicator.hideLoading()
+  }
+
+  func presentLoginStatus(isLoggedIn: Bool) {
+    self.view?.setLoginStatus(isLoggedIn: isLoggedIn)
   }
 }

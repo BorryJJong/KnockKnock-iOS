@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/11/28.
 //
 
-import UIKit
+import Foundation
 
 protocol MyWorkerProtocol {
   func fetchMenuData(completionHandler: @escaping (MyMenu) -> Void)

@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/11/03.
 //
 
-import UIKit
+import Foundation
 
 protocol ProfileSettingInteractorProtocol {
   var worker: ProfileSettingWorkerProtocol? { get set }
@@ -14,9 +14,15 @@ protocol ProfileSettingInteractorProtocol {
   
   var signInInfo: SignInInfo? { get set }
   
-  func requestSignUp(nickname: String, image: UIImage)
+  func requestSignUp(
+    nickname: String,
+    image: Data?
+  )
   func fetchUserData()
-  func requestEditProfile(nickname: String, image: UIImage?)
+  func requestEditProfile(
+    nickname: String,
+    image: Data?
+  )
   
   func navigateToMyView()
   func popProfileView()
@@ -32,9 +38,6 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
   
   var signInInfo: SignInInfo?
   var userDetail: UserDetail?
-  
-  var newNickname: String?
-  var newImage: UIImage?
   
   func navigateToMyView() {
     self.router?.navigateToMyView()
@@ -59,7 +62,7 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
   ///  - image: 프로필 이미지
   func requestSignUp(
     nickname: String,
-    image: UIImage
+    image: Data?
   ) {
     LoadingIndicator.showLoading()
     
@@ -70,7 +73,7 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
       socialUuid: signInInfo.socialUuid,
       socialType: signInInfo.socialType,
       nickname: nickname,
-      image: image.resizeSquareImage(newWidth: 100)
+      image: image
     )
     
     // 닉네임 중복 검사
@@ -93,12 +96,18 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
               guard let isSuccess = self?.worker?.saveUserInfo(response: response) else { return }
               
               if isSuccess {
-                self?.router?.showAlertView(message: "회원가입에 성공하였습니다.", completion: {
+                self?.router?.showAlertView(
+                  message: "회원가입에 성공하였습니다.",
+                  completion: {
                   self?.navigateToMyView()
-                })
+                }
+              )
                 
               } else {
-                self?.router?.showAlertView(message: "회원가입에 실패하였습니다.", completion: nil)
+                self?.router?.showAlertView(
+                  message: "회원가입에 실패하였습니다.",
+                  completion: nil
+                )
               }
             }
           )
@@ -116,7 +125,7 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
   ///  - image: 프로필 이미지
   func requestEditProfile(
     nickname: String,
-    image: UIImage?
+    image: Data?
   ) {
     
     LoadingIndicator.showLoading()
@@ -130,8 +139,7 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
       inputedImage: image,
       completionHandler: { newNickname, newImage in
 
-        guard newNickname != nil, newImage != nil else {
-          
+        if newNickname == nil, newImage == nil {
           self.navigateToMyView()
 
           return
@@ -156,11 +164,12 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
 
               // 프로필 수정 api 호출
               self.worker?.requestEditProfile(
-                nickname: self.newNickname,
-                image: self.newImage,
-                completionHandler: { isSuccess, message in
+                nickname: newNickname,
+                image: newImage,
+                completionHandler: { message in
+
                   self.router?.showAlertView(
-                    message: message ,
+                    message: message,
                     completion: {
                       self.router?.navigateToMyView()
                     }

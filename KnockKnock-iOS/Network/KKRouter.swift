@@ -8,7 +8,6 @@
 import Foundation
 
 import Alamofire
-import UIKit
 
 enum KKRouter: URLRequestConvertible {
 
@@ -69,7 +68,7 @@ enum KKRouter: URLRequestConvertible {
   // MY
   case getUsersDetail
   case getDuplicateNickname(nickname: String)
-  case putUsers(nickname: String?, image: UIImage?)
+  case putUsers(nickname: String?, image: Data?)
   case getMyPage
 
   // MARK: - HTTP Method
@@ -368,7 +367,7 @@ enum KKRouter: URLRequestConvertible {
       let socialUuid = userInfo.socialUuid.data(using: .utf8) ?? Data()
       let socialType = userInfo.socialType.data(using: .utf8) ?? Data()
       let nickname = userInfo.nickname.data(using: .utf8) ?? Data()
-      let image = userInfo.image.pngData() ?? Data()
+      let image = userInfo.image ?? Data()
 
       multipartFormData.append(socialUuid, withName: "socialUuid")
       multipartFormData.append(socialType, withName: "socialType")
@@ -386,12 +385,11 @@ enum KKRouter: URLRequestConvertible {
         multipartFormData.append(nicknameData, withName: "nickname")
       }
 
-      if let image = image,
-         let imageData = image.pngData() {
+      if let image = image {
         multipartFormData.append(
-          imageData,
+          image,
           withName: "image",
-          fileName: "\(imageData).png",
+          fileName: "\(image).png",
           mimeType: "image/png"
         )
       }
@@ -451,6 +449,7 @@ enum KKRouter: URLRequestConvertible {
       case .postFeed,
            .postSignUp,
            .putUsers:
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
 
       default:
