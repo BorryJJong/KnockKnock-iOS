@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/09/14.
 //
 
-import UIKit
+import Foundation
 
 protocol FeedSearchInteractorProtocol {
   var presenter: FeedSearchPresenterProtocol? { get set }

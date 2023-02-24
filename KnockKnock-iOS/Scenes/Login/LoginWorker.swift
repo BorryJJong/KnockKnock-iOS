@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/11/01.
 //
 
-import UIKit
+import Foundation
 
 protocol LoginWorkerProtocol {
   func fetchSignInResult(

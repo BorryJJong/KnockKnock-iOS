@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/09/27.
 //
 
-import UIKit
+import Foundation
 
 protocol ShopSearchPresenterProtocol {
   var view: ShopSearchViewProtocol? { get set }

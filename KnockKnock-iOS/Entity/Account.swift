@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/11/01.
 //
 
-import UIKit
+import Foundation
 
 /// 로그인 요청시 request body에 사용
 struct SignInInfo {
@@ -18,7 +18,7 @@ struct RegisterInfo {
   let socialUuid: String
   let socialType: String
   let nickname: String
-  let image: UIImage
+  let image: Data?
 }
 
 /// 로그인/회원가입 응답 값

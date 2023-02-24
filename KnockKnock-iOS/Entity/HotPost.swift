@@ -5,20 +5,13 @@
 //  Created by Daye on 2023/01/17.
 //
 
-import UIKit
+import Foundation
 
 struct HotPostDTO: Decodable {
   let postId: Int
   let scale: String
   let nickname: String
   let fileUrl: String
-
-  func toDomain() -> HotPost {
-    .init(postId: postId,
-          scale: "1:1",
-          nickname: nickname,
-          fileUrl: fileUrl)
-  }
 }
 
 struct HotPost {
@@ -26,4 +19,15 @@ struct HotPost {
   let scale: String
   let nickname: String
   let fileUrl: String
+}
+
+extension HotPostDTO {
+  func toDomain() -> HotPost {
+    .init(
+      postId: postId,
+          scale: "1:1",
+          nickname: nickname,
+          fileUrl: fileUrl
+    )
+  }
 }

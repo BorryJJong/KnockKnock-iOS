@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/07/30.
 //
 
-import UIKit
+import Foundation
 
 protocol FeedDetailInteractorProtocol {
   var worker: FeedDetailWorkerProtocol? { get set }

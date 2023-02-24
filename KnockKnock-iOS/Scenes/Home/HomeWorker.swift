@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/08/23.
 //
 
-import UIKit
+import Foundation
 
 protocol HomeWorkerProtocol {
   func fetchHotPostList(challengeId: Int, completionHandler: @escaping ([HotPost]) -> Void)

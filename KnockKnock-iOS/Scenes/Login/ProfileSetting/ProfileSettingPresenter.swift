@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/11/03.
 //
 
-import UIKit
+import Foundation
 
 protocol ProfileSettingPresenterProtocol {
   var view: ProfileSettingViewProtocol? { get set }
