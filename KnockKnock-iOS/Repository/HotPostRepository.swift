@@ -1,5 +1,5 @@
 //
-//  HomeRepository.swift
+//  HotPostRepository.swift
 //  KnockKnock-iOS
 //
 //  Created by Daye on 2023/01/17.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol HomeRepositoryProtocol {
+protocol HotPostRepositoryProtocol {
   func requestHotPost(
     challengeId: Int,
     completionHandler: @escaping ([HotPost]) -> Void
@@ -15,11 +15,10 @@ protocol HomeRepositoryProtocol {
   func requestChallengeTitles(
     completionHandler: @escaping ([ChallengeTitle]) -> Void
   )
-  func requestEventList() async -> [Event]
   func requestBanner(bannerType: BannerType) async -> [HomeBanner]?
 }
 
-final class HomeRepository: HomeRepositoryProtocol {
+final class HotPostRepository: HotPostRepositoryProtocol {
 
   /// 홈 메인/바 배너 조회
   ///
@@ -87,25 +86,5 @@ final class HomeRepository: HomeRepositoryProtocol {
           print(error)
         }
       )
-  }
-
-  /// 이벤트 목록 조회
-  func requestEventList() async -> [Event] {
-    do {
-      let result = try await KKNetworkManager
-        .shared
-        .asyncRequest(
-          object: ApiResponseDTO<[EventDTO]>.self,
-          router: .getHomeEvent
-        )
-
-      guard let data = result.data else { return [] }
-      return data.map { $0.toDomain() }
-
-    } catch let error {
-      print(error)
-
-      return []
-    }
   }
 }

@@ -28,6 +28,7 @@ enum KKRouter: URLRequestConvertible {
   case getHotPost(challengeId: Int)
   case getHomeEvent
   case getBanner(bannerType: String)
+  case getEvent(eventTap: String)
 
   // Account
   case postSocialLogin(socialUuid: String, socialType: String)
@@ -79,7 +80,8 @@ enum KKRouter: URLRequestConvertible {
       // Home
     case .getHotPost,
          .getHomeEvent,
-         .getBanner:
+         .getBanner,
+         .getEvent:
       return .get
 
     // Account
@@ -167,6 +169,7 @@ enum KKRouter: URLRequestConvertible {
     case .getHotPost: return "hot-post"
     case .getHomeEvent: return "home-event"
     case .getBanner: return "banner"
+    case .getEvent: return "event"
 
     // Challenge
     case .getChallenges: return "challenges"
@@ -218,6 +221,9 @@ enum KKRouter: URLRequestConvertible {
 
     case let .getBanner(bannerType):
       return [ "bannerType": bannerType ]
+
+    case let .getEvent(eventTap):
+      return [ "eventTap": eventTap ]
 
     case .getHomeEvent:
       return nil
