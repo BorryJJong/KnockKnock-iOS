@@ -17,6 +17,8 @@ protocol HomePresenterProtocol {
     challengeList: [ChallengeTitle],
     index: IndexPath?
   )
+  func presentMainBannerList(bannerList: [HomeBanner])
+  func presentBarBannerList(bannerList: [HomeBanner])
 }
 
 final class HomePresenter: HomePresenterProtocol {
@@ -32,6 +34,14 @@ final class HomePresenter: HomePresenterProtocol {
 
   func presentEventList(eventList: [Event]) {
     self.view?.fetchEventList(eventList: eventList)
+  }
+
+  func presentMainBannerList(bannerList: [HomeBanner]) {
+    self.view?.fetchMainBannerList(bannerList: bannerList)
+  }
+
+  func presentBarBannerList(bannerList: [HomeBanner]) {
+    self.view?.fetchBarBannerList(bannerList: bannerList)
   }
 
   func presentStoreList(storeList: [Store]) {

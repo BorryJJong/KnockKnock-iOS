@@ -26,7 +26,11 @@ final class HomeMainPagerCell: BaseCollectionViewCell {
 
   // MARK: - Properties
 
-  private var mainImages: [String] = ["", "", "", "", "", ""]
+  private var mainImages: [String] = [""] {
+    didSet {
+      self.homeMainCollectionView.reloadData()
+    }
+  }
   private var currentIndex: CGFloat = 0
 
   // MARK: - UIs
@@ -54,6 +58,14 @@ final class HomeMainPagerCell: BaseCollectionViewCell {
     )
   }
 
+  // MARK: - Bind
+
+  func bind(banner: [HomeBanner]) {
+    self.mainImages = banner.map { $0.image }
+  }
+
+  // MARK: - Configure
+
   override func setupConfigure() {
     self.homeMainCollectionView.do {
       $0.delegate = self
@@ -62,6 +74,8 @@ final class HomeMainPagerCell: BaseCollectionViewCell {
       $0.collectionViewLayout = self.setHomeMainPagerCollectionViewLayout()
     }
   }
+
+  // MARK: - Constraints
 
   override func setupConstraints() {
     [self.homeMainCollectionView, self.lineBackgroundView].addSubViews(self.contentView)
@@ -116,7 +130,10 @@ final class HomeMainPagerCell: BaseCollectionViewCell {
 
   // MARK: - Pager(lineView) width 변화 애니메이션 메소드
 
-  private func movePager(currentPage: CGFloat, itemCount: Int) {
+  private func movePager(
+    currentPage: CGFloat,
+    itemCount: Int
+  ) {
     let itemCount = CGFloat(itemCount)
     let lineViewLength = CGFloat(Metric.lineBackgroundViewWidth / itemCount)
     let updateWidth = ((lineViewLength * currentPage) + lineViewLength)
@@ -125,9 +142,12 @@ final class HomeMainPagerCell: BaseCollectionViewCell {
       $0.width.equalTo(updateWidth)
     }
 
-    UIView.animate(withDuration: 0.5, animations: {
-      self.layoutIfNeeded()
-    })
+    UIView.animate(
+      withDuration: 0.5,
+      animations: {
+        self.layoutIfNeeded()
+      }
+    )
   }
 }
 
@@ -150,6 +170,8 @@ extension HomeMainPagerCell: UICollectionViewDataSource, UICollectionViewDelegat
       withType: HomeMainCell.self,
       for: indexPath
     )
+
+    cell.bind(image: self.mainImages[indexPath.item])
 
     return cell
   }

@@ -19,6 +19,8 @@ protocol HomeViewProtocol: AnyObject {
     index: IndexPath?
   )
   func fetchEventList(eventList: [Event])
+  func fetchMainBannerList(bannerList: [HomeBanner])
+  func fetchBarBannerList(bannerList: [HomeBanner])
   func fetchStoreList(storeList: [Store])
 }
 
@@ -28,6 +30,8 @@ final class HomeViewController: BaseViewController<HomeView> {
 
   var interactor: HomeInteractorProtocol?
 
+  private var mainBannerList: [HomeBanner] = []
+  private var barBannerList: [HomeBanner] = []
   private var storeList: [Store] = []
   private var hotPostList: [HotPost] = []
   private var eventList: [Event] = []
@@ -73,6 +77,8 @@ final class HomeViewController: BaseViewController<HomeView> {
   }
 
   private func fetchData() {
+    self.interactor?.fetchBanner(bannerType: .main)
+    self.interactor?.fetchBanner(bannerType: .bar)
     self.interactor?.fetchVerifiedStore()
     self.interactor?.fetchHotpost(challengeId: self.challengeId)
     self.interactor?.fetchChallengeList()
@@ -102,6 +108,26 @@ final class HomeViewController: BaseViewController<HomeView> {
 
 extension HomeViewController: HomeViewProtocol {
 
+  func fetchMainBannerList(bannerList: [HomeBanner]) {
+    self.mainBannerList = bannerList
+
+    DispatchQueue.main.async {
+      UIView.performWithoutAnimation {
+        self.containerView.homeCollectionView.reloadSections([HomeSection.main.rawValue])
+      }
+    }
+  }
+
+  func fetchBarBannerList(bannerList: [HomeBanner]) {
+    self.barBannerList = bannerList
+
+    DispatchQueue.main.async {
+      UIView.performWithoutAnimation {
+        self.containerView.homeCollectionView.reloadSections([HomeSection.banner.rawValue])
+      }
+    }
+  }
+
   func fetchStoreList(storeList: [Store]) {
     self.storeList = storeList
 
@@ -119,7 +145,6 @@ extension HomeViewController: HomeViewProtocol {
     self.hotPostList = hotPostList
 
     DispatchQueue.main.async {
-
       UIView.performWithoutAnimation {
         self.containerView.homeCollectionView.reloadSections(
           IndexSet(integer: HomeSection.popularPost.rawValue)
@@ -180,7 +205,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
       return self.eventList.count
 
     case .banner:
-      return 6
+      return self.barBannerList.count
 
     case .store:
       return self.storeList.count
@@ -281,7 +306,8 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         withType: HomeMainPagerCell.self,
         for: indexPath
       )
-      
+      cell.bind(banner: self.mainBannerList)
+
       return cell
 
     case .store:
@@ -298,6 +324,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         withType: BannerCell.self,
         for: indexPath
       )
+      cell.bind(banner: self.barBannerList[indexPath.item])
 
       return cell
 
