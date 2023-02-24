@@ -21,13 +21,16 @@ final class HomeWorker: HomeWorkerProtocol {
 
   private let hotPostRepository: HotPostRepositoryProtocol
   private let eventRepository: EventRepositoryProtocol
+  private let bannerRepository: BannerRepositoryProtocol
 
   init(
     hotPostRepository: HotPostRepositoryProtocol,
-    eventRepository: EventRepositoryProtocol
+    eventRepository: EventRepositoryProtocol,
+    bannerRepository: BannerRepositoryProtocol
   ) {
     self.hotPostRepository = hotPostRepository
     self.eventRepository = eventRepository
+    self.bannerRepository = bannerRepository
   }
 
   func fetchHotPostList(
@@ -57,6 +60,6 @@ final class HomeWorker: HomeWorkerProtocol {
   }
 
   func fetchBanner(bannerType: BannerType) async -> [HomeBanner]? {
-    return await self.homeRepository.requestBanner(bannerType: bannerType)
+    return await self.bannerRepository.requestBanner(bannerType: bannerType)
   }
 }
