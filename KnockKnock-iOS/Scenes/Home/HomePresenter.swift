@@ -10,6 +10,7 @@ import Foundation
 protocol HomePresenterProtocol {
   var view: HomeViewProtocol? { get set }
 
+  func presentStoreList(storeList: [Store])
   func presentEventList(eventList: [Event])
   func presentHotPostList(hotPostList: [HotPost])
   func presentChallengeList(
@@ -31,5 +32,9 @@ final class HomePresenter: HomePresenterProtocol {
 
   func presentEventList(eventList: [Event]) {
     self.view?.fetchEventList(eventList: eventList)
+  }
+
+  func presentStoreList(storeList: [Store]) {
+    self.view?.fetchStoreList(storeList: storeList)
   }
 }

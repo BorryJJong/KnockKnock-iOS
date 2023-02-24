@@ -19,6 +19,7 @@ protocol HomeViewProtocol: AnyObject {
     index: IndexPath?
   )
   func fetchEventList(eventList: [Event])
+  func fetchStoreList(storeList: [Store])
 }
 
 final class HomeViewController: BaseViewController<HomeView> {
@@ -27,6 +28,7 @@ final class HomeViewController: BaseViewController<HomeView> {
 
   var interactor: HomeInteractorProtocol?
 
+  private var storeList: [Store] = []
   private var hotPostList: [HotPost] = []
   private var eventList: [Event] = []
   private var challengeList: [ChallengeTitle] = []
@@ -71,6 +73,7 @@ final class HomeViewController: BaseViewController<HomeView> {
   }
 
   private func fetchData() {
+    self.interactor?.fetchVerifiedStore()
     self.interactor?.fetchHotpost(challengeId: self.challengeId)
     self.interactor?.fetchChallengeList()
     self.interactor?.fetchEventList()
@@ -98,6 +101,20 @@ final class HomeViewController: BaseViewController<HomeView> {
 // MARK: - HomeViewProtocol
 
 extension HomeViewController: HomeViewProtocol {
+
+  func fetchStoreList(storeList: [Store]) {
+    self.storeList = storeList
+
+    DispatchQueue.main.async {
+
+      UIView.performWithoutAnimation {
+        self.containerView.homeCollectionView.reloadSections(
+          IndexSet(integer: HomeSection.store.rawValue)
+        )
+      }
+    }
+  }
+
   func fetchHotPostList(hotPostList: [HotPost]) {
     self.hotPostList = hotPostList
 
@@ -162,8 +179,11 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     case .event:
       return self.eventList.count
 
-    case .banner, .store:
+    case .banner:
       return 6
+
+    case .store:
+      return self.storeList.count
 
     case .popularPost:
       return self.hotPostList.count
@@ -269,6 +289,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         withType: StoreCell.self,
         for: indexPath
       )
+      cell.bind(store: self.storeList[indexPath.item])
 
       return cell
 

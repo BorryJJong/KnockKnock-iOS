@@ -12,20 +12,25 @@ protocol HomeWorkerProtocol {
     challengeId: Int,
     completionHandler: @escaping ([HotPost]) -> Void
   )
-  func fetchChallengeList(completionHandler: @escaping([ChallengeTitle]) -> Void)
+  func fetchChallengeList(
+    completionHandler: @escaping([ChallengeTitle]) -> Void
+  )
   func fetchEventList() async -> [Event]
-
+  func fetchVerifiedStore() async -> [Store]?
 }
 
 final class HomeWorker: HomeWorkerProtocol {
 
+  private let verifiedStoreRepository: VerifiedStoreRepositoryProtocol
   private let hotPostRepository: HotPostRepositoryProtocol
   private let eventRepository: EventRepositoryProtocol
 
   init(
+    verifiedStoreRepository: VerifiedStoreRepositoryProtocol,
     hotPostRepository: HotPostRepositoryProtocol,
     eventRepository: EventRepositoryProtocol
   ) {
+    self.verifiedStoreRepository = verifiedStoreRepository
     self.hotPostRepository = hotPostRepository
     self.eventRepository = eventRepository
   }
@@ -50,6 +55,10 @@ final class HomeWorker: HomeWorkerProtocol {
         completionHandler(challengeList)
       }
     )
+  }
+
+  func fetchVerifiedStore() async -> [Store]? {
+    return await self.verifiedStoreRepository.requestVerifiedStoreList()
   }
 
   func fetchEventList() async -> [Event] {

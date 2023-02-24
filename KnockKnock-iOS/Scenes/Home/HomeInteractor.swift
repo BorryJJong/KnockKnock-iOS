@@ -19,7 +19,8 @@ protocol HomeInteractorProtocol {
     selectedIndex: IndexPath
   )
   func fetchEventList()
-
+  func fetchVerifiedStore()
+  
   func navigateToStoreListView()
   func navigateToEventPageView()
   func navigateToFeedDetail(feedId: Int)
@@ -64,6 +65,17 @@ final class HomeInteractor: HomeInteractorProtocol {
       }
 
       self.presenter?.presentEventList(eventList: eventList)
+    }
+  }
+
+  func fetchVerifiedStore() {
+    Task {
+      guard let storeList = await self.worker?.fetchVerifiedStore() else {
+        // error
+        return
+      }
+
+      self.presenter?.presentStoreList(storeList: storeList)
     }
   }
 
