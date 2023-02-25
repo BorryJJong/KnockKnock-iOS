@@ -55,6 +55,8 @@ final class MainTabBarController: UITabBarController {
     $0.setImage(KKDS.Image.ic_bottom_more_40, for: .normal)
   }
 
+  private let userDataManager = UserDataManager()
+
   // MARK: - Initialize
   
   init() {
@@ -72,7 +74,9 @@ final class MainTabBarController: UITabBarController {
     self.attribute()
     self.setMiddleButton()
   }
-  
+
+  // MARK: - Configure
+
   private func attribute() {
     self.delegate = self
 
@@ -105,18 +109,6 @@ final class MainTabBarController: UITabBarController {
     ]
   }
 
-  @objc func postButtonDidTap(_ sender: UIButton) {
-    guard let navigationController = self.selectedViewController as? UINavigationController else { return }
-
-    let feedWrite = FeedWriteRouter.createFeedWrite(
-      rootView: navigationController
-    )
-    let feedWriteNVC = UINavigationController(rootViewController: feedWrite)
-    feedWriteNVC.modalPresentationStyle = .overFullScreen
-
-    navigationController.present(feedWriteNVC, animated: true)
-  }
-
   private func setMiddleButton() {
     self.tabBar.addSubview(postButton)
     self.postButton.snp.makeConstraints {
@@ -130,7 +122,59 @@ final class MainTabBarController: UITabBarController {
       for: .touchUpInside
     )
   }
+
+  // MARK: - Button Actions
+
+  @objc func postButtonDidTap(_ sender: UIButton) {
+
+    Task {
+
+        if await self.userDataManager.checkTokenIsValidated() {
+
+          await MainActor.run {
+            self.presentFeedWriteView()
+          }
+        } else {
+
+          await MainActor.run {
+            self.navigateToLoginView()
+          }
+        }
+
+    }
+  }
+
+  // MARK: - Routing
+
+  /// 피드 작성 화면 present
+  private func presentFeedWriteView() {
+    guard let navigationController = self.selectedViewController as? UINavigationController else { return }
+
+    let feedWrite = FeedWriteRouter.createFeedWrite(
+      rootView: navigationController
+    )
+    let feedWriteNVC = UINavigationController(rootViewController: feedWrite)
+    feedWriteNVC.modalPresentationStyle = .overFullScreen
+
+    navigationController.present(feedWriteNVC, animated: true)
+  }
+
+  /// 비로그인 시 로그인 화면 진입
+  private func navigateToLoginView() {
+    guard let navigationController = self.selectedViewController as? UINavigationController else { return }
+
+    let loginViewController = LoginRouter.createLoginView()
+
+    loginViewController.hidesBottomBarWhenPushed = true
+
+    navigationController.pushViewController(
+      loginViewController,
+      animated: true
+    )
+  }
 }
+
+// MARK: - UITabBarController Delegate
 
 extension MainTabBarController: UITabBarControllerDelegate {
   func tabBarController(

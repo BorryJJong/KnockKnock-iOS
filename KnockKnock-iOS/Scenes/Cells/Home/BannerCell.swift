@@ -18,6 +18,17 @@ final class BannerCell: BaseCollectionViewCell {
     $0.layer.cornerRadius = 5
   }
 
+  // MARK: - Bind
+
+  func bind(banner: HomeBanner) {
+    bannerImageView.setImageFromStringUrl(
+      stringUrl: banner.image,
+      defaultImage: UIImage()
+    )
+  }
+
+  // MARK: - Constraints
+
   override func setupConstraints() {
     [self.bannerImageView].addSubViews(self.contentView)
 
