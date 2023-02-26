@@ -19,7 +19,7 @@ protocol FeedListInteractorProtocol {
   func requestReport(feedId: Int)
 
   func presentBottomSheetView(
-    options: [BottomSheet],
+    options: [BottomSheetOption],
     feedData: FeedList.Post
   )
   func presentReportView(feedId: Int)
@@ -261,7 +261,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   }
   
   func presentBottomSheetView(
-    options: [BottomSheet],
+    options: [BottomSheetOption],
     feedData: FeedList.Post
   ) {
     Task {

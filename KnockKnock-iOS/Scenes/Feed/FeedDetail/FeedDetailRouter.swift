@@ -21,7 +21,7 @@ protocol FeedDetailRouterProtocol {
     reportDelegate: ReportDelegate
   )
   func presentBottomSheetView(
-    options: [BottomSheet],
+    options: [BottomSheetOption],
     feedData: FeedShare?
  )
   func showAlertView(
@@ -124,13 +124,13 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
   }
 
   func presentBottomSheetView(
-    options: [BottomSheet],
+    options: [BottomSheetOption],
     feedData: FeedShare?
   ) {
     
     guard let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
       options: options,
-      type: .medium,
+      bottomSheetSize: .medium,
       feedData: feedData
     ) as? BottomSheetViewController else { return }
 

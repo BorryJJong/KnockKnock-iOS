@@ -11,12 +11,24 @@ final class BottomSheetPresenter: BottomSheetPresenterProtocol {
   var view: BottomSheetViewProtocol?
 
   func presentOptions(
-    options: [String],
-    bottomSheetType: BottomSheetSize
+    options: [BottomSheetOption],
+    bottomSheetSize: BottomSheetSize
   ) {
     self.view?.fetchOptions(
       options: options,
-      bottomSheetType: bottomSheetType
+      bottomSheetSize: bottomSheetSize
+    )
+  }
+
+  func presentDistrictContent(
+    content: [String],
+    districtsType: DistrictsType?,
+    bottomSheetSize: BottomSheetSize
+  ) {
+    self.view?.fetchDistrictsContent(
+      content: content,
+      districtsType: districtsType,
+      bottomSheetSize: bottomSheetSize
     )
   }
 }

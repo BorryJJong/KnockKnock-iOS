@@ -25,11 +25,11 @@ final class BottomSheetView: UIView {
 
   // MARK: - Properties
 
-  var bottomSheetType: BottomSheetSize = .medium
+  var bottomSheetSize: BottomSheetSize = .medium
 
   let screenHeight = UIDevice.current.heightOfSafeArea(includeBottomInset: true)
 
-  lazy var bottomSheetHeight: CGFloat = self.bottomSheetType.rawValue * self.screenHeight
+  lazy var bottomSheetHeight: CGFloat = self.bottomSheetSize.rawValue * self.screenHeight
   lazy var bottomSheetMinHeight: CGFloat = self.screenHeight * BottomSheetSize.medium.rawValue
   lazy var bottomSheetPanMinTopConstant: CGFloat = self.bottomSheetHeight
   lazy var bottomSheetPanStartingTopConstant: CGFloat = self.bottomSheetPanMinTopConstant

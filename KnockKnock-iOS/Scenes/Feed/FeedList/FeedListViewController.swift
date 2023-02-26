@@ -103,6 +103,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   }
 
   @objc func configureButtonDidTap(_ sender: UIButton) {
+    
     let isMyPost = self.feedListPost[sender.tag].isWriter
     let feedId = self.feedListPost[sender.tag].id
 
@@ -111,37 +112,19 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     let editAction: (() -> Void)?  = { self.interactor?.navigateToFeedEdit(feedId: feedId) }
     let reportAction: (() -> Void)?  = { self.interactor?.presentReportView(feedId: feedId) }
 
-    var options: [BottomSheet] = []
+    var options: [BottomSheetOption] = []
 
     if isMyPost {
       options = [
-        BottomSheet(
-          option: BottomSheetOption.postDelete.rawValue,
-          action: deleteAction
-        ),
-        BottomSheet(
-          option: BottomSheetOption.postEdit.rawValue,
-          action: editAction
-        ),
-        BottomSheet(
-          option: BottomSheetOption.postShare.rawValue,
-          action: nil
-        )
+        .postDelete(deleteAction),
+        .postEdit(editAction),
+        .postShare
       ]
     } else {
       options = [
-        BottomSheet(
-          option: BottomSheetOption.postHide.rawValue,
-          action: hideAcion
-        ),
-        BottomSheet(
-          option: BottomSheetOption.postReport.rawValue,
-          action: reportAction
-        ),
-        BottomSheet(
-          option: BottomSheetOption.postShare.rawValue,
-          action: nil
-        )
+        .postHide(hideAcion),
+        .postReport(reportAction),
+        .postShare
       ]
     }
 

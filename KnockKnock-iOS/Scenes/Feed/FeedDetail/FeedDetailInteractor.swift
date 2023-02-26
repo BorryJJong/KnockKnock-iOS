@@ -32,7 +32,7 @@ protocol FeedDetailInteractorProtocol {
   func navigateToFeedList()
   func checkLoginStatus()
   func presentBottomSheetView(
-    options: [BottomSheet],
+    options: [BottomSheetOption],
     feedData: FeedDetail
   )
   func navigateToFeedEdit(feedId: Int)
@@ -357,7 +357,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   }
 
   func presentBottomSheetView(
-    options: [BottomSheet],
+    options: [BottomSheetOption],
     feedData: FeedDetail
   ) {
 

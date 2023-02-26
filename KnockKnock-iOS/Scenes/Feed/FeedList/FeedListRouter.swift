@@ -12,7 +12,7 @@ protocol FeedListRouterProtocol {
   static func createFeedList(feedId: Int, challengeId: Int) -> UIViewController
   
   func presentBottomSheetView(
-    options: [BottomSheet],
+    options: [BottomSheetOption],
     feedData: FeedShare?
   )
   func presentReportView(
@@ -122,13 +122,13 @@ final class FeedListRouter: FeedListRouterProtocol {
   }
   
   func presentBottomSheetView(
-    options: [BottomSheet],
+    options: [BottomSheetOption],
     feedData: FeedShare?
   ) {
     
     guard let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
       options: options,
-      type: .medium,
+      bottomSheetSize: .medium,
       feedData: feedData
     ) as? BottomSheetViewController else { return }
 

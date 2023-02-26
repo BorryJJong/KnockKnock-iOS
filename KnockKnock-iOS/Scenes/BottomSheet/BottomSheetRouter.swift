@@ -14,9 +14,10 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
   static func createBottomSheet(
     districtSelectDelegate: DistrictSelectDelegate? = nil,
     districtsType: DistrictsType? = nil,
+    districtsContent: [String]? = nil,
     challengeSortDelegate: ChallengeSortDelegate? = nil,
-    options: [BottomSheet],
-    type: BottomSheetSize,
+    options: [BottomSheetOption]? = nil,
+    bottomSheetSize: BottomSheetSize,
     feedData: FeedShare? = nil
   ) -> UIViewController {
 
@@ -33,16 +34,20 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
     presenter.view = view
     router.view = view
 
-    view.districtsType = districtsType
-    interactor.bottomSheetType = type
+    interactor.districtsType = districtsType
+    interactor.bottomSheetSize = bottomSheetSize
     interactor.districtSelectDelegate = districtSelectDelegate
-    interactor.options = options
     interactor.feedData = feedData
+
+    if let options = options {
+      interactor.options = options
+    }
+    if let districtsContent = districtsContent {
+      interactor.districtContent = districtsContent
+    }
 
     guard challengeSortDelegate != nil else { return view }
     interactor.challengeSortDelegate = challengeSortDelegate
-
-    interactor.feedData = feedData
 
     return view
   }

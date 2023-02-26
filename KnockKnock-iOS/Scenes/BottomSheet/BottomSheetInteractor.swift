@@ -16,8 +16,10 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
   var worker: BottomSheetWorkerProtocol?
   var presenter: BottomSheetPresenterProtocol?
 
-  var options: [BottomSheet] = []
-  var bottomSheetType: BottomSheetSize = .medium
+  var options: [BottomSheetOption]?
+  var districtsType: DistrictsType?
+  var districtContent: [String]?
+  var bottomSheetSize: BottomSheetSize = .medium
   var feedData: FeedShare?
 
   // MARK: - Buisiness Logic
@@ -41,10 +43,20 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
   }
 
   func fetchBottomSheetOptions() {
-    self.presenter?.presentOptions(
-      options: self.options.map{ $0.option },
-      bottomSheetType: self.bottomSheetType
-    )
+    if let districtContent = districtContent {
+      self.presenter?.presentDistrictContent(
+        content: districtContent,
+        districtsType: self.districtsType,
+        bottomSheetSize: self.bottomSheetSize
+      )
+    }
+
+    if let options = options {
+      self.presenter?.presentOptions(
+        options: options,
+        bottomSheetSize: self.bottomSheetSize
+      )
+    }
   }
 
   // MARK: - Routing
@@ -61,19 +73,14 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
 
   func passChallengeSortType(sortType: ChallengeSortType) {
     self.challengeSortDelegate?.getSortType(sortType: sortType)
-    self.dismissView(actionType: .challengeNew)
+    self.dismissView(action: nil)
   }
 
   func navigateToShopSearch() {
     self.router?.navigateToShopSearch()
   }
 
-  func dismissView(actionType: BottomSheetOption) {
-
-    self.options.forEach {
-      if BottomSheetOption(rawValue: $0.option) == actionType {
-        self.router?.dismissView(action: $0.action)
-      }
-    }
+  func dismissView(action: (() -> Void)?) {
+    self.router?.dismissView(action: action)
   }
 }
