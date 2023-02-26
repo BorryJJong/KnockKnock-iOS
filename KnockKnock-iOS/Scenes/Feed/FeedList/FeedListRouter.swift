@@ -12,11 +12,7 @@ protocol FeedListRouterProtocol {
   static func createFeedList(feedId: Int, challengeId: Int) -> UIViewController
   
   func presentBottomSheetView(
-    isMyPost: Bool,
-    deleteAction: (() -> Void)?,
-    hideAction: (() -> Void)?,
-    editAction: (() -> Void)?,
-    reportAction: (() -> Void)?,
+    options: [BottomSheet],
     feedData: FeedShare?
   )
   func presentReportView(
@@ -126,23 +122,18 @@ final class FeedListRouter: FeedListRouterProtocol {
   }
   
   func presentBottomSheetView(
-    isMyPost: Bool,
-    deleteAction: (() -> Void)?,
-    hideAction: (() -> Void)?,
-    editAction: (() -> Void)?,
-    reportAction: (() -> Void)?,
+    options: [BottomSheet],
     feedData: FeedShare?
   ) {
     
     guard let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
-      deleteAction: deleteAction,
-      hideAction: hideAction,
-      editAction: editAction,
-      reportAction: reportAction,
-      feedData: feedData,
-      isMyPost: isMyPost
+      options: options,
+      type: .medium,
+      feedData: feedData
     ) as? BottomSheetViewController else { return }
-    
+
+    bottomSheetViewController.modalPresentationStyle = .overFullScreen
+
     if let sourceView = self.view as? UIViewController {
       sourceView.present(
         bottomSheetViewController,

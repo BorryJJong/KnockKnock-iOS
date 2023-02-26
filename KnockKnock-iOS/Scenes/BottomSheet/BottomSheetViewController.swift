@@ -9,10 +9,6 @@ import UIKit
 
 import Then
 
-protocol BottomSheetViewProtocol: AnyObject {
-  var interactor: BottomSheetInteractorProtocol? { get set }
-}
-
 final class BottomSheetViewController: BaseViewController<BottomSheetView> {
   
   // MARK: - Properties
@@ -26,6 +22,7 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    self.interactor?.fetchBottomSheetOptions()
     self.setupConfigure()
     self.setupGestureRecognizer()
   }
@@ -44,16 +41,6 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
       $0.delegate = self
     }
     self.containerView.dimmedBackView.alpha = 0.0
-  }
-  
-  // MARK: - Bind
-
-  func setBottomSheetContents(
-    contents: [String],
-    bottomSheetType: BottomSheetType
-  ) {
-    self.options = contents
-    self.containerView.bottomSheetType = bottomSheetType
   }
   
   // MARK: - Gesture
@@ -120,7 +107,17 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
 // MARK: - Bottom Sheet View Protocol
 
 extension BottomSheetViewController: BottomSheetViewProtocol {
-  
+  func fetchOptions(
+    options: [String],
+    bottomSheetType: BottomSheetSize
+  ) {
+    self.options = options
+    self.containerView.bottomSheetType = bottomSheetType
+
+    DispatchQueue.main.async {
+      self.containerView.tableView.reloadData()
+    }
+  }
 }
 
 // MARK: - TableView DataSource

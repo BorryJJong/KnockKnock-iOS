@@ -138,23 +138,52 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   @objc
   private func moreButtonDidTap(_ sender: UIButton) {
 
-    guard let isMyPost = self.feedDetail?.feed?.isWriter,
-          let feedId = self.feedDetail?.feed?.id else { return }
+    guard let feedDetail = self.feedDetail,
+          let isMyPost = feedDetail.feed?.isWriter,
+          let feedId = feedDetail.feed?.id else { return }
+
+    let deleteAction: (() -> Void)? = { self.interactor?.requestDelete(feedId: feedId) }
+    let hideAcion: (() -> Void)?  = { self.interactor?.requestHide(feedId: feedId) }
+    let editAction: (() -> Void)?  = { self.interactor?.navigateToFeedEdit(feedId: feedId) }
+    let reportAction: (() -> Void)?  = { self.interactor?.presentReportView(feedId: feedId) }
+
+    var options: [BottomSheet] = []
+
+    if isMyPost {
+      options = [
+        BottomSheet(
+          option: BottomSheetOption.postDelete.rawValue,
+          action: deleteAction
+        ),
+        BottomSheet(
+          option: BottomSheetOption.postEdit.rawValue,
+          action: editAction
+        ),
+        BottomSheet(
+          option: BottomSheetOption.postShare.rawValue,
+          action: nil
+        )
+      ]
+    } else {
+      options = [
+        BottomSheet(
+          option: BottomSheetOption.postHide.rawValue,
+          action: hideAcion
+        ),
+        BottomSheet(
+          option: BottomSheetOption.postReport.rawValue,
+          action: reportAction
+        ),
+        BottomSheet(
+          option: BottomSheetOption.postShare.rawValue,
+          action: nil
+        )
+      ]
+    }
 
     self.interactor?.presentBottomSheetView(
-      isMyPost: isMyPost,
-      deleteAction: {
-        self.interactor?.requestDelete(feedId: feedId)
-      },
-      hideAction: {
-        self.interactor?.requestHide(feedId: feedId)
-      },
-      editAction: {
-        self.interactor?.navigateToFeedEdit(feedId: feedId)
-      },
-      reportAction: {
-        self.interactor?.presentReportView(feedId: feedId)
-      }
+      options: options,
+      feedData: feedDetail
     )
   }
   

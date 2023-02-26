@@ -12,7 +12,7 @@ protocol BottomSheetViewProtocol: AnyObject {
 
   func fetchOptions(
     options: [String],
-    bottomSheetType: BottomSheetType
+    bottomSheetType: BottomSheetSize
   )
 }
 
@@ -29,7 +29,7 @@ protocol BottomSheetInteractorProtocol {
   func passChallengeSortType(sortType: ChallengeSortType)
 
   func navigateToShopSearch()
-  func dismissView(actionType: BottomSheet.Option)
+  func dismissView(actionType: BottomSheetOption)
 }
 
 protocol BottomSheetPresenterProtocol {
@@ -37,7 +37,7 @@ protocol BottomSheetPresenterProtocol {
 
   func presentOptions(
     options: [String],
-    bottomSheetType: BottomSheetType
+    bottomSheetType: BottomSheetSize
   )
 }
 
@@ -56,7 +56,7 @@ protocol BottomSheetRouterProtocol: AnyObject {
     districtsType: DistrictsType?,
     challengeSortDelegate: ChallengeSortDelegate?,
     options: [BottomSheet],
-    type: BottomSheetType,
+    type: BottomSheetSize,
     feedData: FeedShare?
   ) -> UIViewController
 

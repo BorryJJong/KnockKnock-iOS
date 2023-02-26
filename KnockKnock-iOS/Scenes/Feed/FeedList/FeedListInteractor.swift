@@ -19,11 +19,7 @@ protocol FeedListInteractorProtocol {
   func requestReport(feedId: Int)
 
   func presentBottomSheetView(
-    isMyPost: Bool,
-    deleteAction: (() -> Void)?,
-    hideAction: (() -> Void)?,
-    editAction: (() -> Void)?,
-    reportAction: (() -> Void)?,
+    options: [BottomSheet],
     feedData: FeedList.Post
   )
   func presentReportView(feedId: Int)
@@ -265,11 +261,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   }
   
   func presentBottomSheetView(
-    isMyPost: Bool,
-    deleteAction: (() -> Void)?,
-    hideAction: (() -> Void)?,
-    editAction: (() -> Void)?,
-    reportAction: (() -> Void)?,
+    options: [BottomSheet],
     feedData: FeedList.Post
   ) {
     Task {
@@ -278,11 +270,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
 
         await MainActor.run {
           self.router?.presentBottomSheetView(
-            isMyPost: isMyPost,
-            deleteAction: deleteAction,
-            hideAction: hideAction,
-            editAction: editAction,
-            reportAction: reportAction,
+            options: options,
             feedData: feedData.toShare()
           )
         }

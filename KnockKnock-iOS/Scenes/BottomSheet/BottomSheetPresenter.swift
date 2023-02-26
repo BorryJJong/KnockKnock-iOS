@@ -12,7 +12,7 @@ final class BottomSheetPresenter: BottomSheetPresenterProtocol {
 
   func presentOptions(
     options: [String],
-    bottomSheetType: BottomSheetType
+    bottomSheetType: BottomSheetSize
   ) {
     self.view?.fetchOptions(
       options: options,

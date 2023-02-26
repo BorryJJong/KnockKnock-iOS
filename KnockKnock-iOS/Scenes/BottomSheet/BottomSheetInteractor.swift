@@ -7,20 +7,6 @@
 
 import Foundation
 
-protocol BottomSheetInteractorProtocol {
-  var router: BottomSheetRouterProtocol? { get set }
-  var worker: BottomSheetWorkerProtocol? { get set }
-
-  func sharePost()
-
-  func passCityDataToShopSearch(city: String)
-  func passCountyDataToShopSearch(county: String)
-  func passChallengeSortType(sortType: ChallengeSortType)
-
-  func navigateToShopSearch()
-  func dismissView(actionType: BottomSheetOption)
-}
-
 final class BottomSheetInteractor: BottomSheetInteractorProtocol {
   
   weak var districtSelectDelegate: DistrictSelectDelegate?
@@ -28,12 +14,10 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
 
   var router: BottomSheetRouterProtocol?
   var worker: BottomSheetWorkerProtocol?
+  var presenter: BottomSheetPresenterProtocol?
 
-  var deleteAction: (() -> Void)?
-  var editAction: (() -> Void)?
-  var hideAction: (() -> Void)?
-  var reportAction: (() -> Void)?
-
+  var options: [BottomSheet] = []
+  var bottomSheetType: BottomSheetSize = .medium
   var feedData: FeedShare?
 
   // MARK: - Buisiness Logic
@@ -54,6 +38,13 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
         self.router?.presentErrorAlertView(message: error.message)
       }
     })
+  }
+
+  func fetchBottomSheetOptions() {
+    self.presenter?.presentOptions(
+      options: self.options.map{ $0.option },
+      bottomSheetType: self.bottomSheetType
+    )
   }
 
   // MARK: - Routing
@@ -78,21 +69,11 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
   }
 
   func dismissView(actionType: BottomSheetOption) {
-    switch actionType {
-    case .postDelete:
-      self.router?.dismissView(action: self.deleteAction)
 
-    case .postHide:
-      self.router?.dismissView(action: self.hideAction)
-
-    case .postEdit:
-      self.router?.dismissView(action: self.editAction)
-
-    case .postReport:
-      self.router?.dismissView(action: self.reportAction)
-      
-    default:
-      self.router?.dismissView(action: nil)
+    self.options.forEach {
+      if BottomSheetOption(rawValue: $0.option) == actionType {
+        self.router?.dismissView(action: $0.action)
+      }
     }
   }
 }

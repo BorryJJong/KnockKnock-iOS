@@ -32,11 +32,8 @@ protocol FeedDetailInteractorProtocol {
   func navigateToFeedList()
   func checkLoginStatus()
   func presentBottomSheetView(
-    isMyPost: Bool,
-    deleteAction: (() -> Void)?,
-    hideAction: (() -> Void)?,
-    editAction: (() -> Void)?,
-    reportAction: (() -> Void)?
+    options: [BottomSheet],
+    feedData: FeedDetail
   )
   func navigateToFeedEdit(feedId: Int)
 }
@@ -360,11 +357,8 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   }
 
   func presentBottomSheetView(
-    isMyPost: Bool,
-    deleteAction: (() -> Void)?,
-    hideAction: (() -> Void)?,
-    editAction: (() -> Void)?,
-    reportAction: (() -> Void)?
+    options: [BottomSheet],
+    feedData: FeedDetail
   ) {
 
     Task {
@@ -373,11 +367,8 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
 
         await MainActor.run {
           self.router?.presentBottomSheetView(
-            isMyPost: isMyPost,
-            deleteAction: deleteAction,
-            hideAction: hideAction,
-            editAction: editAction,
-            reportAction: reportAction
+            options: options,
+            feedData: feedData.toShare()
           )
         }
       } else {
