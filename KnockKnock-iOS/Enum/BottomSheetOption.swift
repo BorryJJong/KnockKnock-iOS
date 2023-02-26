@@ -1,11 +1,11 @@
 //
-//  BottomSheetOptions.swift
+//  BottomSheetOption.swift
 //  KnockKnock-iOS
 //
-//  Created by Daye on 2022/08/29.
+//  Created by Daye on 2023/02/26.
 //
 
-import UIKit
+import Foundation
 
 enum BottomSheetOption: String {
   case postDelete = "삭제"
@@ -15,10 +15,4 @@ enum BottomSheetOption: String {
   case postHide = "숨기기"
   case challengeNew = "최신순"
   case challengePopular = "인기순"
-}
-
-enum BottomSheetType: CGFloat {
-  case small = 0.85
-  case medium = 0.8
-  case large = 0.3
 }
