@@ -34,7 +34,7 @@ final class FeedEditRouter: FeedEditRouterProtocol {
     let interactor = FeedEditInteractor()
     let presenter = FeedEditPresenter()
     let worker = FeedEditWorker(
-      feedRepository: FeedRepository(),
+      feedDetailRepository: FeedDetailRepository(),
       feedWriteRepository: FeedWriteRepository(),
       feedEditRepository: FeedEditRepository()
     )

@@ -25,16 +25,16 @@ protocol FeedEditWorkerProtocol {
 
 final class FeedEditWorker: FeedEditWorkerProtocol {
 
-  private let feedRepository: FeedRepositoryProtocol
+  private let feedDetailRepository: FeedDetailRepositoryProtocol
   private let feedWriteRepository: FeedWriteRepositoryProtocol
   private let feedEditRepository: FeedEditRepositoryProtocol
 
   init(
-    feedRepository: FeedRepositoryProtocol,
+    feedDetailRepository: FeedDetailRepositoryProtocol,
     feedWriteRepository: FeedWriteRepositoryProtocol,
     feedEditRepository: FeedEditRepositoryProtocol
   ) {
-    self.feedRepository = feedRepository
+    self.feedDetailRepository = feedDetailRepository
     self.feedWriteRepository = feedWriteRepository
     self.feedEditRepository = feedEditRepository
   }
@@ -47,7 +47,7 @@ final class FeedEditWorker: FeedEditWorkerProtocol {
     feedId: Int,
     completionHandler: @escaping (FeedDetail) -> Void
   ) {
-    self.feedRepository.requestFeedDetail(
+    self.feedDetailRepository.requestFeedDetail(
       feedId: feedId,
       completionHandler: { feed in
         completionHandler(feed)

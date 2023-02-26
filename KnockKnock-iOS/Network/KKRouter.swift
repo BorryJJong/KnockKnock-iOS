@@ -52,6 +52,7 @@ enum KKRouter: URLRequestConvertible {
   case getFeedBlogPost(page: Int, take: Int, feedId: Int, challengeId: Int)
   case getFeed(id: Int)
   case postHideBlogPost(id: Int)
+  case postReportBlogPost(id: Int, reportType: String)
   case deleteFeed(id: Int)
 
   // Feed Edit
@@ -115,7 +116,8 @@ enum KKRouter: URLRequestConvertible {
         .getFeed:
       return .get
 
-    case .postHideBlogPost:
+    case .postHideBlogPost,
+         .postReportBlogPost:
       return .post
 
     case .deleteFeed:
@@ -190,6 +192,7 @@ enum KKRouter: URLRequestConvertible {
     case .getFeed(let id): return "feed/\(id)"
     case .deleteFeed(let id): return "feed/\(id)"
     case .postHideBlogPost(let id): return "users/hide/blog-post/\(id)"
+    case .postReportBlogPost(let id, _): return "users/report/blog-post/\(id)"
 
       // Feed Edit
     case .putFeed(let id, _): return "feed/\(id)"
@@ -280,6 +283,9 @@ enum KKRouter: URLRequestConvertible {
         "feedId": feedId,
         "challengeId": challengeId
       ]
+
+    case let .postReportBlogPost(_, reportType):
+      return [ "reportType": reportType ]
 
     case .getFeed,
          .postHideBlogPost,
