@@ -28,6 +28,11 @@ protocol FeedListWorkerProtocol {
     feedId: Int,
     completionHandler: @escaping (Bool) -> Void
   )
+  func requestReportFeed(
+    feedId: Int,
+    reportType: ReportType,
+    completionHandler: @escaping (Bool) -> Void
+  )
   func removePostInFeedList(
     feeds: FeedList,
     id: Int
@@ -67,16 +72,16 @@ protocol FeedListWorkerProtocol {
 final class FeedListWorker: FeedListWorkerProtocol {
   typealias OnCompletionHandler = (Bool) -> Void
   
-  private let feedRepository: FeedRepositoryProtocol
+  private let feedListRepository: FeedListRepositoryProtocol
   private let likeRepository: LikeRepositoryProtocol
   private let userDataManager: UserDataManagerProtocol
   
   init(
-    feedRepository: FeedRepositoryProtocol,
+    feedListRepository: FeedListRepositoryProtocol,
     likeRepository: LikeRepositoryProtocol,
     userDataManager: UserDataManagerProtocol
   ) {
-    self.feedRepository = feedRepository
+    self.feedListRepository = feedListRepository
     self.likeRepository = likeRepository
     self.userDataManager = userDataManager
   }
@@ -86,7 +91,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
     feedId: Int,
     completionHandler: @escaping OnCompletionHandler
   ) {
-    self.feedRepository.requestDeleteFeed(
+    self.feedListRepository.requestDeleteFeed(
       feedId: feedId,
       completionHandler: { isSuccess in
         if isSuccess {
@@ -102,7 +107,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
     feedId: Int,
     completionHandler: @escaping (Bool) -> Void
   ) {
-    self.feedRepository.requestHidePost(
+    self.feedListRepository.requestHidePost(
       feedId: feedId,
       completionHandler: { isSuccess in
         if isSuccess {
@@ -184,7 +189,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
     challengeId: Int,
     completionHandler: @escaping (FeedList) -> Void
   ) {
-    self.feedRepository.requestFeedList(
+    self.feedListRepository.requestFeedList(
       currentPage: currentPage,
       pageSize: count,
       feedId: feedId,
@@ -300,6 +305,27 @@ final class FeedListWorker: FeedListWorkerProtocol {
       isLike = feedList[index].isLike
     }
     return isLike
+  }
+
+  /// 피드 신고하기
+  ///
+  /// - Parameters:
+  ///  - feedId: 피드 아이디
+  ///  - reportType: 신고 타입
+  func requestReportFeed(
+    feedId: Int,
+    reportType: ReportType,
+    completionHandler: @escaping OnCompletionHandler
+  ) {
+    self.feedListRepository.requestReportPost(
+      feedId: feedId,
+      reportType: reportType,
+      completionHandler: { isSuccess in
+
+        completionHandler(isSuccess)
+
+      }
+    )
   }
 }
 

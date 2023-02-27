@@ -1,8 +1,8 @@
 //
 //  ReportType.swift
-//  
+//  KnockKnock-iOS
 //
-//  Created by Daye on 2023/02/06.
+//  Created by Daye on 2023/02/08.
 //
 
 import Foundation

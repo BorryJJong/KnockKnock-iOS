@@ -16,28 +16,36 @@ protocol FeedListInteractorProtocol {
   func requestDelete(feedId: Int)
   func requestHide(feedId: Int)
   func requestLike(feedId: Int)
+  func requestReport(feedId: Int)
 
   func presentBottomSheetView(
-    isMyPost: Bool,
-    deleteAction: (() -> Void)?,
-    hideAction: (() -> Void)?,
-    editAction: (() -> Void)?,
-    reportAction: (() -> Void)?,
+    options: [BottomSheetOption],
     feedData: FeedList.Post
   )
-  func presentReportView()
+  func presentReportView(feedId: Int)
   func navigateToFeedEdit(feedId: Int)
   func navigateToFeedMain()
   func navigateToFeedDetail(feedId: Int)
   func navigateToCommentView(feedId: Int)
 }
 
+extension FeedListInteractor: ReportDelegate {
+  func setReportType(reportType: ReportType) {
+    self.reportType = reportType
+  }
+}
+
 final class FeedListInteractor: FeedListInteractorProtocol {
+
+  // MARK: - Properties
+
   var presenter: FeedListPresenterProtocol?
   var worker: FeedListWorkerProtocol?
   var router: FeedListRouterProtocol?
   
-  var feedListData: FeedList?
+  private var feedListData: FeedList?
+
+  var reportType: ReportType?
   
   // MARK: - Initialize
   
@@ -156,7 +164,6 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   }
 
   /// 피드 숨기기
-  ///
   func requestHide(feedId: Int) {
 
     guard let feedList = self.feedListData else { return }
@@ -185,6 +192,46 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       }
     )
   }
+
+  /// 피드 신고하기
+  func requestReport(
+    feedId: Int
+  ) {
+
+    guard let feedList = self.feedListData else { return }
+    guard !feedList.feeds.isEmpty else { return }
+
+    guard let reportType = self.reportType else { return }
+
+    self.worker?.requestReportFeed(
+      feedId: feedId,
+      reportType: reportType,
+      completionHandler: { [weak self] isSuccess in
+
+        guard let self = self else { return }
+
+        if isSuccess {
+          // 피드 리스트 내 해당 게시글 모두 숨김(삭제)처리
+          guard let feedListData = self.worker?.removePostInFeedList(
+            feeds: feedList,
+            id: feedId
+          ) else { return }
+
+          self.showAlertView(
+            message: "게시글이 신고 되었습니다.",
+            completion: nil
+          )
+          self.presenter?.presentFetchFeedList(feedList: feedListData)
+
+        } else {
+          self.showAlertView(
+            message: "게시글 신고에 실패하였습니다.",
+            completion: nil
+          )
+        }
+      }
+    )
+  }
   
   // Routing
   
@@ -204,16 +251,17 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     self.router?.navigateToFeedMain()
   }
 
-  func presentReportView() {
-    self.router?.presentReportView()
+  func presentReportView(feedId: Int) {
+    self.router?.presentReportView(
+      action: {
+        self.requestReport(feedId: feedId)
+      },
+      reportDelegate: self
+    )
   }
   
   func presentBottomSheetView(
-    isMyPost: Bool,
-    deleteAction: (() -> Void)?,
-    hideAction: (() -> Void)?,
-    editAction: (() -> Void)?,
-    reportAction: (() -> Void)?,
+    options: [BottomSheetOption],
     feedData: FeedList.Post
   ) {
     Task {
@@ -222,11 +270,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
 
         await MainActor.run {
           self.router?.presentBottomSheetView(
-            isMyPost: isMyPost,
-            deleteAction: deleteAction,
-            hideAction: hideAction,
-            editAction: editAction,
-            reportAction: reportAction,
+            options: options,
             feedData: feedData.toShare()
           )
         }
@@ -237,6 +281,16 @@ final class FeedListInteractor: FeedListInteractorProtocol {
         }
       }
     }
+  }
+
+  func showAlertView(
+    message: String,
+    completion: (() -> Void)?
+  ) {
+    self.router?.showAlertView(
+      message: message,
+      completion: completion
+    )
   }
 }
 

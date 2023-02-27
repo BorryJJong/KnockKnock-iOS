@@ -16,6 +16,7 @@ protocol HomeWorkerProtocol {
     completionHandler: @escaping([ChallengeTitle]) -> Void
   )
   func fetchEventList() async -> [Event]
+  func fetchBanner(bannerType: BannerType) async -> [HomeBanner]?
   func fetchVerifiedStore() async -> [Store]?
 }
 
@@ -24,15 +25,18 @@ final class HomeWorker: HomeWorkerProtocol {
   private let verifiedStoreRepository: VerifiedStoreRepositoryProtocol
   private let hotPostRepository: HotPostRepositoryProtocol
   private let eventRepository: EventRepositoryProtocol
+  private let bannerRepository: BannerRepositoryProtocol
 
   init(
     verifiedStoreRepository: VerifiedStoreRepositoryProtocol,
     hotPostRepository: HotPostRepositoryProtocol,
-    eventRepository: EventRepositoryProtocol
+    eventRepository: EventRepositoryProtocol,
+    bannerRepository: BannerRepositoryProtocol
   ) {
     self.verifiedStoreRepository = verifiedStoreRepository
     self.hotPostRepository = hotPostRepository
     self.eventRepository = eventRepository
+    self.bannerRepository = bannerRepository
   }
 
   func fetchHotPostList(
@@ -63,5 +67,9 @@ final class HomeWorker: HomeWorkerProtocol {
 
   func fetchEventList() async -> [Event] {
     return await self.eventRepository.requestEventList()
+  }
+
+  func fetchBanner(bannerType: BannerType) async -> [HomeBanner]? {
+    return await self.bannerRepository.requestBanner(bannerType: bannerType)
   }
 }

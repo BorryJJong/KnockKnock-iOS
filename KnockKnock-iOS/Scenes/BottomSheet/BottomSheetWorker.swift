@@ -7,13 +7,6 @@
 
 import Foundation
 
-protocol BottomSheetWorkerProtocol {
-  func sharePost(
-    feedData: FeedShare?,
-    completionHandler: @escaping (Bool, KakaoShareErrorType?) -> Void
-  )
-}
-
 final class BottomSheetWorker: BottomSheetWorkerProtocol {
 
   private let kakaoShareManager: KakaoShareManagerProtocol

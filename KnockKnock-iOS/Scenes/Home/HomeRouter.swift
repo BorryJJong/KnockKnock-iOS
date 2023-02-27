@@ -27,7 +27,8 @@ final class HomeRouter: HomeRouterProtocol {
     let worker = HomeWorker(
       verifiedStoreRepository: VerifiedStoreRepository(),
       hotPostRepository: HotPostRepository(),
-      eventRepository: EventRepository()
+      eventRepository: EventRepository(),
+      bannerRepository: BannerRepository()
     )
     let router = HomeRouter()
 

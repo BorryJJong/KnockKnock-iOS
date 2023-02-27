@@ -49,33 +49,45 @@ protocol FeedDetailWorkerProtocol {
     feedId: Int,
     completionHandler: @escaping (Bool) -> Void
   )
+  func requestReportFeed(
+    feedId: Int,
+    reportType: ReportType,
+    completionHandler: @escaping (Bool) -> Void
+  )
 }
 
 final class FeedDetailWorker: FeedDetailWorkerProtocol {
   typealias OnCompletionHandler = (Bool) -> Void
 
-  private let feedRepository: FeedRepositoryProtocol
+  // MARK: - Properties
+
+  private let feedDetailRepository: FeedDetailRepositoryProtocol
   private let commentRepository: CommentRepositoryProtocol
   private let likeRepository: LikeRepositoryProtocol
   private let userDataManager: UserDataManagerProtocol
 
+  // MARK: - Initialize
+
   init(
-    feedRepository: FeedRepositoryProtocol,
+    feedDetailRepository: FeedDetailRepositoryProtocol,
     commentRepository: CommentRepositoryProtocol,
     likeRepository: LikeRepositoryProtocol,
     userDataManager: UserDataManagerProtocol
   ) {
-    self.feedRepository = feedRepository
+    self.feedDetailRepository = feedDetailRepository
     self.commentRepository = commentRepository
     self.likeRepository = likeRepository
     self.userDataManager = userDataManager
   }
 
+  // MARK: - Functions
+
+  /// 피드 상세 조회
   func getFeedDetail(
     feedId: Int,
     completionHandler: @escaping (FeedDetail) -> Void
   ) {
-    self.feedRepository.requestFeedDetail(
+    self.feedDetailRepository.requestFeedDetail(
       feedId: feedId,
       completionHandler: { feed in
         completionHandler(feed)
@@ -87,7 +99,7 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
     feedId: Int,
     completionHandler: @escaping OnCompletionHandler
   ) {
-    self.feedRepository.requestDeleteFeed(
+    self.feedDetailRepository.requestDeleteFeed(
       feedId: feedId,
       completionHandler: { [weak self] isSuccess in
 
@@ -101,11 +113,14 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
     )
   }
 
+  /// 게시글 숨기기
+  /// - Parameters:
+  ///  - feedId: 피드 아이디
   func requestHidePost(
     feedId: Int,
     completionHandler: @escaping OnCompletionHandler
   ) {
-    self.feedRepository.requestHidePost(
+    self.feedDetailRepository.requestHidePost(
       feedId: feedId,
       completionHandler: { [weak self] isSuccess in
 
@@ -115,6 +130,31 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
           self.postResfreshNotificationEvent(feedId: feedId)
         }
         completionHandler(isSuccess)
+      }
+    )
+  }
+
+  /// 피드 신고하기
+  ///
+  /// - Parameters:
+  ///  - feedId: 피드 아이디
+  ///  - reportType: 신고 타입
+  func requestReportFeed(
+    feedId: Int,
+    reportType: ReportType,
+    completionHandler: @escaping OnCompletionHandler
+  ) {
+    self.feedDetailRepository.requestReportPost(
+      feedId: feedId,
+      reportType: reportType,
+      completionHandler: { isSuccess in
+
+        if isSuccess {
+          self.postResfreshNotificationEvent(feedId: feedId)
+        }
+
+        completionHandler(isSuccess)
+
       }
     )
   }
