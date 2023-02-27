@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class StoreListPresenter {
+final class StoreListPresenter: StoreListPresentorProtocol {
 
   weak var view: StoreListViewProtocol?
 

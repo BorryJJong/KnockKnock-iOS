@@ -20,10 +20,13 @@ final class StoreListRouter: StoreListRouterProtocol {
     let interactor = StoreListInteractor(
       repository: VerifiedStoreRepository()
     )
+    let presenter = StoreListPresenter()
     let router = StoreListRouter()
 
     view.interactor = interactor
     interactor.router = router
+    interactor.presenter = presenter
+    presenter.view = view
     router.view = view    
 
     return view

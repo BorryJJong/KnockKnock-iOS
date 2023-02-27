@@ -13,7 +13,6 @@ final class StoreListInteractor: StoreListInteractorProtocol {
 
   var router: StoreListRouterProtocol?
   var presenter: StoreListPresentorProtocol?
-
   var repository: VerifiedStoreRepositoryProtocol?
 
   init(repository: VerifiedStoreRepositoryProtocol) {
