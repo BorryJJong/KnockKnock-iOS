@@ -44,6 +44,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
   ) {
     Messaging.messaging().apnsToken = deviceToken
+    
+    // token check
+    //    Messaging.messaging().token { token, error in
+    //      if let error = error {
+    //        print("Error fetching FCM registration token: \(error)")
+    //      } else if let token = token {
+    //        print("FCM registration token: \(token)")
+    //      }ㅏ
+    //    }
   }
 
   // MARK: - UISceneSession Lifecycle
@@ -53,11 +62,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     configurationForConnecting connectingSceneSession: UISceneSession,
     options: UIScene.ConnectionOptions
   ) -> UISceneConfiguration {
-    return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+    return UISceneConfiguration(
+      name: "Default Configuration",
+      sessionRole: connectingSceneSession.role
+    )
   }
 
   func application(
     _ application: UIApplication,
     didDiscardSceneSessions sceneSessions: Set<UISceneSession>
   ) { }
+
+  func userNotificationCenter(
+    _ center: UNUserNotificationCenter,
+    didReceive response: UNNotificationResponse,
+    withCompletionHandler completionHandler: @escaping () -> Void
+  ) {
+    DispatchQueue.main.async {
+      DeeplinkNavigator.shared.setNotificationUrl(response: response)
+    }
+    completionHandler()
+  }
 }
