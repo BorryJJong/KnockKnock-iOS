@@ -8,8 +8,9 @@
 import Foundation
 
 public enum ShareQueryItemType: String {
-  
-  case feed = "feedDetail"
+
+  case feedMain = "feedMain"
+  case feedDetail = "feedDetail"
   case challenge = "challengeDetail"
   
 }

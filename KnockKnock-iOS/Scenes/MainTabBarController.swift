@@ -69,6 +69,7 @@ final class MainTabBarController: UITabBarController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    self.setNotification()
     self.attribute()
     self.setMiddleButton()
   }
@@ -139,5 +140,24 @@ extension MainTabBarController: UITabBarControllerDelegate {
       }
     }
     return true
+  }
+}
+
+extension MainTabBarController {
+
+  /// 수정 된 피드 refetch
+  @objc
+  private func moveFeed(_ notification: Notification) {
+    guard let index = notification.object as? Int else { return }
+    self.selectedIndex = index
+  }
+
+  private func setNotification() {
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(self.moveFeed(_:)),
+      name: .pushFeedMain,
+      object: nil
+    )
   }
 }
