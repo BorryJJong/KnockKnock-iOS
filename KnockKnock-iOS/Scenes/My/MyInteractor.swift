@@ -99,5 +99,13 @@ final class MyInteractor: MyInteractorProtocol {
     ) { _ in
       self.fetchNickname()
     }
+
+    NotificationCenter.default.addObserver(
+      forName: .pushSettingUpdated,
+      object: nil,
+      queue: nil
+    ) { _ in
+      self.presenter?.presentPushSetting()
+    }
   }
 }

@@ -13,6 +13,7 @@ protocol MyViewProtocol: AnyObject {
   func fetchMenuData(menuData: MyMenu)
   func checkLoginStatus(isSignedIn: Bool)
   func fetchNickname(nickname: String)
+  func setPushSetting()
 }
 
 final class MyViewController: BaseViewController<MyView> {
@@ -99,15 +100,18 @@ final class MyViewController: BaseViewController<MyView> {
 
   // MARK: - Button Actions
 
-  @objc private func loginButtonDidTap(_ sender: UIButton) {
+  @objc
+  private func loginButtonDidTap(_ sender: UIButton) {
     self.interactor?.navigateToLoginView()
   }
 
-  @objc func signOutButtonDidTap(_ sender: UIButton) {
+  @objc
+  func signOutButtonDidTap(_ sender: UIButton) {
     self.interactor?.requestSignOut()
   }
 
-  func pushSwitchDidTap() {
+  @objc
+  func pushSwitchDidTap(_ sender: UISwitch) {
     guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
 
     if UIApplication.shared.canOpenURL(url) {
@@ -130,6 +134,15 @@ extension MyViewController: MyViewProtocol {
 
   func fetchNickname(nickname: String) {
     self.nickname = nickname
+  }
+
+  func setPushSetting() {
+    DispatchQueue.main.async {
+      self.containerView.myTableView.reloadRows(
+        at: [IndexPath(item: 2, section: 0)],
+        with: .none
+      )
+    }
   }
 }
 
@@ -178,7 +191,11 @@ extension MyViewController: UITableViewDataSource {
       cell.accessoryType = .none
       cell.accessoryView = UISwitch().then {
         $0.isOn = UIApplication.shared.isRegisteredForRemoteNotifications
-        $0.isEnabled = false
+        $0.addTarget(
+          self,
+          action: #selector(self.pushSwitchDidTap(_:)),
+          for: .touchUpInside
+        )
       }
     case .plain:
       cell.accessoryType = .disclosureIndicator
@@ -282,8 +299,6 @@ extension MyViewController: UITableViewDelegate {
           self.interactor?.requestWithdraw()
         }
       )
-    case .pushNotification:
-      self.pushSwitchDidTap()
 
     case .versionInfo:
       self.showAlert(

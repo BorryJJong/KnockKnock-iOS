@@ -13,6 +13,7 @@ extension Notification.Name {
   static let signInCompleted = Notification.Name("signInCompleted")
   static let signOutCompleted = Notification.Name("signOutCompleted")
   static let profileUpdated = Notification.Name("profileUpdated")
+  static let pushSettingUpdated = Notification.Name("pushSettingUpdated")
 
   // Feed
   static let feedListRefreshAfterSigned = Notification.Name("feedRefreshAfterSigned")
@@ -25,6 +26,7 @@ extension Notification.Name {
   static let feedDetailRefreshAfterEdited = Notification.Name("feedDetailRefreshAfterEdited")
 
   static let postLikeToggled = Notification.Name("postLikeToggled")
+  static let pushFeedMain = Notification.Name("pushFeed")
 
   // Comment
   static let feedListCommentRefreshAfterDelete = Notification.Name("feedListCommentRefreshAfterDelete")

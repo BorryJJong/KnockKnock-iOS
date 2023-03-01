@@ -23,7 +23,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     FirebaseApp.configure()
     self.registerRemoteNotification()
 
+    NotificationCenter.default.addObserver(
+          self,
+          selector: #selector(checkNotificationSetting),
+          name: UIApplication.willEnterForegroundNotification,
+          object: nil
+        )
+
     return true
+  }
+
+  @objc private func checkNotificationSetting() {
+    UNUserNotificationCenter.current()
+      .getNotificationSettings { permission in
+        switch permission.authorizationStatus  {
+        case .authorized:
+          NotificationCenter.default.post(
+            name: .pushSettingUpdated,
+            object: nil
+          )
+        case .denied:
+          NotificationCenter.default.post(
+            name: .pushSettingUpdated,
+            object: nil
+          )
+          // 처리할 것
+//        case .notDetermined:
+//          print("한 번 허용 누른 경우")
+//        case .provisional:
+//          print("푸시 수신 임시 중단")
+//        case .ephemeral:
+//          // @available(iOS 14.0, *)
+//          print("푸시 설정이 App Clip에 대해서만 부분적으로 동의한 경우")
+        @unknown default:
+          print("Unknow Status")
+        }
+      }
   }
 
   private func registerRemoteNotification() {
