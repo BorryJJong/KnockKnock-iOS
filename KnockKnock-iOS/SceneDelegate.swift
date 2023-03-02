@@ -27,10 +27,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     self.window?.rootViewController = main
     self.window?.makeKeyAndVisible()
 
-    self.scene(scene, openURLContexts: connectionOptions.urlContexts)
+    self.scene(
+      scene,
+      openURLContexts: connectionOptions.urlContexts
+    )
   }
 
-  func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+  func scene(
+    _ scene: UIScene,
+    openURLContexts URLContexts: Set<UIOpenURLContext>
+  ) {
 
     guard let url = URLContexts.first?.url else { return }
 
@@ -38,6 +44,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
       _ = AuthController.handleOpenUrl(url: url)
 
     } else {
+
+      guard url.scheme == ShareURL.kakaoScheme,
+            url.host == ShareURL.kakaoHost else { return }
+      
       DeeplinkNavigator.shared.setUrl(url: url)
 
     }

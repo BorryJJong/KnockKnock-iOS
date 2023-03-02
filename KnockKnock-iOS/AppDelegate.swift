@@ -65,8 +65,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     didReceive response: UNNotificationResponse,
     withCompletionHandler completionHandler: @escaping () -> Void
   ) {
+
+    let userInfo = response.notification.request.content.userInfo
+
+    guard let deepLinkUrl = userInfo["url"] as? String,
+          let url = URL(string: deepLinkUrl) else { return }
+    
     DispatchQueue.main.async {
-      DeeplinkNavigator.shared.setNotificationUrl(response: response)
+      guard url.host == "navigation" else { return }
+      
+      DeeplinkNavigator.shared.setUrl(url: url)
     }
     completionHandler()
   }

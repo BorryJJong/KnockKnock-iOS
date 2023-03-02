@@ -19,9 +19,6 @@ final class DeeplinkNavigator {
 
     self.window = UIApplication.shared.windows.first
 
-    guard url.scheme == ShareURL.kakaoScheme,
-          url.host == ShareURL.kakaoHost else { return }
-
     let urlString = url.absoluteString
     let components = URLComponents(string: urlString)
     let urlQueryItems = components?.queryItems ?? []
@@ -47,40 +44,10 @@ final class DeeplinkNavigator {
       self.navigateChallengeDetail(challengeId: id)
 
     case .feedMain:
-      NotificationCenter.default.post(
-        name: .pushFeedMain,
-        object: Tab.feed.rawValue
-      )
-    }
-  }
-
-  func setNotificationUrl(response: UNNotificationResponse) {
-
-    let userInfo = response.notification.request.content.userInfo
-
-    guard let deepLinkUrl = userInfo["url"] as? String,
-          let url = URL(string: deepLinkUrl) else { return }
-
-    guard url.host == "navigation" else { return }
-
-    let urlString = url.absoluteString
-    guard urlString.contains("name") else { return }
-
-    let components = URLComponents(string: urlString)
-
-    let urlQueryItems = components?.queryItems ?? []
-    var dictionaryData = [String: String]()
-    urlQueryItems.forEach { dictionaryData[$0.name] = $0.value }
-    guard let name = dictionaryData["name"] else { return }
-
-    let queryItemType = ShareQueryItemType(rawValue: name)
-
-    switch queryItemType {
-    default:
       self.navigateFeedMain()
     }
   }
-
+  
   func navigateFeedDetail(feedId: Int) {
 
     guard let tabBarController = window?.rootViewController as? MainTabBarController else { return }
@@ -114,9 +81,8 @@ final class DeeplinkNavigator {
   }
 
   func navigateFeedMain() {
-    NotificationCenter.default.post(
-      name: .pushFeedMain,
-      object: Tab.feed.rawValue
-    )
+    guard let tabBarController = window?.rootViewController as? MainTabBarController else { return }
+
+    tabBarController.selectedIndex = Tab.feed.rawValue
   }
 }
