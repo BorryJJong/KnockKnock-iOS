@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/08/23.
 //
 
-import UIKit
+import Foundation
 
 protocol HomeInteractorProtocol {
   var presenter: HomePresenterProtocol? { get set }
@@ -14,7 +14,13 @@ protocol HomeInteractorProtocol {
 
   func fetchHotpost(challengeId: Int)
   func fetchChallengeList()
-  func setSelectedStatus(challengeList: [ChallengeTitle], selectedIndex: IndexPath)
+  func setSelectedStatus(
+    challengeList: [ChallengeTitle],
+    selectedIndex: IndexPath
+  )
+  func fetchEventList()
+  func fetchBanner(bannerType: BannerType)
+  func fetchVerifiedStore()
 
   func navigateToStoreListView()
   func navigateToEventPageView()
@@ -49,6 +55,48 @@ final class HomeInteractor: HomeInteractorProtocol {
       challenges[0].isSelected = true
 
       self?.presenter?.presentChallengeList(challengeList: challenges, index: nil)
+    }
+  }
+
+  func fetchEventList() {
+    Task {
+      guard let eventList = await self.worker?.fetchEventList() else {
+        // error
+        return
+      }
+
+      self.presenter?.presentEventList(eventList: eventList)
+    }
+  }
+
+  /// 배너 데이터 조회
+  func fetchBanner(bannerType: BannerType) {
+    Task {
+      guard let bannerList = await self.worker?.fetchBanner(bannerType: bannerType) else {
+
+        // error
+        return
+      }
+
+      switch bannerType {
+
+      case .main:
+        self.presenter?.presentMainBannerList(bannerList: bannerList)
+        
+      case .bar:
+        self.presenter?.presentBarBannerList(bannerList: bannerList)
+      }
+
+    }
+  }
+
+  func fetchVerifiedStore() {
+    Task {
+      guard let storeList = await self.worker?.fetchVerifiedStore() else {
+        // error
+        return
+      }
+      self.presenter?.presentStoreList(storeList: storeList)
     }
   }
 

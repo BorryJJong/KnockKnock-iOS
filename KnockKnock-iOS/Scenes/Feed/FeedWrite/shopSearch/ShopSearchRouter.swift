@@ -67,12 +67,14 @@ final class ShopSearchRouter: ShopSearchRouterProtocol {
     content: [String],
     districtsType: DistrictsType
   ) {
+
     guard let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
       districtSelectDelegate: self.districtSelectDelegate,
-      districtsType: districtsType
+      districtsType: districtsType,
+      districtsContent: content,
+      bottomSheetSize: .large
     ) as? BottomSheetViewController else { return }
-
-    bottomSheetViewController.setBottomSheetContents(contents: content, bottomSheetType: .large)
+    
     bottomSheetViewController.modalPresentationStyle = .overFullScreen
 
     if let sourceView = source as? UIViewController {

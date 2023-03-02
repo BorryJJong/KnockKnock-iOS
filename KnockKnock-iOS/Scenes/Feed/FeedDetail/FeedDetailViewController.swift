@@ -19,6 +19,7 @@ protocol FeedDetailViewProtocol: AnyObject {
   func fetchLikeList(like: [Like.Info])
   func fetchLikeStatus(isToggle: Bool)
   func deleteComment()
+  func setLoginStatus(isLoggedIn: Bool)
 }
 
 final class FeedDetailViewController: BaseViewController<FeedDetailView> {
@@ -31,28 +32,31 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   var commentId: Int?
   var allCommentsCount: Int = 0
 
-  var feedDetail: FeedDetail?
-  var visibleComments: [Comment] = []
+  private var feedDetail: FeedDetail?
+  private var visibleComments: [Comment] = []
+  private var isLoggedIn: Bool = false
 
-  var like: [Like.Info] = []
+  private var like: [Like.Info] = []
 
   // MARK: - Life Cycles
   
   override func viewDidLoad() {
     super.viewDidLoad()
+
     LoadingIndicator.showLoading()
-    
+
+    self.fetchData()
+    self.interactor?.checkLoginStatus()
     self.setNavigationBar()
     self.setupConfigure()
-    self.fetchData()
   }
   
   // MARK: - Configure
   
   private func fetchData() {
+    self.interactor?.fetchAllComments(feedId: feedId)
     self.interactor?.getFeedDeatil(feedId: feedId)
     self.interactor?.fetchLikeList(feedId: feedId)
-    self.interactor?.fetchAllComments(feedId: feedId)
   }
   
   override func setupConfigure() {
@@ -79,11 +83,19 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     }
 
     self.containerView.registButton.do {
-      $0.addTarget(self, action: #selector(self.registButtonDidTap(_:)), for: .touchUpInside)
+      $0.addTarget(
+        self,
+        action: #selector(self.registButtonDidTap(_:)),
+        for: .touchUpInside
+      )
     }
 
     self.containerView.likeButton.do {
-      $0.addTarget(self, action: #selector(self.likeButtonDidTap(_:)), for: .touchUpInside)
+      $0.addTarget(
+        self,
+        action: #selector(self.likeButtonDidTap(_:)),
+        for: .touchUpInside
+      )
     }
 
     self.addKeyboardNotification()
@@ -98,7 +110,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       target: self,
       action: #selector(backButtonDidTap(_:))
     )
-    
+
     let moreButton = UIBarButtonItem(
       image: KKDS.Image.ic_more_20_gr,
       style: .plain,
@@ -113,66 +125,90 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     self.navigationItem.rightBarButtonItem = moreButton
     self.navigationController?.navigationBar.backgroundColor = .white
     self.navigationController?.navigationBar.tintColor = .black
-    self.changeStatusBarBgColor(bgColor: .white)
+    self.changeStatusBarBgColor(bgColor: .clear)
   }
   
   // MARK: - Button Actions
   
-  @objc private func backButtonDidTap(_ sender: UIButton) {
-    self.navigationController?.popViewController(animated: true)
+  @objc
+  private func backButtonDidTap(_ sender: UIButton) {
+    self.interactor?.navigateToFeedList()
   }
   
-  @objc private func moreButtonDidTap(_ sender: UIButton) {
+  @objc
+  private func moreButtonDidTap(_ sender: UIButton) {
 
-    guard let isMyPost = self.feedDetail?.feed?.isWriter,
-          let feedId = self.feedDetail?.feed?.id else { return }
+    guard let feedDetail = self.feedDetail,
+          let isMyPost = feedDetail.feed?.isWriter,
+          let feedId = feedDetail.feed?.id else { return }
 
+    let deleteAction: (() -> Void)? = { self.interactor?.requestDelete(feedId: feedId) }
+    let hideAcion: (() -> Void)?  = { self.interactor?.requestHide(feedId: feedId) }
+    let editAction: (() -> Void)?  = { self.interactor?.navigateToFeedEdit(feedId: feedId) }
+    let reportAction: (() -> Void)?  = { self.interactor?.presentReportView(feedId: feedId) }
+
+    var options: [BottomSheetOption] = []
+
+    if isMyPost {
+      options = [
+        .postDelete(deleteAction),
+        .postEdit(editAction),
+        .postShare
+      ]
+    } else {
+      options = [
+        .postHide(hideAcion),
+        .postReport(reportAction),
+        .postShare
+      ]
+    }
     self.interactor?.presentBottomSheetView(
-      isMyPost: isMyPost,
-      deleteAction: {
-        self.interactor?.requestDelete(feedId: feedId)
-      },
-      hideAction: {
-        self.interactor?.requestHide(feedId: feedId)
-      },
-      editAction: {
-        self.interactor?.navigateToFeedEdit(feedId: feedId)
-      }
+      options: options,
+      feedData: feedDetail
     )
   }
   
-  @objc private func replyMoreButtonDidTap(_ sender: UIButton) {
+  @objc
+  private func replyMoreButtonDidTap(_ sender: UIButton) {
     self.interactor?.toggleVisibleStatus(commentId: sender.tag)
   }
   
-  @objc private func registButtonDidTap(_ sender: UIButton) {
-    if let content = self.containerView.commentTextView.text {
-      self.interactor?.requestAddComment(
-        comment: AddCommentDTO(
-          postId: self.feedId,
-          content: content,
-          commentId: self.commentId
-        )
+  @objc
+  private func registButtonDidTap(_ sender: UIButton) {
+    guard let content = self.containerView.commentTextView.text else { return }
+
+    self.interactor?.requestAddComment(
+      comment: AddCommentDTO(
+        postId: self.feedId,
+        content: content,
+        commentId: self.commentId
       )
-    }
-    self.containerView.commentTextView.text = ""
-    self.containerView.setPlaceholder()
+    )
+    self.containerView.commentTextView.text = nil
     self.commentId = nil
+
+    DispatchQueue.main.async {
+      self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
+    }
   }
   
-  @objc private func replyWriteButtonDidTap(_ sender: UIButton) {
+  @objc
+  private func replyWriteButtonDidTap(_ sender: UIButton) {
     self.commentId = sender.tag
     self.containerView.commentTextView.becomeFirstResponder()
   }
 
-  @objc func likeButtonDidTap(_ sender: UIButton) {
+  @objc
+  private func likeButtonDidTap(_ sender: UIButton) {
     self.interactor?.requestLike(feedId: self.feedId)
   }
 
   private func commentDeleteButtonDidTap(commentId: Int) {
+
     self.showAlert(
       content: "댓글을 삭제하시겠습니까?",
       confirmActionCompletion: {
+
         self.interactor?.requestDeleteComment(
           feedId: self.feedId,
           commentId: commentId
@@ -261,15 +297,30 @@ extension FeedDetailViewController: FeedDetailViewProtocol {
   func getFeedDetail(feedDetail: FeedDetail) {
     self.feedDetail = feedDetail
 
-    DispatchQueue.main.async {
-      if let feed = self.feedDetail?.feed {
+    if let feed = self.feedDetail?.feed {
+      self.feedId = feed.id
+
+      DispatchQueue.main.async {
         self.containerView.navigationView.bind(feed: feed)
-        self.feedId = feed.id
         self.containerView.bind(isLike: feed.isLike)
       }
+    }
 
-      self.containerView.postCollectionView.reloadData()
-      self.containerView.layoutIfNeeded()
+    DispatchQueue.main.async {
+      UIView.performWithoutAnimation {
+        self.containerView.postCollectionView.reloadSections(
+          IndexSet(integer: FeedDetailSection.content.rawValue)
+        )
+      }
+      self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
+    }
+  }
+
+  func setLoginStatus(isLoggedIn: Bool) {
+    self.isLoggedIn = isLoggedIn
+
+    DispatchQueue.main.async {
+      self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
     }
   }
   
@@ -384,7 +435,10 @@ extension FeedDetailViewController: UICollectionViewDataSource {
       )
       let commentId = self.visibleComments[indexPath.item].data.id
       
-      cell.bind(comment: self.visibleComments[indexPath.item])
+      cell.bind(
+        comment: self.visibleComments[indexPath.item],
+        isLoggedIn: self.isLoggedIn
+      )
       
       cell.replyMoreButton.do {
         $0.tag = commentId
@@ -505,7 +559,10 @@ extension FeedDetailViewController: UICollectionViewDataSource {
     }
   }
   
-  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    didSelectItemAt indexPath: IndexPath
+  ) {
     if indexPath.section == FeedDetailSection.like.rawValue {
       if indexPath.item == self.like.count {
         self.interactor?.navigateToLikeDetail()
@@ -530,11 +587,15 @@ extension FeedDetailViewController: UICollectionViewDelegateFlowLayout {
 
 extension FeedDetailViewController: UITextViewDelegate {
   func textViewDidBeginEditing(_ textView: UITextView) {
-    self.containerView.setPlaceholder()
+    DispatchQueue.main.async {
+      self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
+    }
   }
   
   func textViewDidEndEditing(_ textView: UITextView) {
-    self.containerView.setPlaceholder()
+    DispatchQueue.main.async {
+      self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
+    }
   }
   
   func textViewDidChange(_ textView: UITextView) {

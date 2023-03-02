@@ -55,12 +55,17 @@ final class ChallengeDetailRouter: ChallengeDetailRouterProtocol {
   }
 
   func presentToFeedWrite(challengeId: Int) {
-    let feedWriteViewController = UINavigationController(
-      rootViewController: FeedWriteRouter.createFeedWrite(challengeId: challengeId)
-    )
-    feedWriteViewController.modalPresentationStyle = .fullScreen
 
     guard let sourceView = self.view as? UIViewController else { return }
+
+    let feedWriteViewController = UINavigationController(
+      rootViewController: FeedWriteRouter.createFeedWrite(
+        challengeId: challengeId,
+        rootView: sourceView.navigationController
+      )
+    )
+
+    feedWriteViewController.modalPresentationStyle = .fullScreen
 
     sourceView.navigationController?.present(feedWriteViewController, animated: true)
 

@@ -16,26 +16,36 @@ protocol FeedListInteractorProtocol {
   func requestDelete(feedId: Int)
   func requestHide(feedId: Int)
   func requestLike(feedId: Int)
+  func requestReport(feedId: Int)
 
   func presentBottomSheetView(
-    isMyPost: Bool,
-    deleteAction: (() -> Void)?,
-    hideAction: (() -> Void)?,
-    editAction: (() -> Void)?,
+    options: [BottomSheetOption],
     feedData: FeedList.Post
   )
+  func presentReportView(feedId: Int)
   func navigateToFeedEdit(feedId: Int)
   func navigateToFeedMain()
   func navigateToFeedDetail(feedId: Int)
   func navigateToCommentView(feedId: Int)
 }
 
+extension FeedListInteractor: ReportDelegate {
+  func setReportType(reportType: ReportType) {
+    self.reportType = reportType
+  }
+}
+
 final class FeedListInteractor: FeedListInteractorProtocol {
+
+  // MARK: - Properties
+
   var presenter: FeedListPresenterProtocol?
   var worker: FeedListWorkerProtocol?
   var router: FeedListRouterProtocol?
   
-  var feedListData: FeedList?
+  private var feedListData: FeedList?
+
+  var reportType: ReportType?
   
   // MARK: - Initialize
   
@@ -108,50 +118,52 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       }
     )
   }
-  
+
   /// 피드 좋아요
   ///
   /// - Parameters:
   ///   - feedId: 피드 아이디
   func requestLike(feedId: Int) {
-    
-    // 비로그인 유저인 경우 로그인 화면으로 이동
-    guard self.worker?.checkTokenExisted() ?? false else {
-      self.router?.navigateToLoginView()
-      return
-    }
-    
-    guard let feedList = self.feedListData?.feeds else { return }
-    guard !feedList.isEmpty else { return }
-    
-    // 좋아요 누른 피드가 현재 존재하는지 피드인지 체크
-    guard feedList.contains(where: { feedId == $0.id }) else { return }
-    
-    // 좋아요 이벤트 실행한 피드의 좋아요 여부
-    guard let isLike = self.worker?.checkCurrentLikeState(
-      feedList: feedList,
-      feedId: feedId
-    ) else {
-      return
-    }
-    
-    self.worker?.requestLike(
-      isLike: isLike,
-      feedId: feedId,
-      completionHandler: { [weak self] isSuccess in
-        guard let self = self else { return }
-        guard isSuccess else {
-          // error handle
-          return
-        }
-        
-        self.toggleLike(feedId: feedId)
+
+    Task {
+      
+      // 비로그인 유저인 경우 로그인 화면으로 이동
+      guard await self.checkTokenIsValidated() else {
+        await MainActor.run { self.router?.navigateToLoginView() }
+        return
       }
-    )
+
+      guard let feedList = self.feedListData?.feeds else { return }
+      guard !feedList.isEmpty else { return }
+
+      // 좋아요 누른 피드가 현재 존재하는지 피드인지 체크
+      guard feedList.contains(where: { feedId == $0.id }) else { return }
+
+      // 좋아요 이벤트 실행한 피드의 좋아요 여부
+      guard let isLike = self.worker?.checkCurrentLikeState(
+        feedList: feedList,
+        feedId: feedId
+      ) else {
+        return
+      }
+
+      self.worker?.requestLike(
+        isLike: isLike,
+        feedId: feedId,
+        completionHandler: { [weak self] isSuccess in
+          guard let self = self else { return }
+          guard isSuccess else {
+            // error handle
+            return
+          }
+
+          self.toggleLike(feedId: feedId)
+        }
+      )
+    }
   }
 
   /// 피드 숨기기
-  ///
   func requestHide(feedId: Int) {
 
     guard let feedList = self.feedListData else { return }
@@ -180,6 +192,46 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       }
     )
   }
+
+  /// 피드 신고하기
+  func requestReport(
+    feedId: Int
+  ) {
+
+    guard let feedList = self.feedListData else { return }
+    guard !feedList.feeds.isEmpty else { return }
+
+    guard let reportType = self.reportType else { return }
+
+    self.worker?.requestReportFeed(
+      feedId: feedId,
+      reportType: reportType,
+      completionHandler: { [weak self] isSuccess in
+
+        guard let self = self else { return }
+
+        if isSuccess {
+          // 피드 리스트 내 해당 게시글 모두 숨김(삭제)처리
+          guard let feedListData = self.worker?.removePostInFeedList(
+            feeds: feedList,
+            id: feedId
+          ) else { return }
+
+          self.showAlertView(
+            message: "게시글이 신고 되었습니다.",
+            completion: nil
+          )
+          self.presenter?.presentFetchFeedList(feedList: feedListData)
+
+        } else {
+          self.showAlertView(
+            message: "게시글 신고에 실패하였습니다.",
+            completion: nil
+          )
+        }
+      }
+    )
+  }
   
   // Routing
   
@@ -198,20 +250,46 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   func navigateToFeedMain() {
     self.router?.navigateToFeedMain()
   }
+
+  func presentReportView(feedId: Int) {
+    self.router?.presentReportView(
+      action: {
+        self.requestReport(feedId: feedId)
+      },
+      reportDelegate: self
+    )
+  }
   
   func presentBottomSheetView(
-    isMyPost: Bool,
-    deleteAction: (() -> Void)?,
-    hideAction: (() -> Void)?,
-    editAction: (() -> Void)?,
+    options: [BottomSheetOption],
     feedData: FeedList.Post
   ) {
-    self.router?.presentBottomSheetView(
-      isMyPost: isMyPost,
-      deleteAction: deleteAction,
-      hideAction: hideAction,
-      editAction: editAction,
-      feedData: feedData.toShare()
+    Task {
+
+      if await self.checkTokenIsValidated() {
+
+        await MainActor.run {
+          self.router?.presentBottomSheetView(
+            options: options,
+            feedData: feedData.toShare()
+          )
+        }
+      } else {
+        
+        await MainActor.run {
+          self.router?.navigateToLoginView()
+        }
+      }
+    }
+  }
+
+  func showAlertView(
+    message: String,
+    completion: (() -> Void)?
+  ) {
+    self.router?.showAlertView(
+      message: message,
+      completion: completion
     )
   }
 }
@@ -219,7 +297,13 @@ final class FeedListInteractor: FeedListInteractorProtocol {
 // MARK: - Inner Actions
 
 extension FeedListInteractor {
-  
+
+  private func checkTokenIsValidated() async -> Bool {
+    guard let isValidate = await self.worker?.checkTokenIsValidated() else { return false }
+
+    return isValidate
+  }
+
   /// 피드 상세에서 발생한 좋아요 이벤트 반영
   @objc
   private func likeNotificationEvent(_ notification: Notification) {
@@ -327,31 +411,31 @@ extension FeedListInteractor {
       contents: contents
     )
   }
-  
+
   /// 좋아요 상태 toggle
   ///
   /// - Parameters:
   ///  - feedId: 피드 아이디
   private func toggleLike(feedId: Int) {
-    
+
     guard let feedListData = self.feedListData else { return }
     guard !feedListData.feeds.isEmpty else { return }
-    
+
     guard let convertFeedList = self.worker?.convertLikeFeed(
       feeds: feedListData,
       id: feedId
     ) else {
       return
     }
-    
+
     self.feedListData = convertFeedList
-    
+
     let updatedSections: [IndexPath] = self.worker?.changedSections(
       feeds: feedListData.feeds,
       id: feedId
     )
       .map { IndexPath(item: 0, section: $0) } ?? []
-    
+
     self.presenter?.presentUpdateFeedList(
       feedList: convertFeedList,
       sections: updatedSections
@@ -396,9 +480,9 @@ extension FeedListInteractor {
 
     self.presenter?.presentFetchFeedList(feedList: feedListData)
   }
-  
+
   // Notification Center
-  
+
   private func setNotification() {
     NotificationCenter.default.addObserver(
       forName: .feedListRefreshAfterSigned,
@@ -407,7 +491,7 @@ extension FeedListInteractor {
     ) { _ in
       self.presenter?.reloadFeedList()
     }
-    
+
     NotificationCenter.default.addObserver(
       forName: .feedListRefreshAfterUnsigned,
       object: nil,
@@ -415,7 +499,7 @@ extension FeedListInteractor {
     ) { _ in
       self.presenter?.reloadFeedList()
     }
-    
+
     NotificationCenter.default.addObserver(
       self,
       selector: #selector(self.likeNotificationEvent(_:)),

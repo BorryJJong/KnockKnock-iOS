@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/07/30.
 //
 
-import UIKit
+import Foundation
 
 protocol FeedDetailInteractorProtocol {
   var worker: FeedDetailWorkerProtocol? { get set }
@@ -15,9 +15,10 @@ protocol FeedDetailInteractorProtocol {
   func getFeedDeatil(feedId: Int)
   func requestDelete(feedId: Int)
   func requestHide(feedId: Int)
-
+  func requestReport(feedId: Int)
+  
   func fetchAllComments(feedId: Int)
-
+  
   func fetchVisibleComments(comments: [Comment])
   func requestAddComment(comment: AddCommentDTO)
   func toggleVisibleStatus(commentId: Int)
@@ -26,14 +27,21 @@ protocol FeedDetailInteractorProtocol {
   func requestLike(feedId: Int)
   func fetchLikeList(feedId: Int)
   
+  func presentReportView(feedId: Int)
   func navigateToLikeDetail()
+  func navigateToFeedList()
+  func checkLoginStatus()
   func presentBottomSheetView(
-    isMyPost: Bool,
-    deleteAction: (() -> Void)?,
-    hideAction: (() -> Void)?,
-    editAction: (() -> Void)?
+    options: [BottomSheetOption],
+    feedData: FeedDetail
   )
   func navigateToFeedEdit(feedId: Int)
+}
+
+extension FeedDetailInteractor: ReportDelegate {
+  func setReportType(reportType: ReportType) {
+    self.reportType = reportType
+  }
 }
 
 final class FeedDetailInteractor: FeedDetailInteractorProtocol {
@@ -42,22 +50,34 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   var router: FeedDetailRouterProtocol?
   
   private var likeList: [Like.Info] = []
-
+  
   /// 서버에서 받아온 전체 댓글 array
   private var comments: [Comment] = []
-
+  
   /// view에서 보여지는 댓글 array(open 상태 댓글만)
   private var visibleComments: [Comment] = []
 
+  /// 신고 타입
+  var reportType: ReportType?
+  
   private var feedDetail: FeedDetail?
-
+  
   // MARK: - Initialize
-
+  
   init() {
     self.setNotification()
   }
-
+  
   // MARK: - Business logic
+
+  /// 로그인 상태 체크
+  func checkLoginStatus() {
+    Task {
+      self.presenter?.presentLoginStatus(
+        isLoggedIn: await self.checkTokenIsValidated()
+      )
+    }
+  }
 
   func getFeedDeatil(feedId: Int) {
     self.worker?.getFeedDetail(
@@ -65,7 +85,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       completionHandler: { [weak self] feedDetail in
         
         guard let self = self else { return }
-
+        
         self.feedDetail = feedDetail
         self.presenter?.presentFeedDetail(feedDetail: feedDetail)
       }
@@ -73,56 +93,58 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   }
   
   func requestLike(feedId: Int) {
-    
-    // 비로그인 유저인 경우 로그인 화면으로 이동
-    guard self.worker?.checkTokenExisted() ?? false else {
-      self.router?.navigateToLoginView()
-      return
-    }
 
-    // 좋아요 이벤트 실행한 피드의 좋아요 여부
-    guard let isLike = self.feedDetail?.feed?.isLike else { return }
-
-    self.worker?.requestLike(
-      isLike: isLike,
-      feedId: feedId,
-      completionHandler: { [weak self] isSuccess in
-
-        guard let self = self else { return }
-
-        guard isSuccess else {
-          // error handle
-          return
-        }
-        self.feedDetail = self.worker?.toggleLike(feedDetail: self.feedDetail)
-
-        self.presenter?.presentLikeStatus(isToggle: isSuccess)
-        self.fetchLikeList(feedId: feedId)
+    Task {
+      // 비로그인 유저인 경우 로그인 화면으로 이동
+      guard await self.checkTokenIsValidated() else {
+        await MainActor.run { self.router?.navigateToLoginView() }
+        return
       }
-    )
+
+      // 좋아요 이벤트 실행한 피드의 좋아요 여부
+      guard let isLike = self.feedDetail?.feed?.isLike else { return }
+
+      self.worker?.requestLike(
+        isLike: isLike,
+        feedId: feedId,
+        completionHandler: { [weak self] isSuccess in
+
+          guard let self = self else { return }
+
+          guard isSuccess else {
+            // error handle
+            return
+          }
+          self.feedDetail = self.worker?.toggleLike(feedDetail: self.feedDetail)
+
+          self.presenter?.presentLikeStatus(isToggle: isSuccess)
+          self.fetchLikeList(feedId: feedId)
+        }
+      )
+    }
   }
   
   func fetchLikeList(feedId: Int) {
     self.worker?.fetchLikeList(
       feedId: feedId,
       completionHandler: { [weak self] likeList in
-
+        
         guard let self = self else { return }
-
+        
         self.likeList = likeList
         self.presenter?.presentLikeList(like: likeList)
       }
     )
   }
-
+  
   /// 댓글 목록 조회 api로부터 받은 전체 댓글 fetch
   func fetchAllComments(feedId: Int) {
     self.worker?.getAllComments(
       feedId: feedId,
       completionHandler: { [weak self] comments in
-
+        
         guard let self = self else { return }
-
+        
         self.comments = comments
         self.fetchAllCommentsCount()
         self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
@@ -130,7 +152,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       }
     )
   }
-
+  
   /// 답글 펼침/숨김 상태 toggle
   func toggleVisibleStatus(commentId: Int) {
     guard let index = self.comments.firstIndex(where: {
@@ -138,15 +160,15 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     }) else { return }
     
     self.comments[index].isOpen.toggle()
-
+    
     self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
     self.presenter?.presentVisibleComments(comments: self.visibleComments)
   }
-
+  
   /// 답글을 포함한 모든 댓글의 수 (헤더에 표기)
   func fetchAllCommentsCount() {
     var count = self.comments.filter { !$0.data.isDeleted }.count
-
+    
     self.comments.forEach { comment in
       count += comment.data.reply
         .map {
@@ -162,11 +184,12 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   func fetchVisibleComments(comments: [Comment]) {
     self.presenter?.presentVisibleComments(comments: comments)
   }
-
+  
   /// 댓글 등록
   func requestAddComment(
     comment: AddCommentDTO
   ) {
+
     self.worker?.requestAddComment(
       comment: comment,
       completionHandler: { [weak self] isSuccess in
@@ -185,6 +208,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
         }
       }
     )
+
   }
 
   /// 댓글 삭제
@@ -192,6 +216,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.worker?.requestDeleteComment(
       feedId: feedId,
       commentId: commentId,
+      comments: self.comments,
       completionHandler: { [weak self] isSuccess in
 
         guard let self = self else { return }
@@ -200,7 +225,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
           if let index = self.comments.firstIndex(where: { $0.data.id == commentId }) {
             self.comments[index].data.isDeleted = true
           }
-          
+
           for commentIndex in 0..<self.comments.count {
             if let replyIndex = self.comments[commentIndex].data.reply?.firstIndex(where: {
               $0.id == commentId
@@ -214,7 +239,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
           self.fetchAllCommentsCount()
 
         } else {
-          
+
           self.showAlertView(
             message: "댓글 삭제에 실패하였습니다.",
             confirmAction: nil
@@ -277,8 +302,39 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     )
   }
 
+  /// 피드 신고하기
+  func requestReport(
+    feedId: Int
+  ) {
+
+    guard let reportType = self.reportType else { return }
+
+    self.worker?.requestReportFeed(
+      feedId: feedId,
+      reportType: reportType,
+      completionHandler: { [weak self] isSuccess in
+
+        guard let self = self else { return }
+
+        if isSuccess {
+          self.showAlertView(
+            message: "게시글이 신고 되었습니다.",
+            confirmAction: {
+              self.navigateToFeedList()
+            }
+          )
+        } else {
+          self.showAlertView(
+            message: "게시글 신고에 실패하였습니다.",
+            confirmAction: nil
+          )
+        }
+      }
+    )
+  }
+
   // Routing
-  
+
   func navigateToLikeDetail() {
     self.router?.navigateToLikeDetail(like: self.likeList)
   }
@@ -290,19 +346,38 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   func navigateToFeedEdit(feedId: Int) {
     self.router?.navigateToFeedEdit(feedId: feedId)
   }
+  
+  func presentReportView(feedId: Int) {
+    self.router?.presentReportView(
+      action: {
+        self.requestReport(feedId: feedId)
+      },
+      reportDelegate: self
+    )
+  }
 
   func presentBottomSheetView(
-    isMyPost: Bool,
-    deleteAction: (() -> Void)?,
-    hideAction: (() -> Void)?,
-    editAction: (() -> Void)?
+    options: [BottomSheetOption],
+    feedData: FeedDetail
   ) {
-    self.router?.presentBottomSheetView(
-      isMyPost: isMyPost,
-      deleteAction: deleteAction,
-      hideAction: hideAction,
-      editAction: editAction
-    )
+
+    Task {
+
+      if await self.checkTokenIsValidated() {
+
+        await MainActor.run {
+          self.router?.presentBottomSheetView(
+            options: options,
+            feedData: feedData.toShare()
+          )
+        }
+      } else {
+
+        await MainActor.run {
+          self.router?.navigateToLoginView()
+        }
+      }
+    }
   }
 
   func showAlertView(
@@ -317,14 +392,14 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
 }
 
 extension FeedDetailInteractor {
-
+  
   /// 수정 된 피드 refetch
   @objc
   private func editNotificationEvent(_ notification: Notification) {
     guard let feedId = notification.object as? Int else { return }
     self.getFeedDeatil(feedId: feedId)
   }
-
+  
   private func setNotification() {
     NotificationCenter.default.addObserver(
       self,
@@ -332,5 +407,11 @@ extension FeedDetailInteractor {
       name: .feedDetailRefreshAfterEdited,
       object: nil
     )
+  }
+  
+  private func checkTokenIsValidated() async -> Bool {
+    guard let isValidate = await self.worker?.checkTokenIsValidated() else { return false }
+    
+    return isValidate
   }
 }

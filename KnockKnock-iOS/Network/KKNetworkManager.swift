@@ -50,6 +50,24 @@ final class KKNetworkManager {
       }
   }
 
+  func asyncRequest<T: Decodable>(
+    object: T.Type,
+    router: KKRouter
+  ) async throws -> T {
+
+   let response = session
+    .request(router)
+    .validate(statusCode: 200..<500)
+    .serializingDecodable(object)
+
+    switch await response.result {
+    case .success(let value):
+      return value
+    case .failure(let err):
+      throw err
+    }
+  }
+
   func upload<T>(
     object: T.Type,
     router: KKRouter,

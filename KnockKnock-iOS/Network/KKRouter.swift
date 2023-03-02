@@ -8,7 +8,6 @@
 import Foundation
 
 import Alamofire
-import UIKit
 
 enum KKRouter: URLRequestConvertible {
 
@@ -27,6 +26,10 @@ enum KKRouter: URLRequestConvertible {
 
   // Home
   case getHotPost(challengeId: Int)
+  case getHomeEvent
+  case getBanner(bannerType: String)
+  case getHomeVerificationShop
+  case getEvent(eventTap: String)
 
   // Account
   case postSocialLogin(socialUuid: String, socialType: String)
@@ -49,6 +52,7 @@ enum KKRouter: URLRequestConvertible {
   case getFeedBlogPost(page: Int, take: Int, feedId: Int, challengeId: Int)
   case getFeed(id: Int)
   case postHideBlogPost(id: Int)
+  case postReportBlogPost(id: Int, reportType: String)
   case deleteFeed(id: Int)
 
   // Feed Edit
@@ -67,7 +71,8 @@ enum KKRouter: URLRequestConvertible {
   // MY
   case getUsersDetail
   case getDuplicateNickname(nickname: String)
-  case putUsers(nickname: String?, image: UIImage?)
+  case putUsers(nickname: String?, image: Data?)
+  case getMyPage
 
   // MARK: - HTTP Method
 
@@ -75,7 +80,11 @@ enum KKRouter: URLRequestConvertible {
     switch self {
 
       // Home
-    case .getHotPost:
+    case .getHotPost,
+         .getHomeEvent,
+         .getBanner,
+         .getHomeVerificationShop,
+         .getEvent:
       return .get
 
     // Account
@@ -107,7 +116,8 @@ enum KKRouter: URLRequestConvertible {
         .getFeed:
       return .get
 
-    case .postHideBlogPost:
+    case .postHideBlogPost,
+         .postReportBlogPost:
       return .post
 
     case .deleteFeed:
@@ -139,7 +149,8 @@ enum KKRouter: URLRequestConvertible {
 
       // My
     case .getUsersDetail,
-        .getDuplicateNickname:
+         .getMyPage,
+         .getDuplicateNickname:
       return .get
 
     case .putUsers:
@@ -159,7 +170,11 @@ enum KKRouter: URLRequestConvertible {
     case .deleteWithdraw: return "users"
 
       // Home
-    case .getHotPost: return "home/hot-post"
+    case .getHotPost: return "hot-post"
+    case .getHomeEvent: return "home-event"
+    case .getBanner: return "banner"
+    case .getHomeVerificationShop: return "home-verification-shop"
+    case .getEvent: return "event"
 
     // Challenge
     case .getChallenges: return "challenges"
@@ -177,6 +192,7 @@ enum KKRouter: URLRequestConvertible {
     case .getFeed(let id): return "feed/\(id)"
     case .deleteFeed(let id): return "feed/\(id)"
     case .postHideBlogPost(let id): return "users/hide/blog-post/\(id)"
+    case .postReportBlogPost(let id, _): return "users/report/blog-post/\(id)"
 
       // Feed Edit
     case .putFeed(let id, _): return "feed/\(id)"
@@ -194,6 +210,7 @@ enum KKRouter: URLRequestConvertible {
       // My
     case .getUsersDetail: return "users/detail"
     case .getDuplicateNickname(let nickname): return "users/duplicate-nickname/\(nickname)"
+    case .getMyPage: return "my-page"
     case .putUsers: return "users"
 
     }
@@ -207,6 +224,17 @@ enum KKRouter: URLRequestConvertible {
       // Home
     case let .getHotPost(challengeId):
       return [ "challengeId": challengeId ]
+
+    case let .getBanner(bannerType):
+      return [ "bannerType": bannerType ]
+
+    case .getHomeEvent,
+         .getHomeVerificationShop,
+         .getHomeEvent:
+      return nil
+
+    case let .getEvent(eventTap):
+      return [ "eventTap": eventTap ]
 
       // Account
     case let .postSocialLogin(socialUuid, socialType):
@@ -256,6 +284,9 @@ enum KKRouter: URLRequestConvertible {
         "challengeId": challengeId
       ]
 
+    case let .postReportBlogPost(_, reportType):
+      return [ "reportType": reportType ]
+
     case .getFeed,
          .postHideBlogPost,
          .deleteFeed:
@@ -280,7 +311,6 @@ enum KKRouter: URLRequestConvertible {
         params["locationY"] = locationY
       }
 
-
       return params
 
       // Like
@@ -299,6 +329,7 @@ enum KKRouter: URLRequestConvertible {
 
       // My
     case .getUsersDetail,
+         .getMyPage,
          .getDuplicateNickname,
          .putUsers:
       return nil
@@ -321,7 +352,7 @@ enum KKRouter: URLRequestConvertible {
       let scale = feedWriteForm.scale.data(using: .utf8) ?? Data()
       let promotions = feedWriteForm.promotions.data(using: .utf8) ?? Data()
       let challenges = feedWriteForm.challenges.data(using: .utf8) ?? Data()
-      let images = feedWriteForm.images.map { $0.pngData() ?? Data() }
+      let images = feedWriteForm.images
 
       multipartFormData.append(content, withName: "content")
       if let storeName = storeName,
@@ -336,7 +367,12 @@ enum KKRouter: URLRequestConvertible {
       multipartFormData.append(challenges, withName: "challenges")
 
       images.forEach {
-        multipartFormData.append($0, withName: "images", fileName: "\($0).png", mimeType: "image/png")
+        multipartFormData.append(
+          $0 ?? Data(),
+          withName: "images",
+          fileName: "\($0).png",
+          mimeType: "image/png"
+        )
       }
 
       return multipartFormData
@@ -348,7 +384,7 @@ enum KKRouter: URLRequestConvertible {
       let socialUuid = userInfo.socialUuid.data(using: .utf8) ?? Data()
       let socialType = userInfo.socialType.data(using: .utf8) ?? Data()
       let nickname = userInfo.nickname.data(using: .utf8) ?? Data()
-      let image = userInfo.image.pngData() ?? Data()
+      let image = userInfo.image ?? Data()
 
       multipartFormData.append(socialUuid, withName: "socialUuid")
       multipartFormData.append(socialType, withName: "socialType")
@@ -366,12 +402,11 @@ enum KKRouter: URLRequestConvertible {
         multipartFormData.append(nicknameData, withName: "nickname")
       }
 
-      if let image = image,
-         let imageData = image.pngData() {
+      if let image = image {
         multipartFormData.append(
-          imageData,
+          image,
           withName: "image",
-          fileName: "\(imageData).png",
+          fileName: "\(image).png",
           mimeType: "image/png"
         )
       }
@@ -431,6 +466,7 @@ enum KKRouter: URLRequestConvertible {
       case .postFeed,
            .postSignUp,
            .putUsers:
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
 
       default:

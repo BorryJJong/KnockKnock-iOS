@@ -28,6 +28,17 @@ final class HomeMainCell: BaseCollectionViewCell {
     $0.image = KKDS.Image.ic_bg_gradient_bottom_bk
   }
 
+  // MARK: - Bind
+
+  func bind(image: String) {
+    self.mainImageView.setImageFromStringUrl(
+      stringUrl: image,
+      defaultImage: UIImage()
+    )
+  }
+
+  // MARK: - Constraints
+
   override func setupConstraints() {
     [self.mainImageView, self.topGradientImageView, self.bottomGradientImageView].addSubViews(self.contentView)
 

@@ -33,11 +33,14 @@ final class MyViewController: BaseViewController<MyView> {
 
   var isSignedIn: Bool = false {
     didSet {
-      if isSignedIn {
-        self.interactor?.fetchNickname()
+      DispatchQueue.main.async {
+
+        if self.isSignedIn {
+          self.interactor?.fetchNickname()
+        }
+        self.containerView.setSigninStatus(isSignedIn: self.isSignedIn)
+        self.containerView.myTableView.reloadData()
       }
-      self.containerView.setSigninStatus(isSignedIn: self.isSignedIn)
-      self.containerView.myTableView.reloadData()
     }
   }
 
@@ -61,7 +64,6 @@ final class MyViewController: BaseViewController<MyView> {
   }
 
   override func viewWillAppear(_ animated: Bool) {
-    self.interactor?.checkSignInStatus()
     self.tabBarController?.tabBar.isHidden = false
   }
 

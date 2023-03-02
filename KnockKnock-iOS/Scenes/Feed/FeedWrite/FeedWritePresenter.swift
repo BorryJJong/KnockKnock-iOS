@@ -13,7 +13,6 @@ protocol FeedWritePresenterProtocol: AnyObject {
   func presentSelectedPromotions(promotionList: [Promotion])
   func presentSelectedTags(tagList: [ChallengeTitle])
   func presentShopAddress(address: AddressResponse.Documents)
-  func presentAlertView(isDone: Bool)
 }
 
 final class FeedWritePresenter: FeedWritePresenterProtocol {
@@ -49,7 +48,4 @@ final class FeedWritePresenter: FeedWritePresenterProtocol {
     self.view?.fetchTag(tag: content)
   }
 
-  func presentAlertView(isDone: Bool) {
-    self.view?.showAlertView(isDone: isDone)
-  }
 }

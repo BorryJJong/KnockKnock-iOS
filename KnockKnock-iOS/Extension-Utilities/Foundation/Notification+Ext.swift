@@ -25,6 +25,9 @@ extension Notification.Name {
   static let feedListRefreshAfterEdited = Notification.Name("feedListRefreshAfterEdited")
   static let feedDetailRefreshAfterEdited = Notification.Name("feedDetailRefreshAfterEdited")
 
+  static let feedListRefreshAfterWrite = Notification.Name("feedListRefreshAfterWrite")
+  static let feedMainRefreshAfterWrite = Notification.Name("feedMainRefreshAfterWrite")
+
   static let postLikeToggled = Notification.Name("postLikeToggled")
   static let pushFeedMain = Notification.Name("pushFeed")
 

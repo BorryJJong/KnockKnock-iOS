@@ -7,20 +7,6 @@
 
 import Foundation
 
-protocol BottomSheetInteractorProtocol {
-  var router: BottomSheetRouterProtocol? { get set }
-  var worker: BottomSheetWorkerProtocol? { get set }
-
-  func sharePost()
-
-  func passCityDataToShopSearch(city: String)
-  func passCountyDataToShopSearch(county: String)
-  func passChallengeSortType(sortType: ChallengeSortType)
-
-  func navigateToShopSearch()
-  func dismissView(actionType: BottomSheetOption)
-}
-
 final class BottomSheetInteractor: BottomSheetInteractorProtocol {
   
   weak var districtSelectDelegate: DistrictSelectDelegate?
@@ -28,11 +14,12 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
 
   var router: BottomSheetRouterProtocol?
   var worker: BottomSheetWorkerProtocol?
+  var presenter: BottomSheetPresenterProtocol?
 
-  var deleteAction: (() -> Void)?
-  var editAction: (() -> Void)?
-  var hideAction: (() -> Void)?
-
+  var options: [BottomSheetOption]?
+  var districtsType: DistrictsType?
+  var districtContent: [String]?
+  var bottomSheetSize: BottomSheetSize = .medium
   var feedData: FeedShare?
 
   // MARK: - Buisiness Logic
@@ -55,6 +42,23 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
     })
   }
 
+  func fetchBottomSheetOptions() {
+    if let districtContent = districtContent {
+      self.presenter?.presentDistrictContent(
+        content: districtContent,
+        districtsType: self.districtsType,
+        bottomSheetSize: self.bottomSheetSize
+      )
+    }
+
+    if let options = options {
+      self.presenter?.presentOptions(
+        options: options,
+        bottomSheetSize: self.bottomSheetSize
+      )
+    }
+  }
+
   // MARK: - Routing
 
   func passCityDataToShopSearch(city: String) {
@@ -69,26 +73,14 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
 
   func passChallengeSortType(sortType: ChallengeSortType) {
     self.challengeSortDelegate?.getSortType(sortType: sortType)
-    self.dismissView(actionType: .challengeNew)
+    self.dismissView(action: nil)
   }
 
   func navigateToShopSearch() {
     self.router?.navigateToShopSearch()
   }
 
-  func dismissView(actionType: BottomSheetOption) {
-    switch actionType {
-    case .postDelete:
-      self.router?.dismissView(action: self.deleteAction)
-
-    case .postHide:
-      self.router?.dismissView(action: self.hideAction)
-
-    case .postEdit:
-      self.router?.dismissView(action: self.editAction)
-      
-    default:
-      self.router?.dismissView(action: nil)
-    }
+  func dismissView(action: (() -> Void)?) {
+    self.router?.dismissView(action: action)
   }
 }

@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/06/26.
 //
 
-import UIKit
+import Foundation
 
 protocol FeedListWorkerProtocol {
   func fetchFeedList(
@@ -28,6 +28,11 @@ protocol FeedListWorkerProtocol {
     feedId: Int,
     completionHandler: @escaping (Bool) -> Void
   )
+  func requestReportFeed(
+    feedId: Int,
+    reportType: ReportType,
+    completionHandler: @escaping (Bool) -> Void
+  )
   func removePostInFeedList(
     feeds: FeedList,
     id: Int
@@ -39,7 +44,7 @@ protocol FeedListWorkerProtocol {
     contents: String
   ) -> FeedList
   
-  func checkTokenExisted() -> Bool
+  func checkTokenIsValidated() async -> Bool
   
   func checkCurrentLikeState(
     feedList: [FeedList.Post],
@@ -67,16 +72,16 @@ protocol FeedListWorkerProtocol {
 final class FeedListWorker: FeedListWorkerProtocol {
   typealias OnCompletionHandler = (Bool) -> Void
   
-  private let feedRepository: FeedRepositoryProtocol
+  private let feedListRepository: FeedListRepositoryProtocol
   private let likeRepository: LikeRepositoryProtocol
   private let userDataManager: UserDataManagerProtocol
   
   init(
-    feedRepository: FeedRepositoryProtocol,
+    feedListRepository: FeedListRepositoryProtocol,
     likeRepository: LikeRepositoryProtocol,
     userDataManager: UserDataManagerProtocol
   ) {
-    self.feedRepository = feedRepository
+    self.feedListRepository = feedListRepository
     self.likeRepository = likeRepository
     self.userDataManager = userDataManager
   }
@@ -86,7 +91,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
     feedId: Int,
     completionHandler: @escaping OnCompletionHandler
   ) {
-    self.feedRepository.requestDeleteFeed(
+    self.feedListRepository.requestDeleteFeed(
       feedId: feedId,
       completionHandler: { isSuccess in
         if isSuccess {
@@ -102,7 +107,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
     feedId: Int,
     completionHandler: @escaping (Bool) -> Void
   ) {
-    self.feedRepository.requestHidePost(
+    self.feedListRepository.requestHidePost(
       feedId: feedId,
       completionHandler: { isSuccess in
         if isSuccess {
@@ -166,8 +171,8 @@ final class FeedListWorker: FeedListWorkerProtocol {
   }
 
   /// 토큰 존재 여부 판별을 통해 로그인 된 회원 인지 판별
-  func checkTokenExisted() -> Bool {
-    return self.userDataManager.checkTokenIsExisted()
+  func checkTokenIsValidated() async -> Bool {
+    return await self.userDataManager.checkTokenIsValidated()
   }
 
   /// 피드 리스트 조회 api call
@@ -184,7 +189,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
     challengeId: Int,
     completionHandler: @escaping (FeedList) -> Void
   ) {
-    self.feedRepository.requestFeedList(
+    self.feedListRepository.requestFeedList(
       currentPage: currentPage,
       pageSize: count,
       feedId: feedId,
@@ -301,9 +306,31 @@ final class FeedListWorker: FeedListWorkerProtocol {
     }
     return isLike
   }
+
+  /// 피드 신고하기
+  ///
+  /// - Parameters:
+  ///  - feedId: 피드 아이디
+  ///  - reportType: 신고 타입
+  func requestReportFeed(
+    feedId: Int,
+    reportType: ReportType,
+    completionHandler: @escaping OnCompletionHandler
+  ) {
+    self.feedListRepository.requestReportPost(
+      feedId: feedId,
+      reportType: reportType,
+      completionHandler: { isSuccess in
+
+        completionHandler(isSuccess)
+
+      }
+    )
+  }
 }
 
 // MARK: - Inner Action
+
 extension FeedListWorker {
 
   /// 좋아요 toggle

@@ -1,5 +1,5 @@
 //
-//  HomeRepository.swift
+//  HotPostRepository.swift
 //  KnockKnock-iOS
 //
 //  Created by Daye on 2023/01/17.
@@ -7,12 +7,17 @@
 
 import Foundation
 
-protocol HomeRepositoryProtocol {
-  func requestHotPost(challengeId: Int, completionHandler: @escaping ([HotPost]) -> Void)
-  func requestChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void)
+protocol HotPostRepositoryProtocol {
+  func requestHotPost(
+    challengeId: Int,
+    completionHandler: @escaping ([HotPost]) -> Void
+  )
+  func requestChallengeTitles(
+    completionHandler: @escaping ([ChallengeTitle]) -> Void
+  )
 }
 
-final class HomeRepository: HomeRepositoryProtocol {
+final class HotPostRepository: HotPostRepositoryProtocol {
 
   /// 인기 게시글 조회
   func requestHotPost(
@@ -38,7 +43,9 @@ final class HomeRepository: HomeRepositoryProtocol {
   }
 
   /// 태그 리스트(인기 게시글 필터용)
-  func requestChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void) {
+  func requestChallengeTitles(
+    completionHandler: @escaping ([ChallengeTitle]) -> Void
+  ) {
     KKNetworkManager
       .shared
       .request(

@@ -45,8 +45,15 @@ final class ChallengeRouter: ChallengeRouterProtocol {
     guard let sourceView = self.view as? UIViewController else { return }
 
     let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
-      challengeSortDelegate: challengeSortDelegate
+      challengeSortDelegate: challengeSortDelegate,
+      options: [
+        .challengeNew,
+        .challengePopular
+      ],
+      bottomSheetSize: .small
     )
+
+    bottomSheetViewController.modalPresentationStyle = .overFullScreen
 
     sourceView.present(
       bottomSheetViewController,

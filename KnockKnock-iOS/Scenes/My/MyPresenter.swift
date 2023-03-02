@@ -5,7 +5,7 @@
 //  Created by Daye on 2022/11/28.
 //
 
-import UIKit
+import Foundation
 
 protocol MyPresenterProtocol {
   var view: MyViewProtocol? { get set }

@@ -18,6 +18,10 @@ protocol HomeViewProtocol: AnyObject {
     challengeList: [ChallengeTitle],
     index: IndexPath?
   )
+  func fetchEventList(eventList: [Event])
+  func fetchMainBannerList(bannerList: [HomeBanner])
+  func fetchBarBannerList(bannerList: [HomeBanner])
+  func fetchStoreList(storeList: [Store])
 }
 
 final class HomeViewController: BaseViewController<HomeView> {
@@ -26,30 +30,29 @@ final class HomeViewController: BaseViewController<HomeView> {
 
   var interactor: HomeInteractorProtocol?
 
-  var hotPostList: [HotPost] = [] {
-    didSet {
-      UIView.performWithoutAnimation {
-        self.containerView.homeCollectionView.reloadSections(
-          IndexSet(integer: HomeSection.popularPost.rawValue)
-        )
-      }
-    }
-  }
-
-  var challengeList: [ChallengeTitle] = []
+  private var mainBannerList: [HomeBanner] = []
+  private var barBannerList: [HomeBanner] = []
+  private var storeList: [Store] = []
+  private var hotPostList: [HotPost] = []
+  private var eventList: [Event] = []
+  private var challengeList: [ChallengeTitle] = []
   private var challengeId: Int = 0
 
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    
     self.setupConfigure()
-    self.interactor?.fetchHotpost(challengeId: self.challengeId)
-    self.interactor?.fetchChallengeList()
+    self.fetchData()
   }
-  
+
   override func viewWillAppear(_ animated: Bool) {
-    self.changeStatusBarBgColor(bgColor: .clear)
+    self.navigationController?.setNavigationBarHidden(true, animated: animated)
+  }
+
+  override func viewWillDisappear(_ animated: Bool) {
+    self.navigationController?.setNavigationBarHidden(false, animated: animated)
   }
 
   // MARK: - Configure
@@ -71,6 +74,15 @@ final class HomeViewController: BaseViewController<HomeView> {
 
       $0.collectionViewLayout = self.containerView.mainCollectionViewLayout()
     }
+  }
+
+  private func fetchData() {
+    self.interactor?.fetchBanner(bannerType: .main)
+    self.interactor?.fetchBanner(bannerType: .bar)
+    self.interactor?.fetchVerifiedStore()
+    self.interactor?.fetchHotpost(challengeId: self.challengeId)
+    self.interactor?.fetchChallengeList()
+    self.interactor?.fetchEventList()
   }
 
   // MARK: - Navigation Bar 설정
@@ -95,8 +107,50 @@ final class HomeViewController: BaseViewController<HomeView> {
 // MARK: - HomeViewProtocol
 
 extension HomeViewController: HomeViewProtocol {
+
+  func fetchMainBannerList(bannerList: [HomeBanner]) {
+    self.mainBannerList = bannerList
+
+    DispatchQueue.main.async {
+      UIView.performWithoutAnimation {
+        self.containerView.homeCollectionView.reloadSections([HomeSection.main.rawValue])
+      }
+    }
+  }
+
+  func fetchBarBannerList(bannerList: [HomeBanner]) {
+    self.barBannerList = bannerList
+
+    DispatchQueue.main.async {
+      UIView.performWithoutAnimation {
+        self.containerView.homeCollectionView.reloadSections([HomeSection.banner.rawValue])
+      }
+    }
+  }
+
+  func fetchStoreList(storeList: [Store]) {
+    self.storeList = storeList
+
+    DispatchQueue.main.async {
+
+      UIView.performWithoutAnimation {
+        self.containerView.homeCollectionView.reloadSections(
+          IndexSet(integer: HomeSection.store.rawValue)
+        )
+      }
+    }
+  }
+
   func fetchHotPostList(hotPostList: [HotPost]) {
     self.hotPostList = hotPostList
+
+    DispatchQueue.main.async {
+      UIView.performWithoutAnimation {
+        self.containerView.homeCollectionView.reloadSections(
+          IndexSet(integer: HomeSection.popularPost.rawValue)
+        )
+      }
+    }
   }
 
   func fetchChallengeList(
@@ -104,7 +158,13 @@ extension HomeViewController: HomeViewProtocol {
     index: IndexPath?
   ) {
     self.challengeList = challengeList
-    if let index = index {
+
+    DispatchQueue.main.async {
+      guard let index = index else {
+        self.containerView.homeCollectionView.reloadSections([HomeSection.tag.rawValue])
+        return
+      }
+
       UIView.performWithoutAnimation {
         self.containerView.homeCollectionView.reloadSections([HomeSection.tag.rawValue])
         self.containerView.homeCollectionView.scrollToItem(
@@ -113,8 +173,14 @@ extension HomeViewController: HomeViewProtocol {
           animated: false
         )
       }
-    } else {
-      self.containerView.homeCollectionView.reloadSections([HomeSection.tag.rawValue])
+    }
+  }
+
+  func fetchEventList(eventList: [Event]) {
+    self.eventList = eventList
+
+    DispatchQueue.main.async {
+      self.containerView.homeCollectionView.reloadSections([HomeSection.event.rawValue])
     }
   }
 }
@@ -135,8 +201,14 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     case .tag:
       return self.challengeList.count
 
-    case .event, .banner, .store:
-      return 6
+    case .event:
+      return self.eventList.count
+
+    case .banner:
+      return self.barBannerList.count
+
+    case .store:
+      return self.storeList.count
 
     case .popularPost:
       return self.hotPostList.count
@@ -234,7 +306,8 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         withType: HomeMainPagerCell.self,
         for: indexPath
       )
-      
+      cell.bind(banner: self.mainBannerList)
+
       return cell
 
     case .store:
@@ -242,6 +315,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         withType: StoreCell.self,
         for: indexPath
       )
+      cell.bind(store: self.storeList[indexPath.item])
 
       return cell
 
@@ -250,6 +324,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         withType: BannerCell.self,
         for: indexPath
       )
+      cell.bind(banner: self.barBannerList[indexPath.item])
 
       return cell
 
@@ -276,7 +351,9 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         withType: EventCell.self,
         for: indexPath
       )
-      
+
+      cell.bind(event: self.eventList[indexPath.item])
+
       return cell
 
     default:

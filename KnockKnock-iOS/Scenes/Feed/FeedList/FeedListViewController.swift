@@ -103,20 +103,33 @@ final class FeedListViewController: BaseViewController<FeedListView> {
   }
 
   @objc func configureButtonDidTap(_ sender: UIButton) {
+    
     let isMyPost = self.feedListPost[sender.tag].isWriter
     let feedId = self.feedListPost[sender.tag].id
 
+    let deleteAction: (() -> Void)? = { self.interactor?.requestDelete(feedId: feedId) }
+    let hideAcion: (() -> Void)?  = { self.interactor?.requestHide(feedId: feedId) }
+    let editAction: (() -> Void)?  = { self.interactor?.navigateToFeedEdit(feedId: feedId) }
+    let reportAction: (() -> Void)?  = { self.interactor?.presentReportView(feedId: feedId) }
+
+    var options: [BottomSheetOption] = []
+
+    if isMyPost {
+      options = [
+        .postDelete(deleteAction),
+        .postEdit(editAction),
+        .postShare
+      ]
+    } else {
+      options = [
+        .postHide(hideAcion),
+        .postReport(reportAction),
+        .postShare
+      ]
+    }
+
     self.interactor?.presentBottomSheetView(
-      isMyPost: isMyPost,
-      deleteAction: {
-        self.interactor?.requestDelete(feedId: feedId)
-      },
-      hideAction: {
-        self.interactor?.requestHide(feedId: feedId)
-      },
-      editAction: {
-        self.interactor?.navigateToFeedEdit(feedId: feedId)
-      },
+      options: options,
       feedData: self.feedListPost[sender.tag]
     )
   }

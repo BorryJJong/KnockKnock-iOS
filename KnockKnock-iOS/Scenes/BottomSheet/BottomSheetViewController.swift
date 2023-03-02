@@ -9,23 +9,21 @@ import UIKit
 
 import Then
 
-protocol BottomSheetViewProtocol: AnyObject {
-  var interactor: BottomSheetInteractorProtocol? { get set }
-}
-
 final class BottomSheetViewController: BaseViewController<BottomSheetView> {
   
   // MARK: - Properties
 
   var interactor: BottomSheetInteractorProtocol?
   
-  private var options: [String] = []
-  var districtsType: DistrictsType?
+  private var options: [BottomSheetOption] = []
+  private var districtContents: [String] = []
+  private var districtsType: DistrictsType?
 
   // MARK: - Life Cycle
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    self.interactor?.fetchBottomSheetOptions()
     self.setupConfigure()
     self.setupGestureRecognizer()
   }
@@ -39,21 +37,12 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
   
   override func setupConfigure() {
     self.view.backgroundColor = .clear
+
     self.containerView.tableView.do {
       $0.dataSource = self
       $0.delegate = self
     }
     self.containerView.dimmedBackView.alpha = 0.0
-  }
-  
-  // MARK: - Bind
-
-  func setBottomSheetContents(
-    contents: [String],
-    bottomSheetType: BottomSheetType
-  ) {
-    self.options = contents
-    self.containerView.bottomSheetType = bottomSheetType
   }
   
   // MARK: - Gesture
@@ -120,7 +109,31 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
 // MARK: - Bottom Sheet View Protocol
 
 extension BottomSheetViewController: BottomSheetViewProtocol {
-  
+  func fetchOptions(
+    options: [BottomSheetOption],
+    bottomSheetSize: BottomSheetSize
+  ) {
+    self.options = options
+    self.containerView.bottomSheetSize = bottomSheetSize
+
+    DispatchQueue.main.async {
+      self.containerView.tableView.reloadData()
+    }
+  }
+
+  func fetchDistrictsContent(
+    content: [String],
+    districtsType: DistrictsType?,
+    bottomSheetSize: BottomSheetSize
+  ) {
+    self.districtContents = content
+    self.districtsType = districtsType
+    self.containerView.bottomSheetSize = bottomSheetSize
+
+    DispatchQueue.main.async {
+      self.containerView.tableView.reloadData()
+    }
+  }
 }
 
 // MARK: - TableView DataSource
@@ -130,7 +143,13 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
     _ tableView: UITableView,
     numberOfRowsInSection section: Int
   ) -> Int {
-    return self.options.count
+
+    guard self.districtsType != nil else {
+      return self.options.count
+    }
+
+    return self.districtContents.count
+
   }
   
   func tableView(
@@ -141,9 +160,15 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
       withType: BottomMenuCell.self,
       for: indexPath
     )
-    cell.setData(labelText: options[indexPath.row])
-    cell.setSelected(true, animated: false)
-    
+    guard self.districtsType != nil else {
+      cell.setData(labelText: options[indexPath.row].title)
+      cell.setSelected(true, animated: false)
+
+      return cell
+    }
+
+    cell.setData(labelText: self.districtContents[indexPath.row])
+
     return cell
   }
   
@@ -155,27 +180,25 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
       switch districtsType {
 
       case .city:
-        self.interactor?.passCityDataToShopSearch(city: options[indexPath.row])
+        self.interactor?.passCityDataToShopSearch(city: districtContents[indexPath.row])
 
       case .county:
-        self.interactor?.passCountyDataToShopSearch(county: options[indexPath.row])
+        self.interactor?.passCountyDataToShopSearch(county: districtContents[indexPath.row])
 
       }
     } else {
       
-      let option = BottomSheetOption(rawValue: options[indexPath.row])
+      let option = options[indexPath.row]
       
       switch option {
       case .postDelete:
         self.showAlert(
           content: "게시글을 삭제하시겠습니까?",
-          confirmActionCompletion: {
-            self.interactor?.dismissView(actionType: .postDelete)
-          }
+          confirmActionCompletion: option.getAction()
         )
         
       case .postEdit:
-        self.interactor?.dismissView(actionType: .postEdit)
+        self.interactor?.dismissView(action: option.getAction())
 
       case .postShare:
         self.interactor?.sharePost()
@@ -190,12 +213,12 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
         self.showAlert(
           content: "이 게시글을 숨김 처리 하시겠습니까?",
           confirmActionCompletion: {
-            self.interactor?.dismissView(actionType: .postHide)
+            self.interactor?.dismissView(action: option.getAction())
           }
         )
         
-      default:
-        print("Error")
+      case .postReport:
+        self.interactor?.dismissView(action: option.getAction())
       }
     }
   }

@@ -28,7 +28,7 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
   var interactor: ProfileSettingInteractorProtocol?
   
   var profileSettingViewType: ProfileSettingViewType = .update
-  var selectedImage: UIImage?
+  var selectedImage: UIImage = KKDS.Image.ic_my_img_86
   
   lazy var imagePicker = UIImagePickerController().then {
     $0.sourceType = .photoLibrary
@@ -180,14 +180,14 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
 
       self.interactor?.requestEditProfile(
         nickname: nickname,
-        image: self.selectedImage
+        image: self.selectedImage.resizeSquareImage(newWidth: 86).pngData()
       )
       
     case .register:
 
       self.interactor?.requestSignUp(
         nickname: nickname,
-        image: self.selectedImage ?? KKDS.Image.ic_my_img_86
+        image: self.selectedImage.pngData()
       )
 
     }

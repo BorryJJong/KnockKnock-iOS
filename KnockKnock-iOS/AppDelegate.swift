@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
 
+    self.checkTokenIsValidated()
     KakaoSDK.initSDK(appKey: API.KAKAO_APP_KEY)
     FirebaseApp.configure()
     self.registerRemoteNotification()
@@ -32,7 +33,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     return true
   }
-
   func application(
     _ application: UIApplication,
     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
@@ -47,6 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     configurationForConnecting connectingSceneSession: UISceneSession,
     options: UIScene.ConnectionOptions
   ) -> UISceneConfiguration {
+
     return UISceneConfiguration(
       name: "Default Configuration",
       sessionRole: connectingSceneSession.role
@@ -103,4 +104,26 @@ extension AppDelegate {
     }
   }
 
+  private func checkTokenIsValidated() {
+    let userDataManager = UserDataManager()
+
+    Task {
+
+      let isValidated = await userDataManager.checkTokenIsValidated()
+
+      await MainActor.run {
+        if isValidated {
+          NotificationCenter.default.post(
+            name: .signInCompleted,
+            object: nil
+          )
+        } else {
+          NotificationCenter.default.post(
+            name: .signOutCompleted,
+            object: nil
+          )
+        }
+      }
+    }
+  }
 }

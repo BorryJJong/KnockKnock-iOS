@@ -96,7 +96,12 @@ final class ProfileSettingView: UIView {
 
   func setPreviousProfile(userData: UserDetail) {
     self.nicknameTextField.text = userData.nickname
-    self.profileImageView.image = userData.image
+
+    guard let image = userData.image else {
+      self.profileImageView.image = KKDS.Image.ic_my_img_86
+      return
+    }
+    self.profileImageView.image = UIImage(data: image)
   }
 
   func enableConfirmButton(isEnable: Bool) {

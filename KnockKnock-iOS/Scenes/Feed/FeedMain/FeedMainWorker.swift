@@ -31,7 +31,6 @@ final class FeedMainWorker: FeedMainWorkerProtocol {
       ]
     }
     userDefaults.set(keyword, forKey: "searchLog")
-    print("저장완료")
   }
 
   func fetchFeedMain(
