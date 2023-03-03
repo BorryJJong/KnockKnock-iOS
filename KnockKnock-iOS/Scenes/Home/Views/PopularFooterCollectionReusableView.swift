@@ -9,6 +9,7 @@ import Foundation
 
 import Then
 import SnapKit
+import KKDSKit
 
 final class PopularFooterCollectionReusableView: UICollectionReusableView {
 
@@ -25,14 +26,8 @@ final class PopularFooterCollectionReusableView: UICollectionReusableView {
 
   // MARK: - UIs
 
-  let morePostButton = UIButton().then {
+  let morePostButton = KKDSMiddleButton().then {
     $0.setTitle("더 많은 게시글 살펴보기", for: .normal)
-    $0.setTitleColor(.gray80, for: .normal)
-    $0.titleLabel?.font = .systemFont(ofSize: 13, weight: .medium)
-    $0.layer.cornerRadius = 3
-    $0.clipsToBounds = true
-    $0.layer.borderColor = UIColor.gray30?.cgColor
-    $0.layer.borderWidth = 1
   }
 
   private let seperatorView = UIView().then {

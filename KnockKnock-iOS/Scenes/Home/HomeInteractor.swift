@@ -12,6 +12,8 @@ protocol HomeInteractorProtocol {
   var worker: HomeWorkerProtocol? { get set }
   var router: HomeRouterProtocol? { get set }
 
+  func fetchInitialData()
+
   func fetchHotpost(challengeId: Int)
   func fetchChallengeList()
   func setSelectedStatus(
@@ -38,6 +40,15 @@ final class HomeInteractor: HomeInteractorProtocol {
   var hotPostList: [HotPost] = []
 
   // Buisiness logic
+
+  func fetchInitialData() {
+    self.fetchBanner(bannerType: .main)
+    self.fetchBanner(bannerType: .bar)
+    self.fetchVerifiedStore()
+    self.fetchHotpost(challengeId: 0)
+    self.fetchChallengeList()
+    self.fetchEventList()
+  }
 
   func fetchHotpost(challengeId: Int) {
     self.worker?.fetchHotPostList(

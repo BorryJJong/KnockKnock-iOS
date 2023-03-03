@@ -201,6 +201,7 @@
 		61AEABF8294F327900E05B59 /* FeedEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEABF2294F327900E05B59 /* FeedEditViewController.swift */; };
 		61AEABF9294F327900E05B59 /* FeedEditInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEABF3294F327900E05B59 /* FeedEditInteractor.swift */; };
 		61AEABFA294F327900E05B59 /* FeedEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEABF4294F327900E05B59 /* FeedEditView.swift */; };
+		61B10A9629B1D6A3008D1C18 /* HomeCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B10A9529B1D6A3008D1C18 /* HomeCollectionViewLayout.swift */; };
 		61B20B51292398C700EBA596 /* KKRequestInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B50292398C700EBA596 /* KKRequestInterceptor.swift */; };
 		61B20B572924BD7800EBA596 /* UserDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B562924BD7800EBA596 /* UserDataManager.swift */; };
 		61B20B592925FFA600EBA596 /* UIWindow+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B582925FFA600EBA596 /* UIWindow+Ext.swift */; };
@@ -486,6 +487,7 @@
 		61AEABF2294F327900E05B59 /* FeedEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEditViewController.swift; sourceTree = "<group>"; };
 		61AEABF3294F327900E05B59 /* FeedEditInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEditInteractor.swift; sourceTree = "<group>"; };
 		61AEABF4294F327900E05B59 /* FeedEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEditView.swift; sourceTree = "<group>"; };
+		61B10A9529B1D6A3008D1C18 /* HomeCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewLayout.swift; sourceTree = "<group>"; };
 		61B20B50292398C700EBA596 /* KKRequestInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KKRequestInterceptor.swift; sourceTree = "<group>"; };
 		61B20B562924BD7800EBA596 /* UserDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataManager.swift; sourceTree = "<group>"; };
 		61B20B582925FFA600EBA596 /* UIWindow+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+Ext.swift"; sourceTree = "<group>"; };
@@ -1262,6 +1264,7 @@
 				613856DD289A795200BE347E /* HomeHeaderCollectionReusableView.swift */,
 				613856E5289CCE4800BE347E /* PopularFooterCollectionReusableView.swift */,
 				61A5EA2228B3B71300A0214D /* StoreListView.swift */,
+				61B10A9529B1D6A3008D1C18 /* HomeCollectionViewLayout.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1735,6 +1738,7 @@
 				61B6D97F2888FA6800E60F08 /* ChallengeDetailHeaderCollectionReusableView.swift in Sources */,
 				61B20B51292398C700EBA596 /* KKRequestInterceptor.swift in Sources */,
 				616524BF297ECCCA009610C3 /* KakaoShareManager.swift in Sources */,
+				61B10A9629B1D6A3008D1C18 /* HomeCollectionViewLayout.swift in Sources */,
 				613856DB289948F500BE347E /* StoreCell.swift in Sources */,
 				61E87EC328D30E9F0005CAA6 /* ImageCacheManager.swift in Sources */,
 				61A5EA2528B3B72100A0214D /* StoreListViewController.swift in Sources */,
