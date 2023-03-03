@@ -59,21 +59,8 @@ final class HomeViewController: BaseViewController<HomeView> {
 
   override func setupConfigure() {
     self.setNavigationItem()
-    self.containerView.homeCollectionView.do {
-      $0.dataSource = self
-      $0.delegate = self
 
-      $0.registHeaderView(type: HomeHeaderCollectionReusableView.self)
-      $0.registCell(type: HomeMainPagerCell.self)
-      $0.registCell(type: StoreCell.self)
-      $0.registCell(type: BannerCell.self)
-      $0.registCell(type: TagCell.self)
-      $0.registCell(type: PopularPostCell.self)
-      $0.registFooterView(type: PopularFooterCollectionReusableView.self)
-      $0.registCell(type: EventCell.self)
-
-      $0.collectionViewLayout = self.containerView.mainCollectionViewLayout()
-    }
+    self.containerView.configureHomeCollectionView(viewController: self)
   }
 
   // MARK: - Navigation Bar 설정
@@ -87,8 +74,10 @@ final class HomeViewController: BaseViewController<HomeView> {
 
   @objc func moreButtonDidTap(_ sender: UIButton) {
     let section = HomeSection(rawValue: sender.tag)
+
     if section == .store {
       self.interactor?.navigateToStoreListView()
+
     } else if section == .event {
       self.interactor?.navigateToEventPageView()
     }
@@ -101,11 +90,8 @@ extension HomeViewController: HomeViewProtocol {
 
   func fetchMainBannerList(bannerList: [HomeBanner]) {
     self.mainBannerList = bannerList
-
     DispatchQueue.main.async {
-      UIView.performWithoutAnimation {
-        self.containerView.homeCollectionView.reloadSections([HomeSection.main.rawValue])
-      }
+      self.containerView.reloadHomeCollectionViewSection(section: .main)
     }
   }
 
@@ -113,9 +99,7 @@ extension HomeViewController: HomeViewProtocol {
     self.barBannerList = bannerList
 
     DispatchQueue.main.async {
-      UIView.performWithoutAnimation {
-        self.containerView.homeCollectionView.reloadSections([HomeSection.banner.rawValue])
-      }
+      self.containerView.reloadHomeCollectionViewSection(section: .banner)
     }
   }
 
@@ -123,12 +107,7 @@ extension HomeViewController: HomeViewProtocol {
     self.storeList = storeList
 
     DispatchQueue.main.async {
-
-      UIView.performWithoutAnimation {
-        self.containerView.homeCollectionView.reloadSections(
-          IndexSet(integer: HomeSection.store.rawValue)
-        )
-      }
+      self.containerView.reloadHomeCollectionViewSection(section: .store)
     }
   }
 
@@ -136,11 +115,7 @@ extension HomeViewController: HomeViewProtocol {
     self.hotPostList = hotPostList
 
     DispatchQueue.main.async {
-      UIView.performWithoutAnimation {
-        self.containerView.homeCollectionView.reloadSections(
-          IndexSet(integer: HomeSection.popularPost.rawValue)
-        )
-      }
+      self.containerView.reloadHomeCollectionViewSection(section: .popularPost)
     }
   }
 
@@ -152,15 +127,15 @@ extension HomeViewController: HomeViewProtocol {
 
     DispatchQueue.main.async {
       guard let index = index else {
-        self.containerView.homeCollectionView.reloadSections([HomeSection.tag.rawValue])
+        self.containerView.reloadHomeCollectionViewSection(section: .tag)
         return
       }
 
       UIView.performWithoutAnimation {
-        self.containerView.homeCollectionView.reloadSections([HomeSection.tag.rawValue])
-        self.containerView.homeCollectionView.scrollToItem(
-          at: index,
-          at: .centeredHorizontally,
+        self.containerView.reloadHomeCollectionViewSection(section: .tag)
+        self.containerView.scrollToItem(
+          index: index,
+          scrollPosition: .centeredHorizontally,
           animated: false
         )
       }
@@ -171,7 +146,7 @@ extension HomeViewController: HomeViewProtocol {
     self.eventList = eventList
 
     DispatchQueue.main.async {
-      self.containerView.homeCollectionView.reloadSections([HomeSection.event.rawValue])
+      self.containerView.reloadHomeCollectionViewSection(section: .event)
     }
   }
 }
