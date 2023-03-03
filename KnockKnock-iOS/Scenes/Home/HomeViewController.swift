@@ -44,7 +44,7 @@ final class HomeViewController: BaseViewController<HomeView> {
     super.viewDidLoad()
     
     self.setupConfigure()
-    self.fetchData()
+    self.interactor?.fetchInitialData()
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -74,15 +74,6 @@ final class HomeViewController: BaseViewController<HomeView> {
 
       $0.collectionViewLayout = self.containerView.mainCollectionViewLayout()
     }
-  }
-
-  private func fetchData() {
-    self.interactor?.fetchBanner(bannerType: .main)
-    self.interactor?.fetchBanner(bannerType: .bar)
-    self.interactor?.fetchVerifiedStore()
-    self.interactor?.fetchHotpost(challengeId: self.challengeId)
-    self.interactor?.fetchChallengeList()
-    self.interactor?.fetchEventList()
   }
 
   // MARK: - Navigation Bar 설정
@@ -214,7 +205,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
       return self.hotPostList.count
 
     default:
-      return 1
+      return 0
     }
   }
 
