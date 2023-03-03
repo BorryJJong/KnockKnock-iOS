@@ -48,11 +48,17 @@ final class HomeViewController: BaseViewController<HomeView> {
   }
 
   override func viewWillAppear(_ animated: Bool) {
-    self.navigationController?.setNavigationBarHidden(true, animated: animated)
+    self.navigationController?.setNavigationBarHidden(
+      true,
+      animated: animated
+    )
   }
 
   override func viewWillDisappear(_ animated: Bool) {
-    self.navigationController?.setNavigationBarHidden(false, animated: animated)
+    self.navigationController?.setNavigationBarHidden(
+      false,
+      animated: animated
+    )
   }
 
   // MARK: - Configure
@@ -158,6 +164,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
+    
     let section = HomeSection(rawValue: section)
 
     switch section {
@@ -194,6 +201,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     _ collectionView: UICollectionView,
     didSelectItemAt indexPath: IndexPath
   ) {
+
     let section = HomeSection(rawValue: indexPath.section)
     let challengeId = self.challengeList[indexPath.item].id
 
@@ -218,6 +226,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     viewForSupplementaryElementOfKind kind: String,
     at indexPath: IndexPath
   ) -> UICollectionReusableView {
+
     let section = HomeSection(rawValue: indexPath.section)
 
     switch section {
@@ -264,6 +273,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
+
     let section = HomeSection(rawValue: indexPath.section)
 
     switch section {
