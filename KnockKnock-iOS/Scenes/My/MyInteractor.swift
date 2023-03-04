@@ -39,16 +39,20 @@ final class MyInteractor: MyInteractorProtocol {
   // Busniess Logic
 
   func fetchMenuData() {
-    self.worker?.fetchMenuData(completionHandler: { [weak self] menu in
-      self?.presenter?.presentMenuData(myMenu: menu)
-    })
+    self.worker?.fetchMenuData(
+      completionHandler: { [weak self] menu in
+        self?.presenter?.presentMenuData(myMenu: menu)
+      }
+    )
     self.setNotification()
   }
 
   func fetchNickname() {
-    self.worker?.fetchNickname(completionHandler: { [weak self] nickname in
-      self?.presenter?.presentNickname(nickname: nickname)
-    })
+    self.worker?.fetchNickname(
+      completionHandler: { [weak self] nickname in
+        self?.presenter?.presentNickname(nickname: nickname)
+      }
+    )
   }
 
   func requestSignOut() {
