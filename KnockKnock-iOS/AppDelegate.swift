@@ -99,7 +99,9 @@ extension AppDelegate {
     center.requestAuthorization(options: options) { granted, _ in
 
       DispatchQueue.main.async {
-        UIApplication.shared.registerForRemoteNotifications()
+        if granted {
+          UIApplication.shared.registerForRemoteNotifications()
+        }
       }
     }
   }
