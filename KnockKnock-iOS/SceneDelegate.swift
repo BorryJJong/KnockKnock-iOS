@@ -59,7 +59,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
   func sceneWillResignActive(_ scene: UIScene) { }
 
-  func sceneWillEnterForeground(_ scene: UIScene) { }
+  func sceneWillEnterForeground(_ scene: UIScene) {
+    NotificationCenter.default.post(
+      name: .pushSettingUpdated,
+      object: nil
+    )
+  }
 
   func sceneDidEnterBackground(_ scene: UIScene) { }
 }

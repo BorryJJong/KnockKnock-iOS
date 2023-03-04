@@ -24,15 +24,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     FirebaseApp.configure()
     self.registerRemoteNotification()
 
-    NotificationCenter.default.addObserver(
-      self,
-      selector: #selector(checkNotificationSetting),
-      name: UIApplication.willEnterForegroundNotification,
-      object: nil
-    )
-
     return true
   }
+
   func application(
     _ application: UIApplication,
     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
@@ -82,14 +76,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 }
 
 extension AppDelegate {
-
-  @objc
-  private func checkNotificationSetting() {
-    NotificationCenter.default.post(
-      name: .pushSettingUpdated,
-      object: nil
-    )
-  }
 
   private func registerRemoteNotification() {
     let center = UNUserNotificationCenter.current()
