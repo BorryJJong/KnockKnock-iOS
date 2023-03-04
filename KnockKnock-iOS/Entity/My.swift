@@ -12,7 +12,7 @@ typealias MyMenu = [MySection]
 /// Section별 item
 struct MySection {
   let title: MySectionType
-  let myItems: [MyItem]
+  var myItems: [MyItem]
 }
 
 /// Item 별 세부 정보

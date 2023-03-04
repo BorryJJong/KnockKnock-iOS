@@ -30,6 +30,13 @@ final class MyInteractor: MyInteractorProtocol {
   var worker: MyWorkerProtocol?
   var presenter: MyPresenter?
 
+  private var isSignedIn: Bool = false {
+    didSet {
+      self.fetchMenuData()
+      self.presenter?.presentLoginStatus(isSignedIn: self.isSignedIn)
+    }
+  }
+
   // MARK: - Initailize
 
   init() {
@@ -40,17 +47,21 @@ final class MyInteractor: MyInteractorProtocol {
 
   func fetchMenuData() {
     self.worker?.fetchMenuData(
+      isSignedIn: self.isSignedIn,
       completionHandler: { [weak self] menu in
-        self?.presenter?.presentMenuData(myMenu: menu)
+        guard let self = self else { return }
+
+        self.presenter?.presentMenuData(myMenu: menu)
       }
     )
-    self.setNotification()
   }
 
   func fetchNickname() {
     self.worker?.fetchNickname(
       completionHandler: { [weak self] nickname in
-        self?.presenter?.presentNickname(nickname: nickname)
+        guard let self = self else { return }
+
+        self.presenter?.presentNickname(nickname: nickname)
       }
     )
   }
@@ -85,7 +96,8 @@ final class MyInteractor: MyInteractorProtocol {
       object: nil,
       queue: nil
     ) { _ in
-      self.presenter?.presentLoginStatus(isSignedIn: true)
+      self.isSignedIn = true
+
     }
 
     NotificationCenter.default.addObserver(
@@ -93,7 +105,7 @@ final class MyInteractor: MyInteractorProtocol {
       object: nil,
       queue: nil
     ) { _ in
-      self.presenter?.presentLoginStatus(isSignedIn: false)
+      self.isSignedIn = false
     }
 
     NotificationCenter.default.addObserver(

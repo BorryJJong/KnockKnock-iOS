@@ -31,30 +31,9 @@ final class MyViewController: BaseViewController<MyView> {
 
   var selectedMenuItem: MyMenuType?
 
-  var isSignedIn: Bool = false {
-    didSet {
-      DispatchQueue.main.async {
-
-        if self.isSignedIn {
-          self.interactor?.fetchNickname()
-        }
-        self.containerView.setSigninStatus(isSignedIn: self.isSignedIn)
-        self.containerView.myTableView.reloadData()
-      }
-    }
-  }
-
-  var nickname: String = "" {
-    didSet {
-      self.containerView.setNickname(nickname: self.nickname)
-    }
-  }
-  
-  var menuData: MyMenu = [] {
-    didSet {
-      self.containerView.myTableView.reloadData()
-    }
-  }
+  private var isSignedIn: Bool = false
+  private var nickname: String = ""
+  private var menuData: MyMenu = []
   
   // MARK: - Life Cycles
   
@@ -73,7 +52,7 @@ final class MyViewController: BaseViewController<MyView> {
     self.navigationController?.navigationBar.setDefaultAppearance()
     self.navigationItem.title = "마이"
 
-    self.containerView.setSigninStatus(isSignedIn: self.isSignedIn) // 로그인 상태에 따라 헤더 내용 바인딩
+    self.containerView.setSigninStatus(isSignedIn: self.isSignedIn)
     self.containerView.setNickname(nickname: self.nickname)
 
     self.interactor?.fetchMenuData()
@@ -128,20 +107,42 @@ extension MyViewController: MyViewProtocol {
 
   func fetchMenuData(menuData: MyMenu) {
     self.menuData = menuData
+
+    DispatchQueue.main.async {
+      self.containerView.myTableView.reloadData()
+    }
   }
 
   func checkLoginStatus(isSignedIn: Bool) {
     self.isSignedIn = isSignedIn
+
+    DispatchQueue.main.async {
+
+      if self.isSignedIn {
+        self.interactor?.fetchNickname()
+      }
+
+      self.containerView.setSigninStatus(isSignedIn: self.isSignedIn)
+    }
   }
 
   func fetchNickname(nickname: String) {
     self.nickname = nickname
+
+    DispatchQueue.main.async {
+      self.containerView.setNickname(nickname: self.nickname)
+    }
   }
 
   func setPushSetting() {
+
+    let indexPath = self.isSignedIn
+    ? [IndexPath(item: 2, section: 0)]
+    : [IndexPath(item: 0, section: 0)]
+
     DispatchQueue.main.async {
       self.containerView.myTableView.reloadRows(
-        at: [IndexPath(item: 2, section: 0)],
+        at: indexPath,
         with: .none
       )
     }
@@ -158,15 +159,12 @@ extension MyViewController: UITableViewDataSource {
     _ tableView: UITableView,
     numberOfRowsInSection section: Int
   ) -> Int {
-    if section == 0 {
-      if !self.isSignedIn {
-        return 0
-      }
-    }
+
     return self.menuData[section].myItems.count
   }
   
   func numberOfSections(in tableView: UITableView) -> Int {
+
     return self.menuData.count
   }
   
@@ -227,11 +225,7 @@ extension MyViewController: UITableViewDataSource {
     _ tableView: UITableView,
     heightForHeaderInSection section: Int
   ) -> CGFloat {
-    if self.menuData[section].title == MySectionType.myInfo {
-      if !isSignedIn {
-        return 0
-      }
-    }
+
     return 50
   }
 
@@ -260,19 +254,8 @@ extension MyViewController: UITableViewDataSource {
   ) -> CGFloat {
     let title = self.menuData[section].title
 
-    switch title {
-    case .myInfo:
-      if !self.isSignedIn {
-        return 0
-      }
-
-    case .policy:
-      if isSignedIn {
-        return 130
-      }
-
-    default:
-      return 50
+    if title == .policy {
+      return 130
     }
 
     return 50
