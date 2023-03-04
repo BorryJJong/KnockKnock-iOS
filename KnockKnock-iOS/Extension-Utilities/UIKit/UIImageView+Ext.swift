@@ -7,6 +7,8 @@
 
 import UIKit
 
+import Kingfisher
+
 extension UIImageView {
 
   /// Url(String)을 이미지로 변환하여 UIImageView.image 설정(정방형 비율 리사이징 포함)
@@ -20,24 +22,26 @@ extension UIImageView {
     defaultImage: UIImage,
     imageWidth: CGFloat? = nil
   ) {
-    Task {
-      do {
-        
-        let image = try await self.loadImage(stringUrl: stringUrl)
-        
-        await MainActor.run {
-          self.image = image
-        }
-        
-      } catch {
-        
-        let image = defaultImage.resizeSquareImage(newWidth: imageWidth ?? self.frame.width)
-        
-        await MainActor.run {
-          self.image = image
-        }
-      }
-    }
+    guard let url = stringUrl else { return }
+    self.kf.setImage(with: URL(string: url))
+//    Task {
+//      do {
+//
+//        let image = try await self.loadImage(stringUrl: stringUrl)
+//
+//        await MainActor.run {
+//          self.image = image
+//        }
+//
+//      } catch {
+//
+//        let image = defaultImage.resizeSquareImage(newWidth: imageWidth ?? self.frame.width)
+//
+//        await MainActor.run {
+//          self.image = image
+//        }
+//      }
+//    }
   }
   
   /// String -> URL로 변환

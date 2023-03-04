@@ -201,6 +201,7 @@
 		61AEABF8294F327900E05B59 /* FeedEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEABF2294F327900E05B59 /* FeedEditViewController.swift */; };
 		61AEABF9294F327900E05B59 /* FeedEditInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEABF3294F327900E05B59 /* FeedEditInteractor.swift */; };
 		61AEABFA294F327900E05B59 /* FeedEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEABF4294F327900E05B59 /* FeedEditView.swift */; };
+		61B10A9929B22798008D1C18 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 61B10A9829B22798008D1C18 /* Kingfisher */; };
 		61B20B51292398C700EBA596 /* KKRequestInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B50292398C700EBA596 /* KKRequestInterceptor.swift */; };
 		61B20B572924BD7800EBA596 /* UserDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B562924BD7800EBA596 /* UserDataManager.swift */; };
 		61B20B592925FFA600EBA596 /* UIWindow+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B582925FFA600EBA596 /* UIWindow+Ext.swift */; };
@@ -582,6 +583,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61B10A9929B22798008D1C18 /* Kingfisher in Frameworks */,
 				613856D6289900FE00BE347E /* SnapKit in Frameworks */,
 				20AF1007285F2C74005C73EC /* KKDSKit in Frameworks */,
 				61C21D0F28C75E97009B5F4E /* KakaoSDKUser in Frameworks */,
@@ -1477,6 +1479,7 @@
 				61BD0A9928EAD3A5003038B7 /* Alamofire */,
 				61A02842290E347900943A40 /* Lottie */,
 				61BB9DB12978E09900728E97 /* KakaoSDKShare */,
+				61B10A9829B22798008D1C18 /* Kingfisher */,
 			);
 			productName = "KnockKnock-iOS";
 			productReference = 61FC60E527B9244D00A51DBC /* KnockKnock-iOS.app */;
@@ -1512,6 +1515,7 @@
 				61C21D0028C46C9E009B5F4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				61BD0A9828EAD3A5003038B7 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				61A02841290E347900943A40 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				61B10A9729B22798008D1C18 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 61FC60E627B9244D00A51DBC /* Products */;
 			projectDirPath = "";
@@ -2108,6 +2112,14 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		61B10A9729B22798008D1C18 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 		61BD0A9828EAD3A5003038B7 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -2148,6 +2160,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 61A02841290E347900943A40 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		61B10A9829B22798008D1C18 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61B10A9729B22798008D1C18 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 		61BB9DB12978E09900728E97 /* KakaoSDKShare */ = {
 			isa = XCSwiftPackageProductDependency;
