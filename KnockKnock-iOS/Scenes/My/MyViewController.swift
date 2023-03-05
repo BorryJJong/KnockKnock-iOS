@@ -293,8 +293,11 @@ extension MyViewController: UITableViewDelegate {
         }
       )
 
-    case .notice:
-      self.interactor?.navigateToNoticeView()
+    case .serviceTerms,
+         .privacy,
+         .locationService,
+         .opensource:
+      self.interactor?.navigateToPolicyView(policyType: menu) 
 
     default:
       print("none")

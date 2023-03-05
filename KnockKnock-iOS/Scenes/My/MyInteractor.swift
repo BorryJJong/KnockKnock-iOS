@@ -18,7 +18,7 @@ protocol MyInteractorProtocol {
   func requestWithdraw()
 
   func navigateToLoginView()
-  func navigateToNoticeView()
+  func navigateToPolicyView(policyType: MyMenuType)
   func navigateToProfileSettingView()
 }
 
@@ -80,8 +80,8 @@ final class MyInteractor: MyInteractorProtocol {
     self.router?.navigateToLoginView()
   }
 
-  func navigateToNoticeView() {
-    self.router?.navigateToNoticeView()
+  func navigateToPolicyView(policyType: MyMenuType) {
+    self.router?.navigateToPolicyView(policyType: policyType)
   }
 
   func navigateToProfileSettingView() {
