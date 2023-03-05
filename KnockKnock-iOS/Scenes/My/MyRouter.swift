@@ -12,7 +12,7 @@ protocol MyRouterProtocol {
 
   static func createMy() -> UIViewController
 
-  func navigateToNoticeView()
+  func navigateToPolicyView(policyType: MyMenuType)
   func navigateToLoginView()
   func navigateToProfileSettingView()
 }
@@ -53,12 +53,14 @@ final class MyRouter: MyRouterProtocol {
     }
   }
 
-  func navigateToNoticeView() {
-    let noticeViewController = NoticeRouter.createNoticeView()
+  func navigateToPolicyView(policyType: MyMenuType) {
+    let policyViewController = PolicyRouter.createPolicyView(policyType: policyType)
+
+    policyViewController.hidesBottomBarWhenPushed = true
 
     if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.pushViewController(
-        noticeViewController,
+        policyViewController,
         animated: true
       )
     }

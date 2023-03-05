@@ -37,7 +37,6 @@ final class MyWorker: MyWorkerProtocol {
     let withdraw = MyItem(title: .withdraw, type: .plain)
     let push = MyItem(title: .pushNotification, type: .alert)
 
-    let notice = MyItem(title: .notice, type: .plain)
     let version = MyItem(title: .versionInfo, type: .version)
 
     let service = MyItem(title: .serviceTerms, type: .plain)
@@ -51,7 +50,7 @@ final class MyWorker: MyWorkerProtocol {
     )
     let customerSection = MySection(
       title: .customer,
-      myItems: [notice, version]
+      myItems: [version]
     )
     let policySection = MySection(
       title: .policy,
