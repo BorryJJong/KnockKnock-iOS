@@ -54,11 +54,13 @@ final class MyRouter: MyRouterProtocol {
   }
 
   func navigateToPolicyView(policyType: MyMenuType) {
-    let noticeViewController = PolicyRouter.createPolicyView(policyType: policyType) 
+    let policyViewController = PolicyRouter.createPolicyView(policyType: policyType)
+
+    policyViewController.hidesBottomBarWhenPushed = true
 
     if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.pushViewController(
-        noticeViewController,
+        policyViewController,
         animated: true
       )
     }
