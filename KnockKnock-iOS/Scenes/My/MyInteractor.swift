@@ -30,6 +30,13 @@ final class MyInteractor: MyInteractorProtocol {
   var worker: MyWorkerProtocol?
   var presenter: MyPresenter?
 
+  private var isSignedIn: Bool = false {
+    didSet {
+      self.fetchMenuData()
+      self.presenter?.presentLoginStatus(isSignedIn: self.isSignedIn)
+    }
+  }
+
   // MARK: - Initailize
 
   init() {
@@ -39,16 +46,24 @@ final class MyInteractor: MyInteractorProtocol {
   // Busniess Logic
 
   func fetchMenuData() {
-    self.worker?.fetchMenuData(completionHandler: { [weak self] menu in
-      self?.presenter?.presentMenuData(myMenu: menu)
-    })
-    self.setNotification()
+    self.worker?.fetchMenuData(
+      isSignedIn: self.isSignedIn,
+      completionHandler: { [weak self] menu in
+        guard let self = self else { return }
+
+        self.presenter?.presentMenuData(myMenu: menu)
+      }
+    )
   }
 
   func fetchNickname() {
-    self.worker?.fetchNickname(completionHandler: { [weak self] nickname in
-      self?.presenter?.presentNickname(nickname: nickname)
-    })
+    self.worker?.fetchNickname(
+      completionHandler: { [weak self] nickname in
+        guard let self = self else { return }
+
+        self.presenter?.presentNickname(nickname: nickname)
+      }
+    )
   }
 
   func requestSignOut() {
@@ -81,7 +96,8 @@ final class MyInteractor: MyInteractorProtocol {
       object: nil,
       queue: nil
     ) { _ in
-      self.presenter?.presentLoginStatus(isSignedIn: true)
+      self.isSignedIn = true
+
     }
 
     NotificationCenter.default.addObserver(
@@ -89,7 +105,7 @@ final class MyInteractor: MyInteractorProtocol {
       object: nil,
       queue: nil
     ) { _ in
-      self.presenter?.presentLoginStatus(isSignedIn: false)
+      self.isSignedIn = false
     }
 
     NotificationCenter.default.addObserver(
@@ -98,6 +114,14 @@ final class MyInteractor: MyInteractorProtocol {
       queue: nil
     ) { _ in
       self.fetchNickname()
+    }
+
+    NotificationCenter.default.addObserver(
+      forName: .pushSettingUpdated,
+      object: nil,
+      queue: nil
+    ) { _ in
+      self.presenter?.presentPushSetting()
     }
   }
 }

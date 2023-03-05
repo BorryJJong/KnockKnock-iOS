@@ -19,8 +19,6 @@ final class DeeplinkNavigator {
 
     self.window = UIApplication.shared.windows.first
 
-    guard url.scheme == ShareURL.kakaoScheme, url.host == ShareURL.kakaoHost else { return }
-
     let urlString = url.absoluteString
     let components = URLComponents(string: urlString)
     let urlQueryItems = components?.queryItems ?? []
@@ -39,15 +37,17 @@ final class DeeplinkNavigator {
 
     switch queryItemType {
 
-    case .feed:
+    case .feedDetail:
       self.navigateFeedDetail(feedId: id)
 
     case .challenge:
       self.navigateChallengeDetail(challengeId: id)
 
+    case .feedMain:
+      self.navigateFeedMain()
     }
   }
-
+  
   func navigateFeedDetail(feedId: Int) {
 
     guard let tabBarController = window?.rootViewController as? MainTabBarController else { return }
@@ -78,5 +78,11 @@ final class DeeplinkNavigator {
       challengeDetailViewController,
       animated: true
     )
+  }
+
+  func navigateFeedMain() {
+    guard let tabBarController = window?.rootViewController as? MainTabBarController else { return }
+
+    tabBarController.selectedIndex = Tab.feed.rawValue
   }
 }
