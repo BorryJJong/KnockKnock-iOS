@@ -28,11 +28,30 @@ enum MyMenuType: String {
   case withdraw = "탈퇴하기"
   case pushNotification = "앱 PUSH 알림"
 
-  case notice = "공지사항"
   case versionInfo = "버전정보"
 
   case serviceTerms = "서비스 이용약관"
   case privacy = "개인정보 처리방침"
   case locationService = "위치기반 서비스 이용약관"
   case opensource = "오픈소스 라이선스"
+
+  var url: String? {
+    switch self {
+
+    case .serviceTerms:
+     return "https://glib-brow-cf2.notion.site/KnockKnock-09c388824e12462d8d7a56d09042558c"
+
+    case .privacy:
+      return "https://glib-brow-cf2.notion.site/KnockKnock-09c388824e12462d8d7a56d09042558c"
+
+    case .locationService:
+      return "https://glib-brow-cf2.notion.site/KnockKnock-09c388824e12462d8d7a56d09042558c"
+
+    case .opensource:
+      return "https://glib-brow-cf2.notion.site/KnockKnock-09c388824e12462d8d7a56d09042558c"
+
+    default:
+      return nil
+    }
+  }
 }
