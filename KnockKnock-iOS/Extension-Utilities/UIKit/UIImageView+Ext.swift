@@ -11,7 +11,7 @@ import Kingfisher
 
 extension UIImageView {
 
-  /// Url(String)을 이미지로 변환하여 UIImageView.image 설정(정방형 비율 리사이징 포함)
+  /// Url(String)을 이미지로 변환하여 UIImageView.image 설정
   ///
   /// - Parameters:
   ///  - stringUrl: 이미지 url(String type)
