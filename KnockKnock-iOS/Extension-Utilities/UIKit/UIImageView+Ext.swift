@@ -15,89 +15,55 @@ extension UIImageView {
   ///
   /// - Parameters:
   ///  - stringUrl: 이미지 url(String type)
-  ///  - defaultImage: 이미지 변환에 실패한 경우 나타날 디폴트 이미지
-  ///  - imageWidth: 이미지 뷰 길이
+  ///  - defaultImage: 이미지 or URL 변환에 실패한 경우 나타날 디폴트 이미지
   func setImageFromStringUrl(
     stringUrl: String?,
-    defaultImage: UIImage,
-    imageWidth: CGFloat? = nil
+    defaultImage: UIImage
   ) {
-    guard let url = stringUrl else { return }
-    self.kf.setImage(with: URL(string: url))
-//    Task {
-//      do {
-//
-//        let image = try await self.loadImage(stringUrl: stringUrl)
-//
-//        await MainActor.run {
-//          self.image = image
-//        }
-//
-//      } catch {
-//
-//        let image = defaultImage.resizeSquareImage(newWidth: imageWidth ?? self.frame.width)
-//
-//        await MainActor.run {
-//          self.image = image
-//        }
-//      }
-//    }
-  }
-  
-  /// String -> URL로 변환
-  private func convertStringToUrl(stringUrl: String?) async throws -> URL {
-    
-    guard let stringUrl = stringUrl,
-          let url = URL(string: stringUrl) else {
-      throw ImageError.loadError
-    }
-    
-    return url
-  }
-  
-  /// URL -> Data로 변환
-  private func fetchData(url: URL) async throws -> Data {
-    let (data, response) = try await URLSession.shared.data(from: url)
-    
-    guard let httpResponse = response as? HTTPURLResponse,
-          200..<300 ~= httpResponse.statusCode else {
-      throw ImageError.loadError
-    }
-    
-    return data
-  }
-  
-  /// 이미지 로드 및 이미지 리사이징
-  private func loadImage(
-    stringUrl: String?,
-    imageWidth: CGFloat? = nil
-  ) async throws -> UIImage {
-    
-    guard let chacedImage = await self.setCachedImage(stringUrl: stringUrl) else {
+    guard let stringUrl = stringUrl else { return }
+
+    ImageCache.default.retrieveImage(
+      forKey: stringUrl,
+      options: nil
+    ) { result in
       
-      let url = try await self.convertStringToUrl(stringUrl: stringUrl)
-      let data = try await self.fetchData(url: url)
-      
-      guard let image = UIImage(data: data) else {
-        throw ImageError.loadError
+      switch result {
+      case .success(let value):
+        
+        guard let image = value.image else {
+          
+          // 캐시 이미지 없는 경우
+          guard let url = URL(string: stringUrl) else {
+            // String -> URL 변환 실패시 기본 이미지 세팅
+            self.image = defaultImage
+            return
+          }
+          
+          self.kf.setImage(
+            with: ImageResource(
+              downloadURL: url,
+              cacheKey: stringUrl
+            )
+          ) { result in
+            
+            switch result {
+              
+            case .failure:
+              self.image = defaultImage
+              
+            case .success:
+              return
+            }
+          }
+          return
+        }
+        
+        // 캐시 이미지가 있는 경우
+        self.image = image
+        
+      case .failure(let error):
+        print(error)
       }
-      
-      let resizeImage = image.resizeSquareImage(newWidth: imageWidth ?? self.frame.width)
-      
-      return resizeImage
     }
-    
-    return chacedImage
-  }
-  
-  /// 캐시 이미지 처리
-  private func setCachedImage(stringUrl: String?) async -> UIImage? {
-    
-    guard let stringUrl = stringUrl else { return nil }
-    
-    let cacheKey = NSString(string: stringUrl)
-    let cachedImage = ImageCacheManager.shared.object(forKey: cacheKey)
-    
-    return cachedImage
   }
 }
