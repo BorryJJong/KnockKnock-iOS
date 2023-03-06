@@ -203,7 +203,11 @@
 		61AEABF8294F327900E05B59 /* FeedEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEABF2294F327900E05B59 /* FeedEditViewController.swift */; };
 		61AEABF9294F327900E05B59 /* FeedEditInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEABF3294F327900E05B59 /* FeedEditInteractor.swift */; };
 		61AEABFA294F327900E05B59 /* FeedEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEABF4294F327900E05B59 /* FeedEditView.swift */; };
+
+		61B10A9929B22798008D1C18 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 61B10A9829B22798008D1C18 /* Kingfisher */; };
+
 		61B10A9629B1D6A3008D1C18 /* HomeCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B10A9529B1D6A3008D1C18 /* HomeCollectionViewLayout.swift */; };
+
 		61B20B51292398C700EBA596 /* KKRequestInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B50292398C700EBA596 /* KKRequestInterceptor.swift */; };
 		61B20B572924BD7800EBA596 /* UserDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B562924BD7800EBA596 /* UserDataManager.swift */; };
 		61B20B592925FFA600EBA596 /* UIWindow+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B582925FFA600EBA596 /* UIWindow+Ext.swift */; };
@@ -284,7 +288,6 @@
 		61E87EBB28D189570005CAA6 /* FeedSearchWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E87EBA28D189570005CAA6 /* FeedSearchWorker.swift */; };
 		61E87EBD28D189640005CAA6 /* FeedSearchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E87EBC28D189640005CAA6 /* FeedSearchRouter.swift */; };
 		61E87EBF28D1A1F20005CAA6 /* SearchKeyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E87EBE28D1A1F20005CAA6 /* SearchKeyword.swift */; };
-		61E87EC328D30E9F0005CAA6 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E87EC228D30E9F0005CAA6 /* ImageCacheManager.swift */; };
 		61EC54FD296BE32A005D98DE /* ChallengeTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EC54FC296BE32A005D98DE /* ChallengeTitle.swift */; };
 		61EC54FF296D097C005D98DE /* Challenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EC54FE296D097C005D98DE /* Challenge.swift */; };
 		61EC5501296D0999005D98DE /* FeedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EC5500296D0999005D98DE /* FeedList.swift */; };
@@ -567,7 +570,6 @@
 		61E87EBA28D189570005CAA6 /* FeedSearchWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSearchWorker.swift; sourceTree = "<group>"; };
 		61E87EBC28D189640005CAA6 /* FeedSearchRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSearchRouter.swift; sourceTree = "<group>"; };
 		61E87EBE28D1A1F20005CAA6 /* SearchKeyword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchKeyword.swift; sourceTree = "<group>"; };
-		61E87EC228D30E9F0005CAA6 /* ImageCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManager.swift; sourceTree = "<group>"; };
 		61EC54FC296BE32A005D98DE /* ChallengeTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeTitle.swift; sourceTree = "<group>"; };
 		61EC54FE296D097C005D98DE /* Challenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Challenge.swift; path = "KnockKnock-iOS/Entity/Challenge.swift"; sourceTree = SOURCE_ROOT; };
 		61EC5500296D0999005D98DE /* FeedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedList.swift; sourceTree = "<group>"; };
@@ -587,6 +589,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61B10A9929B22798008D1C18 /* Kingfisher in Frameworks */,
 				61A6B729298D1CF9002A1C57 /* FirebaseMessaging in Frameworks */,
 				613856D6289900FE00BE347E /* SnapKit in Frameworks */,
 				20AF1007285F2C74005C73EC /* KKDSKit in Frameworks */,
@@ -866,7 +869,6 @@
 				61215AC4284F856D003FDCAA /* KKNetworkManager.swift */,
 				61215AC828507D51003FDCAA /* KKRouter.swift */,
 				61215ACA2852D5B5003FDCAA /* APIConstants.swift */,
-				61E87EC228D30E9F0005CAA6 /* ImageCacheManager.swift */,
 				61B20B50292398C700EBA596 /* KKRequestInterceptor.swift */,
 				6174B93C29667D5E00C0C2BC /* APIEventLogger.swift */,
 			);
@@ -1485,6 +1487,7 @@
 				61BD0A9928EAD3A5003038B7 /* Alamofire */,
 				61A02842290E347900943A40 /* Lottie */,
 				61BB9DB12978E09900728E97 /* KakaoSDKShare */,
+				61B10A9829B22798008D1C18 /* Kingfisher */,
 				61A6B728298D1CF9002A1C57 /* FirebaseMessaging */,
 			);
 			productName = "KnockKnock-iOS";
@@ -1521,6 +1524,7 @@
 				61C21D0028C46C9E009B5F4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				61BD0A9828EAD3A5003038B7 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				61A02841290E347900943A40 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				61B10A9729B22798008D1C18 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 61FC60E627B9244D00A51DBC /* Products */;
 			projectDirPath = "";
@@ -1746,7 +1750,6 @@
 				616524BF297ECCCA009610C3 /* KakaoShareManager.swift in Sources */,
 				61B10A9629B1D6A3008D1C18 /* HomeCollectionViewLayout.swift in Sources */,
 				613856DB289948F500BE347E /* StoreCell.swift in Sources */,
-				61E87EC328D30E9F0005CAA6 /* ImageCacheManager.swift in Sources */,
 				61A5EA2528B3B72100A0214D /* StoreListViewController.swift in Sources */,
 				61AEABF6294F327900E05B59 /* FeedEditWorker.swift in Sources */,
 				61DE4193299C7B14006C960F /* EventDetailViewController.swift in Sources */,
@@ -2119,6 +2122,14 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		61B10A9729B22798008D1C18 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 		61BD0A9828EAD3A5003038B7 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -2160,6 +2171,11 @@
 			package = 61A02841290E347900943A40 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
 		};
+		61B10A9829B22798008D1C18 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61B10A9729B22798008D1C18 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+    };
 		61A6B728298D1CF9002A1C57 /* FirebaseMessaging */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 61C21D0028C46C9E009B5F4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
