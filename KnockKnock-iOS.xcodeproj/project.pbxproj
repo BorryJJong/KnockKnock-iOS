@@ -282,7 +282,6 @@
 		61E87EBB28D189570005CAA6 /* FeedSearchWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E87EBA28D189570005CAA6 /* FeedSearchWorker.swift */; };
 		61E87EBD28D189640005CAA6 /* FeedSearchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E87EBC28D189640005CAA6 /* FeedSearchRouter.swift */; };
 		61E87EBF28D1A1F20005CAA6 /* SearchKeyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E87EBE28D1A1F20005CAA6 /* SearchKeyword.swift */; };
-		61E87EC328D30E9F0005CAA6 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E87EC228D30E9F0005CAA6 /* ImageCacheManager.swift */; };
 		61EC54FD296BE32A005D98DE /* ChallengeTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EC54FC296BE32A005D98DE /* ChallengeTitle.swift */; };
 		61EC54FF296D097C005D98DE /* Challenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EC54FE296D097C005D98DE /* Challenge.swift */; };
 		61EC5501296D0999005D98DE /* FeedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EC5500296D0999005D98DE /* FeedList.swift */; };
@@ -563,7 +562,6 @@
 		61E87EBA28D189570005CAA6 /* FeedSearchWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSearchWorker.swift; sourceTree = "<group>"; };
 		61E87EBC28D189640005CAA6 /* FeedSearchRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSearchRouter.swift; sourceTree = "<group>"; };
 		61E87EBE28D1A1F20005CAA6 /* SearchKeyword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchKeyword.swift; sourceTree = "<group>"; };
-		61E87EC228D30E9F0005CAA6 /* ImageCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManager.swift; sourceTree = "<group>"; };
 		61EC54FC296BE32A005D98DE /* ChallengeTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeTitle.swift; sourceTree = "<group>"; };
 		61EC54FE296D097C005D98DE /* Challenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Challenge.swift; path = "KnockKnock-iOS/Entity/Challenge.swift"; sourceTree = SOURCE_ROOT; };
 		61EC5500296D0999005D98DE /* FeedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedList.swift; sourceTree = "<group>"; };
@@ -862,7 +860,6 @@
 				61215AC4284F856D003FDCAA /* KKNetworkManager.swift */,
 				61215AC828507D51003FDCAA /* KKRouter.swift */,
 				61215ACA2852D5B5003FDCAA /* APIConstants.swift */,
-				61E87EC228D30E9F0005CAA6 /* ImageCacheManager.swift */,
 				61B20B50292398C700EBA596 /* KKRequestInterceptor.swift */,
 				6174B93C29667D5E00C0C2BC /* APIEventLogger.swift */,
 			);
@@ -1740,7 +1737,6 @@
 				61B20B51292398C700EBA596 /* KKRequestInterceptor.swift in Sources */,
 				616524BF297ECCCA009610C3 /* KakaoShareManager.swift in Sources */,
 				613856DB289948F500BE347E /* StoreCell.swift in Sources */,
-				61E87EC328D30E9F0005CAA6 /* ImageCacheManager.swift in Sources */,
 				61A5EA2528B3B72100A0214D /* StoreListViewController.swift in Sources */,
 				61AEABF6294F327900E05B59 /* FeedEditWorker.swift in Sources */,
 				61DE4193299C7B14006C960F /* EventDetailViewController.swift in Sources */,
