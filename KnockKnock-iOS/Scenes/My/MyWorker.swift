@@ -8,8 +8,13 @@
 import Foundation
 
 protocol MyWorkerProtocol {
-  func fetchMenuData(completionHandler: @escaping (MyMenu) -> Void)
-  func fetchNickname(completionHandler: @escaping(String) -> Void)
+  func fetchMenuData(
+    isSignedIn: Bool,
+    completionHandler: @escaping (MyMenu) -> Void
+  )
+  func fetchNickname(
+    completionHandler: @escaping(String) -> Void
+  )
   func requestSignOut()
   func requestWithdraw()
 }
@@ -28,39 +33,57 @@ final class MyWorker: MyWorkerProtocol {
   }
 
   private let menuData: MyMenu = {
-    let profile = MyItem(title: MyMenuType.profile, type: .plain)
-    let withdraw = MyItem(title: MyMenuType.withdraw, type: .plain)
-    let push = MyItem(title: MyMenuType.pushNotification, type: .alert)
+    let profile = MyItem(title: .profile, type: .plain)
+    let withdraw = MyItem(title: .withdraw, type: .plain)
+    let push = MyItem(title: .pushNotification, type: .alert)
 
-    let notice = MyItem(title: MyMenuType.notice, type: .plain)
-    let version = MyItem(title: MyMenuType.versionInfo, type: .version)
+    let version = MyItem(title: .versionInfo, type: .version)
 
-    let service = MyItem(title: MyMenuType.serviceTerms, type: .plain)
-    let privacy = MyItem(title: MyMenuType.privacy, type: .plain)
-    let location = MyItem(title: MyMenuType.locationService, type: .plain)
-    let openSource = MyItem(title: MyMenuType.opensource, type: .plain)
+    let service = MyItem(title: .serviceTerms, type: .plain)
+    let privacy = MyItem(title: .privacy, type: .plain)
+    let location = MyItem(title: .locationService, type: .plain)
+    let openSource = MyItem(title: .opensource, type: .plain)
 
     let myInfoSection = MySection(
-      title: MySectionType.myInfo,
+      title: .myInfo,
       myItems: [profile, withdraw, push]
     )
     let customerSection = MySection(
-      title: MySectionType.customer,
-      myItems: [notice, version]
+      title: .customer,
+      myItems: [version]
     )
     let policySection = MySection(
-      title: MySectionType.policy,
+      title: .policy,
       myItems: [service, privacy, location, openSource]
     )
 
     return [myInfoSection, customerSection, policySection]
   }()
 
-  func fetchMenuData(completionHandler: @escaping (MyMenu) -> Void) {
-    completionHandler(self.menuData)
+  func fetchMenuData(
+    isSignedIn: Bool,
+    completionHandler: @escaping (MyMenu) -> Void
+  ) {
+    var menuData = self.menuData
+
+    guard let myInfoIndex = menuData.firstIndex(where: {
+      $0.title == MySectionType.myInfo
+    }) else { return }
+
+    if !isSignedIn {
+      menuData[myInfoIndex].myItems = [
+        MyItem(
+          title: .pushNotification,
+          type: .alert
+        )
+      ]
+    }
+    completionHandler(menuData)
   }
 
-  func fetchNickname(completionHandler: @escaping(String) -> Void) {
+  func fetchNickname(
+    completionHandler: @escaping(String) -> Void
+  ) {
     guard let nickname = self.userDataManager?.userDefaultsService.value(forkey: .nickname) else {
       return
     }
@@ -68,7 +91,8 @@ final class MyWorker: MyWorkerProtocol {
   }
 
   func requestSignOut() {
-    self.accountManager?.signOut(completionHandler: { [weak self] success in
+    self.accountManager?.signOut(
+      completionHandler: { [weak self] success in
       if success {
         self?.userDataManager?.removeAllUserInfo()
       } else {
@@ -78,7 +102,8 @@ final class MyWorker: MyWorkerProtocol {
   }
 
   func requestWithdraw() {
-    self.accountManager?.withdraw(completionHandler: { [weak self] success in
+    self.accountManager?.withdraw(
+      completionHandler: { [weak self] success in
       if success {
         self?.userDataManager?.removeAllUserInfo()
       } else {

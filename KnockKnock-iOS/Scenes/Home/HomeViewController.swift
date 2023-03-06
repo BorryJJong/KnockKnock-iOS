@@ -44,45 +44,29 @@ final class HomeViewController: BaseViewController<HomeView> {
     super.viewDidLoad()
     
     self.setupConfigure()
-    self.fetchData()
+    self.interactor?.fetchInitialData()
   }
 
   override func viewWillAppear(_ animated: Bool) {
-    self.navigationController?.setNavigationBarHidden(true, animated: animated)
+    self.navigationController?.setNavigationBarHidden(
+      true,
+      animated: animated
+    )
   }
 
   override func viewWillDisappear(_ animated: Bool) {
-    self.navigationController?.setNavigationBarHidden(false, animated: animated)
+    self.navigationController?.setNavigationBarHidden(
+      false,
+      animated: animated
+    )
   }
 
   // MARK: - Configure
 
   override func setupConfigure() {
     self.setNavigationItem()
-    self.containerView.homeCollectionView.do {
-      $0.dataSource = self
-      $0.delegate = self
 
-      $0.registHeaderView(type: HomeHeaderCollectionReusableView.self)
-      $0.registCell(type: HomeMainPagerCell.self)
-      $0.registCell(type: StoreCell.self)
-      $0.registCell(type: BannerCell.self)
-      $0.registCell(type: TagCell.self)
-      $0.registCell(type: PopularPostCell.self)
-      $0.registFooterView(type: PopularFooterCollectionReusableView.self)
-      $0.registCell(type: EventCell.self)
-
-      $0.collectionViewLayout = self.containerView.mainCollectionViewLayout()
-    }
-  }
-
-  private func fetchData() {
-    self.interactor?.fetchBanner(bannerType: .main)
-    self.interactor?.fetchBanner(bannerType: .bar)
-    self.interactor?.fetchVerifiedStore()
-    self.interactor?.fetchHotpost(challengeId: self.challengeId)
-    self.interactor?.fetchChallengeList()
-    self.interactor?.fetchEventList()
+    self.containerView.configureHomeCollectionView(viewController: self)
   }
 
   // MARK: - Navigation Bar 설정
@@ -96,8 +80,10 @@ final class HomeViewController: BaseViewController<HomeView> {
 
   @objc func moreButtonDidTap(_ sender: UIButton) {
     let section = HomeSection(rawValue: sender.tag)
+
     if section == .store {
       self.interactor?.navigateToStoreListView()
+
     } else if section == .event {
       self.interactor?.navigateToEventPageView()
     }
@@ -110,11 +96,8 @@ extension HomeViewController: HomeViewProtocol {
 
   func fetchMainBannerList(bannerList: [HomeBanner]) {
     self.mainBannerList = bannerList
-
     DispatchQueue.main.async {
-      UIView.performWithoutAnimation {
-        self.containerView.homeCollectionView.reloadSections([HomeSection.main.rawValue])
-      }
+      self.containerView.reloadHomeCollectionViewSection(section: .main)
     }
   }
 
@@ -122,9 +105,7 @@ extension HomeViewController: HomeViewProtocol {
     self.barBannerList = bannerList
 
     DispatchQueue.main.async {
-      UIView.performWithoutAnimation {
-        self.containerView.homeCollectionView.reloadSections([HomeSection.banner.rawValue])
-      }
+      self.containerView.reloadHomeCollectionViewSection(section: .banner)
     }
   }
 
@@ -132,12 +113,7 @@ extension HomeViewController: HomeViewProtocol {
     self.storeList = storeList
 
     DispatchQueue.main.async {
-
-      UIView.performWithoutAnimation {
-        self.containerView.homeCollectionView.reloadSections(
-          IndexSet(integer: HomeSection.store.rawValue)
-        )
-      }
+      self.containerView.reloadHomeCollectionViewSection(section: .store)
     }
   }
 
@@ -145,11 +121,7 @@ extension HomeViewController: HomeViewProtocol {
     self.hotPostList = hotPostList
 
     DispatchQueue.main.async {
-      UIView.performWithoutAnimation {
-        self.containerView.homeCollectionView.reloadSections(
-          IndexSet(integer: HomeSection.popularPost.rawValue)
-        )
-      }
+      self.containerView.reloadHomeCollectionViewSection(section: .popularPost)
     }
   }
 
@@ -161,15 +133,15 @@ extension HomeViewController: HomeViewProtocol {
 
     DispatchQueue.main.async {
       guard let index = index else {
-        self.containerView.homeCollectionView.reloadSections([HomeSection.tag.rawValue])
+        self.containerView.reloadHomeCollectionViewSection(section: .tag)
         return
       }
 
       UIView.performWithoutAnimation {
-        self.containerView.homeCollectionView.reloadSections([HomeSection.tag.rawValue])
-        self.containerView.homeCollectionView.scrollToItem(
-          at: index,
-          at: .centeredHorizontally,
+        self.containerView.reloadHomeCollectionViewSection(section: .tag)
+        self.containerView.scrollToItem(
+          index: index,
+          scrollPosition: .centeredHorizontally,
           animated: false
         )
       }
@@ -180,7 +152,7 @@ extension HomeViewController: HomeViewProtocol {
     self.eventList = eventList
 
     DispatchQueue.main.async {
-      self.containerView.homeCollectionView.reloadSections([HomeSection.event.rawValue])
+      self.containerView.reloadHomeCollectionViewSection(section: .event)
     }
   }
 }
@@ -192,6 +164,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
+    
     let section = HomeSection(rawValue: section)
 
     switch section {
@@ -214,7 +187,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
       return self.hotPostList.count
 
     default:
-      return 1
+      return 0
     }
   }
 
@@ -228,6 +201,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     _ collectionView: UICollectionView,
     didSelectItemAt indexPath: IndexPath
   ) {
+
     let section = HomeSection(rawValue: indexPath.section)
     let challengeId = self.challengeList[indexPath.item].id
 
@@ -252,6 +226,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     viewForSupplementaryElementOfKind kind: String,
     at indexPath: IndexPath
   ) -> UICollectionReusableView {
+
     let section = HomeSection(rawValue: indexPath.section)
 
     switch section {
@@ -298,6 +273,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
+
     let section = HomeSection(rawValue: indexPath.section)
 
     switch section {
