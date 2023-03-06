@@ -204,6 +204,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
 
     let section = HomeSection(rawValue: indexPath.section)
     let challengeId = self.challengeList[indexPath.item].id
+    let feedId = self.hotPostList[indexPath.item].postId
 
     switch section {
     case .tag:
@@ -214,10 +215,10 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
       self.interactor?.fetchHotpost(challengeId: challengeId)
 
     case .popularPost:
-      self.interactor?.navigateToFeedDetail(feedId: self.hotPostList[indexPath.item].postId)
+      self.interactor?.navigateToFeedDetail(feedId: feedId)
 
     default:
-      print("error")
+      break
     }
   }
 
