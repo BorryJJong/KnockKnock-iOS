@@ -46,11 +46,11 @@ extension StoreListViewController: StoreListViewProtocol {
 }
 
 extension StoreListViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+
   func collectionView(
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-//    print(self.storeList.count)
     return self.storeList.count
   }
 
@@ -67,6 +67,28 @@ extension StoreListViewController: UICollectionViewDelegateFlowLayout, UICollect
     cell.bind(store: self.storeList[indexPath.item])
 
     return cell
+  }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    didSelectItemAt indexPath: IndexPath
+  ) {
+    guard let kakaoMapScheme = URL(string: "kakaomap://") else { return }
+
+    // 카카오맵으로 연결할 수 있는 기기인지 판별
+    if UIApplication.shared.canOpenURL(kakaoMapScheme) {
+
+      // 카카오맵 설치 디바이스인 경우
+      guard let url = URL(string: "kakaomap://look?p=37.402056,127.108212") else { return }
+      UIApplication.shared.open(url, options: [:], completionHandler: nil)
+
+    } else {
+      // 미 설치 디바이스인 경우에는 사파리를 통해 카카오맵 진입하도록 처리
+      DispatchQueue.main.async {
+        guard let url = URL(string: "https://map.kakao.com/link/map/marker,37.402056,127.108212") else { return }
+        UIApplication.shared.open(url, options: [:])
+      }
+    }
   }
 
   func collectionView(

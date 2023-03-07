@@ -203,11 +203,8 @@
 		61AEABF8294F327900E05B59 /* FeedEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEABF2294F327900E05B59 /* FeedEditViewController.swift */; };
 		61AEABF9294F327900E05B59 /* FeedEditInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEABF3294F327900E05B59 /* FeedEditInteractor.swift */; };
 		61AEABFA294F327900E05B59 /* FeedEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEABF4294F327900E05B59 /* FeedEditView.swift */; };
-
-		61B10A9929B22798008D1C18 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 61B10A9829B22798008D1C18 /* Kingfisher */; };
-
 		61B10A9629B1D6A3008D1C18 /* HomeCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B10A9529B1D6A3008D1C18 /* HomeCollectionViewLayout.swift */; };
-
+		61B10A9929B22798008D1C18 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 61B10A9829B22798008D1C18 /* Kingfisher */; };
 		61B20B51292398C700EBA596 /* KKRequestInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B50292398C700EBA596 /* KKRequestInterceptor.swift */; };
 		61B20B572924BD7800EBA596 /* UserDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B562924BD7800EBA596 /* UserDataManager.swift */; };
 		61B20B592925FFA600EBA596 /* UIWindow+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B582925FFA600EBA596 /* UIWindow+Ext.swift */; };
@@ -264,22 +261,19 @@
 		61D190B4296AAE3000329ABD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 61D190B3296AAE3000329ABD /* GoogleService-Info.plist */; };
 		61D190B8296BD76000329ABD /* ApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D190B7296BD76000329ABD /* ApiResponse.swift */; };
 		61D96D6229A86372009E2842 /* VerifiedStoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6129A86372009E2842 /* VerifiedStoreRepository.swift */; };
+		61D96D6429A87207009E2842 /* BannerRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6329A87207009E2842 /* BannerRepository.swift */; };
 		61D96D6629A899D1009E2842 /* StoreDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6529A899D1009E2842 /* StoreDetail.swift */; };
 		61D96D6A29A89B59009E2842 /* StoreDetailDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6929A89B59009E2842 /* StoreDetailDTO.swift */; };
 		61D96D6E29A89E20009E2842 /* StoreListInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6D29A89E20009E2842 /* StoreListInteractor.swift */; };
 		61D96D7029A9DECB009E2842 /* StoreListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6F29A9DECB009E2842 /* StoreListRouter.swift */; };
 		61D96D7229AA0F52009E2842 /* StoreListProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D7129AA0F52009E2842 /* StoreListProtocol.swift */; };
 		61D96D7429AA1275009E2842 /* StoreListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D7329AA1275009E2842 /* StoreListPresenter.swift */; };
-		61DD8FE32998BDEA0061E348 /* ReportType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DD8FE22998BDEA0061E348 /* ReportType.swift */; };
-
-		61D96D6429A87207009E2842 /* BannerRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6329A87207009E2842 /* BannerRepository.swift */; };
 		61D96D7629AA1854009E2842 /* FeedEditRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D7529AA1854009E2842 /* FeedEditRepository.swift */; };
 		61D96D7A29AA191A009E2842 /* FeedWriteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D7929AA191A009E2842 /* FeedWriteRepository.swift */; };
 		61D96D8029AB258B009E2842 /* BottomSheetPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D7F29AB258B009E2842 /* BottomSheetPresenter.swift */; };
 		61D96D8229AB259B009E2842 /* BottomSheetProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D8129AB259B009E2842 /* BottomSheetProtocol.swift */; };
 		61D96D8429AB3B44009E2842 /* BottomSheetSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D8329AB3B44009E2842 /* BottomSheetSize.swift */; };
 		61D96D8829AB4786009E2842 /* BottomSheetOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D8729AB4786009E2842 /* BottomSheetOption.swift */; };
-
 		61DE4185299B6698006C960F /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DE4184299B6698006C960F /* Event.swift */; };
 		61DE4187299C6360006C960F /* EventDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DE4186299C6360006C960F /* EventDetail.swift */; };
 		61DE4189299C64FE006C960F /* EventTapType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DE4188299C64FE006C960F /* EventTapType.swift */; };
@@ -555,23 +549,19 @@
 		61D190B3296AAE3000329ABD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		61D190B7296BD76000329ABD /* ApiResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiResponse.swift; sourceTree = "<group>"; };
 		61D96D6129A86372009E2842 /* VerifiedStoreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifiedStoreRepository.swift; sourceTree = "<group>"; };
-
+		61D96D6329A87207009E2842 /* BannerRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerRepository.swift; sourceTree = "<group>"; };
 		61D96D6529A899D1009E2842 /* StoreDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDetail.swift; sourceTree = "<group>"; };
 		61D96D6929A89B59009E2842 /* StoreDetailDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDetailDTO.swift; sourceTree = "<group>"; };
 		61D96D6D29A89E20009E2842 /* StoreListInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListInteractor.swift; sourceTree = "<group>"; };
 		61D96D6F29A9DECB009E2842 /* StoreListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListRouter.swift; sourceTree = "<group>"; };
 		61D96D7129AA0F52009E2842 /* StoreListProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListProtocol.swift; sourceTree = "<group>"; };
 		61D96D7329AA1275009E2842 /* StoreListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListPresenter.swift; sourceTree = "<group>"; };
-		61DD8FE22998BDEA0061E348 /* ReportType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportType.swift; sourceTree = "<group>"; };
-
-		61D96D6329A87207009E2842 /* BannerRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerRepository.swift; sourceTree = "<group>"; };
 		61D96D7529AA1854009E2842 /* FeedEditRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEditRepository.swift; sourceTree = "<group>"; };
 		61D96D7929AA191A009E2842 /* FeedWriteRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWriteRepository.swift; sourceTree = "<group>"; };
 		61D96D7F29AB258B009E2842 /* BottomSheetPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetPresenter.swift; sourceTree = "<group>"; };
 		61D96D8129AB259B009E2842 /* BottomSheetProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetProtocol.swift; sourceTree = "<group>"; };
 		61D96D8329AB3B44009E2842 /* BottomSheetSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetSize.swift; sourceTree = "<group>"; };
 		61D96D8729AB4786009E2842 /* BottomSheetOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetOption.swift; sourceTree = "<group>"; };
-
 		61DE4184299B6698006C960F /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		61DE4186299C6360006C960F /* EventDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetail.swift; sourceTree = "<group>"; };
 		61DE4188299C64FE006C960F /* EventTapType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTapType.swift; sourceTree = "<group>"; };
@@ -1287,7 +1277,6 @@
 				61B6D992288C2C2700E60F08 /* HomeView.swift */,
 				613856DD289A795200BE347E /* HomeHeaderCollectionReusableView.swift */,
 				613856E5289CCE4800BE347E /* PopularFooterCollectionReusableView.swift */,
-				61A5EA2228B3B71300A0214D /* StoreListView.swift */,
 				61B10A9529B1D6A3008D1C18 /* HomeCollectionViewLayout.swift */,
 			);
 			path = Views;
@@ -1812,7 +1801,6 @@
 				61B10A9629B1D6A3008D1C18 /* HomeCollectionViewLayout.swift in Sources */,
 				613856DB289948F500BE347E /* StoreCell.swift in Sources */,
 				61D96D7029A9DECB009E2842 /* StoreListRouter.swift in Sources */,
-				61E87EC328D30E9F0005CAA6 /* ImageCacheManager.swift in Sources */,
 				61A5EA2528B3B72100A0214D /* StoreListViewController.swift in Sources */,
 				61AEABF6294F327900E05B59 /* FeedEditWorker.swift in Sources */,
 				61DE4193299C7B14006C960F /* EventDetailViewController.swift in Sources */,
@@ -2236,15 +2224,15 @@
 			package = 61A02841290E347900943A40 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
 		};
-		61B10A9829B22798008D1C18 /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 61B10A9729B22798008D1C18 /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
-    };
 		61A6B728298D1CF9002A1C57 /* FirebaseMessaging */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 61C21D0028C46C9E009B5F4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseMessaging;
+		};
+		61B10A9829B22798008D1C18 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61B10A9729B22798008D1C18 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 		61BB9DB12978E09900728E97 /* KakaoSDKShare */ = {
 			isa = XCSwiftPackageProductDependency;
