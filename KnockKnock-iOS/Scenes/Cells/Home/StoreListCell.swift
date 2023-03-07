@@ -7,6 +7,7 @@
 
 import UIKit
 
+import KKDSKit
 import SnapKit
 import Then
 
@@ -23,15 +24,11 @@ final class StoreListCell: BaseCollectionViewCell {
     static let storeNameLabelBottomMargin = -5.f
     static let storeNameLabelLeadingMargin = 10.f
 
-    static let promotionStackViewLeadingMargin = 10.f
-    static let promotionStackViewTopMargin = 5.f
+    static let promotionViewLeadingMargin = 10.f
+    static let promotionViewTopMargin = 5.f
 
     static let separatorLineViewHeight = 1.f
   }
-
-  // MARK: - Properties
-
-  private let promotions = ["텀블러 할인", "사은품 증정", "포인트 적립", "텀블러 할인", "포인트 적립", "텀블러 할인"]
 
   // MARK: - UIs
 
@@ -53,7 +50,7 @@ final class StoreListCell: BaseCollectionViewCell {
     $0.textColor = .gray70
   }
 
-  private let promotionsView = UIView()
+  private let promotionView = UIView()
 
   private let separatorLineView = UIView().then {
     $0.backgroundColor = .gray30
@@ -65,70 +62,20 @@ final class StoreListCell: BaseCollectionViewCell {
     self.separatorLineView.isHidden = isLast
   }
 
-  // MARK: - Configure
-
-  private func setPromotionView(promotions: [String]) -> [UILabel] {
-    return promotions.map { promotion in
-      BasePaddingLabel(
-        padding: .init(top: 5, left: 5, bottom: 5, right: 5)
-      ).then {
-        $0.text = promotion
-        $0.font = .systemFont(ofSize: 10)
-        $0.textColor = .gray70
-        $0.clipsToBounds = true
-        $0.layer.cornerRadius = 5
-        $0.backgroundColor = .gray20
-      }
-    }
+  func bind(store: StoreDetail) {
+    self.thumbnailImageView.setImageFromStringUrl(
+      stringUrl: store.image,
+      defaultImage: KKDS.Image.ic_no_data_60
+    )
+    self.storeNameLabel.text = store.name
+    self.storeInfoLabel.text = store.description
+    self.setPromotionView(promotions: store.shopPromotionNames)
   }
 
-  /// label들의 총 길이를 구해서 Cell의 contentView width를 넘으면 cut 처리
-  /// labels width + 5 x n(marigns)  > contentView.width - 135(other ui's width, margins)이면,
-  /// 마지막 label의 trailing을 contentView.trailing으로 설정하고, 남은 라벨은 뷰에 추가하지 않음
-  private func setPromotionStackView(promotions: [String]) {
-
-    let labels = self.setPromotionView(promotions: promotions)
-    var totalLength = -5.f
-
-    for index in 0..<labels.count {
-      self.promotionsView.addSubview(labels[index])
-
-      if index == 0 {
-        labels[index].snp.makeConstraints {
-          $0.leading.equalToSuperview()
-          $0.top.bottom.equalToSuperview()
-        }
-      } else {
-        labels[index].snp.makeConstraints {
-          $0.leading.equalTo(labels[index-1].snp.trailing).offset(5)
-          $0.top.bottom.equalToSuperview()
-        }
-      }
-
-      if let nsStringText = NSString(utf8String: labels[index].text ?? "") {
-        let labelWidth = nsStringText.size(
-          withAttributes: [
-            NSAttributedString.Key.font: labels[index].font ?? .systemFont(ofSize: 12)
-          ]
-        ).width
-        totalLength += labelWidth + 5
-      }
-
-      if totalLength > (self.contentView.frame.width - 135) {
-        labels[index].snp.makeConstraints {
-          $0.trailing.equalToSuperview()
-        }
-        break
-      }
-    }
-  }
-
-  override func setupConfigure() {
-    self.setPromotionStackView(promotions: self.promotions)
-  }
+  // MARK: - Constraints
 
   override func setupConstraints() {
-    [self.thumbnailImageView, self.storeNameLabel, self.storeInfoLabel, self.promotionsView, self.separatorLineView].addSubViews(self.contentView)
+    [self.thumbnailImageView, self.storeNameLabel, self.storeInfoLabel, self.promotionView, self.separatorLineView].addSubViews(self.contentView)
 
     self.thumbnailImageView.snp.makeConstraints {
       $0.bottom.equalTo(self.contentView).offset(Metric.thumbnailImageViewBottomMargin)
@@ -148,15 +95,57 @@ final class StoreListCell: BaseCollectionViewCell {
       $0.trailing.equalTo(self.contentView.snp.trailing)
     }
 
-    self.promotionsView.snp.makeConstraints {
-      $0.leading.equalTo(self.thumbnailImageView.snp.trailing).offset(Metric.promotionStackViewLeadingMargin)
-      $0.trailing.equalTo(self.contentView.snp.trailing)
-      $0.top.equalTo(self.storeInfoLabel.snp.bottom).offset(Metric.promotionStackViewTopMargin)
+    self.promotionView.snp.makeConstraints {
+      $0.leading.equalTo(self.thumbnailImageView.snp.trailing).offset(Metric.promotionViewLeadingMargin)
+      $0.trailing.equalTo(self.contentView)
+      $0.top.equalTo(self.storeInfoLabel.snp.bottom).offset(Metric.promotionViewTopMargin)
     }
 
     self.separatorLineView.snp.makeConstraints {
       $0.bottom.leading.trailing.equalTo(self.contentView)
       $0.height.equalTo(Metric.separatorLineViewHeight)
+    }
+  }
+}
+
+extension StoreListCell {
+
+  /// contentView 길이만큼 label 추가
+  private func setPromotionView(promotions: [String]) {
+    var totalLength = 0.f
+    let maxLength = self.contentView.frame.width - (Metric.thumbnailImageViewWidth + 15)
+
+    for index in 0..<promotions.count {
+
+      let label = BasePaddingLabel(
+        padding: UIEdgeInsets(
+          top: 5,
+          left: 5,
+          bottom: 5,
+          right: 5
+        )
+      ).then {
+        $0.text = promotions[index]
+        $0.font = .systemFont(ofSize: 10)
+        $0.textColor = .gray70
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 5
+        $0.backgroundColor = .gray20
+        $0.sizeToFit()
+      }
+
+      if totalLength + label.bounds.width < maxLength {
+        self.promotionView.addSubview(label)
+
+        label.snp.makeConstraints {
+          $0.leading.equalTo(self.promotionView).offset(totalLength)
+          $0.top.bottom.equalTo(self.promotionView)
+        }
+
+        totalLength += label.bounds.width + 15
+      }
+
+      if index == 2 { break }
     }
   }
 }

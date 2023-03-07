@@ -50,6 +50,7 @@ extension StoreListViewController: UICollectionViewDelegateFlowLayout, UICollect
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
+//    print(self.storeList.count)
     return self.storeList.count
   }
 
@@ -63,6 +64,7 @@ extension StoreListViewController: UICollectionViewDelegateFlowLayout, UICollect
     )
     let isLast = indexPath.item == (self.storeList.count - 1)
     cell.setSeparatorLineView(isLast: isLast)
+    cell.bind(store: self.storeList[indexPath.item])
 
     return cell
   }
