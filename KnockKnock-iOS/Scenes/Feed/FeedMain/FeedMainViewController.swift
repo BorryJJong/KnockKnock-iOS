@@ -74,7 +74,6 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
   
   override func setupConfigure() {
 
-    self.navigationItem.searchController = searchBar
     self.navigationItem.backButtonTitle = ""
     self.navigationController?.navigationBar.setDefaultAppearance()
 
