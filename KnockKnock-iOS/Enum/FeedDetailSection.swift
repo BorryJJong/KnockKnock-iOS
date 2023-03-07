@@ -7,10 +7,8 @@
 
 import UIKit
 
-enum FeedDetailSection: Int {
+enum FeedDetailSection: Int, CaseIterable {
   case content = 0
   case like = 1
   case comment = 2
-
-  static let allCases: [FeedDetailSection] = [.content, .like, .comment]
 }

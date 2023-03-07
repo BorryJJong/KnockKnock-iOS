@@ -20,7 +20,7 @@ protocol KakaoShareManagerProtocol {
     text: String,
     appLink: Link,
     shareQueryItemType: ShareQueryItemType
-  ) -> TextTemplate
+  ) -> TextTemplate?
 }
 
 final class KakaoShareManager: KakaoShareManagerProtocol {
@@ -76,10 +76,13 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
        let likeCount = Int(like.filter { $0.isNumber }),
        let commentCount = Int(comment.filter { $0.isNumber }) {
 
-      socialData = Social(likeCount: likeCount, commentCount: commentCount)
+      socialData = Social(
+        likeCount: likeCount,
+        commentCount: commentCount
+      )
     }
 
-    let appLink = Link(iosExecutionParams: [ShareQueryItemType.feed.rawValue: "\(feedData.id)"])
+    let appLink = Link(iosExecutionParams: [ShareQueryItemType.feedDetail.rawValue: "\(feedData.id)"])
     let button = Button(title: "앱에서 보기", link: appLink)
 
     // image 변환 실패시 textTemplate 사용
@@ -103,7 +106,7 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
       let textTemplate = self.generateTextTemplate(
         text: feedData.nickname,
         appLink: appLink,
-        shareQueryItemType: .feed
+        shareQueryItemType: .feedDetail
       )
 
       return self.openKakaoShare(template: textTemplate)
@@ -116,11 +119,11 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
     text: String,
     appLink: Link,
     shareQueryItemType: ShareQueryItemType
-  ) -> TextTemplate {
+  ) -> TextTemplate? {
 
     switch shareQueryItemType {
 
-    case .feed:
+    case .feedDetail:
       return TextTemplate(
         text: "\(text)님의 게시글",
         link: appLink
@@ -131,6 +134,9 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
         text: text,
         link: appLink
       )
+
+    default:
+      return nil
     }
   }
 
@@ -160,5 +166,4 @@ final class KakaoShareManager: KakaoShareManagerProtocol {
       return (false, KakaoShareErrorType.no_kakaotalk_installation)
     }
   }
-
 }

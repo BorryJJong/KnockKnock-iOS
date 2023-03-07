@@ -29,13 +29,7 @@ final class HomeHeaderCollectionReusableView: UICollectionReusableView {
     $0.text = "녹녹이 인증한 스토어"
   }
 
-  let moreButton = UIButton().then {
-    $0.setTitle("더보기", for: .normal)
-    $0.setImage(KKDS.Image.ic_left_10_gr, for: .normal)
-    $0.semanticContentAttribute = .forceRightToLeft
-    $0.titleLabel?.font = .systemFont(ofSize: 13, weight: .light)
-    $0.setTitleColor(.gray80, for: .normal)
-  }
+  let moreButton = KKDSMoreButton()
 
   // MARK: - Initailize
 

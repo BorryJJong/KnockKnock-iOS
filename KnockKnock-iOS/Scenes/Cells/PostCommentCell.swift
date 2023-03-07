@@ -130,22 +130,28 @@ final class PostCommentCell: BaseCollectionViewCell {
         $0.top.equalTo(self.writtenDateLabel)
         $0.leading.equalTo(self.writtenDateLabel.snp.trailing).offset(Metric.commentDeleteButtonLeadingMargin)
       }
+
       self.profileImageView.snp.remakeConstraints {
         $0.leading.equalTo(self.safeAreaLayoutGuide).offset(Metric.profileImageViewLeadingForReply)
         $0.width.equalTo(Metric.profileImageViewWidthForReply)
         $0.height.equalTo(Metric.profileImageViewHeightForReply)
       }
       
+      self.profileImageView.layer.cornerRadius = Metric.profileImageViewWidthForReply / 2
+      
     } else {
       self.commentDeleteButton.snp.remakeConstraints {
         $0.top.equalTo(self.writtenDateLabel)
         $0.leading.equalTo(self.replyWriteButton.snp.trailing).offset(Metric.commentDeleteButtonLeadingMargin)
       }
+
       self.profileImageView.snp.remakeConstraints {
         $0.leading.equalTo(self.safeAreaLayoutGuide)
         $0.width.equalTo(Metric.profileImageViewWidth)
         $0.height.equalTo(Metric.profileImageViewHeight)
       }
+
+      self.profileImageView.layer.cornerRadius = Metric.profileImageViewWidth / 2
     }
   }
 
