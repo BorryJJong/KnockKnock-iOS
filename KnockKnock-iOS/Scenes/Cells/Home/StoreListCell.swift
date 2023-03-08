@@ -43,7 +43,7 @@ final class StoreListCell: BaseCollectionViewCell {
   }
 
   private let storeInfoLabel = UILabel().then {
-    $0.numberOfLines = 1
+    $0.numberOfLines = 2
     $0.font = .systemFont(ofSize: 12, weight: .medium)
     $0.textColor = .gray70
   }
