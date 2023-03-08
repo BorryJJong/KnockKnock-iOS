@@ -55,7 +55,6 @@ final class ChallengeCell: BaseCollectionViewCell {
   private let titleLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.tintColor = .black
-    $0.text = "#GOGO 챌린지"
     $0.font = .systemFont(ofSize: 17, weight: .bold)
     $0.numberOfLines = 1
     $0.textAlignment = .left
@@ -64,7 +63,6 @@ final class ChallengeCell: BaseCollectionViewCell {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.tintColor = .gray80
     $0.font = .systemFont(ofSize: 13)
-    $0.text = "쓰레기를 줄이자는 의미의 제로웨이스트 운동이 활발해 지고있다. 제로웨이스트에 대해 좀 더 알아보자!"
     $0.numberOfLines = 2
     $0.textAlignment = .left
   }
