@@ -40,6 +40,7 @@ final class MyViewController: BaseViewController<MyView> {
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setupConfigure()
+    self.setNotification()
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -77,6 +78,20 @@ final class MyViewController: BaseViewController<MyView> {
         for: .touchUpInside
       )
     }
+  }
+
+  private func setNotification() {
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(self.checkNotificationSetting),
+      name: UIApplication.willEnterForegroundNotification,
+      object: nil
+    )
+  }
+
+  @objc
+  private func checkNotificationSetting() {
+    self.setPushSetting()
   }
 
   // MARK: - Button Actions
