@@ -73,21 +73,21 @@ extension StoreListViewController: UICollectionViewDelegateFlowLayout, UICollect
     _ collectionView: UICollectionView,
     didSelectItemAt indexPath: IndexPath
   ) {
-    guard let kakaoMapScheme = URL(string: "kakaomap://") else { return }
+    guard let kakaoMapScheme = URL(string: KakaoMapURL.kakaoMapScheme) else { return }
 
-    // 카카오맵으로 연결할 수 있는 기기인지 판별
-    if UIApplication.shared.canOpenURL(kakaoMapScheme) {
+    let storeData = self.storeList[indexPath.item]
 
-      // 카카오맵 설치 디바이스인 경우
-      guard let url = URL(string: "kakaomap://look?p=37.402056,127.108212") else { return }
-      UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    let stringUrl = UIApplication.shared.canOpenURL(kakaoMapScheme)
+    ? "\(KakaoMapURL.appPrefix)\(storeData.locationY),\(storeData.locationX)"
+    : "\(KakaoMapURL.safariPrefix)\(storeData.locationY),\(storeData.locationX)"
 
-    } else {
-      // 미 설치 디바이스인 경우에는 사파리를 통해 카카오맵 진입하도록 처리
-      DispatchQueue.main.async {
-        guard let url = URL(string: "https://map.kakao.com/link/map/marker,37.402056,127.108212") else { return }
-        UIApplication.shared.open(url, options: [:])
-      }
+    guard let url = URL(string: stringUrl) else { return }
+
+    DispatchQueue.main.async {
+      UIApplication.shared.open(
+        url,
+        options: [:]
+      )
     }
   }
 
