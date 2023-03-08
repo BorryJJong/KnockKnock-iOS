@@ -42,12 +42,10 @@ final class StoreListCell: BaseCollectionViewCell {
   }
 
   private let storeNameLabel = UILabel().then {
-    $0.text = "청담동 스타벅스"
     $0.font = .systemFont(ofSize: 15, weight: .semibold)
   }
 
   private let storeInfoLabel = UILabel().then {
-    $0.text = "환경을 위한 다양한 프로모션이 준비 되어 있습니다."
     $0.numberOfLines = 1
     $0.font = .systemFont(ofSize: 12, weight: .medium)
     $0.textColor = .gray70

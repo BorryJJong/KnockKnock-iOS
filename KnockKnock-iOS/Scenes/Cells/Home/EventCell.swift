@@ -52,13 +52,11 @@ final class EventCell: BaseCollectionViewCell {
   private let periodLabel = UILabel().then {
     $0.font = .systemFont(ofSize: 12, weight: .medium)
     $0.textColor = .white
-    $0.text = "2021.06.25 - 2021.10.31"
   }
 
   private let titleLabel = UILabel().then {
     $0.font = .systemFont(ofSize: 17, weight: .bold)
     $0.textColor = .white
-    $0.text = "[스타벅스] 지구의날 온라인 MD 출시"
   }
 
   private let newEventLabel = UILabel().then {

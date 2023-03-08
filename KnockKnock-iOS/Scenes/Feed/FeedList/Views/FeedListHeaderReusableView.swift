@@ -42,6 +42,7 @@ class FeedListHeaderReusableView: UICollectionReusableView {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.layer.cornerRadius = 16
     $0.clipsToBounds = true
+    $0.image = KKDS.Image.ic_person_24
   }
 
   private let userIdLabel = UILabel().then {

@@ -29,14 +29,12 @@ final class NoticeCell: BaseCollectionViewCell {
 
   private let titleLabel = UILabel().then {
     $0.font = .systemFont(ofSize: 15, weight: .bold)
-    $0.text = "시스템 점검 안내"
     $0.numberOfLines = 1
   }
 
   private let dateLabel = UILabel().then {
     $0.font = .systemFont(ofSize: 13, weight: .medium)
     $0.textColor = .gray70
-    $0.text = "2022.10.24"
     $0.numberOfLines = 1
   }
 

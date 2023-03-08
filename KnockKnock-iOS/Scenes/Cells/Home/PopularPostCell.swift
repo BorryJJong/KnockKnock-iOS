@@ -39,7 +39,6 @@ final class PopularPostCell: BaseCollectionViewCell {
   private let nickNameLabel = UILabel().then {
     $0.font = .systemFont(ofSize: 12, weight: .medium)
     $0.textColor = .white
-    $0.text = "@ksungmin94"
   }
 
   // MARK: - Bind

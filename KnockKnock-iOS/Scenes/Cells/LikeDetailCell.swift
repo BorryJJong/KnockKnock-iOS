@@ -40,7 +40,6 @@ final class LikeDetailCell: BaseCollectionViewCell {
   }
 
   private let userNameLabel = UILabel().then {
-    $0.text = "ksungmin94"
     $0.font = .systemFont(ofSize: 15, weight: .semibold)
     $0.textColor = .black
   }
