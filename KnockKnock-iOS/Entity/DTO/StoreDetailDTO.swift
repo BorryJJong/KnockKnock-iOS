@@ -14,6 +14,8 @@ struct StoreDetailDTO: Decodable {
   let image: String
   let shopPromotionNames: [String]
   let url: String
+  let locationX: String // 경도
+  let locationY: String // 위도
 }
 
 extension StoreDetailDTO {
@@ -24,7 +26,9 @@ extension StoreDetailDTO {
       description: description,
       image: image,
       shopPromotionNames: shopPromotionNames,
-      url: URL(string: url)
+      url: URL(string: url),
+      locationX: locationX,
+      locationY: locationY
     )
   }
 }

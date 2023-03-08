@@ -14,4 +14,6 @@ struct StoreDetail: Decodable {
   let image: String
   let shopPromotionNames: [String]
   let url: URL?
+  let locationX: String // 경도
+  let locationY: String // 위도
 }
