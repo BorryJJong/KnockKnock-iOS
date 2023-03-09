@@ -11,13 +11,17 @@ final class StoreListViewController: BaseViewController<StoreListView> {
 
   // MARK: - Properties
 
-  private let store = ["", "", "", ""]
+  var interactor: StoreListInteractorProtocol?
+  
+  private var storeList: [StoreDetail] = []
 
   // MARK: - Life Cycles
 
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setupConfigure()
+
+    self.interactor?.fetchStoreDetailList()
   }
 
   override func setupConfigure() {
@@ -31,12 +35,23 @@ final class StoreListViewController: BaseViewController<StoreListView> {
   }
 }
 
+extension StoreListViewController: StoreListViewProtocol {
+  func fetchStoreList(storeList: [StoreDetail]) {
+    self.storeList = storeList
+
+    DispatchQueue.main.async {
+      self.containerView.storeCollectionView.reloadData()
+    }
+  }
+}
+
 extension StoreListViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+
   func collectionView(
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    return self.store.count
+    return self.storeList.count
   }
 
   func collectionView(
@@ -47,10 +62,33 @@ extension StoreListViewController: UICollectionViewDelegateFlowLayout, UICollect
       withType: StoreListCell.self,
       for: indexPath
     )
-    let isLast = indexPath.item == (self.store.count - 1)
+    let isLast = indexPath.item == (self.storeList.count - 1)
     cell.setSeparatorLineView(isLast: isLast)
+    cell.bind(store: self.storeList[indexPath.item])
 
     return cell
+  }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    didSelectItemAt indexPath: IndexPath
+  ) {
+    guard let kakaoMapScheme = URL(string: KakaoMapURL.kakaoMapScheme) else { return }
+
+    let storeData = self.storeList[indexPath.item]
+
+    let stringUrl = UIApplication.shared.canOpenURL(kakaoMapScheme)
+    ? "\(KakaoMapURL.appPrefix)\(storeData.locationY),\(storeData.locationX)"
+    : "\(KakaoMapURL.safariPrefix)\(storeData.locationY),\(storeData.locationX)"
+
+    guard let url = URL(string: stringUrl) else { return }
+
+    DispatchQueue.main.async {
+      UIApplication.shared.open(
+        url,
+        options: [:]
+      )
+    }
   }
 
   func collectionView(

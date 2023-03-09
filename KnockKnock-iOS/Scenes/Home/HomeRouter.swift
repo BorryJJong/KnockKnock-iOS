@@ -43,11 +43,13 @@ final class HomeRouter: HomeRouterProtocol {
   }
 
   func navigateToStoreListView() {
-    let storeListViewController = StoreListViewController()
+    let storeListViewController = StoreListRouter.createStoreListView()
 
     if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.pushViewController(
-        storeListViewController, animated: true)
+        storeListViewController,
+        animated: true
+      )
     }
   }
 

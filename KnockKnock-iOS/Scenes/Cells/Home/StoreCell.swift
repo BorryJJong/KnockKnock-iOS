@@ -22,7 +22,7 @@ final class StoreCell: BaseCollectionViewCell {
 
     static let storeInfoLabelTopMargin = 5.f
 
-    static let promotionStackViewTopMargin = 10.f
+    static let promotionViewTopMargin = 10.f
   }
 
   // MARK: - UIs
@@ -81,7 +81,7 @@ final class StoreCell: BaseCollectionViewCell {
 
     self.promotionView.snp.makeConstraints {
       $0.leading.bottom.trailing.equalTo(self.contentView)
-      $0.top.equalTo(self.storeInfoLabel.snp.bottom).offset(Metric.promotionStackViewTopMargin)
+      $0.top.equalTo(self.storeInfoLabel.snp.bottom).offset(Metric.promotionViewTopMargin)
     }
   }
 }

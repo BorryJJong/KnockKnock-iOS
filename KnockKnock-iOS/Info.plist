@@ -30,6 +30,7 @@
 		<string>knock-knock</string>
 		<string>kakaokompassauth</string>
 		<string>kakaolink</string>
+		<string>kakaomap</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
