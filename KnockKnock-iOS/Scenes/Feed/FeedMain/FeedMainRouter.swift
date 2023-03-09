@@ -8,16 +8,24 @@
 import UIKit
 
 protocol FeedMainRouterProtocol {
+  var view: FeedMainViewProtocol? { get set }
+  
   static func createFeed() -> UIViewController
 
   func navigateToFeedList(
-    source: FeedMainViewProtocol,
     feedId: Int,
     challengeId: Int
   )
+
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  ) 
 }
 
 final class FeedMainRouter: FeedMainRouterProtocol {
+
+  weak var view: FeedMainViewProtocol?
 
   static func createFeed() -> UIViewController {
     let view = FeedMainViewController()
@@ -27,16 +35,16 @@ final class FeedMainRouter: FeedMainRouterProtocol {
     let router = FeedMainRouter()
 
     view.interactor = interactor
-    view.router = router
+    interactor.router = router
     interactor.presenter = presenter
     interactor.worker = worker
     presenter.view = view
+    router.view = view
 
     return view
   }
 
   func navigateToFeedList(
-    source: FeedMainViewProtocol,
     feedId: Int,
     challengeId: Int
   ) {
@@ -44,10 +52,23 @@ final class FeedMainRouter: FeedMainRouterProtocol {
       feedId: feedId,
       challengeId: challengeId
     )
-    if let sourceView = source as? UIViewController {
+    if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.pushViewController(
         feedListViewController,
         animated: true
+      )
+    }
+  }
+
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  ) {
+    if let sourceView = self.view as? UIViewController {
+      sourceView.showAlert(
+        content: message,
+        isCancelActive: false,
+        confirmActionCompletion: confirmAction
       )
     }
   }

@@ -28,7 +28,6 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
   // MARK: - Properties
   
   var interactor: FeedMainInteractorProtocol?
-  var router: FeedMainRouterProtocol?
 
   private var feedMainPost: [FeedMain.Post] = []
   private var isNext: Bool = false
@@ -262,8 +261,7 @@ extension FeedMainViewController: UICollectionViewDelegate {
       )
       
     case CollectionViewTag.feed.rawValue:
-      self.router?.navigateToFeedList(
-        source: self,
+      self.interactor?.navigateToFeedList(
         feedId: feedMainPost[indexPath.item].id,
         challengeId: self.challengeId
       )

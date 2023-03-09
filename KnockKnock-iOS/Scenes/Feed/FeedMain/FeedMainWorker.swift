@@ -8,8 +8,15 @@
 import Foundation
 
 protocol FeedMainWorkerProtocol: AnyObject {
-  func fetchFeedMain(currentPage: Int, pageSize: Int, challengeId: Int, completionHandler: @escaping (FeedMain) -> Void)
-  func fetchChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void)
+  func fetchFeedMain(
+    currentPage: Int,
+    pageSize: Int,
+    challengeId: Int,
+    completionHandler: @escaping (Result<ApiResponseDTO<FeedMain>, NetworkErrorType>) -> Void
+  )
+  func fetchChallengeTitles(
+    completionHandler: @escaping (Result<ApiResponseDTO<[ChallengeTitle]>, NetworkErrorType>) -> Void
+  )
   
   func saveSearchKeyword(searchKeyword: [SearchKeyword])
 }
@@ -37,20 +44,26 @@ final class FeedMainWorker: FeedMainWorkerProtocol {
     currentPage: Int,
     pageSize: Int,
     challengeId: Int,
-    completionHandler: @escaping (FeedMain) -> Void) {
+    completionHandler: @escaping (Result<ApiResponseDTO<FeedMain>, NetworkErrorType>) -> Void
+  ) {
 
     repository.requestFeedMain(
       currentPage: currentPage,
       totalCount: pageSize,
       challengeId: challengeId,
       completionHandler: { result in
-      completionHandler(result)
-    })
+        completionHandler(result)
+      }
+    )
   }
 
-  func fetchChallengeTitles(completionHandler: @escaping ([ChallengeTitle]) -> Void) {
-    repository.requestChallengeTitles(completionHandler: { result in
-      completionHandler(result)
-    })
+  func fetchChallengeTitles(
+    completionHandler: @escaping (Result<ApiResponseDTO<[ChallengeTitle]>, NetworkErrorType>) -> Void
+  ) {
+    repository.requestChallengeTitles(
+      completionHandler: { result in
+        completionHandler(result)
+      }
+    )
   }
 }

@@ -15,11 +15,11 @@ protocol FeedRepositoryProtocol {
     currentPage: Int,
     totalCount: Int,
     challengeId: Int,
-    completionHandler: @escaping (FeedMain) -> Void
+    completionHandler: @escaping (Result<ApiResponseDTO<FeedMain>, NetworkErrorType>) -> Void
   )
 
   func requestChallengeTitles(
-    completionHandler: @escaping ([ChallengeTitle]) -> Void
+    completionHandler: @escaping (Result<ApiResponseDTO<[ChallengeTitle]>, NetworkErrorType>) -> Void
   )
 }
 
@@ -30,7 +30,7 @@ final class FeedRepository: FeedRepositoryProtocol {
   // MARK: - Feed main APIs
 
   func requestChallengeTitles(
-    completionHandler: @escaping ([ChallengeTitle]) -> Void
+    completionHandler: @escaping (Result<ApiResponseDTO<[ChallengeTitle]>, NetworkErrorType>) -> Void
   ) {
 
     KKNetworkManager
@@ -39,13 +39,17 @@ final class FeedRepository: FeedRepositoryProtocol {
         object: ApiResponseDTO<[ChallengeTitleDTO]>.self,
         router: .getChallengeTitles,
         success: { response in
-          guard let data = response.data else {
-            // no data error
-            return
-          }
-          completionHandler(data.map{$0.toDomain()})
+
+          let result = ApiResponseDTO(
+            code: response.code,
+            message: response.message,
+            data: response.data?.map { $0.toDomain() }
+          )
+          completionHandler(.success(result))
+
         }, failure: { error in
-          print(error)
+          print(error.localizedDescription)
+          completionHandler(.failure(NetworkErrorType.networkFail))
         }
       )
   }
@@ -54,27 +58,32 @@ final class FeedRepository: FeedRepositoryProtocol {
     currentPage: Int,
     totalCount: Int,
     challengeId: Int,
-    completionHandler: @escaping (FeedMain) -> Void
+    completionHandler: @escaping (Result<ApiResponseDTO<FeedMain>, NetworkErrorType>) -> Void
   ) {
 
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<FeedMain>.self,
+        object: ApiResponseDTO<FeedMainDTO>.self,
         router: .getFeedMain(
           page: currentPage,
           take: totalCount,
           challengeId: challengeId
         ),
         success: { response in
-          guard let data = response.data else {
-            // no data error
-            return
-          }
-          completionHandler(data)
+
+          let result = ApiResponseDTO(
+            code: response.code,
+            message: response.message,
+            data: response.data?.toDomain()
+          )
+          
+          completionHandler(.success(result))
         },
-        failure: { response in
-          print(response)
+
+        failure: { error in
+          print(error.localizedDescription)
+          completionHandler(.failure(NetworkErrorType.networkFail))
         }
       )
   }

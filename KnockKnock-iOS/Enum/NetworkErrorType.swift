@@ -9,9 +9,18 @@ import Foundation
 
 enum NetworkErrorType: Error {
 
-  /// 유효하지 않은 URL 형식 오류.
-  case invalidURLString
+  case unknownedError
+  case networkFail
 
-  /// 유효하지 않은 통신 오류.
-  case invalidServerResponse
+  var message: String {
+
+    switch self {
+
+    case .networkFail:
+      return "네트워크 연결상태를 확인해주세요."
+
+    case .unknownedError:
+      return "알 수 없는 오류가 발생하였습니다."
+    }
+  }
 }

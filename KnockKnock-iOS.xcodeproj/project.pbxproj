@@ -203,11 +203,8 @@
 		61AEABF8294F327900E05B59 /* FeedEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEABF2294F327900E05B59 /* FeedEditViewController.swift */; };
 		61AEABF9294F327900E05B59 /* FeedEditInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEABF3294F327900E05B59 /* FeedEditInteractor.swift */; };
 		61AEABFA294F327900E05B59 /* FeedEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEABF4294F327900E05B59 /* FeedEditView.swift */; };
-
-		61B10A9929B22798008D1C18 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 61B10A9829B22798008D1C18 /* Kingfisher */; };
-
 		61B10A9629B1D6A3008D1C18 /* HomeCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B10A9529B1D6A3008D1C18 /* HomeCollectionViewLayout.swift */; };
-
+		61B10A9929B22798008D1C18 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 61B10A9829B22798008D1C18 /* Kingfisher */; };
 		61B20B51292398C700EBA596 /* KKRequestInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B50292398C700EBA596 /* KKRequestInterceptor.swift */; };
 		61B20B572924BD7800EBA596 /* UserDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B562924BD7800EBA596 /* UserDataManager.swift */; };
 		61B20B592925FFA600EBA596 /* UIWindow+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B20B582925FFA600EBA596 /* UIWindow+Ext.swift */; };
@@ -2171,15 +2168,15 @@
 			package = 61A02841290E347900943A40 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
 		};
-		61B10A9829B22798008D1C18 /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 61B10A9729B22798008D1C18 /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
-    };
 		61A6B728298D1CF9002A1C57 /* FirebaseMessaging */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 61C21D0028C46C9E009B5F4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseMessaging;
+		};
+		61B10A9829B22798008D1C18 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61B10A9729B22798008D1C18 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 		61BB9DB12978E09900728E97 /* KakaoSDKShare */ = {
 			isa = XCSwiftPackageProductDependency;
