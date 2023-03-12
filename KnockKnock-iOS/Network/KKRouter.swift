@@ -29,6 +29,7 @@ enum KKRouter: URLRequestConvertible {
   case getHomeEvent
   case getBanner(bannerType: String)
   case getHomeVerificationShop
+  case getVerificationShop
   case getEvent(eventTap: String)
 
   // Account
@@ -84,6 +85,7 @@ enum KKRouter: URLRequestConvertible {
          .getHomeEvent,
          .getBanner,
          .getHomeVerificationShop,
+         .getVerificationShop,
          .getEvent:
       return .get
 
@@ -174,6 +176,7 @@ enum KKRouter: URLRequestConvertible {
     case .getHomeEvent: return "home-event"
     case .getBanner: return "banner"
     case .getHomeVerificationShop: return "home-verification-shop"
+    case .getVerificationShop: return "verification-shop"
     case .getEvent: return "event"
 
     // Challenge
@@ -230,7 +233,7 @@ enum KKRouter: URLRequestConvertible {
 
     case .getHomeEvent,
          .getHomeVerificationShop,
-         .getHomeEvent:
+         .getVerificationShop:
       return nil
 
     case let .getEvent(eventTap):

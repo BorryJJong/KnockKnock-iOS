@@ -67,6 +67,7 @@
 		6135F69329B47EB200727FE6 /* PolicyInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6135F69229B47EB200727FE6 /* PolicyInteractor.swift */; };
 		6135F69529B47EC000727FE6 /* PolicyPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6135F69429B47EC000727FE6 /* PolicyPresenter.swift */; };
 		6135F69729B47F3900727FE6 /* PolicyProtoocl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6135F69629B47F3900727FE6 /* PolicyProtoocl.swift */; };
+		6135F69D29B837F300727FE6 /* KakaoMapURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6135F69C29B837F300727FE6 /* KakaoMapURL.swift */; };
 		613856C3289553CB00BE347E /* FeedDetailInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613856C2289553CB00BE347E /* FeedDetailInteractor.swift */; };
 		613856C52895548D00BE347E /* FeedDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613856C42895548D00BE347E /* FeedDetailPresenter.swift */; };
 		613856C7289554E600BE347E /* FeedDetailWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613856C6289554E600BE347E /* FeedDetailWorker.swift */; };
@@ -262,6 +263,12 @@
 		61D190B8296BD76000329ABD /* ApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D190B7296BD76000329ABD /* ApiResponse.swift */; };
 		61D96D6229A86372009E2842 /* VerifiedStoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6129A86372009E2842 /* VerifiedStoreRepository.swift */; };
 		61D96D6429A87207009E2842 /* BannerRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6329A87207009E2842 /* BannerRepository.swift */; };
+		61D96D6629A899D1009E2842 /* StoreDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6529A899D1009E2842 /* StoreDetail.swift */; };
+		61D96D6A29A89B59009E2842 /* StoreDetailDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6929A89B59009E2842 /* StoreDetailDTO.swift */; };
+		61D96D6E29A89E20009E2842 /* StoreListInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6D29A89E20009E2842 /* StoreListInteractor.swift */; };
+		61D96D7029A9DECB009E2842 /* StoreListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6F29A9DECB009E2842 /* StoreListRouter.swift */; };
+		61D96D7229AA0F52009E2842 /* StoreListProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D7129AA0F52009E2842 /* StoreListProtocol.swift */; };
+		61D96D7429AA1275009E2842 /* StoreListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D7329AA1275009E2842 /* StoreListPresenter.swift */; };
 		61D96D7629AA1854009E2842 /* FeedEditRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D7529AA1854009E2842 /* FeedEditRepository.swift */; };
 		61D96D7A29AA191A009E2842 /* FeedWriteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D7929AA191A009E2842 /* FeedWriteRepository.swift */; };
 		61D96D8029AB258B009E2842 /* BottomSheetPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D7F29AB258B009E2842 /* BottomSheetPresenter.swift */; };
@@ -356,6 +363,7 @@
 		6135F69229B47EB200727FE6 /* PolicyInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyInteractor.swift; sourceTree = "<group>"; };
 		6135F69429B47EC000727FE6 /* PolicyPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyPresenter.swift; sourceTree = "<group>"; };
 		6135F69629B47F3900727FE6 /* PolicyProtoocl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyProtoocl.swift; sourceTree = "<group>"; };
+		6135F69C29B837F300727FE6 /* KakaoMapURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoMapURL.swift; sourceTree = "<group>"; };
 		613856C2289553CB00BE347E /* FeedDetailInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailInteractor.swift; sourceTree = "<group>"; };
 		613856C42895548D00BE347E /* FeedDetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailPresenter.swift; sourceTree = "<group>"; };
 		613856C6289554E600BE347E /* FeedDetailWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailWorker.swift; sourceTree = "<group>"; };
@@ -544,6 +552,12 @@
 		61D190B7296BD76000329ABD /* ApiResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiResponse.swift; sourceTree = "<group>"; };
 		61D96D6129A86372009E2842 /* VerifiedStoreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifiedStoreRepository.swift; sourceTree = "<group>"; };
 		61D96D6329A87207009E2842 /* BannerRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerRepository.swift; sourceTree = "<group>"; };
+		61D96D6529A899D1009E2842 /* StoreDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDetail.swift; sourceTree = "<group>"; };
+		61D96D6929A89B59009E2842 /* StoreDetailDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDetailDTO.swift; sourceTree = "<group>"; };
+		61D96D6D29A89E20009E2842 /* StoreListInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListInteractor.swift; sourceTree = "<group>"; };
+		61D96D6F29A9DECB009E2842 /* StoreListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListRouter.swift; sourceTree = "<group>"; };
+		61D96D7129AA0F52009E2842 /* StoreListProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListProtocol.swift; sourceTree = "<group>"; };
+		61D96D7329AA1275009E2842 /* StoreListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListPresenter.swift; sourceTree = "<group>"; };
 		61D96D7529AA1854009E2842 /* FeedEditRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEditRepository.swift; sourceTree = "<group>"; };
 		61D96D7929AA191A009E2842 /* FeedWriteRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWriteRepository.swift; sourceTree = "<group>"; };
 		61D96D7F29AB258B009E2842 /* BottomSheetPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetPresenter.swift; sourceTree = "<group>"; };
@@ -608,6 +622,8 @@
 		201077EC27D39A8B00280991 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
+				61D96D6829A89B4B009E2842 /* DTO */,
+				61D96D6729A899DB009E2842 /* Home */,
 				61EC54FB296BE314005D98DE /* Challenge */,
 				61B23BA32966F341005AFA6D /* Feed */,
 				619DEE9B28868E7E00C80095 /* Comment.swift */,
@@ -618,12 +634,8 @@
 				61A028762913AC5200943A40 /* Promotion.swift */,
 				61B20B5A29261B3B00EBA596 /* My.swift */,
 				61D190B7296BD76000329ABD /* ApiResponse.swift */,
-				61BB9DA7297679CC00728E97 /* HotPost.swift */,
 				6128A4CA29824DB1005E36F3 /* UserDetail.swift */,
-				61DE4184299B6698006C960F /* Event.swift */,
 				61CA513029A2030500C43461 /* HomeBanner.swift */,
-				61CA513429A342A400C43461 /* Store.swift */,
-				61DE4186299C6360006C960F /* EventDetail.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -767,13 +779,13 @@
 			isa = PBXGroup;
 			children = (
 				61B6D991288C2C1500E60F08 /* Views */,
-				61A45CF128A7710400070B22 /* Event */,
 				2090811727CA4F56005A1573 /* HomeViewController.swift */,
 				6105079728B4EEA800C1B5CF /* HomeInteractor.swift */,
 				6105079928B4EEDF00C1B5CF /* HomePresenter.swift */,
 				6105079328B4EE7E00C1B5CF /* HomeWorker.swift */,
 				6105079528B4EE9F00C1B5CF /* HomeRouter.swift */,
-				61A5EA2428B3B72100A0214D /* StoreListViewController.swift */,
+				61D96D6B29A89D4C009E2842 /* Store */,
+				61A45CF128A7710400070B22 /* Event */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -1267,7 +1279,6 @@
 				61B6D992288C2C2700E60F08 /* HomeView.swift */,
 				613856DD289A795200BE347E /* HomeHeaderCollectionReusableView.swift */,
 				613856E5289CCE4800BE347E /* PopularFooterCollectionReusableView.swift */,
-				61A5EA2228B3B71300A0214D /* StoreListView.swift */,
 				61B10A9529B1D6A3008D1C18 /* HomeCollectionViewLayout.swift */,
 			);
 			path = Views;
@@ -1326,6 +1337,47 @@
 				61D190B1296AA9D800329ABD /* ci_post_xcodebuild.sh */,
 			);
 			path = ci_scripts;
+			sourceTree = "<group>";
+		};
+		61D96D6729A899DB009E2842 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				61BB9DA7297679CC00728E97 /* HotPost.swift */,
+				61DE4184299B6698006C960F /* Event.swift */,
+				61CA513429A342A400C43461 /* Store.swift */,
+				61DE4186299C6360006C960F /* EventDetail.swift */,
+				61D96D6529A899D1009E2842 /* StoreDetail.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		61D96D6829A89B4B009E2842 /* DTO */ = {
+			isa = PBXGroup;
+			children = (
+				61D96D6929A89B59009E2842 /* StoreDetailDTO.swift */,
+			);
+			path = DTO;
+			sourceTree = "<group>";
+		};
+		61D96D6B29A89D4C009E2842 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				61D96D6C29A89D55009E2842 /* Views */,
+				61A5EA2428B3B72100A0214D /* StoreListViewController.swift */,
+				61D96D6D29A89E20009E2842 /* StoreListInteractor.swift */,
+				61D96D6F29A9DECB009E2842 /* StoreListRouter.swift */,
+				61D96D7129AA0F52009E2842 /* StoreListProtocol.swift */,
+				61D96D7329AA1275009E2842 /* StoreListPresenter.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		61D96D6C29A89D55009E2842 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				61A5EA2228B3B71300A0214D /* StoreListView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		61DE4197299C7B4E006C960F /* EventDetail */ = {
@@ -1390,6 +1442,7 @@
 				61DE4188299C64FE006C960F /* EventTapType.swift */,
 				61D96D8329AB3B44009E2842 /* BottomSheetSize.swift */,
 				61D96D8729AB4786009E2842 /* BottomSheetOption.swift */,
+				6135F69C29B837F300727FE6 /* KakaoMapURL.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -1616,6 +1669,7 @@
 				617F9D73282BAF8E00C2BC9A /* BottomSheetView.swift in Sources */,
 				61CA513329A2035800C43461 /* BannerType.swift in Sources */,
 				6139FF6B28E2CB0200CC9950 /* ShopSearchPresenter.swift in Sources */,
+				61D96D6A29A89B59009E2842 /* StoreDetailDTO.swift in Sources */,
 				61B23BA92966F440005AFA6D /* Address.swift in Sources */,
 				61CA513E29A6331900C43461 /* FeedListRepository.swift in Sources */,
 				613856E0289B5CF200BE347E /* BannerCell.swift in Sources */,
@@ -1687,6 +1741,7 @@
 				61215ADE28571E20003FDCAA /* FeedMainView.swift in Sources */,
 				61B23BAB296923E5005AFA6D /* UserDefaultsKey.swift in Sources */,
 				61EC54FD296BE32A005D98DE /* ChallengeTitle.swift in Sources */,
+				61D96D7429AA1275009E2842 /* StoreListPresenter.swift in Sources */,
 				2090811A27CA4F61005A1573 /* ChallengeViewController.swift in Sources */,
 				617E99C32987A04400E3FBD5 /* ImageError.swift in Sources */,
 				613856D82899015000BE347E /* HomeMainCell.swift in Sources */,
@@ -1731,6 +1786,7 @@
 				61AEABF9294F327900E05B59 /* FeedEditInteractor.swift in Sources */,
 				613856C3289553CB00BE347E /* FeedDetailInteractor.swift in Sources */,
 				6128A4BF297F6B24005E36F3 /* DeeplinkNavigator.swift in Sources */,
+				61D96D6629A899D1009E2842 /* StoreDetail.swift in Sources */,
 				61BB9DA62976784200728E97 /* HotPostRepository.swift in Sources */,
 				618D8B6428BDFD3200828794 /* SearchResultCell.swift in Sources */,
 				611BD4AC27E48B9F007D5C79 /* FeedWritePresenter.swift in Sources */,
@@ -1747,6 +1803,7 @@
 				616524BF297ECCCA009610C3 /* KakaoShareManager.swift in Sources */,
 				61B10A9629B1D6A3008D1C18 /* HomeCollectionViewLayout.swift in Sources */,
 				613856DB289948F500BE347E /* StoreCell.swift in Sources */,
+				61D96D7029A9DECB009E2842 /* StoreListRouter.swift in Sources */,
 				61A5EA2528B3B72100A0214D /* StoreListViewController.swift in Sources */,
 				61AEABF6294F327900E05B59 /* FeedEditWorker.swift in Sources */,
 				61DE4193299C7B14006C960F /* EventDetailViewController.swift in Sources */,
@@ -1799,6 +1856,7 @@
 				201077FE27D3D2AC00280991 /* ChallengeCell.swift in Sources */,
 				616EB08B28910485001BD18C /* PostHeaderReusableView.swift in Sources */,
 				61DE4187299C6360006C960F /* EventDetail.swift in Sources */,
+				61D96D7229AA0F52009E2842 /* StoreListProtocol.swift in Sources */,
 				618D8B5A28BDA12500828794 /* FeedSearchViewController.swift in Sources */,
 				6143297A28687B74008BDCC9 /* FeedListPresenter.swift in Sources */,
 				61767BB72990AF0200EA1FFC /* ReportCell.swift in Sources */,
@@ -1826,6 +1884,7 @@
 				6143295C2862F6BB008BDCC9 /* FeedMainRouter.swift in Sources */,
 				61A0285B2910DF1A00943A40 /* Account.swift in Sources */,
 				616EB08F28915470001BD18C /* LikeCell.swift in Sources */,
+				61D96D6E29A89E20009E2842 /* StoreListInteractor.swift in Sources */,
 				6105D2F628AFD544001413DF /* EventListView.swift in Sources */,
 				61BB9DA8297679CC00728E97 /* HotPost.swift in Sources */,
 				61215AE228572055003FDCAA /* FeedMainViewController.swift in Sources */,
@@ -1859,6 +1918,7 @@
 				611BD4BA27E702F5007D5C79 /* PropertySelectView.swift in Sources */,
 				618D8B6228BDF8E500828794 /* SearchResultPageCell.swift in Sources */,
 				611BD4B227E4903A007D5C79 /* FeedWriteRouter.swift in Sources */,
+				6135F69D29B837F300727FE6 /* KakaoMapURL.swift in Sources */,
 				61EC54FF296D097C005D98DE /* Challenge.swift in Sources */,
 				6139FF6F28E2DC9000CC9950 /* ShopSearchRepository.swift in Sources */,
 				61A730E228ED4ECD00C6BD98 /* MyView.swift in Sources */,
