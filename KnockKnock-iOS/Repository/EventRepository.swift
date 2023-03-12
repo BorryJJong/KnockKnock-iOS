@@ -8,29 +8,35 @@
 import Foundation
 
 protocol EventRepositoryProtocol {
-  func requestEventList() async -> [Event]
-  func requestEventDetailList(eventTapType: EventTapType) async -> [EventDetail]?
+  func requestEventList() async -> ApiResponse<[Event]>?
+  func requestEventDetailList(eventTapType: EventTapType) async -> ApiResponse<[EventDetail]>?
 }
 
 final class EventRepository: EventRepositoryProtocol {
 
   /// 이벤트 목록 조회
-  func requestEventList() async -> [Event] {
+  func requestEventList() async -> ApiResponse<[Event]>? {
+
     do {
       let result = try await KKNetworkManager
         .shared
         .asyncRequest(
-          object: ApiResponseDTO<[EventDTO]>.self,
+          object: ApiResponse<[EventDTO]>.self,
           router: .getHomeEvent
         )
 
-      guard let data = result.data else { return [] }
-      return data.map { $0.toDomain() }
+      guard let data = result.value else { return nil }
 
-    } catch let error {
-      print(error)
+      return ApiResponse(
+        code: data.code,
+        message: data.message,
+        data: data.data?.map{ $0.toDomain() }
+      )
 
-      return []
+    } catch {
+
+      print(error.localizedDescription)
+      return nil
     }
   }
 
@@ -38,21 +44,27 @@ final class EventRepository: EventRepositoryProtocol {
   ///
   /// - Parameters:
   ///  - eventTapType: 이벤트 상태 (종료/진행)
-  func requestEventDetailList(eventTapType: EventTapType) async -> [EventDetail]? {
+  func requestEventDetailList(eventTapType: EventTapType) async -> ApiResponse<[EventDetail]>? {
     do {
+
       let result = try await KKNetworkManager
         .shared
         .asyncRequest(
-          object: ApiResponseDTO<[EventDetailDTO]>.self,
+          object: ApiResponse<[EventDetailDTO]>.self,
           router: .getEvent(eventTap: eventTapType.rawValue)
         )
+      
+      guard let data = result.value else { return nil }
 
-      guard let data = result.data else { return nil }
-      return data.map { $0.toDomain() }
+      return ApiResponse(
+        code: data.code,
+        message: data.message,
+        data: data.data?.map{ $0.toDomain() }
+      )
 
-    } catch let error {
-      print(error)
+    } catch {
 
+      print(error.localizedDescription)
       return nil
     }
   }

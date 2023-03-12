@@ -27,6 +27,10 @@ protocol HomeInteractorProtocol {
   func navigateToStoreListView()
   func navigateToEventPageView()
   func navigateToFeedDetail(feedId: Int)
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class HomeInteractor: HomeInteractorProtocol {
@@ -51,30 +55,52 @@ final class HomeInteractor: HomeInteractorProtocol {
   }
 
   func fetchHotpost(challengeId: Int) {
+
     self.worker?.fetchHotPostList(
       challengeId: challengeId,
-      completionHandler: { [weak self] hotPostList in
-        self?.hotPostList = hotPostList
-        self?.presenter?.presentHotPostList(hotPostList: hotPostList)
+      completionHandler: { [weak self] response in
+
+        guard let self = self else { return }
+
+        self.showErrorAlert(response: response)
+
+        guard let hotPostList = response?.data else { return }
+
+        self.hotPostList = hotPostList
+        self.presenter?.presentHotPostList(hotPostList: hotPostList)
       }
     )
   }
 
+  // 챌린지 목록 패치(최초 실행시)
   func fetchChallengeList() {
-    self.worker?.fetchChallengeList { [weak self] challenges in
-      var challenges = challenges
+    self.worker?.fetchChallengeList { [weak self] response in
+
+      guard let self = self else { return }
+
+      self.showErrorAlert(response: response)
+
+      guard var challenges = response?.data else { return }
+
       challenges[0].isSelected = true
 
-      self?.presenter?.presentChallengeList(challengeList: challenges, index: nil)
+      self.presenter?.presentChallengeList(
+        challengeList: challenges,
+        index: nil
+      )
     }
   }
 
   func fetchEventList() {
+
     Task {
-      guard let eventList = await self.worker?.fetchEventList() else {
-        // error
-        return
+      let response = await self.worker?.fetchEventList()
+
+      await MainActor.run {
+        self.showErrorAlert(response: response)
       }
+
+      guard let eventList = response?.data else { return }
 
       self.presenter?.presentEventList(eventList: eventList)
     }
@@ -82,12 +108,15 @@ final class HomeInteractor: HomeInteractorProtocol {
 
   /// 배너 데이터 조회
   func fetchBanner(bannerType: BannerType) {
-    Task {
-      guard let bannerList = await self.worker?.fetchBanner(bannerType: bannerType) else {
 
-        // error
-        return
+    Task {
+      let response = await self.worker?.fetchBanner(bannerType: bannerType)
+
+      await MainActor.run {
+        self.showErrorAlert(response: response)
       }
+
+      guard let bannerList = response?.data else { return }
 
       switch bannerType {
 
@@ -102,11 +131,15 @@ final class HomeInteractor: HomeInteractorProtocol {
   }
 
   func fetchVerifiedStore() {
+
     Task {
-      guard let storeList = await self.worker?.fetchVerifiedStore() else {
-        // error
-        return
+      let response = await self.worker?.fetchVerifiedStore()
+
+      await MainActor.run {
+        self.showErrorAlert(response: response)
       }
+      guard let storeList = response?.data else { return }
+
       self.presenter?.presentStoreList(storeList: storeList)
     }
   }
@@ -136,5 +169,45 @@ final class HomeInteractor: HomeInteractorProtocol {
 
   func navigateToFeedDetail(feedId: Int) {
     self.router?.navigateToFeedDetail(feedId: feedId)
+  }
+
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  ) {
+    self.router?.showAlertView(
+      message: message,
+      confirmAction: confirmAction
+    )
+  }
+}
+
+extension HomeInteractorProtocol {
+
+  // MARK: - Error
+
+  func showErrorAlert<T>(response: ApiResponse<T>?) {
+
+    guard let response = response else {
+
+      LoadingIndicator.hideLoading()
+
+      self.showAlertView(
+        message: "네트워크 연결을 확인해 주세요.",
+        confirmAction: nil
+      )
+      return
+    }
+
+    guard response.data != nil else {
+
+      LoadingIndicator.hideLoading()
+
+      self.showAlertView(
+        message: response.message,
+        confirmAction: nil
+      )
+      return
+    }
   }
 }
