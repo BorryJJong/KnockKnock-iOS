@@ -19,7 +19,7 @@ final class FeedWriteRepository: FeedWriteRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<[ChallengeTitleDTO]>.self,
+        object: ApiResponse<[ChallengeTitleDTO]>.self,
         router: KKRouter.getChallengeTitles,
         success: { response in
           guard let data = response.data else {
@@ -27,16 +27,17 @@ final class FeedWriteRepository: FeedWriteRepositoryProtocol {
             return
           }
           completionHandler(data.map{$0.toDomain()})
-        }, failure: { error in
+        }, failure: { response, error in
           print(error)
-        })
+        }
+      )
   }
 
   func requestPromotionList(completionHandler: @escaping ([Promotion]) -> Void) {
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<[PromotionDTO]>.self,
+        object: ApiResponse<[PromotionDTO]>.self,
         router: KKRouter.getPromotions,
         success: { response in
           guard let data = response.data else {
@@ -45,7 +46,7 @@ final class FeedWriteRepository: FeedWriteRepositoryProtocol {
           }
           completionHandler(data.map{$0.toDomain()})
         },
-        failure: { error in
+        failure: { response, error in
           print(error)
         }
       )
@@ -58,12 +59,12 @@ final class FeedWriteRepository: FeedWriteRepositoryProtocol {
     KKNetworkManager
       .shared
       .upload(
-        object: ApiResponseDTO<FeedWriteDTO>.self,
+        object: ApiResponse<FeedWriteDTO>.self,
         router: KKRouter.postFeed(postData: postData),
         success: { response in
           completionHandler(response.data?.id)
         },
-        failure: { error in
+        failure: { response, error in
           print(error)
         }
       )

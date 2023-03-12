@@ -31,11 +31,11 @@ final class UserDataManager: UserDataManagerProtocol {
       let result = try await KKNetworkManager
         .shared
         .asyncRequest(
-          object: ApiResponseDTO<Bool>.self,
+          object: ApiResponse<Bool>.self,
           router: .getMyPage
         )
 
-      return result.code == 200
+      return result.value?.code == 200
 
     } catch let error {
       print(error)

@@ -26,7 +26,7 @@ final class ProfileRepository: ProfileRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<UserDetailDTO>.self,
+        object: ApiResponse<UserDetailDTO>.self,
         router: KKRouter.getUsersDetail,
         success: { response in
           guard let data = response.data else {
@@ -35,7 +35,7 @@ final class ProfileRepository: ProfileRepositoryProtocol {
           }
           completionHandler(data)
         },
-        failure: { error in
+        failure: { response, error in
           print(error)
 
         }
@@ -51,7 +51,7 @@ final class ProfileRepository: ProfileRepositoryProtocol {
     KKNetworkManager
       .shared
       .upload(
-        object: ApiResponseDTO<Bool>.self,
+        object: ApiResponse<Bool>.self,
         router: KKRouter.putUsers(
           nickname: nickname,
           image: image
@@ -59,7 +59,7 @@ final class ProfileRepository: ProfileRepositoryProtocol {
         success: { response in
           completionHandler(response.code == 200)
         },
-        failure: { error in
+        failure: { response, error in
           print(error)
         }
       )
@@ -72,7 +72,7 @@ final class ProfileRepository: ProfileRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<Bool>.self,
+        object: ApiResponse<Bool>.self,
         router: KKRouter.getDuplicateNickname(nickname: nickname),
         success: { response in
           guard let isSuccess = response.data else {
@@ -81,7 +81,7 @@ final class ProfileRepository: ProfileRepositoryProtocol {
           }
           completionHandler(isSuccess)
         },
-        failure: { error in
+        failure: { response, error in
           print(error)
         }
       )

@@ -8,47 +8,58 @@
 import Foundation
 
 protocol VerifiedStoreRepositoryProtocol {
-  func requestVerifiedStoreList() async -> [Store]?
-  func requestVerifiedStoreDetailList() async -> [StoreDetail]?
+  func requestVerifiedStoreDetailList() async -> ApiResponse<[StoreDetail]>?
+  func requestVerifiedStoreList() async -> ApiResponse<[Store]>?
 }
 
 final class VerifiedStoreRepository: VerifiedStoreRepositoryProtocol {
   
   /// 인증 스토어 목록 조회
-  func requestVerifiedStoreList() async -> [Store]? {
+  func requestVerifiedStoreList() async -> ApiResponse<[Store]>? {
     do {
+
       let result = try await KKNetworkManager
         .shared
         .asyncRequest(
-          object: ApiResponseDTO<[StoreDTO]>.self,
+          object: ApiResponse<[StoreDTO]>.self,
           router: .getHomeVerificationShop
         )
 
-      guard let data = result.data else { return nil }
-      return data.map { $0.toDomain() }
+      guard let data = result.value else { return nil }
+
+      return ApiResponse(
+        code: data.code,
+        message: data.message,
+        data: data.data?.map{ $0.toDomain() }
+      )
 
     } catch let error {
-      print(error)
 
+      print(error.localizedDescription)
       return nil
     }
   }
 
-  func requestVerifiedStoreDetailList() async -> [StoreDetail]? {
+  func requestVerifiedStoreDetailList() async -> ApiResponse<[StoreDetail]>? {
     do {
       let result = try await KKNetworkManager
         .shared
         .asyncRequest(
-          object: ApiResponseDTO<[StoreDetailDTO]>.self,
+          object: ApiResponse<[StoreDetailDTO]>.self,
           router: .getVerificationShop
         )
 
-      guard let data = result.data else { return nil }
-      return data.map { $0.toDomain() }
+      guard let data = result.value else { return nil }
+
+      return ApiResponse(
+        code: data.code,
+        message: data.message,
+        data: data.data?.map{ $0.toDomain() }
+      )
 
     } catch let error {
-      print(error)
 
+      print(error.localizedDescription)
       return nil
     }
   }

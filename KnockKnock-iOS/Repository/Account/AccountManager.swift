@@ -29,7 +29,7 @@ final class AccountManager: AccountManagerProtocol {
     KKNetworkManager
       .shared
       .upload(
-        object: ApiResponseDTO<AccountResponse>.self,
+        object: ApiResponse<AccountResponse>.self,
         router: KKRouter.postSignUp(userInfo: registerInfo),
         success: { response in
           guard let data = response.data else {
@@ -37,7 +37,7 @@ final class AccountManager: AccountManagerProtocol {
             return
           }
           completionHandler(data)
-        }, failure: { error in
+        }, failure: { response, error in
           print(error)
         }
       )
@@ -60,7 +60,7 @@ final class AccountManager: AccountManagerProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<AccountResponse>.self,
+        object: ApiResponse<AccountResponse>.self,
         router: KKRouter.postSocialLogin(
           socialUuid: accessToken,
           socialType: socialType.rawValue
@@ -72,7 +72,7 @@ final class AccountManager: AccountManagerProtocol {
           }
           completionHandler(data, signInInfo)
         },
-        failure: { error in
+        failure: { response, error in
           print(error)
         }
       )
@@ -83,7 +83,7 @@ final class AccountManager: AccountManagerProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<Bool>.self,
+        object: ApiResponse<Bool>.self,
         router: KKRouter.postLogOut,
         success: { response in
           if response.message == "SUCCESS" {
@@ -91,7 +91,7 @@ final class AccountManager: AccountManagerProtocol {
           } else {
             // error
           }
-        }, failure: { error in
+        }, failure: { response, error in
           print(error)
         }
       )
@@ -102,7 +102,7 @@ final class AccountManager: AccountManagerProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<Bool>.self,
+        object: ApiResponse<Bool>.self,
         router: KKRouter.deleteWithdraw,
         success: { response in
           if response.message == "SUCCESS" {
@@ -110,7 +110,7 @@ final class AccountManager: AccountManagerProtocol {
           } else {
             // error
           }
-        }, failure: { error in
+        }, failure: { response, error in
           print(error)
         }
       )

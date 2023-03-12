@@ -24,7 +24,7 @@ final class FeedEditRepository: FeedEditRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<Bool>.self,
+        object: ApiResponse<Bool>.self,
         router: .putFeed(
           id: id,
           post: postData
@@ -32,7 +32,7 @@ final class FeedEditRepository: FeedEditRepositoryProtocol {
         success: { response in
           completionHandler(response.code == 200)
         },
-        failure: { error in
+        failure: { response, error in
           print(error)
         }
       )

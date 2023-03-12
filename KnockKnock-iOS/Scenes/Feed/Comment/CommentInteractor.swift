@@ -49,11 +49,16 @@ final class CommentInteractor: CommentInteractorProtocol {
 
   /// 댓글 목록 조회 api로부터 받은 전체 댓글 fetch
   func fetchAllComments(feedId: Int) {
+
     self.worker?.getAllComments(
       feedId: feedId,
-      completionHandler: { [weak self] comments in
+      completionHandler: { [weak self] response in
 
         guard let self = self else { return }
+
+        self.showErrorAlert(response: response)
+
+        guard let comments = response?.data else { return }
 
         self.comments = comments
         self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
@@ -167,5 +172,34 @@ extension CommentInteractor {
     guard let isValidate = await self.worker?.checkTokenIsValidated() else { return false }
 
     return isValidate
+  }
+
+  // MARK: - Error
+
+  private func showErrorAlert<T>(response: ApiResponse<T>?) {
+    guard let response = response else {
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.showAlertView(
+          message: "네트워크 연결을 확인해 주세요.",
+          confirmAction: nil
+        )
+      }
+      return
+    }
+
+    guard response.data != nil else {
+
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.showAlertView(
+          message: response.message,
+          confirmAction: nil
+        )
+      }
+      return
+    }
   }
 }

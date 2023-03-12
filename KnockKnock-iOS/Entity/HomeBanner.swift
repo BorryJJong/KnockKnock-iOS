@@ -12,7 +12,7 @@ struct HomeBannerDTO: Decodable {
   let image: String
 }
 
-struct HomeBanner {
+struct HomeBanner: Decodable {
   let id: Int
   let image: String
 }

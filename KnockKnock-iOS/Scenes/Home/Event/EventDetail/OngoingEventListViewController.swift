@@ -41,7 +41,7 @@ final class OngoingEventListViewController: BaseViewController<EventListView> {
 
       self.ongoingEventList = await self.repository?.requestEventDetailList(
         eventTapType: .ongoing
-      ) ?? []
+      )?.data ?? []
 
       await MainActor.run {
         self.containerView.showResult(hasData: self.ongoingEventList.count != 0)

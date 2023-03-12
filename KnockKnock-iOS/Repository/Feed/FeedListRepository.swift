@@ -49,7 +49,7 @@ final class FeedListRepository: FeedListRepositoryProtocol {
       KKNetworkManager
         .shared
         .request(
-          object: ApiResponseDTO<FeedList>.self,
+          object: ApiResponse<FeedList>.self,
           router: .getFeedBlogPost(
             page: currentPage,
             take: pageSize,
@@ -63,8 +63,8 @@ final class FeedListRepository: FeedListRepositoryProtocol {
             }
             completionHandler(data)
           },
-          failure: { response in
-            print(response)
+          failure: { response, error in
+            print(error)
           }
         )
     }
@@ -77,14 +77,14 @@ final class FeedListRepository: FeedListRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<Bool>.self,
+        object: ApiResponse<Bool>.self,
         router: .deleteFeed(id: feedId),
         success: { response in
 
           let isSuccess = response.code == 200
           completionHandler(isSuccess)
 
-        }, failure: { error in
+        }, failure: { response, error in
 
           print(error)
         }
@@ -98,12 +98,12 @@ final class FeedListRepository: FeedListRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<Bool>.self,
+        object: ApiResponse<Bool>.self,
         router: .postHideBlogPost(id: feedId),
         success: { response in
           completionHandler(response.code == 200)
         },
-        failure: { error in
+        failure: { response, error in
           print(error)
         }
       )
@@ -118,7 +118,7 @@ final class FeedListRepository: FeedListRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<Bool>.self,
+        object: ApiResponse<Bool>.self,
         router: .postReportBlogPost(
           id: feedId,
           reportType: reportType.rawValue
@@ -126,7 +126,7 @@ final class FeedListRepository: FeedListRepositoryProtocol {
         success: { response in
           completionHandler(response.code == 200)
         },
-        failure: { error in
+        failure: { response, error in
           print(error)
         }
       )

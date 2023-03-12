@@ -41,7 +41,7 @@ final class ClosedEventListViewController: BaseViewController<EventListView> {
 
       self.endEventList = await self.repository?.requestEventDetailList(
         eventTapType: .end
-      ) ?? []
+      )?.data ?? []
 
       await MainActor.run {
         self.containerView.showResult(hasData: self.endEventList.count != 0)

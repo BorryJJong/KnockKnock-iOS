@@ -22,12 +22,12 @@ final class LikeRepository: LikeRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<Bool>.self,
+        object: ApiResponse<Bool>.self,
         router: KKRouter.postFeedLike(
           id: id
         ), success: { response in
           completionHandler(response.code == 200)
-        }, failure: { error in
+        }, failure: { response, error in
           print(error)
         }
       )
@@ -40,13 +40,13 @@ final class LikeRepository: LikeRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<Bool>.self,
+        object: ApiResponse<Bool>.self,
         router: KKRouter.deleteFeedLike(
           id: id
         ), success: { response in
           completionHandler(response.code == 200)
 
-        }, failure: { error in
+        }, failure: { response, error in
           print(error)
         }
       )
@@ -59,7 +59,7 @@ final class LikeRepository: LikeRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<Like>.self,
+        object: ApiResponse<Like>.self,
         router: KKRouter.getLikeList(id: feedId),
         success: { response in
           guard let data = response.data else {
@@ -68,7 +68,7 @@ final class LikeRepository: LikeRepositoryProtocol {
           }
           completionHandler(data.likes)
         },
-        failure: { error in
+        failure: { response, error in
           print(error)
         }
       )

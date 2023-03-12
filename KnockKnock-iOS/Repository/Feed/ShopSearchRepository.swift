@@ -25,11 +25,15 @@ final class ShopSearchRepository: ShopSearchRepositoryProtocol {
   ) {
     KKNetworkManager.shared.request(
       object: AddressResponse.self,
-      router: KKRouter.requestShopAddress(query: keyword, page: page, size: 15),
+      router: KKRouter.requestShopAddress(
+        query: keyword,
+        page: page,
+        size: 15
+      ),
       success: { response in
         completionHandler(response)
       },
-      failure: { error in
+      failure: { response, error in
         print(error)
       }
     )

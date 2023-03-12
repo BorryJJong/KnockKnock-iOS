@@ -19,7 +19,7 @@ final class ChallengeRepository: ChallengeRepositoryProtocol {
 
     KKNetworkManager.shared
       .request(
-        object: ApiResponseDTO<Challenge>.self,
+        object: ApiResponse<Challenge>.self,
         router: KKRouter.getChallenges(sort: sortType),
         success: { response in
           
@@ -29,8 +29,8 @@ final class ChallengeRepository: ChallengeRepositoryProtocol {
           }
           completionHandler(data)
         },
-        failure: { response in
-          print(response)
+        failure: { response, error in
+          print(error)
         }
       )
   }
@@ -41,7 +41,7 @@ final class ChallengeRepository: ChallengeRepositoryProtocol {
 
       KKNetworkManager.shared
         .request(
-          object: ApiResponseDTO<ChallengeDetail>.self,
+          object: ApiResponse<ChallengeDetail>.self,
           router: KKRouter.getChallengeDetail(id: challengeId),
           success: { response in
 
@@ -51,8 +51,8 @@ final class ChallengeRepository: ChallengeRepositoryProtocol {
             }
             completionHandler(data)
           },
-          failure: { response in
-            print(response)
+          failure: { response, error in
+            print(error)
           }
         )
     }

@@ -10,7 +10,7 @@ import Foundation
 protocol CommentWorkerProtocol {
   func getAllComments(
     feedId: Int,
-    completionHandler: @escaping ([Comment]) -> Void
+    completionHandler: @escaping (ApiResponse<[Comment]>?) -> Void
   )
   func requestAddComment(
     comment: AddCommentDTO,
@@ -52,16 +52,16 @@ final class CommentWorker: CommentWorkerProtocol {
   
   func getAllComments(
     feedId: Int,
-    completionHandler: @escaping ([Comment]) -> Void
+    completionHandler: @escaping (ApiResponse<[Comment]>?) -> Void
   ) {
-    var data: [Comment] = []
+
     self.commentRepository?.requestComments(
       feedId: feedId,
-      completionHandler: { comment in
-        let commentData = comment.map { Comment(data: $0) }
-        data += commentData
-        
-        completionHandler(data)
+      completionHandler: { response in
+//        let commentData = response?.data?.map { Comment(data: $0) }
+//        data += commentData
+//        
+        completionHandler(response)
       }
     )
   }
@@ -85,7 +85,7 @@ final class CommentWorker: CommentWorkerProtocol {
         
         visibleComments += reply.map {
           Comment(
-            data: CommentResponse(
+            data: Comment.Data(
               id: $0.id,
               userId: $0.userId,
               nickname: $0.nickname,

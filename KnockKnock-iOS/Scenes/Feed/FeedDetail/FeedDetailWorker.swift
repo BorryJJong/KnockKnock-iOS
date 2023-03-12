@@ -26,7 +26,7 @@ protocol FeedDetailWorkerProtocol {
 
   func getAllComments(
     feedId: Int,
-    completionHandler: @escaping ([Comment]) -> Void
+    completionHandler: @escaping (ApiResponse<[Comment]>?) -> Void
   )
   func fetchVisibleComments(comments: [Comment]?) -> [Comment]
 
@@ -178,7 +178,7 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
 
         visibleComments += reply.map {
           Comment(
-            data: CommentResponse(
+            data: Comment.Data(
               id: $0.id,
               userId: $0.userId,
               nickname: $0.nickname,
@@ -202,16 +202,14 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
 
   func getAllComments(
     feedId: Int,
-    completionHandler: @escaping ([Comment]) -> Void
+    completionHandler: @escaping (ApiResponse<[Comment]>?) -> Void
   ) {
-    var data: [Comment] = []
+
     self.commentRepository.requestComments(
       feedId: feedId,
-      completionHandler: { comment in
-        let commentData = comment.map { Comment(data: $0) }
-        data += commentData
+      completionHandler: { response in
 
-        completionHandler(data)
+        completionHandler(response)
       }
     )
   }
