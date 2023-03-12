@@ -12,10 +12,10 @@ protocol FeedMainWorkerProtocol: AnyObject {
     currentPage: Int,
     pageSize: Int,
     challengeId: Int,
-    completionHandler: @escaping (Result<ApiResponseDTO<FeedMain>, NetworkErrorType>) -> Void
+    completionHandler: @escaping (ApiResponse<FeedMain>?) -> Void
   )
   func fetchChallengeTitles(
-    completionHandler: @escaping (Result<ApiResponseDTO<[ChallengeTitle]>, NetworkErrorType>) -> Void
+    completionHandler: @escaping (ApiResponse<[ChallengeTitle]>?) -> Void
   )
   
   func saveSearchKeyword(searchKeyword: [SearchKeyword])
@@ -44,7 +44,7 @@ final class FeedMainWorker: FeedMainWorkerProtocol {
     currentPage: Int,
     pageSize: Int,
     challengeId: Int,
-    completionHandler: @escaping (Result<ApiResponseDTO<FeedMain>, NetworkErrorType>) -> Void
+    completionHandler: @escaping (ApiResponse<FeedMain>?) -> Void
   ) {
 
     repository.requestFeedMain(
@@ -58,7 +58,7 @@ final class FeedMainWorker: FeedMainWorkerProtocol {
   }
 
   func fetchChallengeTitles(
-    completionHandler: @escaping (Result<ApiResponseDTO<[ChallengeTitle]>, NetworkErrorType>) -> Void
+    completionHandler: @escaping (ApiResponse<[ChallengeTitle]>?) -> Void
   ) {
     repository.requestChallengeTitles(
       completionHandler: { result in

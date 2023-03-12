@@ -68,87 +68,46 @@ final class FeedMainInteractor: FeedMainInteractorProtocol {
       currentPage: currentPage,
       pageSize: pageSize,
       challengeId: challengeId,
-      completionHandler: { [weak self] result in
+      completionHandler: { [weak self] response in
 
         guard let self = self else { return }
 
-        switch result {
+        self.showErrorAlert(response: response)
 
-        case .success(let response):
+        guard let data = response?.data else { return }
 
-          guard let data = response.data,
-                response.code == 200 else {
+        if currentPage == 1 {
 
-            LoadingIndicator.hideLoading()
+          self.feedData = data
 
-            self.showAlertView(
-              message: response.message,
-              confirmAction: nil
-            )
-            return
-          }
+        } else {
 
-          if currentPage == 1 {
-            self.feedData = data
-          } else {
-            self.feedData?.feeds += data.feeds
-            self.feedData?.isNext = data.isNext
-          }
+          self.feedData?.feeds += data.feeds
+          self.feedData?.isNext = data.isNext
 
-          guard let feedData = self.feedData else { return }
-          self.presenter?.presentFeedMain(feed: feedData)
-
-        case .failure(let err):
-
-          LoadingIndicator.hideLoading()
-
-          self.showAlertView(
-            message: err.message,
-            confirmAction: nil
-          )
         }
+
+        guard let feedData = self.feedData else { return }
+        self.presenter?.presentFeedMain(feed: feedData)
+
       }
     )
   }
 
   func fetchChallengeTitles() {
 
-    self.worker?.fetchChallengeTitles { [weak self] result in
+    self.worker?.fetchChallengeTitles { [weak self] response in
 
       guard let self = self else { return }
 
-      switch result {
-      case .success(let response):
+      guard var challengeTitle = response?.data else { return }
 
-        guard var challengeTitle = response.data,
-              response.code == 200 else {
+      challengeTitle[0].isSelected = true
 
-          LoadingIndicator.hideLoading()
-
-          self.showAlertView(
-            message: response.message,
-            confirmAction: nil
-          )
-
-          return
-        }
-
-        challengeTitle[0].isSelected = true
-
-        self.presenter?.presentGetChallengeTitles(
-          challengeTitle: challengeTitle,
-          index: nil
-        )
-
-      case .failure(let err):
-        
-        LoadingIndicator.hideLoading()
-
-        self.showAlertView(
-          message: err.message,
-          confirmAction: nil
-        )
-      }
+      self.presenter?.presentGetChallengeTitles(
+        challengeTitle: challengeTitle,
+        index: nil
+      )
     }
   }
 
@@ -231,6 +190,35 @@ extension FeedMainInteractor {
       queue: nil
     ) { _ in
       self.presenter?.reloadFeedMain()
+    }
+  }
+
+  // MARK: - Error
+
+  private func showErrorAlert<T>(response: ApiResponse<T>?) {
+    guard let response = response else {
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.showAlertView(
+          message: "네트워크 연결을 확인해 주세요.",
+          confirmAction: nil
+        )
+      }
+      return
+    }
+
+    guard response.data != nil else {
+
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.showAlertView(
+          message: response.message,
+          confirmAction: nil
+        )
+      }
+      return
     }
   }
 }

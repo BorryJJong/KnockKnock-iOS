@@ -15,11 +15,11 @@ protocol FeedRepositoryProtocol {
     currentPage: Int,
     totalCount: Int,
     challengeId: Int,
-    completionHandler: @escaping (Result<ApiResponseDTO<FeedMain>, NetworkErrorType>) -> Void
+    completionHandler: @escaping (ApiResponse<FeedMain>?) -> Void
   )
 
   func requestChallengeTitles(
-    completionHandler: @escaping (Result<ApiResponseDTO<[ChallengeTitle]>, NetworkErrorType>) -> Void
+    completionHandler: @escaping (ApiResponse<[ChallengeTitle]>?) -> Void
   )
 }
 
@@ -30,26 +30,37 @@ final class FeedRepository: FeedRepositoryProtocol {
   // MARK: - Feed main APIs
 
   func requestChallengeTitles(
-    completionHandler: @escaping (Result<ApiResponseDTO<[ChallengeTitle]>, NetworkErrorType>) -> Void
+    completionHandler: @escaping (ApiResponse<[ChallengeTitle]>?) -> Void
   ) {
 
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<[ChallengeTitleDTO]>.self,
+        object: ApiResponse<[ChallengeTitleDTO]>.self,
         router: .getChallengeTitles,
         success: { response in
 
-          let result = ApiResponseDTO(
+          let result = ApiResponse(
             code: response.code,
             message: response.message,
             data: response.data?.map { $0.toDomain() }
           )
-          completionHandler(.success(result))
+          completionHandler(result)
 
-        }, failure: { error in
+        }, failure: { response, error in
+
+          guard let response = response else {
+            completionHandler(nil)
+            return
+          }
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.data?.map { $0.toDomain() }
+          )
+          completionHandler(result)
           print(error.localizedDescription)
-          completionHandler(.failure(NetworkErrorType.networkFail))
         }
       )
   }
@@ -58,13 +69,13 @@ final class FeedRepository: FeedRepositoryProtocol {
     currentPage: Int,
     totalCount: Int,
     challengeId: Int,
-    completionHandler: @escaping (Result<ApiResponseDTO<FeedMain>, NetworkErrorType>) -> Void
+    completionHandler: @escaping (ApiResponse<FeedMain>?) -> Void
   ) {
 
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<FeedMainDTO>.self,
+        object: ApiResponse<FeedMainDTO>.self,
         router: .getFeedMain(
           page: currentPage,
           take: totalCount,
@@ -72,18 +83,30 @@ final class FeedRepository: FeedRepositoryProtocol {
         ),
         success: { response in
 
-          let result = ApiResponseDTO(
+          let result = ApiResponse(
             code: response.code,
             message: response.message,
             data: response.data?.toDomain()
           )
           
-          completionHandler(.success(result))
+          completionHandler(result)
         },
 
-        failure: { error in
+        failure: { response, error in
+
+          guard let response = response else {
+            completionHandler(nil)
+            return
+          }
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.data?.toDomain()
+          )
+
+          completionHandler(result)
           print(error.localizedDescription)
-          completionHandler(.failure(NetworkErrorType.networkFail))
         }
       )
   }
