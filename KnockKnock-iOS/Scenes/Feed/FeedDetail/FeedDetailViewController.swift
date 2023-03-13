@@ -138,9 +138,9 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   @objc
   private func moreButtonDidTap(_ sender: UIButton) {
 
-    guard let feedDetail = self.feedDetail,
-          let isMyPost = feedDetail.feed?.isWriter,
-          let feedId = feedDetail.feed?.id else { return }
+    guard let feedDetail = self.feedDetail else { return }
+
+    let feedId = feedDetail.feed.id
 
     let deleteAction: (() -> Void)? = { self.interactor?.requestDelete(feedId: feedId) }
     let hideAcion: (() -> Void)?  = { self.interactor?.requestHide(feedId: feedId) }
@@ -149,7 +149,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
 
     var options: [BottomSheetOption] = []
 
-    if isMyPost {
+    if feedDetail.feed.isWriter {
       options = [
         .postDelete(deleteAction),
         .postEdit(editAction),
@@ -510,8 +510,8 @@ extension FeedDetailViewController: UICollectionViewDataSource {
         
         if let feedDetail = self.feedDetail {
           footer.bind(
-            name: feedDetail.feed?.storeName,
-            address: feedDetail.feed?.storeAddress
+            name: feedDetail.feed.storeName,
+            address: feedDetail.feed.storeAddress
           )
         }
         
