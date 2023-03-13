@@ -88,9 +88,13 @@ final class CommentInteractor: CommentInteractorProtocol {
   func requestAddComment(comment: AddCommentDTO) {
     self.worker?.requestAddComment(
       comment: comment,
-      completionHandler: { [weak self] isSuccess in
+      completionHandler: { [weak self] response in
 
         guard let self = self else { return }
+
+        self.showErrorAlert(response: response )
+
+        guard let isSuccess = response?.data else { return }
 
         if isSuccess {
           self.fetchAllComments(feedId: comment.postId)
@@ -118,9 +122,13 @@ final class CommentInteractor: CommentInteractorProtocol {
       feedId: feedId,
       commentId: commentId,
       comments: self.comments,
-      completionHandler: { [weak self] isSuccess in
+      completionHandler: { [weak self] response in
 
         guard let self = self else { return }
+
+        self.showErrorAlert(response: response )
+
+        guard let isSuccess = response?.data else { return }
 
         if isSuccess {
 

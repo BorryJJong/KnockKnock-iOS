@@ -14,14 +14,14 @@ protocol CommentWorkerProtocol {
   )
   func requestAddComment(
     comment: AddCommentDTO,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
   func fetchVisibleComments(comments: [Comment]?) -> [Comment]
   func requestDeleteComment(
     feedId: Int,
     commentId: Int,
     comments: [Comment],
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
   func convertDeletedComment(
     comments: [Comment],
@@ -58,9 +58,7 @@ final class CommentWorker: CommentWorkerProtocol {
     self.commentRepository?.requestComments(
       feedId: feedId,
       completionHandler: { response in
-//        let commentData = response?.data?.map { Comment(data: $0) }
-//        data += commentData
-//        
+   
         completionHandler(response)
       }
     )
@@ -109,15 +107,19 @@ final class CommentWorker: CommentWorkerProtocol {
   
   func requestAddComment(
     comment: AddCommentDTO,
-    completionHandler: @escaping OnCompletionHandler
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   ) {
     self.commentRepository?.requestAddComment(
       comment: comment,
-      completionHandler: { isSuccess in
-        if isSuccess {
-          self.postAddNotificationEvent(feedId: comment.postId)
+      completionHandler: { response in
+
+        if let isSuccess = response?.data {
+          if isSuccess {
+            self.postAddNotificationEvent(feedId: comment.postId)
+          }
         }
-        completionHandler(isSuccess)
+
+        completionHandler(response)
       }
     )
   }
@@ -126,25 +128,28 @@ final class CommentWorker: CommentWorkerProtocol {
     feedId: Int,
     commentId: Int,
     comments: [Comment],
-    completionHandler: @escaping OnCompletionHandler
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   ) {
     
     self.commentRepository?.requestDeleteComment(
       commentId: commentId,
-      completionHandler: { isSuccess in
-        if isSuccess {
-          
-          guard let commentIndex = comments.firstIndex(
-            where: { $0.data.id == commentId }
-          ) else { return }
-          
-          self.postDeleteNotificationEvent(
-            feedId: feedId,
-            replyCount: comments[commentIndex].data.replyCnt
-          )
-          
+      completionHandler: { response in
+
+        if let isSuccess = response?.data {
+          if isSuccess {
+
+            guard let commentIndex = comments.firstIndex(
+              where: { $0.data.id == commentId }
+            ) else { return }
+
+            self.postDeleteNotificationEvent(
+              feedId: feedId,
+              replyCount: comments[commentIndex].data.replyCnt
+            )
+
+          }
         }
-        completionHandler(isSuccess)
+        completionHandler(response)
       }
     )
   }

@@ -14,15 +14,16 @@ protocol CommentRepositoryProtocol {
   )
   func requestAddComment(
     comment: AddCommentDTO,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
   func requestDeleteComment(
     commentId: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
 }
 
 final class CommentRepository: CommentRepositoryProtocol {
+
   func requestComments(
     feedId: Int,
     completionHandler: @escaping (ApiResponse<[Comment]>?) -> Void
@@ -61,7 +62,7 @@ final class CommentRepository: CommentRepositoryProtocol {
 
   func requestAddComment(
     comment: AddCommentDTO,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   ) {
 
     do {
@@ -73,10 +74,28 @@ final class CommentRepository: CommentRepositoryProtocol {
           object: ApiResponse<Bool>.self,
           router: KKRouter.postAddComment(comment: parameters),
           success: { response in
-            completionHandler(true)
-          },
-          failure: { response, error in
-            print(error)
+
+            let result = ApiResponse(
+              code: response.code,
+              message: response.message,
+              data: true
+            )
+            completionHandler(result)
+
+          }, failure: { response, error in
+
+            guard let response = response else {
+              completionHandler(nil)
+              return
+            }
+
+            let result = ApiResponse(
+              code: response.code,
+              message: response.message,
+              data: false
+            )
+            completionHandler(result)
+            print(error.localizedDescription)
           }
         )
 
@@ -87,7 +106,7 @@ final class CommentRepository: CommentRepositoryProtocol {
 
   func requestDeleteComment(
     commentId: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   ) {
 
     KKNetworkManager
@@ -96,9 +115,28 @@ final class CommentRepository: CommentRepositoryProtocol {
         object: ApiResponse<Bool>.self,
         router: KKRouter.deleteComment(id: commentId),
         success: { response in
-          completionHandler(response.code == 200)
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+
         }, failure: { response, error in
-          print(error)
+
+          guard let response = response else {
+            completionHandler(nil)
+            return
+          }
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+          print(error.localizedDescription)
         }
       )
   }
