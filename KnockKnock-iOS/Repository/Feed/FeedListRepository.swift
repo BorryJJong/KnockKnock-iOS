@@ -15,26 +15,26 @@ protocol FeedListRepositoryProtocol {
     pageSize: Int,
     feedId: Int,
     challengeId: Int,
-    completionHandler: @escaping (FeedList) -> Void
+    completionHandler: @escaping (ApiResponse<FeedList>?) -> Void
   )
   func requestDeleteFeed(
     feedId: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
   func requestHidePost(
     feedId: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
   func requestReportPost(
     feedId: Int,
     reportType: ReportType,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
 }
 
 final class FeedListRepository: FeedListRepositoryProtocol {
 
-  typealias OnCompletionHandler = (Bool) -> Void
+  typealias OnCompletionHandler = (ApiResponse<Bool>?) -> Void
 
   // MARK: - Feed list APIs
 
@@ -43,13 +43,13 @@ final class FeedListRepository: FeedListRepositoryProtocol {
     pageSize: Int,
     feedId: Int,
     challengeId: Int,
-    completionHandler: @escaping (FeedList) -> Void
+    completionHandler: @escaping (ApiResponse<FeedList>?) -> Void
   ) {
 
       KKNetworkManager
         .shared
         .request(
-          object: ApiResponse<FeedList>.self,
+          object: ApiResponse<FeedListDTO>.self,
           router: .getFeedBlogPost(
             page: currentPage,
             take: pageSize,
@@ -57,14 +57,28 @@ final class FeedListRepository: FeedListRepositoryProtocol {
             challengeId: challengeId
           ),
           success: { response in
-            guard let data = response.data else {
-              // no data error
+
+            let result = ApiResponse(
+              code: response.code,
+              message: response.message,
+              data: response.data?.toDomain()
+            )
+            completionHandler(result)
+
+          }, failure: { response, error in
+
+            guard let response = response else {
+              completionHandler(nil)
               return
             }
-            completionHandler(data)
-          },
-          failure: { response, error in
-            print(error)
+
+            let result = ApiResponse(
+              code: response.code,
+              message: response.message,
+              data: response.data?.toDomain()
+            )
+            completionHandler(result)
+            print(error.localizedDescription)
           }
         )
     }
@@ -81,12 +95,27 @@ final class FeedListRepository: FeedListRepositoryProtocol {
         router: .deleteFeed(id: feedId),
         success: { response in
 
-          let isSuccess = response.code == 200
-          completionHandler(isSuccess)
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
 
         }, failure: { response, error in
 
-          print(error)
+          guard let response = response else {
+            completionHandler(nil)
+            return
+          }
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+          print(error.localizedDescription)
         }
       )
   }
@@ -101,10 +130,28 @@ final class FeedListRepository: FeedListRepositoryProtocol {
         object: ApiResponse<Bool>.self,
         router: .postHideBlogPost(id: feedId),
         success: { response in
-          completionHandler(response.code == 200)
-        },
-        failure: { response, error in
-          print(error)
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+
+        }, failure: { response, error in
+
+          guard let response = response else {
+            completionHandler(nil)
+            return
+          }
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+          print(error.localizedDescription)
         }
       )
   }
@@ -124,10 +171,28 @@ final class FeedListRepository: FeedListRepositoryProtocol {
           reportType: reportType.rawValue
         ),
         success: { response in
-          completionHandler(response.code == 200)
-        },
-        failure: { response, error in
-          print(error)
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+
+        }, failure: { response, error in
+
+          guard let response = response else {
+            completionHandler(nil)
+            return
+          }
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+          print(error.localizedDescription)
         }
       )
   }

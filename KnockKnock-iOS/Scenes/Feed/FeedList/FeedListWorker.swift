@@ -13,25 +13,25 @@ protocol FeedListWorkerProtocol {
     count: Int,
     feedId: Int,
     challengeId: Int,
-    completionHandler: @escaping (FeedList) -> Void
+    completionHandler: @escaping (ApiResponse<FeedList>?) -> Void
   )
   func requestDeleteFeed(
     feedId: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
   func requestLike(
     isLike: Bool,
     feedId: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
   func requestHidePost(
     feedId: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
   func requestReportFeed(
     feedId: Int,
     reportType: ReportType,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
   func removePostInFeedList(
     feeds: FeedList,
@@ -70,7 +70,7 @@ protocol FeedListWorkerProtocol {
 }
 
 final class FeedListWorker: FeedListWorkerProtocol {
-  typealias OnCompletionHandler = (Bool) -> Void
+  typealias OnCompletionHandler = (ApiResponse<Bool>?) -> Void
   
   private let feedListRepository: FeedListRepositoryProtocol
   private let likeRepository: LikeRepositoryProtocol
@@ -93,11 +93,14 @@ final class FeedListWorker: FeedListWorkerProtocol {
   ) {
     self.feedListRepository.requestDeleteFeed(
       feedId: feedId,
-      completionHandler: { isSuccess in
-        if isSuccess {
-          self.postResfreshNotificationEvent(feedId: feedId)
+      completionHandler: { response in
+
+        if let isSuccess = response?.data {
+          if isSuccess {
+            self.postResfreshNotificationEvent(feedId: feedId)
+          }
         }
-        completionHandler(isSuccess)
+        completionHandler(response)
       }
     )
   }
@@ -105,15 +108,18 @@ final class FeedListWorker: FeedListWorkerProtocol {
   /// 게시글 숨기기
   func requestHidePost(
     feedId: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping OnCompletionHandler
   ) {
     self.feedListRepository.requestHidePost(
       feedId: feedId,
-      completionHandler: { isSuccess in
-        if isSuccess {
-          self.postResfreshNotificationEvent(feedId: feedId)
+      completionHandler: { response in
+
+        if let isSuccess = response?.data {
+          if isSuccess {
+            self.postResfreshNotificationEvent(feedId: feedId)
+          }
         }
-        completionHandler(isSuccess)
+        completionHandler(response)
       }
     )
   }
@@ -187,7 +193,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
     count: Int,
     feedId: Int,
     challengeId: Int,
-    completionHandler: @escaping (FeedList) -> Void
+    completionHandler: @escaping (ApiResponse<FeedList>?) -> Void
   ) {
     self.feedListRepository.requestFeedList(
       currentPage: currentPage,

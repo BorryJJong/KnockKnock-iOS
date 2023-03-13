@@ -8,16 +8,25 @@
 import Foundation
 
 protocol LikeRepositoryProtocol {
-  func requestLike(id: Int, completionHandler: @escaping (Bool) -> Void)
-  func requestLikeCancel(id: Int, completionHandler: @escaping (Bool) -> Void)
-  func requestLikeList(feedId: Int, completionHandler: @escaping ([Like.Info]) -> Void)
+  func requestLike(
+    id: Int,
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
+  )
+  func requestLikeCancel(
+    id: Int,
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
+  )
+  func requestLikeList(
+    feedId: Int,
+    completionHandler: @escaping (ApiResponse<[Like.Info]>?) -> Void
+  )
 }
 
 final class LikeRepository: LikeRepositoryProtocol {
 
   func requestLike(
     id: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   ) {
     KKNetworkManager
       .shared
@@ -26,16 +35,35 @@ final class LikeRepository: LikeRepositoryProtocol {
         router: KKRouter.postFeedLike(
           id: id
         ), success: { response in
-          completionHandler(response.code == 200)
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+
         }, failure: { response, error in
-          print(error)
+
+          guard let response = response else {
+            completionHandler(nil)
+            return
+          }
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+          print(error.localizedDescription)
         }
       )
   }
 
   func requestLikeCancel(
     id: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   ) {
     KKNetworkManager
       .shared
@@ -44,17 +72,35 @@ final class LikeRepository: LikeRepositoryProtocol {
         router: KKRouter.deleteFeedLike(
           id: id
         ), success: { response in
-          completionHandler(response.code == 200)
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
 
         }, failure: { response, error in
-          print(error)
+
+          guard let response = response else {
+            completionHandler(nil)
+            return
+          }
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+          print(error.localizedDescription)
         }
       )
   }
 
   func requestLikeList(
     feedId: Int,
-    completionHandler: @escaping ([Like.Info]) -> Void
+    completionHandler: @escaping (ApiResponse<[Like.Info]>?) -> Void
   ) {
     KKNetworkManager
       .shared
@@ -62,14 +108,28 @@ final class LikeRepository: LikeRepositoryProtocol {
         object: ApiResponse<Like>.self,
         router: KKRouter.getLikeList(id: feedId),
         success: { response in
-          guard let data = response.data else {
-            // no data error
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.data?.likes
+          )
+          completionHandler(result)
+
+        }, failure: { response, error in
+
+          guard let response = response else {
+            completionHandler(nil)
             return
           }
-          completionHandler(data.likes)
-        },
-        failure: { response, error in
-          print(error)
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.data?.likes
+          )
+          completionHandler(result)
+          print(error.localizedDescription)
         }
       )
   }
