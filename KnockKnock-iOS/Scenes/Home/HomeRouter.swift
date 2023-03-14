@@ -15,10 +15,6 @@ protocol HomeRouterProtocol {
   func navigateToStoreListView()
   func navigateToEventPageView()
   func navigateToFeedDetail(feedId: Int)
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  )
 }
 
 final class HomeRouter: HomeRouterProtocol {
@@ -77,19 +73,6 @@ final class HomeRouter: HomeRouterProtocol {
       sourceView.navigationController?.pushViewController(
         feedDetailViewController,
         animated: true
-      )
-    }
-  }
-
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    if let sourceView = self.view as? UIViewController {
-      sourceView.showAlert(
-        content: message,
-        isCancelActive: false,
-        confirmActionCompletion: confirmAction
       )
     }
   }

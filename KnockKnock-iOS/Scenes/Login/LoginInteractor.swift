@@ -36,7 +36,7 @@ final class LoginInteractor: LoginInteractorProtocol {
 
         guard let self = self else { return }
 
-//        self.showErrorAlert(response: response)
+        self.showErrorAlert(response: response)
 
         guard let response = response?.data else { return }
 
@@ -68,7 +68,7 @@ final class LoginInteractor: LoginInteractorProtocol {
   ///   - response: 회원가입/로그인 api response(userinfo)
   func saveTokens(response: Account) {
     guard (self.worker?.saveUserInfo(response: response) != nil) == true else {
-      // error
+      self.presentError(message: "처리 중 오류가 발생하였습니다.")
       return
     }
 
@@ -104,6 +104,36 @@ extension LoginInteractor: AppleLoginResultDelegate {
     self.checkExistUser(
       response: response,
       signInInfo: signInInfo
+    )
+  }
+
+  // MARK: - Error
+
+  private func showErrorAlert<T>(response: ApiResponse<T>?) {
+    guard let response = response else {
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.presentError(message: "네트워크 연결을 확인해 주세요.")
+      }
+      return
+    }
+
+    guard response.data != nil else {
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.presentError(message: response.message)
+      }
+      return
+    }
+  }
+
+  private func presentError(message: String) {
+    self.presenter?.presentAlert(
+      message: message,
+      isCancelActive: false,
+      confirmAction: nil
     )
   }
 }

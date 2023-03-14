@@ -12,6 +12,12 @@ import KKDSKit
 
 protocol LoginViewProtocol: AnyObject {
   var interactor: LoginInteractorProtocol? { get set }
+
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class LoginViewController: BaseViewController<LoginView> {
@@ -66,6 +72,18 @@ final class LoginViewController: BaseViewController<LoginView> {
   }
 }
 
-extension LoginViewController: LoginViewProtocol {
+extension LoginViewController: LoginViewProtocol, AlertProtocol {
 
+  /// Alert 팝업 창
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool,
+    confirmAction: (() -> Void)?
+  ) {
+    self.showAlert(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
+  }
 }

@@ -126,7 +126,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
           )
           
         } else {
-          print(isSuccess) // error
+          self.presentError(message: "게시글 삭제에 실패하였습니다.")
         }
       }
     )
@@ -172,7 +172,8 @@ final class FeedListInteractor: FeedListInteractorProtocol {
           guard let isSuccess = response?.data else { return }
 
           guard isSuccess else {
-            // error handle
+
+            self.presentError(message: "처리 중 오류가 발생하였습니다.")
             return
           }
 
@@ -211,9 +212,8 @@ final class FeedListInteractor: FeedListInteractorProtocol {
           self.presenter?.presentFetchFeedList(feedList: feedListData)
 
         } else {
-          // error
+          self.presentError(message: "게시글 숨기기에 실패하였습니다.")
         }
-
       }
     )
   }
@@ -246,17 +246,11 @@ final class FeedListInteractor: FeedListInteractorProtocol {
             id: feedId
           ) else { return }
 
-          self.showAlertView(
-            message: "게시글이 신고 되었습니다.",
-            completion: nil
-          )
+          self.presentError(message: "게시글이 신고 되었습니다.")
           self.presenter?.presentFetchFeedList(feedList: feedListData)
 
         } else {
-          self.showAlertView(
-            message: "게시글 신고에 실패하였습니다.",
-            completion: nil
-          )
+          self.presentError(message: "게시글 신고에 실패하였습니다.")
         }
       }
     )
@@ -310,16 +304,6 @@ final class FeedListInteractor: FeedListInteractorProtocol {
         }
       }
     }
-  }
-
-  func showAlertView(
-    message: String,
-    completion: (() -> Void)?
-  ) {
-    self.router?.showAlertView(
-      message: message,
-      completion: completion
-    )
   }
 }
 
@@ -572,25 +556,26 @@ extension FeedListInteractor {
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.showAlertView(
-          message: "네트워크 연결을 확인해 주세요.",
-          completion: nil
-        )
+        self.presentError(message: "네트워크 연결을 확인해 주세요.")
       }
       return
     }
 
     guard response.data != nil else {
-
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.showAlertView(
-          message: response.message,
-          completion: nil
-        )
+        self.presentError(message: response.message)
       }
       return
     }
+  }
+
+  private func presentError(message: String) {
+    self.presenter?.presentAlert(
+      message: message,
+      isCancelActive: false,
+      confirmAction: nil
+    )
   }
 }

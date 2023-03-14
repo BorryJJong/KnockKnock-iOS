@@ -13,6 +13,12 @@ protocol FeedListPresenterProtocol {
   func presentFetchFeedList(feedList: FeedList)
   func presentUpdateFeedList(feedList: FeedList, sections: [IndexPath])
   func reloadFeedList()
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class FeedListPresenter: FeedListPresenterProtocol {
@@ -36,5 +42,17 @@ final class FeedListPresenter: FeedListPresenterProtocol {
 
   func reloadFeedList() {
     self.view?.reloadFeedList()
+  }
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool,
+    confirmAction: (() -> Void)?
+  ) {
+    self.view?.showAlertView(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

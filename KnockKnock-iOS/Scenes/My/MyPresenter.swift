@@ -13,6 +13,11 @@ protocol MyPresenterProtocol {
   func presentMenuData(myMenu: MyMenu)
   func presentLoginStatus(isSignedIn: Bool)
   func presentPushSetting()
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class MyPresenter: MyPresenterProtocol {
@@ -33,5 +38,17 @@ final class MyPresenter: MyPresenterProtocol {
 
   func presentPushSetting() {
     self.view?.setPushSetting()
+  }
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool,
+    confirmAction: (() -> Void)?
+  ) {
+    self.view?.showAlertView(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

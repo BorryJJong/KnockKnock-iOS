@@ -27,10 +27,6 @@ protocol HomeInteractorProtocol {
   func navigateToStoreListView()
   func navigateToEventPageView()
   func navigateToFeedDetail(feedId: Int)
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  )
 }
 
 final class HomeInteractor: HomeInteractorProtocol {
@@ -170,16 +166,6 @@ final class HomeInteractor: HomeInteractorProtocol {
   func navigateToFeedDetail(feedId: Int) {
     self.router?.navigateToFeedDetail(feedId: feedId)
   }
-
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    self.router?.showAlertView(
-      message: message,
-      confirmAction: confirmAction
-    )
-  }
 }
 
 extension HomeInteractorProtocol {
@@ -192,10 +178,12 @@ extension HomeInteractorProtocol {
 
       LoadingIndicator.hideLoading()
 
-      self.showAlertView(
+      self.presenter?.presentAlert(
         message: "네트워크 연결을 확인해 주세요.",
+        isCancelActive: false,
         confirmAction: nil
       )
+
       return
     }
 
@@ -203,8 +191,9 @@ extension HomeInteractorProtocol {
 
       LoadingIndicator.hideLoading()
 
-      self.showAlertView(
+      self.presenter?.presentAlert(
         message: response.message,
+        isCancelActive: false,
         confirmAction: nil
       )
       return

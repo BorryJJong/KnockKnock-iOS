@@ -22,6 +22,12 @@ protocol HomeViewProtocol: AnyObject {
   func fetchMainBannerList(bannerList: [HomeBanner])
   func fetchBarBannerList(bannerList: [HomeBanner])
   func fetchStoreList(storeList: [Store])
+
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class HomeViewController: BaseViewController<HomeView> {
@@ -92,7 +98,7 @@ final class HomeViewController: BaseViewController<HomeView> {
 
 // MARK: - HomeViewProtocol
 
-extension HomeViewController: HomeViewProtocol {
+extension HomeViewController: HomeViewProtocol, AlertProtocol {
 
   func fetchMainBannerList(bannerList: [HomeBanner]) {
     self.mainBannerList = bannerList
@@ -154,6 +160,18 @@ extension HomeViewController: HomeViewProtocol {
     DispatchQueue.main.async {
       self.containerView.reloadHomeCollectionViewSection(section: .event)
     }
+  }
+
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool,
+    confirmAction: (() -> Void)?
+  ) {
+    self.showAlert(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }
 

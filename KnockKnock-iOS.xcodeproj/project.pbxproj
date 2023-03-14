@@ -47,6 +47,7 @@
 		611BD4BC27E70393007D5C79 /* PropertySelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4BB27E70393007D5C79 /* PropertySelectViewController.swift */; };
 		611BD4C127E767CE007D5C79 /* shopSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4C027E767CE007D5C79 /* shopSearchView.swift */; };
 		611ED84829BEBDEC00DB0A48 /* ChallengeDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611ED84729BEBDEC00DB0A48 /* ChallengeDetail.swift */; };
+		611ED85029C0479A00DB0A48 /* AlertProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611ED84F29C0479A00DB0A48 /* AlertProtocol.swift */; };
 		61215AC5284F856D003FDCAA /* KKNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AC4284F856D003FDCAA /* KKNetworkManager.swift */; };
 		61215AC928507D51003FDCAA /* KKRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AC828507D51003FDCAA /* KKRouter.swift */; };
 		61215ACB2852D5B5003FDCAA /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215ACA2852D5B5003FDCAA /* APIConstants.swift */; };
@@ -343,6 +344,7 @@
 		611BD4BB27E70393007D5C79 /* PropertySelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertySelectViewController.swift; sourceTree = "<group>"; };
 		611BD4C027E767CE007D5C79 /* shopSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shopSearchView.swift; sourceTree = "<group>"; };
 		611ED84729BEBDEC00DB0A48 /* ChallengeDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetail.swift; sourceTree = "<group>"; };
+		611ED84F29C0479A00DB0A48 /* AlertProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertProtocol.swift; sourceTree = "<group>"; };
 		61215AC4284F856D003FDCAA /* KKNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KKNetworkManager.swift; sourceTree = "<group>"; };
 		61215AC828507D51003FDCAA /* KKRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KKRouter.swift; sourceTree = "<group>"; };
 		61215ACA2852D5B5003FDCAA /* APIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
@@ -1413,6 +1415,7 @@
 			children = (
 				61DEFE8C2941AF7A00ABC13E /* Views */,
 				61DEFE8D2941AF9000ABC13E /* AlertViewController.swift */,
+				611ED84F29C0479A00DB0A48 /* AlertProtocol.swift */,
 			);
 			path = Alert;
 			sourceTree = "<group>";
@@ -1708,6 +1711,7 @@
 				6105079628B4EE9F00C1B5CF /* HomeRouter.swift in Sources */,
 				6190E968294EEE5F00A48512 /* Encodable+Ext.swift in Sources */,
 				6128A4C3297F7CC6005E36F3 /* FeedShare.swift in Sources */,
+				611ED85029C0479A00DB0A48 /* AlertProtocol.swift in Sources */,
 				61D96D8829AB4786009E2842 /* BottomSheetOption.swift in Sources */,
 				20EAE2972814054F009242A1 /* ChellengeRepository.swift in Sources */,
 				618FDAC527E80C6B00C2823F /* ShopSearchViewController.swift in Sources */,
