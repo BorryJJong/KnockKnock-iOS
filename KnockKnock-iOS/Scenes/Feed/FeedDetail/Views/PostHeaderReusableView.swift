@@ -151,7 +151,7 @@ final class PostHeaderReusableView: UICollectionReusableView {
     }
 
     self.contentLabel.setLineHeight(
-      content: feedData.feed?.content ?? "",
+      content: feedData.feed.content,
       font: .systemFont(ofSize: 14, weight: .regular)
     )
     

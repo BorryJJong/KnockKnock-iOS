@@ -139,13 +139,14 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
         promotions: promotions,
         challenges: challenges,
         images: images
-      ), completionHandler: { feedId in
+      ),
+      completionHandler: { [weak self] response in
 
-        guard let feedId = feedId else {
-          // error
+        guard let self = self else { return }
 
-          return
-        }
+        self.showErrorAlert(response: response)
+
+        guard let feedId = response?.data else { return }
 
         LoadingIndicator.hideLoading()
 
@@ -199,15 +200,51 @@ extension FeedWriteInteractor {
 
     // 태그(챌린지) 리스트 api
     self.worker?.requestTagList(
-      selectedChallengeId: selectedChallengeId,
-      completionHandler: { [weak self] challenges in
+      completionHandler: { [weak self] response in
 
         guard let self = self else { return }
 
-        self.selectedTagList = challenges
+        self.showErrorAlert(response: response)
+
+        guard let challenges = response?.data,
+              let selectedTagList = self.worker?.selectChallenge(
+                selectedChallengeId: selectedChallengeId,
+                challenges: challenges
+              ) else { return }
+
+        self.selectedTagList = selectedTagList
 
         self.presenter?.presentSelectedTags(tagList: self.selectedTagList)
       }
     )
+  }
+
+  // MARK: - Error
+
+  private func showErrorAlert<T>(response: ApiResponse<T>?) {
+    guard let response = response else {
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.showAlertView(
+          message: "네트워크 연결을 확인해 주세요.",
+          confirmAction: nil
+        )
+      }
+      return
+    }
+
+    guard response.data != nil else {
+
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.showAlertView(
+          message: response.message,
+          confirmAction: nil
+        )
+      }
+      return
+    }
   }
 }

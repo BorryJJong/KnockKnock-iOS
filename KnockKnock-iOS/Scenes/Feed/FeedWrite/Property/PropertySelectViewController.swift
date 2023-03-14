@@ -11,7 +11,6 @@ import Then
 import KKDSKit
 
 protocol PropertySelectViewProtocol: AnyObject {
-  var router: PropertySelectRouterProtocol? { get set }
   var interactor: PropertySelectInteractorProtocol? { get set }
 
   func fetchPromotionList(promotionList: [Promotion])
@@ -26,8 +25,7 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
   var promotionList: [Promotion] = []
 
   var propertyType = PropertyType.promotion
-  
-  var router: PropertySelectRouterProtocol?
+
   var interactor: PropertySelectInteractorProtocol?
 
   // MARK: - UIs
@@ -101,21 +99,20 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
   // MARK: - Button Actions
 
   @objc private func doneButtonDidTap(_ sender: UIBarButtonItem) {
+
     if self.propertyType == .promotion {
-      self.router?.passPromotionToFeedWriteView(
-        source: self,
-        promotionList: self.promotionList
-      )
+
+      self.interactor?.passPromotionToFeedWriteView(promotionList: self.promotionList)
+
     } else if self.propertyType == .tag {
-      self.router?.passTagToFeedWriteView(
-        source: self,
-        tagList: self.tagList
-      )
+
+      self.interactor?.passTagToFeedWriteView(tagList: self.tagList)
+
     }
   }
 
   @objc func tapBackBarButton(_ sender: UIBarButtonItem) {
-    self.router?.navigateToFeedWriteView(source: self)
+    self.interactor?.navigateToFeedWriteView()
   }
 }
 

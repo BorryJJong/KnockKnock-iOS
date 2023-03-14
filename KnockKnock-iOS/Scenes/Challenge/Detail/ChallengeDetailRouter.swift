@@ -15,6 +15,10 @@ protocol ChallengeDetailRouterProtocol {
   func presentErrorAlertView(message: String)
   func popChallengeDetailView()
   func presentToFeedWrite(challengeId: Int)
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class ChallengeDetailRouter: ChallengeDetailRouterProtocol {
@@ -69,5 +73,18 @@ final class ChallengeDetailRouter: ChallengeDetailRouterProtocol {
 
     sourceView.navigationController?.present(feedWriteViewController, animated: true)
 
+  }
+
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  ) {
+    guard let sourceView = self.view as? UIViewController else { return }
+
+    sourceView.showAlert(
+      content: message,
+      isCancelActive: false,
+      confirmActionCompletion: confirmAction
+    )
   }
 }

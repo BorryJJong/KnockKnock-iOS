@@ -199,10 +199,10 @@ final class FeedEditView: UIView {
       self.setPromotion(promotion: promotions)
     }
 
-    self.contentTextView.text = data?.feed?.content
+    self.contentTextView.text = data?.feed.content
 
-    guard let storeName = data?.feed?.storeName,
-          let storeAddress = data?.feed?.storeAddress else { return }
+    guard let storeName = data?.feed.storeName,
+          let storeAddress = data?.feed.storeAddress else { return }
 
     self.setAddress(name: storeName, address: storeAddress)
   }

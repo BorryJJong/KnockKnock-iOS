@@ -67,11 +67,29 @@ final class MyInteractor: MyInteractorProtocol {
   }
 
   func requestSignOut() {
-    self.worker?.requestSignOut()
+    self.worker?.requestSignOut(
+      completionHandler: { [weak self] response in
+        guard let self = self else { return }
+
+        // error
+
+        guard let isSuccess = response?.data else { return }
+
+      }
+    )
   }
 
   func requestWithdraw() {
-    self.worker?.requestWithdraw()
+    self.worker?.requestWithdraw(
+      completionHandler: { [weak self] response in
+        guard let self = self else { return }
+
+        // error
+
+        guard let isSuccess = response?.data else { return }
+
+      }
+    )
   }
 
   // Routing

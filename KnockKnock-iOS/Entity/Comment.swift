@@ -61,6 +61,7 @@ struct Comment: Decodable {
 }
 
 extension CommentDTO {
+
   func toDomain() -> Comment {
     return .init(
       data: Comment.Data(

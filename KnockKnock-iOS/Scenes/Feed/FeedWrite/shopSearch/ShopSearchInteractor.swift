@@ -10,16 +10,32 @@ import Foundation
 protocol ShopSearchInteractorProtocol {
   var worker: ShopSearchWorkerProtocol? { get set }
   var presenter: ShopSearchPresenterProtocol? { get set }
+  var router: ShopSearchRouterProtocol? { get set }
 
-  func fetchShopAddress(address: String?, isNew: Bool)
+  func fetchShopAddress(
+    address: String?,
+    isNew: Bool
+  )
   func fetchCityList()
   func fetchCountyList(city: String)
+
+  func presentBottomSheetView(
+    content: [String],
+    districtsType: DistrictsType
+  )
+  func passDataToFeedWriteView(address: AddressResponse.Documents?)
+  func navigateToFeedWriteView()
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class ShopSearchInteractor: ShopSearchInteractorProtocol {
 
   var worker: ShopSearchWorkerProtocol?
   var presenter: ShopSearchPresenterProtocol?
+  var router: ShopSearchRouterProtocol?
 
   var selectedCity: String?
   var selectedCounty: String?
@@ -51,6 +67,15 @@ final class ShopSearchInteractor: ShopSearchInteractorProtocol {
       keyword: keyword,
       page: page,
       completionHandler: { address in
+
+        guard let address = address else {
+          self.showAlertView(
+            message: "검색에 실패하였습니다. 잠시 후에 다시 시도해 주세요.",
+            confirmAction: nil
+          )
+          return
+        }
+
         self.presenter?.presentShopAddress(address: address)
           self.page += 1
       }
@@ -81,6 +106,34 @@ final class ShopSearchInteractor: ShopSearchInteractorProtocol {
           }
         }
       }
+    )
+  }
+
+  func presentBottomSheetView(
+    content: [String],
+    districtsType: DistrictsType
+  ) {
+    self.router?.presentBottomSheetView(
+      content: content,
+      districtsType: districtsType
+    )
+  }
+
+  func passDataToFeedWriteView(address: AddressResponse.Documents?) {
+    self.router?.passDataToFeedWriteView(address: address)
+  }
+
+  func navigateToFeedWriteView() {
+    self.router?.navigateToFeedWriteView()
+  }
+
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  ) {
+    self.router?.showAlertView(
+      message: message,
+      confirmAction: confirmAction
     )
   }
 }

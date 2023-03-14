@@ -46,6 +46,7 @@
 		611BD4BA27E702F5007D5C79 /* PropertySelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4B927E702F5007D5C79 /* PropertySelectView.swift */; };
 		611BD4BC27E70393007D5C79 /* PropertySelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4BB27E70393007D5C79 /* PropertySelectViewController.swift */; };
 		611BD4C127E767CE007D5C79 /* shopSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BD4C027E767CE007D5C79 /* shopSearchView.swift */; };
+		611ED84829BEBDEC00DB0A48 /* ChallengeDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611ED84729BEBDEC00DB0A48 /* ChallengeDetail.swift */; };
 		61215AC5284F856D003FDCAA /* KKNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AC4284F856D003FDCAA /* KKNetworkManager.swift */; };
 		61215AC928507D51003FDCAA /* KKRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215AC828507D51003FDCAA /* KKRouter.swift */; };
 		61215ACB2852D5B5003FDCAA /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61215ACA2852D5B5003FDCAA /* APIConstants.swift */; };
@@ -342,6 +343,7 @@
 		611BD4B927E702F5007D5C79 /* PropertySelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertySelectView.swift; sourceTree = "<group>"; };
 		611BD4BB27E70393007D5C79 /* PropertySelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertySelectViewController.swift; sourceTree = "<group>"; };
 		611BD4C027E767CE007D5C79 /* shopSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shopSearchView.swift; sourceTree = "<group>"; };
+		611ED84729BEBDEC00DB0A48 /* ChallengeDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetail.swift; sourceTree = "<group>"; };
 		61215AC4284F856D003FDCAA /* KKNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KKNetworkManager.swift; sourceTree = "<group>"; };
 		61215AC828507D51003FDCAA /* KKRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KKRouter.swift; sourceTree = "<group>"; };
 		61215ACA2852D5B5003FDCAA /* APIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
@@ -1450,6 +1452,7 @@
 		61EC54FB296BE314005D98DE /* Challenge */ = {
 			isa = PBXGroup;
 			children = (
+				611ED84729BEBDEC00DB0A48 /* ChallengeDetail.swift */,
 				61EC54FE296D097C005D98DE /* Challenge.swift */,
 				61EC54FC296BE32A005D98DE /* ChallengeTitle.swift */,
 			);
@@ -1810,6 +1813,7 @@
 				61DE4193299C7B14006C960F /* EventDetailViewController.swift in Sources */,
 				61CCF3FB2984D7F000FBAB07 /* SharQueryItemType.swift in Sources */,
 				6139FF7128E4165D00CC9950 /* PropertyType.swift in Sources */,
+				611ED84829BEBDEC00DB0A48 /* ChallengeDetail.swift in Sources */,
 				616AE6C02988BD0D00706B9C /* String+Ext.swift in Sources */,
 				614329552862EFE0008BDCC9 /* FeedListView.swift in Sources */,
 				61DEFE8429402DEE00ABC13E /* UIImage+Ext.swift in Sources */,

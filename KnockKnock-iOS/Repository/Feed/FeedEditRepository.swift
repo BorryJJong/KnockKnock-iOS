@@ -11,15 +11,16 @@ protocol FeedEditRepositoryProtocol {
   func requestEditFeed(
     id: Int,
     postData: FeedEdit,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
 }
 
 final class FeedEditRepository: FeedEditRepositoryProtocol {
+
   func requestEditFeed(
     id: Int,
     postData: FeedEdit,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   ) {
     KKNetworkManager
       .shared
@@ -30,10 +31,28 @@ final class FeedEditRepository: FeedEditRepositoryProtocol {
           post: postData
         ),
         success: { response in
-          completionHandler(response.code == 200)
-        },
-        failure: { response, error in
-          print(error)
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+
+        }, failure: { response, error in
+
+          guard let response = response else {
+            completionHandler(nil)
+            return
+          }
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+          print(error.localizedDescription)
         }
       )
   }

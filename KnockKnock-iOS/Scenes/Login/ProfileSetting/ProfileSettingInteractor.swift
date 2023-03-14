@@ -26,6 +26,10 @@ protocol ProfileSettingInteractorProtocol {
   
   func navigateToMyView()
   func popProfileView()
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
@@ -38,7 +42,9 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
   
   var signInInfo: SignInInfo?
   var userDetail: UserDetail?
-  
+
+  // MARK: - Routing
+
   func navigateToMyView() {
     self.router?.navigateToMyView()
   }
@@ -46,13 +52,32 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
   func popProfileView() {
     self.router?.popProfileView()
   }
-  
+
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  ) {
+    self.router?.showAlertView(
+      message: message,
+      completion: confirmAction
+    )
+  }
+
+  // MARK: - Buisiness Logic
+
   /// 기존에 설정 된 프로필 불러오기
   func fetchUserData() {
-    self.worker?.fetchUserData(completionHandler: { [weak self] data in
-      self?.userDetail = data
-      self?.presenter?.presentUserData(userData: data)
-    })
+
+    Task {
+      let response = await self.worker?.fetchUserData()
+
+      self.showErrorAlert(response: response)
+
+      guard let userDetail = response?.data else { return }
+
+      self.userDetail = userDetail
+      self.presenter?.presentUserData(userData: userDetail)
+    }
   }
   
   /// 회원가입 요청 이벤트
@@ -79,7 +104,13 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
     // 닉네임 중복 검사
     self.worker?.checkDuplicateNickname(
       nickname: nickname,
-      completionHandler: { isDuplicated in
+      completionHandler: { [weak self] response in
+
+        guard let self = self else { return }
+
+        self.showErrorAlert(response: response)
+
+        guard let isDuplicated = response?.data else { return }
         
         if isDuplicated {
           self.router?.showAlertView(
@@ -92,19 +123,25 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
           self.worker?.requestRegister(
             registerInfo: registerInfo,
             completionHandler: { [weak self] response in
+
+              guard let self = self else { return }
+
+              self.showErrorAlert(response: response)
+
+              guard let data = response?.data else { return }
               
-              guard let isSuccess = self?.worker?.saveUserInfo(response: response) else { return }
+              guard let isSuccess = self.worker?.saveUserInfo(response: data) else { return }
               
               if isSuccess {
-                self?.router?.showAlertView(
+                self.router?.showAlertView(
                   message: "회원가입에 성공하였습니다.",
                   completion: {
-                  self?.navigateToMyView()
+                  self.navigateToMyView()
                 }
               )
                 
               } else {
-                self?.router?.showAlertView(
+                self.router?.showAlertView(
                   message: "회원가입에 실패하였습니다.",
                   completion: nil
                 )
@@ -137,7 +174,7 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
       originImage: self.userDetail?.image,
       inputedNickname: nickname,
       inputedImage: image,
-      completionHandler: { newNickname, newImage in
+      completionHandler: { (newNickname, newImage) in
 
         if newNickname == nil, newImage == nil {
           self.navigateToMyView()
@@ -148,7 +185,13 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
         // 닉네임 중복검사
         self.worker?.checkDuplicateNickname(
           nickname: nickname,
-          completionHandler: { isDuplicated in
+          completionHandler: { [weak self] response in
+
+            guard let self = self else { return }
+
+            self.showErrorAlert(response: response)
+
+            guard let isDuplicated = response?.data else { return }
 
             // 본인이 사용하고 있는 닉네임이 아니고,
             // 중복 검사 결과 true일 경우 이미 사용 중인 닉네임 noti
@@ -181,5 +224,37 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
         )
       }
     )
+  }
+}
+
+extension ProfileSettingInteractor {
+
+  // MARK: - Error
+
+  private func showErrorAlert<T>(response: ApiResponse<T>?) {
+    guard let response = response else {
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.showAlertView(
+          message: "네트워크 연결을 확인해 주세요.",
+          confirmAction: nil
+        )
+      }
+      return
+    }
+
+    guard response.data != nil else {
+
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.showAlertView(
+          message: response.message,
+          confirmAction: nil
+        )
+      }
+      return
+    }
   }
 }

@@ -10,7 +10,7 @@ import Foundation
 protocol FeedWriteWorkerProtocol: AnyObject {
   func uploadFeed(
     postData: FeedWrite,
-    completionHandler: @escaping (Int?) -> Void
+    completionHandler: @escaping (ApiResponse<Int>?) -> Void
   )
   func checkEssentialField(
     imageCount: Int,
@@ -18,10 +18,11 @@ protocol FeedWriteWorkerProtocol: AnyObject {
     promotion: [Promotion],
     content: String
   ) -> Bool
-
-  func requestTagList(
+  func selectChallenge(
     selectedChallengeId: Int,
-    completionHandler: @escaping ([ChallengeTitle]) -> Void
+    challenges: [ChallengeTitle]
+  ) -> [ChallengeTitle]?
+  func requestTagList(completionHandler: @escaping (ApiResponse<[ChallengeTitle]>?) -> Void
   )
 }
 
@@ -39,13 +40,15 @@ final class FeedWriteWorker: FeedWriteWorkerProtocol {
 
   func uploadFeed(
     postData: FeedWrite,
-    completionHandler: @escaping (Int?) -> Void
+    completionHandler: @escaping (ApiResponse<Int>?) -> Void
   ) {
     self.feedWriteRepository.requestFeedPost(
       postData: postData,
       completionHandler: { feedId in
-        
-        self.postWriteNotificationEvent()
+
+        if feedId?.data != nil {
+          self.postWriteNotificationEvent()
+        }
         completionHandler(feedId)
       }
     )
@@ -53,23 +56,30 @@ final class FeedWriteWorker: FeedWriteWorkerProtocol {
 
   /// 챌린지 참여하기 -> 해당 챌린지 선택 상태 리스트 리턴
   func requestTagList(
-    selectedChallengeId: Int,
-    completionHandler: @escaping ([ChallengeTitle]) -> Void
+    completionHandler: @escaping (ApiResponse<[ChallengeTitle]>?) -> Void
   ) {
     self.feedWriteRepository.requestChallengeTitles(
       completionHandler: { response in
-        var challenges = response
-        challenges.remove(at: 0) // '전체' 삭제
-
-        guard let id = challenges.firstIndex(
-          where: { $0.id == selectedChallengeId }
-        ) else { return }
-        
-        challenges[id].isSelected = true
-        
-        completionHandler(challenges)
+        completionHandler(response)
       }
     )
+  }
+
+  func selectChallenge(
+    selectedChallengeId: Int,
+    challenges: [ChallengeTitle]
+  ) -> [ChallengeTitle]? {
+
+    var challenges = challenges
+    challenges.remove(at: 0) // '전체' 삭제
+
+    guard let id = challenges.firstIndex(
+      where: { $0.id == selectedChallengeId }
+    ) else { return nil }
+
+    challenges[id].isSelected = true
+
+    return challenges
   }
 
   /// 필수 입력 필드 입력 유무 검사
@@ -100,11 +110,6 @@ final class FeedWriteWorker: FeedWriteWorkerProtocol {
 extension FeedWriteWorker {
 
   private func postWriteNotificationEvent() {
-    NotificationCenter.default.post(
-      name: .feedListRefreshAfterWrite,
-      object: nil
-    )
-
     NotificationCenter.default.post(
       name: .feedMainRefreshAfterWrite,
       object: nil

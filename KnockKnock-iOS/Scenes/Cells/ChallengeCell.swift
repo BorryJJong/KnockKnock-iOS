@@ -124,7 +124,7 @@ final class ChallengeCell: BaseCollectionViewCell {
   
   // MARK: - Bind
   
-  func bind(data: Challenge.ChallengeData?) {
+  func bind(data: Challenge.Data?) {
     guard let data = data else { return }
     
     self.titleLabel.text = data.title

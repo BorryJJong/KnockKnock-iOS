@@ -13,7 +13,7 @@ protocol UserDataManagerProtocol {
   func checkTokenIsValidated() async -> Bool
   func removeAllUserInfo()
   func saveNickname(nickname: String)
-  func saveUserInfo(response: AccountResponse) -> Bool
+  func saveUserInfo(response: Account) -> Bool
 }
 
 final class UserDataManager: UserDataManagerProtocol {
@@ -45,7 +45,7 @@ final class UserDataManager: UserDataManagerProtocol {
   }
 
   /// 회원 가입 및 로그인 시 유저 데이터 저장
-  func saveUserInfo(response: AccountResponse) -> Bool {
+  func saveUserInfo(response: Account) -> Bool {
 
     guard let authInfo = response.authInfo else { return false }
 
