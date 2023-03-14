@@ -24,6 +24,8 @@ protocol LikeRepositoryProtocol {
 
 final class LikeRepository: LikeRepositoryProtocol {
 
+  typealias OnCompletionHandler = (ApiResponse<Bool>?) -> Void
+
   func requestLike(
     id: Int,
     completionHandler: @escaping (ApiResponse<Bool>?) -> Void
@@ -63,7 +65,7 @@ final class LikeRepository: LikeRepositoryProtocol {
 
   func requestLikeCancel(
     id: Int,
-    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
+    completionHandler: @escaping OnCompletionHandler
   ) {
     KKNetworkManager
       .shared

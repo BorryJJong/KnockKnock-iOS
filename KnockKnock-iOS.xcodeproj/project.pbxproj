@@ -267,7 +267,6 @@
 		61D96D6229A86372009E2842 /* VerifiedStoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6129A86372009E2842 /* VerifiedStoreRepository.swift */; };
 		61D96D6429A87207009E2842 /* BannerRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6329A87207009E2842 /* BannerRepository.swift */; };
 		61D96D6629A899D1009E2842 /* StoreDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6529A899D1009E2842 /* StoreDetail.swift */; };
-		61D96D6A29A89B59009E2842 /* StoreDetailDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6929A89B59009E2842 /* StoreDetailDTO.swift */; };
 		61D96D6E29A89E20009E2842 /* StoreListInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6D29A89E20009E2842 /* StoreListInteractor.swift */; };
 		61D96D7029A9DECB009E2842 /* StoreListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D6F29A9DECB009E2842 /* StoreListRouter.swift */; };
 		61D96D7229AA0F52009E2842 /* StoreListProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D96D7129AA0F52009E2842 /* StoreListProtocol.swift */; };
@@ -557,7 +556,6 @@
 		61D96D6129A86372009E2842 /* VerifiedStoreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifiedStoreRepository.swift; sourceTree = "<group>"; };
 		61D96D6329A87207009E2842 /* BannerRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerRepository.swift; sourceTree = "<group>"; };
 		61D96D6529A899D1009E2842 /* StoreDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDetail.swift; sourceTree = "<group>"; };
-		61D96D6929A89B59009E2842 /* StoreDetailDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDetailDTO.swift; sourceTree = "<group>"; };
 		61D96D6D29A89E20009E2842 /* StoreListInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListInteractor.swift; sourceTree = "<group>"; };
 		61D96D6F29A9DECB009E2842 /* StoreListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListRouter.swift; sourceTree = "<group>"; };
 		61D96D7129AA0F52009E2842 /* StoreListProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListProtocol.swift; sourceTree = "<group>"; };
@@ -624,7 +622,6 @@
 		201077EC27D39A8B00280991 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
-				61D96D6829A89B4B009E2842 /* DTO */,
 				61D96D6729A899DB009E2842 /* Home */,
 				61EC54FB296BE314005D98DE /* Challenge */,
 				61B23BA32966F341005AFA6D /* Feed */,
@@ -646,17 +643,14 @@
 		201077ED27D39AB400280991 /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				611ED84D29C01EAF00DB0A48 /* Home */,
 				61CA513C29A6325A00C43461 /* Feed */,
 				209B80DF2955E883003E591C /* Account */,
 				61A028362908D10100943A40 /* districts.json */,
 				20EAE2962814054F009242A1 /* ChellengeRepository.swift */,
 				61B20B562924BD7800EBA596 /* UserDataManager.swift */,
-				61BB9DA52976784200728E97 /* HotPostRepository.swift */,
 				6128A4C82982429B005E36F3 /* ProfileRepositroy.swift */,
 				616524BE297ECCCA009610C3 /* KakaoShareManager.swift */,
-				61D96D6329A87207009E2842 /* BannerRepository.swift */,
-				61CA513829A3BC2500C43461 /* EventRepository.swift */,
-				61D96D6129A86372009E2842 /* VerifiedStoreRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -873,6 +867,17 @@
 				6128A4C4297FEC2B005E36F3 /* FeedWriteCompletedViewController.swift */,
 			);
 			path = FeedWrite;
+			sourceTree = "<group>";
+		};
+		611ED84D29C01EAF00DB0A48 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				61BB9DA52976784200728E97 /* HotPostRepository.swift */,
+				61D96D6329A87207009E2842 /* BannerRepository.swift */,
+				61CA513829A3BC2500C43461 /* EventRepository.swift */,
+				61D96D6129A86372009E2842 /* VerifiedStoreRepository.swift */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 		61215AC728507D3F003FDCAA /* Network */ = {
@@ -1354,14 +1359,6 @@
 			path = Home;
 			sourceTree = "<group>";
 		};
-		61D96D6829A89B4B009E2842 /* DTO */ = {
-			isa = PBXGroup;
-			children = (
-				61D96D6929A89B59009E2842 /* StoreDetailDTO.swift */,
-			);
-			path = DTO;
-			sourceTree = "<group>";
-		};
 		61D96D6B29A89D4C009E2842 /* Store */ = {
 			isa = PBXGroup;
 			children = (
@@ -1672,7 +1669,6 @@
 				617F9D73282BAF8E00C2BC9A /* BottomSheetView.swift in Sources */,
 				61CA513329A2035800C43461 /* BannerType.swift in Sources */,
 				6139FF6B28E2CB0200CC9950 /* ShopSearchPresenter.swift in Sources */,
-				61D96D6A29A89B59009E2842 /* StoreDetailDTO.swift in Sources */,
 				61B23BA92966F440005AFA6D /* Address.swift in Sources */,
 				61CA513E29A6331900C43461 /* FeedListRepository.swift in Sources */,
 				613856E0289B5CF200BE347E /* BannerCell.swift in Sources */,

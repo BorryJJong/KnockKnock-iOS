@@ -25,8 +25,6 @@ protocol FeedRepositoryProtocol {
 
 final class FeedRepository: FeedRepositoryProtocol {
 
-  typealias OnCompletionHandler = (Bool) -> Void
-
   // MARK: - Feed main APIs
 
   func requestChallengeTitles(

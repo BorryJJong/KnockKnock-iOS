@@ -24,6 +24,8 @@ protocol CommentRepositoryProtocol {
 
 final class CommentRepository: CommentRepositoryProtocol {
 
+  typealias OnCompletionHandler = (ApiResponse<Bool>?) -> Void
+
   func requestComments(
     feedId: Int,
     completionHandler: @escaping (ApiResponse<[Comment]>?) -> Void
@@ -62,7 +64,7 @@ final class CommentRepository: CommentRepositoryProtocol {
 
   func requestAddComment(
     comment: AddCommentDTO,
-    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
+    completionHandler: @escaping OnCompletionHandler
   ) {
 
     do {
@@ -106,7 +108,7 @@ final class CommentRepository: CommentRepositoryProtocol {
 
   func requestDeleteComment(
     commentId: Int,
-    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
+    completionHandler: @escaping OnCompletionHandler
   ) {
 
     KKNetworkManager

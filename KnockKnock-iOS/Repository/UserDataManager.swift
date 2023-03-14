@@ -35,11 +35,13 @@ final class UserDataManager: UserDataManagerProtocol {
           router: .getMyPage
         )
 
-      return result.value?.code == 200
+      guard let data = result.value else { return false }
 
-    } catch let error {
-      print(error)
+      return data.code == 200
 
+    } catch {
+
+      print(error.localizedDescription)
       return false
     }
   }
