@@ -13,12 +13,12 @@ protocol LoginInteractorProtocol {
   var router: LoginRouterProtocol? { get set }
 
   func fetchLoginResult(socialType: SocialType)
-  func saveTokens(response: AccountResponse)
+  func saveTokens(response: Account)
   func popLoginView()
 }
 
 protocol AppleLoginResultDelegate: AnyObject {
-  func getSignInResult(response: AccountResponse, signInInfo: SignInInfo)
+  func getSignInResult(response: Account, signInInfo: SignInInfo)
 }
 
 final class LoginInteractor: LoginInteractorProtocol {
@@ -32,7 +32,13 @@ final class LoginInteractor: LoginInteractorProtocol {
     self.worker?.fetchSignInResult(
       appleLoginResultDelegate: self,
       socialType: socialType,
-      completionHandler: { response, signInInfo in
+      completionHandler: { [weak self] response, signInInfo in
+
+        guard let self = self else { return }
+
+        self.showErrorAlert(response: response)
+
+        guard let response = response?.data else { return }
 
         self.checkExistUser(
           response: response,
@@ -47,7 +53,7 @@ final class LoginInteractor: LoginInteractorProtocol {
   ///   - 회원 X: 발급 된 토큰과 함께 프로필 설정 화면 진입(회원가입)
   /// - Parameters:
   ///   - isExisted: 기존 회원 여부
-  func checkExistUser(response: AccountResponse, signInInfo: SignInInfo) {
+  func checkExistUser(response: Account, signInInfo: SignInInfo) {
 
     if response.isExistUser {
       self.saveTokens(response: response)
@@ -60,8 +66,12 @@ final class LoginInteractor: LoginInteractorProtocol {
   /// 로컬(UserDefaults)에 서버 토큰 저장
   /// - Parameters:
   ///   - response: 회원가입/로그인 api response(userinfo)
-  func saveTokens(response: AccountResponse) {
-    self.worker?.saveUserInfo(response: response)
+  func saveTokens(response: Account) {
+    guard (self.worker?.saveUserInfo(response: response) != nil) == true else {
+      self.presentError(message: "처리 중 오류가 발생하였습니다.")
+      return
+    }
+
   }
 
   // MARK: - Routing logic
@@ -82,11 +92,48 @@ final class LoginInteractor: LoginInteractorProtocol {
 // MARK: - Apple login result delegate
 
 extension LoginInteractor: AppleLoginResultDelegate {
+  
   /// Worker -> Interactor로 로그인 결과 전달
   /// - Parameters:
   ///   - loginReseponse: 서버로 부터 받은 로그인 결과 데이터
   ///   - loginInfo: 비회원인 경우 회원가입 요청 시 사용할 request body
-  func getSignInResult(response: AccountResponse, signInInfo: SignInInfo) {
-    self.checkExistUser(response: response, signInInfo: signInInfo)
+  func getSignInResult(
+    response: Account,
+    signInInfo: SignInInfo
+  ) {
+    self.checkExistUser(
+      response: response,
+      signInInfo: signInInfo
+    )
+  }
+
+  // MARK: - Error
+
+  private func showErrorAlert<T>(response: ApiResponse<T>?) {
+    guard let response = response else {
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.presentError(message: "네트워크 연결을 확인해 주세요.")
+      }
+      return
+    }
+
+    guard response.data != nil else {
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.presentError(message: response.message)
+      }
+      return
+    }
+  }
+
+  private func presentError(message: String) {
+    self.presenter?.presentAlert(
+      message: message,
+      isCancelActive: false,
+      confirmAction: nil
+    )
   }
 }

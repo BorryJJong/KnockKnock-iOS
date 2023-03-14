@@ -9,8 +9,26 @@ import Foundation
 
 protocol LoginPresenterProtocol {
   var view: LoginViewProtocol? { get set }
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class LoginPresenter: LoginPresenterProtocol {
   weak var view: LoginViewProtocol?
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool,
+    confirmAction: (() -> Void)?
+  ) {
+    self.view?.showAlertView(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
+  }
 }

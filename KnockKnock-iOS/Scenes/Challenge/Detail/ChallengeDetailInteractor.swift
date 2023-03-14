@@ -16,6 +16,10 @@ protocol ChallengeDetailInteractorProtocol {
 
   func popChallengeDetailView()
   func presentToFeedWrite(challengeId: Int)
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class ChallengeDetailInteractor: ChallengeDetailInteractorProtocol {
@@ -38,9 +42,13 @@ final class ChallengeDetailInteractor: ChallengeDetailInteractorProtocol {
 
     self.worker?.getChallengeDetail(
       challengeId: challengeId,
-      completionHandler: { [weak self] challengeDetail in
+      completionHandler: { [weak self] response in
 
         guard let self = self else { return }
+
+        self.showErrorAlert(response: response)
+
+        guard let challengeDetail = response?.data else { return }
 
         self.presenter?.presentChallengeDetail(challengeDetail: challengeDetail)
       }
@@ -81,5 +89,47 @@ final class ChallengeDetailInteractor: ChallengeDetailInteractorProtocol {
 
   func presentToFeedWrite(challengeId: Int) {
     self.router?.presentToFeedWrite(challengeId: challengeId)
+  }
+  
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  ) {
+    self.router?.showAlertView(
+      message: message,
+      confirmAction: confirmAction
+    )
+  }
+}
+
+extension ChallengeDetailInteractor {
+
+  // MARK: - Error
+
+  private func showErrorAlert<T>(response: ApiResponse<T>?) {
+    guard let response = response else {
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.showAlertView(
+          message: "네트워크 연결을 확인해 주세요.",
+          confirmAction: nil
+        )
+      }
+      return
+    }
+
+    guard response.data != nil else {
+
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.showAlertView(
+          message: response.message,
+          confirmAction: nil
+        )
+      }
+      return
+    }
   }
 }

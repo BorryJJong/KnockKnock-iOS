@@ -13,50 +13,64 @@ protocol FeedDetailRepositoryProtocol {
 
   func requestDeleteFeed(
     feedId: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
 
   func requestFeedDetail(
     feedId: Int,
-    completionHandler: @escaping (FeedDetail) -> Void
+    completionHandler: @escaping (ApiResponse<FeedDetail>?) -> Void
   )
   func requestHidePost(
     feedId: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
   func requestReportPost(
     feedId: Int,
     reportType: ReportType,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
 }
 
 final class FeedDetailRepository: FeedDetailRepositoryProtocol {
 
-  typealias OnCompletionHandler = (Bool) -> Void
+  typealias OnCompletionHandler = (ApiResponse<Bool>?) -> Void
 
   // MARK: - Feed detail APIs
 
   /// 게시글 상세 조회
   func requestFeedDetail(
     feedId: Int,
-    completionHandler: @escaping (FeedDetail) -> Void
+    completionHandler: @escaping (ApiResponse<FeedDetail>?) -> Void
   ) {
 
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<FeedDetail>.self,
+        object: ApiResponse<FeedDetailDTO>.self,
         router: .getFeed(id: feedId),
         success: { response in
-          guard let data = response.data else {
-            // no data error
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.data?.toDomain()
+          )
+          completionHandler(result)
+
+        }, failure: { response, error in
+
+          guard let response = response else {
+            completionHandler(nil)
             return
           }
-          completionHandler(data)
-        },
-        failure: { response in
-          print(response)
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.data?.toDomain()
+          )
+          completionHandler(result)
+          print(error.localizedDescription)
         }
       )
   }
@@ -70,16 +84,31 @@ final class FeedDetailRepository: FeedDetailRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<Bool>.self,
+        object: ApiResponse<Bool>.self,
         router: .deleteFeed(id: feedId),
         success: { response in
 
-          let isSuccess = response.code == 200
-          completionHandler(isSuccess)
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
 
-        }, failure: { error in
+        }, failure: { response, error in
 
-          print(error)
+          guard let response = response else {
+            completionHandler(nil)
+            return
+          }
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+          print(error.localizedDescription)
         }
       )
   }
@@ -92,13 +121,31 @@ final class FeedDetailRepository: FeedDetailRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<Bool>.self,
+        object: ApiResponse<Bool>.self,
         router: .postHideBlogPost(id: feedId),
         success: { response in
-          completionHandler(response.code == 200)
-        },
-        failure: { error in
-          print(error)
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+
+        }, failure: { response, error in
+
+          guard let response = response else {
+            completionHandler(nil)
+            return
+          }
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+          print(error.localizedDescription)
         }
       )
   }
@@ -113,16 +160,34 @@ final class FeedDetailRepository: FeedDetailRepositoryProtocol {
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<Bool>.self,
+        object: ApiResponse<Bool>.self,
         router: .postReportBlogPost(
           id: feedId,
           reportType: reportType.rawValue
         ),
         success: { response in
-          completionHandler(response.code == 200)
-        },
-        failure: { error in
-          print(error)
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+
+        }, failure: { response, error in
+
+          guard let response = response else {
+            completionHandler(nil)
+            return
+          }
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+          print(error.localizedDescription)
         }
       )
   }

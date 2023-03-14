@@ -82,10 +82,14 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   func getFeedDeatil(feedId: Int) {
     self.worker?.getFeedDetail(
       feedId: feedId,
-      completionHandler: { [weak self] feedDetail in
+      completionHandler: { [weak self] response in
         
         guard let self = self else { return }
-        
+
+        self.showErrorAlert(response: response)
+
+        guard let feedDetail = response?.data else { return }
+
         self.feedDetail = feedDetail
         self.presenter?.presentFeedDetail(feedDetail: feedDetail)
       }
@@ -102,19 +106,20 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       }
 
       // 좋아요 이벤트 실행한 피드의 좋아요 여부
-      guard let isLike = self.feedDetail?.feed?.isLike else { return }
+      guard let isLike = self.feedDetail?.feed.isLike else { return }
 
       self.worker?.requestLike(
         isLike: isLike,
         feedId: feedId,
-        completionHandler: { [weak self] isSuccess in
+        completionHandler: { [weak self] response in
 
           guard let self = self else { return }
 
-          guard isSuccess else {
-            // error handle
-            return
-          }
+          self.showErrorAlert(response: response)
+
+          guard let isSuccess = response?.data,
+                    isSuccess else { return }
+
           self.feedDetail = self.worker?.toggleLike(feedDetail: self.feedDetail)
 
           self.presenter?.presentLikeStatus(isToggle: isSuccess)
@@ -127,9 +132,13 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   func fetchLikeList(feedId: Int) {
     self.worker?.fetchLikeList(
       feedId: feedId,
-      completionHandler: { [weak self] likeList in
+      completionHandler: { [weak self] response in
         
         guard let self = self else { return }
+
+        self.showErrorAlert(response: response)
+
+        guard let likeList = response?.data else { return }
         
         self.likeList = likeList
         self.presenter?.presentLikeList(like: likeList)
@@ -139,12 +148,17 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   
   /// 댓글 목록 조회 api로부터 받은 전체 댓글 fetch
   func fetchAllComments(feedId: Int) {
+
     self.worker?.getAllComments(
       feedId: feedId,
-      completionHandler: { [weak self] comments in
+      completionHandler: { [weak self] response in
         
         guard let self = self else { return }
-        
+
+        self.showErrorAlert(response: response)
+
+        guard let comments = response?.data else { return }
+
         self.comments = comments
         self.fetchAllCommentsCount()
         self.visibleComments = self.worker?.fetchVisibleComments(comments: self.comments) ?? []
@@ -192,9 +206,13 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
 
     self.worker?.requestAddComment(
       comment: comment,
-      completionHandler: { [weak self] isSuccess in
+      completionHandler: { [weak self] response in
 
         guard let self = self else { return }
+
+        self.showErrorAlert(response: response)
+
+        guard let isSuccess = response?.data else { return }
 
         if isSuccess {
           self.fetchAllComments(feedId: comment.postId)
@@ -217,9 +235,13 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       feedId: feedId,
       commentId: commentId,
       comments: self.comments,
-      completionHandler: { [weak self] isSuccess in
+      completionHandler: { [weak self] response in
 
         guard let self = self else { return }
+
+        self.showErrorAlert(response: response)
+
+        guard let isSuccess = response?.data else { return }
 
         if isSuccess {
           if let index = self.comments.firstIndex(where: { $0.data.id == commentId }) {
@@ -254,9 +276,13 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
 
     self.worker?.requestDeleteFeed(
       feedId: feedId,
-      completionHandler: { [weak self] isSuccess in
+      completionHandler: { [weak self] response in
 
         guard let self = self else { return }
+
+        self.showErrorAlert(response: response)
+
+        guard let isSuccess = response?.data else { return }
 
         if isSuccess {
           self.showAlertView(
@@ -276,14 +302,17 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   }
 
   /// 피드 숨기기
-  ///
   func requestHide(feedId: Int) {
 
     self.worker?.requestHidePost(
       feedId: feedId,
-      completionHandler: { [weak self] isSuccess in
+      completionHandler: { [weak self] response in
 
         guard let self = self else { return }
+
+        self.showErrorAlert(response: response)
+
+        guard let isSuccess = response?.data else { return }
 
         if isSuccess {
           self.showAlertView(
@@ -312,9 +341,13 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     self.worker?.requestReportFeed(
       feedId: feedId,
       reportType: reportType,
-      completionHandler: { [weak self] isSuccess in
+      completionHandler: { [weak self] response in
 
         guard let self = self else { return }
+
+        self.showErrorAlert(response: response)
+
+        guard let isSuccess = response?.data else { return }
 
         if isSuccess {
           self.showAlertView(
@@ -413,5 +446,34 @@ extension FeedDetailInteractor {
     guard let isValidate = await self.worker?.checkTokenIsValidated() else { return false }
     
     return isValidate
+  }
+
+  // MARK: - Error
+
+  private func showErrorAlert<T>(response: ApiResponse<T>?) {
+    guard let response = response else {
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.showAlertView(
+          message: "네트워크 연결을 확인해 주세요.",
+          confirmAction: nil
+        )
+      }
+      return
+    }
+
+    guard response.data != nil else {
+
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.showAlertView(
+          message: response.message,
+          confirmAction: nil
+        )
+      }
+      return
+    }
   }
 }

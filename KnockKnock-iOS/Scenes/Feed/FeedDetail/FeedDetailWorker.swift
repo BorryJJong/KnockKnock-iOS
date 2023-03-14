@@ -8,56 +8,56 @@
 import Foundation
 
 protocol FeedDetailWorkerProtocol {
-  func getFeedDetail(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void)
+  func getFeedDetail(feedId: Int, completionHandler: @escaping (ApiResponse<FeedDetail>?) -> Void)
 
   func checkTokenIsValidated() async -> Bool
   
   func requestLike(
     isLike: Bool,
     feedId: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
 
   func toggleLike(feedDetail: FeedDetail?) -> FeedDetail?
   func fetchLikeList(
     feedId: Int,
-    completionHandler: @escaping ([Like.Info]) -> Void
+    completionHandler: @escaping (ApiResponse<[Like.Info]>?) -> Void
   )
 
   func getAllComments(
     feedId: Int,
-    completionHandler: @escaping ([Comment]) -> Void
+    completionHandler: @escaping (ApiResponse<[Comment]>?) -> Void
   )
   func fetchVisibleComments(comments: [Comment]?) -> [Comment]
 
   func requestAddComment(
     comment: AddCommentDTO,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
   func requestDeleteComment(
     feedId: Int,
     commentId: Int,
     comments: [Comment],
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
 
   func requestDeleteFeed(
     feedId: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
   func requestHidePost(
     feedId: Int,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
   func requestReportFeed(
     feedId: Int,
     reportType: ReportType,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
 }
 
 final class FeedDetailWorker: FeedDetailWorkerProtocol {
-  typealias OnCompletionHandler = (Bool) -> Void
+  typealias OnCompletionHandler = (ApiResponse<Bool>?) -> Void
 
   // MARK: - Properties
 
@@ -85,7 +85,7 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
   /// 피드 상세 조회
   func getFeedDetail(
     feedId: Int,
-    completionHandler: @escaping (FeedDetail) -> Void
+    completionHandler: @escaping (ApiResponse<FeedDetail>?) -> Void
   ) {
     self.feedDetailRepository.requestFeedDetail(
       feedId: feedId,
@@ -101,14 +101,17 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
   ) {
     self.feedDetailRepository.requestDeleteFeed(
       feedId: feedId,
-      completionHandler: { [weak self] isSuccess in
+      completionHandler: { [weak self] response in
 
         guard let self = self else { return }
 
-        if isSuccess {
-          self.postResfreshNotificationEvent(feedId: feedId)
+        if let isSuccess = response?.data {
+          if isSuccess {
+            self.postResfreshNotificationEvent(feedId: feedId)
+          }
         }
-        completionHandler(isSuccess)
+
+        completionHandler(response)
       }
     )
   }
@@ -122,14 +125,15 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
   ) {
     self.feedDetailRepository.requestHidePost(
       feedId: feedId,
-      completionHandler: { [weak self] isSuccess in
+      completionHandler: { [weak self] response in
 
         guard let self = self else { return }
-
-        if isSuccess {
-          self.postResfreshNotificationEvent(feedId: feedId)
+        if let isSuccess = response?.data {
+          if isSuccess {
+            self.postResfreshNotificationEvent(feedId: feedId)
+          }
         }
-        completionHandler(isSuccess)
+        completionHandler(response)
       }
     )
   }
@@ -147,13 +151,15 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
     self.feedDetailRepository.requestReportPost(
       feedId: feedId,
       reportType: reportType,
-      completionHandler: { isSuccess in
+      completionHandler: { response in
 
-        if isSuccess {
-          self.postResfreshNotificationEvent(feedId: feedId)
+        if let isSuccess = response?.data {
+          if isSuccess {
+            self.postResfreshNotificationEvent(feedId: feedId)
+          }
         }
 
-        completionHandler(isSuccess)
+        completionHandler(response)
 
       }
     )
@@ -178,7 +184,7 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
 
         visibleComments += reply.map {
           Comment(
-            data: CommentResponse(
+            data: Comment.Data(
               id: $0.id,
               userId: $0.userId,
               nickname: $0.nickname,
@@ -202,16 +208,14 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
 
   func getAllComments(
     feedId: Int,
-    completionHandler: @escaping ([Comment]) -> Void
+    completionHandler: @escaping (ApiResponse<[Comment]>?) -> Void
   ) {
-    var data: [Comment] = []
+
     self.commentRepository.requestComments(
       feedId: feedId,
-      completionHandler: { comment in
-        let commentData = comment.map { Comment(data: $0) }
-        data += commentData
+      completionHandler: { response in
 
-        completionHandler(data)
+        completionHandler(response)
       }
     )
   }
@@ -229,29 +233,33 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
     if !isLike {
       self.likeRepository.requestLike(
         id: feedId,
-        completionHandler: { [weak self] isSuccess in
+        completionHandler: { [weak self] response in
 
           guard let self = self else { return }
 
-          if isSuccess {
-            self.postLikeNotificationEvent(feedId: feedId)
+          if let isSuccess = response?.data {
+            if isSuccess {
+              self.postLikeNotificationEvent(feedId: feedId)
+            }
           }
 
-          completionHandler(isSuccess)
+          completionHandler(response)
         }
       )
     } else {
       self.likeRepository.requestLikeCancel(
         id: feedId,
-        completionHandler: { [weak self] isSuccess in
+        completionHandler: { [weak self] response in
 
           guard let self = self else { return }
 
-          if isSuccess {
-            self.postLikeNotificationEvent(feedId: feedId)
+          if let isSuccess = response?.data {
+            if isSuccess {
+              self.postLikeNotificationEvent(feedId: feedId)
+            }
           }
 
-          completionHandler(isSuccess)
+          completionHandler(response)
         }
       )
     }
@@ -260,14 +268,14 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
   func toggleLike(feedDetail: FeedDetail?) -> FeedDetail? {
     var feedDetail = feedDetail
 
-    feedDetail?.feed?.isLike.toggle()
+    feedDetail?.feed.isLike.toggle()
 
     return feedDetail
   }
 
   func fetchLikeList(
     feedId: Int,
-    completionHandler: @escaping ([Like.Info]) -> Void
+    completionHandler: @escaping (ApiResponse<[Like.Info]>?) -> Void
   ) {
     self.likeRepository.requestLikeList(
       feedId: feedId,
@@ -283,14 +291,16 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
   ) {
     self.commentRepository.requestAddComment(
       comment: comment,
-      completionHandler: { [weak self] isSuccess in
+      completionHandler: { [weak self] response in
 
         guard let self = self else { return }
 
-        if isSuccess {
-          self.postCommentAddNotificationEvent(feedId: comment.postId)
+        if let isSuccess = response?.data {
+          if isSuccess {
+            self.postCommentAddNotificationEvent(feedId: comment.postId)
+          }
         }
-        completionHandler(isSuccess)
+        completionHandler(response)
       }
     )
   }
@@ -303,23 +313,25 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
   ) {
     self.commentRepository.requestDeleteComment(
       commentId: commentId,
-      completionHandler: { [weak self] isSuccess in
+      completionHandler: { [weak self] response in
 
         guard let self = self else { return }
 
-        if isSuccess {
+        if let isSuccess = response?.data {
+          if isSuccess {
 
-          guard let commentIndex = comments.firstIndex(
-            where: { $0.data.id == commentId }
-          ) else { return }
+            guard let commentIndex = comments.firstIndex(
+              where: { $0.data.id == commentId }
+            ) else { return }
 
-          self.postCommentDeleteNotificationEvent(
-            feedId: feedId,
-            replyCount: comments[commentIndex].data.replyCnt
-          )
+            self.postCommentDeleteNotificationEvent(
+              feedId: feedId,
+              replyCount: comments[commentIndex].data.replyCnt
+            )
 
+          }
         }
-        completionHandler(isSuccess)
+        completionHandler(response)
       }
     )
   }

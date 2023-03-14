@@ -13,7 +13,7 @@ protocol UserDataManagerProtocol {
   func checkTokenIsValidated() async -> Bool
   func removeAllUserInfo()
   func saveNickname(nickname: String)
-  func saveUserInfo(response: AccountResponse) -> Bool
+  func saveUserInfo(response: Account) -> Bool
 }
 
 final class UserDataManager: UserDataManagerProtocol {
@@ -31,21 +31,23 @@ final class UserDataManager: UserDataManagerProtocol {
       let result = try await KKNetworkManager
         .shared
         .asyncRequest(
-          object: ApiResponseDTO<Bool>.self,
+          object: ApiResponse<Bool>.self,
           router: .getMyPage
         )
 
-      return result.code == 200
+      guard let data = result.value else { return false }
 
-    } catch let error {
-      print(error)
+      return data.code == 200
 
+    } catch {
+
+      print(error.localizedDescription)
       return false
     }
   }
 
   /// 회원 가입 및 로그인 시 유저 데이터 저장
-  func saveUserInfo(response: AccountResponse) -> Bool {
+  func saveUserInfo(response: Account) -> Bool {
 
     guard let authInfo = response.authInfo else { return false }
 

@@ -12,7 +12,6 @@ import Then
 
 protocol ShopSearchViewProtocol: AnyObject {
   var interactor: ShopSearchInteractorProtocol? { get set }
-  var router: ShopSearchRouterProtocol? { get set }
 
   func fetchShopAddress(address: AddressResponse)
   func fetchCountyList(county: [String])
@@ -30,8 +29,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   var countyList: [String] = []
 
   var interactor: ShopSearchInteractorProtocol?
-  var router: ShopSearchRouterProtocol?
-
+  
   var addressList: [AddressResponse.Documents] = [] {
    didSet {
       self.containerView.resultTableView.reloadData()
@@ -141,25 +139,23 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
   }
 
   @objc private func doneButtonDidTap(_ sender: UIBarButtonItem) {
-    self.router?.passDataToFeedWriteView(source: self, address: nil)
+    self.interactor?.passDataToFeedWriteView(address: nil)
   }
 
   @objc func tapBackBarButton(_ sender: UIBarButtonItem) {
-    self.router?.navigateToFeedWriteView(source: self)
+    self.interactor?.navigateToFeedWriteView()
   }
 
   @objc func cityButtonDidTap(_ sender: UIButton) {
     self.containerView.setButtonStatus(isCitySelected: false)
-    self.router?.presentBottomSheetView(
-      source: self,
+    self.interactor?.presentBottomSheetView(
       content: self.cityList,
       districtsType: .city
     )
   }
 
   @objc func countyButtonDidTap(_ sender: UIButton) {
-    self.router?.presentBottomSheetView(
-      source: self,
+    self.interactor?.presentBottomSheetView(
       content: self.countyList,
       districtsType: .county
     )
@@ -255,8 +251,7 @@ extension ShopSearchViewController: UITableViewDelegate {
     _ tableView: UITableView,
     didSelectRowAt indexPath: IndexPath
   ) {
-    self.router?.passDataToFeedWriteView(
-      source: self,
+    self.interactor?.passDataToFeedWriteView(
       address: self.addressList[indexPath.row]
     )
   }

@@ -67,11 +67,41 @@ final class MyInteractor: MyInteractorProtocol {
   }
 
   func requestSignOut() {
-    self.worker?.requestSignOut()
+    self.worker?.requestSignOut(
+      completionHandler: { [weak self] response in
+
+        guard let self = self else { return }
+
+        self.showErrorAlert(response: response)
+
+        guard let isSuccess = response?.data,
+              isSuccess else {
+
+          self.presentError(message: "처리 중 오류가 발생하였습니다.")
+          return
+        }
+      }
+    )
   }
 
   func requestWithdraw() {
-    self.worker?.requestWithdraw()
+    self.worker?.requestWithdraw(
+      completionHandler: { [weak self] response in
+
+        guard let self = self else { return }
+
+        self.showErrorAlert(response: response)
+
+        guard let isSuccess = response?.data,
+              isSuccess else {
+
+          self.presentError(message: "처리 중 오류가 발생하였습니다.")
+          return
+        }
+
+        self.presentError(message: "성공적으로 탈퇴 처리 되었습니다.")
+      }
+    )
   }
 
   // Routing
@@ -87,6 +117,11 @@ final class MyInteractor: MyInteractorProtocol {
   func navigateToProfileSettingView() {
     self.router?.navigateToProfileSettingView()
   }
+}
+
+  // MARK: - Inner Actions
+
+extension MyInteractor {
 
   // Notification Center
 
@@ -115,5 +150,35 @@ final class MyInteractor: MyInteractorProtocol {
     ) { _ in
       self.fetchNickname()
     }
+  }
+
+  // MARK: - Error
+
+  private func showErrorAlert<T>(response: ApiResponse<T>?) {
+    guard let response = response else {
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.presentError(message: "네트워크 연결을 확인해 주세요.")
+      }
+      return
+    }
+
+    guard response.data != nil else {
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.presentError(message: response.message)
+      }
+      return
+    }
+  }
+
+  private func presentError(message: String) {
+    self.presenter?.presentAlert(
+      message: message,
+      isCancelActive: false,
+      confirmAction: nil
+    )
   }
 }

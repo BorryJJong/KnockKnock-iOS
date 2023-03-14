@@ -8,13 +8,20 @@
 import Foundation
 
 protocol FeedEditWorkerProtocol {
-  func fetchOriginPost(feedId: Int, completionHandler: @escaping (FeedDetail) -> Void)
-  func requestPromotionList(completionHandler: @escaping ([Promotion]) -> Void)
-  func requestTagList(completionHandler: @escaping ([ChallengeTitle]) -> Void)
+  func fetchOriginPost(
+    feedId: Int,
+    completionHandler: @escaping (ApiResponse<FeedDetail>?) -> Void
+  )
+  func requestPromotionList(
+    completionHandler: @escaping (ApiResponse<[Promotion]>?) -> Void
+  )
+  func requestTagList(
+    completionHandler: @escaping (ApiResponse<[ChallengeTitle]>?) -> Void
+  )
   func requestFeedEdit(
     id: Int,
     postData: FeedEdit,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
   func checkEssentialField(
     tag: [ChallengeTitle],
@@ -45,7 +52,7 @@ final class FeedEditWorker: FeedEditWorkerProtocol {
   ///  - feedId: 피드 아이디
   func fetchOriginPost(
     feedId: Int,
-    completionHandler: @escaping (FeedDetail) -> Void
+    completionHandler: @escaping (ApiResponse<FeedDetail>?) -> Void
   ) {
     self.feedDetailRepository.requestFeedDetail(
       feedId: feedId,
@@ -56,17 +63,25 @@ final class FeedEditWorker: FeedEditWorkerProtocol {
   }
 
   /// 프로모션 리스트 조회 api call
-  func requestPromotionList(completionHandler: @escaping ([Promotion]) -> Void) {
-    self.feedWriteRepository.requestPromotionList(completionHandler: { response in
-      completionHandler(response)
-    })
+  func requestPromotionList(
+    completionHandler: @escaping (ApiResponse<[Promotion]>?) -> Void
+  ) {
+    self.feedWriteRepository.requestPromotionList(
+      completionHandler: { response in
+        completionHandler(response)
+      }
+    )
   }
-
+  
   /// 챌린지 리스트 조회 api call
-  func requestTagList(completionHandler: @escaping ([ChallengeTitle]) -> Void) {
-    self.feedWriteRepository.requestChallengeTitles(completionHandler: { response in
-      completionHandler(response)
-    })
+  func requestTagList(
+    completionHandler: @escaping (ApiResponse<[ChallengeTitle]>?) -> Void
+  ) {
+    self.feedWriteRepository.requestChallengeTitles(
+      completionHandler: { response in
+        completionHandler(response)
+      }
+    )
   }
 
   /// 피드 수정
@@ -77,16 +92,19 @@ final class FeedEditWorker: FeedEditWorkerProtocol {
   func requestFeedEdit(
     id: Int,
     postData: FeedEdit,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   ) {
     self.feedEditRepository.requestEditFeed(
       id: id,
       postData: postData,
-      completionHandler: { isSuccess in
-        if isSuccess {
-          self.postEditNotificationEvent(feedId: id, contents: postData.content)
+      completionHandler: { response in
+        if let isSuccess = response?.data {
+          if isSuccess {
+            self.postEditNotificationEvent(feedId: id, contents: postData.content)
+          }
         }
-        completionHandler(isSuccess)
+
+        completionHandler(response)
       }
     )
   }

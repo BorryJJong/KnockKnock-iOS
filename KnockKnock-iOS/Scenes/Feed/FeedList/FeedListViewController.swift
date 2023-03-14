@@ -16,6 +16,12 @@ protocol FeedListViewProtocol: AnyObject {
   func fetchFeedList(feedList: FeedList)
   func updateFeedList(feedList: FeedList, sections: [IndexPath])
   func reloadFeedList()
+  
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class FeedListViewController: BaseViewController<FeedListView> {
@@ -277,7 +283,7 @@ extension FeedListViewController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - Feed List View Protocol
 
-extension FeedListViewController: FeedListViewProtocol {
+extension FeedListViewController: FeedListViewProtocol, AlertProtocol {
 
   /// 피드 최초 요청 이벤트
   ///
@@ -321,6 +327,19 @@ extension FeedListViewController: FeedListViewProtocol {
       pageSize: self.pageSize,
       feedId: self.feedId,
       challengeId: self.challengeId
+    )
+  }
+
+  /// Alert 팝업 창
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool,
+    confirmAction: (() -> Void)?
+  ) {
+    self.showAlert(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
     )
   }
 }

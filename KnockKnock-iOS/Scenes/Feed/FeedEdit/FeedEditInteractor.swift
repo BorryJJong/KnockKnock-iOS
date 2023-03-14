@@ -46,12 +46,19 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
 
     self.worker?.fetchOriginPost(
       feedId: feedId,
-      completionHandler: { [weak self] feedDetail in
+      completionHandler: { [weak self] response in
+
+        guard let self = self else { return }
+
+        self.showErrorAlert(response: response)
+
+        guard let feedDetail = response?.data else { return }
+
         /// 기존에 선택 상태에 있던 속성(프로모션, 챌린지) 상태 반영
-        self?.postContent = feedDetail.feed?.content ?? ""
-        self?.setSelectedPromotion(selectedPromotions: feedDetail.promotions)
-        self?.setSelectedChallenge(selectedChallenges: feedDetail.challenges)
-        self?.presenter?.presentOriginPost(feedDetail: feedDetail)
+        self.postContent = feedDetail.feed.content
+        self.setSelectedPromotion(selectedPromotions: feedDetail.promotions)
+        self.setSelectedChallenge(selectedChallenges: feedDetail.challenges)
+        self.presenter?.presentOriginPost(feedDetail: feedDetail)
       }
     )
   }
@@ -104,7 +111,14 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
         locationX: addressData?.latitude,
         locationY: addressData?.longtitude
       ),
-      completionHandler: { isSuccess in
+      completionHandler: { [weak self] response in
+
+        guard let self = self else { return }
+
+        self.showErrorAlert(response: response)
+
+        guard let isSuccess = response?.data else { return }
+
         if isSuccess {
           self.router?.showAlertView(
             message: "수정이 완료되었습니다.",
@@ -187,21 +201,28 @@ extension FeedEditInteractor {
   private func setSelectedPromotion(selectedPromotions: [FeedDetail.Promotion]) {
 
     // 프로모션 리스트 api
-    self.worker?.requestPromotionList(completionHandler: { [weak self] result in
-      self?.promotions = result
-      self?.promotions.insert(
+    self.worker?.requestPromotionList(completionHandler: { [ weak self ] response in
+
+      guard let self = self else { return }
+
+      self.showErrorAlert(response: response)
+
+      guard let promotions = response?.data else { return }
+
+      self.promotions = promotions
+      self.promotions.insert(
         Promotion(
           id: 0,
           type: "없음",
-          isSelected: self?.promotions.count == 0
+          isSelected: self.promotions.count == 0
         ), at: 0
       )
 
       selectedPromotions.forEach { selectedPromotion in
-        if let index = self?.promotions.firstIndex(where: {
+        if let index = self.promotions.firstIndex(where: {
           selectedPromotion.promotionId == $0.id
         }) {
-          self?.promotions[index].isSelected = true
+          self.promotions[index].isSelected = true
         }
       }
     })
@@ -214,15 +235,22 @@ extension FeedEditInteractor {
   private func setSelectedChallenge(selectedChallenges: [FeedDetail.Challenge]) {
 
     // 태그(챌린지) 리스트 api
-    self.worker?.requestTagList(completionHandler: { [weak self] result in
-      self?.challenges = result
-      self?.challenges.remove(at: 0) // '전체' 컬럼 삭제
+    self.worker?.requestTagList(completionHandler: { [weak self] response in
+
+      guard let self = self else { return }
+
+      self.showErrorAlert(response: response)
+
+      guard let challenges = response?.data else { return }
+
+      self.challenges = challenges
+      self.challenges.remove(at: 0) // '전체' 컬럼 삭제
 
       selectedChallenges.forEach { selectedChallenge in
-        if let index = self?.challenges.firstIndex(where: {
+        if let index = self.challenges.firstIndex(where: {
           selectedChallenge.challengeId == $0.id
         }) {
-          self?.challenges[index].isSelected = true
+          self.challenges[index].isSelected = true
         }
       }
     })
@@ -247,5 +275,34 @@ extension FeedEditInteractor {
       String($0.id)
     }.joined(separator: ",")
 
+  }
+
+  // MARK: - Error
+
+  private func showErrorAlert<T>(response: ApiResponse<T>?) {
+    guard let response = response else {
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.showAlertView(
+          message: "네트워크 연결을 확인해 주세요.",
+          confirmAction: nil
+        )
+      }
+      return
+    }
+
+    guard response.data != nil else {
+
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.showAlertView(
+          message: response.message,
+          confirmAction: nil
+        )
+      }
+      return
+    }
   }
 }

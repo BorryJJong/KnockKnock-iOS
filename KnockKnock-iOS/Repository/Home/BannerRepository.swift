@@ -8,7 +8,7 @@
 import Foundation
 
 protocol BannerRepositoryProtocol {
-  func requestBanner(bannerType: BannerType) async -> [HomeBanner]?
+  func requestBanner(bannerType: BannerType) async -> ApiResponse<[HomeBanner]>?
 }
 
 final class BannerRepository: BannerRepositoryProtocol {
@@ -17,22 +17,27 @@ final class BannerRepository: BannerRepositoryProtocol {
   ///
   /// - Parameters:
   ///  - bannerType: 배너 형태(메인/바)
-  func requestBanner(bannerType: BannerType) async -> [HomeBanner]? {
-    do {
+  func requestBanner(bannerType: BannerType) async -> ApiResponse<[HomeBanner]>? {
 
+    do {
       let result = try await KKNetworkManager
         .shared
         .asyncRequest(
-          object: ApiResponseDTO<[HomeBannerDTO]>.self,
+          object: ApiResponse<[HomeBannerDTO]>.self,
           router: .getBanner(bannerType: bannerType.rawValue)
         )
 
-      guard let data = result.data else { return nil }
-      return data.map { $0.toDomain() }
+      guard let data = result.value else { return nil }
+      
+      return ApiResponse(
+        code: data.code,
+        message: data.message,
+        data: data.data?.map{ $0.toDomain() }
+      )
 
     } catch {
-      print(error)
 
+      print(error.localizedDescription)
       return nil
     }
   }

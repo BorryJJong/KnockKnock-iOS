@@ -10,7 +10,7 @@ import Foundation
 protocol ChallengeDetailWorkerProtocol {
   func getChallengeDetail(
     challengeId: Int,
-    completionHandler: @escaping (ChallengeDetail) -> Void
+    completionHandler: @escaping (ApiResponse<ChallengeDetail>?) -> Void
   )
 
   func shareChallenge(
@@ -38,7 +38,7 @@ final class ChallengeDetailWorker: ChallengeDetailWorkerProtocol {
   
   func getChallengeDetail(
     challengeId: Int,
-    completionHandler: @escaping (ChallengeDetail) -> Void
+    completionHandler: @escaping (ApiResponse<ChallengeDetail>?) -> Void
   ) {
     repository.requestChallengeDetail(
       challengeId: challengeId,

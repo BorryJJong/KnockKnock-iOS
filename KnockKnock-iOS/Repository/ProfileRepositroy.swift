@@ -8,81 +8,120 @@
 import Foundation
 
 protocol ProfileRepositoryProtocol {
-  func requestUserDeatil(completionHandler: @escaping (UserDetailDTO) -> Void)
+  func requestUserDetail() async -> ApiResponse<UserDetail>?
+
   func requestEditProfile(
     nickname: String?,
     image: Data?,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
   func checkDuplicateNickname(
     nickname: String,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
 }
 
 final class ProfileRepository: ProfileRepositoryProtocol {
 
-  func requestUserDeatil(completionHandler: @escaping (UserDetailDTO) -> Void) {
-    KKNetworkManager
-      .shared
-      .request(
-        object: ApiResponseDTO<UserDetailDTO>.self,
-        router: KKRouter.getUsersDetail,
-        success: { response in
-          guard let data = response.data else {
-            // error
-            return
-          }
-          completionHandler(data)
-        },
-        failure: { error in
-          print(error)
+  typealias OncompletionHandler = (ApiResponse<Bool>?) -> Void
 
-        }
+  func requestUserDetail() async -> ApiResponse<UserDetail>? {
+    do {
+      let result = try await KKNetworkManager
+        .shared
+        .asyncRequest(
+          object: ApiResponse<UserDetailDTO>.self,
+          router: .getUsersDetail
+        )
+
+      guard let response = result.value else { return nil }
+
+      return ApiResponse(
+        code: response.code,
+        message: response.message,
+        data: await response.data?.toDomain()
       )
+
+    } catch {
+
+      print(error.localizedDescription)
+      return nil
+    }
   }
 
   func requestEditProfile(
     nickname: String?,
     image: Data?,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping OncompletionHandler
   ) {
 
     KKNetworkManager
       .shared
       .upload(
-        object: ApiResponseDTO<Bool>.self,
+        object: ApiResponse<Bool>.self,
         router: KKRouter.putUsers(
           nickname: nickname,
           image: image
         ),
         success: { response in
-          completionHandler(response.code == 200)
-        },
-        failure: { error in
-          print(error)
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+
+        }, failure: { response, error in
+
+          guard let response = response else {
+            completionHandler(nil)
+            return
+          }
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+          print(error.localizedDescription)
         }
       )
   }
 
   func checkDuplicateNickname(
     nickname: String,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping OncompletionHandler
   ) {
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponseDTO<Bool>.self,
+        object: ApiResponse<Bool>.self,
         router: KKRouter.getDuplicateNickname(nickname: nickname),
         success: { response in
-          guard let isSuccess = response.data else {
-            // error
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+
+        }, failure: { response, error in
+
+          guard let response = response else {
+            completionHandler(nil)
             return
           }
-          completionHandler(isSuccess)
-        },
-        failure: { error in
-          print(error)
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.code == 200
+          )
+          completionHandler(result)
+          print(error.localizedDescription)
         }
       )
   }

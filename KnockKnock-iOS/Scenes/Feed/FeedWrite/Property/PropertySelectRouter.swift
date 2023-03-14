@@ -13,6 +13,8 @@ protocol PropertyDelegate: AnyObject {
 }
 
 protocol PropertySelectRouterProtocol {
+  var view: PropertySelectViewProtocol? { get set }
+
   static func createPropertySelectView(
     delegate: PropertyDelegate,
     propertyType: PropertyType,
@@ -20,21 +22,20 @@ protocol PropertySelectRouterProtocol {
     tagList: [ChallengeTitle]?
   ) -> UIViewController
 
-  func passTagToFeedWriteView(
-    source: PropertySelectViewProtocol,
-    tagList: [ChallengeTitle]
-  )
-  func passPromotionToFeedWriteView(
-    source: PropertySelectViewProtocol,
-    promotionList: [Promotion]
-  )
+  func passTagToFeedWriteView(tagList: [ChallengeTitle])
+  func passPromotionToFeedWriteView(promotionList: [Promotion])
 
-  func navigateToFeedWriteView(source: PropertySelectViewProtocol)
+  func navigateToFeedWriteView()
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class PropertySelectRouter: PropertySelectRouterProtocol {
 
   weak var delegate: PropertyDelegate?
+  weak var view: PropertySelectViewProtocol?
 
   static func createPropertySelectView(
     delegate: PropertyDelegate,
@@ -49,12 +50,13 @@ final class PropertySelectRouter: PropertySelectRouterProtocol {
     let worker = PropertySelectWorker(repository: FeedWriteRepository())
     let router = PropertySelectRouter()
 
-    view.router = router
     view.propertyType = propertyType
     view.interactor = interactor
     interactor.presenter = presenter
     interactor.worker = worker
+    interactor.router = router
     presenter.view = view
+    router.view = view
     router.delegate = delegate
 
     if let promotionList = promotionList {
@@ -67,24 +69,36 @@ final class PropertySelectRouter: PropertySelectRouterProtocol {
     return view
   }
 
-  func passTagToFeedWriteView(
-    source: PropertySelectViewProtocol,
-    tagList: [ChallengeTitle]
-  ) {
+  func passTagToFeedWriteView(tagList: [ChallengeTitle]) {
     self.delegate?.fetchSelectedTag(tagList: tagList)
-    self.navigateToFeedWriteView(source: source)
+    self.navigateToFeedWriteView()
   }
 
-  func passPromotionToFeedWriteView(
-    source: PropertySelectViewProtocol,
-    promotionList: [Promotion]
-  ) {
+  func passPromotionToFeedWriteView(promotionList: [Promotion]) {
     self.delegate?.fetchSelectedPromotion(promotionList: promotionList)
-    self.navigateToFeedWriteView(source: source)
+    self.navigateToFeedWriteView()
   }
 
-  func navigateToFeedWriteView(source: PropertySelectViewProtocol) {
-    guard let sourceView = source as? PropertySelectViewController else { return }
+  func navigateToFeedWriteView() {
+    guard let sourceView = self.view as? UIViewController else { return }
     sourceView.navigationController?.popViewController(animated: true)
+  }
+
+  /// AlertView
+  ///
+  /// - Parameters:
+  ///  - message: 알림창 메세지
+  ///  - confirmAction: 확인 눌렀을 때 수행 될 액션
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  ) {
+    if let sourceView = self.view as? UIViewController {
+      sourceView.showAlert(
+        content: message,
+        isCancelActive: false,
+        confirmActionCompletion: confirmAction
+      )
+    }
   }
 }

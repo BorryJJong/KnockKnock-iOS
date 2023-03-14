@@ -18,6 +18,11 @@ protocol StoreListInteractorProtocol {
   var presenter: StoreListPresentorProtocol? { get set }
 
   func fetchStoreDetailList()
+
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  )
 }
 
 protocol StoreListPresentorProtocol {
@@ -30,4 +35,9 @@ protocol StoreListRouterProtocol {
   var view: StoreListViewProtocol? { get set }
 
   static func createStoreListView() -> UIViewController
+  
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  )
 }

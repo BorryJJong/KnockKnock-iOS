@@ -1,41 +1,35 @@
 //
-//  FeedRepository.swift
+//  HotPostRepository.swift
 //  KnockKnock-iOS
 //
-//  Created by Daye on 2022/06/23.
+//  Created by Daye on 2023/01/17.
 //
 
 import Foundation
 
-import Alamofire
-
-protocol FeedRepositoryProtocol {
-
-  func requestFeedMain(
-    currentPage: Int,
-    totalCount: Int,
+protocol HotPostRepositoryProtocol {
+  func requestHotPost(
     challengeId: Int,
-    completionHandler: @escaping (ApiResponse<FeedMain>?) -> Void
+    completionHandler: @escaping (ApiResponse<[HotPost]>?) -> Void
   )
-
   func requestChallengeTitles(
     completionHandler: @escaping (ApiResponse<[ChallengeTitle]>?) -> Void
   )
 }
 
-final class FeedRepository: FeedRepositoryProtocol {
+final class HotPostRepository: HotPostRepositoryProtocol {
 
-  // MARK: - Feed main APIs
-
-  func requestChallengeTitles(
-    completionHandler: @escaping (ApiResponse<[ChallengeTitle]>?) -> Void
+  /// 인기 게시글 조회
+  func requestHotPost(
+    challengeId: Int,
+    completionHandler: @escaping (ApiResponse<[HotPost]>?) -> Void
   ) {
 
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponse<[ChallengeTitleDTO]>.self,
-        router: .getChallengeTitles,
+        object: ApiResponse<[HotPostDTO]>.self,
+        router: KKRouter.getHotPost(challengeId: challengeId),
         success: { response in
 
           let result = ApiResponse(
@@ -63,34 +57,25 @@ final class FeedRepository: FeedRepositoryProtocol {
       )
   }
 
-  func requestFeedMain(
-    currentPage: Int,
-    totalCount: Int,
-    challengeId: Int,
-    completionHandler: @escaping (ApiResponse<FeedMain>?) -> Void
+  /// 태그 리스트(인기 게시글 필터용)
+  func requestChallengeTitles(
+    completionHandler: @escaping (ApiResponse<[ChallengeTitle]>?) -> Void
   ) {
-
     KKNetworkManager
       .shared
       .request(
-        object: ApiResponse<FeedMainDTO>.self,
-        router: .getFeedMain(
-          page: currentPage,
-          take: totalCount,
-          challengeId: challengeId
-        ),
+        object: ApiResponse<[ChallengeTitleDTO]>.self,
+        router: KKRouter.getChallengeTitles,
         success: { response in
 
           let result = ApiResponse(
             code: response.code,
             message: response.message,
-            data: response.data?.toDomain()
+            data: response.data?.map { $0.toDomain() }
           )
-          
           completionHandler(result)
-        },
 
-        failure: { response, error in
+        }, failure: { response, error in
 
           guard let response = response else {
             completionHandler(nil)
@@ -100,9 +85,8 @@ final class FeedRepository: FeedRepositoryProtocol {
           let result = ApiResponse(
             code: response.code,
             message: response.message,
-            data: response.data?.toDomain()
+            data: response.data?.map { $0.toDomain() }
           )
-
           completionHandler(result)
           print(error.localizedDescription)
         }

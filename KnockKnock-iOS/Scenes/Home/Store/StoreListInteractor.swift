@@ -21,11 +21,55 @@ final class StoreListInteractor: StoreListInteractorProtocol {
 
   func fetchStoreDetailList() {
     Task {
-      guard let result = await self.repository?.requestVerifiedStoreDetailList() else {
-        return
+      let response = await self.repository?.requestVerifiedStoreDetailList()
+
+      await MainActor.run {
+        self.showErrorAlert(response: response)
       }
 
-      self.presenter?.presentStoreList(storeList: result)
+      guard let storeList = response?.data else { return }
+
+      self.presenter?.presentStoreList(storeList: storeList)
+    }
+  }
+
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  ) {
+    self.router?.showAlertView(
+      message: message,
+      confirmAction: confirmAction
+    )
+  }
+}
+
+extension StoreListInteractorProtocol {
+
+  // MARK: - Error
+
+  func showErrorAlert<T>(response: ApiResponse<T>?) {
+
+    guard let response = response else {
+
+      LoadingIndicator.hideLoading()
+
+      self.showAlertView(
+        message: "네트워크 연결을 확인해 주세요.",
+        confirmAction: nil
+      )
+      return
+    }
+
+    guard response.data != nil else {
+
+      LoadingIndicator.hideLoading()
+
+      self.showAlertView(
+        message: response.message,
+        confirmAction: nil
+      )
+      return
     }
   }
 }

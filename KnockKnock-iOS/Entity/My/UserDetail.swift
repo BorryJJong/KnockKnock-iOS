@@ -15,7 +15,7 @@ struct UserDetailDTO: Decodable {
   let image: String?
 }
 
-struct UserDetail {
+struct UserDetail: Decodable {
   let nickname: String
   let socialType: String
   let image: Data?

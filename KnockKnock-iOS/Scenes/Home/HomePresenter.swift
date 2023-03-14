@@ -19,6 +19,12 @@ protocol HomePresenterProtocol {
   )
   func presentMainBannerList(bannerList: [HomeBanner])
   func presentBarBannerList(bannerList: [HomeBanner])
+  
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class HomePresenter: HomePresenterProtocol {
@@ -46,5 +52,17 @@ final class HomePresenter: HomePresenterProtocol {
 
   func presentStoreList(storeList: [Store]) {
     self.view?.fetchStoreList(storeList: storeList)
+  }
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool,
+    confirmAction: (() -> Void)?
+  ) {
+    self.view?.showAlertView(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

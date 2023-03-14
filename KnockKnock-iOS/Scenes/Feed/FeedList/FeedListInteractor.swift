@@ -75,16 +75,23 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       count: pageSize,
       feedId: feedId,
       challengeId: challengeId,
-      completionHandler: { [weak self] feedList in
-        
+      completionHandler: { [weak self] response in
+
+        guard let self = self else { return }
+
+        self.showErrorAlert(response: response)
+
+        guard let feedList = response?.data else { return }
+
         if currentPage == 1 {
-          self?.feedListData = feedList
+          self.feedListData = feedList
+
         } else {
-          self?.feedListData?.feeds += feedList.feeds
+          self.feedListData?.feeds += feedList.feeds
         }
-        
-        guard let feedListData = self?.feedListData else { return }
-        self?.presenter?.presentFetchFeedList(feedList: feedListData)
+
+        guard let feedListData = self.feedListData else { return }
+        self.presenter?.presentFetchFeedList(feedList: feedListData)
       }
     )
   }
@@ -103,8 +110,14 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     
     self.worker?.requestDeleteFeed(
       feedId: feedId,
-      completionHandler: { isSuccess in
-        
+      completionHandler: { [weak self] response in
+
+        guard let self = self else { return }
+
+        self.showErrorAlert(response: response)
+
+        guard let isSuccess = response?.data else { return }
+
         if isSuccess {
 
           self.deletePost(
@@ -113,7 +126,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
           )
           
         } else {
-          print(isSuccess) // error
+          self.presentError(message: "게시글 삭제에 실패하였습니다.")
         }
       }
     )
@@ -150,10 +163,17 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       self.worker?.requestLike(
         isLike: isLike,
         feedId: feedId,
-        completionHandler: { [weak self] isSuccess in
+        completionHandler: { [weak self] response in
+
           guard let self = self else { return }
+
+          self.showErrorAlert(response: response)
+
+          guard let isSuccess = response?.data else { return }
+
           guard isSuccess else {
-            // error handle
+
+            self.presentError(message: "처리 중 오류가 발생하였습니다.")
             return
           }
 
@@ -174,7 +194,13 @@ final class FeedListInteractor: FeedListInteractorProtocol {
 
     self.worker?.requestHidePost(
       feedId: feedId,
-      completionHandler: { isSuccess in
+      completionHandler: { [weak self] response in
+
+        guard let self = self else { return }
+
+        self.showErrorAlert(response: response)
+
+        guard let isSuccess = response?.data else { return }
 
         if isSuccess {
           // 피드 리스트 내 해당 게시글 모두 삭제
@@ -186,9 +212,8 @@ final class FeedListInteractor: FeedListInteractorProtocol {
           self.presenter?.presentFetchFeedList(feedList: feedListData)
 
         } else {
-          // error
+          self.presentError(message: "게시글 숨기기에 실패하였습니다.")
         }
-
       }
     )
   }
@@ -206,9 +231,13 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     self.worker?.requestReportFeed(
       feedId: feedId,
       reportType: reportType,
-      completionHandler: { [weak self] isSuccess in
+      completionHandler: { [weak self] response in
 
         guard let self = self else { return }
+
+        self.showErrorAlert(response: response)
+
+        guard let isSuccess = response?.data else { return }
 
         if isSuccess {
           // 피드 리스트 내 해당 게시글 모두 숨김(삭제)처리
@@ -217,17 +246,11 @@ final class FeedListInteractor: FeedListInteractorProtocol {
             id: feedId
           ) else { return }
 
-          self.showAlertView(
-            message: "게시글이 신고 되었습니다.",
-            completion: nil
-          )
+          self.presentError(message: "게시글이 신고 되었습니다.")
           self.presenter?.presentFetchFeedList(feedList: feedListData)
 
         } else {
-          self.showAlertView(
-            message: "게시글 신고에 실패하였습니다.",
-            completion: nil
-          )
+          self.presentError(message: "게시글 신고에 실패하였습니다.")
         }
       }
     )
@@ -281,16 +304,6 @@ final class FeedListInteractor: FeedListInteractorProtocol {
         }
       }
     }
-  }
-
-  func showAlertView(
-    message: String,
-    completion: (() -> Void)?
-  ) {
-    self.router?.showAlertView(
-      message: message,
-      completion: completion
-    )
   }
 }
 
@@ -533,6 +546,36 @@ extension FeedListInteractor {
       selector: #selector(self.editNotificationEvent(_:)),
       name: .feedListRefreshAfterEdited,
       object: nil
+    )
+  }
+
+  // MARK: - Error
+
+  private func showErrorAlert<T>(response: ApiResponse<T>?) {
+    guard let response = response else {
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.presentError(message: "네트워크 연결을 확인해 주세요.")
+      }
+      return
+    }
+
+    guard response.data != nil else {
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.presentError(message: response.message)
+      }
+      return
+    }
+  }
+
+  private func presentError(message: String) {
+    self.presenter?.presentAlert(
+      message: message,
+      isCancelActive: false,
+      confirmAction: nil
     )
   }
 }

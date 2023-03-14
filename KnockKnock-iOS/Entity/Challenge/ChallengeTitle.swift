@@ -12,7 +12,7 @@ struct ChallengeTitleDTO: Decodable {
   let title: String
 }
 
-struct ChallengeTitle {
+struct ChallengeTitle: Decodable {
   let id: Int
   let title: String
   var isSelected: Bool = false
@@ -20,8 +20,10 @@ struct ChallengeTitle {
 
 extension ChallengeTitleDTO {
   func toDomain() -> ChallengeTitle {
-
-    return .init(id: self.id,
-                 title: self.title)
+    
+    return .init(
+      id: self.id,
+      title: self.title
+    )
   }
 }

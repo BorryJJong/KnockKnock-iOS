@@ -10,6 +10,7 @@ import Foundation
 protocol FeedMainInteractorProtocol {
   var presenter: FeedMainPresenterProtocol? { get set }
   var worker: FeedMainWorkerProtocol? { get set }
+  var router: FeedMainRouterProtocol? { get set }
 
   func fetchFeedMain(
     currentPage: Int,
@@ -23,6 +24,15 @@ protocol FeedMainInteractorProtocol {
   )
 
   func saveSearchKeyword(searchKeyword: [SearchKeyword])
+
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  )
+  func navigateToFeedList(
+    feedId: Int,
+    challengeId: Int
+  )
 }
 
 final class FeedMainInteractor: FeedMainInteractorProtocol {
@@ -31,6 +41,7 @@ final class FeedMainInteractor: FeedMainInteractorProtocol {
   
   var presenter: FeedMainPresenterProtocol?
   var worker: FeedMainWorkerProtocol?
+  var router: FeedMainRouterProtocol?
 
   private var feedData: FeedMain?
 
@@ -57,28 +68,40 @@ final class FeedMainInteractor: FeedMainInteractorProtocol {
       currentPage: currentPage,
       pageSize: pageSize,
       challengeId: challengeId,
-      completionHandler: { [weak self] data in
+      completionHandler: { [weak self] response in
 
         guard let self = self else { return }
 
+        self.showErrorAlert(response: response)
+
+        guard let data = response?.data else { return }
+
         if currentPage == 1 {
+
           self.feedData = data
+
         } else {
+
           self.feedData?.feeds += data.feeds
           self.feedData?.isNext = data.isNext
+
         }
 
         guard let feedData = self.feedData else { return }
         self.presenter?.presentFeedMain(feed: feedData)
+
       }
     )
   }
 
   func fetchChallengeTitles() {
-    self.worker?.fetchChallengeTitles { [weak self] challengeTitle in
+
+    self.worker?.fetchChallengeTitles { [weak self] response in
+
       guard let self = self else { return }
 
-      var challengeTitle = challengeTitle
+      guard var challengeTitle = response?.data else { return }
+
       challengeTitle[0].isSelected = true
 
       self.presenter?.presentGetChallengeTitles(
@@ -106,6 +129,28 @@ final class FeedMainInteractor: FeedMainInteractorProtocol {
     presenter?.presentGetChallengeTitles(
       challengeTitle: challengeTitles,
       index: selectedIndex
+    )
+  }
+
+  // MARK: - Routing
+
+  func showAlertView(
+    message: String,
+    confirmAction: (() -> Void)?
+  ) {
+    self.router?.showAlertView(
+      message: message,
+      confirmAction: confirmAction
+    )
+  }
+
+  func navigateToFeedList(
+    feedId: Int,
+    challengeId: Int
+  ) {
+    self.router?.navigateToFeedList(
+      feedId: feedId,
+      challengeId: challengeId
     )
   }
 }
@@ -145,6 +190,35 @@ extension FeedMainInteractor {
       queue: nil
     ) { _ in
       self.presenter?.reloadFeedMain()
+    }
+  }
+
+  // MARK: - Error
+
+  private func showErrorAlert<T>(response: ApiResponse<T>?) {
+    guard let response = response else {
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.showAlertView(
+          message: "네트워크 연결을 확인해 주세요.",
+          confirmAction: nil
+        )
+      }
+      return
+    }
+
+    guard response.data != nil else {
+
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
+
+        self.showAlertView(
+          message: response.message,
+          confirmAction: nil
+        )
+      }
+      return
     }
   }
 }

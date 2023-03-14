@@ -10,14 +10,14 @@ import Foundation
 protocol HomeWorkerProtocol {
   func fetchHotPostList(
     challengeId: Int,
-    completionHandler: @escaping ([HotPost]) -> Void
+    completionHandler: @escaping (ApiResponse<[HotPost]>?) -> Void
   )
   func fetchChallengeList(
-    completionHandler: @escaping([ChallengeTitle]) -> Void
+    completionHandler: @escaping(ApiResponse<[ChallengeTitle]>?) -> Void
   )
-  func fetchEventList() async -> [Event]
-  func fetchBanner(bannerType: BannerType) async -> [HomeBanner]?
-  func fetchVerifiedStore() async -> [Store]?
+  func fetchEventList() async -> ApiResponse<[Event]>?
+  func fetchBanner(bannerType: BannerType) async -> ApiResponse<[HomeBanner]>?
+  func fetchVerifiedStore() async -> ApiResponse<[Store]>?
 }
 
 final class HomeWorker: HomeWorkerProtocol {
@@ -41,35 +41,35 @@ final class HomeWorker: HomeWorkerProtocol {
 
   func fetchHotPostList(
     challengeId: Int,
-    completionHandler: @escaping ([HotPost]) -> Void
+    completionHandler: @escaping (ApiResponse<[HotPost]>?) -> Void
   ) {
     self.hotPostRepository.requestHotPost(
       challengeId: challengeId,
-      completionHandler: { hotPostList in
-        completionHandler(hotPostList)
+      completionHandler: { response in
+        completionHandler(response)
       }
     )
   }
 
   func fetchChallengeList(
-    completionHandler: @escaping([ChallengeTitle]) -> Void
+    completionHandler: @escaping(ApiResponse<[ChallengeTitle]>?) -> Void
   ) {
     self.hotPostRepository.requestChallengeTitles(
-      completionHandler: { challengeList in
-        completionHandler(challengeList)
+      completionHandler: { response in
+        completionHandler(response)
       }
     )
   }
 
-  func fetchVerifiedStore() async -> [Store]? {
+  func fetchVerifiedStore() async -> ApiResponse<[Store]>? {
     return await self.verifiedStoreRepository.requestVerifiedStoreList()
   }
 
-  func fetchEventList() async -> [Event] {
+  func fetchEventList() async -> ApiResponse<[Event]>? {
     return await self.eventRepository.requestEventList()
   }
 
-  func fetchBanner(bannerType: BannerType) async -> [HomeBanner]? {
+  func fetchBanner(bannerType: BannerType) async -> ApiResponse<[HomeBanner]>? {
     return await self.bannerRepository.requestBanner(bannerType: bannerType)
   }
 }

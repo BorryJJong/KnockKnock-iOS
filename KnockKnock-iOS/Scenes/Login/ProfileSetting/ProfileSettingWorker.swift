@@ -10,7 +10,7 @@ import Foundation
 protocol ProfileSettingWorkerProtocol {
   func requestRegister(
     registerInfo: RegisterInfo,
-    completionHandler: @escaping (AccountResponse) -> Void
+    completionHandler: @escaping (ApiResponse<Account>?) -> Void
   )
   func requestEditProfile(
     nickname: String?,
@@ -19,7 +19,7 @@ protocol ProfileSettingWorkerProtocol {
   )
   func checkDuplicateNickname(
     nickname: String,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
   func isChangedUserData(
     originNickname: String,
@@ -29,12 +29,12 @@ protocol ProfileSettingWorkerProtocol {
     completionHandler: @escaping (String?, Data?) -> Void
   )
   
-  func fetchUserData(completionHandler: @escaping (UserDetail) -> Void)
-  func saveUserInfo(response: AccountResponse) -> Bool
-  
+  func fetchUserData() async -> ApiResponse<UserDetail>?
+  func saveUserInfo(response: Account) -> Bool
 }
 
 final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
+
   private let accountManager: AccountManagerProtocol
   private let userDataManager: UserDataManagerProtocol
   private let profileRepository: ProfileRepositoryProtocol
@@ -49,19 +49,13 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
     self.profileRepository = profileRepository
   }
   
-  func fetchUserData(completionHandler: @escaping (UserDetail) -> Void) {
-    self.profileRepository.requestUserDeatil(
-      completionHandler: { response in
-        Task {
-          completionHandler(await response.toDomain())
-        }
-      }
-    )
+  func fetchUserData() async -> ApiResponse<UserDetail>? {
+    return await self.profileRepository.requestUserDetail()
   }
   
   func requestRegister(
     registerInfo: RegisterInfo,
-    completionHandler: @escaping (AccountResponse) -> Void
+    completionHandler: @escaping (ApiResponse<Account>?) -> Void
   ) {
     
     self.accountManager.register(
@@ -102,8 +96,10 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
     self.profileRepository.requestEditProfile(
       nickname: nickname,
       image: image,
-      completionHandler: { isSuccess in
-        
+      completionHandler: { response in
+
+        let isSuccess = response?.data ?? false
+
         if isSuccess {
           self.saveNickname(nickname: nickname)
         }
@@ -116,7 +112,7 @@ final class ProfileSettingWorker: ProfileSettingWorkerProtocol {
   
   func checkDuplicateNickname(
     nickname: String,
-    completionHandler: @escaping (Bool) -> Void
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   ) {
     
     self.profileRepository.checkDuplicateNickname(
@@ -133,7 +129,7 @@ extension ProfileSettingWorker {
   /// UserDefaults에 회원 정보 저장
   ///
   /// - Returns: 성공 여부(Bool)
-  func saveUserInfo(response: AccountResponse) -> Bool {
+  func saveUserInfo(response: Account) -> Bool {
     return self.userDataManager.saveUserInfo(response: response)
   }
   

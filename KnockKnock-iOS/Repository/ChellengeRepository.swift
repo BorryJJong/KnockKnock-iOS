@@ -10,49 +10,85 @@ import Foundation
 import Alamofire
 
 protocol ChallengeRepositoryProtocol {
-  func fetchChellenge(sortType: String, completionHandler: @escaping (Challenge) -> Void)
-  func requestChallengeDetail(challengeId: Int, completionHandler: @escaping (ChallengeDetail) -> Void)
+  func fetchChellenge(
+    sortType: String,
+    completionHandler: @escaping (ApiResponse<Challenge>?) -> Void
+  )
+  func requestChallengeDetail(
+    challengeId: Int,
+    completionHandler: @escaping (ApiResponse<ChallengeDetail>?) -> Void
+  )
 }
 
 final class ChallengeRepository: ChallengeRepositoryProtocol {
-  func fetchChellenge(sortType: String, completionHandler: @escaping (Challenge) -> Void) {
+
+  func fetchChellenge(
+    sortType: String,
+    completionHandler: @escaping (ApiResponse<Challenge>?) -> Void
+  ) {
 
     KKNetworkManager.shared
       .request(
-        object: ApiResponseDTO<Challenge>.self,
+        object: ApiResponse<ChallengeDTO>.self,
         router: KKRouter.getChallenges(sort: sortType),
         success: { response in
-          
-          guard let data = response.data else {
-            // no data error
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.data?.toDomain()
+          )
+          completionHandler(result)
+
+        }, failure: { response, error in
+
+          guard let response = response else {
+            completionHandler(nil)
             return
           }
-          completionHandler(data)
-        },
-        failure: { response in
-          print(response)
+
+          let result = ApiResponse(
+            code: response.code,
+            message: response.message,
+            data: response.data?.toDomain()
+          )
+          completionHandler(result)
+          print(error.localizedDescription)
         }
       )
   }
 
   func requestChallengeDetail(
     challengeId: Int,
-    completionHandler: @escaping (ChallengeDetail) -> Void) {
+    completionHandler: @escaping (ApiResponse<ChallengeDetail>?) -> Void) {
 
       KKNetworkManager.shared
         .request(
-          object: ApiResponseDTO<ChallengeDetail>.self,
+          object: ApiResponse<ChallengeDetailDTO>.self,
           router: KKRouter.getChallengeDetail(id: challengeId),
           success: { response in
 
-            guard let data = response.data else {
-              // no data error
+            let result = ApiResponse(
+              code: response.code,
+              message: response.message,
+              data: response.data?.toDomain()
+            )
+            completionHandler(result)
+
+          }, failure: { response, error in
+
+            guard let response = response else {
+              completionHandler(nil)
               return
             }
-            completionHandler(data)
-          },
-          failure: { response in
-            print(response)
+
+            let result = ApiResponse(
+              code: response.code,
+              message: response.message,
+              data: response.data?.toDomain()
+            )
+            completionHandler(result)
+            print(error.localizedDescription)
           }
         )
     }

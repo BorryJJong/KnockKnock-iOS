@@ -14,7 +14,7 @@ struct HotPostDTO: Decodable {
   let fileUrl: String
 }
 
-struct HotPost {
+struct HotPost: Decodable {
   let postId: Int
   let scale: String
   let nickname: String
@@ -25,9 +25,9 @@ extension HotPostDTO {
   func toDomain() -> HotPost {
     .init(
       postId: postId,
-          scale: "1:1",
-          nickname: nickname,
-          fileUrl: fileUrl
+      scale: "1:1",
+      nickname: nickname,
+      fileUrl: fileUrl
     )
   }
 }

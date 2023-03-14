@@ -11,7 +11,7 @@ import Alamofire
 
 final class KKNetworkManager {
   typealias Success<T> = ((T) -> Void)
-  typealias Failure = ((_ error: Error) -> Void)
+  typealias Failure<T> = ((T?, _ error: Error) -> Void)
 
   static let shared = KKNetworkManager()
 
@@ -34,18 +34,21 @@ final class KKNetworkManager {
     object: T.Type,
     router: KKRouter,
     success: @escaping Success<T>,
-    failure: @escaping Failure
+    failure: @escaping Failure<T>
   ) where T: Decodable {
 
     session.request(router)
-      .validate(statusCode: 200..<500)
+      .validate(statusCode: 200..<300)
       .responseDecodable(of: object) { response in
+
         switch response.result {
+
         case .success:
           guard let decodedData = response.value else { return }
           success(decodedData)
+
         case .failure(let err):
-          failure(err)
+          failure(response.value, err)
         }
       }
   }
@@ -53,40 +56,38 @@ final class KKNetworkManager {
   func asyncRequest<T: Decodable>(
     object: T.Type,
     router: KKRouter
-  ) async throws -> T {
+  ) async throws -> DataResponse<T, AFError> {
 
-   let response = session
-    .request(router)
-    .validate(statusCode: 200..<500)
-    .serializingDecodable(object)
+    let response = await session
+      .request(router)
+      .validate(statusCode: 200..<300)
+      .serializingDecodable(object)
+      .response
 
-    switch await response.result {
-    case .success(let value):
-      return value
-    case .failure(let err):
-      throw err
-    }
+    return response
   }
 
   func upload<T>(
     object: T.Type,
     router: KKRouter,
     success: @escaping Success<T>,
-    failure: @escaping Failure
+    failure: @escaping Failure<T>
   ) where T: Decodable {
 
     session.upload(
       multipartFormData: router.multipart,
       with: router
-    ).validate(statusCode: 200..<500)
+    ).validate(statusCode: 200..<300)
      .responseDecodable(of: object) { response in
+
         switch response.result {
+
         case .success:
           guard let decodedData = response.value else { return }
           success(decodedData)
 
         case .failure(let err):
-          failure(err)
+          failure(response.value, err)
         }
       }
   }

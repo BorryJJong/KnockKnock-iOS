@@ -24,10 +24,6 @@ protocol FeedListRouterProtocol {
   func navigateToFeedDetail(feedId: Int)
   func navigateToCommentView(feedId: Int)
   func navigateToLoginView()
-  func showAlertView(
-    message: String,
-    completion: (() -> Void)?
-  )
 }
 
 final class FeedListRouter: FeedListRouterProtocol {
@@ -141,18 +137,5 @@ final class FeedListRouter: FeedListRouterProtocol {
         completion: nil
       )
     }
-  }
-  
-  func showAlertView(
-    message: String,
-    completion: (() -> Void)?
-  ) {
-    guard let sourceView = self.view as? UIViewController else { return }
-    
-    sourceView.showAlert(
-      content: message,
-      isCancelActive: false,
-      confirmActionCompletion: completion
-    )
   }
 }

@@ -15,8 +15,12 @@ protocol MyWorkerProtocol {
   func fetchNickname(
     completionHandler: @escaping(String) -> Void
   )
-  func requestSignOut()
-  func requestWithdraw()
+  func requestSignOut(
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
+  )
+  func requestWithdraw(
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
+  )
 }
 
 final class MyWorker: MyWorkerProtocol {
@@ -90,25 +94,33 @@ final class MyWorker: MyWorkerProtocol {
       completionHandler(nickname)
   }
 
-  func requestSignOut() {
+  func requestSignOut(
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
+  ) {
     self.accountManager?.signOut(
-      completionHandler: { [weak self] success in
-      if success {
-        self?.userDataManager?.removeAllUserInfo()
-      } else {
-        // error
+      completionHandler: { [weak self] response in
+        if let isSuccess = response?.data {
+          if isSuccess {
+            self?.userDataManager?.removeAllUserInfo()
+          }
+        }
+        completionHandler(response)
       }
-    })
+    )
   }
 
-  func requestWithdraw() {
+  func requestWithdraw(
+    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
+  ) {
     self.accountManager?.withdraw(
-      completionHandler: { [weak self] success in
-      if success {
-        self?.userDataManager?.removeAllUserInfo()
-      } else {
-        // error
+      completionHandler: { [weak self] response in
+        if let isSuccess = response?.data {
+          if isSuccess {
+            self?.userDataManager?.removeAllUserInfo()
+          }
+        }
+        completionHandler(response)
       }
-    })
+    )
   }
 }

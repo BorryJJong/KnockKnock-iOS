@@ -14,6 +14,11 @@ protocol MyViewProtocol: AnyObject {
   func checkLoginStatus(isSignedIn: Bool)
   func fetchNickname(nickname: String)
   func setPushSetting()
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class MyViewController: BaseViewController<MyView> {
@@ -118,7 +123,7 @@ final class MyViewController: BaseViewController<MyView> {
 
 // MARK: - My View Protocol
 
-extension MyViewController: MyViewProtocol {
+extension MyViewController: MyViewProtocol, AlertProtocol {
 
   func fetchMenuData(menuData: MyMenu) {
     self.menuData = menuData
@@ -161,6 +166,19 @@ extension MyViewController: MyViewProtocol {
         with: .none
       )
     }
+  }
+
+  /// Alert 팝업 창
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool,
+    confirmAction: (() -> Void)?
+  ) {
+    self.showAlert(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }
 
@@ -315,7 +333,7 @@ extension MyViewController: UITableViewDelegate {
       self.interactor?.navigateToPolicyView(policyType: menu) 
 
     default:
-      print("none")
+      self.showAlert(content: "잘못 된 접근입니다.")
     }
   }
 } 

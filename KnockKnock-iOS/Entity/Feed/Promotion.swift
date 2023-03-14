@@ -14,13 +14,15 @@ struct PromotionDTO: Decodable {
 
 extension PromotionDTO {
   func toDomain() -> Promotion {
-    return .init(id: self.id,
-                 type: self.type,
-                 isSelected: false)
+    return .init(
+      id: self.id,
+      type: self.type,
+      isSelected: false
+    )
   }
 }
 
-struct Promotion {
+struct Promotion: Decodable {
   let id: Int
   let type: String
 

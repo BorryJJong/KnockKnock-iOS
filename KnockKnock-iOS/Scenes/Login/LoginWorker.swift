@@ -11,10 +11,10 @@ protocol LoginWorkerProtocol {
   func fetchSignInResult(
     appleLoginResultDelegate: AppleLoginResultDelegate,
     socialType: SocialType,
-    completionHandler: @escaping (AccountResponse, SignInInfo) -> Void
+    completionHandler: @escaping (ApiResponse<Account>?, SignInInfo) -> Void
   )
   
-  func saveUserInfo(response: AccountResponse)
+  func saveUserInfo(response: Account) -> Bool
 }
 
 protocol AppleLoginDelegate: AnyObject {
@@ -46,7 +46,7 @@ final class LoginWorker: LoginWorkerProtocol {
   func fetchSignInResult(
     appleLoginResultDelegate: AppleLoginResultDelegate,
     socialType: SocialType,
-    completionHandler: @escaping (AccountResponse, SignInInfo) -> Void
+    completionHandler: @escaping (ApiResponse<Account>?, SignInInfo) -> Void
   ) {
     switch socialType {
     case .kakao:
@@ -69,8 +69,8 @@ final class LoginWorker: LoginWorkerProtocol {
 
   /// - Parameters:
   ///   - response: 회원가입/로그인 api response(userinfo)
-  func saveUserInfo(response: AccountResponse) {
-    self.userDataManager.saveUserInfo(response: response)
+  func saveUserInfo(response: Account) -> Bool {
+    return self.userDataManager.saveUserInfo(response: response)
   }
 }
 
@@ -83,6 +83,8 @@ extension LoginWorker: AppleLoginDelegate {
       accessToken: token,
       socialType: SocialType.apple
     ) { response, signInInfo in
+
+      guard let response = response?.data else { return }
 
       self.appleLoginResultDelegate?.getSignInResult(
         response: response,
