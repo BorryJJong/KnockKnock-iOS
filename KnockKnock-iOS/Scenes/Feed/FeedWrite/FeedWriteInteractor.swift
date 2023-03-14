@@ -16,14 +16,13 @@ protocol FeedWriteInteractorProtocol: AnyObject {
   func presentFeedWriteCompletedView(feedId: Int)
   func navigateToShopSearch()
   func navigateToProperty(propertyType: PropertyType)
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  )
 
   func setCurrentText(text: String)
   func checkEssentialField(image: [Data?])
-  func requestUploadFeed(content: String, images: [Data?])
+  func requestUploadFeed(
+    content: String,
+    images: [Data?]
+  )
 }
 
 final class FeedWriteInteractor: FeedWriteInteractorProtocol {
@@ -67,16 +66,6 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
     )
   }
 
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    self.router?.showAlertView(
-      message: message,
-      confirmAction: confirmAction
-    )
-  }
-
   // Buisness Logic
 
   func setCurrentText(text: String) {
@@ -93,8 +82,9 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
     ) else { return }
 
     if isDone {
-      self.showAlertView(
+      self.presentAlert(
         message: "게시글 등록을 완료 하시겠습니까?",
+        isCancelActive: true,
         confirmAction: {
           LoadingIndicator.showLoading()
 
@@ -105,10 +95,7 @@ final class FeedWriteInteractor: FeedWriteInteractorProtocol {
         }
       )
     } else {
-      self.showAlertView(
-        message: "사진, 태그, 프로모션, 내용은 필수 입력 항목입니다.",
-        confirmAction: nil
-      )
+      self.presentAlert(message: "사진, 태그, 프로모션, 내용은 필수 입력 항목입니다.")
     }
   }
 
@@ -226,25 +213,30 @@ extension FeedWriteInteractor {
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.showAlertView(
-          message: "네트워크 연결을 확인해 주세요.",
-          confirmAction: nil
-        )
+        self.presentAlert(message: "네트워크 연결을 확인해 주세요.")
       }
       return
     }
 
     guard response.data != nil else {
-
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.showAlertView(
-          message: response.message,
-          confirmAction: nil
-        )
+        self.presentAlert(message: response.message)
       }
       return
     }
+  }
+
+  private func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    self.presenter?.presentAlert(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

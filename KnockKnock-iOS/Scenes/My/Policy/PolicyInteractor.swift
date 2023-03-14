@@ -24,7 +24,7 @@ final class PolicyInteractor: PolicyInteractorProtocol {
     LoadingIndicator.showLoading()
     
     guard let policyType = policyType else {
-      self.showAlertView(
+      self.presentAlert(
         message: "로드에 실패하였습니다.",
         confirmAction: self.popToMyView
       )
@@ -34,17 +34,19 @@ final class PolicyInteractor: PolicyInteractorProtocol {
     self.presenter?.presentPolicyUrl(policyType: policyType)
   }
 
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    self.router?.showAlertView(
-      message: message,
-      confirmAction: confirmAction
-    )
-  }
-
   func popToMyView() {
     self.router?.popToMyView()
+  }
+
+  private func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    self.presenter?.presentAlert(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

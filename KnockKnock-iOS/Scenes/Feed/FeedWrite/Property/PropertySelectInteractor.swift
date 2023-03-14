@@ -19,10 +19,6 @@ protocol PropertySelectInteractorProtocol {
   func passPromotionToFeedWriteView(promotionList: [Promotion])
 
   func navigateToFeedWriteView()
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  )
 }
 
 final class PropertySelectInteractor: PropertySelectInteractorProtocol {
@@ -79,16 +75,6 @@ final class PropertySelectInteractor: PropertySelectInteractorProtocol {
   func navigateToFeedWriteView() {
     self.router?.navigateToFeedWriteView()
   }
-
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    self.router?.showAlertView(
-      message: message,
-      confirmAction: confirmAction
-    )
-  }
 }
 
 extension PropertySelectInteractor {
@@ -100,25 +86,30 @@ extension PropertySelectInteractor {
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.showAlertView(
-          message: "네트워크 연결을 확인해 주세요.",
-          confirmAction: nil
-        )
+        self.presentAlert(message: "네트워크 연결을 확인해 주세요.")
       }
       return
     }
 
     guard response.data != nil else {
-
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.showAlertView(
-          message: response.message,
-          confirmAction: nil
-        )
+        self.presentAlert(message: response.message)
       }
       return
     }
+  }
+
+  private func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    self.presenter?.presentAlert(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

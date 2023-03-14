@@ -219,10 +219,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
           self.fetchAllCommentsCount()
 
         } else {
-          self.showAlertView(
-            message: "댓글 등록에 실패하였습니다.",
-            confirmAction: nil
-          )
+          self.presentAlert(message: "댓글 등록에 실패하였습니다.")
         }
       }
     )
@@ -262,10 +259,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
 
         } else {
 
-          self.showAlertView(
-            message: "댓글 삭제에 실패하였습니다.",
-            confirmAction: nil
-          )
+          self.presentAlert(message: "댓글 삭제에 실패하였습니다.")
         }
       }
     )
@@ -285,17 +279,14 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
         guard let isSuccess = response?.data else { return }
 
         if isSuccess {
-          self.showAlertView(
+          self.presentAlert(
             message: "게시글이 삭제되었습니다.",
             confirmAction: {
               self.navigateToFeedList()
             }
           )
         } else {
-          self.showAlertView(
-            message: "게시글 삭제에 실패하였습니다.",
-            confirmAction: nil
-          )
+          self.presentAlert(message: "게시글 삭제 중 오류가 발생하였습니다.")
         }
       }
     )
@@ -315,17 +306,14 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
         guard let isSuccess = response?.data else { return }
 
         if isSuccess {
-          self.showAlertView(
+          self.presentAlert(
             message: "게시글이 숨김 처리 되었습니다.",
             confirmAction: {
               self.navigateToFeedList()
             }
           )
         } else {
-          self.showAlertView(
-            message: "게시글 숨김 처리에 실패하였습니다.",
-            confirmAction: nil
-          )
+          self.presentAlert(message: "게시글 숨김 처리에 실패하였습니다.")
         }
       }
     )
@@ -350,17 +338,14 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
         guard let isSuccess = response?.data else { return }
 
         if isSuccess {
-          self.showAlertView(
+          self.presentAlert(
             message: "게시글이 신고 되었습니다.",
             confirmAction: {
               self.navigateToFeedList()
             }
           )
         } else {
-          self.showAlertView(
-            message: "게시글 신고에 실패하였습니다.",
-            confirmAction: nil
-          )
+          self.presentAlert(message: "게시글 신고에 실패하였습니다.")
         }
       }
     )
@@ -412,16 +397,6 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
       }
     }
   }
-
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    self.router?.showAlertView(
-      message: message,
-      confirmAction: confirmAction
-    )
-  }
 }
 
 extension FeedDetailInteractor {
@@ -455,25 +430,30 @@ extension FeedDetailInteractor {
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.showAlertView(
-          message: "네트워크 연결을 확인해 주세요.",
-          confirmAction: nil
-        )
+        self.presentAlert(message: "네트워크 연결을 확인해 주세요.")
       }
       return
     }
 
     guard response.data != nil else {
-
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.showAlertView(
-          message: response.message,
-          confirmAction: nil
-        )
+        self.presentAlert(message: response.message)
       }
       return
     }
+  }
+
+  private func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    self.presenter?.presentAlert(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

@@ -32,16 +32,6 @@ final class StoreListInteractor: StoreListInteractorProtocol {
       self.presenter?.presentStoreList(storeList: storeList)
     }
   }
-
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    self.router?.showAlertView(
-      message: message,
-      confirmAction: confirmAction
-    )
-  }
 }
 
 extension StoreListInteractorProtocol {
@@ -49,27 +39,34 @@ extension StoreListInteractorProtocol {
   // MARK: - Error
 
   func showErrorAlert<T>(response: ApiResponse<T>?) {
-
     guard let response = response else {
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
 
-      LoadingIndicator.hideLoading()
-
-      self.showAlertView(
-        message: "네트워크 연결을 확인해 주세요.",
-        confirmAction: nil
-      )
+        self.presentAlert(message: "네트워크 연결을 확인해 주세요.")
+      }
       return
     }
 
     guard response.data != nil else {
+      DispatchQueue.main.async {
+        LoadingIndicator.hideLoading()
 
-      LoadingIndicator.hideLoading()
-
-      self.showAlertView(
-        message: response.message,
-        confirmAction: nil
-      )
+        self.presentAlert(message: response.message)
+      }
       return
     }
+  }
+
+  private func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    self.presenter?.presentAlert(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

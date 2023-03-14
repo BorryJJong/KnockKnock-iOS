@@ -77,17 +77,15 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
     ) else { return }
 
     if isDone {
-      self.showAlertView(
+      self.presentAlert(
         message: "게시글을 수정하시겠습니까?",
+        isCancelActive: true,
         confirmAction: {
           self.updateFeed(id: feedId)
         }
       )
     } else {
-      self.showAlertView(
-        message: "사진, 태그, 프로모션, 내용은 필수 입력 항목입니다.",
-        confirmAction: nil
-      )
+      self.presentAlert(message: "사진, 태그, 프로모션, 내용은 필수 입력 항목입니다.")
     }
   }
 
@@ -120,17 +118,10 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
         guard let isSuccess = response?.data else { return }
 
         if isSuccess {
-          self.router?.showAlertView(
-            message: "수정이 완료되었습니다.",
-            confirmAction: {
-              self.popFeedEditView()
-            }
-          )
+          self.presentAlert(message: "게시글 수정이 완료되었습니다.")
+
         } else {
-          self.router?.showAlertView(
-            message: "수정에 실패하였습니다.",
-            confirmAction: nil
-          )
+          self.presentAlert(message: "게시글 수정에 실패하였습니다.")
         }
       }
     )
@@ -151,16 +142,6 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
       propertyType: propertyType,
       promotionList: self.promotions,
       tagList: self.challenges
-    )
-  }
-
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    self.router?.showAlertView(
-      message: message,
-      confirmAction: confirmAction
     )
   }
 }
@@ -277,6 +258,7 @@ extension FeedEditInteractor {
 
   }
 
+
   // MARK: - Error
 
   private func showErrorAlert<T>(response: ApiResponse<T>?) {
@@ -284,25 +266,30 @@ extension FeedEditInteractor {
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.showAlertView(
-          message: "네트워크 연결을 확인해 주세요.",
-          confirmAction: nil
-        )
+        self.presentAlert(message: "네트워크 연결을 확인해 주세요.")
       }
       return
     }
 
     guard response.data != nil else {
-
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.showAlertView(
-          message: response.message,
-          confirmAction: nil
-        )
+        self.presentAlert(message: response.message)
       }
       return
     }
+  }
+
+  private func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (()-> Void)? = nil
+  ) {
+    self.presenter?.presentAlert(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

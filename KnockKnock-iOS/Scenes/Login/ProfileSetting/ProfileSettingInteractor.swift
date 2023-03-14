@@ -57,9 +57,9 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
     message: String,
     confirmAction: (() -> Void)?
   ) {
-    self.router?.showAlertView(
+    self.presentAlert(
       message: message,
-      completion: confirmAction
+      confirmAction: confirmAction
     )
   }
 
@@ -113,10 +113,7 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
         guard let isDuplicated = response?.data else { return }
         
         if isDuplicated {
-          self.router?.showAlertView(
-            message: "이미 사용되고 있는 닉네임입니다.",
-            completion: nil
-          )
+          self.presentAlert(message: "이미 사용되고 있는 닉네임입니다.")
           
         } else {
           
@@ -133,18 +130,16 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
               guard let isSuccess = self.worker?.saveUserInfo(response: data) else { return }
               
               if isSuccess {
-                self.router?.showAlertView(
+                self.presentAlert(
                   message: "회원가입에 성공하였습니다.",
-                  completion: {
+                  confirmAction: {
                   self.navigateToMyView()
                 }
               )
                 
               } else {
-                self.router?.showAlertView(
-                  message: "회원가입에 실패하였습니다.",
-                  completion: nil
-                )
+                self.presentAlert(
+                  message: "회원가입에 실패하였습니다.")
               }
             }
           )
@@ -198,10 +193,7 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
             if nickname != self.userDetail?.nickname,
                isDuplicated {
 
-              self.router?.showAlertView(
-                message: "이미 사용되고 있는 닉네임입니다.",
-                completion: nil
-              )
+              self.presentAlert(message: "이미 사용되고 있는 닉네임입니다.")
 
             } else {
 
@@ -211,9 +203,9 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
                 image: newImage,
                 completionHandler: { message in
 
-                  self.router?.showAlertView(
+                  self.presentAlert(
                     message: message,
-                    completion: {
+                    confirmAction: {
                       self.router?.navigateToMyView()
                     }
                   )
@@ -236,25 +228,31 @@ extension ProfileSettingInteractor {
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.showAlertView(
-          message: "네트워크 연결을 확인해 주세요.",
-          confirmAction: nil
-        )
+        self.presentAlert(message: "네트워크 연결을 확인해 주세요.")
       }
       return
     }
 
     guard response.data != nil else {
-
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.showAlertView(
-          message: response.message,
-          confirmAction: nil
-        )
+        self.presentAlert(message: response.message)
       }
       return
     }
+  }
+
+  private func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    LoadingIndicator.hideLoading()
+    self.presenter?.presentAlert(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

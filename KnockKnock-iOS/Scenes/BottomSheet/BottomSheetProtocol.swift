@@ -19,6 +19,12 @@ protocol BottomSheetViewProtocol: AnyObject {
     districtsType: DistrictsType?,
     bottomSheetSize: BottomSheetSize
   )
+
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: @escaping (() -> Void)
+  )
 }
 
 protocol BottomSheetInteractorProtocol {
@@ -49,6 +55,12 @@ protocol BottomSheetPresenterProtocol {
     districtsType: DistrictsType?,
     bottomSheetSize: BottomSheetSize
   )
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: @escaping (() -> Void)
+  )
 }
 
 protocol BottomSheetWorkerProtocol {
@@ -74,5 +86,4 @@ protocol BottomSheetRouterProtocol: AnyObject {
   func navigateToShopSearch()
 
   func dismissView(action: (() -> Void)?)
-  func presentErrorAlertView(message: String)
 }

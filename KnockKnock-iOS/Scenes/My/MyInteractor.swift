@@ -77,7 +77,7 @@ final class MyInteractor: MyInteractorProtocol {
         guard let isSuccess = response?.data,
               isSuccess else {
 
-          self.presentError(message: "처리 중 오류가 발생하였습니다.")
+          self.presentAlert(message: "처리 중 오류가 발생하였습니다.")
           return
         }
       }
@@ -95,11 +95,11 @@ final class MyInteractor: MyInteractorProtocol {
         guard let isSuccess = response?.data,
               isSuccess else {
 
-          self.presentError(message: "처리 중 오류가 발생하였습니다.")
+          self.presentAlert(message: "처리 중 오류가 발생하였습니다.")
           return
         }
 
-        self.presentError(message: "성공적으로 탈퇴 처리 되었습니다.")
+        self.presentAlert(message: "성공적으로 탈퇴 처리 되었습니다.")
       }
     )
   }
@@ -159,7 +159,7 @@ extension MyInteractor {
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.presentError(message: "네트워크 연결을 확인해 주세요.")
+        self.presentAlert(message: "네트워크 연결을 확인해 주세요.")
       }
       return
     }
@@ -168,17 +168,21 @@ extension MyInteractor {
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.presentError(message: response.message)
+        self.presentAlert(message: response.message)
       }
       return
     }
   }
 
-  private func presentError(message: String) {
+  private func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
     self.presenter?.presentAlert(
       message: message,
-      isCancelActive: false,
-      confirmAction: nil
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
     )
   }
 }

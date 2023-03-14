@@ -43,16 +43,18 @@ final class PolicyViewController: BaseViewController<PolicyView> {
   }
 }
 
-extension PolicyViewController: PolicyViewProtocol {
+extension PolicyViewController: PolicyViewProtocol, AlertProtocol {
   func fetchPolicyUrl(policyType: MyMenuType) {
 
     guard let urlString = policyType.url,
           let url = URL(string: urlString) else {
 
-      self.interactor?.showAlertView(
-        message: "페이지 로드 실패",
-        confirmAction: self.interactor?.popToMyView
-      )
+      DispatchQueue.main.async {
+        self.showAlertView(
+          message: "페이지 로드 실패",
+          confirmAction: self.interactor?.popToMyView
+        )
+      }
       return
 
     }
@@ -61,6 +63,21 @@ extension PolicyViewController: PolicyViewProtocol {
       self.containerView.setWebViewUrl(url: url)
       self.navigationItem.title = policyType.rawValue
       LoadingIndicator.hideLoading()
+    }
+  }
+
+  /// Alert 팝업 창
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    DispatchQueue.main.async {
+      self.showAlert(
+        message: message,
+        isCancelActive: isCancelActive,
+        confirmAction: confirmAction
+      )
     }
   }
 }

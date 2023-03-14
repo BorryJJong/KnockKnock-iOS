@@ -12,6 +12,12 @@ protocol PropertySelectPresenterProtocol {
 
   func presentPromotionList(promotionList: [Promotion])
   func presentTagList(tagList: [ChallengeTitle])
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class PropertySelectPresenter: PropertySelectPresenterProtocol {
@@ -23,5 +29,17 @@ final class PropertySelectPresenter: PropertySelectPresenterProtocol {
 
   func presentTagList(tagList: [ChallengeTitle]) {
     self.view?.fetchTagList(tagList: tagList)
+  }
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    self.view?.showAlertView(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

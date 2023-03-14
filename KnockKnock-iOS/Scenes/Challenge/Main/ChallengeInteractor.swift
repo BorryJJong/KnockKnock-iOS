@@ -54,19 +54,10 @@ final class ChallengeInteractor: ChallengeInteractorProtocol {
   func navigateToChallengeDetail(challengeId: Int) {
     self.router?.navigateToChallengeDetail(challengeId: challengeId)
   }
-
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    self.router?.showAlertView(
-      message: message,
-      confirmAction: confirmAction
-    )
-  }
 }
 
 extension ChallengeInteractor: ChallengeSortDelegate {
+  
   func getSortType(sortType: ChallengeSortType) {
     self.fetchChallenge(sortType: sortType)
   }
@@ -78,25 +69,30 @@ extension ChallengeInteractor: ChallengeSortDelegate {
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.showAlertView(
-          message: "네트워크 연결을 확인해 주세요.",
-          confirmAction: nil
-        )
+        self.presentAlert(message: "네트워크 연결을 확인해 주세요.")
       }
       return
     }
 
     guard response.data != nil else {
-
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.showAlertView(
-          message: response.message,
-          confirmAction: nil
-        )
+        self.presentAlert(message: response.message)
       }
       return
     }
+  }
+
+  private func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    self.presenter?.presentAlert(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

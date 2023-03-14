@@ -15,6 +15,12 @@ protocol CommentViewProtocol: AnyObject {
   
   func fetchVisibleComments(comments: [Comment])
   func setLoginStatus(isLoggedIn: Bool)
+
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class CommentViewController: BaseViewController<CommentView> {
@@ -147,15 +153,18 @@ final class CommentViewController: BaseViewController<CommentView> {
   }
   
   private func commentDeleteButtonDidTap(commentId: Int) {
-    self.showAlert(
-      content: "댓글을 삭제하시겠습니까?",
-      confirmActionCompletion: {
-        self.interactor?.requestDeleteComment(
-          feedId: self.feedId,
-          commentId: commentId
-        )
-      }
-    )
+    DispatchQueue.main.async {
+      self.showAlert(
+        message: "댓글을 삭제하시겠습니까?",
+        isCancelActive: true,
+        confirmAction: {
+          self.interactor?.requestDeleteComment(
+            feedId: self.feedId,
+            commentId: commentId
+          )
+        }
+      )
+    }
   }
   
   @objc private func regitstButtonDidTap(_ sender: UIButton) {
@@ -179,7 +188,7 @@ final class CommentViewController: BaseViewController<CommentView> {
 
 // MARK: - CommentViewProtocol
 
-extension CommentViewController: CommentViewProtocol {
+extension CommentViewController: CommentViewProtocol, AlertProtocol {
   func fetchVisibleComments(comments: [Comment]) {
     self.visibleComments = comments
 
@@ -195,6 +204,21 @@ extension CommentViewController: CommentViewProtocol {
 
     DispatchQueue.main.async {
       self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
+    }
+  }
+
+  /// Alert 팝업 창
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    DispatchQueue.main.async {
+      self.showAlert(
+        message: message,
+        isCancelActive: isCancelActive,
+        confirmAction: confirmAction
+      )
     }
   }
 }

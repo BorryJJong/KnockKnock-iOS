@@ -126,7 +126,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
           )
           
         } else {
-          self.presentError(message: "게시글 삭제에 실패하였습니다.")
+          self.presentAlert(message: "게시글 삭제에 실패하였습니다.")
         }
       }
     )
@@ -173,7 +173,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
 
           guard isSuccess else {
 
-            self.presentError(message: "처리 중 오류가 발생하였습니다.")
+            self.presentAlert(message: "처리 중 오류가 발생하였습니다.")
             return
           }
 
@@ -212,7 +212,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
           self.presenter?.presentFetchFeedList(feedList: feedListData)
 
         } else {
-          self.presentError(message: "게시글 숨기기에 실패하였습니다.")
+          self.presentAlert(message: "게시글 숨기기에 실패하였습니다.")
         }
       }
     )
@@ -246,11 +246,11 @@ final class FeedListInteractor: FeedListInteractorProtocol {
             id: feedId
           ) else { return }
 
-          self.presentError(message: "게시글이 신고 되었습니다.")
+          self.presentAlert(message: "게시글이 신고 되었습니다.")
           self.presenter?.presentFetchFeedList(feedList: feedListData)
 
         } else {
-          self.presentError(message: "게시글 신고에 실패하였습니다.")
+          self.presentAlert(message: "게시글 신고에 실패하였습니다.")
         }
       }
     )
@@ -556,7 +556,7 @@ extension FeedListInteractor {
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.presentError(message: "네트워크 연결을 확인해 주세요.")
+        self.presentAlert(message: "네트워크 연결을 확인해 주세요.")
       }
       return
     }
@@ -565,17 +565,21 @@ extension FeedListInteractor {
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.presentError(message: response.message)
+        self.presentAlert(message: response.message)
       }
       return
     }
   }
 
-  private func presentError(message: String) {
+  private func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
     self.presenter?.presentAlert(
       message: message,
-      isCancelActive: false,
-      confirmAction: nil
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
     )
   }
 }

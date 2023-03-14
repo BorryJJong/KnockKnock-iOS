@@ -25,10 +25,6 @@ protocol ShopSearchInteractorProtocol {
   )
   func passDataToFeedWriteView(address: AddressResponse.Documents?)
   func navigateToFeedWriteView()
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  )
 }
 
 final class ShopSearchInteractor: ShopSearchInteractorProtocol {
@@ -69,10 +65,7 @@ final class ShopSearchInteractor: ShopSearchInteractorProtocol {
       completionHandler: { address in
 
         guard let address = address else {
-          self.showAlertView(
-            message: "검색에 실패하였습니다. 잠시 후에 다시 시도해 주세요.",
-            confirmAction: nil
-          )
+          self.presentAlert(message: "검색에 실패하였습니다. 잠시 후에 다시 시도해 주세요.")
           return
         }
 
@@ -127,12 +120,14 @@ final class ShopSearchInteractor: ShopSearchInteractorProtocol {
     self.router?.navigateToFeedWriteView()
   }
 
-  func showAlertView(
+  private func presentAlert(
     message: String,
-    confirmAction: (() -> Void)?
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
   ) {
-    self.router?.showAlertView(
+    self.presenter?.presentAlert(
       message: message,
+      isCancelActive: isCancelActive,
       confirmAction: confirmAction
     )
   }

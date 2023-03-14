@@ -31,17 +31,4 @@ final class StoreListRouter: StoreListRouterProtocol {
 
     return view
   }
-
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    if let sourceView = self.view as? UIViewController {
-      sourceView.showAlert(
-        content: message,
-        isCancelActive: false,
-        confirmActionCompletion: confirmAction
-      )
-    }
-  }
 }

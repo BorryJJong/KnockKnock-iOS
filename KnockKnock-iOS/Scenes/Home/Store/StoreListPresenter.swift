@@ -16,4 +16,16 @@ final class StoreListPresenter: StoreListPresentorProtocol {
     self.view?.fetchStoreList(storeList: storeList)
 
   }
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  ) {
+    self.view?.showAlertView(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
+  }
 }

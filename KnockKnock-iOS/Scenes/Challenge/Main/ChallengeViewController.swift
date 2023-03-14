@@ -12,7 +12,16 @@ import KKDSKit
 protocol ChallengeViewProtocol: AnyObject {
   var interactor: ChallengeInteractorProtocol? { get set }
 
-  func fetchChallenges(challenges: Challenge, sortType: ChallengeSortType)
+  func fetchChallenges(
+    challenges: Challenge,
+    sortType: ChallengeSortType
+  )
+
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class ChallengeViewController: BaseViewController<ChallengeView> {
@@ -73,8 +82,12 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
 
 // MARK: - Challenge View Protocol
 
-extension ChallengeViewController: ChallengeViewProtocol {
-  func fetchChallenges(challenges: Challenge, sortType: ChallengeSortType) {
+extension ChallengeViewController: ChallengeViewProtocol, AlertProtocol {
+
+  func fetchChallenges(
+    challenges: Challenge,
+    sortType: ChallengeSortType
+  ) {
     self.challenges = challenges
 
     DispatchQueue.main.async {
@@ -84,6 +97,21 @@ extension ChallengeViewController: ChallengeViewProtocol {
         newCount: self.challenges?.challengeNewCount
       )
       self.containerView.challengeCollectionView.reloadData()
+    }
+  }
+
+  /// Alert 팝업 창
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    DispatchQueue.main.async {
+      self.showAlert(
+        message: message,
+        isCancelActive: isCancelActive,
+        confirmAction: confirmAction
+      )
     }
   }
 }

@@ -25,10 +25,6 @@ protocol FeedMainInteractorProtocol {
 
   func saveSearchKeyword(searchKeyword: [SearchKeyword])
 
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  )
   func navigateToFeedList(
     feedId: Int,
     challengeId: Int
@@ -100,6 +96,8 @@ final class FeedMainInteractor: FeedMainInteractorProtocol {
 
       guard let self = self else { return }
 
+      self.showErrorAlert(response: response)
+
       guard var challengeTitle = response?.data else { return }
 
       challengeTitle[0].isSelected = true
@@ -133,16 +131,6 @@ final class FeedMainInteractor: FeedMainInteractorProtocol {
   }
 
   // MARK: - Routing
-
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    self.router?.showAlertView(
-      message: message,
-      confirmAction: confirmAction
-    )
-  }
 
   func navigateToFeedList(
     feedId: Int,
@@ -200,25 +188,30 @@ extension FeedMainInteractor {
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.showAlertView(
-          message: "네트워크 연결을 확인해 주세요.",
-          confirmAction: nil
-        )
+        self.presentAlert(message: "네트워크 연결을 확인해 주세요.")
       }
       return
     }
 
     guard response.data != nil else {
-
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.showAlertView(
-          message: response.message,
-          confirmAction: nil
-        )
+        self.presentAlert(message: response.message)
       }
       return
     }
+  }
+
+  private func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    self.presenter?.presentAlert(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }
