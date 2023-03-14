@@ -123,6 +123,7 @@ final class PostCommentCell: BaseCollectionViewCell {
 
     self.replyWriteButton.isHidden = !isLoggedIn
     self.commentDeleteButton.isHidden = !isLoggedIn
+    self.commentDeleteButton.isHidden = !comment.data.isWriter
 
     if comment.isReply {
       self.replyWriteButton.isHidden = comment.isReply

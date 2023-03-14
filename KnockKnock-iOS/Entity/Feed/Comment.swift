@@ -15,6 +15,7 @@ struct CommentDTO: Decodable {
   let content: String
   let regDate: String
   let isDeleted: Bool
+  let isWriter: Bool
   let replyCnt: Int
   let reply: [Reply]?
 
@@ -26,6 +27,7 @@ struct CommentDTO: Decodable {
     let content: String
     let regDate: String
     let isDeleted: Bool
+    let isWriter: Bool
   }
 }
 
@@ -42,6 +44,7 @@ struct Comment: Decodable {
     let content: String
     let regDate: String
     var isDeleted: Bool
+    let isWriter: Bool
     let replyCnt: Int
     var reply: [Reply]?
 
@@ -53,6 +56,7 @@ struct Comment: Decodable {
       let content: String
       let regDate: String
       var isDeleted: Bool
+      let isWriter: Bool
     }
   }
 
@@ -72,6 +76,7 @@ extension CommentDTO {
         content: content,
         regDate: regDate,
         isDeleted: isDeleted,
+        isWriter: isWriter,
         replyCnt: replyCnt,
         reply: reply?.map {
           Comment.Data.Reply(
@@ -81,7 +86,8 @@ extension CommentDTO {
             image: $0.image,
             content: $0.content,
             regDate: $0.regDate,
-            isDeleted: $0.isDeleted
+            isDeleted: $0.isDeleted,
+            isWriter: isWriter
           )
         }
       )
