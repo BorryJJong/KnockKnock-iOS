@@ -622,20 +622,11 @@
 		201077EC27D39A8B00280991 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
+				611ED84E29C01F5300DB0A48 /* My */,
 				61D96D6729A899DB009E2842 /* Home */,
 				61EC54FB296BE314005D98DE /* Challenge */,
 				61B23BA32966F341005AFA6D /* Feed */,
-				619DEE9B28868E7E00C80095 /* Comment.swift */,
-				613856CC2898B64000BE347E /* Like.swift */,
-				61E87EBE28D1A1F20005CAA6 /* SearchKeyword.swift */,
-				61A0285A2910DF1A00943A40 /* Account.swift */,
-				61A028382908D1F600943A40 /* DistrictsData.swift */,
-				61A028762913AC5200943A40 /* Promotion.swift */,
-				61B20B5A29261B3B00EBA596 /* My.swift */,
 				61D190B7296BD76000329ABD /* ApiResponse.swift */,
-				6128A4CA29824DB1005E36F3 /* UserDetail.swift */,
-				61CA513029A2030500C43461 /* HomeBanner.swift */,
-				61BE932529BD7C2200684EEF /* AddComment.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -878,6 +869,16 @@
 				61D96D6129A86372009E2842 /* VerifiedStoreRepository.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		611ED84E29C01F5300DB0A48 /* My */ = {
+			isa = PBXGroup;
+			children = (
+				61A0285A2910DF1A00943A40 /* Account.swift */,
+				61B20B5A29261B3B00EBA596 /* My.swift */,
+				6128A4CA29824DB1005E36F3 /* UserDetail.swift */,
+			);
+			path = My;
 			sourceTree = "<group>";
 		};
 		61215AC728507D3F003FDCAA /* Network */ = {
@@ -1213,6 +1214,12 @@
 				61B23BA82966F440005AFA6D /* Address.swift */,
 				617E99C42987BCD700E3FBD5 /* FeedEdit.swift */,
 				6128A4C2297F7CC6005E36F3 /* FeedShare.swift */,
+				619DEE9B28868E7E00C80095 /* Comment.swift */,
+				613856CC2898B64000BE347E /* Like.swift */,
+				61E87EBE28D1A1F20005CAA6 /* SearchKeyword.swift */,
+				61A028762913AC5200943A40 /* Promotion.swift */,
+				61A028382908D1F600943A40 /* DistrictsData.swift */,
+				61BE932529BD7C2200684EEF /* AddComment.swift */,
 				61767BBD2990F17D00EA1FFC /* Report.swift */,
 			);
 			path = Feed;
@@ -1350,6 +1357,7 @@
 		61D96D6729A899DB009E2842 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				61CA513029A2030500C43461 /* HomeBanner.swift */,
 				61BB9DA7297679CC00728E97 /* HotPost.swift */,
 				61DE4184299B6698006C960F /* Event.swift */,
 				61D96D6529A899D1009E2842 /* StoreDetail.swift */,
