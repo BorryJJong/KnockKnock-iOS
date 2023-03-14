@@ -65,7 +65,7 @@ final class ShopSearchInteractor: ShopSearchInteractorProtocol {
       completionHandler: { address in
 
         guard let address = address else {
-          self.presentAlert(message: "검색에 실패하였습니다. 잠시 후에 다시 시도해 주세요.")
+          self.presentAlert(message: AlertMessage.addressSearchFailed.rawValue)
           return
         }
 

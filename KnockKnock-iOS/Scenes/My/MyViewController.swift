@@ -315,7 +315,7 @@ extension MyViewController: UITableViewDelegate {
     case .withdraw:
       DispatchQueue.main.async {
         self.showAlert(
-          message: Alert.withdraw.message,
+          message: AlertMessage.withdrawConfirm.rawValue,
           isCancelActive: true,
           confirmAction: {
             self.interactor?.requestWithdraw()
@@ -326,7 +326,7 @@ extension MyViewController: UITableViewDelegate {
     case .versionInfo:
       DispatchQueue.main.async {
         self.showAlert(
-          message: Alert.versionInfo.message,
+          message: AlertMessage.versionInfo.rawValue,
           confirmAction: {
             self.dismiss(animated: false)
           }
@@ -341,7 +341,7 @@ extension MyViewController: UITableViewDelegate {
 
     default:
       DispatchQueue.main.async {
-        self.showAlert(message: "잘못 된 접근입니다.")
+        self.showAlert(message: AlertMessage.unaccessible.rawValue)
       }
     }
   }

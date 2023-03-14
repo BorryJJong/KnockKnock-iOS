@@ -96,7 +96,7 @@ final class CommentInteractor: CommentInteractorProtocol {
           self.fetchAllComments(feedId: comment.postId)
 
         } else {
-          self.presentAlert(message: "댓글 등록에 실패하였습니다.")
+          self.presentAlert(message: AlertMessage.commentFailed.rawValue)
         }
       }
     )
@@ -137,7 +137,7 @@ final class CommentInteractor: CommentInteractorProtocol {
 
         } else {
 
-          self.presentAlert(message: "댓글 삭제에 실패하였습니다.")
+          self.presentAlert(message: AlertMessage.commentDeleteFailed.rawValue)
         }
       }
     )
@@ -164,7 +164,7 @@ extension CommentInteractor {
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.presentAlert(message: "네트워크 연결을 확인해 주세요.")
+        self.presentAlert(message: AlertMessage.unknownedError.rawValue)
       }
       return
     }

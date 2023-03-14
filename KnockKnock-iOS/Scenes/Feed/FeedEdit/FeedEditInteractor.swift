@@ -78,14 +78,14 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
 
     if isDone {
       self.presentAlert(
-        message: "게시글을 수정하시겠습니까?",
+        message: AlertMessage.feedEditConfirm.rawValue,
         isCancelActive: true,
         confirmAction: {
           self.updateFeed(id: feedId)
         }
       )
     } else {
-      self.presentAlert(message: "사진, 태그, 프로모션, 내용은 필수 입력 항목입니다.")
+      self.presentAlert(message: AlertMessage.feedWriteNeedFill.rawValue)
     }
   }
 
@@ -118,10 +118,10 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
         guard let isSuccess = response?.data else { return }
 
         if isSuccess {
-          self.presentAlert(message: "게시글 수정이 완료되었습니다.")
+          self.presentAlert(message: AlertMessage.feedEditDone.rawValue)
 
         } else {
-          self.presentAlert(message: "게시글 수정에 실패하였습니다.")
+          self.presentAlert(message: AlertMessage.feedEditFailed.rawValue)
         }
       }
     )
@@ -266,7 +266,7 @@ extension FeedEditInteractor {
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.presentAlert(message: "네트워크 연결을 확인해 주세요.")
+        self.presentAlert(message: AlertMessage.unknownedError.rawValue)
       }
       return
     }

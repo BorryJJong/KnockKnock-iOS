@@ -69,7 +69,7 @@ extension ChallengeInteractor: ChallengeSortDelegate {
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.presentAlert(message: "네트워크 연결을 확인해 주세요.")
+        self.presentAlert(message: AlertMessage.unknownedError.rawValue)
       }
       return
     }

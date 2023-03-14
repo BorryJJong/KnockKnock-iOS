@@ -25,7 +25,7 @@ final class PolicyInteractor: PolicyInteractorProtocol {
     
     guard let policyType = policyType else {
       self.presentAlert(
-        message: "로드에 실패하였습니다.",
+        message: AlertMessage.pageLoadFailed.rawValue,
         confirmAction: self.popToMyView
       )
       return

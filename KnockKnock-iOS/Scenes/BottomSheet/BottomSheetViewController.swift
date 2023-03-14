@@ -210,7 +210,7 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
       case .postDelete:
         DispatchQueue.main.async {
           self.showAlert(
-            message: "게시글을 삭제하시겠습니까?",
+            message: AlertMessage.feedDeleteConfirm.rawValue,
             isCancelActive: true,
             confirmAction: {
               self.interactor?.dismissView(action: option.getAction())
@@ -233,7 +233,7 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
       case .postHide:
         DispatchQueue.main.async {
           self.showAlert(
-            message: "이 게시글을 숨김 처리 하시겠습니까?",
+            message: AlertMessage.feedHideConfirm.rawValue,
             isCancelActive: true,
             confirmAction: {
               self.interactor?.dismissView(action: option.getAction())

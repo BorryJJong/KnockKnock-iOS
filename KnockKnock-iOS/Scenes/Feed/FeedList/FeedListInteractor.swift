@@ -126,7 +126,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
           )
           
         } else {
-          self.presentAlert(message: "게시글 삭제에 실패하였습니다.")
+          self.presentAlert(message: AlertMessage.feedDeleteFailed.rawValue)
         }
       }
     )
@@ -173,7 +173,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
 
           guard isSuccess else {
 
-            self.presentAlert(message: "처리 중 오류가 발생하였습니다.")
+            self.presentAlert(message: AlertMessage.unknownedError.rawValue)
             return
           }
 
@@ -212,7 +212,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
           self.presenter?.presentFetchFeedList(feedList: feedListData)
 
         } else {
-          self.presentAlert(message: "게시글 숨기기에 실패하였습니다.")
+          self.presentAlert(message: AlertMessage.feedHideFailed.rawValue)
         }
       }
     )
@@ -246,11 +246,11 @@ final class FeedListInteractor: FeedListInteractorProtocol {
             id: feedId
           ) else { return }
 
-          self.presentAlert(message: "게시글이 신고 되었습니다.")
+          self.presentAlert(message: AlertMessage.feedReportDone.rawValue)
           self.presenter?.presentFetchFeedList(feedList: feedListData)
 
         } else {
-          self.presentAlert(message: "게시글 신고에 실패하였습니다.")
+          self.presentAlert(message: AlertMessage.feedReportFailed.rawValue)
         }
       }
     )
@@ -556,7 +556,7 @@ extension FeedListInteractor {
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.presentAlert(message: "네트워크 연결을 확인해 주세요.")
+        self.presentAlert(message: AlertMessage.unknownedError.rawValue)
       }
       return
     }

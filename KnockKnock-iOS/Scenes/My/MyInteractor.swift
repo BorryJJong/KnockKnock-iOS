@@ -77,7 +77,7 @@ final class MyInteractor: MyInteractorProtocol {
         guard let isSuccess = response?.data,
               isSuccess else {
 
-          self.presentAlert(message: "처리 중 오류가 발생하였습니다.")
+          self.presentAlert(message: AlertMessage.unknownedError.rawValue)
           return
         }
       }
@@ -95,11 +95,11 @@ final class MyInteractor: MyInteractorProtocol {
         guard let isSuccess = response?.data,
               isSuccess else {
 
-          self.presentAlert(message: "처리 중 오류가 발생하였습니다.")
+          self.presentAlert(message: AlertMessage.unknownedError.rawValue)
           return
         }
 
-        self.presentAlert(message: "성공적으로 탈퇴 처리 되었습니다.")
+        self.presentAlert(message: AlertMessage.withdrawDone.rawValue)
       }
     )
   }
@@ -159,7 +159,7 @@ extension MyInteractor {
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.presentAlert(message: "네트워크 연결을 확인해 주세요.")
+        self.presentAlert(message: AlertMessage.unknownedError.rawValue)
       }
       return
     }

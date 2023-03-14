@@ -51,7 +51,7 @@ extension PolicyViewController: PolicyViewProtocol, AlertProtocol {
 
       DispatchQueue.main.async {
         self.showAlertView(
-          message: "페이지 로드 실패",
+          message: AlertMessage.pageLoadFailed.rawValue,
           confirmAction: self.interactor?.popToMyView
         )
       }

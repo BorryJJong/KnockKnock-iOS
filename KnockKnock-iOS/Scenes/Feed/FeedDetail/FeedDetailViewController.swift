@@ -212,7 +212,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   private func commentDeleteButtonDidTap(commentId: Int) {
     DispatchQueue.main.async {
       self.showAlert(
-        message: "댓글을 삭제하시겠습니까?",
+        message: AlertMessage.commentDeleteConfirm.rawValue,
         isCancelActive: true,
         confirmAction: {
           self.interactor?.requestDeleteComment(

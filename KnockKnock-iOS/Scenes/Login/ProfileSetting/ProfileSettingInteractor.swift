@@ -113,7 +113,7 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
         guard let isDuplicated = response?.data else { return }
         
         if isDuplicated {
-          self.presentAlert(message: "이미 사용되고 있는 닉네임입니다.")
+          self.presentAlert(message: AlertMessage.isDuplicatedNickname.rawValue)
           
         } else {
           
@@ -131,7 +131,7 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
               
               if isSuccess {
                 self.presentAlert(
-                  message: "회원가입에 성공하였습니다.",
+                  message: AlertMessage.registerDone.rawValue,
                   confirmAction: {
                   self.navigateToMyView()
                 }
@@ -139,7 +139,7 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
                 
               } else {
                 self.presentAlert(
-                  message: "회원가입에 실패하였습니다.")
+                  message: AlertMessage.registerFailed.rawValue)
               }
             }
           )
@@ -193,7 +193,7 @@ final class ProfileSettingInteractor: ProfileSettingInteractorProtocol {
             if nickname != self.userDetail?.nickname,
                isDuplicated {
 
-              self.presentAlert(message: "이미 사용되고 있는 닉네임입니다.")
+              self.presentAlert(message: AlertMessage.isDuplicatedNickname.rawValue)
 
             } else {
 
@@ -228,7 +228,7 @@ extension ProfileSettingInteractor {
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.presentAlert(message: "네트워크 연결을 확인해 주세요.")
+        self.presentAlert(message: AlertMessage.unknownedError.rawValue)
       }
       return
     }
