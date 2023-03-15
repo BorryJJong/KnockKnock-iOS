@@ -27,6 +27,8 @@ protocol HomeInteractorProtocol {
   func navigateToStoreListView()
   func navigateToEventPageView()
   func navigateToFeedDetail(feedId: Int)
+  func navigateToFeedWrite()
+  func navigateToChallengeDetail(challengeId: Int?)
 }
 
 final class HomeInteractor: HomeInteractorProtocol {
@@ -165,6 +167,15 @@ final class HomeInteractor: HomeInteractorProtocol {
 
   func navigateToFeedDetail(feedId: Int) {
     self.router?.navigateToFeedDetail(feedId: feedId)
+  }
+
+  func navigateToFeedWrite() {
+    self.router?.navigateToFeedWrite()
+  }
+
+  func navigateToChallengeDetail(challengeId: Int?) {
+    guard let challengeId = challengeId else { return }
+    self.router?.navigateToChallengeDetail(challengeId: challengeId)
   }
 }
 

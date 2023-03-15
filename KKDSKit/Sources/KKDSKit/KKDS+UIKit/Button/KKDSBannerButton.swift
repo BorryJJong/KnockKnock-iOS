@@ -10,7 +10,7 @@ import UIKit
 public final class KKDSBannerButton: KKDSButton {
 
   override func setupConfigure() {
-    self.backgroundColor = KKDS.Color.gray10
+    self.backgroundColor = .clear
     
     self.layer.cornerRadius = 5
     self.clipsToBounds = true

@@ -44,7 +44,9 @@ final class StoreListRouter: StoreListRouterProtocol {
 
     feedWriteViewController.modalPresentationStyle = .fullScreen
 
-    sourceView.navigationController?.present(feedWriteViewController, animated: true)  }
+    sourceView.navigationController?.present(feedWriteViewController, animated: true)
+    
+  }
 
   func showAlertView(
     message: String,

@@ -31,7 +31,11 @@ final class HomeMainPagerCell: BaseCollectionViewCell {
       self.homeMainCollectionView.reloadData()
     }
   }
+  private var bannerTargetList: [BannerTagrget?] = []
   private var currentIndex: CGFloat = 0
+
+  private var navigateToFeedWrite: (() -> Void)?
+  private var navigateToChallenge: ((Int?) -> Void)?
 
   // MARK: - UIs
 
@@ -61,7 +65,16 @@ final class HomeMainPagerCell: BaseCollectionViewCell {
   // MARK: - Bind
 
   func bind(banner: [HomeBanner]) {
+    self.bannerTargetList = banner.map { $0.targetScreen }
     self.mainImages = banner.map { $0.image }
+  }
+
+  func setDidSelectAction(
+    feedWrite: (() -> Void)?,
+    challenge: ((Int?) -> Void)?
+  ) {
+    self.navigateToFeedWrite = feedWrite
+    self.navigateToChallenge = challenge
   }
 
   // MARK: - Configure
@@ -174,5 +187,28 @@ extension HomeMainPagerCell: UICollectionViewDataSource, UICollectionViewDelegat
     cell.bind(image: self.mainImages[indexPath.item])
 
     return cell
+  }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    didSelectItemAt indexPath: IndexPath
+  ) {
+    let bannerTarget = self.bannerTargetList[indexPath.item]
+
+    switch bannerTarget {
+
+    case .feedWrite:
+      guard let navigateToFeedWrite = self.navigateToFeedWrite else { return }
+
+      navigateToFeedWrite()
+
+    case .challengeGogo, .challengeBrave, .challengeUpcycling:
+      guard let navigateToChallenge = self.navigateToChallenge else { return }
+
+      navigateToChallenge(bannerTarget?.challengId)
+
+    default:
+      break
+    }
   }
 }
