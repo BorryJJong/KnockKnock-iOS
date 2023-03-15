@@ -130,6 +130,12 @@ public extension KKDS.Image {
   static var ic_bottom_more_40: UIImage           { .load(name: "ic_bottom_more_40") }
 }
 
+// MARK: - Banner
+
+public extension KKDS.Image {
+  static var banner_bar_feed_write: UIImage       { .load(name: "banner_bar_feed_write") }
+}
+
 // MARK: - Etc.
 
 public extension KKDS.Image {
