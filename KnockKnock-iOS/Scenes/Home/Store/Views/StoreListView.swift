@@ -16,18 +16,21 @@ final class StoreListView: UIView {
   // MARK: - Constants
 
   private enum Metric {
-    static let bannerButtonTopMargin = 10.f
-    static let bannerButtonLeadingMargin = 20.f
-    static let bannerButtonHeight = 4.f
+    static let bannerImageViewTopMargin = 10.f
+    static let bannerImageViewLeadingMargin = 20.f
+    static let bannerImageViewHeightRatio = 4.f
 
     static let storeCollectionViewTopMargin = 15.f
   }
 
   // MARK: - UIs
 
-  let bannerButton = KKDSBannerButton().then {
-    $0.setImage(KKDS.Image.banner_bar_feed_write, for: .normal)
+  let bannerImageView = UIImageView().then {
+    $0.image = KKDS.Image.banner_bar_feed_write
+    $0.contentMode = .scaleAspectFill
   }
+
+  let bannerButton = KKDSBannerButton()
 
   let storeCollectionView = UICollectionView(
     frame: .zero,
@@ -53,12 +56,16 @@ final class StoreListView: UIView {
   // MARK: - Configure
 
   private func setupConstraints() {
-    [self.bannerButton, self.storeCollectionView].addSubViews(self)
+    [self.bannerImageView, self.bannerButton, self.storeCollectionView].addSubViews(self)
 
-    self.bannerButton.snp.makeConstraints {
+    self.bannerImageView.snp.makeConstraints {
       $0.top.equalTo(self.safeAreaLayoutGuide).offset(Metric.bannerImageViewTopMargin)
       $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.bannerImageViewLeadingMargin)
-      $0.height.equalTo(self.bannerButton.snp.width).dividedBy(Metric.bannerImageViewHeight)
+      $0.height.equalTo(self.bannerImageView.snp.width).dividedBy(Metric.bannerImageViewHeightRatio)
+    }
+
+    self.bannerButton.snp.makeConstraints {
+      $0.edges.equalTo(self.bannerImageView)
     }
 
     self.storeCollectionView.snp.makeConstraints {
