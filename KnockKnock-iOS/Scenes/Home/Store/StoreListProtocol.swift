@@ -11,6 +11,12 @@ protocol StoreListViewProtocol: AnyObject {
   var interactor: StoreListInteractorProtocol? { get set }
 
   func fetchStoreList(storeList: [StoreDetail])
+
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 protocol StoreListInteractorProtocol {
@@ -20,17 +26,17 @@ protocol StoreListInteractorProtocol {
   func fetchStoreDetailList()
 
   func navigateToFeedWrite()
-
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  )
 }
 
 protocol StoreListPresentorProtocol {
   var view: StoreListViewProtocol? { get set }
 
   func presentStoreList(storeList: [StoreDetail])
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 protocol StoreListRouterProtocol {
@@ -40,8 +46,4 @@ protocol StoreListRouterProtocol {
 
   func navigateToFeedWrite()
 
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  )
 }

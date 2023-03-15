@@ -14,6 +14,12 @@ protocol FeedMainViewProtocol: AnyObject {
   func fetchChallengeTitles(challengeTitle: [ChallengeTitle], index: IndexPath?)
   func fetchSearchLog(searchKeyword: [SearchKeyword])
   func reloadFeedMain()
+
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class FeedMainViewController: BaseViewController<FeedMainView> {
@@ -107,7 +113,7 @@ final class FeedMainViewController: BaseViewController<FeedMainView> {
 
 // MARK: - FeedMainView Protocol
 
-extension FeedMainViewController: FeedMainViewProtocol {
+extension FeedMainViewController: FeedMainViewProtocol, AlertProtocol {
   func fetchFeedMain(feed: FeedMain) {
     self.feedMainPost = feed.feeds
     self.isNext = feed.isNext
@@ -148,6 +154,21 @@ extension FeedMainViewController: FeedMainViewProtocol {
       pageSize: self.pageSize,
       challengeId: self.challengeId
     )
+  }
+
+  /// Alert 팝업 창
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    DispatchQueue.main.async {
+      self.showAlert(
+        message: message,
+        isCancelActive: isCancelActive,
+        confirmAction: confirmAction
+      )
+    }
   }
 }
 
@@ -246,12 +267,12 @@ extension FeedMainViewController: UICollectionViewDelegate {
     switch collectionView.tag {
     case CollectionViewTag.tag.rawValue:
       self.interactor?.setSelectedStatus(
-        challengeTitles: challengeTitles,
+        challengeTitles: self.challengeTitles,
         selectedIndex: indexPath
       )
 
       self.feedMainPost = []
-      self.challengeId = indexPath.item
+      self.challengeId = self.challengeTitles[indexPath.item].id
       self.currentPage = 1
       
       self.interactor?.fetchFeedMain(

@@ -16,7 +16,7 @@ protocol FeedListPresenterProtocol {
 
   func presentAlert(
     message: String,
-    isCancelActive: Bool,
+    isCancelActive: Bool?,
     confirmAction: (() -> Void)?
   )
 }
@@ -46,8 +46,8 @@ final class FeedListPresenter: FeedListPresenterProtocol {
 
   func presentAlert(
     message: String,
-    isCancelActive: Bool,
-    confirmAction: (() -> Void)?
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
   ) {
     self.view?.showAlertView(
       message: message,

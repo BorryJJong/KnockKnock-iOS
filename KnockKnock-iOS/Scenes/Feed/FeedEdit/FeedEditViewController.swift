@@ -16,6 +16,12 @@ protocol FeedEditViewProtocol: AnyObject {
   func fetchTag(tag: String)
   func fetchPromotion(promotion: String)
   func fetchAddress(address: AddressResponse.Documents)
+
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class FeedEditViewController: BaseViewController<FeedEditView> {
@@ -135,7 +141,7 @@ final class FeedEditViewController: BaseViewController<FeedEditView> {
 
 // MARK: - FeedEdit View Protocol
 
-extension FeedEditViewController: FeedEditViewProtocol {
+extension FeedEditViewController: FeedEditViewProtocol, AlertProtocol {
   func fetchOriginPost(feedDetail: FeedDetail) {
     self.feedData = feedDetail
   }
@@ -153,6 +159,21 @@ extension FeedEditViewController: FeedEditViewProtocol {
       name: address.placeName,
       address: address.addressName
     )
+  }
+
+  /// Alert 팝업 창
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    DispatchQueue.main.async {
+      self.showAlert(
+        message: message,
+        isCancelActive: isCancelActive,
+        confirmAction: confirmAction
+      )
+    }
   }
 }
 

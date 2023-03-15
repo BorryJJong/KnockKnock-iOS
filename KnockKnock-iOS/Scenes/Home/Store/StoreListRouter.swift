@@ -47,17 +47,4 @@ final class StoreListRouter: StoreListRouterProtocol {
     sourceView.navigationController?.present(feedWriteViewController, animated: true)
     
   }
-
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    if let sourceView = self.view as? UIViewController {
-      sourceView.showAlert(
-        content: message,
-        isCancelActive: false,
-        confirmActionCompletion: confirmAction
-      )
-    }
-  }
 }

@@ -21,10 +21,6 @@ protocol CommentInteractorProtocol {
   func checkLoginStatus()
 
   func dismissCommentView()
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  )
 }
 
 final class CommentInteractor: CommentInteractorProtocol {
@@ -100,10 +96,7 @@ final class CommentInteractor: CommentInteractorProtocol {
           self.fetchAllComments(feedId: comment.postId)
 
         } else {
-          self.showAlertView(
-            message: "댓글 등록에 실패하였습니다.",
-            confirmAction: nil
-          )
+          self.presentAlert(message: AlertMessage.commentFailed.rawValue)
         }
       }
     )
@@ -144,10 +137,7 @@ final class CommentInteractor: CommentInteractorProtocol {
 
         } else {
 
-          self.showAlertView(
-            message: "댓글 삭제에 실패하였습니다.",
-            confirmAction: nil
-          )
+          self.presentAlert(message: AlertMessage.commentDeleteFailed.rawValue)
         }
       }
     )
@@ -157,21 +147,6 @@ final class CommentInteractor: CommentInteractorProtocol {
 
   func dismissCommentView() {
     self.router?.dismissCommentView()
-  }
-
-  /// AlertView
-  ///
-  /// - Parameters:
-  ///  - message: 알림창 메세지
-  ///  - confirmAction: 확인 눌렀을 때 수행 될 액션
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    self.router?.showAlertView(
-      message: message,
-      confirmAction: confirmAction
-    )
   }
 }
 
@@ -189,25 +164,30 @@ extension CommentInteractor {
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.showAlertView(
-          message: "네트워크 연결을 확인해 주세요.",
-          confirmAction: nil
-        )
+        self.presentAlert(message: AlertMessage.unknownedError.rawValue)
       }
       return
     }
 
     guard response.data != nil else {
-
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.showAlertView(
-          message: response.message,
-          confirmAction: nil
-        )
+        self.presentAlert(message: response.message)
       }
       return
     }
+  }
+
+  private func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    self.presenter?.presentAlert(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

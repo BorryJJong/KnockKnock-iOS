@@ -24,10 +24,6 @@ protocol FeedDetailRouterProtocol {
     options: [BottomSheetOption],
     feedData: FeedShare?
  )
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  )
 }
 
 final class FeedDetailRouter: FeedDetailRouterProtocol {
@@ -86,19 +82,6 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
     loginViewController.hidesBottomBarWhenPushed = true
     if let sourceView = self.view as? UIViewController {
       sourceView.navigationController?.pushViewController(loginViewController, animated: true)
-    }
-  }
-  
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    if let sourceView = self.view as? UIViewController {
-      sourceView.showAlert(
-        content: message,
-        isCancelActive: false,
-        confirmActionCompletion: confirmAction
-      )
     }
   }
 

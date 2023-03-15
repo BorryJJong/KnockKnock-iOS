@@ -14,12 +14,15 @@ protocol FeedListViewProtocol: AnyObject {
   var interactor: FeedListInteractorProtocol? { get set }
   
   func fetchFeedList(feedList: FeedList)
-  func updateFeedList(feedList: FeedList, sections: [IndexPath])
+  func updateFeedList(
+    feedList: FeedList,
+    sections: [IndexPath]
+  )
   func reloadFeedList()
   
   func showAlertView(
     message: String,
-    isCancelActive: Bool,
+    isCancelActive: Bool?,
     confirmAction: (() -> Void)?
   )
 }
@@ -333,13 +336,15 @@ extension FeedListViewController: FeedListViewProtocol, AlertProtocol {
   /// Alert 팝업 창
   func showAlertView(
     message: String,
-    isCancelActive: Bool,
-    confirmAction: (() -> Void)?
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
   ) {
-    self.showAlert(
-      message: message,
-      isCancelActive: isCancelActive,
-      confirmAction: confirmAction
-    )
+    DispatchQueue.main.async {
+      self.showAlert(
+        message: message,
+        isCancelActive: isCancelActive,
+        confirmAction: confirmAction
+      )
+    }
   }
 }

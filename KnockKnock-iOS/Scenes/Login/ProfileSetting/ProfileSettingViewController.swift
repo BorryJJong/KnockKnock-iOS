@@ -14,6 +14,11 @@ protocol ProfileSettingViewProtocol: AnyObject {
   var interactor: ProfileSettingInteractorProtocol? { get set }
   
   func fetchUserData(userData: UserDetail)
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class ProfileSettingViewController: BaseViewController<ProfileSettingView> {
@@ -28,7 +33,7 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
   var interactor: ProfileSettingInteractorProtocol?
   
   var profileSettingViewType: ProfileSettingViewType = .update
-  var selectedImage: UIImage = KKDS.Image.ic_my_img_86
+  var selectedImage: UIImage?
   
   lazy var imagePicker = UIImagePickerController().then {
     $0.sourceType = .photoLibrary
@@ -180,14 +185,14 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
 
       self.interactor?.requestEditProfile(
         nickname: nickname,
-        image: self.selectedImage.resizeSquareImage(newWidth: 86).pngData()
+        image: self.selectedImage?.resizeSquareImage(newWidth: 86).pngData()
       )
       
     case .register:
 
       self.interactor?.requestSignUp(
         nickname: nickname,
-        image: self.selectedImage.pngData()
+        image: self.selectedImage?.pngData()
       )
 
     }
@@ -196,11 +201,26 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
 
 // MARK: - Profile Setting View Protocol
 
-extension ProfileSettingViewController: ProfileSettingViewProtocol {
+extension ProfileSettingViewController: ProfileSettingViewProtocol, AlertProtocol {
   
   func fetchUserData(userData: UserDetail) {
     DispatchQueue.main.async {
       self.containerView.setPreviousProfile(userData: userData)
+    }
+  }
+
+  /// Alert 팝업 창
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    DispatchQueue.main.async {
+      self.showAlert(
+        message: message,
+        isCancelActive: isCancelActive,
+        confirmAction: confirmAction
+      )
     }
   }
 }

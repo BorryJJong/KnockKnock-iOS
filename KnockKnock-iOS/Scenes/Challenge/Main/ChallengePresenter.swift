@@ -10,7 +10,15 @@ import Foundation
 protocol ChallengePresenterProtocol: AnyObject {
   var view: ChallengeViewProtocol? { get set }
   
-  func presentFetchChallenge(challenges: Challenge, sortType: ChallengeSortType)
+  func presentFetchChallenge(
+    challenges: Challenge,
+    sortType: ChallengeSortType
+  )
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class ChallengePresenter: ChallengePresenterProtocol {
@@ -25,5 +33,17 @@ final class ChallengePresenter: ChallengePresenterProtocol {
       sortType: sortType
     )
     LoadingIndicator.hideLoading()
+  }
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    self.view?.showAlertView(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

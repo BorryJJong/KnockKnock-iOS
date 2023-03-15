@@ -13,6 +13,11 @@ protocol FeedWritePresenterProtocol: AnyObject {
   func presentSelectedPromotions(promotionList: [Promotion])
   func presentSelectedTags(tagList: [ChallengeTitle])
   func presentShopAddress(address: AddressResponse.Documents)
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class FeedWritePresenter: FeedWritePresenterProtocol {
@@ -48,4 +53,15 @@ final class FeedWritePresenter: FeedWritePresenterProtocol {
     self.view?.fetchTag(tag: content)
   }
 
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    self.view?.showAlertView(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
+  }
 }

@@ -23,10 +23,6 @@ protocol FeedWriteRouterProtocol: AnyObject {
     promotionList: [Promotion]?,
     tagList: [ChallengeTitle]?
   )
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  )
 }
 
 final class FeedWriteRouter: FeedWriteRouterProtocol {
@@ -62,19 +58,6 @@ final class FeedWriteRouter: FeedWriteRouterProtocol {
     router.rootView = rootView
 
     return view
-  }
-
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    guard let sourceView = self.view as? UIViewController else { return }
-    
-    sourceView.showAlert(
-      content: message,
-      isCancelActive: false,
-      confirmActionCompletion: confirmAction
-    )
   }
 
   func navigateToShopSearch() {

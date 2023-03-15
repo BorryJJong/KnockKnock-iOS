@@ -11,6 +11,12 @@ protocol ProfileSettingPresenterProtocol {
   var view: ProfileSettingViewProtocol? { get set }
 
   func presentUserData(userData: UserDetail)
+  
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class ProfileSettingPresenter: ProfileSettingPresenterProtocol {
@@ -18,5 +24,17 @@ final class ProfileSettingPresenter: ProfileSettingPresenterProtocol {
 
   func presentUserData(userData: UserDetail) {
     self.view?.fetchUserData(userData: userData)
+  }
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  ) {
+    self.view?.showAlertView(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

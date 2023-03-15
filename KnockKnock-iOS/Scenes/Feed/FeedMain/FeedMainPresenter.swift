@@ -16,6 +16,12 @@ protocol FeedMainPresenterProtocol {
     index: IndexPath?
   )
   func reloadFeedMain()
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class FeedMainPresenter: FeedMainPresenterProtocol {
@@ -41,5 +47,17 @@ final class FeedMainPresenter: FeedMainPresenterProtocol {
 
   func reloadFeedMain() {
     self.view?.reloadFeedMain()
+  }
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    self.view?.showAlertView(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

@@ -190,7 +190,7 @@ extension HomeInteractorProtocol {
       LoadingIndicator.hideLoading()
 
       self.presenter?.presentAlert(
-        message: "네트워크 연결을 확인해 주세요.",
+        message: AlertMessage.unknownedError.rawValue,
         isCancelActive: false,
         confirmAction: nil
       )

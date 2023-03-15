@@ -15,7 +15,7 @@ protocol LoginViewProtocol: AnyObject {
 
   func showAlertView(
     message: String,
-    isCancelActive: Bool,
+    isCancelActive: Bool?,
     confirmAction: (() -> Void)?
   )
 }
@@ -77,13 +77,15 @@ extension LoginViewController: LoginViewProtocol, AlertProtocol {
   /// Alert 팝업 창
   func showAlertView(
     message: String,
-    isCancelActive: Bool,
-    confirmAction: (() -> Void)?
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
   ) {
-    self.showAlert(
-      message: message,
-      isCancelActive: isCancelActive,
-      confirmAction: confirmAction
-    )
+    DispatchQueue.main.async {
+      self.showAlert(
+        message: message,
+        isCancelActive: isCancelActive,
+        confirmAction: confirmAction
+      )
+    }
   }
 }

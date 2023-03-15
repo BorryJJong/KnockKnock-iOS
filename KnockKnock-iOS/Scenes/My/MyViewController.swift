@@ -16,7 +16,7 @@ protocol MyViewProtocol: AnyObject {
   func setPushSetting()
   func showAlertView(
     message: String,
-    isCancelActive: Bool,
+    isCancelActive: Bool?,
     confirmAction: (() -> Void)?
   )
 }
@@ -171,14 +171,16 @@ extension MyViewController: MyViewProtocol, AlertProtocol {
   /// Alert 팝업 창
   func showAlertView(
     message: String,
-    isCancelActive: Bool,
-    confirmAction: (() -> Void)?
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
   ) {
-    self.showAlert(
-      message: message,
-      isCancelActive: isCancelActive,
-      confirmAction: confirmAction
-    )
+    DispatchQueue.main.async {
+      self.showAlert(
+        message: message,
+        isCancelActive: isCancelActive,
+        confirmAction: confirmAction
+      )
+    }
   }
 }
 
@@ -311,20 +313,25 @@ extension MyViewController: UITableViewDelegate {
       self.interactor?.navigateToProfileSettingView()
 
     case .withdraw:
-      self.showAlert(
-        content: Alert.withdraw.message,
-        confirmActionCompletion: {
-          self.interactor?.requestWithdraw()
-        }
-      )
+      DispatchQueue.main.async {
+        self.showAlert(
+          message: AlertMessage.withdrawConfirm.rawValue,
+          isCancelActive: true,
+          confirmAction: {
+            self.interactor?.requestWithdraw()
+          }
+        )
+      }
 
     case .versionInfo:
-      self.showAlert(
-        content: Alert.versionInfo.message,
-        confirmActionCompletion: {
-          self.dismiss(animated: false)
-        }
-      )
+      DispatchQueue.main.async {
+        self.showAlert(
+          message: AlertMessage.versionInfo.rawValue,
+          confirmAction: {
+            self.dismiss(animated: false)
+          }
+        )
+      }
 
     case .serviceTerms,
          .privacy,
@@ -333,7 +340,9 @@ extension MyViewController: UITableViewDelegate {
       self.interactor?.navigateToPolicyView(policyType: menu) 
 
     default:
-      self.showAlert(content: "잘못 된 접근입니다.")
+      DispatchQueue.main.async {
+        self.showAlert(message: AlertMessage.unaccessible.rawValue)
+      }
     }
   }
 } 

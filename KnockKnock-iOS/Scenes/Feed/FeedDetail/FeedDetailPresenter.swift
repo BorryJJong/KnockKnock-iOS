@@ -14,11 +14,18 @@ protocol FeedDetailPresenterProtocol {
 
   func presentAllCommentsCount(allCommentsCount: Int)
   func presentVisibleComments(comments: [Comment])
-
   func presentDeleteComment()
+
   func presentLikeList(like: [Like.Info])
   func presentLikeStatus(isToggle: Bool)
+
   func presentLoginStatus(isLoggedIn: Bool)
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class FeedDetailPresenter: FeedDetailPresenterProtocol {
@@ -51,5 +58,17 @@ final class FeedDetailPresenter: FeedDetailPresenterProtocol {
   
   func presentLoginStatus(isLoggedIn: Bool) {
     self.view?.setLoginStatus(isLoggedIn: isLoggedIn)
+  }
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    self.view?.showAlertView(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

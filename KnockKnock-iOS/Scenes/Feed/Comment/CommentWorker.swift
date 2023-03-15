@@ -91,6 +91,7 @@ final class CommentWorker: CommentWorkerProtocol {
               content: $0.content,
               regDate: $0.regDate,
               isDeleted: $0.isDeleted,
+              isWriter: $0.isWriter,
               replyCnt: 0,
               reply: []
             ), isReply: true

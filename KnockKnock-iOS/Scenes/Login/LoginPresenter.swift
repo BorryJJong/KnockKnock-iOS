@@ -12,7 +12,7 @@ protocol LoginPresenterProtocol {
 
   func presentAlert(
     message: String,
-    isCancelActive: Bool,
+    isCancelActive: Bool?,
     confirmAction: (() -> Void)?
   )
 }
@@ -22,7 +22,7 @@ final class LoginPresenter: LoginPresenterProtocol {
 
   func presentAlert(
     message: String,
-    isCancelActive: Bool,
+    isCancelActive: Bool?,
     confirmAction: (() -> Void)?
   ) {
     self.view?.showAlertView(

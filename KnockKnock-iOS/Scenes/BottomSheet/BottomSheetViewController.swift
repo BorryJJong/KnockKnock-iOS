@@ -108,7 +108,7 @@ final class BottomSheetViewController: BaseViewController<BottomSheetView> {
 
 // MARK: - Bottom Sheet View Protocol
 
-extension BottomSheetViewController: BottomSheetViewProtocol {
+extension BottomSheetViewController: BottomSheetViewProtocol, AlertProtocol {
   func fetchOptions(
     options: [BottomSheetOption],
     bottomSheetSize: BottomSheetSize
@@ -132,6 +132,21 @@ extension BottomSheetViewController: BottomSheetViewProtocol {
 
     DispatchQueue.main.async {
       self.containerView.tableView.reloadData()
+    }
+  }
+
+  /// Alert 팝업 창
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: @escaping (() -> Void)
+  ) {
+    DispatchQueue.main.async {
+      self.showAlert(
+        message: message,
+        isCancelActive: isCancelActive,
+        confirmAction: confirmAction
+      )
     }
   }
 }
@@ -191,11 +206,17 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
       let option = options[indexPath.row]
       
       switch option {
+
       case .postDelete:
-        self.showAlert(
-          content: "게시글을 삭제하시겠습니까?",
-          confirmActionCompletion: option.getAction()
-        )
+        DispatchQueue.main.async {
+          self.showAlert(
+            message: AlertMessage.feedDeleteConfirm.rawValue,
+            isCancelActive: true,
+            confirmAction: {
+              self.interactor?.dismissView(action: option.getAction())
+            }
+          )
+        }
         
       case .postEdit:
         self.interactor?.dismissView(action: option.getAction())
@@ -204,19 +225,22 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
         self.interactor?.sharePost()
 
       case .challengeNew:
-        self.interactor?.passChallengeSortType(sortType: ChallengeSortType.new)
+        self.interactor?.passChallengeSortType(sortType: .new)
 
       case .challengePopular:
-        self.interactor?.passChallengeSortType(sortType: ChallengeSortType.popular)
+        self.interactor?.passChallengeSortType(sortType: .popular)
 
       case .postHide:
-        self.showAlert(
-          content: "이 게시글을 숨김 처리 하시겠습니까?",
-          confirmActionCompletion: {
-            self.interactor?.dismissView(action: option.getAction())
-          }
-        )
-        
+        DispatchQueue.main.async {
+          self.showAlert(
+            message: AlertMessage.feedHideConfirm.rawValue,
+            isCancelActive: true,
+            confirmAction: {
+              self.interactor?.dismissView(action: option.getAction())
+            }
+          )
+        }
+
       case .postReport:
         self.interactor?.dismissView(action: option.getAction())
       }
