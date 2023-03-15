@@ -35,12 +35,26 @@ final class StoreListViewController: BaseViewController<StoreListView> {
   }
 }
 
-extension StoreListViewController: StoreListViewProtocol {
+extension StoreListViewController: StoreListViewProtocol, AlertProtocol {
   func fetchStoreList(storeList: [StoreDetail]) {
     self.storeList = storeList
 
     DispatchQueue.main.async {
       self.containerView.storeCollectionView.reloadData()
+    }
+  }
+
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  ) {
+    DispatchQueue.main.async {
+      self.showAlert(
+        message: message,
+        isCancelActive: isCancelActive,
+        confirmAction: confirmAction
+      )
     }
   }
 }

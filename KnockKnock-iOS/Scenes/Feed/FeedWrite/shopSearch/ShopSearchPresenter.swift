@@ -16,6 +16,12 @@ protocol ShopSearchPresenterProtocol {
 
   func presentSelectedCity(city: String)
   func presentSelectedCounty(county: String)
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class ShopSearchPresenter: ShopSearchPresenterProtocol {
@@ -39,5 +45,17 @@ final class ShopSearchPresenter: ShopSearchPresenterProtocol {
 
   func presentSelectedCounty(county: String) {
     self.view?.fetchSelectedCounty(county: county)
+  }
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    self.view?.showAlertView(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

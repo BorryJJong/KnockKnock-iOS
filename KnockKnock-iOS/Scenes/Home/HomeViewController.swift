@@ -25,7 +25,7 @@ protocol HomeViewProtocol: AnyObject {
 
   func showAlertView(
     message: String,
-    isCancelActive: Bool,
+    isCancelActive: Bool?,
     confirmAction: (() -> Void)?
   )
 }
@@ -164,14 +164,16 @@ extension HomeViewController: HomeViewProtocol, AlertProtocol {
 
   func showAlertView(
     message: String,
-    isCancelActive: Bool,
+    isCancelActive: Bool?,
     confirmAction: (() -> Void)?
   ) {
-    self.showAlert(
-      message: message,
-      isCancelActive: isCancelActive,
-      confirmAction: confirmAction
-    )
+    DispatchQueue.main.async {
+      self.showAlert(
+        message: message,
+        isCancelActive: isCancelActive,
+        confirmAction: confirmAction
+      )
+    }
   }
 }
 

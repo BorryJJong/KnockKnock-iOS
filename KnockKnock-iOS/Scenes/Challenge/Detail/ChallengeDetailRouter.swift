@@ -12,13 +12,8 @@ protocol ChallengeDetailRouterProtocol {
 
   static func createChallengeDetail(challengeId: Int) -> UIViewController
 
-  func presentErrorAlertView(message: String)
   func popChallengeDetailView()
   func presentToFeedWrite(challengeId: Int)
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  )
 }
 
 final class ChallengeDetailRouter: ChallengeDetailRouterProtocol {
@@ -45,13 +40,6 @@ final class ChallengeDetailRouter: ChallengeDetailRouterProtocol {
     return view
   }
 
-  func presentErrorAlertView(message: String) {
-    guard let sourceView = self.view as? UIViewController else { return }
-
-    LoadingIndicator.hideLoading()
-    sourceView.showAlert(content: message)
-  }
-
   func popChallengeDetailView() {
     guard let sourceView = self.view as? UIViewController else { return }
 
@@ -72,19 +60,5 @@ final class ChallengeDetailRouter: ChallengeDetailRouterProtocol {
     feedWriteViewController.modalPresentationStyle = .fullScreen
 
     sourceView.navigationController?.present(feedWriteViewController, animated: true)
-
-  }
-
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    guard let sourceView = self.view as? UIViewController else { return }
-
-    sourceView.showAlert(
-      content: message,
-      isCancelActive: false,
-      confirmActionCompletion: confirmAction
-    )
   }
 }

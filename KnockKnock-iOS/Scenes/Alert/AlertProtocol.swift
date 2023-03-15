@@ -10,7 +10,7 @@ import UIKit
 protocol AlertProtocol {
   func showAlert(
     message: String,
-    isCancelActive: Bool,
+    isCancelActive: Bool?,
     confirmAction: (() -> Void)?
   )
 }
@@ -19,12 +19,12 @@ extension AlertProtocol where Self: UIViewController {
 
   func showAlert(
     message: String,
-    isCancelActive: Bool,
+    isCancelActive: Bool? = false,
     confirmAction: (() -> Void)? = nil
   ) {
     let alertViewController = AlertViewController(
       content: message,
-      isCancelActive: isCancelActive
+      isCancelActive: isCancelActive ?? false
     )
     alertViewController.addActionToConfirmButton(completion: confirmAction)
 

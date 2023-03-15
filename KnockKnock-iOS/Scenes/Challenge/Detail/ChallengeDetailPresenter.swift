@@ -11,6 +11,12 @@ protocol ChallengeDetailPresenterProtocol {
   var view: ChallengeDetailViewProtocol? { get set }
 
   func presentChallengeDetail(challengeDetail: ChallengeDetail)
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class ChallengeDetailPresenter: ChallengeDetailPresenterProtocol {
@@ -19,5 +25,17 @@ final class ChallengeDetailPresenter: ChallengeDetailPresenterProtocol {
   func presentChallengeDetail(challengeDetail: ChallengeDetail) {
     self.view?.getChallengeDetail(challengeDetail: challengeDetail)
     LoadingIndicator.hideLoading()
+  }
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    self.view?.showAlertView(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

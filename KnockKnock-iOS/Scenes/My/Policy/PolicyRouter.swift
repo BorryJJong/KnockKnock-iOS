@@ -30,19 +30,6 @@ final class PolicyRouter: PolicyRouterProtocol {
     return view
   }
 
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    guard let sourceView = self.view as? UIViewController else { return }
-
-    sourceView.showAlert(
-      content: message,
-      isCancelActive: false,
-      confirmActionCompletion: confirmAction
-    )
-  }
-
   func popToMyView() {
     guard let sourceView = self.view as? UIViewController else { return }
 

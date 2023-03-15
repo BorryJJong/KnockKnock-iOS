@@ -12,6 +12,12 @@ protocol CommentPresenterProtocol {
   
   func presentVisibleComments(comments: [Comment])
   func presentLoginStatus(isLoggedIn: Bool)
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class CommentPresenter: CommentPresenterProtocol {
@@ -24,5 +30,17 @@ final class CommentPresenter: CommentPresenterProtocol {
 
   func presentLoginStatus(isLoggedIn: Bool) {
     self.view?.setLoginStatus(isLoggedIn: isLoggedIn)
+  }
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    self.view?.showAlertView(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

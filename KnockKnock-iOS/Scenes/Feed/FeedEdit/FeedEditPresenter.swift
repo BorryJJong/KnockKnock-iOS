@@ -14,6 +14,11 @@ protocol FeedEditPresenterProtocol: AnyObject {
   func presentSelectedPromotions(promotionList: [Promotion])
   func presentSelectedTags(tagList: [ChallengeTitle])
   func presentShopAddress(address: AddressResponse.Documents)
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class FeedEditPresenter: FeedEditPresenterProtocol {
@@ -52,5 +57,17 @@ final class FeedEditPresenter: FeedEditPresenterProtocol {
   
   func presentShopAddress(address: AddressResponse.Documents) {
     self.view?.fetchAddress(address: address)
+  }
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    self.view?.showAlertView(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

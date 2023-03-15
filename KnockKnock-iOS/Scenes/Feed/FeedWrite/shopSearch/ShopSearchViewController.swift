@@ -19,6 +19,13 @@ protocol ShopSearchViewProtocol: AnyObject {
 
   func fetchSelectedCity(city: String)
   func fetchSelectedCounty(county: String)
+
+  /// Alert 팝업 창
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class ShopSearchViewController: BaseViewController<ShopSearchView> {
@@ -164,7 +171,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
 
 // MARK: - ShopSearchView Protocol
 
-extension ShopSearchViewController: ShopSearchViewProtocol {
+extension ShopSearchViewController: ShopSearchViewProtocol, AlertProtocol {
   func fetchShopAddress(address: AddressResponse) {
     self.addressResult = address
   }
@@ -186,6 +193,21 @@ extension ShopSearchViewController: ShopSearchViewProtocol {
 
   func fetchSelectedCounty(county: String) {
     self.containerView.countyLabel.text = county
+  }
+
+  /// Alert 팝업 창
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    DispatchQueue.main.async {
+      self.showAlert(
+        message: message,
+        isCancelActive: isCancelActive,
+        confirmAction: confirmAction
+      )
+    }
   }
 }
 

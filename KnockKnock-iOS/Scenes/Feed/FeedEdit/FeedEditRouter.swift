@@ -19,7 +19,6 @@ protocol FeedEditRouterProtocol {
     promotionList: [Promotion]?,
     tagList: [ChallengeTitle]?
   )
-  func showAlertView(message: String, confirmAction: (() -> Void)?) 
 }
 
 final class FeedEditRouter: FeedEditRouterProtocol {
@@ -52,16 +51,6 @@ final class FeedEditRouter: FeedEditRouterProtocol {
     router.propertyDelegate = interactor
 
     return view
-  }
-
-  func showAlertView(message: String, confirmAction: (() -> Void)?) {
-    if let sourceView = self.view as? UIViewController {
-      sourceView.showAlert(
-        content: message,
-        isCancelActive: false,
-        confirmActionCompletion: confirmAction
-      )
-    }
   }
 
   func popFeedEditView() {

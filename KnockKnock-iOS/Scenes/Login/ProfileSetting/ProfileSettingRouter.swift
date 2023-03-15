@@ -17,7 +17,6 @@ protocol ProfileSettingRouterProtocol {
   
   func navigateToMyView()
   func popProfileView()
-  func showAlertView(message: String, completion: (() -> Void)?) 
 }
 
 final class ProfileSettingRouter: ProfileSettingRouterProtocol {
@@ -63,17 +62,5 @@ final class ProfileSettingRouter: ProfileSettingRouterProtocol {
   func popProfileView() {
     guard let sourceView = self.view as? UIViewController else { return }
     sourceView.navigationController?.popViewController(animated: true)
-  }
-
-  func showAlertView(message: String, completion: (() -> Void)?) {
-    LoadingIndicator.hideLoading()
-
-    guard let sourceView = self.view as? UIViewController else { return }
-
-    sourceView.showAlert(
-      content: message,
-      isCancelActive: false,
-      confirmActionCompletion: completion
-    )
   }
 }

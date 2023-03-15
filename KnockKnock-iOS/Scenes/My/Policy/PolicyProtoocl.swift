@@ -11,6 +11,12 @@ protocol PolicyViewProtocol: AnyObject {
   var interactor: PolicyInteractorProtocol? { get set }
 
   func fetchPolicyUrl(policyType: MyMenuType)
+
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 protocol PolicyInteractorProtocol {
@@ -21,11 +27,6 @@ protocol PolicyInteractorProtocol {
 
   // MARK: - Routing
 
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  )
-
   func popToMyView()
 }
 
@@ -33,16 +34,18 @@ protocol PolicyPresenterProtocol {
   var view: PolicyViewProtocol? { get set }
 
   func presentPolicyUrl(policyType: MyMenuType)
+
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 protocol PolicyRouterProtocol {
   var view: PolicyViewProtocol? { get set }
   
   static func createPolicyView(policyType: MyMenuType) -> UIViewController
-
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  )
+  
   func popToMyView()
 }

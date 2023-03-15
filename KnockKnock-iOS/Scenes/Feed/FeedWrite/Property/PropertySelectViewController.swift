@@ -15,6 +15,13 @@ protocol PropertySelectViewProtocol: AnyObject {
 
   func fetchPromotionList(promotionList: [Promotion])
   func fetchTagList(tagList: [ChallengeTitle])
+
+  /// Alert 팝업 창
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class PropertySelectViewController: BaseViewController<PropertySelectView> {
@@ -118,7 +125,7 @@ final class PropertySelectViewController: BaseViewController<PropertySelectView>
 
 // MARK: - PropertySelectViewProtocol
 
-extension PropertySelectViewController: PropertySelectViewProtocol {
+extension PropertySelectViewController: PropertySelectViewProtocol, AlertProtocol {
   func fetchPromotionList(promotionList: [Promotion]) {
     self.promotionList = promotionList
     self.promotionList.insert(
@@ -135,6 +142,21 @@ extension PropertySelectViewController: PropertySelectViewProtocol {
     self.tagList = tagList
     self.tagList.remove(at: 0)
     self.containerView.propertyTableView.reloadData()
+  }
+
+  /// Alert 팝업 창
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    DispatchQueue.main.async {
+      self.showAlert(
+        message: message,
+        isCancelActive: isCancelActive,
+        confirmAction: confirmAction
+      )
+    }
   }
 }
 

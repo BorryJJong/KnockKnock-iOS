@@ -72,7 +72,8 @@ final class ChallengeDetailInteractor: ChallengeDetailInteractorProtocol {
         if !isSuccess {
           guard let error = error else { return }
 
-          self.router?.presentErrorAlertView(message: error.message)
+          self.presentAlert(message: error.message)
+          
         } else {
           
           LoadingIndicator.hideLoading()
@@ -95,7 +96,7 @@ final class ChallengeDetailInteractor: ChallengeDetailInteractorProtocol {
     message: String,
     confirmAction: (() -> Void)?
   ) {
-    self.router?.showAlertView(
+    self.presentAlert(
       message: message,
       confirmAction: confirmAction
     )
@@ -111,25 +112,30 @@ extension ChallengeDetailInteractor {
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.showAlertView(
-          message: "네트워크 연결을 확인해 주세요.",
-          confirmAction: nil
-        )
+        self.presentAlert(message: AlertMessage.unknownedError.rawValue)
       }
       return
     }
 
     guard response.data != nil else {
-
       DispatchQueue.main.async {
         LoadingIndicator.hideLoading()
 
-        self.showAlertView(
-          message: response.message,
-          confirmAction: nil
-        )
+        self.presentAlert(message: response.message)
       }
       return
     }
+  }
+
+  private func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    self.presenter?.presentAlert(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }
