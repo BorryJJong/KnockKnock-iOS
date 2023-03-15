@@ -267,12 +267,12 @@ extension FeedMainViewController: UICollectionViewDelegate {
     switch collectionView.tag {
     case CollectionViewTag.tag.rawValue:
       self.interactor?.setSelectedStatus(
-        challengeTitles: challengeTitles,
+        challengeTitles: self.challengeTitles,
         selectedIndex: indexPath
       )
 
       self.feedMainPost = []
-      self.challengeId = indexPath.item
+      self.challengeId = self.challengeTitles[indexPath.item].id
       self.currentPage = 1
       
       self.interactor?.fetchFeedMain(
