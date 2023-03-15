@@ -52,16 +52,8 @@ final class ChallengeViewController: BaseViewController<ChallengeView> {
   }
 
   func setNavigationItem() {
-    let searchBarButtonItem = UIBarButtonItem(
-      image: KKDS.Image.ic_search_24_bk,
-      style: .plain,
-      target: self,
-      action: nil
-    )
-
     self.navigationItem.title = "챌린지"
     self.navigationController?.navigationBar.setDefaultAppearance()
-    self.navigationItem.rightBarButtonItem = searchBarButtonItem
   }
 
   // MARK: - Button Actions
