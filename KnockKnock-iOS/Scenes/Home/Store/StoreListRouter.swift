@@ -32,6 +32,20 @@ final class StoreListRouter: StoreListRouterProtocol {
     return view
   }
 
+  func navigateToFeedWrite() {
+
+    guard let sourceView = self.view as? UIViewController else { return }
+
+    let feedWriteViewController = UINavigationController(
+      rootViewController: FeedWriteRouter.createFeedWrite(
+        rootView: sourceView.navigationController
+      )
+    )
+
+    feedWriteViewController.modalPresentationStyle = .fullScreen
+
+    sourceView.navigationController?.present(feedWriteViewController, animated: true)  }
+
   func showAlertView(
     message: String,
     confirmAction: (() -> Void)?

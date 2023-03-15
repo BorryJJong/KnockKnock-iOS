@@ -24,16 +24,36 @@ final class StoreListViewController: BaseViewController<StoreListView> {
     self.interactor?.fetchStoreDetailList()
   }
 
+  // MARK: - Configure
+
   override func setupConfigure() {
     self.navigationItem.title = "인증된 스토어"
     self.navigationItem.titleView?.tintColor = .black
+
     self.containerView.storeCollectionView.do {
       $0.delegate = self
       $0.dataSource = self
       $0.registCell(type: StoreListCell.self)
     }
+
+    self.containerView.bannerButton.do {
+      $0.addTarget(
+        self,
+        action: #selector(self.bannerButtonDidTap(_:)),
+        for: .touchUpInside
+      )
+    }
+  }
+
+  // MARK: - Button Actions
+
+  @objc
+  func bannerButtonDidTap(_ sender: UIButton) {
+    self.interactor?.navigateToFeedWrite()
   }
 }
+
+  // MARK: - Store List View Protocol
 
 extension StoreListViewController: StoreListViewProtocol {
   func fetchStoreList(storeList: [StoreDetail]) {
@@ -44,6 +64,8 @@ extension StoreListViewController: StoreListViewProtocol {
     }
   }
 }
+
+  // MARK: - CollectionView Delegate, DataSource
 
 extension StoreListViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
 

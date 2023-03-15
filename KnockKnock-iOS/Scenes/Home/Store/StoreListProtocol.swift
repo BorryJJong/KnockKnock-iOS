@@ -19,6 +19,8 @@ protocol StoreListInteractorProtocol {
 
   func fetchStoreDetailList()
 
+  func navigateToFeedWrite()
+
   func showAlertView(
     message: String,
     confirmAction: (() -> Void)?
@@ -35,7 +37,9 @@ protocol StoreListRouterProtocol {
   var view: StoreListViewProtocol? { get set }
 
   static func createStoreListView() -> UIViewController
-  
+
+  func navigateToFeedWrite()
+
   func showAlertView(
     message: String,
     confirmAction: (() -> Void)?
