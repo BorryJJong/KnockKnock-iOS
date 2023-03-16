@@ -15,6 +15,7 @@ protocol ChallengeDetailRouterProtocol {
   func presentErrorAlertView(message: String)
   func popChallengeDetailView()
   func presentToFeedWrite(challengeId: Int)
+  func navigateToHomeView()
   func showAlertView(
     message: String,
     confirmAction: (() -> Void)?
@@ -73,6 +74,13 @@ final class ChallengeDetailRouter: ChallengeDetailRouterProtocol {
 
     sourceView.navigationController?.present(feedWriteViewController, animated: true)
 
+  }
+
+  func navigateToHomeView() {
+    guard let sourceView = self.view as? UIViewController else { return }
+
+    sourceView.tabBarController?.selectedIndex = Tab.home.rawValue
+    sourceView.navigationController?.popViewController(animated: true)
   }
 
   func showAlertView(
