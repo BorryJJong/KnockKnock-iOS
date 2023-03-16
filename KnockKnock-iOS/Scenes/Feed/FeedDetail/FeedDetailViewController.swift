@@ -20,6 +20,12 @@ protocol FeedDetailViewProtocol: AnyObject {
   func fetchLikeStatus(isToggle: Bool)
   func deleteComment()
   func setLoginStatus(isLoggedIn: Bool)
+
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class FeedDetailViewController: BaseViewController<FeedDetailView> {
@@ -204,17 +210,18 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   }
 
   private func commentDeleteButtonDidTap(commentId: Int) {
-
-    self.showAlert(
-      content: "댓글을 삭제하시겠습니까?",
-      confirmActionCompletion: {
-
-        self.interactor?.requestDeleteComment(
-          feedId: self.feedId,
-          commentId: commentId
-        )
-      }
-    )
+    DispatchQueue.main.async {
+      self.showAlert(
+        message: AlertMessage.commentDeleteConfirm.rawValue,
+        isCancelActive: true,
+        confirmAction: {
+          self.interactor?.requestDeleteComment(
+            feedId: self.feedId,
+            commentId: commentId
+          )
+        }
+      )
+    }
   }
   
   // MARK: - Keyboard Show & Hide
@@ -293,7 +300,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
 
 // MARK: - FeedDetailViewProtocol
 
-extension FeedDetailViewController: FeedDetailViewProtocol {
+extension FeedDetailViewController: FeedDetailViewProtocol, AlertProtocol {
   func getFeedDetail(feedDetail: FeedDetail) {
     self.feedDetail = feedDetail
 
@@ -361,6 +368,21 @@ extension FeedDetailViewController: FeedDetailViewProtocol {
       self.containerView.likeButton.do {
         $0.isSelected.toggle()
       }
+    }
+  }
+
+  /// Alert 팝업 창
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    DispatchQueue.main.async {
+      self.showAlert(
+        message: message,
+        isCancelActive: isCancelActive,
+        confirmAction: confirmAction
+      )
     }
   }
 }

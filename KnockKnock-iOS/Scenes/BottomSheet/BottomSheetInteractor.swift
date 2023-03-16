@@ -31,15 +31,21 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
       feedData: self.feedData,
       completionHandler: { isSuccess, error in
 
-      if isSuccess {
-        self.router?.dismissView(action: nil)
-        
-      } else {
-        guard let error = error else { return }
+        if isSuccess {
+          self.dismissView(action: nil)
 
-        self.router?.presentErrorAlertView(message: error.message)
+        } else {
+          guard let error = error else { return }
+
+          self.presentAlert(
+            message: error.message,
+            confirmAction: {
+              self.dismissView(action: nil)
+            }
+          )
+        }
       }
-    })
+    )
   }
 
   func fetchBottomSheetOptions() {
@@ -82,5 +88,17 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
 
   func dismissView(action: (() -> Void)?) {
     self.router?.dismissView(action: action)
+  }
+
+  private func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: @escaping (() -> Void)
+  ) {
+    self.presenter?.presentAlert(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
   }
 }

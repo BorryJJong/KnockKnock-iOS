@@ -16,11 +16,6 @@ protocol FeedMainRouterProtocol {
     feedId: Int,
     challengeId: Int
   )
-
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) 
 }
 
 final class FeedMainRouter: FeedMainRouterProtocol {
@@ -56,19 +51,6 @@ final class FeedMainRouter: FeedMainRouterProtocol {
       sourceView.navigationController?.pushViewController(
         feedListViewController,
         animated: true
-      )
-    }
-  }
-
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    if let sourceView = self.view as? UIViewController {
-      sourceView.showAlert(
-        content: message,
-        isCancelActive: false,
-        confirmActionCompletion: confirmAction
       )
     }
   }

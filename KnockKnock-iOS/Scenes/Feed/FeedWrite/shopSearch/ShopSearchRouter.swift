@@ -18,10 +18,6 @@ protocol ShopSearchRouterProtocol: AnyObject {
   )
   func passDataToFeedWriteView(address: AddressResponse.Documents?)
   func navigateToFeedWriteView()
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  )
 }
 
 protocol ShopSearchDelegate: AnyObject {
@@ -89,24 +85,6 @@ final class ShopSearchRouter: ShopSearchRouterProtocol {
         bottomSheetViewController,
         animated: false,
         completion: nil
-      )
-    }
-  }
-
-  /// AlertView
-  ///
-  /// - Parameters:
-  ///  - message: 알림창 메세지
-  ///  - confirmAction: 확인 눌렀을 때 수행 될 액션
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    if let sourceView = self.view as? UIViewController {
-      sourceView.showAlert(
-        content: message,
-        isCancelActive: false,
-        confirmActionCompletion: confirmAction
       )
     }
   }

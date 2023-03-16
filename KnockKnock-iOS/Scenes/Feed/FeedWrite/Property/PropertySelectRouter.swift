@@ -26,10 +26,6 @@ protocol PropertySelectRouterProtocol {
   func passPromotionToFeedWriteView(promotionList: [Promotion])
 
   func navigateToFeedWriteView()
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  )
 }
 
 final class PropertySelectRouter: PropertySelectRouterProtocol {
@@ -82,23 +78,5 @@ final class PropertySelectRouter: PropertySelectRouterProtocol {
   func navigateToFeedWriteView() {
     guard let sourceView = self.view as? UIViewController else { return }
     sourceView.navigationController?.popViewController(animated: true)
-  }
-
-  /// AlertView
-  ///
-  /// - Parameters:
-  ///  - message: 알림창 메세지
-  ///  - confirmAction: 확인 눌렀을 때 수행 될 액션
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    if let sourceView = self.view as? UIViewController {
-      sourceView.showAlert(
-        content: message,
-        isCancelActive: false,
-        confirmActionCompletion: confirmAction
-      )
-    }
   }
 }

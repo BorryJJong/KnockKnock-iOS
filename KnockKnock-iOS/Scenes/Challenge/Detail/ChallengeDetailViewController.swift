@@ -13,6 +13,12 @@ protocol ChallengeDetailViewProtocol: AnyObject {
   var interactor: ChallengeDetailInteractorProtocol? { get set }
 
   func getChallengeDetail(challengeDetail: ChallengeDetail)
+
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool?,
+    confirmAction: (() -> Void)?
+  )
 }
 
 final class ChallengeDetailViewController: BaseViewController<ChallengeDetailView> {
@@ -121,12 +127,27 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
 
 // MARK: - Bind
 
-extension ChallengeDetailViewController: ChallengeDetailViewProtocol {
+extension ChallengeDetailViewController: ChallengeDetailViewProtocol, AlertProtocol {
   func getChallengeDetail(challengeDetail: ChallengeDetail) {
     self.challengeDetail = challengeDetail
     
     DispatchQueue.main.async {
       self.containerView.challengeDetailCollectionView.reloadData()
+    }
+  }
+
+  /// Alert 팝업 창
+  func showAlertView(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    DispatchQueue.main.async {
+      self.showAlert(
+        message: message,
+        isCancelActive: isCancelActive,
+        confirmAction: confirmAction
+      )
     }
   }
 }

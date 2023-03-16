@@ -14,10 +14,6 @@ protocol ChallengeRouterProtocol: AnyObject {
 
   func navigateToChallengeDetail(challengeId: Int)
   func presentBottomSheet(challengeSortDelegate: ChallengeSortDelegate)
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  )
 }
 
 protocol ChallengeSortDelegate: AnyObject {
@@ -78,18 +74,5 @@ final class ChallengeRouter: ChallengeRouterProtocol {
         animated: true
       )
     }
-  }
-
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    guard let sourceView = self.view as? UIViewController else { return }
-
-    sourceView.showAlert(
-      content: message,
-      isCancelActive: false,
-      confirmActionCompletion: confirmAction
-    )
   }
 }

@@ -101,12 +101,7 @@ final class ProfileRepository: ProfileRepositoryProtocol {
         router: KKRouter.getDuplicateNickname(nickname: nickname),
         success: { response in
 
-          let result = ApiResponse(
-            code: response.code,
-            message: response.message,
-            data: response.code == 200
-          )
-          completionHandler(result)
+          completionHandler(response)
 
         }, failure: { response, error in
 
@@ -114,13 +109,8 @@ final class ProfileRepository: ProfileRepositoryProtocol {
             completionHandler(nil)
             return
           }
-
-          let result = ApiResponse(
-            code: response.code,
-            message: response.message,
-            data: response.code == 200
-          )
-          completionHandler(result)
+          
+          completionHandler(response)
           print(error.localizedDescription)
         }
       )

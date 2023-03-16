@@ -13,10 +13,6 @@ protocol CommentRouterProtocol {
   static func createCommentView(feedId: Int) -> UIViewController
 
   func dismissCommentView()
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  )
 }
 
 final class CommentRouter: CommentRouterProtocol {
@@ -46,24 +42,6 @@ final class CommentRouter: CommentRouterProtocol {
   func dismissCommentView() {
     if let view = self.view as? UIViewController {
       view.dismiss(animated: true)
-    }
-  }
-
-  /// AlertView
-  ///
-  /// - Parameters:
-  ///  - message: 알림창 메세지
-  ///  - confirmAction: 확인 눌렀을 때 수행 될 액션
-  func showAlertView(
-    message: String,
-    confirmAction: (() -> Void)?
-  ) {
-    if let sourceView = self.view as? UIViewController {
-      sourceView.showAlert(
-        content: message,
-        isCancelActive: false,
-        confirmActionCompletion: confirmAction
-      )
     }
   }
 }

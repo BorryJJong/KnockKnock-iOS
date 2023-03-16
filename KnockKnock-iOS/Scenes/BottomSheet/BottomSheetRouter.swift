@@ -58,20 +58,6 @@ final class BottomSheetRouter: BottomSheetRouterProtocol {
     }
   }
 
-  func presentErrorAlertView(message: String) {
-    guard let sourceView = self.view as? UIViewController else { return }
-
-    LoadingIndicator.hideLoading()
-
-    sourceView.showAlert(
-      content: message,
-      isCancelActive: false,
-      confirmActionCompletion: {
-        self.dismissView(action: nil)
-      }
-    )
-  }
-
   func dismissView(action: (() -> Void)?) {
     guard let sourceView = self.view as? UIViewController else { return }
 

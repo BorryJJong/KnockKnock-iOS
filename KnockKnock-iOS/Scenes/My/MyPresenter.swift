@@ -15,7 +15,7 @@ protocol MyPresenterProtocol {
   func presentPushSetting()
   func presentAlert(
     message: String,
-    isCancelActive: Bool,
+    isCancelActive: Bool?,
     confirmAction: (() -> Void)?
   )
 }
@@ -42,8 +42,8 @@ final class MyPresenter: MyPresenterProtocol {
 
   func presentAlert(
     message: String,
-    isCancelActive: Bool,
-    confirmAction: (() -> Void)?
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
   ) {
     self.view?.showAlertView(
       message: message,

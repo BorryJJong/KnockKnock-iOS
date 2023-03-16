@@ -16,4 +16,16 @@ final class PolicyPresenter: PolicyPresenterProtocol {
   func presentPolicyUrl(policyType: MyMenuType) {
     self.view?.fetchPolicyUrl(policyType: policyType)
   }
+  
+  func presentAlert(
+    message: String,
+    isCancelActive: Bool? = false,
+    confirmAction: (() -> Void)? = nil
+  ) {
+    self.view?.showAlertView(
+      message: message,
+      isCancelActive: isCancelActive,
+      confirmAction: confirmAction
+    )
+  }
 }
