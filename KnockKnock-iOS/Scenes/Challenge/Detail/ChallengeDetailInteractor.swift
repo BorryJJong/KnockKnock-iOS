@@ -16,6 +16,7 @@ protocol ChallengeDetailInteractorProtocol {
 
   func popChallengeDetailView()
   func presentToFeedWrite(challengeId: Int)
+  func navigateToHomeView()
   func showAlertView(
     message: String,
     confirmAction: (() -> Void)?
@@ -91,7 +92,11 @@ final class ChallengeDetailInteractor: ChallengeDetailInteractorProtocol {
   func presentToFeedWrite(challengeId: Int) {
     self.router?.presentToFeedWrite(challengeId: challengeId)
   }
-  
+
+  func navigateToHomeView() {
+    self.router?.navigateToHomeView()
+  }
+
   func showAlertView(
     message: String,
     confirmAction: (() -> Void)?

@@ -14,6 +14,7 @@ protocol ChallengeDetailRouterProtocol {
 
   func popChallengeDetailView()
   func presentToFeedWrite(challengeId: Int)
+  func navigateToHomeView()
 }
 
 final class ChallengeDetailRouter: ChallengeDetailRouterProtocol {
@@ -60,5 +61,12 @@ final class ChallengeDetailRouter: ChallengeDetailRouterProtocol {
     feedWriteViewController.modalPresentationStyle = .fullScreen
 
     sourceView.navigationController?.present(feedWriteViewController, animated: true)
+  }
+
+  func navigateToHomeView() {
+    guard let sourceView = self.view as? UIViewController else { return }
+
+    sourceView.tabBarController?.selectedIndex = Tab.home.rawValue
+    sourceView.navigationController?.popViewController(animated: true)
   }
 }

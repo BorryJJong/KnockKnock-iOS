@@ -30,27 +30,6 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
   var challengeId: Int = 12
   var challengeDetail: ChallengeDetail?
 
-  lazy var backBarButtonItem = UIBarButtonItem(
-    image: KKDS.Image.ic_back_24_wh,
-    style: .plain,
-    target: self,
-    action: #selector(tapBackBarButton(_:))
-  )
-
-  lazy var shareBarButtonItem = UIBarButtonItem(
-    image: KKDS.Image.ic_gnb_share_24_wh,
-    style: .plain,
-    target: self,
-    action: #selector(self.shareBarButtonDidTap(_:))
-  )
-
-  lazy var homeBarButtonItem = UIBarButtonItem(
-    image: KKDS.Image.ic_gnb_home_24_wh,
-    style: .plain,
-    target: self,
-    action: nil
-  )
-
   // MARK: - Life cycle
 
   override func viewDidLoad() {
@@ -94,14 +73,35 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
       $0.shadowColor = .clear
     }
 
+    let backBarButtonItem = UIBarButtonItem(
+      image: KKDS.Image.ic_back_24_wh,
+      style: .plain,
+      target: self,
+      action: #selector(tapBackBarButton(_:))
+    )
+
+    let shareBarButtonItem = UIBarButtonItem(
+      image: KKDS.Image.ic_gnb_share_24_wh,
+      style: .plain,
+      target: self,
+      action: #selector(self.shareBarButtonDidTap(_:))
+    )
+
+    let homeBarButtonItem = UIBarButtonItem(
+      image: KKDS.Image.ic_gnb_home_24_wh,
+      style: .plain,
+      target: self,
+      action: #selector(self.homeBarButtonDidTap(_:))
+    )
+
     self.navigationController?.navigationBar.standardAppearance = scrollAppearance
     self.navigationController?.navigationBar.scrollEdgeAppearance = topAppearance
 
     self.navigationController?.navigationBar.setDefaultAppearance()
     self.navigationController?.navigationBar.tintColor = .white
 
-    self.navigationItem.leftBarButtonItem = self.backBarButtonItem
-    self.navigationItem.rightBarButtonItems = [self.shareBarButtonItem, self.homeBarButtonItem]
+    self.navigationItem.leftBarButtonItem = backBarButtonItem
+    self.navigationItem.rightBarButtonItems = [shareBarButtonItem, homeBarButtonItem]
   }
 
   @objc
@@ -117,6 +117,11 @@ final class ChallengeDetailViewController: BaseViewController<ChallengeDetailVie
   @objc
   func participateButtonDidTap(_ sender: UIButton) {
     self.interactor?.presentToFeedWrite(challengeId: self.challengeId)
+  }
+
+  @objc
+  func homeBarButtonDidTap(_ sender: UIBarButtonItem) {
+    self.interactor?.navigateToHomeView()
   }
 }
 
