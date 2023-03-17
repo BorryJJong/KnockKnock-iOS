@@ -7,6 +7,7 @@
 
 import UIKit
 
+import KKDSKit
 import SnapKit
 import Then
 
@@ -17,18 +18,19 @@ final class StoreListView: UIView {
   private enum Metric {
     static let bannerImageViewTopMargin = 10.f
     static let bannerImageViewLeadingMargin = 20.f
-    static let bannerImageViewHeight = 4.f
+    static let bannerImageViewHeightRatio = 4.f
 
     static let storeCollectionViewTopMargin = 15.f
   }
 
   // MARK: - UIs
 
-  private let bannerImageView = UIImageView().then {
-    $0.backgroundColor = .orange
-    $0.layer.cornerRadius = 5
-    $0.clipsToBounds = true
+  let bannerImageView = UIImageView().then {
+    $0.image = KKDS.Image.banner_bar_feed_write
+    $0.contentMode = .scaleAspectFill
   }
+
+  let bannerButton = KKDSBannerButton()
 
   let storeCollectionView = UICollectionView(
     frame: .zero,
@@ -54,16 +56,20 @@ final class StoreListView: UIView {
   // MARK: - Configure
 
   private func setupConstraints() {
-    [self.bannerImageView, self.storeCollectionView].addSubViews(self)
+    [self.bannerImageView, self.bannerButton, self.storeCollectionView].addSubViews(self)
 
     self.bannerImageView.snp.makeConstraints {
       $0.top.equalTo(self.safeAreaLayoutGuide).offset(Metric.bannerImageViewTopMargin)
       $0.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(Metric.bannerImageViewLeadingMargin)
-      $0.height.equalTo(self.bannerImageView.snp.width).dividedBy(Metric.bannerImageViewHeight)
+      $0.height.equalTo(self.bannerImageView.snp.width).dividedBy(Metric.bannerImageViewHeightRatio)
+    }
+
+    self.bannerButton.snp.makeConstraints {
+      $0.edges.equalTo(self.bannerImageView)
     }
 
     self.storeCollectionView.snp.makeConstraints {
-      $0.top.equalTo(self.bannerImageView.snp.bottom).offset(Metric.storeCollectionViewTopMargin)
+      $0.top.equalTo(self.bannerButton.snp.bottom).offset(Metric.storeCollectionViewTopMargin)
       $0.leading.trailing.bottom.equalTo(self.safeAreaLayoutGuide)
     }
   }

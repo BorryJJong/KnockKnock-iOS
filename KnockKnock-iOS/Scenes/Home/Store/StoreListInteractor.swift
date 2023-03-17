@@ -19,6 +19,8 @@ final class StoreListInteractor: StoreListInteractorProtocol {
     self.repository = repository
   }
 
+  // MARK: - Buisiness Logic
+
   func fetchStoreDetailList() {
     Task {
       let response = await self.repository?.requestVerifiedStoreDetailList()
@@ -31,6 +33,12 @@ final class StoreListInteractor: StoreListInteractorProtocol {
 
       self.presenter?.presentStoreList(storeList: storeList)
     }
+  }
+  
+  // MARK: - Routing
+
+  func navigateToFeedWrite() {
+    self.router?.navigateToFeedWrite()
   }
 }
 

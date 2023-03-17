@@ -156,6 +156,7 @@
 		6190E968294EEE5F00A48512 /* Encodable+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6190E967294EEE5F00A48512 /* Encodable+Ext.swift */; };
 		619DEE9C28868E7E00C80095 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619DEE9B28868E7E00C80095 /* Comment.swift */; };
 		619DEE9E2887B41B00C80095 /* CommentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619DEE9D2887B41B00C80095 /* CommentRepository.swift */; };
+		619EF4E129C1757C006138C8 /* BannerTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619EF4E029C1757C006138C8 /* BannerTarget.swift */; };
 		61A028372908D10100943A40 /* districts.json in Resources */ = {isa = PBXBuildFile; fileRef = 61A028362908D10100943A40 /* districts.json */; };
 		61A028392908D1F600943A40 /* DistrictsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A028382908D1F600943A40 /* DistrictsData.swift */; };
 		61A0283D29090B4500943A40 /* BottomSheetRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A0283C29090B4500943A40 /* BottomSheetRouter.swift */; };
@@ -453,6 +454,7 @@
 		6190E967294EEE5F00A48512 /* Encodable+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+Ext.swift"; sourceTree = "<group>"; };
 		619DEE9B28868E7E00C80095 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		619DEE9D2887B41B00C80095 /* CommentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRepository.swift; sourceTree = "<group>"; };
+		619EF4E029C1757C006138C8 /* BannerTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerTarget.swift; sourceTree = "<group>"; };
 		61A028362908D10100943A40 /* districts.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = districts.json; sourceTree = "<group>"; };
 		61A028382908D1F600943A40 /* DistrictsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictsData.swift; sourceTree = "<group>"; };
 		61A0283C29090B4500943A40 /* BottomSheetRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetRouter.swift; sourceTree = "<group>"; };
@@ -1453,6 +1455,7 @@
 				61D96D8329AB3B44009E2842 /* BottomSheetSize.swift */,
 				61D96D8729AB4786009E2842 /* BottomSheetOption.swift */,
 				6135F69C29B837F300727FE6 /* KakaoMapURL.swift */,
+				619EF4E029C1757C006138C8 /* BannerTarget.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -1863,6 +1866,7 @@
 				616EB08D289120C7001BD18C /* PostFooterReusableView.swift in Sources */,
 				61A028572910D3CE00943A40 /* LoginRouter.swift in Sources */,
 				61C21D1728CA2244009B5F4E /* ProfileSettingView.swift in Sources */,
+				619EF4E129C1757C006138C8 /* BannerTarget.swift in Sources */,
 				61A0284E290F60C100943A40 /* NoticeCell.swift in Sources */,
 				201077F427D3AA9800280991 /* ChallengeView.swift in Sources */,
 				201077FE27D3D2AC00280991 /* ChallengeCell.swift in Sources */,

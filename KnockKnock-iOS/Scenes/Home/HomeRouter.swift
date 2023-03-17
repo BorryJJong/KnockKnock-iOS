@@ -15,6 +15,8 @@ protocol HomeRouterProtocol {
   func navigateToStoreListView()
   func navigateToEventPageView()
   func navigateToFeedDetail(feedId: Int)
+  func navigateToFeedWrite()
+  func navigateToChallengeDetail(challengeId: Int)
 }
 
 final class HomeRouter: HomeRouterProtocol {
@@ -75,5 +77,36 @@ final class HomeRouter: HomeRouterProtocol {
         animated: true
       )
     }
+  }
+
+  func navigateToFeedWrite() {
+    guard let sourceView = self.view as? UIViewController else { return }
+
+    let feedWriteViewController = UINavigationController(
+      rootViewController: FeedWriteRouter.createFeedWrite(
+        rootView: sourceView.navigationController
+      )
+    )
+
+    feedWriteViewController.modalPresentationStyle = .fullScreen
+
+    sourceView.navigationController?.present(
+      feedWriteViewController,
+      animated: true
+    )
+  }
+  
+  func navigateToChallengeDetail(challengeId: Int) {
+    guard let sourceView = self.view as? UIViewController else { return }
+
+    let challengeDetailController = ChallengeDetailRouter.createChallengeDetail(
+      challengeId: challengeId
+    )
+    challengeDetailController.hidesBottomBarWhenPushed = true
+
+    sourceView.navigationController?.pushViewController(
+      challengeDetailController,
+      animated: true
+    )
   }
 }

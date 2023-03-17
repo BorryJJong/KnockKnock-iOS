@@ -24,6 +24,8 @@ protocol StoreListInteractorProtocol {
   var presenter: StoreListPresentorProtocol? { get set }
 
   func fetchStoreDetailList()
+
+  func navigateToFeedWrite()
 }
 
 protocol StoreListPresentorProtocol {
@@ -41,4 +43,7 @@ protocol StoreListRouterProtocol {
   var view: StoreListViewProtocol? { get set }
 
   static func createStoreListView() -> UIViewController
+
+  func navigateToFeedWrite()
+
 }
