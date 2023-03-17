@@ -123,10 +123,15 @@ class CommentView: UIView {
     }
 
     if self.commentTextView.text == Placeholder.noText ||
-        self.commentTextView.text == Placeholder.noLoggedIn {
+      self.commentTextView.text == Placeholder.noLoggedIn {
+
       self.commentTextView.text = nil
       self.commentTextView.textColor = .black
+
     } else if self.commentTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+
+      self.registButton.isEnabled = false
+
       self.commentTextView.text = Placeholder.noText
       self.commentTextView.textColor = .gray50
     }
