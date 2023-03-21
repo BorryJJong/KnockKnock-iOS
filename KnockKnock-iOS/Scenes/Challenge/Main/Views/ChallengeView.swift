@@ -44,14 +44,14 @@ final class ChallengeView: UIView {
 
   let numOfNewChallengeLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.textColor = .gray60
+    $0.textColor = KKDS.Color.gray60
     $0.font = .systemFont(ofSize: 13)
   }
 
   let sortChallengeButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.contentVerticalAlignment = .top
-    $0.setTitleColor(.gray80, for: .normal)
+    $0.setTitleColor(KKDS.Color.gray80, for: .normal)
     $0.setTitle("최신순", for: .normal)
     $0.setImage(KKDS.Image.ic_down_20_gr, for: .normal)
     $0.semanticContentAttribute = .forceRightToLeft

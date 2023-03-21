@@ -52,7 +52,7 @@ class FeedListHeaderReusableView: UICollectionReusableView {
 
   private let postDateLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.textColor = .gray70
+    $0.textColor = KKDS.Color.gray70
     $0.font = .systemFont(ofSize: 12, weight: .light)
   }
 

@@ -31,7 +31,7 @@ final class EventCell: BaseCollectionViewCell {
   // MARK: - UIs
 
   private let thumbnailImageView = UIImageView().then {
-    $0.backgroundColor = .gray20
+    $0.backgroundColor = KKDS.Color.gray20
     $0.layer.cornerRadius = 5
     $0.clipsToBounds = true
   }

@@ -239,7 +239,7 @@ extension FeedWriteViewController: FeedWriteViewProtocol, AlertProtocol {
 
 extension FeedWriteViewController: UITextViewDelegate {
   func textViewDidBeginEditing(_ textView: UITextView) {
-    if textView.textColor == .gray40 {
+    if textView.textColor == KKDS.Color.gray40 {
       textView.text = nil
       textView.textColor = .black
     }
@@ -248,7 +248,7 @@ extension FeedWriteViewController: UITextViewDelegate {
   func textViewDidEndEditing(_ textView: UITextView) {
     if textView.text.isEmpty {
       textView.text = "내용을 입력해주세요. (글자수 1,000자 이내)"
-      textView.textColor = .gray40
+      textView.textColor = KKDS.Color.gray40
       self.interactor?.setCurrentText(text: "")
     } else {
       self.interactor?.setCurrentText(text: textView.text)

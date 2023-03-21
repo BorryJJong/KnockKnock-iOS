@@ -8,6 +8,7 @@
 import UIKit
 
 import Then
+import KKDSKit
 import SnapKit
 
 final class NoticeCell: BaseCollectionViewCell {
@@ -34,12 +35,12 @@ final class NoticeCell: BaseCollectionViewCell {
 
   private let dateLabel = UILabel().then {
     $0.font = .systemFont(ofSize: 13, weight: .medium)
-    $0.textColor = .gray70
+    $0.textColor = KKDS.Color.gray70
     $0.numberOfLines = 1
   }
 
   lazy var separatorLineView = UIView().then {
-    $0.backgroundColor = .gray20
+    $0.backgroundColor = KKDS.Color.gray20
   }
 
   // MARK: - Configure

@@ -48,7 +48,7 @@ final class EventDetailView: UIView {
   }
 
   private let separatorView = UIView().then {
-    $0.backgroundColor = .gray20
+    $0.backgroundColor = KKDS.Color.gray20
   }
 
   // MARK: - Initailize

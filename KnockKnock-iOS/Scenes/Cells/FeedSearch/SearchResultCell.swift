@@ -65,7 +65,7 @@ final class SearchResultCell: BaseCollectionViewCell {
         self.imageView.image = KKDS.Image.ic_search_location_52
 
       default:
-        self.imageView.backgroundColor = .gray30
+        self.imageView.backgroundColor = KKDS.Color.gray30
         self.imageView.image = nil
       }
 

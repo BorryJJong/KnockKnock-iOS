@@ -82,10 +82,10 @@ final class MainTabBarController: UITabBarController {
 
     self.tabBar.do {
       $0.backgroundColor = .white
-      $0.tintColor = .green50
+      $0.tintColor = KKDS.Color.green50
       $0.barTintColor = .white
       $0.isTranslucent = false
-      $0.unselectedItemTintColor = .gray60
+      $0.unselectedItemTintColor = KKDS.Color.gray60
       $0.standardAppearance.backgroundColor = .white
     }
     

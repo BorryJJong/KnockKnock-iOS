@@ -73,12 +73,12 @@ class FeedWriteView: UIView {
   let photoAddButton = UIButton().then {
     $0.setImage(KKDS.Image.ic_post_camera_24_gr, for: .normal)
     $0.setTitle("0/5", for: .normal)
-    $0.setTitleColor(.gray60, for: .normal)
+    $0.setTitleColor(KKDS.Color.gray60, for: .normal)
     $0.titleLabel?.font = .systemFont(ofSize: 14)
     $0.contentVerticalAlignment = .center
     $0.contentHorizontalAlignment = .center
     $0.layer.borderWidth = 1
-    $0.layer.borderColor = UIColor.gray50?.cgColor
+    $0.layer.borderColor = KKDS.Color.gray50.cgColor
     $0.layer.cornerRadius = Metric.buttonCornerRadius
     $0.alignTextBelow(spacing: 0)
   }
@@ -97,7 +97,7 @@ class FeedWriteView: UIView {
   }
 
   private lazy var tagSeparateLineView = UIView().then {
-    $0.backgroundColor = .gray20
+    $0.backgroundColor = KKDS.Color.gray20
   }
 
   private let promotionLabel = UILabel().then {
@@ -114,7 +114,7 @@ class FeedWriteView: UIView {
   }
 
   private let promotionSeparateLineView = UIView().then {
-    $0.backgroundColor = .gray20
+    $0.backgroundColor = KKDS.Color.gray20
   }
 
   private let shopNameLabel = UILabel().then {
@@ -142,7 +142,7 @@ class FeedWriteView: UIView {
   }
 
   private let shopNameSeparateLineView = UIView().then {
-    $0.backgroundColor = .gray20
+    $0.backgroundColor = KKDS.Color.gray20
   }
 
   private let shopAddressLabel = UILabel().then {
@@ -163,7 +163,7 @@ class FeedWriteView: UIView {
   }
 
   private let shopAddressSeparateLineView = UIView().then {
-    $0.backgroundColor = .gray20
+    $0.backgroundColor = KKDS.Color.gray20
   }
 
   private lazy var doneBarButton = UIBarButtonItem(
@@ -191,7 +191,7 @@ class FeedWriteView: UIView {
   }
 
   lazy var contentTextView = UITextView().then {
-    $0.textColor = .gray40
+    $0.textColor = KKDS.Color.gray40
     $0.font = .systemFont(ofSize: 14)
     $0.text = "내용을 입력해주세요. (글자수 1,000자 이내)"
     $0.inputAccessoryView = self.toolbar

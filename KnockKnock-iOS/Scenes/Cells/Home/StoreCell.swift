@@ -40,7 +40,7 @@ final class StoreCell: BaseCollectionViewCell {
 
   private let storeInfoLabel = UILabel().then {
     $0.font = .systemFont(ofSize: 12, weight: .medium)
-    $0.textColor = .gray70
+    $0.textColor = KKDS.Color.gray70
     $0.numberOfLines = 1
   }
 
@@ -105,10 +105,10 @@ extension StoreCell {
       ).then {
         $0.text = promotions[index]
         $0.font = .systemFont(ofSize: 10)
-        $0.textColor = .gray70
+        $0.textColor = KKDS.Color.gray70
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 5
-        $0.backgroundColor = .gray20
+        $0.backgroundColor = KKDS.Color.gray20
         $0.sizeToFit()
       }
 

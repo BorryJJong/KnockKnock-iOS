@@ -33,7 +33,7 @@ final class StoreListCell: BaseCollectionViewCell {
   // MARK: - UIs
 
   private let thumbnailImageView = UIImageView().then {
-    $0.backgroundColor = .gray20
+    $0.backgroundColor = KKDS.Color.gray20
     $0.layer.cornerRadius = 5
     $0.clipsToBounds = true
   }
@@ -45,13 +45,13 @@ final class StoreListCell: BaseCollectionViewCell {
   private let storeInfoLabel = UILabel().then {
     $0.numberOfLines = 2
     $0.font = .systemFont(ofSize: 12, weight: .medium)
-    $0.textColor = .gray70
+    $0.textColor = KKDS.Color.gray70
   }
 
   private let promotionView = UIView()
 
   private let separatorLineView = UIView().then {
-    $0.backgroundColor = .gray30
+    $0.backgroundColor = KKDS.Color.gray30
   }
 
   // MARK: - Bind
@@ -125,10 +125,10 @@ extension StoreListCell {
       ).then {
         $0.text = promotions[index]
         $0.font = .systemFont(ofSize: 10)
-        $0.textColor = .gray70
+        $0.textColor = KKDS.Color.gray70
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 5
-        $0.backgroundColor = .gray20
+        $0.backgroundColor = KKDS.Color.gray20
         $0.sizeToFit()
       }
 

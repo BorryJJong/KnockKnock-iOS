@@ -8,6 +8,7 @@
 import UIKit
 
 import Then
+import KKDSKit
 
 final class ReactFooterReusableView: UICollectionReusableView {
 
@@ -22,7 +23,7 @@ final class ReactFooterReusableView: UICollectionReusableView {
 
   private let seperateLineView = UIView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .gray20
+    $0.backgroundColor = KKDS.Color.gray20
   }
 
   // MARK: - Initailize

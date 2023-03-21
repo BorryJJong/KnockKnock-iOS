@@ -47,7 +47,7 @@ final class LikeDetailCell: BaseCollectionViewCell {
   private let likeLabel = UILabel().then {
     $0.text = "좋아요"
     $0.font = .systemFont(ofSize: 12, weight: .medium)
-    $0.textColor = .gray60
+    $0.textColor = KKDS.Color.gray60
   }
 
   // MARK: - Bind

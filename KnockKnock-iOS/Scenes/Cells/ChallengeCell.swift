@@ -61,7 +61,7 @@ final class ChallengeCell: BaseCollectionViewCell {
   }
   private let contentsLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.tintColor = .gray80
+    $0.tintColor = KKDS.Color.gray80
     $0.font = .systemFont(ofSize: 13)
     $0.numberOfLines = 2
     $0.textAlignment = .left
@@ -83,18 +83,18 @@ final class ChallengeCell: BaseCollectionViewCell {
   private let participantLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.text = "첫 번째 참여자가 되어보세요!"
-    $0.textColor = .green50
+    $0.textColor = KKDS.Color.green50
     $0.font = .systemFont(ofSize: 13)
   }
 
   private let seperatorLineView = UIView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .gray20
+    $0.backgroundColor = KKDS.Color.gray20
   }
 
   private let newChallengeLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .green50
+    $0.backgroundColor = KKDS.Color.green50
     $0.textAlignment = .center
     $0.layer.cornerRadius = 3
     $0.clipsToBounds = true

@@ -8,6 +8,7 @@
 import UIKit
 
 import Then
+import KKDSKit
 import SnapKit
 
 final class FeedSearchResultHeaderReusableView: UICollectionReusableView {
@@ -23,12 +24,12 @@ final class FeedSearchResultHeaderReusableView: UICollectionReusableView {
   private let headerLabel = UILabel().then {
     $0.text = "최근 검색"
     $0.font = .systemFont(ofSize: 15)
-    $0.textColor = .gray80
+    $0.textColor = KKDS.Color.gray80
   }
 
   let deleteLogButton = UIButton().then {
     $0.setTitle("전체 삭제", for: .normal)
-    $0.setTitleColor(.gray60, for: .normal)
+    $0.setTitleColor(KKDS.Color.gray60, for: .normal)
     $0.titleLabel?.font = .systemFont(ofSize: 15)
   }
 

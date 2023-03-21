@@ -7,6 +7,8 @@
 
 import UIKit
 
+import KKDSKit
+
 class FeedMainFooterCollectionReusableView: UICollectionReusableView {
 
   // MARK: - Constants
@@ -17,12 +19,9 @@ class FeedMainFooterCollectionReusableView: UICollectionReusableView {
 
   // MARK: - UIs
 
-  let viewMoreButton = UIButton().then {
+  let viewMoreButton = KKDSMiddleButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setTitle("+ 더보기", for: .normal)
-    $0.setTitleColor(.gray80, for: .normal)
-    $0.layer.borderWidth = 1
-    $0.layer.borderColor = UIColor.gray30?.cgColor
   }
 
   // MARK: - Initailize

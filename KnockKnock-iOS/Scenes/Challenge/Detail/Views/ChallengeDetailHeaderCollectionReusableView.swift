@@ -89,7 +89,7 @@ final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableVie
 
   private let participantSeperatorView = UIView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .gray20
+    $0.backgroundColor = KKDS.Color.gray20
   }
 
   private let titleLabel = UILabel().then {
@@ -108,14 +108,14 @@ final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableVie
 
   private let summarySeperatorView = UIView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .gray20
+    $0.backgroundColor = KKDS.Color.gray20
   }
 
   private let wayHeaderLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.text = "실천방법"
     $0.font = .systemFont(ofSize: 17, weight: .bold)
-    $0.textColor = .green50
+    $0.textColor = KKDS.Color.green50
   }
 
   private let waysStackView = UIStackView().then {
@@ -126,7 +126,7 @@ final class ChallengeDetailHeaderCollectionReusableView: UICollectionReusableVie
     $0.spacing = 5
     $0.layoutMargins = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
     $0.isLayoutMarginsRelativeArrangement = true
-    $0.backgroundColor = .gray20
+    $0.backgroundColor = KKDS.Color.gray20
     $0.clipsToBounds = true
     $0.layer.cornerRadius = 10
   }

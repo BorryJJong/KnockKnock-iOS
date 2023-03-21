@@ -31,7 +31,7 @@ class EventListView: UIView {
   }
 
   private let statusLabel = UILabel().then {
-    $0.textColor = .gray60
+    $0.textColor = KKDS.Color.gray60
     $0.text = "현재 진행중인 이벤트가 없습니다."
   }
 

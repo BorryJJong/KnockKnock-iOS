@@ -90,7 +90,7 @@ class CommentView: UIView {
 
   lazy var commentTextView = UITextView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.textColor = .gray50
+    $0.textColor = KKDS.Color.gray50
     $0.font = .systemFont(ofSize: 15, weight: .regular)
     $0.autocorrectionType = .no
     $0.spellCheckingType = .no
@@ -128,7 +128,7 @@ class CommentView: UIView {
       self.commentTextView.textColor = .black
     } else if self.commentTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
       self.commentTextView.text = Placeholder.noText
-      self.commentTextView.textColor = .gray50
+      self.commentTextView.textColor = KKDS.Color.gray50
     }
   }
 

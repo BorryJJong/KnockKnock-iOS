@@ -8,6 +8,7 @@
 import UIKit
 
 import Then
+import KKDSKit
 
 final class PostCell: BaseCollectionViewCell {
 
@@ -21,8 +22,8 @@ final class PostCell: BaseCollectionViewCell {
   )).then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.numberOfLines = 0
-    $0.backgroundColor = .gray20
-    $0.textColor = .gray70
+    $0.backgroundColor = KKDS.Color.gray20
+    $0.textColor = KKDS.Color.gray70
     $0.font = .systemFont(ofSize: 12, weight: .semibold)
     $0.layer.cornerRadius = 3
     $0.clipsToBounds = true

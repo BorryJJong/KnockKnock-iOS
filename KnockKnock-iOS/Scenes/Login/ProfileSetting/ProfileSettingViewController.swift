@@ -153,8 +153,8 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
       self.containerView.confirmButton.backgroundColor = .green50
       self.containerView.confirmButton.isEnabled = true
     } else {
-      textField.layer.borderColor = UIColor.gray30?.cgColor
-      self.containerView.confirmButton.backgroundColor = .gray40
+      textField.layer.borderColor = KKDS.Color.gray30.cgColor
+      self.containerView.confirmButton.backgroundColor = KKDS.Color.gray40
       self.containerView.confirmButton.isEnabled = false
     }
     
