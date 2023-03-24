@@ -327,6 +327,11 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
               feedId: feedId,
               replyCount: comments[commentIndex].data.replyCnt
             )
+          } else {
+            self.postCommentDeleteNotificationEvent(
+              feedId: feedId,
+              replyCount: 0
+            )
           }
         }
         completionHandler(response)
