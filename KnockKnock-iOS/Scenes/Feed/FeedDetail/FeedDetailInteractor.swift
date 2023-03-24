@@ -241,10 +241,15 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
         guard let isSuccess = response?.data else { return }
 
         if isSuccess {
+
+          // 댓글 삭제
           if let index = self.comments.firstIndex(where: { $0.data.id == commentId }) {
             self.comments[index].data.isDeleted = true
+            self.comments[index].data.replyCnt = 0
+            self.comments[index].data.reply = nil
           }
 
+          // 답글 삭제
           for commentIndex in 0..<self.comments.count {
             if let replyIndex = self.comments[commentIndex].data.reply?.firstIndex(where: {
               $0.id == commentId
