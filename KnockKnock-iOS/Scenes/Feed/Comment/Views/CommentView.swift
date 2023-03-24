@@ -125,6 +125,8 @@ class CommentView: UIView {
     if self.commentTextView.text == Placeholder.noText ||
       self.commentTextView.text == Placeholder.noLoggedIn {
 
+      self.registButton.isEnabled = false
+
       self.commentTextView.text = nil
       self.commentTextView.textColor = .black
 

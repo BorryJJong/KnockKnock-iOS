@@ -81,7 +81,7 @@ final class CommentViewController: BaseViewController<CommentView> {
     self.addKeyboardNotification()
     self.hideKeyboardWhenTappedAround()
   }
-  
+
   // MARK: - Keyboard Show & Hide
   
   private func addKeyboardNotification() {
@@ -306,11 +306,13 @@ extension CommentViewController: UITextViewDelegate {
       self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
     }
   }
-  
+
   func textViewDidChange(_ textView: UITextView) {
     let size = CGSize(width: view.frame.width, height: .infinity)
     let estimatedSize = textView.sizeThatFits(size)
-    
+
+    self.containerView.registButton.isEnabled = !textView.text.isEmpty
+
     textView.constraints.forEach { (constraint) in
       if estimatedSize.height <= 60 && constraint.firstAttribute == .height {
         constraint.constant = estimatedSize.height
