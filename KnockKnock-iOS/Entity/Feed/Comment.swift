@@ -45,7 +45,7 @@ struct Comment: Decodable {
     let regDate: String
     var isDeleted: Bool
     let isWriter: Bool
-    let replyCnt: Int
+    var replyCnt: Int
     var reply: [Reply]?
 
     struct Reply: Decodable {
