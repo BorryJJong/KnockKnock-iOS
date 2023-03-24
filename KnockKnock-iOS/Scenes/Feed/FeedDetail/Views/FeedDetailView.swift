@@ -39,6 +39,8 @@ final class FeedDetailView: UIView {
     static let commentTextViewTrailingMargin = -10.f
     static let commentTextViewLeadingMargin = 10.f
 
+    static let placeholderLabelLeadingMargin = 5.f
+
     static let registButtonTrailingMargin = -20.f
     static let registButtonBottomMargin = -15.f
     static let registButtonWidth = 50.f
@@ -111,9 +113,15 @@ final class FeedDetailView: UIView {
     $0.setImage(KKDS.Image.ic_like_24_on, for: .selected)
   }
 
-  lazy var commentTextView = UITextView().then {
+  let placeholderLabel = UILabel().then {
     $0.text = Placeholder.noText
     $0.textColor = .gray50
+    $0.font = .systemFont(ofSize: 15, weight: .regular)
+  }
+
+  lazy var commentTextView = UITextView().then {
+    $0.textColor = .black
+    $0.tintColor = .black
     $0.font = .systemFont(ofSize: 15, weight: .regular)
     $0.autocorrectionType = .no
     $0.spellCheckingType = .no
@@ -121,6 +129,7 @@ final class FeedDetailView: UIView {
 
   let registButton = KKDSSmallButton().then {
     $0.setTitle("등록", for: .normal)
+    $0.isEnabled = false
   }
 
   // MARK: - Initailize
@@ -142,27 +151,10 @@ final class FeedDetailView: UIView {
 
   func setCommentComponets(isLoggedIn: Bool) {
     self.commentTextView.isEditable = isLoggedIn
-    self.registButton.isEnabled = isLoggedIn
 
     guard isLoggedIn else {
-      self.commentTextView.text = Placeholder.noLoggedIn
+      self.placeholderLabel.text = Placeholder.noLoggedIn
       return
-    }
-
-    if self.commentTextView.text == Placeholder.noText ||
-        self.commentTextView.text == Placeholder.noLoggedIn {
-
-      self.registButton.isEnabled = false
-
-      self.commentTextView.text = nil
-      self.commentTextView.textColor = .black
-
-    } else if self.commentTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-
-      self.registButton.isEnabled = false
-
-      self.commentTextView.text = Placeholder.noText
-      self.commentTextView.textColor = .gray50
     }
   }
 
@@ -177,6 +169,7 @@ final class FeedDetailView: UIView {
     }
 
     [self.commentInputView, self.likeButton, self.commentTextView, self.registButton].addSubViews(self)
+    [self.placeholderLabel].addSubViews(self)
 
     self.commentInputView.snp.makeConstraints {
       $0.top.equalTo(self.commentTextView).offset(Metric.commentInputViewTopMargin)
@@ -193,6 +186,11 @@ final class FeedDetailView: UIView {
       $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(Metric.commentTextViewBottomMargin)
       $0.trailing.equalTo(self.registButton.snp.leading).offset(Metric.commentTextViewTrailingMargin)
       $0.leading.equalTo(self.likeButton.snp.trailing).offset(Metric.commentTextViewLeadingMargin)
+    }
+
+    self.placeholderLabel.snp.makeConstraints {
+      $0.leading.equalTo(self.commentTextView).offset(Metric.placeholderLabelLeadingMargin)
+      $0.bottom.top.equalTo(self.commentTextView)
     }
 
     self.registButton.snp.makeConstraints {
