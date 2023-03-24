@@ -159,6 +159,16 @@ final class FeedDetailView: UIView {
     }
   }
 
+  func setLikeButton(isHidden: Bool) {
+    self.likeButton.isHidden = isHidden
+
+    if !isHidden {
+      self.commentTextView.snp.updateConstraints {
+        $0.leading.equalTo(self.likeButton.snp.trailing)
+      }
+    }
+  }
+
   // MARK: - Constraints
 
   func setupConstraints() {
