@@ -249,7 +249,6 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       notification: notification,
       isAppearing: true
     )
-//    self.containerView.likeButton.isHidden = true
     self.containerView.setLikeButton(isHidden: true)
   }
   
