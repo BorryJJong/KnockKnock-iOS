@@ -621,12 +621,15 @@ extension FeedDetailViewController: UITextViewDelegate {
   }
   
   func textViewDidChange(_ textView: UITextView) {
+
+    self.containerView.registButton.isEnabled = !textView.text.isEmpty
+
     let size = CGSize(
       width: view.frame.width,
       height: .infinity
     )
     let estimatedSize = textView.sizeThatFits(size)
-    
+
     textView.constraints.forEach { (constraint) in
       if estimatedSize.height <= 60 && constraint.firstAttribute == .height {
         constraint.constant = estimatedSize.height
