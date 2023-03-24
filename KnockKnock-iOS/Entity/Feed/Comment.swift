@@ -87,7 +87,7 @@ extension CommentDTO {
             content: $0.content,
             regDate: $0.regDate,
             isDeleted: $0.isDeleted,
-            isWriter: isWriter
+            isWriter: $0.isWriter
           )
         }
       )
