@@ -318,18 +318,20 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
 
         guard let self = self else { return }
 
-        if let isSuccess = response?.data {
-          if isSuccess {
-
-            guard let commentIndex = comments.firstIndex(
-              where: { $0.data.id == commentId }
-            ) else { return }
+        if response?.data == true {
+          if let commentIndex = comments.firstIndex(
+            where: { $0.data.id == commentId }
+          ) {
 
             self.postCommentDeleteNotificationEvent(
               feedId: feedId,
               replyCount: comments[commentIndex].data.replyCnt
             )
-
+          } else {
+            self.postCommentDeleteNotificationEvent(
+              feedId: feedId,
+              replyCount: 0
+            )
           }
         }
         completionHandler(response)

@@ -609,25 +609,18 @@ extension FeedDetailViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - TextField delegate
 
 extension FeedDetailViewController: UITextViewDelegate {
-  func textViewDidBeginEditing(_ textView: UITextView) {
-    DispatchQueue.main.async {
-      self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
-    }
-  }
-  
-  func textViewDidEndEditing(_ textView: UITextView) {
-    DispatchQueue.main.async {
-      self.containerView.setCommentComponets(isLoggedIn: self.isLoggedIn)
-    }
-  }
-  
+
   func textViewDidChange(_ textView: UITextView) {
+
+    self.containerView.placeholderLabel.isHidden = !textView.text.isEmpty
+    self.containerView.registButton.isEnabled = !textView.text.isEmpty
+
     let size = CGSize(
       width: view.frame.width,
       height: .infinity
     )
     let estimatedSize = textView.sizeThatFits(size)
-    
+
     textView.constraints.forEach { (constraint) in
       if estimatedSize.height <= 60 && constraint.firstAttribute == .height {
         constraint.constant = estimatedSize.height
