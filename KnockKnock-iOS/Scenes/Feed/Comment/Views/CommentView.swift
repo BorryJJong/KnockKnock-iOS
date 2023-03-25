@@ -32,6 +32,8 @@ class CommentView: UIView {
 
     static let commentInputViewTopMargin = -20.f
 
+    static let placeholderLabelTrailingMargin = 5.f
+
     static let commentTextViewHeight = 34.f
     static let commentTextViewBottomMargin = -19.f
     static let commentTextViewTrailingMargin = -70.f
@@ -52,13 +54,11 @@ class CommentView: UIView {
   let contentView = UIView()
 
   private let titleLabel = UILabel().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.text = "댓글"
     $0.font = .systemFont(ofSize: 17, weight: .bold)
   }
 
   let exitButton = UIButton().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.setImage(KKDS.Image.ic_close_24_bk, for: .normal)
   }
 
@@ -78,7 +78,6 @@ class CommentView: UIView {
     }
 
   let commentInputView = UIView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
     $0.backgroundColor = .white
     $0.layer.borderWidth = 1
     $0.layer.borderColor = UIColor.white.cgColor
@@ -89,15 +88,22 @@ class CommentView: UIView {
   }
 
   lazy var commentTextView = UITextView().then {
-    $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.textColor = KKDS.Color.gray50
+    $0.textColor = .black
+    $0.tintColor = .black
     $0.font = .systemFont(ofSize: 15, weight: .regular)
     $0.autocorrectionType = .no
     $0.spellCheckingType = .no
   }
 
+  let placeholderLabel = UILabel().then {
+    $0.text = Placeholder.noText
+    $0.textColor = .gray50
+    $0.font = .systemFont(ofSize: 15, weight: .regular)
+  }
+
   let registButton = KKDSSmallButton().then {
     $0.setTitle("등록", for: .normal)
+    $0.isEnabled = false
   }
 
   // MARK: - Initailize
@@ -115,20 +121,10 @@ class CommentView: UIView {
 
   func setCommentComponets(isLoggedIn: Bool) {
     self.commentTextView.isEditable = isLoggedIn
-    self.registButton.isEnabled = isLoggedIn
 
     guard isLoggedIn else {
-      self.commentTextView.text = Placeholder.noLoggedIn
+      self.placeholderLabel.text = Placeholder.noLoggedIn
       return
-    }
-
-    if self.commentTextView.text == Placeholder.noText ||
-        self.commentTextView.text == Placeholder.noLoggedIn {
-      self.commentTextView.text = nil
-      self.commentTextView.textColor = .black
-    } else if self.commentTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-      self.commentTextView.text = Placeholder.noText
-      self.commentTextView.textColor = KKDS.Color.gray50
     }
   }
 
@@ -138,6 +134,7 @@ class CommentView: UIView {
     [self.contentView].addSubViews(self)
     [self.commentCollectionView].addSubViews(self.contentView)
     [self.commentInputView, self.commentTextView, self.registButton].addSubViews(self.contentView)
+    [self.placeholderLabel].addSubViews(self.contentView)
     [self.headerView].addSubViews(self)
     [self.titleLabel, self.exitButton].addSubViews(self.headerView)
 
@@ -178,6 +175,11 @@ class CommentView: UIView {
       $0.bottom.equalTo(self.contentView).offset(Metric.commentTextViewBottomMargin)
       $0.trailing.equalTo(self.contentView).offset(Metric.commentTextViewTrailingMargin)
       $0.leading.equalTo(self.contentView).offset(Metric.commentTextViewLeadingMargin)
+    }
+
+    self.placeholderLabel.snp.makeConstraints {
+      $0.leading.equalTo(self.commentTextView).offset(Metric.placeholderLabelTrailingMargin)
+      $0.trailing.bottom.top.equalTo(self.commentTextView)
     }
 
     self.registButton.snp.makeConstraints {

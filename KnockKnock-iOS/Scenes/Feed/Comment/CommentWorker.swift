@@ -134,20 +134,23 @@ final class CommentWorker: CommentWorkerProtocol {
     
     self.commentRepository?.requestDeleteComment(
       commentId: commentId,
-      completionHandler: { response in
+      completionHandler: { [weak self] response in
 
-        if let isSuccess = response?.data {
-          if isSuccess {
+        guard let self = self else { return }
 
-            guard let commentIndex = comments.firstIndex(
-              where: { $0.data.id == commentId }
-            ) else { return }
-
+        if response?.data == true {
+          if let commentIndex = comments.firstIndex(
+            where: { $0.data.id == commentId }
+          ) {
             self.postDeleteNotificationEvent(
               feedId: feedId,
               replyCount: comments[commentIndex].data.replyCnt
             )
-
+          } else {
+            self.postDeleteNotificationEvent(
+              feedId: feedId,
+              replyCount: 0
+            )
           }
         }
         completionHandler(response)
@@ -160,11 +163,13 @@ final class CommentWorker: CommentWorkerProtocol {
     commentId: Int
   ) -> [Comment] {
     var comments = comments
-    
+
+    // 댓글 삭제
     if let index = comments.firstIndex(where: { $0.data.id == commentId }) {
       comments[index].data.isDeleted = true
     }
-    
+
+    // 답글 삭제
     for commentIndex in 0..<comments.count {
       if let replyIndex = comments[commentIndex].data.reply?.firstIndex(where: {
         $0.id == commentId

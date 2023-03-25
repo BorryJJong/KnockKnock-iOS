@@ -119,7 +119,7 @@ final class CommentInteractor: CommentInteractorProtocol {
 
         guard let self = self else { return }
 
-        self.showErrorAlert(response: response )
+        self.showErrorAlert(response: response)
 
         guard let isSuccess = response?.data else { return }
 
