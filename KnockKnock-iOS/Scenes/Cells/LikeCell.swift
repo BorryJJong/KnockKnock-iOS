@@ -60,7 +60,7 @@ final class LikeCell: BaseCollectionViewCell {
   func setImage(imageUrl: String?) {
     self.profileImageView.setImageFromStringUrl(
       stringUrl: imageUrl,
-      defaultImage: KKDS.Image.ic_like_circle_16
+      defaultImage: KKDS.Image.ic_person_24
     )
   }
   

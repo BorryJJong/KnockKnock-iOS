@@ -20,7 +20,10 @@ extension UIImageView {
     stringUrl: String?,
     defaultImage: UIImage
   ) {
-    guard let stringUrl = stringUrl else { return }
+    guard let stringUrl = stringUrl else {
+      self.image = defaultImage
+      return
+    }
 
     ImageCache.default.retrieveImage(
       forKey: stringUrl,
@@ -55,6 +58,7 @@ extension UIImageView {
               return
             }
           }
+
           return
         }
         
