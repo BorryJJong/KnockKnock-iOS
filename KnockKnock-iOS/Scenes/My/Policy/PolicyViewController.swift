@@ -67,7 +67,6 @@ extension PolicyViewController: PolicyViewProtocol, AlertProtocol {
     DispatchQueue.main.async {
       self.containerView.setWebViewUrl(url: url)
       self.navigationItem.title = policyType.rawValue
-//      LoadingIndicator.hideLoading()
     }
   }
 
@@ -87,7 +86,7 @@ extension PolicyViewController: PolicyViewProtocol, AlertProtocol {
   }
 }
 
-// MARK: - Policy View Protocol
+// MARK: - WKNavigationDelegate
 
 extension PolicyViewController: WKNavigationDelegate {
 
