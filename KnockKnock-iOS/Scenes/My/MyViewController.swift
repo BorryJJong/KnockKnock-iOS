@@ -108,7 +108,13 @@ final class MyViewController: BaseViewController<MyView> {
 
   @objc
   func signOutButtonDidTap(_ sender: UIButton) {
-    self.interactor?.requestSignOut()
+    self.showAlertView(
+      message: AlertMessage.signOutConfirm.rawValue,
+      isCancelActive: true,
+      confirmAction: {
+        self.interactor?.requestSignOut()
+      }
+    )
   }
 
   @objc

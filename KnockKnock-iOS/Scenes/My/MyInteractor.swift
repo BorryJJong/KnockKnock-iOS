@@ -80,6 +80,8 @@ final class MyInteractor: MyInteractorProtocol {
           self.presentAlert(message: AlertMessage.unknownedError.rawValue)
           return
         }
+        
+        self.presentAlert(message: AlertMessage.signOutDone.rawValue)
       }
     )
   }
