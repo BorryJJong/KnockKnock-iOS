@@ -73,6 +73,7 @@ final class PostCommentCell: BaseCollectionViewCell {
     $0.titleEdgeInsets.right = -(Metric.replyWriteButtonContentPadding)
     $0.semanticContentAttribute = .forceLeftToRight
     $0.titleLabel?.font = .systemFont(ofSize: 12, weight: .semibold)
+    $0.isHidden = false
   }
 
   lazy var replyMoreButton = UIButton().then {
@@ -82,6 +83,7 @@ final class PostCommentCell: BaseCollectionViewCell {
     $0.titleEdgeInsets.left = Metric.replyMoreButtonContentPadding
     $0.titleEdgeInsets.right = -(Metric.replyMoreButtonContentPadding)
     $0.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
+    $0.isHidden = false
   }
 
   let commentDeleteButton = UIButton().then {
@@ -92,6 +94,7 @@ final class PostCommentCell: BaseCollectionViewCell {
     $0.titleEdgeInsets.right = -(Metric.commentDeleteButtonContentPadding)
     $0.setTitleColor(.gray70, for: .normal)
     $0.titleLabel?.font = .systemFont(ofSize: 12, weight: .semibold)
+    $0.isHidden = false
   }
   
   // MARK: - Bind
