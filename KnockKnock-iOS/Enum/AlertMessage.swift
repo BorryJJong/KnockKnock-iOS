@@ -11,6 +11,9 @@ enum AlertMessage: String {
   case registerDone = "회원가입에 성공하였습니다."
   case registerFailed = "회원가입에 실패하였습니다."
 
+  case signOutConfirm = "로그아웃 하시겠습니까?"
+  case signOutDone = "성공적으로 로그아웃 처리 되었습니다."
+
   case withdrawConfirm = "계정을 삭제하면 게시글, 좋아요, 댓글 등 모든 활동 정보가 삭제됩니다. 그래도 탈퇴 하시겠습니까?"
   case withdrawDone = "성공적으로 탈퇴 처리 되었습니다."
 
