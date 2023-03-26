@@ -38,7 +38,7 @@ final class ChallengeView: UIView {
 
   let totalChallengeLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.textColor = .green50
+    $0.textColor = KKDS.Color.green50
     $0.font = .boldSystemFont(ofSize: 13)
   }
 
