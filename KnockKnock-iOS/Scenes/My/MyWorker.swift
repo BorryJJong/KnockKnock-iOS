@@ -45,7 +45,6 @@ final class MyWorker: MyWorkerProtocol {
 
     let service = MyItem(title: .serviceTerms, type: .plain)
     let privacy = MyItem(title: .privacy, type: .plain)
-    let location = MyItem(title: .locationService, type: .plain)
     let openSource = MyItem(title: .opensource, type: .plain)
 
     let myInfoSection = MySection(
@@ -58,7 +57,7 @@ final class MyWorker: MyWorkerProtocol {
     )
     let policySection = MySection(
       title: .policy,
-      myItems: [service, privacy, location, openSource]
+      myItems: [service, privacy, openSource]
     )
 
     return [myInfoSection, customerSection, policySection]
