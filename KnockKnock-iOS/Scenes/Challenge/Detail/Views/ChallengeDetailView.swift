@@ -46,7 +46,7 @@ class ChallengeDetailView: UIView {
 
   let participateButton = KKDSLargeButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.backgroundColor = .green50
+    $0.backgroundColor = KKDS.Color.green50
     $0.setTitle("챌린지 참여하기", for: .normal)
     $0.titleLabel?.textColor = .white
     $0.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)

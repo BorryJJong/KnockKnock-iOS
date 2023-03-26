@@ -67,7 +67,7 @@ final class FeedEditView: UIView {
   }
 
   private lazy var tagSeparateLineView = UIView().then {
-    $0.backgroundColor = .gray20
+    $0.backgroundColor = KKDS.Color.gray20
   }
 
   private let promotionLabel = UILabel().then {
@@ -84,7 +84,7 @@ final class FeedEditView: UIView {
   }
 
   private let promotionSeparateLineView = UIView().then {
-    $0.backgroundColor = .gray20
+    $0.backgroundColor = KKDS.Color.gray20
   }
 
   private let shopNameLabel = UILabel().then {
@@ -112,7 +112,7 @@ final class FeedEditView: UIView {
   }
 
   private let shopNameSeparateLineView = UIView().then {
-    $0.backgroundColor = .gray20
+    $0.backgroundColor = KKDS.Color.gray20
   }
 
   private let shopAddressLabel = UILabel().then {
@@ -133,7 +133,7 @@ final class FeedEditView: UIView {
   }
 
   private let shopAddressSeparateLineView = UIView().then {
-    $0.backgroundColor = .gray20
+    $0.backgroundColor = KKDS.Color.gray20
   }
 
   private lazy var doneBarButton = UIBarButtonItem(

@@ -7,6 +7,8 @@
 
 import UIKit
 
+import KKDSKit
+
 class TagCell: BaseCollectionViewCell {
 
   // MARK: - UIs
@@ -22,9 +24,9 @@ class TagCell: BaseCollectionViewCell {
     $0.clipsToBounds = true
     $0.layer.cornerRadius = 17
     $0.font = .systemFont(ofSize: 12)
-    $0.textColor = .green50
+    $0.textColor = KKDS.Color.green50
     $0.layer.borderWidth = 1
-    $0.layer.borderColor = UIColor.green40?.cgColor
+    $0.layer.borderColor = KKDS.Color.green40.cgColor
   }
 
   // MARK: - Bind
@@ -37,14 +39,14 @@ class TagCell: BaseCollectionViewCell {
   private func setLabel(isSelected: Bool) {
     switch isSelected {
     case true:
-      self.tagLabel.backgroundColor = .green50
+      self.tagLabel.backgroundColor = KKDS.Color.green50
       self.tagLabel.textColor = .white
       self.tagLabel.font = .systemFont(ofSize: 12, weight: .bold)
       self.tagLabel.sizeToFit()
 
     case false:
       self.tagLabel.backgroundColor = .white
-      self.tagLabel.textColor = .green50
+      self.tagLabel.textColor = KKDS.Color.green50
       self.tagLabel.font = .systemFont(ofSize: 12, weight: .medium)
       self.tagLabel.sizeToFit()
     }

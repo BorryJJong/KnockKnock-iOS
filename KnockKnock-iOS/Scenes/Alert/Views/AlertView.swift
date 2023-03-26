@@ -8,6 +8,7 @@
 import UIKit
 
 import SnapKit
+import KKDSKit
 import Then
 
 final class AlertView: UIView {
@@ -36,7 +37,7 @@ final class AlertView: UIView {
   // MARK: - UIs
 
   private let alertView = UIView().then {
-    $0.backgroundColor = .gray10
+    $0.backgroundColor = KKDS.Color.gray10
     $0.clipsToBounds = true
     $0.layer.cornerRadius = 10
   }
@@ -48,14 +49,14 @@ final class AlertView: UIView {
 
   let cancelButton = UIButton().then {
     $0.setTitle("취소", for: .normal)
-    $0.setTitleColor(.gray60, for: .normal)
+    $0.setTitleColor(KKDS.Color.gray60, for: .normal)
     $0.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
     $0.tag = 0
   }
 
   let confirmButton = UIButton().then {
     $0.setTitle("확인", for: .normal)
-    $0.setTitleColor(.green40, for: .normal)
+    $0.setTitleColor(KKDS.Color.green40, for: .normal)
     $0.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
     $0.tag = 1
   }
@@ -82,7 +83,10 @@ final class AlertView: UIView {
     attrString.addAttribute(
       NSAttributedString.Key.paragraphStyle,
       value: paragraphStyle,
-      range: NSMakeRange(0, attrString.length)
+      range: NSMakeRange(
+        0,
+        attrString.length
+      )
     )
 
     self.contentLabel.attributedText = attrString

@@ -24,7 +24,7 @@ final class PopularPostCell: BaseCollectionViewCell {
   // MARK: - UIs
 
   private let thumbnailImageView = UIImageView().then {
-    $0.backgroundColor = .gray40
+    $0.backgroundColor = KKDS.Color.gray40
     $0.layer.cornerRadius = 5
     $0.clipsToBounds = true
     $0.contentMode = .scaleAspectFill

@@ -61,11 +61,11 @@ final class PostCommentCell: BaseCollectionViewCell {
 
   private let writtenDateLabel = UILabel().then {
     $0.font = .systemFont(ofSize: 12, weight: .medium)
-    $0.textColor = .gray70
+    $0.textColor = KKDS.Color.gray70
   }
 
   let replyWriteButton = UIButton().then {
-    $0.setTitleColor(.gray70, for: .normal)
+    $0.setTitleColor(KKDS.Color.gray70, for: .normal)
     $0.setImage(KKDS.Image.etc_bar_8_gr, for: .normal)
     $0.setTitle("댓글달기", for: .normal)
     $0.contentEdgeInsets.right = Metric.replyWriteButtonContentPadding
@@ -77,7 +77,7 @@ final class PostCommentCell: BaseCollectionViewCell {
 
   lazy var replyMoreButton = UIButton().then {
     $0.setImage(KKDS.Image.etc_bar_30_gr, for: .normal)
-    $0.setTitleColor(.gray70, for: .normal)
+    $0.setTitleColor(KKDS.Color.gray70, for: .normal)
     $0.contentEdgeInsets.right = Metric.replyMoreButtonContentPadding
     $0.titleEdgeInsets.left = Metric.replyMoreButtonContentPadding
     $0.titleEdgeInsets.right = -(Metric.replyMoreButtonContentPadding)
@@ -90,7 +90,7 @@ final class PostCommentCell: BaseCollectionViewCell {
     $0.contentEdgeInsets.right = Metric.commentDeleteButtonContentPadding
     $0.titleEdgeInsets.left = Metric.commentDeleteButtonContentPadding
     $0.titleEdgeInsets.right = -(Metric.commentDeleteButtonContentPadding)
-    $0.setTitleColor(.gray70, for: .normal)
+    $0.setTitleColor(KKDS.Color.gray70, for: .normal)
     $0.titleLabel?.font = .systemFont(ofSize: 12, weight: .semibold)
   }
   

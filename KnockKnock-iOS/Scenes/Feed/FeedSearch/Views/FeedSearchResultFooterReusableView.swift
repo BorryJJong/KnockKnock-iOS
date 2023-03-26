@@ -8,6 +8,7 @@
 import UIKit
 
 import Then
+import KKDSKit
 import SnapKit
 
 final class FeedSearchResultFooterReusableView: UICollectionReusableView {
@@ -23,7 +24,7 @@ final class FeedSearchResultFooterReusableView: UICollectionReusableView {
   // MARK: - UIs
 
   private let lineView = UIView().then {
-    $0.backgroundColor = .gray20
+    $0.backgroundColor = KKDS.Color.gray20
   }
 
   // MARK: - Initialize

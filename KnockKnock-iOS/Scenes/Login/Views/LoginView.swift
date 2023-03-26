@@ -38,7 +38,7 @@ final class LoginView: UIView {
     $0.text = "복잡한 절차 없이 SNS 계정으로 간편하게\n제로웨이스트를 시작하세요."
     $0.textAlignment = .center
     $0.font = .systemFont(ofSize: 13, weight: .medium)
-    $0.textColor = .gray70
+    $0.textColor = KKDS.Color.gray70
     $0.numberOfLines = 0
   }
 

@@ -49,7 +49,7 @@ final class ProfileSettingView: UIView {
   let nicknameTextField = UITextField().then {
     let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: $0.frame.height))
     $0.placeholder = "닉네임 입력"
-    $0.layer.borderColor = UIColor.gray40?.cgColor
+    $0.layer.borderColor = KKDS.Color.gray40.cgColor
     $0.layer.borderWidth = 1
     $0.layer.cornerRadius = 3
     $0.tintColor = .green50
@@ -65,7 +65,7 @@ final class ProfileSettingView: UIView {
       font: .systemFont(ofSize: 13, weight: .regular)
     )
     $0.numberOfLines = 3
-    $0.textColor = .gray50
+    $0.textColor = KKDS.Color.gray50
   }
   
   let confirmButton = UIButton().then {
@@ -73,7 +73,7 @@ final class ProfileSettingView: UIView {
     $0.titleLabel?.textColor = .white
     $0.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
     $0.layer.cornerRadius = 3
-    $0.backgroundColor = .gray40
+    $0.backgroundColor = KKDS.Color.gray40
     $0.isEnabled = false
   }
 

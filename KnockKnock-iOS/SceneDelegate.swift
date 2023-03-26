@@ -24,6 +24,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     let main = MainTabBarController()
 
+    sleep(1)
+
     self.window?.rootViewController = main
     self.window?.makeKeyAndVisible()
 

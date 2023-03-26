@@ -56,7 +56,7 @@ final class ShopSearchView: UIView {
     $0.setImage(KKDS.Image.ic_down_10_bk, for: .normal)
     $0.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
     $0.layer.borderWidth = 1
-    $0.layer.borderColor = UIColor.gray30?.cgColor
+    $0.layer.borderColor = KKDS.Color.gray30.cgColor
     $0.layer.cornerRadius = 5
     $0.contentHorizontalAlignment = .trailing
     $0.backgroundColor = .clear
@@ -73,7 +73,7 @@ final class ShopSearchView: UIView {
     $0.contentHorizontalAlignment = .trailing
     $0.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
     $0.layer.borderWidth = 1
-    $0.layer.borderColor = UIColor.gray30?.cgColor
+    $0.layer.borderColor = KKDS.Color.gray30.cgColor
     $0.layer.cornerRadius = 5
     $0.backgroundColor = KKDS.Color.gray10
     $0.isEnabled = false
@@ -113,7 +113,7 @@ final class ShopSearchView: UIView {
 
   private let statusLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.textColor = .gray60
+    $0.textColor = KKDS.Color.gray60
     $0.text = "매장주소를 검색해보세요."
   }
 

@@ -31,7 +31,7 @@ final class PopularFooterCollectionReusableView: UICollectionReusableView {
   }
 
   private let seperatorView = UIView().then {
-    $0.backgroundColor = .gray10
+    $0.backgroundColor = KKDS.Color.gray10
   }
 
   // MARK: - Initailize

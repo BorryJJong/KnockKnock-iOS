@@ -7,6 +7,8 @@
 
 import UIKit
 
+import KKDSKit
+
 final class TapCell: BaseCollectionViewCell {
 
   // MARK: - UIs
@@ -23,10 +25,10 @@ final class TapCell: BaseCollectionViewCell {
     self.tapLabel.do {
       $0.text = tapName
       if isSelected {
-        $0.textColor = .green40
+        $0.textColor = KKDS.Color.green40
         $0.font = .systemFont(ofSize: 15, weight: .bold)
       } else {
-        $0.textColor = .gray70
+        $0.textColor = KKDS.Color.gray70
         $0.font = .systemFont(ofSize: 15, weight: .light)
       }
     }

@@ -22,7 +22,7 @@ class FeedCell: BaseCollectionViewCell {
   let thumbnailImageView = UIImageView().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
     $0.contentMode = .scaleAspectFill
-    $0.backgroundColor = .gray20
+    $0.backgroundColor = KKDS.Color.gray20
     $0.clipsToBounds = true
     $0.layer.cornerRadius = 5
   }

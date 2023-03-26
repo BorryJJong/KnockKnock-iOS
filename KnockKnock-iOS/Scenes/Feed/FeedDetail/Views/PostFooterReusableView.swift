@@ -37,7 +37,7 @@ final class PostFooterReusableView: UICollectionReusableView {
 
   private let shopInfoView = UIView().then {
     $0.layer.borderWidth = 1
-    $0.layer.borderColor = UIColor.gray20?.cgColor
+    $0.layer.borderColor = KKDS.Color.gray20.cgColor
     $0.clipsToBounds = true
     $0.layer.cornerRadius = 3
   }
@@ -48,16 +48,16 @@ final class PostFooterReusableView: UICollectionReusableView {
 
   private let shopNameLabel = UILabel().then {
     $0.font = .systemFont(ofSize: 13, weight: .bold)
-    $0.textColor = .gray80
+    $0.textColor = KKDS.Color.gray80
   }
 
   private let shopAddressLabel = UILabel().then {
     $0.font = .systemFont(ofSize: 12, weight: .medium)
-    $0.textColor = .gray60
+    $0.textColor = KKDS.Color.gray60
   }
 
   private let separateLineView = UIView().then {
-    $0.backgroundColor = .gray10
+    $0.backgroundColor = KKDS.Color.gray10
   }
 
   // MARK: - Initailize

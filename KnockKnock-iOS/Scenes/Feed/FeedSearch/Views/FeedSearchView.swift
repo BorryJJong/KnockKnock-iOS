@@ -46,7 +46,7 @@ final class FeedSearchView: UIView {
   }
 
   private let separatorLineView = UIView().then {
-    $0.backgroundColor = .gray20
+    $0.backgroundColor = KKDS.Color.gray20
   }
 
   let searchResultPageCollectionView =  UICollectionView(
