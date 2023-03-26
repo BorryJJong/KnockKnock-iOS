@@ -8,6 +8,7 @@
 import UIKit
 
 import KKDSKit
+import WebKit
 
 final class PolicyViewController: BaseViewController<PolicyView> {
 
@@ -32,6 +33,8 @@ final class PolicyViewController: BaseViewController<PolicyView> {
       action: #selector(self.backButtonDidTap(_:))
     )
 
+    self.containerView.webView.navigationDelegate = self
+
     self.navigationController?.navigationBar.setDefaultAppearance()
     self.navigationItem.leftBarButtonItem = backButton
   }
@@ -42,6 +45,8 @@ final class PolicyViewController: BaseViewController<PolicyView> {
     self.interactor?.popToMyView()
   }
 }
+
+// MARK: - Policy View Protocol
 
 extension PolicyViewController: PolicyViewProtocol, AlertProtocol {
   func fetchPolicyUrl(policyType: MyMenuType) {
@@ -62,7 +67,7 @@ extension PolicyViewController: PolicyViewProtocol, AlertProtocol {
     DispatchQueue.main.async {
       self.containerView.setWebViewUrl(url: url)
       self.navigationItem.title = policyType.rawValue
-      LoadingIndicator.hideLoading()
+//      LoadingIndicator.hideLoading()
     }
   }
 
@@ -79,5 +84,26 @@ extension PolicyViewController: PolicyViewProtocol, AlertProtocol {
         confirmAction: confirmAction
       )
     }
+  }
+}
+
+// MARK: - Policy View Protocol
+
+extension PolicyViewController: WKNavigationDelegate {
+
+  func webView(
+    _ webView: WKWebView,
+    didFinish navigation: WKNavigation!
+  ) {
+    LoadingIndicator.hideLoading()
+  }
+
+  func webView(
+    _ webView: WKWebView,
+    didFail navigation: WKNavigation!,
+    withError error: Error
+  ) {
+    LoadingIndicator.hideLoading()
+    self.showAlertView(message: AlertMessage.pageLoadFailed.rawValue)
   }
 }

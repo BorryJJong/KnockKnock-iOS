@@ -29,7 +29,7 @@ final class PolicyView: UIView {
 
   // MARK: - UIs
 
-  private let webView = WKWebView()
+  let webView = WKWebView()
 
   // MARK: - Initialize
 
