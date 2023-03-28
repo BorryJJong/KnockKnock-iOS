@@ -190,11 +190,12 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
       
     case .register:
 
+      let image = self.selectedImage ?? KKDS.Image.ic_person_24
+
       self.interactor?.requestSignUp(
         nickname: nickname,
-        image: self.selectedImage?.pngData()
+        image: image.resizeSquareImage(newWidth: 86).pngData()
       )
-
     }
   }
 }
