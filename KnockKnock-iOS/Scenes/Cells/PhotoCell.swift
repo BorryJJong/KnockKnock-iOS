@@ -8,6 +8,7 @@
 import UIKit
 
 import Then
+import KKDSKit
 
 final class PhotoCell: BaseCollectionViewCell {
 
@@ -34,7 +35,7 @@ final class PhotoCell: BaseCollectionViewCell {
   
   let deleteButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.setImage(#imageLiteral(resourceName: "ic_input_cancel"), for: .normal)
+    $0.setImage(KKDS.Image.ic_img_close_20_gr, for: .normal)
   }
 
   // MARK: - Bind

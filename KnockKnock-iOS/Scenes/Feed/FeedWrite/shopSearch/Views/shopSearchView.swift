@@ -89,7 +89,7 @@ final class ShopSearchView: UIView {
 
   lazy var addressSearchButton = UIButton().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.setImage(#imageLiteral(resourceName: "ic_search"), for: .normal)
+    $0.setImage(KKDS.Image.ic_search_24_gr, for: .normal)
   }
 
   private let seperatorLineView = UIView().then {
