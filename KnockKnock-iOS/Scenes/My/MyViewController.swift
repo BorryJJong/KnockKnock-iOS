@@ -339,8 +339,7 @@ extension MyViewController: UITableViewDelegate {
         )
       }
 
-    case .serviceTerms,
-         .privacy,
+    case .privacy,
          .opensource:
       self.interactor?.navigateToPolicyView(policyType: menu) 
 

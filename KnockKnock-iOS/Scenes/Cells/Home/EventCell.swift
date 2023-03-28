@@ -60,7 +60,7 @@ final class EventCell: BaseCollectionViewCell {
   }
 
   private let newEventLabel = UILabel().then {
-    $0.backgroundColor = .green50
+    $0.backgroundColor = KKDS.Color.green50
     $0.textAlignment = .center
     $0.layer.cornerRadius = 3
     $0.clipsToBounds = true

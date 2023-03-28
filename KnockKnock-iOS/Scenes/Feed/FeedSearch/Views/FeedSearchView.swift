@@ -42,7 +42,7 @@ final class FeedSearchView: UIView {
   }
 
   let underLineView = UIView().then {
-    $0.backgroundColor = .green40
+    $0.backgroundColor = KKDS.Color.green40
   }
 
   private let separatorLineView = UIView().then {

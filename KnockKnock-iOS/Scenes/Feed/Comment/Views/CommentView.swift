@@ -97,7 +97,7 @@ class CommentView: UIView {
 
   let placeholderLabel = UILabel().then {
     $0.text = Placeholder.noText
-    $0.textColor = .gray50
+    $0.textColor = KKDS.Color.gray50
     $0.font = .systemFont(ofSize: 15, weight: .regular)
   }
 

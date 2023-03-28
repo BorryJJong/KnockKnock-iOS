@@ -43,7 +43,6 @@ final class MyWorker: MyWorkerProtocol {
 
     let version = MyItem(title: .versionInfo, type: .version)
 
-    let service = MyItem(title: .serviceTerms, type: .plain)
     let privacy = MyItem(title: .privacy, type: .plain)
     let openSource = MyItem(title: .opensource, type: .plain)
 
@@ -57,7 +56,7 @@ final class MyWorker: MyWorkerProtocol {
     )
     let policySection = MySection(
       title: .policy,
-      myItems: [service, privacy, openSource]
+      myItems: [privacy, openSource]
     )
 
     return [myInfoSection, customerSection, policySection]
