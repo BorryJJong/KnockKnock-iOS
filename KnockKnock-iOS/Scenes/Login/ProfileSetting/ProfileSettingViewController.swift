@@ -149,7 +149,7 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
     guard let text = textField.text else { return }
     
     if text.count >= Nickname.minLength && text.count < Nickname.maxLength {
-      textField.layer.borderColor = UIColor.green50?.cgColor
+      textField.layer.borderColor = KKDS.Color.green50.cgColor
       self.containerView.confirmButton.backgroundColor = KKDS.Color.green50
       self.containerView.confirmButton.isEnabled = true
     } else {
