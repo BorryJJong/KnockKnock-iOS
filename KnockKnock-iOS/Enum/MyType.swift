@@ -30,15 +30,11 @@ enum MyMenuType: String {
 
   case versionInfo = "버전정보"
 
-  case serviceTerms = "서비스 이용약관"
   case privacy = "개인정보 처리방침"
   case opensource = "오픈소스 라이선스"
 
   var url: String? {
     switch self {
-
-    case .serviceTerms:
-     return "https://glib-brow-cf2.notion.site/KonckKonck-4b9c45bfcdbb41cdbb2a1e1d0075a343"
 
     case .privacy:
       return "https://glib-brow-cf2.notion.site/KnockKnock-09c388824e12462d8d7a56d09042558c"
