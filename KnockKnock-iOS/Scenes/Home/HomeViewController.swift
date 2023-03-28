@@ -222,13 +222,12 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     didSelectItemAt indexPath: IndexPath
   ) {
     let section = HomeSection(rawValue: indexPath.section)
-    let barBannerTarget = self.barBannerList[indexPath.item].targetScreen
-    let challengeId = self.challengeList[indexPath.item].id
-    let feedId = self.hotPostList[indexPath.item].postId
 
     switch section {
 
     case .banner:
+
+      let barBannerTarget = self.barBannerList[indexPath.item].targetScreen
 
       switch barBannerTarget {
 
@@ -246,13 +245,18 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
 
     case .tag:
 
+      let challengeId = self.challengeList[indexPath.item].id
+
       self.interactor?.setSelectedStatus(
         challengeList: self.challengeList,
         selectedIndex: indexPath
       )
+
       self.interactor?.fetchHotpost(challengeId: challengeId)
 
     case .popularPost:
+      
+      let feedId = self.hotPostList[indexPath.item].postId
 
       self.interactor?.navigateToFeedDetail(feedId: feedId)
 

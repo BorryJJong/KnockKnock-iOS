@@ -156,6 +156,7 @@ final class FeedDetailView: UIView {
       self.placeholderLabel.text = Placeholder.noLoggedIn
       return
     }
+    self.placeholderLabel.text = Placeholder.noText
   }
 
   func setLikeButton(isHidden: Bool) {

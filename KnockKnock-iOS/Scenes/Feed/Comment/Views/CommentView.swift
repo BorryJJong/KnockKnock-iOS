@@ -126,6 +126,7 @@ class CommentView: UIView {
       self.placeholderLabel.text = Placeholder.noLoggedIn
       return
     }
+    self.placeholderLabel.text = Placeholder.noText
   }
 
   // MARK: - Constraints
