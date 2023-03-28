@@ -73,7 +73,7 @@ final class ShopSearchViewController: BaseViewController<ShopSearchView> {
     target: self,
     action: #selector(doneButtonDidTap(_:))
   ).then {
-    $0.tintColor = .green50
+    $0.tintColor = KKDS.Color.green50
   }
 
   // MARK: - Life cycle

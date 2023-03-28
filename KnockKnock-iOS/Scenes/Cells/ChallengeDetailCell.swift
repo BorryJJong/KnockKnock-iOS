@@ -36,7 +36,7 @@ final class ChallengeDetailCell: BaseCollectionViewCell {
 
   private let titleLabel = UILabel().then {
     $0.translatesAutoresizingMaskIntoConstraints = false
-    $0.textColor = .green50
+    $0.textColor = KKDS.Color.green50
     $0.font = .systemFont(ofSize: 17, weight: .bold)
     $0.textAlignment = .natural
     $0.numberOfLines = 0

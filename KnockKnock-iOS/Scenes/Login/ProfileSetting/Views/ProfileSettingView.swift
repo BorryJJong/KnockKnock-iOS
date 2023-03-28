@@ -52,7 +52,7 @@ final class ProfileSettingView: UIView {
     $0.layer.borderColor = KKDS.Color.gray40.cgColor
     $0.layer.borderWidth = 1
     $0.layer.cornerRadius = 3
-    $0.tintColor = .green50
+    $0.tintColor = KKDS.Color.green50
     $0.clearButtonMode = .whileEditing
     $0.leftView = paddingView
     $0.leftViewMode = .always
@@ -106,7 +106,7 @@ final class ProfileSettingView: UIView {
 
   func enableConfirmButton(isEnable: Bool) {
     self.confirmButton.isEnabled = isEnable
-    self.confirmButton.backgroundColor = .green50
+    self.confirmButton.backgroundColor = KKDS.Color.green50
   }
 
   // MARK: - Configure

@@ -30,7 +30,7 @@ final class BottomMenuCell: BaseTableViewCell<Void> {
 
   override func setSelected(_ selected: Bool, animated: Bool) {
     if selected {
-      self.contentsLabel.textColor = .green40
+      self.contentsLabel.textColor = KKDS.Color.green40
       self.contentsLabel.font = .systemFont(ofSize: 15, weight: .bold)
       self.checkImageView.isHidden = false
     } else {
