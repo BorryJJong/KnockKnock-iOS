@@ -149,7 +149,7 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
     guard let text = textField.text else { return }
     
     if text.count >= Nickname.minLength && text.count < Nickname.maxLength {
-      textField.layer.borderColor = UIColor.green50?.cgColor
+      textField.layer.borderColor = KKDS.Color.green50.cgColor
       self.containerView.confirmButton.backgroundColor = KKDS.Color.green50
       self.containerView.confirmButton.isEnabled = true
     } else {
@@ -190,11 +190,12 @@ final class ProfileSettingViewController: BaseViewController<ProfileSettingView>
       
     case .register:
 
+      let image = self.selectedImage ?? KKDS.Image.ic_person_24
+
       self.interactor?.requestSignUp(
         nickname: nickname,
-        image: self.selectedImage?.pngData()
+        image: image.resizeSquareImage(newWidth: 86).pngData()
       )
-
     }
   }
 }
