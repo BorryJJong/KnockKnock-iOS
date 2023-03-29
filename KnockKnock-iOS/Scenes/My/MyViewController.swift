@@ -12,6 +12,7 @@ protocol MyViewProtocol: AnyObject {
 
   func fetchMenuData(menuData: MyMenu)
   func checkLoginStatus(isSignedIn: Bool)
+  func fetchVersionInfo(version: String)
   func fetchNickname(nickname: String)
   func setPushSetting()
   func showAlertView(
@@ -27,7 +28,6 @@ final class MyViewController: BaseViewController<MyView> {
 
   private enum MY {
     static let MyCellID = "MyTableCellID"
-    static let APP_VERSION = "V 0.0.1"
   }
 
   // MARK: - Properties
@@ -39,6 +39,7 @@ final class MyViewController: BaseViewController<MyView> {
   private var isSignedIn: Bool = false
   private var nickname: String = ""
   private var menuData: MyMenu = []
+  private var version: String = ""
   
   // MARK: - Life Cycles
   
@@ -62,6 +63,7 @@ final class MyViewController: BaseViewController<MyView> {
     self.containerView.setNickname(nickname: self.nickname)
 
     self.interactor?.fetchMenuData()
+    self.interactor?.fetchVersionInfo()
 
     self.containerView.myTableView.do {
       $0.dataSource = self
@@ -152,6 +154,14 @@ extension MyViewController: MyViewProtocol, AlertProtocol {
     }
   }
 
+  func fetchVersionInfo(version: String) {
+    self.version = version
+
+    DispatchQueue.main.async {
+      self.containerView.myTableView.reloadData()
+    }
+  }
+
   func fetchNickname(nickname: String) {
     self.nickname = nickname
 
@@ -238,10 +248,12 @@ extension MyViewController: UITableViewDataSource {
           for: .touchUpInside
         )
       }
+
     case .plain:
       cell.accessoryType = .disclosureIndicator
+
     case .version:
-      cell.detailTextLabel?.text = MY.APP_VERSION
+      cell.detailTextLabel?.text = self.version
       cell.accessoryType = .disclosureIndicator
     }
 
@@ -330,14 +342,7 @@ extension MyViewController: UITableViewDelegate {
       }
 
     case .versionInfo:
-      DispatchQueue.main.async {
-        self.showAlert(
-          message: AlertMessage.versionInfo.rawValue,
-          confirmAction: {
-            self.dismiss(animated: false)
-          }
-        )
-      }
+      self.interactor?.checkVersion()
 
     case .privacy,
          .opensource:
