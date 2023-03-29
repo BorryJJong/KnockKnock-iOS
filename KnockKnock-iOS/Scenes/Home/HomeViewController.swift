@@ -225,6 +225,9 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
 
     switch section {
 
+    case .store:
+      self.interactor?.navigateToStoreListView()
+
     case .banner:
 
       let barBannerTarget = self.barBannerList[indexPath.item].targetScreen
@@ -259,6 +262,9 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
       let feedId = self.hotPostList[indexPath.item].postId
 
       self.interactor?.navigateToFeedDetail(feedId: feedId)
+
+    case .event:
+      self.interactor?.navigateToEventPageView()
 
     default:
       break
