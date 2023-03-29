@@ -17,7 +17,10 @@ enum AlertMessage: String {
   case withdrawConfirm = "계정을 삭제하면 게시글, 좋아요, 댓글 등 모든 활동 정보가 삭제됩니다. 그래도 탈퇴 하시겠습니까?"
   case withdrawDone = "성공적으로 탈퇴 처리 되었습니다."
 
-  case versionInfo = "현재 최신버전을 사용중입니다."
+  case versionNewest = "현재 최신버전을 사용중입니다."
+  case versionOld = "업데이트가 필요합니다."
+  case versionUnknown = "버전 정보를 불러올 수 없습니다."
+  
   case profileSetting = "프로필 등록을 완료하였습니다."
 
   case addressSearchFailed = "검색에 실패하였습니다. 잠시 후에 다시 시도해 주세요."

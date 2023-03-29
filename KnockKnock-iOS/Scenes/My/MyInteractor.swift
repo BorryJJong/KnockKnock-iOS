@@ -13,7 +13,9 @@ protocol MyInteractorProtocol {
   var presenter: MyPresenter? { get set }
 
   func fetchMenuData()
-  func fetchNickname() 
+  func fetchNickname()
+  func fetchVersionInfo()
+  func checkVersion()
   func requestSignOut()
   func requestWithdraw()
 
@@ -36,6 +38,8 @@ final class MyInteractor: MyInteractorProtocol {
       self.presenter?.presentLoginStatus(isSignedIn: self.isSignedIn)
     }
   }
+
+  private let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
 
   // MARK: - Initailize
 
@@ -64,6 +68,21 @@ final class MyInteractor: MyInteractorProtocol {
         self.presenter?.presentNickname(nickname: nickname)
       }
     )
+  }
+
+  func fetchVersionInfo() {
+    guard let version = version else { return }
+
+    self.presenter?.presentVersionInfo(version: version)
+  }
+
+  func checkVersion() {
+    guard version != nil else {
+      self.presentAlert(message: AlertMessage.versionUnknown.rawValue)
+      return
+    }
+
+    self.presentAlert(message: AlertMessage.versionNewest.rawValue)
   }
 
   func requestSignOut() {

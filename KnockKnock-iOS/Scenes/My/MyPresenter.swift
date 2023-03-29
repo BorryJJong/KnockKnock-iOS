@@ -12,6 +12,7 @@ protocol MyPresenterProtocol {
 
   func presentMenuData(myMenu: MyMenu)
   func presentLoginStatus(isSignedIn: Bool)
+  func presentVersionInfo(version: String)
   func presentPushSetting()
   func presentAlert(
     message: String,
@@ -30,6 +31,10 @@ final class MyPresenter: MyPresenterProtocol {
 
   func presentLoginStatus(isSignedIn: Bool) {
     self.view?.checkLoginStatus(isSignedIn: isSignedIn)
+  }
+
+  func presentVersionInfo(version: String) {
+    self.view?.fetchVersionInfo(version: version)
   }
 
   func presentNickname(nickname: String) {
