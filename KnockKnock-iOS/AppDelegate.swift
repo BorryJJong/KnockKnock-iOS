@@ -34,6 +34,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     Messaging.messaging().apnsToken = deviceToken
   }
 
+  func application(
+    _ application: UIApplication,
+    supportedInterfaceOrientationsFor window: UIWindow?
+  ) -> UIInterfaceOrientationMask {
+    return UIInterfaceOrientationMask.portrait
+  }
+
   // MARK: - UISceneSession Lifecycle
 
   func application(
