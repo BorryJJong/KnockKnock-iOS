@@ -224,6 +224,17 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
       case .postShare:
         self.interactor?.sharePost()
 
+      case .userBlock:
+        DispatchQueue.main.async {
+          self.showAlert(
+            message: AlertMessage.feedDeleteConfirm.rawValue,
+            isCancelActive: true,
+            confirmAction: {
+              self.interactor?.dismissView(action: option.getAction())
+            }
+          )
+        }
+
       case .challengeNew:
         self.interactor?.passChallengeSortType(sortType: .new)
 

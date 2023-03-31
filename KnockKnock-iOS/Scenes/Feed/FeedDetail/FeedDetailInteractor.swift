@@ -32,6 +32,7 @@ protocol FeedDetailInteractorProtocol {
   func navigateToFeedList()
   func checkLoginStatus()
   func presentBottomSheetView(
+    bottomSheetSize: BottomSheetSize,
     options: [BottomSheetOption],
     feedData: FeedDetail
   )
@@ -380,6 +381,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   }
 
   func presentBottomSheetView(
+    bottomSheetSize: BottomSheetSize,
     options: [BottomSheetOption],
     feedData: FeedDetail
   ) {
@@ -390,6 +392,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
 
         await MainActor.run {
           self.router?.presentBottomSheetView(
+            bottomSheetSize: bottomSheetSize,
             options: options,
             feedData: feedData.toShare()
           )

@@ -152,6 +152,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     let hideAcion: (() -> Void)?  = { self.interactor?.requestHide(feedId: feedId) }
     let editAction: (() -> Void)?  = { self.interactor?.navigateToFeedEdit(feedId: feedId) }
     let reportAction: (() -> Void)?  = { self.interactor?.presentReportView(feedId: feedId) }
+    let blockAction: (() -> Void)? = { }
 
     var options: [BottomSheetOption] = []
 
@@ -163,12 +164,14 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       ]
     } else {
       options = [
+        .postShare,
         .postHide(hideAcion),
         .postReport(reportAction),
-        .postShare
+        .userBlock(blockAction)
       ]
     }
     self.interactor?.presentBottomSheetView(
+      bottomSheetSize: feedDetail.feed.isWriter ? .three : .four,
       options: options,
       feedData: feedDetail
     )

@@ -120,6 +120,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     let hideAcion: (() -> Void)?  = { self.interactor?.requestHide(feedId: feedId) }
     let editAction: (() -> Void)?  = { self.interactor?.navigateToFeedEdit(feedId: feedId) }
     let reportAction: (() -> Void)?  = { self.interactor?.presentReportView(feedId: feedId) }
+    let blockAction: (() -> Void)? = { }
 
     var options: [BottomSheetOption] = []
 
@@ -131,13 +132,15 @@ final class FeedListViewController: BaseViewController<FeedListView> {
       ]
     } else {
       options = [
+        .postShare,
         .postHide(hideAcion),
         .postReport(reportAction),
-        .postShare
+        .userBlock(blockAction)
       ]
     }
 
     self.interactor?.presentBottomSheetView(
+      bottomSheetSize: isMyPost ? .three : .four,
       options: options,
       feedData: self.feedListPost[sender.tag]
     )

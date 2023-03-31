@@ -12,13 +12,19 @@ protocol FeedListInteractorProtocol {
   var worker: FeedListWorkerProtocol? { get set }
   var router: FeedListRouterProtocol? { get set }
   
-  func fetchFeedList(currentPage: Int, pageSize: Int, feedId: Int, challengeId: Int)
+  func fetchFeedList(
+    currentPage: Int,
+    pageSize: Int,
+    feedId: Int,
+    challengeId: Int
+  )
   func requestDelete(feedId: Int)
   func requestHide(feedId: Int)
   func requestLike(feedId: Int)
   func requestReport(feedId: Int)
 
   func presentBottomSheetView(
+    bottomSheetSize: BottomSheetSize,
     options: [BottomSheetOption],
     feedData: FeedList.Post
   )
@@ -284,6 +290,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   }
   
   func presentBottomSheetView(
+    bottomSheetSize: BottomSheetSize,
     options: [BottomSheetOption],
     feedData: FeedList.Post
   ) {
@@ -293,6 +300,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
 
         await MainActor.run {
           self.router?.presentBottomSheetView(
+            bottomSheetSize: bottomSheetSize,
             options: options,
             feedData: feedData.toShare()
           )
