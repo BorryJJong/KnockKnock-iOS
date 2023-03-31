@@ -75,7 +75,7 @@ final class ShopSearchRouter: ShopSearchRouterProtocol {
       districtSelectDelegate: self.districtSelectDelegate,
       districtsType: districtsType,
       districtsContent: content,
-      bottomSheetSize: .large
+      bottomSheetSize: .max
     ) as? BottomSheetViewController else { return }
     
     bottomSheetViewController.modalPresentationStyle = .overFullScreen

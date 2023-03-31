@@ -50,7 +50,7 @@ final class ChallengeRouter: ChallengeRouterProtocol {
         .challengeNew,
         .challengePopular
       ],
-      bottomSheetSize: .small
+      bottomSheetSize: .two
     )
 
     bottomSheetViewController.modalPresentationStyle = .overFullScreen
