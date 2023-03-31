@@ -7,40 +7,6 @@
 
 import Foundation
 
-protocol FeedListInteractorProtocol {
-  var presenter: FeedListPresenterProtocol? { get set }
-  var worker: FeedListWorkerProtocol? { get set }
-  var router: FeedListRouterProtocol? { get set }
-  
-  func fetchFeedList(
-    currentPage: Int,
-    pageSize: Int,
-    feedId: Int,
-    challengeId: Int
-  )
-  func requestDelete(feedId: Int)
-  func requestHide(feedId: Int)
-  func requestLike(feedId: Int)
-  func requestReport(feedId: Int)
-
-  func presentBottomSheetView(
-    bottomSheetSize: BottomSheetSize,
-    options: [BottomSheetOption],
-    feedData: FeedList.Post
-  )
-  func presentReportView(feedId: Int)
-  func navigateToFeedEdit(feedId: Int)
-  func navigateToFeedMain()
-  func navigateToFeedDetail(feedId: Int)
-  func navigateToCommentView(feedId: Int)
-}
-
-extension FeedListInteractor: ReportDelegate {
-  func setReportType(reportType: ReportType) {
-    self.reportType = reportType
-  }
-}
-
 final class FeedListInteractor: FeedListInteractorProtocol {
 
   // MARK: - Properties
@@ -312,6 +278,14 @@ final class FeedListInteractor: FeedListInteractorProtocol {
         }
       }
     }
+  }
+}
+
+// MARK: - Report Delegate
+
+extension FeedListInteractor: ReportDelegate {
+  func setReportType(reportType: ReportType) {
+    self.reportType = reportType
   }
 }
 

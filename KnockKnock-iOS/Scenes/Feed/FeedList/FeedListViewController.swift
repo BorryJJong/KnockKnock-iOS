@@ -10,23 +10,6 @@ import UIKit
 import Then
 import KKDSKit
 
-protocol FeedListViewProtocol: AnyObject {
-  var interactor: FeedListInteractorProtocol? { get set }
-  
-  func fetchFeedList(feedList: FeedList)
-  func updateFeedList(
-    feedList: FeedList,
-    sections: [IndexPath]
-  )
-  func reloadFeedList()
-  
-  func showAlertView(
-    message: String,
-    isCancelActive: Bool?,
-    confirmAction: (() -> Void)?
-  )
-}
-
 final class FeedListViewController: BaseViewController<FeedListView> {
   
   // MARK: - Properties

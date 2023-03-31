@@ -7,26 +7,6 @@
 
 import UIKit
 
-protocol FeedListRouterProtocol {
-  var view: FeedListViewProtocol? { get set }
-  static func createFeedList(feedId: Int, challengeId: Int) -> UIViewController
-  
-  func presentBottomSheetView(
-    bottomSheetSize: BottomSheetSize,
-    options: [BottomSheetOption],
-    feedData: FeedShare?
-  )
-  func presentReportView(
-    action: (() -> Void)?,
-    reportDelegate: ReportDelegate
-  )
-  func navigateToFeedEdit(feedId: Int)
-  func navigateToFeedMain()
-  func navigateToFeedDetail(feedId: Int)
-  func navigateToCommentView(feedId: Int)
-  func navigateToLoginView()
-}
-
 final class FeedListRouter: FeedListRouterProtocol {
   weak var view: FeedListViewProtocol?
   

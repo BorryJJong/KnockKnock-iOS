@@ -7,20 +7,6 @@
 
 import Foundation
 
-protocol FeedListPresenterProtocol {
-  var view: FeedListViewController? { get set }
-
-  func presentFetchFeedList(feedList: FeedList)
-  func presentUpdateFeedList(feedList: FeedList, sections: [IndexPath])
-  func reloadFeedList()
-
-  func presentAlert(
-    message: String,
-    isCancelActive: Bool?,
-    confirmAction: (() -> Void)?
-  )
-}
-
 final class FeedListPresenter: FeedListPresenterProtocol {
   var view: FeedListViewController?
 

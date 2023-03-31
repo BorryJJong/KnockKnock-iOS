@@ -7,68 +7,6 @@
 
 import Foundation
 
-protocol FeedListWorkerProtocol {
-  func fetchFeedList(
-    currentPage: Int,
-    count: Int,
-    feedId: Int,
-    challengeId: Int,
-    completionHandler: @escaping (ApiResponse<FeedList>?) -> Void
-  )
-  func requestDeleteFeed(
-    feedId: Int,
-    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
-  )
-  func requestLike(
-    isLike: Bool,
-    feedId: Int,
-    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
-  )
-  func requestHidePost(
-    feedId: Int,
-    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
-  )
-  func requestReportFeed(
-    feedId: Int,
-    reportType: ReportType,
-    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
-  )
-  func removePostInFeedList(
-    feeds: FeedList,
-    id: Int
-  ) -> FeedList
-  
-  func updatePostInFeedList(
-    feeds: FeedList,
-    feedId: Int,
-    contents: String
-  ) -> FeedList
-  
-  func checkTokenIsValidated() async -> Bool
-  
-  func checkCurrentLikeState(
-    feedList: [FeedList.Post],
-    feedId: Int
-  ) -> Bool
-  
-  func changedSections(
-    feeds: [FeedList.Post],
-    id: Int
-  ) -> [Int]
-  
-  func convertLikeFeed(
-    feeds: FeedList,
-    id: Int
-  ) -> FeedList
-
-  func convertComment(
-    feeds: FeedList,
-    id: Int,
-    replyCount: Int?,
-    isAdded: Bool
-  ) -> FeedList
-}
-
 final class FeedListWorker: FeedListWorkerProtocol {
   typealias OnCompletionHandler = (ApiResponse<Bool>?) -> Void
   
