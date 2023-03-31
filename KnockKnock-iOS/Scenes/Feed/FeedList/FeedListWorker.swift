@@ -62,6 +62,10 @@ final class FeedListWorker: FeedListWorkerProtocol {
     )
   }
 
+  func requestBlockUser(userId: Int) async -> ApiResponse<Bool>? {
+    return ApiResponse(code: 200, message: "", data: true)
+  }
+
   /// 이미 조회 된 피드 리스트 내에서 게시글 삭제하기
   ///
   /// - Parameters:

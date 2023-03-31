@@ -128,9 +128,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       guard let isLike = self.worker?.checkCurrentLikeState(
         feedList: feedList,
         feedId: feedId
-      ) else {
-        return
-      }
+      ) else { return }
 
       self.worker?.requestLike(
         isLike: isLike,
@@ -191,9 +189,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   }
 
   /// 피드 신고하기
-  func requestReport(
-    feedId: Int
-  ) {
+  func requestReport(feedId: Int) {
 
     guard let feedList = self.feedListData else { return }
     guard !feedList.feeds.isEmpty else { return }
@@ -226,6 +222,28 @@ final class FeedListInteractor: FeedListInteractorProtocol {
         }
       }
     )
+  }
+
+  func requestBlockUser(userId: Int) {
+
+    Task {
+
+      let response = await self.worker?.requestBlockUser(userId: userId)
+
+      await MainActor.run {
+        self.showErrorAlert(response: response)
+      }
+
+      guard let isSuccess = response?.data else { return }
+
+      if isSuccess {
+        self.presentAlert(message: AlertMessage.userBlockDone.rawValue)
+
+      } else {
+        self.presentAlert(message: AlertMessage.userBlockFailed.rawValue)
+
+      }
+    }
   }
   
   // Routing

@@ -98,12 +98,13 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     
     let isMyPost = self.feedListPost[sender.tag].isWriter
     let feedId = self.feedListPost[sender.tag].id
+    let userId = 10 // change needed
 
     let deleteAction: (() -> Void)? = { self.interactor?.requestDelete(feedId: feedId) }
     let hideAcion: (() -> Void)?  = { self.interactor?.requestHide(feedId: feedId) }
     let editAction: (() -> Void)?  = { self.interactor?.navigateToFeedEdit(feedId: feedId) }
     let reportAction: (() -> Void)?  = { self.interactor?.presentReportView(feedId: feedId) }
-    let blockAction: (() -> Void)? = { }
+    let blockAction: (() -> Void)? = { self.interactor?.requestBlockUser(userId: userId) }
 
     var options: [BottomSheetOption] = []
 

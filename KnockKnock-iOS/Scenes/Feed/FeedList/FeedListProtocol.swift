@@ -40,6 +40,7 @@ protocol FeedListInteractorProtocol {
   func requestHide(feedId: Int)
   func requestLike(feedId: Int)
   func requestReport(feedId: Int)
+  func requestBlockUser(userId: Int)
 
   func presentBottomSheetView(
     bottomSheetSize: BottomSheetSize,
@@ -93,6 +94,8 @@ protocol FeedListWorkerProtocol {
     reportType: ReportType,
     completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
+
+  func requestBlockUser(userId: Int) async -> ApiResponse<Bool>?
 
   func removePostInFeedList(
     feeds: FeedList,
