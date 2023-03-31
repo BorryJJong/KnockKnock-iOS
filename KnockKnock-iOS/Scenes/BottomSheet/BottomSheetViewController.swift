@@ -227,7 +227,7 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
       case .userBlock:
         DispatchQueue.main.async {
           self.showAlert(
-            message: AlertMessage.feedDeleteConfirm.rawValue,
+            message: AlertMessage.userBlockConfirm.rawValue,
             isCancelActive: true,
             confirmAction: {
               self.interactor?.dismissView(action: option.getAction())

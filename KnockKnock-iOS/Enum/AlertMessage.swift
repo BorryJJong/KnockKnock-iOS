@@ -43,6 +43,10 @@ enum AlertMessage: String {
   case feedReportDone = "게시글이 신고 되었습니다."
   case feedReportFailed = "게시글 신고에 실패하였습니다."
 
+  case userBlockConfirm = "이 사용자를 차단하시겠습니까? 앞으로 해당 사용자의 활동 내역이 나타나지 않습니다."
+  case userBlockDone = "성공적으로 차단이 완료되었습니다."
+  case userBlockFailed = "차단에 실패하였습니다."
+
   case commentDeleteConfirm = "댓글을 삭제하시겠습니까?"
   case commentDeleteFailed = "댓글 삭제에 실패하였습니다."
   case commentFailed = "댓글 등록에 실패하였습니다."
