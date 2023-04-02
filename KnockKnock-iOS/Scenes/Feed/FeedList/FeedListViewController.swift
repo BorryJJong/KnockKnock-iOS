@@ -310,10 +310,10 @@ extension FeedListViewController: FeedListViewProtocol, AlertProtocol {
     }
   }
 
-  /// 로그인/로그아웃 시 피드 데이터 re-fatch & reload
+  /// 로그인/로그아웃, 유저 차단 시 피드 데이터 re-fatch & reload
   func reloadFeedList() {
     self.interactor?.fetchFeedList(
-      currentPage: self.currentPage,
+      currentPage: 1,
       pageSize: self.pageSize,
       feedId: self.feedId,
       challengeId: self.challengeId

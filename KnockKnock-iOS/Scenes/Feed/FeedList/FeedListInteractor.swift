@@ -14,7 +14,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   var presenter: FeedListPresenterProtocol?
   var worker: FeedListWorkerProtocol?
   var router: FeedListRouterProtocol?
-  
+
   private var feedListData: FeedList?
 
   var reportType: ReportType?
@@ -41,7 +41,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     challengeId: Int
   ) {
     LoadingIndicator.showLoading()
-    
+
     self.worker?.fetchFeedList(
       currentPage: currentPage,
       count: pageSize,
@@ -224,6 +224,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     )
   }
 
+  /// 유저 차단하기
   func requestBlockUser(userId: Int) {
 
     Task {
@@ -237,7 +238,12 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       guard let isSuccess = response?.data else { return }
 
       if isSuccess {
-        self.presentAlert(message: AlertMessage.userBlockDone.rawValue)
+        self.presentAlert(
+          message: AlertMessage.userBlockDone.rawValue,
+          confirmAction: {
+            self.presenter?.reloadFeedList()
+          }
+        )
 
       } else {
         self.presentAlert(message: AlertMessage.userBlockFailed.rawValue)

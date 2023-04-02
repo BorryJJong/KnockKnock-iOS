@@ -62,6 +62,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
     )
   }
 
+  /// 유저 차단 api call
   func requestBlockUser(userId: Int) async -> ApiResponse<Bool>? {
     return ApiResponse(code: 200, message: "", data: true)
   }
