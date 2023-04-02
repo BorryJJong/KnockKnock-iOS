@@ -12,7 +12,7 @@
 녹녹에서 여러가지 제로웨이스트에 대한 정보를 얻어 지구를 위한 작은 실천에 도전해 보세요!
 
 ## 구성도
-![녹녹 구조도](https://user-images.githubusercontent.com/40792935/229351074-9f05b274-a286-4b85-ba81-a11ca7dc25f1.png)
+![구조도](https://user-images.githubusercontent.com/40792935/229351239-f85ead39-983b-400e-bc24-77e511f83be7.png)
 
 ## 구조
 - Clean Swift(VIP)
