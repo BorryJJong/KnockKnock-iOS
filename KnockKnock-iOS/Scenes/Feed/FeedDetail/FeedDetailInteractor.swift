@@ -7,38 +7,6 @@
 
 import Foundation
 
-protocol FeedDetailInteractorProtocol {
-  var worker: FeedDetailWorkerProtocol? { get set }
-  var presenter: FeedDetailPresenterProtocol? { get set }
-  var router: FeedDetailRouterProtocol? { get set }
-  
-  func getFeedDeatil(feedId: Int)
-  func requestDelete(feedId: Int)
-  func requestHide(feedId: Int)
-  func requestReport(feedId: Int)
-  
-  func fetchAllComments(feedId: Int)
-  
-  func fetchVisibleComments(comments: [Comment])
-  func requestAddComment(comment: AddCommentDTO)
-  func toggleVisibleStatus(commentId: Int)
-  func requestDeleteComment(feedId: Int, commentId: Int)
-  
-  func requestLike(feedId: Int)
-  func fetchLikeList(feedId: Int)
-  
-  func presentReportView(feedId: Int)
-  func navigateToLikeDetail()
-  func navigateToFeedList()
-  func checkLoginStatus()
-  func presentBottomSheetView(
-    bottomSheetSize: BottomSheetSize,
-    options: [BottomSheetOption],
-    feedData: FeedDetail
-  )
-  func navigateToFeedEdit(feedId: Int)
-}
-
 extension FeedDetailInteractor: ReportDelegate {
   func setReportType(reportType: ReportType) {
     self.reportType = reportType

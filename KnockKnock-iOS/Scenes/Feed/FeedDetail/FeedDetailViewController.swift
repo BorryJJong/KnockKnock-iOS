@@ -10,24 +10,6 @@ import UIKit
 import Then
 import KKDSKit
 
-protocol FeedDetailViewProtocol: AnyObject {
-  var interactor: FeedDetailInteractorProtocol? { get set }
-  
-  func getFeedDetail(feedDetail: FeedDetail)
-  func getAllCommentsCount(allCommentsCount: Int)
-  func fetchVisibleComments(visibleComments: [Comment])
-  func fetchLikeList(like: [Like.Info])
-  func fetchLikeStatus(isToggle: Bool)
-  func deleteComment()
-  func setLoginStatus(isLoggedIn: Bool)
-
-  func showAlertView(
-    message: String,
-    isCancelActive: Bool?,
-    confirmAction: (() -> Void)?
-  )
-}
-
 final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   
   // MARK: - Properties

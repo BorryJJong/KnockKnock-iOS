@@ -7,26 +7,6 @@
 
 import UIKit
 
-protocol FeedDetailRouterProtocol {
-  var view: FeedDetailViewProtocol? { get set }
-  
-  static func createFeedDetail(feedId: Int) -> UIViewController
-  
-  func navigateToFeedEdit(feedId: Int)
-  func navigateToLikeDetail(like: [Like.Info])
-  func navigateToLoginView()
-  func navigateToFeedList()
-  func presentReportView(
-    action: (() -> Void)?,
-    reportDelegate: ReportDelegate
-  )
-  func presentBottomSheetView(
-    bottomSheetSize: BottomSheetSize,
-    options: [BottomSheetOption],
-    feedData: FeedShare?
- )
-}
-
 final class FeedDetailRouter: FeedDetailRouterProtocol {
   
   weak var view: FeedDetailViewProtocol?

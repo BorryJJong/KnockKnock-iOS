@@ -5,7 +5,6 @@
 //  Created by Daye on 2023/03/31.
 //
 
-import Foundation
 import UIKit
 
 protocol FeedListViewProtocol: AnyObject {

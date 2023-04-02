@@ -7,27 +7,6 @@
 
 import Foundation
 
-protocol FeedDetailPresenterProtocol {
-  var view: FeedDetailViewProtocol? { get set }
-
-  func presentFeedDetail(feedDetail: FeedDetail)
-
-  func presentAllCommentsCount(allCommentsCount: Int)
-  func presentVisibleComments(comments: [Comment])
-  func presentDeleteComment()
-
-  func presentLikeList(like: [Like.Info])
-  func presentLikeStatus(isToggle: Bool)
-
-  func presentLoginStatus(isLoggedIn: Bool)
-
-  func presentAlert(
-    message: String,
-    isCancelActive: Bool?,
-    confirmAction: (() -> Void)?
-  )
-}
-
 final class FeedDetailPresenter: FeedDetailPresenterProtocol {
   weak var view: FeedDetailViewProtocol?
 
