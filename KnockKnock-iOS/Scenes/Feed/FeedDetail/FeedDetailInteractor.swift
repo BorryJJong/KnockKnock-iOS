@@ -7,12 +7,6 @@
 
 import Foundation
 
-extension FeedDetailInteractor: ReportDelegate {
-  func setReportType(reportType: ReportType) {
-    self.reportType = reportType
-  }
-}
-
 final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   var worker: FeedDetailWorkerProtocol?
   var presenter: FeedDetailPresenterProtocol?
@@ -325,6 +319,34 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     )
   }
 
+  /// 유저 차단하기
+  func requestBlockUser(userId: Int) {
+
+    Task {
+
+      let response = await self.worker?.requestBlockUser(userId: userId)
+
+      await MainActor.run {
+        self.showErrorAlert(response: response)
+      }
+
+      guard let isSuccess = response?.data else { return }
+
+      if isSuccess {
+        self.presentAlert(
+          message: AlertMessage.userBlockDone.rawValue,
+          confirmAction: {
+            self.navigateToFeedList()
+          }
+        )
+
+      } else {
+        self.presentAlert(message: AlertMessage.userBlockFailed.rawValue)
+
+      }
+    }
+  }
+
   // Routing
 
   func navigateToLikeDetail() {
@@ -374,6 +396,8 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     }
   }
 }
+
+// MARK: - Inner Actions
 
 extension FeedDetailInteractor {
   
@@ -431,5 +455,11 @@ extension FeedDetailInteractor {
       isCancelActive: isCancelActive,
       confirmAction: confirmAction
     )
+  }
+}
+
+extension FeedDetailInteractor: ReportDelegate {
+  func setReportType(reportType: ReportType) {
+    self.reportType = reportType
   }
 }

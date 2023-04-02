@@ -116,6 +116,19 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
     )
   }
 
+  /// 유저 차단 api call
+  func requestBlockUser(userId: Int) async -> ApiResponse<Bool>? {
+    let response = ApiResponse(code: 200, message: "", data: true)
+
+    if let isSuccess = response.data {
+      if isSuccess {
+        self.postUserBlockedEvent()
+      }
+    }
+
+    return response
+  }
+
   /// 전체 댓글에서 삭제된 댓글, 숨김(접힘) 상태 댓글을 제외하고 보여질 댓글만 필터링
   func fetchVisibleComments(comments: [Comment]?) -> [Comment] {
     var visibleComments: [Comment] = []
@@ -310,6 +323,13 @@ extension FeedDetailWorker {
     NotificationCenter.default.post(
       name: .postLikeToggled,
       object: feedId
+    )
+  }
+
+  private func postUserBlockedEvent() {
+    NotificationCenter.default.post(
+      name: .feedListRefreshAfterBlocked,
+      object: nil
     )
   }
 

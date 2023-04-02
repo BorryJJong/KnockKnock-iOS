@@ -16,32 +16,36 @@ final class LoadingIndicator {
   private var showTime: DispatchTime?
 
   static func showLoading() {
-    guard let window = UIApplication.shared.windows.last else { return }
-    var loadingIndicatorView = LottieAnimationView(name: "zero_waste_loading")
+    DispatchQueue.main.async {
+      guard let window = UIApplication.shared.windows.last else { return }
 
-    if let existedView = window.subviews.first(where: {
-      $0 is LottieAnimationView
-    }) as? LottieAnimationView {
-      loadingIndicatorView = existedView
-    } else {
-      shared.showTime = DispatchTime.now()
+      var loadingIndicatorView = LottieAnimationView(name: "zero_waste_loading")
 
-      let backgroundView = UIView().then {
-        $0.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.5)
-        $0.frame = window.frame
+      if let existedView = window.subviews.first(where: {
+        $0 is LottieAnimationView
+      }) as? LottieAnimationView {
+        loadingIndicatorView = existedView
+      } else {
+        shared.showTime = DispatchTime.now()
+
+        let backgroundView = UIView().then {
+          $0.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.5)
+          $0.frame = window.frame
+        }
+        loadingIndicatorView.frame = CGRect(x: 0, y: 0, width: 120, height: 120)
+        loadingIndicatorView.center = window.center
+
+        window.backgroundColor = .clear
+        window.addSubview(backgroundView)
+        window.addSubview(loadingIndicatorView)
+
+        shared.backgroundView = backgroundView
       }
-      loadingIndicatorView.frame = CGRect(x: 0, y: 0, width: 120, height: 120)
-      loadingIndicatorView.center = window.center
+      loadingIndicatorView.contentMode = .scaleAspectFit
+      loadingIndicatorView.play()
+      loadingIndicatorView.loopMode = .loop
 
-      window.backgroundColor = .clear
-      window.addSubview(backgroundView)
-      window.addSubview(loadingIndicatorView)
-
-      shared.backgroundView = backgroundView
     }
-    loadingIndicatorView.contentMode = .scaleAspectFit
-    loadingIndicatorView.play()
-    loadingIndicatorView.loopMode = .loop
   }
 
   static func hideLoading() {

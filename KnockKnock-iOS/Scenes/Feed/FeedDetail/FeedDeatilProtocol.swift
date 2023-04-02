@@ -34,6 +34,7 @@ protocol FeedDetailInteractorProtocol {
   func requestDelete(feedId: Int)
   func requestHide(feedId: Int)
   func requestReport(feedId: Int)
+  func requestBlockUser(userId: Int)
 
   func fetchAllComments(feedId: Int)
 
@@ -125,6 +126,7 @@ protocol FeedDetailWorkerProtocol {
     reportType: ReportType,
     completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
+  func requestBlockUser(userId: Int) async -> ApiResponse<Bool>?
 }
 
 protocol FeedDetailRouterProtocol {

@@ -553,6 +553,14 @@ extension FeedListInteractor {
       name: .feedListRefreshAfterEdited,
       object: nil
     )
+
+    NotificationCenter.default.addObserver(
+      forName: .feedListRefreshAfterBlocked,
+      object: nil,
+      queue: nil
+    ) { _ in
+      self.presenter?.reloadFeedList()
+    }
   }
 
   // MARK: - Error

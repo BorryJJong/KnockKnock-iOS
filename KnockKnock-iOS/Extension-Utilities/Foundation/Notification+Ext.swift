@@ -30,6 +30,8 @@ extension Notification.Name {
 
   static let postLikeToggled = Notification.Name("postLikeToggled")
   static let pushFeedMain = Notification.Name("pushFeed")
+  
+  static let feedListRefreshAfterBlocked = Notification.Name("feedListRefreshAfterBlocked")
 
   // Comment
   static let feedListCommentRefreshAfterDelete = Notification.Name("feedListCommentRefreshAfterDelete")

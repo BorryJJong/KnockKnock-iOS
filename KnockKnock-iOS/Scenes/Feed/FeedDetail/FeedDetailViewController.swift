@@ -134,7 +134,7 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     let hideAcion: (() -> Void)?  = { self.interactor?.requestHide(feedId: feedId) }
     let editAction: (() -> Void)?  = { self.interactor?.navigateToFeedEdit(feedId: feedId) }
     let reportAction: (() -> Void)?  = { self.interactor?.presentReportView(feedId: feedId) }
-    let blockAction: (() -> Void)? = { }
+    let blockAction: (() -> Void)? = { self.interactor?.requestBlockUser(userId: 0) }
 
     var options: [BottomSheetOption] = []
 
