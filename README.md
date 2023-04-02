@@ -11,6 +11,9 @@
 제로웨이스트는 무분별한 일회용품 사용, 잘못 된 처리 방법 등으로 인하여 발생 된 환경 오염을 해결하기 위한 활동입니다. <br>
 녹녹에서 여러가지 제로웨이스트에 대한 정보를 얻어 지구를 위한 작은 실천에 도전해 보세요!
 
+## 구성도
+![녹녹 구조도](https://user-images.githubusercontent.com/40792935/229351074-9f05b274-a286-4b85-ba81-a11ca7dc25f1.png)
+
 ## 구조
 - Clean Swift(VIP)
 - UIKit, Code based UI
