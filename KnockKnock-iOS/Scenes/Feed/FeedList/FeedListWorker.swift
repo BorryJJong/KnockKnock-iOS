@@ -64,7 +64,7 @@ final class FeedListWorker: FeedListWorkerProtocol {
 
   /// 유저 차단 api call
   func requestBlockUser(userId: Int) async -> ApiResponse<Bool>? {
-    return ApiResponse(code: 200, message: "", data: true)
+    return await self.feedListRepository.requestBlockUser(userId: userId)
   }
 
   /// 이미 조회 된 피드 리스트 내에서 게시글 삭제하기

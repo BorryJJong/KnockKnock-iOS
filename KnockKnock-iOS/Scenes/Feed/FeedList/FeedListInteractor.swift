@@ -231,11 +231,14 @@ final class FeedListInteractor: FeedListInteractorProtocol {
 
       let response = await self.worker?.requestBlockUser(userId: userId)
 
-      await MainActor.run {
-        self.showErrorAlert(response: response)
-      }
+      guard let isSuccess = response?.data else {
 
-      guard let isSuccess = response?.data else { return }
+        await MainActor.run {
+          self.showErrorAlert(response: response)
+        }
+        
+        return
+      }
 
       if isSuccess {
         self.presentAlert(
