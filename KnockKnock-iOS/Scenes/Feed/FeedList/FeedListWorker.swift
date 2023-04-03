@@ -64,7 +64,15 @@ final class FeedListWorker: FeedListWorkerProtocol {
 
   /// 유저 차단 api call
   func requestBlockUser(userId: Int) async -> ApiResponse<Bool>? {
-    return await self.feedListRepository.requestBlockUser(userId: userId)
+    let response = await self.feedListRepository.requestBlockUser(userId: userId)
+
+    if let isSuccess = response?.data {
+      if isSuccess {
+        self.postUserBlockedEvent()
+      }
+    }
+
+    return response
   }
 
   /// 이미 조회 된 피드 리스트 내에서 게시글 삭제하기
@@ -332,6 +340,13 @@ extension FeedListWorker {
     NotificationCenter.default.post(
       name: .feedMainRefreshAfterDelete,
       object: feedId
+    )
+  }
+
+  private func postUserBlockedEvent() {
+    NotificationCenter.default.post(
+      name: .feedMainRefreshAfterBlocked,
+      object: nil
     )
   }
 }
