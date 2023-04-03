@@ -20,15 +20,19 @@ protocol FeedDetailRepositoryProtocol {
     feedId: Int,
     completionHandler: @escaping (ApiResponse<FeedDetail>?) -> Void
   )
+
   func requestHidePost(
     feedId: Int,
     completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
+
   func requestReportPost(
     feedId: Int,
     reportType: ReportType,
     completionHandler: @escaping (ApiResponse<Bool>?) -> Void
   )
+  
+  func requestBlockUser(userId: Int) async -> ApiResponse<Bool>?
 }
 
 final class FeedDetailRepository: FeedDetailRepositoryProtocol {
@@ -190,5 +194,30 @@ final class FeedDetailRepository: FeedDetailRepositoryProtocol {
           print(error.localizedDescription)
         }
       )
+  }
+
+  func requestBlockUser(userId: Int) async -> ApiResponse<Bool>? {
+
+    do {
+      let result = try await KKNetworkManager
+        .shared
+        .asyncRequest(
+          object: ApiResponse<Bool>.self,
+          router: .postBlockUser(id: userId)
+        )
+
+      guard let data = result.value else { return nil }
+
+      return ApiResponse(
+        code: data.code,
+        message: data.message,
+        data: data.code == 200
+      )
+    } catch {
+
+      print(error.localizedDescription)
+      return nil
+    }
+
   }
 }

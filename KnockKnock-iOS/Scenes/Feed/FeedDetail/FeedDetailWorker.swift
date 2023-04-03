@@ -118,9 +118,9 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
 
   /// 유저 차단 api call
   func requestBlockUser(userId: Int) async -> ApiResponse<Bool>? {
-    let response = ApiResponse(code: 200, message: "", data: true)
+    let response = await self.feedDetailRepository.requestBlockUser(userId: userId)
 
-    if let isSuccess = response.data {
+    if let isSuccess = response?.data {
       if isSuccess {
         self.postUserBlockedEvent()
       }
@@ -329,6 +329,11 @@ extension FeedDetailWorker {
   private func postUserBlockedEvent() {
     NotificationCenter.default.post(
       name: .feedListRefreshAfterBlocked,
+      object: nil
+    )
+
+    NotificationCenter.default.post(
+      name: .feedMainRefreshAfterBlocked,
       object: nil
     )
   }

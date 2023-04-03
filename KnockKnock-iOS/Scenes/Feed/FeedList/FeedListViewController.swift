@@ -98,7 +98,7 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     
     let isMyPost = self.feedListPost[sender.tag].isWriter
     let feedId = self.feedListPost[sender.tag].id
-    let userId = 10 // change needed
+    let userId = self.feedListPost[sender.tag].userId
 
     let deleteAction: (() -> Void)? = { self.interactor?.requestDelete(feedId: feedId) }
     let hideAcion: (() -> Void)?  = { self.interactor?.requestHide(feedId: feedId) }
@@ -312,6 +312,8 @@ extension FeedListViewController: FeedListViewProtocol, AlertProtocol {
 
   /// 로그인/로그아웃, 유저 차단 시 피드 데이터 re-fatch & reload
   func reloadFeedList() {
+    self.feedListPost = []
+
     self.interactor?.fetchFeedList(
       currentPage: 1,
       pageSize: self.pageSize,

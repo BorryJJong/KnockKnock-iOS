@@ -32,6 +32,7 @@ extension Notification.Name {
   static let pushFeedMain = Notification.Name("pushFeed")
   
   static let feedListRefreshAfterBlocked = Notification.Name("feedListRefreshAfterBlocked")
+  static let feedMainRefreshAfterBlocked = Notification.Name("feedMainRefreshAfterBlocked")
 
   // Comment
   static let feedListCommentRefreshAfterDelete = Notification.Name("feedListCommentRefreshAfterDelete")

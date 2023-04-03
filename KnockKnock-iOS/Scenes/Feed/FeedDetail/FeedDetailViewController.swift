@@ -129,12 +129,13 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     guard let feedDetail = self.feedDetail else { return }
 
     let feedId = feedDetail.feed.id
+    let userId = feedDetail.feed.userId
 
     let deleteAction: (() -> Void)? = { self.interactor?.requestDelete(feedId: feedId) }
     let hideAcion: (() -> Void)?  = { self.interactor?.requestHide(feedId: feedId) }
     let editAction: (() -> Void)?  = { self.interactor?.navigateToFeedEdit(feedId: feedId) }
     let reportAction: (() -> Void)?  = { self.interactor?.presentReportView(feedId: feedId) }
-    let blockAction: (() -> Void)? = { self.interactor?.requestBlockUser(userId: 0) }
+    let blockAction: (() -> Void)? = { self.interactor?.requestBlockUser(userId: userId) }
 
     var options: [BottomSheetOption] = []
 
