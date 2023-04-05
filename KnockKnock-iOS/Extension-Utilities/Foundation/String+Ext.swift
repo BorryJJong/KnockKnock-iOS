@@ -21,7 +21,7 @@ extension String {
 
     guard let data = await self.getDataFromStringUrl() else { return defaultImage }
 
-    let image = UIImage(data: data )
+    let image = UIImage(data: data)
 
     return image?.resizeSquareImage(newWidth: imageWidth) ?? defaultImage
 
