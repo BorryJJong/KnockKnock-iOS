@@ -59,8 +59,7 @@ final class UserDataManager: UserDataManagerProtocol {
     self.userDefaultsService.set(value: authInfo.accessToken, forkey: .accessToken)
     self.userDefaultsService.set(value: authInfo.refreshToken, forkey: .refreshToken)
 
-    NotificationCenter.default.post(name: .signInCompleted, object: nil)
-    NotificationCenter.default.post(name: .feedListRefreshAfterSigned, object: nil)
+    self.postSignInEvent()
 
     return true
   }
@@ -68,9 +67,8 @@ final class UserDataManager: UserDataManagerProtocol {
   /// 프로필 수정 시 닉네임 저장
   func saveNickname(nickname: String) {
     self.userDefaultsService.set(value: nickname, forkey: .nickname)
-
-    NotificationCenter.default.post(name: .profileUpdated, object: nil)
-    NotificationCenter.default.post(name: .feedListRefreshAfterSigned, object: nil)
+    
+    self.postEditProfileEvent()
   }
 
   /// 회원 탈퇴 및 로그아웃 시 유저 데이터 삭제
@@ -80,8 +78,7 @@ final class UserDataManager: UserDataManagerProtocol {
     self.userDefaultsService.remove(forkey: .nickname)
     self.userDefaultsService.remove(forkey: .profileImage)
 
-    NotificationCenter.default.post(name: .signOutCompleted, object: nil)
-    NotificationCenter.default.post(name: .feedListRefreshAfterUnsigned, object: nil)
+    self.postSignOutEvent()
   }
 }
 
@@ -93,8 +90,27 @@ extension UserDataManager {
   private func checkTokenIsExisted() -> Bool {
     if userDefaultsService.value(forkey: .accessToken) != nil {
       return true
+
     } else {
       return false
+
     }
+  }
+
+  private func postSignInEvent() {
+    NotificationCenter.default.post(name: .signInCompleted, object: nil)
+    NotificationCenter.default.post(name: .feedListRefreshAfterSigned, object: nil)
+    NotificationCenter.default.post(name: .feedMainRefreshAfterSigned, object: nil)
+  }
+
+  private func postSignOutEvent() {
+    NotificationCenter.default.post(name: .signOutCompleted, object: nil)
+    NotificationCenter.default.post(name: .feedListRefreshAfterUnsigned, object: nil)
+    NotificationCenter.default.post(name: .feedMainRefreshAfterUnsigned, object: nil)
+  }
+
+  private func postEditProfileEvent() {
+    NotificationCenter.default.post(name: .profileUpdated, object: nil)
+    NotificationCenter.default.post(name: .feedListRefreshAfterSigned, object: nil)
   }
 }

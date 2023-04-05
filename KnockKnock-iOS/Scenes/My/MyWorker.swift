@@ -97,9 +97,12 @@ final class MyWorker: MyWorkerProtocol {
   ) {
     self.accountManager?.signOut(
       completionHandler: { [weak self] response in
+
+        guard let self = self else { return }
+
         if let isSuccess = response?.data {
           if isSuccess {
-            self?.userDataManager?.removeAllUserInfo()
+            self.userDataManager?.removeAllUserInfo()
           }
         }
         completionHandler(response)
@@ -112,9 +115,12 @@ final class MyWorker: MyWorkerProtocol {
   ) {
     self.accountManager?.withdraw(
       completionHandler: { [weak self] response in
+
+        guard let self = self else { return }
+
         if let isSuccess = response?.data {
           if isSuccess {
-            self?.userDataManager?.removeAllUserInfo()
+            self.userDataManager?.removeAllUserInfo()
           }
         }
         completionHandler(response)
