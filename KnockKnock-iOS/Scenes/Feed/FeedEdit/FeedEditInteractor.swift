@@ -118,7 +118,12 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
         guard let isSuccess = response?.data else { return }
 
         if isSuccess {
-          self.presentAlert(message: AlertMessage.feedEditDone.rawValue)
+          self.presentAlert(
+            message: AlertMessage.feedEditDone.rawValue,
+            confirmAction: {
+              self.popFeedEditView()
+            }
+          )
 
         } else {
           self.presentAlert(message: AlertMessage.feedEditFailed.rawValue)
@@ -195,7 +200,7 @@ extension FeedEditInteractor {
         Promotion(
           id: 0,
           type: "없음",
-          isSelected: self.promotions.count == 0
+          isSelected: selectedPromotions.count == 0
         ), at: 0
       )
 
