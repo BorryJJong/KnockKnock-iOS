@@ -10,24 +10,6 @@ import UIKit
 import Then
 import KKDSKit
 
-protocol FeedDetailViewProtocol: AnyObject {
-  var interactor: FeedDetailInteractorProtocol? { get set }
-  
-  func getFeedDetail(feedDetail: FeedDetail)
-  func getAllCommentsCount(allCommentsCount: Int)
-  func fetchVisibleComments(visibleComments: [Comment])
-  func fetchLikeList(like: [Like.Info])
-  func fetchLikeStatus(isToggle: Bool)
-  func deleteComment()
-  func setLoginStatus(isLoggedIn: Bool)
-
-  func showAlertView(
-    message: String,
-    isCancelActive: Bool?,
-    confirmAction: (() -> Void)?
-  )
-}
-
 final class FeedDetailViewController: BaseViewController<FeedDetailView> {
   
   // MARK: - Properties
@@ -147,11 +129,13 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
     guard let feedDetail = self.feedDetail else { return }
 
     let feedId = feedDetail.feed.id
+    let userId = feedDetail.feed.userId
 
     let deleteAction: (() -> Void)? = { self.interactor?.requestDelete(feedId: feedId) }
     let hideAcion: (() -> Void)?  = { self.interactor?.requestHide(feedId: feedId) }
     let editAction: (() -> Void)?  = { self.interactor?.navigateToFeedEdit(feedId: feedId) }
     let reportAction: (() -> Void)?  = { self.interactor?.presentReportView(feedId: feedId) }
+    let blockAction: (() -> Void)? = { self.interactor?.requestBlockUser(userId: userId) }
 
     var options: [BottomSheetOption] = []
 
@@ -163,12 +147,14 @@ final class FeedDetailViewController: BaseViewController<FeedDetailView> {
       ]
     } else {
       options = [
+        .postShare,
         .postHide(hideAcion),
         .postReport(reportAction),
-        .postShare
+        .userBlock(blockAction)
       ]
     }
     self.interactor?.presentBottomSheetView(
+      bottomSheetSize: feedDetail.feed.isWriter ? .three : .four,
       options: options,
       feedData: feedDetail
     )

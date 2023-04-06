@@ -16,8 +16,11 @@ extension Notification.Name {
   static let pushSettingUpdated = Notification.Name("pushSettingUpdated")
 
   // Feed
-  static let feedListRefreshAfterSigned = Notification.Name("feedRefreshAfterSigned")
-  static let feedListRefreshAfterUnsigned = Notification.Name("feedRefreshAfterUnsigned")
+  static let feedListRefreshAfterSigned = Notification.Name("feedListRefreshAfterSigned")
+  static let feedListRefreshAfterUnsigned = Notification.Name("feedListRefreshAfterUnsigned")
+
+  static let feedMainRefreshAfterSigned = Notification.Name("feedMainRefreshAfterSigned")
+  static let feedMainRefreshAfterUnsigned = Notification.Name("feedMainRefreshAfterUnsigned")
 
   static let feedMainRefreshAfterDelete = Notification.Name("feedMainRefreshAfterDelete")
   static let feedListRefreshAfterDelete = Notification.Name("feedListRefreshAfterDelete")
@@ -30,6 +33,9 @@ extension Notification.Name {
 
   static let postLikeToggled = Notification.Name("postLikeToggled")
   static let pushFeedMain = Notification.Name("pushFeed")
+  
+  static let feedListRefreshAfterBlocked = Notification.Name("feedListRefreshAfterBlocked")
+  static let feedMainRefreshAfterBlocked = Notification.Name("feedMainRefreshAfterBlocked")
 
   // Comment
   static let feedListCommentRefreshAfterDelete = Notification.Name("feedListCommentRefreshAfterDelete")

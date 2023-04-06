@@ -7,55 +7,6 @@
 
 import Foundation
 
-protocol FeedDetailWorkerProtocol {
-  func getFeedDetail(feedId: Int, completionHandler: @escaping (ApiResponse<FeedDetail>?) -> Void)
-
-  func checkTokenIsValidated() async -> Bool
-  
-  func requestLike(
-    isLike: Bool,
-    feedId: Int,
-    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
-  )
-
-  func toggleLike(feedDetail: FeedDetail?) -> FeedDetail?
-  func fetchLikeList(
-    feedId: Int,
-    completionHandler: @escaping (ApiResponse<[Like.Info]>?) -> Void
-  )
-
-  func getAllComments(
-    feedId: Int,
-    completionHandler: @escaping (ApiResponse<[Comment]>?) -> Void
-  )
-  func fetchVisibleComments(comments: [Comment]?) -> [Comment]
-
-  func requestAddComment(
-    comment: AddCommentDTO,
-    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
-  )
-  func requestDeleteComment(
-    feedId: Int,
-    commentId: Int,
-    comments: [Comment],
-    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
-  )
-
-  func requestDeleteFeed(
-    feedId: Int,
-    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
-  )
-  func requestHidePost(
-    feedId: Int,
-    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
-  )
-  func requestReportFeed(
-    feedId: Int,
-    reportType: ReportType,
-    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
-  )
-}
-
 final class FeedDetailWorker: FeedDetailWorkerProtocol {
   typealias OnCompletionHandler = (ApiResponse<Bool>?) -> Void
 
@@ -163,6 +114,19 @@ final class FeedDetailWorker: FeedDetailWorkerProtocol {
 
       }
     )
+  }
+
+  /// 유저 차단 api call
+  func requestBlockUser(userId: Int) async -> ApiResponse<Bool>? {
+    let response = await self.feedDetailRepository.requestBlockUser(userId: userId)
+
+    if let isSuccess = response?.data {
+      if isSuccess {
+        self.postUserBlockedEvent()
+      }
+    }
+
+    return response
   }
 
   /// 전체 댓글에서 삭제된 댓글, 숨김(접힘) 상태 댓글을 제외하고 보여질 댓글만 필터링
@@ -359,6 +323,18 @@ extension FeedDetailWorker {
     NotificationCenter.default.post(
       name: .postLikeToggled,
       object: feedId
+    )
+  }
+
+  private func postUserBlockedEvent() {
+    NotificationCenter.default.post(
+      name: .feedListRefreshAfterBlocked,
+      object: nil
+    )
+
+    NotificationCenter.default.post(
+      name: .feedMainRefreshAfterBlocked,
+      object: nil
     )
   }
 

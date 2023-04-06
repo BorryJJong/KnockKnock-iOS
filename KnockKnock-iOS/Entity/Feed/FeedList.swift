@@ -24,6 +24,7 @@ struct FeedListDTO: Decodable {
     let blogCommentCount: String
     let blogImages: [Image]
     let isWriter: Bool
+    let userId: Int
 
     func toShare() -> FeedShare? {
       
@@ -61,6 +62,7 @@ struct FeedList: Decodable {
     var blogCommentCount: String
     let blogImages: [Image]
     let isWriter: Bool
+    let userId: Int
 
     func toShare() -> FeedShare? {
 
@@ -100,7 +102,8 @@ extension FeedListDTO {
               fileUrl: $0.fileUrl
             )
           },
-          isWriter: $0.isWriter
+          isWriter: $0.isWriter,
+          userId: $0.userId
         )
       },
       isNext: isNext,

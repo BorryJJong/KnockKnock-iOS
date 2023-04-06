@@ -8,7 +8,8 @@
 import Foundation
 
 enum BottomSheetSize: CGFloat {
-  case small = 0.85
-  case medium = 0.8
-  case large = 0.3
+  case two = 0.85
+  case three = 0.8
+  case four = 0.75
+  case max = 0.3
 }

@@ -179,6 +179,30 @@ extension FeedMainInteractor {
     ) { _ in
       self.presenter?.reloadFeedMain()
     }
+
+    NotificationCenter.default.addObserver(
+      forName: .feedMainRefreshAfterBlocked,
+      object: nil,
+      queue: nil
+    ) { _ in
+      self.presenter?.reloadFeedMain()
+    }
+
+    NotificationCenter.default.addObserver(
+      forName: .feedMainRefreshAfterSigned,
+      object: nil,
+      queue: nil
+    ) { _ in
+      self.presenter?.reloadFeedMain()
+    }
+
+    NotificationCenter.default.addObserver(
+      forName: .feedMainRefreshAfterUnsigned,
+      object: nil,
+      queue: nil
+    ) { _ in
+      self.presenter?.reloadFeedMain()
+    }
   }
 
   // MARK: - Error

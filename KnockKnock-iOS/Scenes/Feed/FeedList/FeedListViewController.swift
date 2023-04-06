@@ -10,23 +10,6 @@ import UIKit
 import Then
 import KKDSKit
 
-protocol FeedListViewProtocol: AnyObject {
-  var interactor: FeedListInteractorProtocol? { get set }
-  
-  func fetchFeedList(feedList: FeedList)
-  func updateFeedList(
-    feedList: FeedList,
-    sections: [IndexPath]
-  )
-  func reloadFeedList()
-  
-  func showAlertView(
-    message: String,
-    isCancelActive: Bool?,
-    confirmAction: (() -> Void)?
-  )
-}
-
 final class FeedListViewController: BaseViewController<FeedListView> {
   
   // MARK: - Properties
@@ -115,11 +98,13 @@ final class FeedListViewController: BaseViewController<FeedListView> {
     
     let isMyPost = self.feedListPost[sender.tag].isWriter
     let feedId = self.feedListPost[sender.tag].id
+    let userId = self.feedListPost[sender.tag].userId
 
     let deleteAction: (() -> Void)? = { self.interactor?.requestDelete(feedId: feedId) }
     let hideAcion: (() -> Void)?  = { self.interactor?.requestHide(feedId: feedId) }
     let editAction: (() -> Void)?  = { self.interactor?.navigateToFeedEdit(feedId: feedId) }
     let reportAction: (() -> Void)?  = { self.interactor?.presentReportView(feedId: feedId) }
+    let blockAction: (() -> Void)? = { self.interactor?.requestBlockUser(userId: userId) }
 
     var options: [BottomSheetOption] = []
 
@@ -131,13 +116,15 @@ final class FeedListViewController: BaseViewController<FeedListView> {
       ]
     } else {
       options = [
+        .postShare,
         .postHide(hideAcion),
         .postReport(reportAction),
-        .postShare
+        .userBlock(blockAction)
       ]
     }
 
     self.interactor?.presentBottomSheetView(
+      bottomSheetSize: isMyPost ? .three : .four,
       options: options,
       feedData: self.feedListPost[sender.tag]
     )
@@ -323,10 +310,12 @@ extension FeedListViewController: FeedListViewProtocol, AlertProtocol {
     }
   }
 
-  /// 로그인/로그아웃 시 피드 데이터 re-fatch & reload
+  /// 로그인/로그아웃, 유저 차단 시 피드 데이터 re-fatch & reload
   func reloadFeedList() {
+    self.feedListPost = []
+
     self.interactor?.fetchFeedList(
-      currentPage: self.currentPage,
+      currentPage: 1,
       pageSize: self.pageSize,
       feedId: self.feedId,
       challengeId: self.challengeId

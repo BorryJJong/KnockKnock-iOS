@@ -7,25 +7,6 @@
 
 import UIKit
 
-protocol FeedDetailRouterProtocol {
-  var view: FeedDetailViewProtocol? { get set }
-  
-  static func createFeedDetail(feedId: Int) -> UIViewController
-  
-  func navigateToFeedEdit(feedId: Int)
-  func navigateToLikeDetail(like: [Like.Info])
-  func navigateToLoginView()
-  func navigateToFeedList()
-  func presentReportView(
-    action: (() -> Void)?,
-    reportDelegate: ReportDelegate
-  )
-  func presentBottomSheetView(
-    options: [BottomSheetOption],
-    feedData: FeedShare?
- )
-}
-
 final class FeedDetailRouter: FeedDetailRouterProtocol {
   
   weak var view: FeedDetailViewProtocol?
@@ -107,13 +88,14 @@ final class FeedDetailRouter: FeedDetailRouterProtocol {
   }
 
   func presentBottomSheetView(
+    bottomSheetSize: BottomSheetSize,
     options: [BottomSheetOption],
     feedData: FeedShare?
   ) {
     
     guard let bottomSheetViewController = BottomSheetRouter.createBottomSheet(
       options: options,
-      bottomSheetSize: .medium,
+      bottomSheetSize: bottomSheetSize,
       feedData: feedData
     ) as? BottomSheetViewController else { return }
 

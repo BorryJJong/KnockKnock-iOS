@@ -15,6 +15,7 @@ enum BottomSheetOption {
   case postReport(Action)
   case postShare
   case postHide(Action)
+  case userBlock(Action)
   case challengeNew
   case challengePopular
 
@@ -34,6 +35,9 @@ enum BottomSheetOption {
 
     case .postHide:
       return "숨기기"
+
+    case .userBlock:
+      return "차단하기"
 
     case .challengeNew:
       return "최신순"
@@ -58,6 +62,9 @@ enum BottomSheetOption {
       return nil
 
     case .postHide(let action):
+      return action
+
+    case .userBlock(let action):
       return action
 
     case .challengeNew,

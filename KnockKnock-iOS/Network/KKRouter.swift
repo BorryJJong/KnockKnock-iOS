@@ -55,6 +55,7 @@ enum KKRouter: URLRequestConvertible {
   case postHideBlogPost(id: Int)
   case postReportBlogPost(id: Int, reportType: String)
   case deleteFeed(id: Int)
+  case postBlockUser(id: Int)
 
   // Feed Edit
   case putFeed(id: Int, post: FeedEdit)
@@ -91,8 +92,8 @@ enum KKRouter: URLRequestConvertible {
 
     // Account
     case .postSocialLogin,
-        .postSignUp,
-        .postLogOut:
+         .postSignUp,
+         .postLogOut:
       return .post
 
     case .deleteWithdraw:
@@ -105,9 +106,9 @@ enum KKRouter: URLRequestConvertible {
 
       // FeedWrite, Main
     case .getChallengeTitles,
-        .getPromotions,
-        .requestShopAddress,
-        .getFeedMain:
+         .getPromotions,
+         .requestShopAddress,
+         .getFeedMain:
       return .get
 
     case .postFeed:
@@ -115,11 +116,12 @@ enum KKRouter: URLRequestConvertible {
 
       // FeedList, Detail
     case .getFeedBlogPost,
-        .getFeed:
+         .getFeed:
       return .get
 
     case .postHideBlogPost,
-         .postReportBlogPost:
+         .postReportBlogPost,
+         .postBlockUser:
       return .post
 
     case .deleteFeed:
@@ -196,6 +198,7 @@ enum KKRouter: URLRequestConvertible {
     case .deleteFeed(let id): return "feed/\(id)"
     case .postHideBlogPost(let id): return "users/hide/blog-post/\(id)"
     case .postReportBlogPost(let id, _): return "users/report/blog-post/\(id)"
+    case .postBlockUser(let id): return "users/block-user/\(id)"
 
       // Feed Edit
     case .putFeed(let id, _): return "feed/\(id)"
@@ -292,7 +295,8 @@ enum KKRouter: URLRequestConvertible {
 
     case .getFeed,
          .postHideBlogPost,
-         .deleteFeed:
+         .deleteFeed,
+         .postBlockUser:
       return nil
 
       // Feed Edit
@@ -458,6 +462,7 @@ enum KKRouter: URLRequestConvertible {
       case .postFeedLike,
            .postHideBlogPost,
            .postLogOut,
+           .postBlockUser,
            .deleteFeedLike,
            .deleteFeed,
            .deleteWithdraw,

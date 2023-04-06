@@ -7,34 +7,6 @@
 
 import Foundation
 
-protocol FeedListInteractorProtocol {
-  var presenter: FeedListPresenterProtocol? { get set }
-  var worker: FeedListWorkerProtocol? { get set }
-  var router: FeedListRouterProtocol? { get set }
-  
-  func fetchFeedList(currentPage: Int, pageSize: Int, feedId: Int, challengeId: Int)
-  func requestDelete(feedId: Int)
-  func requestHide(feedId: Int)
-  func requestLike(feedId: Int)
-  func requestReport(feedId: Int)
-
-  func presentBottomSheetView(
-    options: [BottomSheetOption],
-    feedData: FeedList.Post
-  )
-  func presentReportView(feedId: Int)
-  func navigateToFeedEdit(feedId: Int)
-  func navigateToFeedMain()
-  func navigateToFeedDetail(feedId: Int)
-  func navigateToCommentView(feedId: Int)
-}
-
-extension FeedListInteractor: ReportDelegate {
-  func setReportType(reportType: ReportType) {
-    self.reportType = reportType
-  }
-}
-
 final class FeedListInteractor: FeedListInteractorProtocol {
 
   // MARK: - Properties
@@ -42,7 +14,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   var presenter: FeedListPresenterProtocol?
   var worker: FeedListWorkerProtocol?
   var router: FeedListRouterProtocol?
-  
+
   private var feedListData: FeedList?
 
   var reportType: ReportType?
@@ -69,7 +41,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
     challengeId: Int
   ) {
     LoadingIndicator.showLoading()
-    
+
     self.worker?.fetchFeedList(
       currentPage: currentPage,
       count: pageSize,
@@ -156,9 +128,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       guard let isLike = self.worker?.checkCurrentLikeState(
         feedList: feedList,
         feedId: feedId
-      ) else {
-        return
-      }
+      ) else { return }
 
       self.worker?.requestLike(
         isLike: isLike,
@@ -219,9 +189,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   }
 
   /// 피드 신고하기
-  func requestReport(
-    feedId: Int
-  ) {
+  func requestReport(feedId: Int) {
 
     guard let feedList = self.feedListData else { return }
     guard !feedList.feeds.isEmpty else { return }
@@ -255,6 +223,37 @@ final class FeedListInteractor: FeedListInteractorProtocol {
       }
     )
   }
+
+  /// 유저 차단하기
+  func requestBlockUser(userId: Int) {
+
+    Task {
+
+      let response = await self.worker?.requestBlockUser(userId: userId)
+
+      guard let isSuccess = response?.data else {
+
+        await MainActor.run {
+          self.showErrorAlert(response: response)
+        }
+        
+        return
+      }
+
+      if isSuccess {
+        self.presentAlert(
+          message: AlertMessage.userBlockDone.rawValue,
+          confirmAction: {
+            self.presenter?.reloadFeedList()
+          }
+        )
+
+      } else {
+        self.presentAlert(message: AlertMessage.userBlockFailed.rawValue)
+
+      }
+    }
+  }
   
   // Routing
   
@@ -284,6 +283,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
   }
   
   func presentBottomSheetView(
+    bottomSheetSize: BottomSheetSize,
     options: [BottomSheetOption],
     feedData: FeedList.Post
   ) {
@@ -293,6 +293,7 @@ final class FeedListInteractor: FeedListInteractorProtocol {
 
         await MainActor.run {
           self.router?.presentBottomSheetView(
+            bottomSheetSize: bottomSheetSize,
             options: options,
             feedData: feedData.toShare()
           )
@@ -304,6 +305,14 @@ final class FeedListInteractor: FeedListInteractorProtocol {
         }
       }
     }
+  }
+}
+
+// MARK: - Report Delegate
+
+extension FeedListInteractor: ReportDelegate {
+  func setReportType(reportType: ReportType) {
+    self.reportType = reportType
   }
 }
 
@@ -547,6 +556,14 @@ extension FeedListInteractor {
       name: .feedListRefreshAfterEdited,
       object: nil
     )
+
+    NotificationCenter.default.addObserver(
+      forName: .feedListRefreshAfterBlocked,
+      object: nil,
+      queue: nil
+    ) { _ in
+      self.presenter?.reloadFeedList()
+    }
   }
 
   // MARK: - Error

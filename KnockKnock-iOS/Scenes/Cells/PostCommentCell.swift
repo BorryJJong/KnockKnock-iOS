@@ -101,12 +101,10 @@ final class PostCommentCell: BaseCollectionViewCell {
     isLoggedIn: Bool
   ) {
 
-    Task {
-      self.profileImageView.image = await comment.data.image?.getImageFromStringUrl(
-        defaultImage: KKDS.Image.ic_person_24,
-        imageWidth: Metric.profileImageViewWidth
-      )
-    }
+    self.profileImageView.setImageFromStringUrl(
+      stringUrl: comment.data.image,
+      defaultImage: KKDS.Image.ic_person_24
+    )
 
     let reply = comment.data.reply.map {
       $0.filter { !$0.isDeleted }

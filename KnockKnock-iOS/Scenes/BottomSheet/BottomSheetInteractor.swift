@@ -19,7 +19,7 @@ final class BottomSheetInteractor: BottomSheetInteractorProtocol {
   var options: [BottomSheetOption]?
   var districtsType: DistrictsType?
   var districtContent: [String]?
-  var bottomSheetSize: BottomSheetSize = .medium
+  var bottomSheetSize: BottomSheetSize = .three
   var feedData: FeedShare?
 
   // MARK: - Buisiness Logic

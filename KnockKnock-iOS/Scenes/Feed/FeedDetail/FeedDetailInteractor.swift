@@ -7,43 +7,6 @@
 
 import Foundation
 
-protocol FeedDetailInteractorProtocol {
-  var worker: FeedDetailWorkerProtocol? { get set }
-  var presenter: FeedDetailPresenterProtocol? { get set }
-  var router: FeedDetailRouterProtocol? { get set }
-  
-  func getFeedDeatil(feedId: Int)
-  func requestDelete(feedId: Int)
-  func requestHide(feedId: Int)
-  func requestReport(feedId: Int)
-  
-  func fetchAllComments(feedId: Int)
-  
-  func fetchVisibleComments(comments: [Comment])
-  func requestAddComment(comment: AddCommentDTO)
-  func toggleVisibleStatus(commentId: Int)
-  func requestDeleteComment(feedId: Int, commentId: Int)
-  
-  func requestLike(feedId: Int)
-  func fetchLikeList(feedId: Int)
-  
-  func presentReportView(feedId: Int)
-  func navigateToLikeDetail()
-  func navigateToFeedList()
-  func checkLoginStatus()
-  func presentBottomSheetView(
-    options: [BottomSheetOption],
-    feedData: FeedDetail
-  )
-  func navigateToFeedEdit(feedId: Int)
-}
-
-extension FeedDetailInteractor: ReportDelegate {
-  func setReportType(reportType: ReportType) {
-    self.reportType = reportType
-  }
-}
-
 final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   var worker: FeedDetailWorkerProtocol?
   var presenter: FeedDetailPresenterProtocol?
@@ -356,6 +319,34 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     )
   }
 
+  /// 유저 차단하기
+  func requestBlockUser(userId: Int) {
+
+    Task {
+
+      let response = await self.worker?.requestBlockUser(userId: userId)
+
+      await MainActor.run {
+        self.showErrorAlert(response: response)
+      }
+
+      guard let isSuccess = response?.data else { return }
+
+      if isSuccess {
+        self.presentAlert(
+          message: AlertMessage.userBlockDone.rawValue,
+          confirmAction: {
+            self.navigateToFeedList()
+          }
+        )
+
+      } else {
+        self.presentAlert(message: AlertMessage.userBlockFailed.rawValue)
+
+      }
+    }
+  }
+
   // Routing
 
   func navigateToLikeDetail() {
@@ -380,6 +371,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
   }
 
   func presentBottomSheetView(
+    bottomSheetSize: BottomSheetSize,
     options: [BottomSheetOption],
     feedData: FeedDetail
   ) {
@@ -390,6 +382,7 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
 
         await MainActor.run {
           self.router?.presentBottomSheetView(
+            bottomSheetSize: bottomSheetSize,
             options: options,
             feedData: feedData.toShare()
           )
@@ -403,6 +396,8 @@ final class FeedDetailInteractor: FeedDetailInteractorProtocol {
     }
   }
 }
+
+// MARK: - Inner Actions
 
 extension FeedDetailInteractor {
   
@@ -460,5 +455,11 @@ extension FeedDetailInteractor {
       isCancelActive: isCancelActive,
       confirmAction: confirmAction
     )
+  }
+}
+
+extension FeedDetailInteractor: ReportDelegate {
+  func setReportType(reportType: ReportType) {
+    self.reportType = reportType
   }
 }

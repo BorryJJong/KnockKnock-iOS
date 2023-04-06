@@ -7,68 +7,6 @@
 
 import Foundation
 
-protocol FeedListWorkerProtocol {
-  func fetchFeedList(
-    currentPage: Int,
-    count: Int,
-    feedId: Int,
-    challengeId: Int,
-    completionHandler: @escaping (ApiResponse<FeedList>?) -> Void
-  )
-  func requestDeleteFeed(
-    feedId: Int,
-    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
-  )
-  func requestLike(
-    isLike: Bool,
-    feedId: Int,
-    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
-  )
-  func requestHidePost(
-    feedId: Int,
-    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
-  )
-  func requestReportFeed(
-    feedId: Int,
-    reportType: ReportType,
-    completionHandler: @escaping (ApiResponse<Bool>?) -> Void
-  )
-  func removePostInFeedList(
-    feeds: FeedList,
-    id: Int
-  ) -> FeedList
-  
-  func updatePostInFeedList(
-    feeds: FeedList,
-    feedId: Int,
-    contents: String
-  ) -> FeedList
-  
-  func checkTokenIsValidated() async -> Bool
-  
-  func checkCurrentLikeState(
-    feedList: [FeedList.Post],
-    feedId: Int
-  ) -> Bool
-  
-  func changedSections(
-    feeds: [FeedList.Post],
-    id: Int
-  ) -> [Int]
-  
-  func convertLikeFeed(
-    feeds: FeedList,
-    id: Int
-  ) -> FeedList
-
-  func convertComment(
-    feeds: FeedList,
-    id: Int,
-    replyCount: Int?,
-    isAdded: Bool
-  ) -> FeedList
-}
-
 final class FeedListWorker: FeedListWorkerProtocol {
   typealias OnCompletionHandler = (ApiResponse<Bool>?) -> Void
   
@@ -122,6 +60,19 @@ final class FeedListWorker: FeedListWorkerProtocol {
         completionHandler(response)
       }
     )
+  }
+
+  /// 유저 차단 api call
+  func requestBlockUser(userId: Int) async -> ApiResponse<Bool>? {
+    let response = await self.feedListRepository.requestBlockUser(userId: userId)
+
+    if let isSuccess = response?.data {
+      if isSuccess {
+        self.postUserBlockedEvent()
+      }
+    }
+
+    return response
   }
 
   /// 이미 조회 된 피드 리스트 내에서 게시글 삭제하기
@@ -389,6 +340,13 @@ extension FeedListWorker {
     NotificationCenter.default.post(
       name: .feedMainRefreshAfterDelete,
       object: feedId
+    )
+  }
+
+  private func postUserBlockedEvent() {
+    NotificationCenter.default.post(
+      name: .feedMainRefreshAfterBlocked,
+      object: nil
     )
   }
 }
