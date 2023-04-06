@@ -200,7 +200,7 @@ extension FeedEditInteractor {
         Promotion(
           id: 0,
           type: "없음",
-          isSelected: self.promotions.count == 0
+          isSelected: selectedPromotions.count == 0
         ), at: 0
       )
 
