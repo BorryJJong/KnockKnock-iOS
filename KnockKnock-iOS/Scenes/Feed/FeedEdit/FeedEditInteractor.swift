@@ -118,7 +118,12 @@ final class FeedEditInteractor: FeedEditInteractorProtocol {
         guard let isSuccess = response?.data else { return }
 
         if isSuccess {
-          self.presentAlert(message: AlertMessage.feedEditDone.rawValue)
+          self.presentAlert(
+            message: AlertMessage.feedEditDone.rawValue,
+            confirmAction: {
+              self.popFeedEditView()
+            }
+          )
 
         } else {
           self.presentAlert(message: AlertMessage.feedEditFailed.rawValue)
