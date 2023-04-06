@@ -341,11 +341,21 @@ extension FeedListWorker {
       name: .feedMainRefreshAfterDelete,
       object: feedId
     )
+    
+    NotificationCenter.default.post(
+      name: .homePopularPostRefresh,
+      object: nil
+    )
   }
 
   private func postUserBlockedEvent() {
     NotificationCenter.default.post(
       name: .feedMainRefreshAfterBlocked,
+      object: nil
+    )
+
+    NotificationCenter.default.post(
+      name: .homePopularPostRefresh,
       object: nil
     )
   }

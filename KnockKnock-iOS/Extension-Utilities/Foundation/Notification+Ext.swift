@@ -15,6 +15,9 @@ extension Notification.Name {
   static let profileUpdated = Notification.Name("profileUpdated")
   static let pushSettingUpdated = Notification.Name("pushSettingUpdated")
 
+  // Home
+  static let homePopularPostRefresh = Notification.Name("homePopularPostRefresh")
+
   // Feed
   static let feedListRefreshAfterSigned = Notification.Name("feedListRefreshAfterSigned")
   static let feedListRefreshAfterUnsigned = Notification.Name("feedListRefreshAfterUnsigned")

@@ -317,6 +317,11 @@ extension FeedDetailWorker {
       name: .feedMainRefreshAfterDelete,
       object: feedId
     )
+
+    NotificationCenter.default.post(
+      name: .homePopularPostRefresh,
+      object: nil
+    )
   }
 
   private func postLikeNotificationEvent(feedId: Int) {
@@ -334,6 +339,11 @@ extension FeedDetailWorker {
 
     NotificationCenter.default.post(
       name: .feedMainRefreshAfterBlocked,
+      object: nil
+    )
+
+    NotificationCenter.default.post(
+      name: .homePopularPostRefresh,
       object: nil
     )
   }
