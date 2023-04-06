@@ -40,6 +40,13 @@ final class HomeInteractor: HomeInteractorProtocol {
   var router: HomeRouterProtocol?
 
   var hotPostList: [HotPost] = []
+  private var challengeId = 0
+
+  // MARK: - Initialize
+
+  init() {
+    self.setNotification()
+  }
 
   // Buisiness logic
 
@@ -142,17 +149,22 @@ final class HomeInteractor: HomeInteractorProtocol {
     }
   }
 
-  func setSelectedStatus(challengeList: [ChallengeTitle], selectedIndex: IndexPath) {
+  func setSelectedStatus(
+    challengeList: [ChallengeTitle],
+    selectedIndex: IndexPath
+  ) {
     var challenges = challengeList
 
+    self.challengeId = challenges[selectedIndex.item].id
+
     for index in 0..<challenges.count {
-      if index == selectedIndex.item {
-        challenges[index].isSelected = true
-      } else {
-        challenges[index].isSelected = false
-      }
+        challenges[index].isSelected = index == selectedIndex.item
     }
-    presenter?.presentChallengeList(challengeList: challenges, index: selectedIndex)
+
+    presenter?.presentChallengeList(
+      challengeList: challenges,
+      index: selectedIndex
+    )
   }
 
   // Routing
@@ -179,11 +191,11 @@ final class HomeInteractor: HomeInteractorProtocol {
   }
 }
 
-extension HomeInteractorProtocol {
+extension HomeInteractor {
 
   // MARK: - Error
 
-  func showErrorAlert<T>(response: ApiResponse<T>?) {
+  private func showErrorAlert<T>(response: ApiResponse<T>?) {
 
     guard let response = response else {
 
@@ -208,6 +220,18 @@ extension HomeInteractorProtocol {
         confirmAction: nil
       )
       return
+    }
+  }
+
+  // MARK: - NotificationCenter
+
+  private func setNotification() {
+    NotificationCenter.default.addObserver(
+      forName: .homePopularPostRefresh,
+      object: nil,
+      queue: nil
+    ) { _ in
+      self.fetchHotpost(challengeId: self.challengeId)
     }
   }
 }

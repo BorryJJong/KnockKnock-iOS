@@ -114,5 +114,10 @@ extension FeedWriteWorker {
       name: .feedMainRefreshAfterWrite,
       object: nil
     )
+    
+    NotificationCenter.default.post(
+      name: .homePopularPostRefresh,
+      object: nil
+    )
   }
 }

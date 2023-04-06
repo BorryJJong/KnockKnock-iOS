@@ -44,7 +44,10 @@ final class PopularPostCell: BaseCollectionViewCell {
   // MARK: - Bind
 
   func bind(data: HotPost) {
-    self.thumbnailImageView.setImageFromStringUrl(stringUrl: data.fileUrl, defaultImage: KKDS.Image.ic_no_data_60)
+    self.thumbnailImageView.setImageFromStringUrl(
+      stringUrl: data.fileUrl,
+      defaultImage: KKDS.Image.ic_no_data_60
+    )
     self.nickNameLabel.text = "@\(data.nickname)"
   }
 
