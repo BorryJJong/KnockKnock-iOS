@@ -1,6 +1,10 @@
 # Created by https://www.toptal.com/developers/gitignore/api/xcode,cocoapods,swift,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=xcode,cocoapods,swift,macos
 
+### API KEY ###
+KnockKnock-iOS/Network/APIConstants.swift
+
+
 ### CocoaPods ###
 ## CocoaPods GitIgnore Template
 
@@ -71,7 +75,7 @@ DerivedData/
 *.dSYM
 
 ## plist
-GoogleService-Info.plist
+# GoogleService-Info.plist
 
 ## Playgrounds
 timeline.xctimeline
